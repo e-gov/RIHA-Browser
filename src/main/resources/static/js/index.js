@@ -1,9 +1,6 @@
 "use strict";
 
-function Browser() {
-
-//  todo get this value from conf
-  var infosystemsUrl = 'http://localhost:8081/infosystems/';
+function Browser(infosystemsUrl) {
 
   var self = this;
 
