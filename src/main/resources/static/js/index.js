@@ -11,7 +11,28 @@ function Browser(infosystemsUrl) {
   function loadInfosystems() {
     $.getJSON(infosystemsUrl, function(data) {
       self._createTableRows(data);
-      $('#info-systems-table').DataTable({paging: false});
+      $('#info-systems-table').DataTable({
+        paging: false,
+        initComplete: function () {
+          this.api().columns().every( function () {
+            var column = this;
+            var select = $('<select></select>')
+              .appendTo( $(column.header()) )
+              .on( 'change', function () {
+                var val = $.fn.dataTable.util.escapeRegex(
+                  $(this).val()
+                );
+
+                column
+                  .search( val ? '^'+val+'$' : '', true, false )
+                  .draw();
+              } );
+            column.data().unique().sort().each( function ( d, j ) {
+              select.append( '<option value="'+d+'">'+d+'</option>' )
+            } );
+          } );
+        }
+      });
     });
   }
   self._createTableRows = function(data) {
