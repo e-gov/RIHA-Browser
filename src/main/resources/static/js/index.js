@@ -14,28 +14,31 @@ function Browser(infosystemsUrl) {
       $('#info-systems-table').DataTable({
         language: { "url": "/js/vendor/jquery.dataTables.i18n.json" },
         paging: false,
-        initComplete: function () {
-          this.api().columns().every( function () {
-            var column = this;
-            var select = $('<select></select>')
-              .appendTo( $(column.header()) )
-              .on( 'change', function () {
-                var val = $.fn.dataTable.util.escapeRegex(
-                  $(this).val()
-                );
-
-                column
-                  .search( val ? '^'+val+'$' : '', true, false )
-                  .draw();
-              } );
-            column.data().unique().sort().each( function ( d, j ) {
-              select.append( '<option value="'+d+'">'+d+'</option>' )
-            } );
-          } );
-        }
+        initComplete: initColumnFilters
       });
     });
   }
+
+  function initColumnFilters() {
+    this.api().columns().every(function () {
+      var column = this;
+      var select = $('<select></select>')
+        .appendTo($(column.header()))
+        .on('change', function () {
+          var val = $.fn.dataTable.util.escapeRegex(
+            $(this).val()
+          );
+
+          column
+            .search(val ? '^' + val + '$' : '', true, false)
+            .draw();
+        });
+      column.data().unique().sort().each(function (d, j) {
+        select.append('<option value="' + d + '">' + d + '</option>')
+      });
+    });
+  }
+
   self._createTableRows = function(data) {
     var template = $('.template-row');
 
