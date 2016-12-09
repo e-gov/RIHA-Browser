@@ -21,22 +21,51 @@ function Browser(infosystemsUrl) {
 
   function initColumnFilters() {
     this.api().columns().every(function () {
-      var column = this;
-      var select = $('<select></select>')
-        .appendTo($(column.header()))
-        .on('change', function () {
-          var val = $.fn.dataTable.util.escapeRegex(
-            $(this).val()
-          );
-
-          column
-            .search(val ? '^' + val + '$' : '', true, false)
-            .draw();
-        });
-      column.data().unique().sort().each(function (d, j) {
-        select.append('<option value="' + d + '">' + d + '</option>')
-      });
+      addFilter(this);
     });
+  }
+
+  function addInputFilter(column) {
+    return $('<input>')
+      .appendTo($(column.header()))
+      .on('keyup', function () {
+        var val = $.fn.dataTable.util.escapeRegex(
+          $(this).val()
+        );
+
+        column
+          .search(val ? val : '', true, false)
+          .draw();
+      });
+  }
+
+  function addSelectFilter(column) {
+    var select = $('<select></select>')
+      .appendTo($(column.header()))
+      .on('change', function () {
+        var val = $.fn.dataTable.util.escapeRegex(
+          $(this).val()
+        );
+
+        column
+          .search(val ? '^' + val + '$' : '', true, false)
+          .draw();
+      });
+    column.data().unique().sort().each(function (d, j) {
+      select.append('<option value="' + d + '">' + d + '</option>')
+    });
+    return select;
+  }
+
+  function addFilter(column) {
+    var filterType = $(column.header()).data('filter');
+
+    if (filterType == 'input') {
+      var input = addInputFilter(column);
+    }
+    else if (filterType == 'select') {
+      var select = addSelectFilter(column);
+    }
   }
 
   self._createTableRows = function(data) {
