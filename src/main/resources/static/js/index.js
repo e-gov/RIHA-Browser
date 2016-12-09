@@ -26,8 +26,9 @@ function Browser(infosystemsUrl) {
   }
 
   function addInputFilter(column) {
-    return $('<input>')
-      .appendTo($(column.header()))
+    var columnHeader = $(column.header());
+    var input = $('<input>')
+      .attr('placeholder', columnHeader.data('placeholder'))
       .on('keyup', function () {
         var val = $.fn.dataTable.util.escapeRegex(
           $(this).val()
@@ -37,6 +38,8 @@ function Browser(infosystemsUrl) {
           .search(val ? val : '', true, false)
           .draw();
       });
+
+    columnHeader.append($('<div></div>').append(input));
   }
 
   function addSelectFilter(column) {
@@ -54,17 +57,16 @@ function Browser(infosystemsUrl) {
     column.data().unique().sort().each(function (d, j) {
       select.append('<option value="' + d + '">' + d + '</option>')
     });
-    return select;
   }
 
   function addFilter(column) {
     var filterType = $(column.header()).data('filter');
 
     if (filterType == 'input') {
-      var input = addInputFilter(column);
+      addInputFilter(column);
     }
     else if (filterType == 'select') {
-      var select = addSelectFilter(column);
+      addSelectFilter(column);
     }
   }
 
