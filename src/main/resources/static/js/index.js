@@ -12,6 +12,7 @@ function Browser(infosystemsUrl) {
     $.getJSON(infosystemsUrl, function(data) {
       self._createTableRows(data);
       $('#info-systems-table').DataTable({
+        language: { "url": "/js/vendor/jquery.dataTables.i18n.json" },
         paging: false,
         initComplete: function () {
           this.api().columns().every( function () {
