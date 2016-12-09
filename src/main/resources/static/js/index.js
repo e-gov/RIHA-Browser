@@ -29,6 +29,9 @@ function Browser(infosystemsUrl) {
     var columnHeader = $(column.header());
     var input = $('<input>')
       .attr('placeholder', columnHeader.data('placeholder'))
+      .on('click', function (e) {
+        e.stopPropagation();
+      })
       .on('keyup', function () {
         var val = $.fn.dataTable.util.escapeRegex(
           $(this).val()
@@ -45,6 +48,9 @@ function Browser(infosystemsUrl) {
   function addSelectFilter(column) {
     var select = $('<select></select>')
       .appendTo($(column.header()))
+      .on('click', function (e) {
+        e.stopPropagation();
+      })
       .on('change', function () {
         var val = $.fn.dataTable.util.escapeRegex(
           $(this).val()
