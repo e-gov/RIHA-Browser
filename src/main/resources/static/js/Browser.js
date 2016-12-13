@@ -77,11 +77,10 @@ function Browser(infosystemsUrl) {
   }
 
   self._createTableRows = function(data) {
-    var template = $('.template-row');
-
+    var template = $('#row-template').html();
     var tbody = $('tbody');
     data.forEach(function (infosystem) {
-      var newRow = $(template).clone().removeClass('hidden').removeClass('template-row');
+      var newRow = $(template);
       newRow.attr('title', JSON.stringify(infosystem));
       newRow.find('.owner').text(infosystem.owner);
       newRow.find('.name').text(infosystem.name);

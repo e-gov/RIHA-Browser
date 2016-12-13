@@ -40,11 +40,9 @@ describe('Browser', function() {
 
     new Browser()._createTableRows(data);
 
-    var rows = $('tbody tr:not(.template-row)');
+    var rows = $('tbody tr');
 
     expect(rows.length).toBe(2);
-    expect(rows.hasClass('hidden')).toBe(false);
-    expect(rows.hasClass('template-row')).toBe(false);
     expect($(rows[0]).find('.name').text()).toBe('Eesti kirikute, koguduste ja koguduste liitude register');
     expect($(rows[0]).find('.owner').text()).toBe('70000562');
     expect($(rows[0]).find('.last-modified').text()).toBe('2015-08-05T08:29:58.328468');
