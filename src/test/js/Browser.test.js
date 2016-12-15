@@ -19,7 +19,7 @@ describe('Browser', function() {
           "timestamp": "2016-09-05T00:36:26.255215"
         }
       },
-      "uri": "http://172.31.34.244:8090/Eesti%20kirikuregister"
+      "uri": "http://base.url:8090/Eesti%20kirikuregister"
     },
     {
       "name": "Õpilaste ja üliõpilaste register",
@@ -35,7 +35,7 @@ describe('Browser', function() {
           "timestamp": "2013-11-14T13:43:55.546948"
         }
       },
-      "uri": "http://172.31.34.244:8090/%C3%95ppurite%20register"
+      "uri": "http://base.url:8090/%C3%95ppurite%20register"
     }
   ];
 
