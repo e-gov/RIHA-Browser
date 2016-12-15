@@ -46,7 +46,7 @@ function Browser(infosystemsUrl) {
   }
 
   function addSelectFilter(column) {
-    var select = $('<select></select>')
+    var select = $('<select><option></option></select>')
       .appendTo($(column.header()))
       .on('click', function (e) {
         e.stopPropagation();
