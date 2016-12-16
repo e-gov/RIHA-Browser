@@ -32,6 +32,7 @@ public class MvcConfigurer extends WebMvcConfigurerAdapter {
     FreeMarkerConfigurer result = new FreeMarkerConfigurer();
     freemarker.template.Configuration configuration = factory.createConfiguration();
     configuration.setOutputFormat(HTMLOutputFormat.INSTANCE);
+    result.setConfiguration(configuration);
     return result;
   }
 }
