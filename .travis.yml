@@ -1,0 +1,6 @@
+language: java
+jdk:
+  - oraclejdk8
+
+before_script:
+        - npm install karma-jasmine karma-junit-reporter karma-jasmine-jquery karma-jasmine-ajax karma-coverage karma-phantomjs2-launcher 
