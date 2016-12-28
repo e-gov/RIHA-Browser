@@ -57,6 +57,22 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.kelveden</groupId>
+				<artifactId>maven-karma-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<browsers>PhantomJS2</browsers>
+					<configFile>karma-conf.js</configFile>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

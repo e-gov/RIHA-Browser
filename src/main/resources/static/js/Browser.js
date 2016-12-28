@@ -46,7 +46,7 @@ function Browser(infosystemsUrl) {
   }
 
   function addSelectFilter(column) {
-    var select = $('<select></select>')
+    var select = $('<select><option></option></select>')
       .appendTo($(column.header()))
       .on('click', function (e) {
         e.stopPropagation();
@@ -77,18 +77,17 @@ function Browser(infosystemsUrl) {
   }
 
   self._createTableRows = function(data) {
-    var template = $('.template-row');
-
+    var template = $('#row-template').html();
     var tbody = $('tbody');
     data.forEach(function (infosystem) {
-      var newRow = $(template).clone().removeClass('hidden').removeClass('template-row');
+      var newRow = $(template);
       newRow.attr('title', JSON.stringify(infosystem));
-      newRow.find('.owner').text(infosystem.owner);
+      newRow.find('.owner').text(infosystem.owner.code);
       newRow.find('.name').text(infosystem.name);
-      newRow.find('.last-modified').text(infosystem.status ? infosystem.status.timestamp : '');
-      newRow.find('.status').text(infosystem.status ? infosystem.status.staatus : '');
-      newRow.find('.approved').text(infosystem.approval ? infosystem.approval.timestamp : '');
-      newRow.find('.approval-status').text(infosystem.approval ? infosystem.approval.status : '');
+      newRow.find('.last-modified').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.timestamp : '');
+      newRow.find('.status').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.status : '');
+      newRow.find('.approved').text(infosystem.meta && infosystem.meta.approval_status ? infosystem.meta.approval_status.timestamp : '');
+      newRow.find('.approval-status').text(infosystem.meta && infosystem.meta.approval_status ? infosystem.meta.approval_status.status : '');
       tbody.append(newRow);
     });
   }

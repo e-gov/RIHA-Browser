@@ -2,3 +2,5 @@ target/
 .idea/
 *.iws
 *.ipr
+*.iml
+node_modules/

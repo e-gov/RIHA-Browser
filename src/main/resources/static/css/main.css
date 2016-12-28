@@ -1,7 +1,3 @@
-.hidden {
-  display: none;
-}
-
-select {
+.info-systems-table select {
   width: inherit;
 }

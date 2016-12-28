@@ -1,5 +1,6 @@
 package ee.ria.riha.conf;
 
+import freemarker.core.HTMLOutputFormat;
 import freemarker.template.TemplateException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,9 @@ public class MvcConfigurer extends WebMvcConfigurerAdapter {
     factory.setTemplateLoaderPaths("classpath:templates", "src/main/resource/templates");
     factory.setDefaultEncoding("UTF-8");
     FreeMarkerConfigurer result = new FreeMarkerConfigurer();
-    result.setConfiguration(factory.createConfiguration());
+    freemarker.template.Configuration configuration = factory.createConfiguration();
+    configuration.setOutputFormat(HTMLOutputFormat.INSTANCE);
+    result.setConfiguration(configuration);
     return result;
   }
 }
