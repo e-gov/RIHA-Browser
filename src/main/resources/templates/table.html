@@ -9,6 +9,7 @@
           <th class="status" data-filter="select">Staatus</th>
           <th class="approved" data-filter="input" data-placeholder="AAAA-KK-PP">Kooskõlastatud</th>
           <th class="approval-status" data-filter="select">Kooskõlastamise staatus</th>
+          <th class="text-sm-right">Tegevused</th>
         </tr>
       </thead>
       <tbody>
@@ -20,9 +21,36 @@
             <td class="status"></td>
             <td class="approved text-nowrap"></td>
             <td class="approval-status text-nowrap"></td>
+            <td class="text-nowrap text-sm-right">
+              <button class="btn btn-sm btn-outline-info">Ava</button>
+            </td>
           </tr>
         </script>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div class="modal" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p>Lühinimi: <span class="short-name"></span></p>
+        <p>Omanik: <span class="owner"></span></p>
+        <p>Viimati muudetud: <span class="last-modified"></span></p>
+        <p>Staatus: <span class="status"></span></p>
+        <p>Kooskõlastatud: <span class="approved"></span></p>
+        <p>Kooskõlastamise staatus: <span class="approval-status"></span></p>
+        <p>Dokumentatsiooni URL: <a class="documentation" href="" target="_blank"></a></p>
+        <p>Eesmärk: <div class="purpose"></div></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulge</button>
+      </div>
+    </div>
   </div>
 </div>

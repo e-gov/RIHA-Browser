@@ -42,7 +42,9 @@ describe('Browser', function() {
   it('fills table with info system data', function() {
     loadFixtures('table.html');
 
-    new Browser()._createTableRows(data);
+    var br = new Browser();
+    br._indexRows(data);
+    br._createTableRows(data);
 
     var rows = $('tbody tr');
 
