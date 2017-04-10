@@ -19,7 +19,8 @@ describe('Browser', function() {
           "timestamp": "2016-09-05T00:36:26.255215"
         }
       },
-      "uri": "http://base.url:8090/Eesti%20kirikuregister"
+      "uri": "http://base.url:8090/Eesti%20kirikuregister",
+      "objective": "http://base.url:8090/Eesti%20kirikuregister"
     },
     {
       "name": "Õpilaste ja üliõpilaste register",
