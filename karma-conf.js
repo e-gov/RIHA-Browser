@@ -14,6 +14,8 @@ module.exports = function(karma) {
     files: [
       'src/main/resources/static/js/vendor/jquery-3.1.1.min.js',
       'src/main/resources/static/js/vendor/jquery.dataTables.min.js',
+      'src/main/resources/static/js/vendor/tether.min.js',
+      'src/main/resources/static/js/vendor/bootstrap.min.js',
       'src/main/resources/static/js/**/*.js',
       'src/test/js/**/*.js',
       {
