@@ -20,7 +20,7 @@ describe('Browser', function() {
         }
       },
       "uri": "http://base.url:8090/Eesti%20kirikuregister",
-      "objective": "http://base.url:8090/Eesti%20kirikuregister"
+      "objective": "Kirikutest, kogudustest ja liitudest nimekirja saamine"
     },
     {
       "name": "Õpilaste ja üliõpilaste register",
@@ -54,6 +54,7 @@ describe('Browser', function() {
     expect($(rows[0]).find('.status').text()).toBe('INFOSYS_STAATUS_LOPETATUD');
     expect($(rows[0]).find('.approval-status').text()).toBe('MITTE KOOSKÕLASTATUD');
     expect($(rows[0]).find('.approved').text()).toBe('2016-09-05T00:36:26.255215');
+    expect($(rows[0]).find('.objective').text()).toBe('Kirikutest, kogudustest ja liitudest nimekirja saamine');
   });
 });
 
