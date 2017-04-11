@@ -51,10 +51,6 @@ describe('Browser', function() {
     expect($(rows[0]).find('.name').text()).toBe('Eesti kirikute, koguduste ja koguduste liitude register');
     expect($(rows[0]).find('.owner').text()).toBe('70000562');
     expect($(rows[0]).find('.last-modified').text()).toBe('2015-09-05T00:36:26.255215');
-    expect($(rows[0]).find('.status').text()).toBe('INFOSYS_STAATUS_LOPETATUD');
-    expect($(rows[0]).find('.approval-status').text()).toBe('MITTE KOOSKÕLASTATUD');
-    expect($(rows[0]).find('.approved').text()).toBe('2016-09-05T00:36:26.255215');
-    expect($(rows[0]).find('.objective').text()).toBe('Kirikutest, kogudustest ja liitudest nimekirja saamine');
   });
 });
 
