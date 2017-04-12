@@ -3,6 +3,7 @@ package ee.ria.riha.controllers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -16,5 +17,11 @@ public class InfosystemController {
   public String index(Model model) {
     model.addAttribute("infosystemsUrl", infosystemsUrl);
     return "index";
+  }
+
+  @RequestMapping(value = "/{URI}", method = RequestMethod.GET)
+  public  String detailView(Model model, @PathVariable("URI") String uri){
+    model.addAttribute("uri", uri);
+    return "detailView";
   }
 }

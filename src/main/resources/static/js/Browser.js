@@ -85,10 +85,6 @@ function Browser(infosystemsUrl) {
       newRow.find('.owner').text(infosystem.owner.code);
       newRow.find('.name').text(infosystem.name);
       newRow.find('.last-modified').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.timestamp : '');
-      newRow.find('.status').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.status : '');
-      newRow.find('.approved').text(infosystem.meta && infosystem.meta.approval_status ? infosystem.meta.approval_status.timestamp : '');
-      newRow.find('.approval-status').text(infosystem.meta && infosystem.meta.approval_status ? infosystem.meta.approval_status.status : '');
-      newRow.find('.objective').text(infosystem.objective);
       tbody.append(newRow);
     });
   }
