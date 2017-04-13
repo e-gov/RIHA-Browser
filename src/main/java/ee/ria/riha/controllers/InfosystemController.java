@@ -19,9 +19,10 @@ public class InfosystemController {
     return "index";
   }
 
-  @RequestMapping(value = "/{URI}", method = RequestMethod.GET)
-  public  String detailView(Model model, @PathVariable("URI") String uri){
-    model.addAttribute("uri", uri);
+  @RequestMapping(value = "/{OWNERCODE}/{SHORTNAME}", method = RequestMethod.GET)
+  public  String detailView(Model model, @PathVariable("OWNERCODE") String ownerCode, @PathVariable("SHORTNAME") String shortName){
+    model.addAttribute("ownercode", ownerCode);
+    model.addAttribute("shortname", shortName);
     return "detailView";
   }
 }
