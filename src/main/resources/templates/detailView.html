@@ -1,13 +1,23 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Sirvija</title>
+    <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/vendor/bootstrap-4.0.0-alpha.5.min.css">
+    <link rel="stylesheet" href="/css/vendor/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/vendor/jquery-3.1.1.min.js"></script>
+    <script src="/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="/js/vendor/jquery.dataTables.bootstrap4.min.js"></script>
+    <script src="/js/Detailview.js"></script>
+    <script>
+        $(function() {
+            new Detailview('${infosystem}').init();
+        });
+    </script>
 </head>
 <body>
-<script>
-    console.log('${shortname}'+" "+'${ownercode}');
-</script>
+<#include 'table.html'/>
 </body>
 </html>

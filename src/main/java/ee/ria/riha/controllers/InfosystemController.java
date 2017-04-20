@@ -1,5 +1,8 @@
 package ee.ria.riha.controllers;
 
+import ee.ria.riha.models.Infosystem;
+import ee.ria.riha.services.InfosystemStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class InfosystemController {
 
+  @Autowired
+  InfosystemStorageService infosystemStorageService;
+
   @Value("${infosystems.url}")
   private String infosystemsUrl;
 
@@ -19,10 +25,6 @@ public class InfosystemController {
     return "index";
   }
 
-  @RequestMapping(value = "/{OWNERCODE}/{SHORTNAME}", method = RequestMethod.GET)
-  public  String detailView(Model model, @PathVariable("OWNERCODE") String ownerCode, @PathVariable("SHORTNAME") String shortName){
-    model.addAttribute("ownercode", ownerCode);
-    model.addAttribute("shortname", shortName);
-    return "detailView";
-  }
+
+
 }
