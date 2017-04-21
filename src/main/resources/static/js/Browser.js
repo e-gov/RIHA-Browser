@@ -89,7 +89,7 @@ function Browser(infosystemsUrl) {
     });
     
     function getPath(owner, name) {
-        return "/"+owner+"/"+name;
+        return "/detail/"+owner+"/"+name;
     }
   }
 }
