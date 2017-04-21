@@ -1,9 +1,5 @@
 package ee.ria.riha.controllers;
 
-import ee.ria.riha.models.Infosystem;
-import ee.ria.riha.services.InfosystemStorageService;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
