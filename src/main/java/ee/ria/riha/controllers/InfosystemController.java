@@ -14,6 +14,9 @@ public class InfosystemController {
   @Value("${infosystems.url}")
   private String infosystemsUrl;
 
+  @Value("${conf.url")
+  private String confUrl;
+
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String index(Model model) {
     model.addAttribute("infosystemsUrl", infosystemsUrl);
@@ -24,6 +27,7 @@ public class InfosystemController {
   public String detailView(Model model, @PathVariable("shortname") String shortname, @PathVariable("ownerCode") String ownerCode) {
     model.addAttribute("shortname", shortname);
     model.addAttribute("ownerCode", ownerCode);
+    model.addAttribute("confUrl", confUrl);
     model.addAttribute("infosystemsUrl", infosystemsUrl);
     return "detailView";
   }
