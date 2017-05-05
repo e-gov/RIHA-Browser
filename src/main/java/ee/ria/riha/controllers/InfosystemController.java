@@ -27,7 +27,6 @@ public class InfosystemController {
   public String detailView(Model model, @PathVariable("shortname") String shortname, @PathVariable("ownerCode") String ownerCode) {
     model.addAttribute("shortname", shortname);
     model.addAttribute("ownerCode", ownerCode);
-    model.addAttribute("confUrl", confUrl);
     model.addAttribute("infosystemsUrl", infosystemsUrl);
     return "detailView";
   }

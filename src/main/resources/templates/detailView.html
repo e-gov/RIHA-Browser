@@ -10,8 +10,22 @@
     <script src="/js/vendor/jquery-3.1.1.min.js"></script>
     <script src="/js/vendor/jquery.dataTables.min.js"></script>
     <script src="/js/vendor/jquery.dataTables.bootstrap4.min.js"></script>
+    <script src="/js/Detailview.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: "./conf.json",
+                dataType: "json",
+                success: function(data) {console.log(data);}
+            });
+        });
+        $(function() {
+            new Detailview('${infosystemsUrl}', '${ownerCode}', '${shortname}').init();
+        });
+    </script>
 </head>
 <body>
-<#include 'detailTable.html'/>
+<#include 'table.html'/>
 </body>
 </html>

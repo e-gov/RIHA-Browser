@@ -1,2 +1,10 @@
-[ "Standardid",
-  "Turvaklass.Turbeaste"]
+[
+  {
+    "fieldName":"Standardid",
+    "displayName":"Kasutatud standardid"
+  },
+  {
+    "fieldName":"Turvaklass.Turbeaste",
+    "displayName":"Turbeaste"
+  }
+]

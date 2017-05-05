@@ -1,3 +1,4 @@
+"use strict";
 
 function Detailview(infosystems, ownerCode, shortName) {
     var template = $('#row-template').html();
