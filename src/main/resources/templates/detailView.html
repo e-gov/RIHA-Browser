@@ -15,8 +15,8 @@
         $(document).ready(function() {
             $.ajax({
                 type: "GET",
-                url: "./conf.json",
-                dataType: "json",
+                url: "conf.json",
+                dataType: "text",
                 success: function(data) {console.log(data);}
             });
         });
