@@ -1,10 +1,14 @@
 [
   {
-    "fieldName":"Standardid",
-    "displayName":"Kasutatud standardid"
+    "fieldName":"name",
+    "displayName":"Nimi"
   },
   {
-    "fieldName":"Turvaklass.Turbeaste",
-    "displayName":"Turbeaste"
+    "fieldName":"Short_name",
+    "displayName":"Lühinimi"
+  },
+  {
+    "fieldName":"owner",
+    "displayName":"Omanik"
   }
 ]

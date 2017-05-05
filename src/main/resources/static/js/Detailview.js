@@ -1,6 +1,6 @@
 "use strict";
 
-function Detailview(infosystems, ownerCode, shortName) {
+function Detailview(infosystems, ownerCode, shortName, confData) {
     var template = $('#row-template').html();
     var tbody = $('tbody');
 
@@ -24,6 +24,7 @@ function Detailview(infosystems, ownerCode, shortName) {
             index.forEach(function (infosystem) {
                 if((infosystem.owner.code === ownerCode) && (infosystem.shortname === shortName)){
                     load(infosystem, template, tbody);
+                    console.log(confData);
                 }
             });
         });

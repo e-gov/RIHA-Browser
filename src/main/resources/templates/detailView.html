@@ -12,17 +12,15 @@
     <script src="/js/vendor/jquery.dataTables.bootstrap4.min.js"></script>
     <script src="/js/Detailview.js"></script>
     <script>
-        $(document).ready(function() {
-            $.ajax({
-                type: "GET",
-                url: "conf.json",
-                dataType: "text",
-                success: function(data) {console.log(data);}
+
+        $.getJSON('https://jira.ria.ee/secure/attachment/25918/rr-pohiinfo.json', function (data) {
+            processData(data);
+        });
+        function processData(data) {
+            $(function() {
+                new Detailview('${infosystemsUrl}', '${ownerCode}', '${shortname}', data).init();
             });
-        });
-        $(function() {
-            new Detailview('${infosystemsUrl}', '${ownerCode}', '${shortname}').init();
-        });
+        }
     </script>
 </head>
 <body>
