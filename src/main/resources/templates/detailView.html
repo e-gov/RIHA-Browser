@@ -13,17 +13,21 @@
     <script src="/js/Detailview.js"></script>
     <script>
 
-        $.getJSON('https://jira.ria.ee/secure/attachment/25918/rr-pohiinfo.json', function (data) {
-            processData(data);
+        $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/rr-pohiinfo.json', function (data) {
+
+            $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/conf.json', function (conf) {
+                processData(data, conf);
+            });
         });
-        function processData(data) {
+
+        function processData(data, conf) {
             $(function() {
-                new Detailview('${infosystemsUrl}', '${ownerCode}', '${shortname}', data).init();
+                new Detailview('${infosystemsUrl}', '${ownerCode}', '${shortname}', data, conf).init();
             });
         }
     </script>
 </head>
 <body>
-<#include 'table.html'/>
+<#include 'detailTable.html'/>
 </body>
 </html>

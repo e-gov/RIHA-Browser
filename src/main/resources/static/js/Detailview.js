@@ -1,6 +1,7 @@
 "use strict";
 
-function Detailview(infosystems, ownerCode, shortName, confData) {
+function Detailview(infosystems, ownerCode, shortName, data, conf) {
+
     var template = $('#row-template').html();
     var tbody = $('tbody');
 
@@ -11,20 +12,26 @@ function Detailview(infosystems, ownerCode, shortName, confData) {
             paging: false,
         });
     }
+
     function load(infosystem, template, tbody) {
         var newRow = $(template);
         newRow.attr('title', JSON.stringify(infosystem));
-        newRow.find('.name').text(infosystem.name);
-        newRow.find('.last-modified').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.timestamp : '');
+        newRow.find('.fieldname').text(conf[0].displayName);
+        newRow.find('.fieldvalue').text(getValue(conf[0].fieldName));
         tbody.append(newRow);
     }
 
-    function createInfosystem(infosystems, ownerCode, shortName) {
+    function getValue(fieldName) {
+        return "data."+fieldName;
+    }
+   function createInfosystem(infosystems, ownerCode, shortName) {
         $.getJSON(infosystems, function (index) {
             index.forEach(function (infosystem) {
                 if((infosystem.owner.code === ownerCode) && (infosystem.shortname === shortName)){
                     load(infosystem, template, tbody);
-                    console.log(confData);
+                    console.log(data);
+                    console.log(conf);
+                    console.log(infosystems);
                 }
             });
         });
