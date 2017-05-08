@@ -1,14 +1,98 @@
 [
   {
-    "fieldName":"name",
-    "displayName":"Nimi"
+    "fieldName": "name",
+    "displayName": "Nimi"
   },
   {
-    "fieldName":"Short_name",
-    "displayName":"Lühinimi"
+    "fieldName": "short_name",
+    "displayName": "Lühinimi"
   },
   {
-    "fieldName":"owner",
-    "displayName":"Omanik"
+    "fieldName": "owner",
+    "displayName": "Omanik"
+  },
+  {
+    "fieldName": "purpose",
+    "displayName": "Infosüsteemi eesmärk"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Kas infosüsteem on aktiivses arenduses?"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Kas infosüsteem on kasutusele võetud?"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Viide infosüsteemi kasutajaliidesele"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Põhineb standardlahendusel"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Viited infosüsteemiga seotud õigusaktidele"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Tehnilise kirjelduse viited"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Andmete kirjeldus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Valdkond"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Ülemsüsteem"
+  },
+  {
+    "fieldName": "",
+    "displayName": "ISKE turvaosaklassid"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Kasutuseolev turvaraamistik"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Viimase ISKE auditi kuupäev"
+  },
+  {
+    "fieldName": "",
+    "displayName": "ISKE rakendatus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Muudatuse sisu lühikirjeldus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "uue kooskõlastuse kuupäev"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea lühikokkuvõte"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea olulisus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea asukoht"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea oodatud tulemus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea tegelik tulemus"
   }
 ]

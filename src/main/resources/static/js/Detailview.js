@@ -8,26 +8,31 @@ function Detailview(infosystems, ownerCode, shortName, data, conf) {
     this.init = function () {
         createInfosystem(infosystems, ownerCode, shortName);
         $('#info-systems-table').DataTable({
-            language: { "url": "/js/vendor/jquery.dataTables.i18n.json" },
+            language: {"url": "/js/vendor/jquery.dataTables.i18n.json"},
             paging: false,
         });
     }
 
     function load(infosystem, template, tbody) {
         var newRow = $(template);
-        newRow.attr('title', JSON.stringify(infosystem));
-        newRow.find('.fieldname').text(conf[0].displayName);
-        newRow.find('.fieldvalue').text(getValue(conf[0].fieldName));
-        tbody.append(newRow);
+        for(var i in conf){
+            newRow.find('.fieldname').text(conf[i].displayName);
+            newRow.find('.fieldvalue').text(getValue(conf[i].fieldName));
+            console.log(conf[i].displayName);
+            tbody.append(newRow);
+        }
+
+
     }
 
     function getValue(fieldName) {
-        return "data."+fieldName;
+        return eval("data." + fieldName.toLowerCase());
     }
-   function createInfosystem(infosystems, ownerCode, shortName) {
+
+    function createInfosystem(infosystems, ownerCode, shortName) {
         $.getJSON(infosystems, function (index) {
             index.forEach(function (infosystem) {
-                if((infosystem.owner.code === ownerCode) && (infosystem.shortname === shortName)){
+                if ((infosystem.owner.code === ownerCode) && (infosystem.shortname === shortName)) {
                     load(infosystem, template, tbody);
                     console.log(data);
                     console.log(conf);
