@@ -20,7 +20,7 @@
     "displayName": "Kas infosüsteem on aktiivses arenduses?"
   },
   {
-    "fieldName": "",
+    "fieldName": "infosystem_status",
     "displayName": "Kas infosüsteem on kasutusele võetud?"
   },
   {
@@ -28,7 +28,7 @@
     "displayName": "Viide infosüsteemi kasutajaliidesele"
   },
   {
-    "fieldName": "",
+    "fieldName": "uses_standard_solution",
     "displayName": "Põhineb standardlahendusel"
   },
   {
