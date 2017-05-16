@@ -1,13 +1,30 @@
-
 <div class="container-fluid my-1">
     <div class="table-responsive">
-        <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+        <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0"
+               width="100%">
 
             <tbody>
             <script id="row-template" type="text/x-custom-template">
                 <tr>
-                    <td class="fieldname"></td>
-                    <td class="fieldvalue"></td>
+                <th class="fieldname"></th>
+                <td class="fieldvalue"></td>
+                </tr>
+            </script>
+
+            </tbody>
+        </table>
+        <table class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+            <hr/>
+            <h2>Viited infosüsteemiga seotud õigusaktidele</h2>
+            <thead>
+            <th>Nimi</th>
+            <th>Liik</th>
+            </thead>
+            <tbody id="source">
+            <script id="row-template-source" type="text/x-custom-template">
+                <tr>
+                    <td class="name"></td>
+                    <td class="type"></td>
                 </tr>
             </script>
             </tbody>

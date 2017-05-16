@@ -64,7 +64,7 @@
     "displayName": "Viimase ISKE auditi kuupäev"
   },
   {
-    "fieldName": "",
+    "fieldName": "status_of_applying_iske",
     "displayName": "ISKE rakendatus"
   },
   {
@@ -92,7 +92,7 @@
     "displayName": "vea oodatud tulemus"
   },
   {
-    "fieldName": "",
+    "fieldName": "-",
     "displayName": "vea tegelik tulemus"
   }
 ]
