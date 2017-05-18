@@ -1,14 +1,47 @@
 "use strict";
 
-function Detailview(infosystems, ownerCode, shortName, sata, conf) {
+function Detailview(infosystems, ownerCode, shortName) {
 
     var template = $('#row-template').html();
-    var tbody = $('tbody');
+    var tbody = $('#detail');
+    var sTemp = $('#row-template-source').html();
+    var sBody = $('#source');
 
     this.init = function () {
-        load(template, tbody);
+        loadInfosystem(template, tbody);
+    }
+
+
+    function loadInfosystem(template, tbody) {
+
+        $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/rr-pohiinfo.json', function (data) {
+
+            $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/conf.json', function (conf) {
+                console.log(data);
+                proccessData(data, conf, template, tbody);
+            });
+        });
 
     }
+
+    function proccessData(data, conf, template, tbody) {
+        for (var i = 0; i <= conf.length; i++) {
+            var newRow = $(template);
+            newRow.find('.fieldname').text(conf[i].displayName);
+            newRow.find('.fieldvalue').text(getValue(conf[i].fieldName));
+            tbody.append(newRow);
+
+        }
+
+
+        function getValue(fieldName) {
+            if(fieldName===""){
+                return null;
+            }
+            return eval("data." + fieldName.toLowerCase());
+        }
+    }
+
 
     function getSourceFiles() {
         var params = {"op":"get","path":"db/document/","token":"testToken","filter":[["main_resource_id","=","437050"],["kind","=","infosystem_source_document"]],"sort":"-name"};
@@ -19,7 +52,14 @@ function Detailview(infosystems, ownerCode, shortName, sata, conf) {
             data: JSON.stringify(params),
             cache: false,
             success: function (data) {
-                console.log(data);
+                for (var i = 0; i <= data.length; i++) {
+                    var newRow = $(sTemp);
+                    newRow.find('.name').text(data[i].name);
+                    newRow.find('.type').text(data[i].type);
+                    newRow.find('.date').text(data[i].doc_date);
+
+                    sBody.append(newRow);
+                }
             }
         });
     }
@@ -52,31 +92,30 @@ function Detailview(infosystems, ownerCode, shortName, sata, conf) {
         });
     }
 
-    function load(template, tbody) {
-        for (var i = 0; i <= conf.length; i++) {
-            var newRow = $(template);
-            if(conf[i].displayName==="Viited infosüsteemiga seotud õigusaktidele"){
-                getSourceFiles();
-                getEntity();
-                getFiles();
+
+    function getSourceFiles() {
+
+        var sTemp = $('#row-template-source').html();
+        var sBody = $('#source');
+        var params = {"op":"get","path":"db/document/","token":"testToken","filter":[["main_resource_id","=","437050"],["kind","=","infosystem_source_document"]],"sort":"-name"};
+        $.ajax({
+            url: "https://riha-proxy.ci.kit/rest/api",
+            dataType: 'json',
+            type: "POST",
+            data: JSON.stringify(params),
+            cache: false,
+            success: function (data) {
+                for (var i = 0; i <= data.length; i++) {
+                    var newRow = $(sTemp);
+                    newRow.find('.name').text(data[i].name);
+                    newRow.find('.type').text(data[i].type);
+                    newRow.find('.date').text(data[i].doc_date);
+
+                    sBody.append(newRow);
+                }
             }
-            else {
-                newRow.find('.fieldname').text(conf[i].displayName);
-                newRow.find('.fieldvalue').text(getValue(conf[i].fieldName));
-                tbody.append(newRow);
-
-            }
-        }
-
-
+        });
     }
-
-    function getValue(fieldName) {
-        if(fieldName===""){
-            return null;
-        }
-        return eval("sata." + fieldName.toLowerCase());
-    }
-
 
 }
+
