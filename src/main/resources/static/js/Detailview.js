@@ -1,14 +1,16 @@
 "use strict";
 
-function Detailview(infosystems, ownerCode, shortName) {
+function Detailview() {
 
     var template = $('#row-template').html();
     var tbody = $('#detail');
     var sTemp = $('#row-template-source').html();
     var sBody = $('#source');
+    var dv = $('detailTable.html');
 
     this.init = function () {
         loadInfosystem(template, tbody);
+            getSourceFiles();
     }
 
 
@@ -17,7 +19,6 @@ function Detailview(infosystems, ownerCode, shortName) {
         $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/rr-pohiinfo.json', function (data) {
 
             $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/conf.json', function (conf) {
-                console.log(data);
                 proccessData(data, conf, template, tbody);
             });
         });

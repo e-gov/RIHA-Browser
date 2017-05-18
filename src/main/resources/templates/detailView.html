@@ -14,7 +14,7 @@
     <script>
 
             $(function() {
-                new Detailview('${infosystemsUrl}', '${ownerCode}', '${shortname}').init();
+                new Detailview().init();
             });
 
     </script>
@@ -42,8 +42,8 @@
 <div class="container">
 
 </div>
-<div class="content">
-    <#include 'detailTable.html'/>
+<div id="tableview">
+<#include 'sourcedocs.html'>
 </div>
 
 <script>
