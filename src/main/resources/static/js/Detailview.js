@@ -2,24 +2,24 @@
 
 function Detailview() {
 
-    var template = $('#row-template').html();
-    var tbody = $('#detail');
-    var sTemp = $('#row-template-source').html();
-    var sBody = $('#source');
-    var dv = $('detailTable.html');
-
     this.init = function () {
-        loadInfosystem(template, tbody);
-            getSourceFiles();
+        loadInfosystem();
+        getSourceFiles();
+        getFiles();
+        getEntity()
+        jQuery(function () {
+            jQuery('.targetDiv').hide();
+            jQuery('#div1').show();
+        });
     }
 
 
-    function loadInfosystem(template, tbody) {
+    function loadInfosystem() {
 
         $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/rr-pohiinfo.json', function (data) {
 
             $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/conf.json', function (conf) {
-                proccessData(data, conf, template, tbody);
+                proccessData(data, conf, $('#row-template').html(), $('#detail'));
             });
         });
 
@@ -36,7 +36,7 @@ function Detailview() {
 
 
         function getValue(fieldName) {
-            if(fieldName===""){
+            if (fieldName === "") {
                 return null;
             }
             return eval("data." + fieldName.toLowerCase());
@@ -44,8 +44,51 @@ function Detailview() {
     }
 
 
-    function getSourceFiles() {
-        var params = {"op":"get","path":"db/document/","token":"testToken","filter":[["main_resource_id","=","437050"],["kind","=","infosystem_source_document"]],"sort":"-name"};
+    function getFiles() {
+
+        var sTemp = $('#row-template-docs').html();
+        var sBody = $('#docs');
+        var params = {
+            "op": "get",
+            "path": "db/document/",
+            "token": "testToken",
+            "filter": [["main_resource_id", "=", "437050"], ["kind", "=", "document"]],
+            "sort": "-name"
+        };
+        $.ajax({
+            url: "https://riha-proxy.ci.kit/rest/api",
+            dataType: 'json',
+            type: "POST",
+            data: JSON.stringify(params),
+            cache: false,
+            success: function (data) {
+                for (var i = 0; i <= data.length; i++) {
+                    var newRow = $(sTemp);
+                    if(data[i].filename!=null){
+                        newRow.find('.name').text(data[i].filename);
+                    }else {
+                        newRow.find('.name').text("Nimetu");
+
+                    }
+                    newRow.find('.date').text(data[i].start_date);
+
+                    sBody.append(newRow);
+                }
+            }
+        });
+    }
+
+    function getEntity() {
+
+        var sTemp = $('#row-template-entities').html();
+        var sBody = $('#entities')
+        var params = {
+            "op": "get",
+            "path": "db/data_object/",
+            "token": "testToken",
+            "filter": [["main_resource_id", "=", "437144"], ["kind", "=", "entity"]],
+            "sort": "-name"
+        };
         $.ajax({
             url: "https://riha-proxy.ci.kit/rest/api",
             dataType: 'json',
@@ -56,40 +99,9 @@ function Detailview() {
                 for (var i = 0; i <= data.length; i++) {
                     var newRow = $(sTemp);
                     newRow.find('.name').text(data[i].name);
-                    newRow.find('.type').text(data[i].type);
-                    newRow.find('.date').text(data[i].doc_date);
 
                     sBody.append(newRow);
-                }
-            }
-        });
-    }
-
-    function getFiles() {
-        var params = {"op":"get","path":"db/document/","token":"testToken","filter":[["main_resource_id","=","437050"],["kind","=","document"]],"sort":"-name"};
-        $.ajax({
-            url: "https://riha-proxy.ci.kit/rest/api",
-            dataType: 'json',
-            type: "POST",
-            data: JSON.stringify(params),
-            cache: false,
-            success: function (data) {
-                console.log(data);
-            }
-        });
-    }
-
-    function getEntity() {
-        var params = {"op":"get","path":"db/data_object/","token":"testToken","filter":[["main_resource_id","=","437144"],["kind","=","entity"]],"sort":"-name"};
-        $.ajax({
-            url: "https://riha-proxy.ci.kit/rest/api",
-            dataType: 'json',
-            type: "POST",
-            data: JSON.stringify(params),
-            cache: false,
-            success: function (data) {
-                console.log(data);
-            }
+                }            }
         });
     }
 
@@ -98,7 +110,13 @@ function Detailview() {
 
         var sTemp = $('#row-template-source').html();
         var sBody = $('#source');
-        var params = {"op":"get","path":"db/document/","token":"testToken","filter":[["main_resource_id","=","437050"],["kind","=","infosystem_source_document"]],"sort":"-name"};
+        var params = {
+            "op": "get",
+            "path": "db/document/",
+            "token": "testToken",
+            "filter": [["main_resource_id", "=", "437050"], ["kind", "=", "infosystem_source_document"]],
+            "sort": "-name"
+        };
         $.ajax({
             url: "https://riha-proxy.ci.kit/rest/api",
             dataType: 'json',

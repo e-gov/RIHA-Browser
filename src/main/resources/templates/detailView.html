@@ -17,38 +17,44 @@
                 new Detailview().init();
             });
 
+            jQuery(function(){
+                jQuery('.showSingle').click(function(){
+                    jQuery('.targetDiv').hide();
+                    jQuery('#div'+$(this).attr('target')).show();
+                });
+            });
     </script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-left">
-    <a class="navbar-brand" href="#">Brand</a>
-    <ul class="nav navbar-nav">
-        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Sub Menu1</a></li>
-                <li><a href="#">Sub Menu2</a></li>
-                <li><a href="#">Sub Menu3</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Sub Menu4</a></li>
-                <li><a href="#">Sub Menu5</a></li>
-            </ul>
-        </li>
-        <li><a href="sourcedocs.html">Link2</a></li>
-        <li><a href="#">Link3</a></li>
-        <li><a href="#">Link4</a></li>
-        <li><a href="#">Link5</a></li>
-    </ul>
+    <div class="button">
+        <ul class="nav navbar-nav">
+            <li><a class="showSingle" target="1" >Üldandmed</a></li>
+            <li><a class="showSingle" target="2" >Alusdokumendid</a></li>
+            <li><a class="showSingle" target="3">Lisadokumendid</a></li>
+            <li><a class="showSingle" target="4">Andmeobjektid</a></li>
+        </ul>
+    </div>
+
 </div>
 <div class="container">
 
 </div>
-<div id="tableview">
-<#include 'sourcedocs.html'>
+
+<div id="div1" class="targetDiv">
+    <#include 'detailTable.html'>
 </div>
 
-<script>
+<div id="div2"class="targetDiv">
+    <#include 'sourcedocs.html'>
+</div>
 
+<div id="div3"class="targetDiv">
+    <#include 'docs.html'>
+</div>
 
-</script>
+<div id="div4"class="targetDiv">
+    <#include 'entities.html'>
+</div>
 </body>
 </html>
