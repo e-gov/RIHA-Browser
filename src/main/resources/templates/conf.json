@@ -33,18 +33,6 @@
   },
   {
     "fieldName": "",
-    "displayName": "Viited infosüsteemiga seotud õigusaktidele"
-  },
-  {
-    "fieldName": "",
-    "displayName": "Tehnilise kirjelduse viited"
-  },
-  {
-    "fieldName": "",
-    "displayName": "Andmete kirjeldus"
-  },
-  {
-    "fieldName": "",
     "displayName": "Valdkond"
   },
   {
@@ -52,7 +40,7 @@
     "displayName": "Ülemsüsteem"
   },
   {
-    "fieldName": "",
+    "fieldName": [ "iske_security_class_k", "iske_security_class_l", "iske_security_class_s"],
     "displayName": "ISKE turvaosaklassid"
   },
   {
