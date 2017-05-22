@@ -29,9 +29,16 @@ function Detailview() {
         for (var i = 0; i <= conf.length; i++) {
             var newRow = $(template);
             newRow.find('.fieldname').text(conf[i].displayName);
-            newRow.find('.fieldvalue').text(getValue(conf[i].fieldName));
+            if($.isArray(conf[i].fieldName)){
+                var field = "";
+                for(var j = 0; j < conf[i].fieldName.length;j++){
+                    field += " " + getValue(conf[i].fieldName[j]);
+                }
+                newRow.find('.fieldvalue').text(field);     }
+            else {
+                newRow.find('.fieldvalue').text(getValue(conf[i].fieldName));
+            }
             tbody.append(newRow);
-
         }
 
 
