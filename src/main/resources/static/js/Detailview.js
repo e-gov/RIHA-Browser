@@ -1,5 +1,6 @@
 "use strict";
 
+
 function Detailview(shortName, ownerCode) {
     var resourceId;
 
@@ -15,17 +16,17 @@ function Detailview(shortName, ownerCode) {
             jQuery('#div1').show();
         });
 
-        jQuery(function(){
-            jQuery('.showSingle').click(function(){
+        jQuery(function () {
+            jQuery('.showSingle').click(function () {
                 jQuery('.targetDiv').hide();
-                jQuery('#div'+$(this).attr('target')).show();
+                jQuery('#div' + $(this).attr('target')).show();
             });
         });
     }
 
 
     function loadInfosystem(shortName, ownerCode) {
-            console.log(numerWithoutCommas(ownerCode));
+        console.log(numerWithoutCommas(ownerCode));
 
         var params =
             {
@@ -43,7 +44,7 @@ function Detailview(shortName, ownerCode) {
             success: function (data) {
                 console.log(data[0].main_resource_id);
                 resourceId = data[0].main_resource_id;
-                
+
                 getSourceFiles(resourceId);
                 getFiles(resourceId);
                 getEntity(resourceId);
@@ -63,8 +64,15 @@ function Detailview(shortName, ownerCode) {
             newRow.find('.fieldname').text(conf[i].displayName);
             if ($.isArray(conf[i].fieldName)) {
                 var field = "";
+
                 for (var j = 0; j < conf[i].fieldName.length; j++) {
-                    field += " " + getValue(conf[i].fieldName[j]);
+                    if (conf[i].displayName === "ISKE turvaosaklassid") {
+                        field = calcIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]));
+                        j = conf[i].fieldName.length - 1;
+                    }
+                    else {
+                        field += " " + getValue(conf[i].fieldName[j]);
+                    }
                 }
                 newRow.find('.fieldvalue').text(field);
             }
@@ -139,7 +147,7 @@ function Detailview(shortName, ownerCode) {
                 for (var i = 0; i <= data.length; i++) {
                     var newRow = $(sTemp);
                     newRow.find('.name').text(data[i].name);
-
+                    newRow.find('.description').text("");
                     sBody.append(newRow);
                 }
             }
@@ -180,5 +188,23 @@ function Detailview(shortName, ownerCode) {
     function numerWithoutCommas(str) {
         return str.replace(/,/g, "");
     }
+
+    var calcIske = function (k, t, s) {
+        function toInt(str) {
+            return parseInt(str.substr(1, 1));
+        }
+
+        var level = Math.max(toInt(k), toInt(t), toInt(s));
+        if(level==3){
+            return "Kõrge";
+        }
+        else if(level==2){
+            return "Keskmine";
+        }
+        else {
+            return "madal";
+
+        }
+    };
 }
 
