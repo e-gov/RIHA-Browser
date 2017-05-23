@@ -1,27 +1,59 @@
 "use strict";
 
-function Detailview() {
+function Detailview(shortName, ownerCode) {
+    var resourceId;
+
+    function createTables() {
+        loadInfosystem(shortName, ownerCode);
+    }
 
     this.init = function () {
-        loadInfosystem();
-        getSourceFiles();
-        getFiles();
-        getEntity()
+        createTables();
+
         jQuery(function () {
             jQuery('.targetDiv').hide();
             jQuery('#div1').show();
         });
+
+        jQuery(function(){
+            jQuery('.showSingle').click(function(){
+                jQuery('.targetDiv').hide();
+                jQuery('#div'+$(this).attr('target')).show();
+            });
+        });
     }
 
 
-    function loadInfosystem() {
+    function loadInfosystem(shortName, ownerCode) {
+            console.log(numerWithoutCommas(ownerCode));
 
-        $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/rr-pohiinfo.json', function (data) {
+        var params =
+            {
+                "op": "get",
+                "path": "db/main_resource/",
+                "token": "testToken",
+                "filter": [["owner", "=", numerWithoutCommas(ownerCode)], ["short_name", "=", shortName]]
+            };
+        $.ajax({
+            url: "https://riha-proxy.ci.kit/rest/api",
+            dataType: 'json',
+            type: "POST",
+            data: JSON.stringify(params),
+            cache: false,
+            success: function (data) {
+                console.log(data[0].main_resource_id);
+                resourceId = data[0].main_resource_id;
+                
+                getSourceFiles(resourceId);
+                getFiles(resourceId);
+                getEntity(resourceId);
 
-            $.getJSON('https://raw.githubusercontent.com/TaaviMeinberg/RIHA-Browser/detailView/src/main/resources/templates/conf.json', function (conf) {
-                proccessData(data, conf, $('#row-template').html(), $('#detail'));
-            });
+                $.getJSON('/js/conf.json', function (conf) {
+                    proccessData(data[0], conf, $('#row-template').html(), $('#detail'));
+                });
+            }
         });
+
 
     }
 
@@ -29,12 +61,13 @@ function Detailview() {
         for (var i = 0; i <= conf.length; i++) {
             var newRow = $(template);
             newRow.find('.fieldname').text(conf[i].displayName);
-            if($.isArray(conf[i].fieldName)){
+            if ($.isArray(conf[i].fieldName)) {
                 var field = "";
-                for(var j = 0; j < conf[i].fieldName.length;j++){
+                for (var j = 0; j < conf[i].fieldName.length; j++) {
                     field += " " + getValue(conf[i].fieldName[j]);
                 }
-                newRow.find('.fieldvalue').text(field);     }
+                newRow.find('.fieldvalue').text(field);
+            }
             else {
                 newRow.find('.fieldvalue').text(getValue(conf[i].fieldName));
             }
@@ -51,7 +84,7 @@ function Detailview() {
     }
 
 
-    function getFiles() {
+    function getFiles(resource) {
 
         var sTemp = $('#row-template-docs').html();
         var sBody = $('#docs');
@@ -59,7 +92,7 @@ function Detailview() {
             "op": "get",
             "path": "db/document/",
             "token": "testToken",
-            "filter": [["main_resource_id", "=", "437050"], ["kind", "=", "document"]],
+            "filter": [["main_resource_id", "=", resource], ["kind", "=", "document"]],
             "sort": "-name"
         };
         $.ajax({
@@ -71,9 +104,9 @@ function Detailview() {
             success: function (data) {
                 for (var i = 0; i <= data.length; i++) {
                     var newRow = $(sTemp);
-                    if(data[i].filename!=null){
+                    if (data[i].filename != null) {
                         newRow.find('.name').text(data[i].filename);
-                    }else {
+                    } else {
                         newRow.find('.name').text("Nimetu");
 
                     }
@@ -85,7 +118,7 @@ function Detailview() {
         });
     }
 
-    function getEntity() {
+    function getEntity(resource) {
 
         var sTemp = $('#row-template-entities').html();
         var sBody = $('#entities')
@@ -93,7 +126,7 @@ function Detailview() {
             "op": "get",
             "path": "db/data_object/",
             "token": "testToken",
-            "filter": [["main_resource_id", "=", "437144"], ["kind", "=", "entity"]],
+            "filter": [["main_resource_id", "=", resource], ["kind", "=", "entity"]],
             "sort": "-name"
         };
         $.ajax({
@@ -108,12 +141,13 @@ function Detailview() {
                     newRow.find('.name').text(data[i].name);
 
                     sBody.append(newRow);
-                }            }
+                }
+            }
         });
     }
 
 
-    function getSourceFiles() {
+    function getSourceFiles(resource) {
 
         var sTemp = $('#row-template-source').html();
         var sBody = $('#source');
@@ -121,7 +155,7 @@ function Detailview() {
             "op": "get",
             "path": "db/document/",
             "token": "testToken",
-            "filter": [["main_resource_id", "=", "437050"], ["kind", "=", "infosystem_source_document"]],
+            "filter": [["main_resource_id", "=", resource], ["kind", "=", "infosystem_source_document"]],
             "sort": "-name"
         };
         $.ajax({
@@ -143,5 +177,8 @@ function Detailview() {
         });
     }
 
+    function numerWithoutCommas(str) {
+        return str.replace(/,/g, "");
+    }
 }
 

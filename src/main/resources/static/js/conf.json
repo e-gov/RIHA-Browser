@@ -40,7 +40,7 @@
     "displayName": "Ülemsüsteem"
   },
   {
-    "fieldName": [ "iske_security_class_k", "iske_security_class_l", "iske_security_class_s"],
+    "fieldName": [ "iske_security_class_k", "iske_security_class_t", "iske_security_class_s"],
     "displayName": "ISKE turvaosaklassid"
   },
   {
