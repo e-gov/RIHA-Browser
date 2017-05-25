@@ -42,6 +42,7 @@ function Detailview(shortName, ownerCode) {
             data: JSON.stringify(params),
             cache: false,
             success: function (data) {
+
                 console.log(data[0].main_resource_id);
                 resourceId = data[0].main_resource_id;
 
@@ -58,6 +59,10 @@ function Detailview(shortName, ownerCode) {
 
     }
 
+    function iske(k, t, s) {
+        return ((k!=null)&&(t!=null)&&(s!=null));
+    }
+
     function proccessData(data, conf, template, tbody) {
         for (var i = 0; i <= conf.length; i++) {
             var newRow = $(template);
@@ -66,7 +71,7 @@ function Detailview(shortName, ownerCode) {
                 var field = "";
 
                 for (var j = 0; j < conf[i].fieldName.length; j++) {
-                    if (conf[i].displayName === "ISKE turvaosaklassid") {
+                    if (conf[i].displayName === "ISKE turvaosaklassid" && iske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]))) {
                         field = calcIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]));
                         j = conf[i].fieldName.length - 1;
                     }
@@ -190,6 +195,7 @@ function Detailview(shortName, ownerCode) {
     }
 
     var calcIske = function (k, t, s) {
+        console.log(k+t+s);
         function toInt(str) {
             return parseInt(str.substr(1, 1));
         }

@@ -31,6 +31,11 @@ public class InfosystemController {
     return "detailView";
   }
 
+    @RequestMapping(value = "/asu/{ownerCode}", method = RequestMethod.GET)
+    public String detailView(Model model, @PathVariable("ownerCode") int ownerCode) {
+        model.addAttribute("ownerCode", ownerCode);
+        return "Infosystemlist";
+    }
 
 
 }
