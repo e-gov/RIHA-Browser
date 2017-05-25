@@ -4,11 +4,13 @@
 function Detailview(shortName, ownerCode) {
     var resourceId;
 
+    var self = this;
+
     function createTables() {
         loadInfosystem(shortName, ownerCode);
     }
 
-    this.init = function () {
+    self.init = function () {
         createTables();
 
         jQuery(function () {
@@ -51,7 +53,7 @@ function Detailview(shortName, ownerCode) {
                 getEntity(resourceId);
 
                 $.getJSON('/js/conf.json', function (conf) {
-                    proccessData(data[0], conf, $('#row-template').html(), $('#detail'));
+                    self.proccessData(data[0], conf, $('#row-template').html(), $('#detail'));
                 });
             }
         });
@@ -63,7 +65,7 @@ function Detailview(shortName, ownerCode) {
         return ((k!=null)&&(t!=null)&&(s!=null));
     }
 
-    function proccessData(data, conf, template, tbody) {
+    self.proccessData = function (data, conf, template, tbody) {
         for (var i = 0; i <= conf.length; i++) {
             var newRow = $(template);
             newRow.find('.fieldname').text(conf[i].displayName);
