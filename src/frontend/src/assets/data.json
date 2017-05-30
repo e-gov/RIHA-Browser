@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "i18n": "home",
+      "hash": "#home"
+    },
+    {
+      "i18n": "list",
+      "hash": "#list"
+    }
+  ]
+}

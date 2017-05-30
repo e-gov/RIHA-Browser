@@ -1,0 +1,73 @@
+/*------------------------------------*\
+$MODALS
+\*------------------------------------*/
+.modal-content {
+    border-radius: 0px;
+}
+.modal-header {
+    background: $primary;
+    color: $white;
+    button.close {
+        font-size: 12px;
+        text-transform: uppercase;
+        line-height: 20px;
+        font-weight: bold;
+        text-shadow: none;
+        color: $white;
+        opacity: 1;
+        .fa {
+            line-height: 20px;
+            vertical-align: top;
+            margin-left: 6px;
+            font-size: 20px;
+        }
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+.modal-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+.modal-body {
+    .col-form-label {
+        flex: 0 0 140px;
+        max-width: 140px;
+    }
+    .col {
+        &.smaller {
+            padding-right: 110px;
+        }
+    }
+}
+.modal-footer {
+    padding-top: 19px;
+    border-width: 1px;
+}
+.modal {
+    &.loader {
+        .modal-dialog {
+            max-width: 340px;
+        }
+        .modal-body {
+            display: flex;
+            align-items: center;
+            img {
+                flex-shrink: 0;
+                margin-right: 20px;
+            }
+            .block-content {
+                font-size: 16px;
+                flex-grow: 1;
+                a:not(.btn) {
+                    font-size: 12px;
+                    text-decoration: underline;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}
