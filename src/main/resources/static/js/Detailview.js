@@ -27,6 +27,10 @@ function Detailview(shortName, ownerCode) {
     }
 
 
+    function isUndefined(value) {
+        return typeof value === 'undefined';
+    }
+
     function loadInfosystem(shortName, ownerCode) {
         console.log(numerWithoutCommas(ownerCode));
 
@@ -45,35 +49,51 @@ function Detailview(shortName, ownerCode) {
             cache: false,
             success: function (data) {
 
-                console.log(data[0].main_resource_id);
-                resourceId = data[0].main_resource_id;
+                if (isUndefined(data[0])) {
+                    alert("Sellist infosüsteemi ei eksisteeri!");
+                } else {
 
-                getSourceFiles(resourceId);
-                getFiles(resourceId);
-                getEntity(resourceId);
+                    if (isUndefined(data[0].main_resource_id)) {
 
-                $.getJSON('/js/conf.json', function (conf) {
-                    self.proccessData(data[0], conf, $('#row-template').html(), $('#detail'));
-                });
+                        $.getJSON('/js/conf.json', function (conf) {
+                            self.proccessData(data[0], conf, $('#row-template').html(), $('#detail'));
+                        });
+                    } else {
+
+                        resourceId = data[0].main_resource_id;
+
+                        getSourceFiles(resourceId);
+                        getFiles(resourceId);
+                        getEntity(resourceId);
+
+                        $.getJSON('/js/conf.json', function (conf) {
+                            self.proccessData(data[0], conf, $('#row-template').html(), $('#detail'));
+                        });
+                    }
+
+                }
+
+
             }
+
         });
 
 
     }
 
-    function iske(k, t, s) {
-        return ((k!=null)&&(t!=null)&&(s!=null));
+    function isIske(k, t, s) {
+        return ((!isUndefined(k)) && (!isUndefined(t)) && (!isUndefined(s)));
     }
 
     self.proccessData = function (data, conf, template, tbody) {
-        for (var i = 0; i <= conf.length; i++) {
+        for (var i = 0; i < conf.length; i++) {
             var newRow = $(template);
-            newRow.find('.fieldname').text(conf[i].displayName);
+            newRow.find('.fieldname').text(hasValue(conf[i].displayName));
             if ($.isArray(conf[i].fieldName)) {
                 var field = "";
 
                 for (var j = 0; j < conf[i].fieldName.length; j++) {
-                    if (conf[i].displayName === "ISKE turvaosaklassid" && iske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]))) {
+                    if (conf[i].displayName === "ISKE turvaosaklassid" && isIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]))) {
                         field = calcIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]));
                         j = conf[i].fieldName.length - 1;
                     }
@@ -117,9 +137,9 @@ function Detailview(shortName, ownerCode) {
             data: JSON.stringify(params),
             cache: false,
             success: function (data) {
-                for (var i = 0; i <= data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
                     var newRow = $(sTemp);
-                    if (data[i].filename != null) {
+                    if (!isUndefined(data[i].filename)) {
                         newRow.find('.name').text(data[i].filename);
                     } else {
                         newRow.find('.name').text("Nimetu");
@@ -151,7 +171,7 @@ function Detailview(shortName, ownerCode) {
             data: JSON.stringify(params),
             cache: false,
             success: function (data) {
-                for (var i = 0; i <= data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
                     var newRow = $(sTemp);
                     newRow.find('.name').text(data[i].name);
                     newRow.find('.description').text("");
@@ -180,7 +200,7 @@ function Detailview(shortName, ownerCode) {
             data: JSON.stringify(params),
             cache: false,
             success: function (data) {
-                for (var i = 0; i <= data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
                     var newRow = $(sTemp);
                     newRow.find('.name').text(data[i].name);
                     newRow.find('.type').text(data[i].type);
@@ -192,21 +212,29 @@ function Detailview(shortName, ownerCode) {
         });
     }
 
+    function hasValue(val) {
+        if(isUndefined(val)){
+            return '';
+        }else {
+            return val;
+        }
+    }
+
     function numerWithoutCommas(str) {
         return str.replace(/,/g, "");
     }
 
     var calcIske = function (k, t, s) {
-        console.log(k+t+s);
+        console.log(k + t + s);
         function toInt(str) {
             return parseInt(str.substr(1, 1));
         }
 
         var level = Math.max(toInt(k), toInt(t), toInt(s));
-        if(level==3){
+        if (level == 3) {
             return "Kõrge";
         }
-        else if(level==2){
+        else if (level == 2) {
             return "Keskmine";
         }
         else {
