@@ -181,7 +181,7 @@ describe('Detailview', function () {
         }
     ];
         it('fills table with infosystem details', function () {
-            loadFixtures('detailTable');
+            loadFixtures('detailTable.html');
 
             new Detailview().proccessData(data, conf, $('#row-template').html(), $('#detail'));
 
