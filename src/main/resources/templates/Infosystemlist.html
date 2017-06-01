@@ -15,7 +15,7 @@
         loadInfosystems('${ownerCode}');
 
         function loadInfosystems(ownerCode) {
-            var params =
+/*            var params =
                 {
                     "op": "get",
                     "path": "db/main_resource/",
@@ -28,10 +28,11 @@
                 type: "POST",
                 data: JSON.stringify(params),
                 cache: false,
-                success: function (data) {
+                success:*/
+            $.getJSON('https://riha-proxy.ci.kit/rest/api/db/main_resource?filter=owner,=,'+numerWithoutCommas(ownerCode), function (data) {
                     createTableRows(data);
                 }
-            });
+            );
 
 
         }
