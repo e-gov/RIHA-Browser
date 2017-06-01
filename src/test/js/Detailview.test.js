@@ -180,7 +180,7 @@ describe('Detailview', function () {
             "displayName": "vea tegelik tulemus"
         }
     ];
-        it('fills table with infosystem details', function () {
+        it('table as correct amount of rows', function () {
             loadFixtures('detailTable.html');
 
             new Detailview().proccessData(data, conf, $('#row-template').html(), $('#detail'));
@@ -188,5 +188,16 @@ describe('Detailview', function () {
             var rows = $('tbody tr');
 
             expect(rows.length).toBe(conf.length);
+        });
+
+        it('fills table rows correctly', function () {
+           loadFixtures('detailTable.html');
+
+
+            new Detailview().proccessData(data, conf, $('#row-template').html(), $('#detail'));
+
+            var rows = $('tbody tr');
+
+            expect(rows[0].fieldName).toBe(conf[0].displayName);
         });
 });
