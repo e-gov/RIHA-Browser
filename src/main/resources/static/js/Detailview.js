@@ -27,27 +27,26 @@ function Detailview(shortName, ownerCode) {
     }
 
 
-    function isUndefined(value) {
-        return typeof value === 'undefined';
-    }
 
     function loadInfosystem(shortName, ownerCode) {
         console.log(numerWithoutCommas(ownerCode));
-
+/*
         var params =
             {
                 "op": "get",
                 "path": "db/main_resource/",
                 "token": "testToken",
                 "filter": [["owner", "=", numerWithoutCommas(ownerCode)], ["short_name", "=", shortName]]
-            };
-        $.ajax({
+            };*/
+/*        $.ajax({
             url: "https://riha-proxy.ci.kit/rest/api",
             dataType: 'json',
             type: "POST",
             data: JSON.stringify(params),
             cache: false,
-            success: function (data) {
+            success:*/
+
+            $.getJSON('https://riha-proxy.ci.kit/rest/api/db/main_resource?filter=short_name,=,'+shortName+',owner,=,'+ numerWithoutCommas(ownerCode),function (data) {
 
                 if (isUndefined(data[0])) {
                     alert("Sellist infosüsteemi ei eksisteeri!");
@@ -74,16 +73,14 @@ function Detailview(shortName, ownerCode) {
                 }
 
 
-            }
+
 
         });
 
 
     }
 
-    function isIske(k, t, s) {
-        return ((!isUndefined(k)) && (!isUndefined(t)) && (!isUndefined(s)));
-    }
+
 
     self.proccessData = function (data, conf, template, tbody) {
         for (var i = 0; i < conf.length; i++) {
@@ -123,7 +120,7 @@ function Detailview(shortName, ownerCode) {
 
         var sTemp = $('#row-template-docs').html();
         var sBody = $('#docs');
-        var params = {
+/*        var params = {
             "op": "get",
             "path": "db/document/",
             "token": "testToken",
@@ -136,7 +133,8 @@ function Detailview(shortName, ownerCode) {
             type: "POST",
             data: JSON.stringify(params),
             cache: false,
-            success: function (data) {
+            success: */
+            $.getJSON('https://riha-proxy.ci.kit/rest/api/db/document?filter=main_resource_id,=,'+resource+',kind,=,document&sort=-name', function (data) {
                 for (var i = 0; i < data.length; i++) {
                     var newRow = $(sTemp);
                     if (!isUndefined(data[i].filename)) {
@@ -150,14 +148,14 @@ function Detailview(shortName, ownerCode) {
                     sBody.append(newRow);
                 }
             }
-        });
+        );
     }
 
     function getEntity(resource) {
 
         var sTemp = $('#row-template-entities').html();
         var sBody = $('#entities')
-        var params = {
+/*        var params = {
             "op": "get",
             "path": "db/data_object/",
             "token": "testToken",
@@ -169,8 +167,8 @@ function Detailview(shortName, ownerCode) {
             dataType: 'json',
             type: "POST",
             data: JSON.stringify(params),
-            cache: false,
-            success: function (data) {
+            cache: false,*/
+            $.getJSON('https://riha-proxy.ci.kit/rest/api/db/document?filter=main_resource_id,=,'+resource+',kind,=,infosystem_source_document&sort=-name',function (data) {
                 for (var i = 0; i < data.length; i++) {
                     var newRow = $(sTemp);
                     newRow.find('.name').text(data[i].name);
@@ -178,7 +176,7 @@ function Detailview(shortName, ownerCode) {
                     sBody.append(newRow);
                 }
             }
-        });
+        );
     }
 
 
@@ -186,7 +184,7 @@ function Detailview(shortName, ownerCode) {
 
         var sTemp = $('#row-template-source').html();
         var sBody = $('#source');
-        var params = {
+ /*       var params = {
             "op": "get",
             "path": "db/document/",
             "token": "testToken",
@@ -199,7 +197,8 @@ function Detailview(shortName, ownerCode) {
             type: "POST",
             data: JSON.stringify(params),
             cache: false,
-            success: function (data) {
+            success: */
+            $.getJSON('https://riha-proxy.ci.kit/rest/api/db/document?filter=main_resource_id,=,'+resource+',kind,=,infosystem_source_document&sort=-name',function (data) {
                 for (var i = 0; i < data.length; i++) {
                     var newRow = $(sTemp);
                     newRow.find('.name').text(data[i].name);
@@ -209,7 +208,15 @@ function Detailview(shortName, ownerCode) {
                     sBody.append(newRow);
                 }
             }
-        });
+        );
+    }
+
+    function isUndefined(value) {
+        return typeof value === 'undefined';
+    }
+
+    function isIske(k, t, s) {
+        return ((!isUndefined(k)) && (!isUndefined(t)) && (!isUndefined(s)));
     }
 
     function hasValue(val) {
