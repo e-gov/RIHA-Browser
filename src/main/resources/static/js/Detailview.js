@@ -95,7 +95,11 @@ function Detailview(shortName, ownerCode) {
                         j = conf[i].fieldName.length - 1;
                     }
                     else {
-                        field += " " + getValue(conf[i].fieldName[j]);
+                        if(!isUndefined(getValue(conf[i].fieldName[j]))){
+                            field += " " + getValue(conf[i].fieldName[j]);
+                            console.log(field);
+                        }
+
                     }
                 }
                 newRow.find('.fieldvalue').text(field);
