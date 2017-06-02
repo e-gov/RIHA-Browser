@@ -213,7 +213,7 @@ describe('Detailview', function () {
             expect($(rows[6]).find('.fieldname').text()).toBe(conf[6].displayName);
             expect($(rows[6]).find('.fieldvalue').text()).toBe("");
             expect($(rows[7]).find('.fieldname').text()).toBe(conf[7].displayName);
-            expect($(rows[7]).find('.fieldvalue')).toBe(data.uses_standard_solution);
+            expect($(rows[7]).find('.fieldvalue').text()).toBe(data.uses_standard_solution.text());
             expect($(rows[8]).find('.fieldname').text()).toBe(conf[8].displayName);
             expect($(rows[8]).find('.fieldvalue').text()).toBe("");
             expect($(rows[9]).find('.fieldname').text()).toBe(conf[9].displayName);
