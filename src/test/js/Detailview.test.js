@@ -213,7 +213,7 @@ describe('Detailview', function () {
             expect($(rows[6]).find('.fieldname').text()).toBe(conf[6].displayName);
             expect($(rows[6]).find('.fieldvalue').text()).toBe("");
             expect($(rows[7]).find('.fieldname').text()).toBe(conf[7].displayName);
-            expect($(rows[7]).find('.fieldvalue').text()).toBe(data.uses_standard_solution.text());
+            expect($(rows[7]).find('.fieldvalue').text()).toBe("false");
             expect($(rows[8]).find('.fieldname').text()).toBe(conf[8].displayName);
             expect($(rows[8]).find('.fieldvalue').text()).toBe("");
             expect($(rows[9]).find('.fieldname').text()).toBe(conf[9].displayName);
@@ -225,7 +225,7 @@ describe('Detailview', function () {
             expect($(rows[12]).find('.fieldname').text()).toBe(conf[12].displayName);
             expect($(rows[12]).find('.fieldvalue').text()).toBe("");
             expect($(rows[13]).find('.fieldname').text()).toBe(conf[13].displayName);
-            expect($(rows[13]).find('.fieldvalue').text()).toBe("false");
+            expect($(rows[13]).find('.fieldvalue').text()).toBe(data.status_of_applying_iske);
             expect($(rows[14]).find('.fieldname').text()).toBe(conf[14].displayName);
             expect($(rows[14]).find('.fieldvalue').text()).toBe("");
             expect($(rows[15]).find('.fieldname').text()).toBe(conf[15].displayName);
