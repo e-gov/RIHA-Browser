@@ -225,7 +225,7 @@ describe('Detailview', function () {
             expect($(rows[12]).find('.fieldname').text()).toBe(conf[12].displayName);
             expect($(rows[12]).find('.fieldvalue').text()).toBe("");
             expect($(rows[13]).find('.fieldname').text()).toBe(conf[13].displayName);
-            expect($(rows[13]).find('.fieldvalue').text()).toBe(data.status_of_applying_iske);
+            expect($(rows[13]).find('.fieldvalue').text()).toBe("false");
             expect($(rows[14]).find('.fieldname').text()).toBe(conf[14].displayName);
             expect($(rows[14]).find('.fieldvalue').text()).toBe("");
             expect($(rows[15]).find('.fieldname').text()).toBe(conf[15].displayName);
