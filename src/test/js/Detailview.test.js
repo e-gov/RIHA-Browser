@@ -198,6 +198,6 @@ describe('Detailview', function () {
 
             var rows = $('tbody tr');
 
-            expect($(rows[0].fieldname).text()).toBe(conf[0].displayName);
+            expect($(rows[0]).find('.fieldname').text()).toBe(conf[0].displayName);
         });
 });

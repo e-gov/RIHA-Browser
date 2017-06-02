@@ -96,7 +96,7 @@ function Detailview(shortName, ownerCode) {
                     }
                     else {
                         if(!isUndefined(getValue(conf[i].fieldName[j]))){
-                            field += " " + getValue(conf[i].fieldName[j]);
+                            field += getValue(conf[i].fieldName[j]);
                             console.log(field);
                         }
 
