@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {JsonDataService} from '../json-data.service';
 import {TranslateService, TranslatePipe} from '@ngx-translate/core';
 
+declare var $: any;
+
 @Component({
   selector: 'app-riha-navbar',
   templateUrl: './riha-navbar.component.html',
@@ -19,6 +21,10 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  openNavigationMenu() {
+    $('body').toggleClass('nav-open');
   }
 
 }

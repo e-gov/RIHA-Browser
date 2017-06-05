@@ -1,7 +1,4 @@
 // Responsive
-$('.menu-toggle').on('click', function () {
-    $('body').toggleClass('nav-open');
-});
 var windowW = $(window).width();
 function responsive() {
     if (windowW < 576) {

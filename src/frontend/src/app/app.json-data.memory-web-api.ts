@@ -10,7 +10,8 @@ export class JsonData implements InMemoryDbService {
             i18n: 'i18n',
             hash: '#hash'
           }
-        ]
+        ],
+        cards: [{}, {}, {}]
       }
     };
   };

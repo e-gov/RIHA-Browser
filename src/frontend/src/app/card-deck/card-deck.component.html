@@ -1,50 +1,42 @@
 <section>
   <div class="card-deck mb-2 mb-sm-3">
-    <div class="card feature">
+    <div *ngFor="let card of cards" class="card feature">
       <div class="card-block">
         <h4 class="card-title">
-                  <span class="fa fa-pencil">
-                  </span>Infosüsteemi kirjeldamine</h4>
+                  <span class="fa" [ngClass]="card.iconType">
+                  </span>{{card.title}}</h4>
         <div class="card-text">
-          <p>Selleks, et teised leiaksid sinu infosüsteemi, tuleb see esmalt kirja panna. Olgu tegemist alles loodava või juba aastaid kasutuselolevaga, siis kirjelda see RIHAs.</p>
-          <p><strong>Infosüsteemi kirjeldamine RIHA-s annab:</strong></p>
-          <ul>
-            <li>teistele asutustele ja arendajatele teada, mis andmed sul on ja kuidas neid kasutada saab</li>
-            <li>teadmise, kas infosüsteem vastab riigi IT nõuetele</li>
-            <li>sulle endale kindluse, et oled täitnud tublisti seadust</li>
-          </ul>
+          <ng-container *ngFor="let item of card.content">
+            <p *ngIf="item.type==='p'">{{ item.value }}</p>
+            <ng-container *ngIf="item.type==='list'">
+              <p><strong>{{ item.title }}</strong></p>
+              <ul *ngIf="item.items !==null">
+                <li *ngFor="let li of item.items">{{li}}</li>
+              </ul>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
       <footer class="card-footer">
         <div class="actions-bar row align-items-center">
           <div class="col">
             <div class="links">
-              <a href="Abi/Kirjeldamine">Loe lähemalt</a>
+              <ng-container *ngIf="card.actions && card.actions.links">
+                <a *ngFor="let link of card.actions.links" [href]="link.hash">{{link.label}}</a>
+              </ng-container>
             </div>
           </div>
           <div class="col">
             <div class="buttons justify-content-end">
-              <a class="btn btn-primary btn-lg btn-01" href="#" role="button">Alustan</a>
+              <ng-container *ngIf="card.actions && card.actions.buttons">
+                <a *ngFor="let button of card.actions.buttons" [href]="button.hash" class="btn btn-primary btn-lg btn-01" role="button">{{button.label}}</a>
+              </ng-container>
             </div>
           </div>
         </div>
       </footer>
     </div>
-    <div class="card feature">
-      <div class="card-block">
-        <h4 class="card-title">
-                  <span class="fa fa-times">
-                  </span>X-teega liitumine</h4>
-        <div class="card-text">
-          <p>Teistest infosüsteemidest andmete saamiskes või sinna sisestamiseks tuleb kasutada X-teed. See tagab koosvõimelise andmevahetuse kõikide riigiasutustega.</p>
-          <p><strong>X-teega liitumine:</strong></p>
-          <ul>
-            <li>avab sulle päringud teistesse infosüsteemidesse</li>
-            <li>annab teistele turvalise ligipääsu sinu andmetele</li>
-            <li>võimaldab sul keskenduda infosüsteemi funktsionaalsuse ja andmekvaliteedile ning jätta andmevahetus X-tee hooleks</li>
-          </ul>
-        </div>
-      </div>
+    <!--<div class="card feature">
       <footer class="card-footer">
         <div class="actions-bar row align-items-center">
           <div class="col">
@@ -61,21 +53,6 @@
       </footer>
     </div>
     <div class="card feature">
-      <div class="card-block">
-        <h4 class="card-title">
-                  <span class="fa fa-magic">
-                  </span>Infosüsteemi hindamine</h4>
-        <div class="card-text">
-          <p>Riigis on mitmeid IT nõuete seadjaid, kelle ülesanne on kontrollida, kas infosüsteemid neile nõuetele vastavad. See tagab riigi infosüsteemi läbipaistvuse, koosvõimelisuse ja turvalisuse.</p>
-          <p><strong>Infosüsteemi hindamine RIHA-s:</strong>
-          </p>
-          <ul>
-            <li>lihtsustab infosüsteemi omaniku arendusi, kuna kõik riigi IT nõuded on teada ja arusaadavad</li>
-            <li></li>
-            <li></li>
-          </ul>
-        </div>
-      </div>
       <footer class="card-footer">
         <div class="actions-bar row align-items-center">
           <div class="col">
@@ -90,6 +67,6 @@
           </div>
         </div>
       </footer>
-    </div>
+    </div>-->
   </div>
 </section>

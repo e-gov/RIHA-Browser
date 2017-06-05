@@ -11,8 +11,8 @@ import 'rxjs/add/operator/do';
 export class JsonDataService {
   private jsonDataUrl = 'assets/data.json';  // URL to web API
   private lastData = new Subject();
-  public routes = this.lastData.startWith({}).map(this.getRoutes).distinctUntilChanged().do((_data) => console.log('#####DO', _data));
-  public cards = this.lastData.startWith({}).map(this.getCards).distinctUntilChanged();
+  public routes = this.lastData.startWith({}).map(this.getRoutes).distinctUntilChanged();
+  public cards = this.lastData.map(this.getCards).distinctUntilChanged();
 
   constructor(private http: Http) {
     this.http
