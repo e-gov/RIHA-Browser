@@ -18,6 +18,8 @@ import { ProducerDetailsComponent } from './producer-details/producer-details.co
 import { ApproverListComponent } from './approver-list/approver-list.component';
 import { ApproverDetailsComponent } from './approver-details/approver-details.component';
 import { BrowserListComponent } from './browser-list/browser-list.component';
+import { FrontPageComponent } from './front-page/front-page.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -32,7 +34,9 @@ export function HttpLoaderFactory(http: Http) {
     ProducerDetailsComponent,
     ApproverListComponent,
     ApproverDetailsComponent,
-    BrowserListComponent
+    BrowserListComponent,
+    FrontPageComponent,
+    PageHeaderComponent
   ],
   imports: [
     BrowserModule,
