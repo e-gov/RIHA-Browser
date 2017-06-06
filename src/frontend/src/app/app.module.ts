@@ -48,7 +48,7 @@ export function HttpLoaderFactory(http: Http) {
     }),
     NgbModule.forRoot()
   ],
-  bootstrap: [AppComponent, RihaNavbarComponent, CardDeckComponent],
+  bootstrap: [AppComponent],
   providers: [JsonDataService]
 })
 
