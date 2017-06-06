@@ -244,6 +244,6 @@ describe('Detailview', function () {
         });
 
     it('returns correct iske level', function () {
-        expect(new Detailview().calcIske(iske_security_class_k, iske_security_class_s, iske_security_class_t)).toBe("Kõrge")
+        expect(new Detailview().calcIske(data.iske_security_class_k, data.iske_security_class_s, data.iske_security_class_t)).toBe("Kõrge")
     });
 });
