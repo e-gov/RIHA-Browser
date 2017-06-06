@@ -81,7 +81,6 @@ function Detailview(shortName, ownerCode) {
     }
 
 
-
     self.proccessData = function (data, conf, template, tbody) {
         for (var i = 0; i < conf.length; i++) {
             var newRow = $(template);
@@ -90,8 +89,8 @@ function Detailview(shortName, ownerCode) {
                 var field = "";
 
                 for (var j = 0; j < conf[i].fieldName.length; j++) {
-                    if (conf[i].displayName === "ISKE turvaosaklassid" && isIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]))) {
-                        field = calcIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]));
+                    if (isIske(conf, i, j)) {
+                        field = self.calcIske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]));
                         j = conf[i].fieldName.length - 1;
                     }
                     else {
@@ -110,6 +109,10 @@ function Detailview(shortName, ownerCode) {
             tbody.append(newRow);
         }
 
+
+        function isIske(conf, i, j) {
+            return conf[i].displayName === "ISKE turvaosaklassid" && iske(getValue(conf[i].fieldName[j]), getValue(conf[i].fieldName[1]), getValue(conf[i].fieldName[2]));
+        }
 
         function getValue(fieldName) {
             if (fieldName === "") {
@@ -219,7 +222,7 @@ function Detailview(shortName, ownerCode) {
         return typeof value === 'undefined';
     }
 
-    function isIske(k, t, s) {
+    function iske(k, t, s) {
         return ((!isUndefined(k)) && (!isUndefined(t)) && (!isUndefined(s)));
     }
 
@@ -235,7 +238,7 @@ function Detailview(shortName, ownerCode) {
         return str.replace(/,/g, "");
     }
 
-    var calcIske = function (k, t, s) {
+    self.calcIske = function (k, t, s) {
         console.log(k + t + s);
         function toInt(str) {
             return parseInt(str.substr(1, 1));

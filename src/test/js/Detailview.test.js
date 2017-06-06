@@ -242,4 +242,8 @@ describe('Detailview', function () {
             expect($(rows[20]).find('.fieldvalue').text()).toBe("");
 
         });
+
+    it('returns correct iske level', function () {
+        expect(new Detailview().calcIske(iske_security_class_k, iske_security_class_s, iske_security_class_t)).toBe("Kõrge")
+    });
 });
