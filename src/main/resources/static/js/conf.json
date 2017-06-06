@@ -1,0 +1,86 @@
+[
+  {
+    "fieldName": "name",
+    "displayName": "Nimi"
+  },
+  {
+    "fieldName": "short_name",
+    "displayName": "Lühinimi"
+  },
+  {
+    "fieldName": "owner",
+    "displayName": "Omanik"
+  },
+  {
+    "fieldName": "purpose",
+    "displayName": "Infosüsteemi eesmärk"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Kas infosüsteem on aktiivses arenduses?"
+  },
+  {
+    "fieldName": "infosystem_status",
+    "displayName": "Kas infosüsteem on kasutusele võetud?"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Viide infosüsteemi kasutajaliidesele"
+  },
+  {
+    "fieldName": "uses_standard_solution",
+    "displayName": "Põhineb standardlahendusel"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Valdkond"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Ülemsüsteem"
+  },
+  {
+    "fieldName": [ "iske_security_class_k", "iske_security_class_t", "iske_security_class_s"],
+    "displayName": "ISKE turvaosaklassid"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Kasutuseolev turvaraamistik"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Viimase ISKE auditi kuupäev"
+  },
+  {
+    "fieldName": "status_of_applying_iske",
+    "displayName": "ISKE rakendatus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "Muudatuse sisu lühikirjeldus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "uue kooskõlastuse kuupäev"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea lühikokkuvõte"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea olulisus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea asukoht"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea oodatud tulemus"
+  },
+  {
+    "fieldName": "",
+    "displayName": "vea tegelik tulemus"
+  }
+]

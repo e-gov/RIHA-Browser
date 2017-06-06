@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/vendor/bootstrap-4.0.0-alpha.5.min.css">
+    <link rel="stylesheet" href="/css/vendor/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/vendor/jquery-3.1.1.min.js"></script>
+    <script src="/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="/js/vendor/jquery.dataTables.bootstrap4.min.js"></script>
+    <script>
+
+        loadInfosystems('${ownerCode}');
+
+        function loadInfosystems(ownerCode) {
+/*            var params =
+                {
+                    "op": "get",
+                    "path": "db/main_resource/",
+                    "token": "testToken",
+                    "filter": [["owner", "=", numerWithoutCommas(ownerCode)]]
+                };
+            $.ajax({
+                url: "https://riha-proxy.ci.kit/rest/api",
+                dataType: 'json',
+                type: "POST",
+                data: JSON.stringify(params),
+                cache: false,
+                success:*/
+            $.getJSON('https://riha-proxy.ci.kit/rest/api/db/main_resource?filter=owner,=,'+numerWithoutCommas(ownerCode), function (data) {
+                    createTableRows(data);
+                }
+            );
+
+
+        }
+
+        createTableRows = function(data) {
+            var template = $('#row-template').html();
+            var tbody = $('tbody');
+            data.forEach(function (infosystem) {
+                var newRow = $(template);
+                newRow.attr('title', JSON.stringify(infosystem));
+                newRow.find('.owner').text(infosystem.owner);
+                newRow.find('.name').html('<a href="' + getPath(infosystem.owner, infosystem.short_name) + '">' + infosystem.name + '</a>');
+                tbody.append(newRow);
+            });
+
+        }
+            function getPath(owner, name) {
+                return "/inf/"+owner+"/"+name;
+            }
+
+            function numerWithoutCommas(str) {
+                return str.replace(/,/g, "");
+            }
+    </script>
+</head>
+<body>
+
+<#include 'table.html'/>
+</body>
+</html>

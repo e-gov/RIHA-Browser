@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/vendor/bootstrap-4.0.0-alpha.5.min.css">
+    <link rel="stylesheet" href="/css/vendor/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/vendor/jquery-3.1.1.min.js"></script>
+    <script src="/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="/js/vendor/jquery.dataTables.bootstrap4.min.js"></script>
+    <script src="/js/Detailview.js"></script>
+    <script>
+
+            $(function() {
+                new Detailview('${shortname}', '${ownerCode}').init();
+            });
+
+
+    </script>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-left">
+    <div class="button">
+        <ul class="nav navbar-nav">
+            <li><a class="showSingle" target="1" >Üldandmed</a></li>
+            <li><a class="showSingle" target="2" >Alusdokumendid</a></li>
+            <li><a class="showSingle" target="3">Lisadokumendid</a></li>
+            <li><a class="showSingle" target="4">Andmeobjektid</a></li>
+        </ul>
+    </div>
+
+</div>
+<div class="container">
+
+</div>
+
+<div id="div1" class="targetDiv">
+    <#include 'detailTable.html'>
+</div>
+
+<div id="div2"class="targetDiv">
+    <#include 'sourcedocs.html'>
+</div>
+
+<div id="div3"class="targetDiv">
+    <#include 'docs.html'>
+</div>
+
+<div id="div4"class="targetDiv">
+    <#include 'entities.html'>
+</div>
+</body>
+</html>
