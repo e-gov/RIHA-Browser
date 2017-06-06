@@ -13,6 +13,11 @@ import { AppComponent } from './app.component';
 import { RihaNavbarComponent } from './riha-navbar/riha-navbar.component';
 import { JsonDataService } from './json-data.service';
 import { CardDeckComponent } from './card-deck/card-deck.component';
+import { ProducerListComponent } from './producer-list/producer-list.component';
+import { ProducerDetailsComponent } from './producer-details/producer-details.component';
+import { ApproverListComponent } from './approver-list/approver-list.component';
+import { ApproverDetailsComponent } from './approver-details/approver-details.component';
+import { BrowserListComponent } from './browser-list/browser-list.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -22,7 +27,12 @@ export function HttpLoaderFactory(http: Http) {
   declarations: [
     AppComponent,
     RihaNavbarComponent,
-    CardDeckComponent
+    CardDeckComponent,
+    ProducerListComponent,
+    ProducerDetailsComponent,
+    ApproverListComponent,
+    ApproverDetailsComponent,
+    BrowserListComponent
   ],
   imports: [
     BrowserModule,

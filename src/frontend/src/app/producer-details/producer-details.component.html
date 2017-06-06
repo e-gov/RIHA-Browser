@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Sisesta infosüsteemi andmed</h1>
+  <form id="infosystem-form" method="post" action="/save/">
+    <input type="hidden" name="id" value="${(infosystem.shortname)!}">
+    <div class="form-group">
+      <label for="name">Nimi</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="Nimi" required value="">
+    </div>
+    <div class="form-group">
+      <label for="short-name">Lühinimi</label>
+      <input type="text" class="form-control" id="short-name" name="shortName" placeholder="Lühinimi" required value="">
+    </div>
+    <div class="form-group">
+      <label for="documentation">Dokumentatsiooni URL</label>
+      <input type="text" class="form-control" id="documentation" name="documentation" placeholder="Dokumentatsiooni URL" required value="">
+    </div>
+
+    <button type="submit" class="btn btn-default">Salvesta</button>
+  </form>
+</div>
