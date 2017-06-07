@@ -2,11 +2,11 @@
   "routes": [
     {
       "i18n": "home",
-      "hash": "#home"
+      "link": "/Avaleht"
     },
     {
       "i18n": "list",
-      "hash": "#list"
+      "link": "/Infosüsteemid"
     }
   ],
   "cards": [

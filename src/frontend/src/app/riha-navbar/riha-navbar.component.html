@@ -1,11 +1,11 @@
 <nav class="navbar  navbar-toggleable-xl">
   <div class="container">
-    <a class="navbar-brand" href="_index.php">
+    <a class="navbar-brand" routerLink="/Avaleht">
       <img src="assets/images/base/RIHA.png" width="234" height="78" alt="Riigi infosüsteemi haldussüsteem"></a>
     <nav class="collapse navbar-collapse" id="mainmenu">
       <ul class="navbar-nav mr-0 mr-xl-auto">
-        <li *ngFor="let route of routes; let isFirst=first" class="nav-item" [class.active]="isFirst">
-          <a class="nav-link" href={{route.hash}}>{{['navbar', route.i18n].join('.') | translate}}<span *ngIf="isFirst" class="sr-only">(current)</span></a>
+        <li *ngFor="let route of routes; let isFirst=first" class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="{{route.link}}">{{['navbar', route.i18n].join('.') | translate}}<span *ngIf="isFirst" class="sr-only">(current)</span></a>
         </li>
       </ul>
     </nav>
