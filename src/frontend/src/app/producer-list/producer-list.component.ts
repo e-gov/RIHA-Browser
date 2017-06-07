@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProducerListComponent implements OnInit {
 
-  constructor() { }
+  systems: any[];
+
+  constructor() {
+    this.systems = [];
+  }
 
   ngOnInit() {
   }
