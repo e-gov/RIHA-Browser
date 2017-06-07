@@ -1,0 +1,48 @@
+image: riha-test-env
+
+variables:
+    DEPLOYMENT_DIR: "/opt/riha/$CI_PROJECT_NAME"
+    ARTIFACT_NAME: "$CI_PROJECT_NAME.jar"
+
+stages:
+    - test
+    - build
+    - deploy
+
+test:
+    stage: test
+    before_script:
+        - node -v
+        - npm -v
+        - npm install
+    script:
+        - mvn clean test
+    tags:
+        - riha
+
+build:
+    stage: build
+    script:
+        - mvn clean package
+    artifacts:
+        paths:
+            - target/*.jar
+    tags:
+        - riha
+
+deploy_development:
+    stage: deploy
+    script:
+        - echo "$SSH_PRIVATE_KEY" > id_rsa
+        - chmod 700 id_rsa
+        - mkdir $HOME/.ssh
+        - echo "$SSH_HOST_KEY" > $HOME/.ssh/known_hosts
+        - scp -i id_rsa target/*.jar deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
+        - ssh -i id_rsa deployer@$SSH_HOST "/sbin/service $CI_PROJECT_NAME restart"
+    environment:
+        name: development
+        url: http://$SSH_HOST:$PORT/
+    only:
+        - develop
+    tags:
+        - riha
