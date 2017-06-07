@@ -6,6 +6,7 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {TranslateService} from '@ngx-translate/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule, Routes } from '@angular/router';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -25,6 +26,22 @@ export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+const routes: Routes = [
+  { path: '', component: FrontPageComponent },
+  { path: 'Avaleht', component: FrontPageComponent },
+  { path: 'Home', component: FrontPageComponent },
+  { path: 'Infosüsteemid', component: BrowserListComponent },
+  { path: 'Systems', component: BrowserListComponent },
+  { path: 'Kirjelda', component: ProducerListComponent },
+  { path: 'Describe', component: ProducerListComponent },
+  { path: 'Kirjelda/:id', component: ProducerDetailsComponent },
+  { path: 'Describe/:id', component: ProducerDetailsComponent },
+  { path: 'Hinda', component: ApproverListComponent },
+  { path: 'Approve', component: ApproverListComponent },
+  { path: 'Hinda/:id', component: ApproverDetailsComponent },
+  { path: 'Approve/:id', component: ApproverDetailsComponent }
+];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +59,7 @@ export function HttpLoaderFactory(http: Http) {
     BrowserModule,
     FormsModule,
     HttpModule,
+    RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       missingTranslationHandler,
       loader: {
