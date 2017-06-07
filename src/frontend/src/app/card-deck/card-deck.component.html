@@ -29,7 +29,7 @@
           <div class="col">
             <div class="buttons justify-content-end">
               <ng-container *ngIf="card.actions && card.actions.buttons">
-                <a *ngFor="let button of card.actions.buttons" [href]="button.hash" class="btn btn-primary btn-lg btn-01" role="button">{{button.label}}</a>
+                <a *ngFor="let button of card.actions.buttons" routerLink="{{button.link}}" class="btn btn-primary btn-lg btn-01" role="button">{{button.label}}</a>
               </ng-container>
             </div>
           </div>
