@@ -79,15 +79,16 @@ function Browser(infosystemsUrl) {
   self._createTableRows = function(data) {
     var template = $('#row-template').html();
     var tbody = $('tbody');
-    data.forEach(function (infosystem) {
+    data.content.forEach(function (infosystem) {
+      var description = infosystem.description;
       var newRow = $(template);
-      newRow.attr('title', JSON.stringify(infosystem));
-      newRow.find('.owner').text(infosystem.owner.code);
-      newRow.find('.name').text(infosystem.name);
-      newRow.find('.last-modified').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.timestamp : '');
-      newRow.find('.status').text(infosystem.meta && infosystem.meta.system_status ? infosystem.meta.system_status.status : '');
-      newRow.find('.approved').text(infosystem.meta && infosystem.meta.approval_status ? infosystem.meta.approval_status.timestamp : '');
-      newRow.find('.approval-status').text(infosystem.meta && infosystem.meta.approval_status ? infosystem.meta.approval_status.status : '');
+      newRow.attr('title', JSON.stringify(description));
+      newRow.find('.owner').text(description.owner);
+      newRow.find('.name').text(description.name);
+      newRow.find('.last-modified').text(description.modified_date);
+      newRow.find('.status').text(description.status);
+      newRow.find('.approved').text("-- empty --");
+      newRow.find('.approval-status').text("-- empty --");
       tbody.append(newRow);
     });
   }
