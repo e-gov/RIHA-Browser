@@ -11,16 +11,17 @@ import { RouterModule, Routes } from '@angular/router';
 import missingTranslationHandler from './app.missingTranslation';
 
 import { AppComponent } from './app.component';
-import { RihaNavbarComponent } from './riha-navbar/riha-navbar.component';
+import { RihaNavbarComponent } from './components/riha-navbar/riha-navbar.component';
 import { JsonDataService } from './json-data.service';
-import { CardDeckComponent } from './card-deck/card-deck.component';
-import { ProducerListComponent } from './producer-list/producer-list.component';
-import { ProducerDetailsComponent } from './producer-details/producer-details.component';
-import { ApproverListComponent } from './approver-list/approver-list.component';
-import { ApproverDetailsComponent } from './approver-details/approver-details.component';
-import { BrowserListComponent } from './browser-list/browser-list.component';
-import { FrontPageComponent } from './front-page/front-page.component';
-import { PageHeaderComponent } from './page-header/page-header.component';
+import { CardDeckComponent } from './components/card-deck/card-deck.component';
+import { ProducerListComponent } from './components/producer-list/producer-list.component';
+import { ProducerDetailsComponent } from './components/producer-details/producer-details.component';
+import { ApproverListComponent } from './components/approver-list/approver-list.component';
+import { ApproverDetailsComponent } from './components/approver-details/approver-details.component';
+import { BrowserListComponent } from './components/browser-list/browser-list.component';
+import { FrontPageComponent } from './components/front-page/front-page.component';
+import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -43,7 +44,8 @@ const routes: Routes = [
   { path: 'Hinda/Detailid/:id', component: ApproverDetailsComponent },
   { path: 'Approve/Details/:id', component: ApproverDetailsComponent },
   { path: 'Hinda/Detailid', component: ApproverDetailsComponent },
-  { path: 'Approve/Details', component: ApproverDetailsComponent }
+  { path: 'Approve/Details', component: ApproverDetailsComponent },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -57,7 +59,8 @@ const routes: Routes = [
     ApproverDetailsComponent,
     BrowserListComponent,
     FrontPageComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JsonDataService } from '../json-data.service';
+import { JsonDataService } from '../../json-data.service';
 
 @Component({
   selector: 'app-card-deck',

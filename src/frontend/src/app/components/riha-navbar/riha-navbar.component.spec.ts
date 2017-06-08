@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PipeTransform, Pipe } from '@angular/core';
 import { RihaNavbarComponent } from './riha-navbar.component';
 import {TranslateService} from '@ngx-translate/core';
-import {JsonDataService} from '../json-data.service';
+import {JsonDataService} from '../../json-data.service';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/startWith';
 

@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/startWith';
 
 import { CardDeckComponent } from './card-deck.component';
-import { JsonDataService } from '../json-data.service';
+import { JsonDataService } from '../../json-data.service';
 
 describe('CardDeckComponent', () => {
   let component: CardDeckComponent;
