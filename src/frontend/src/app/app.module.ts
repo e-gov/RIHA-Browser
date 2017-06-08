@@ -22,6 +22,7 @@ import { BrowserListComponent } from './components/browser-list/browser-list.com
 import { FrontPageComponent } from './components/front-page/front-page.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'Avaleht', pathMatch: 'full' },
   { path: 'Avaleht', component: FrontPageComponent },
   { path: 'Home', component: FrontPageComponent },
+  { path: 'Login', component: LoginFormComponent },
   { path: 'Infosüsteemid', component: BrowserListComponent },
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
@@ -60,7 +62,8 @@ const routes: Routes = [
     BrowserListComponent,
     FrontPageComponent,
     PageHeaderComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
