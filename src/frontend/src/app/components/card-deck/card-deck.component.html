@@ -22,7 +22,7 @@
           <div class="col">
             <div class="links">
               <ng-container *ngIf="card.actions && card.actions.links">
-                <a *ngFor="let link of card.actions.links" [href]="link.hash">{{link.label}}</a>
+                <a *ngFor="let link of card.actions.links" [routerLink]="link.hash">{{link.label}}</a>
               </ng-container>
             </div>
           </div>
