@@ -27,19 +27,23 @@ export function HttpLoaderFactory(http: Http) {
 }
 
 const routes: Routes = [
-  { path: '', component: FrontPageComponent },
+  { path: '', redirectTo: 'Avaleht', pathMatch: 'full' },
   { path: 'Avaleht', component: FrontPageComponent },
   { path: 'Home', component: FrontPageComponent },
   { path: 'Infosüsteemid', component: BrowserListComponent },
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
-  { path: 'Kirjelda/:id', component: ProducerDetailsComponent },
-  { path: 'Describe/:id', component: ProducerDetailsComponent },
+  { path: 'Kirjelda/Detailid/:id', component: ProducerDetailsComponent },
+  { path: 'Describe/Details/:id', component: ProducerDetailsComponent },
+  { path: 'Kirjelda/Detailid', component: ProducerDetailsComponent },
+  { path: 'Describe/Details', component: ProducerDetailsComponent },
   { path: 'Hinda', component: ApproverListComponent },
   { path: 'Approve', component: ApproverListComponent },
-  { path: 'Hinda/:id', component: ApproverDetailsComponent },
-  { path: 'Approve/:id', component: ApproverDetailsComponent }
+  { path: 'Hinda/Detailid/:id', component: ApproverDetailsComponent },
+  { path: 'Approve/Details/:id', component: ApproverDetailsComponent },
+  { path: 'Hinda/Detailid', component: ApproverDetailsComponent },
+  { path: 'Approve/Details', component: ApproverDetailsComponent }
 ];
 
 @NgModule({
