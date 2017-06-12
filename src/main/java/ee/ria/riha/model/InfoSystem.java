@@ -1,9 +1,7 @@
 package ee.ria.riha.model;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 /**
@@ -14,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class InfoSystem {
 
     @JsonRawValue
