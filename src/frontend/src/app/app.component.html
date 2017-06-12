@@ -1,0 +1,59 @@
+<div id="wrap">
+  <header id="header">
+    <div class="header-bottom">
+      <app-riha-navbar></app-riha-navbar>
+    </div>
+  </header>
+  <div class="header-alert bg-primary">
+    <div class="container"></div>
+  </div>
+  <main id="content" class="container">
+    <router-outlet>
+    </router-outlet>
+  </main>
+  <footer id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-md-3 col-12">
+          <div class="block">
+            <p class="head">Kasutajatugi
+            </p>
+            <ul class="contacts-list list-unstyled">
+              <li>
+                <div class="item-single">
+                    <span class="fa fa-envelope">
+                    </span>
+                  <div class="body">
+                    <div class="content">
+                      <a href="mailto:help@ria.ee">help@ria.ee</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 col-12">
+          <div class="block">
+            <p class="head">Abiinfo &amp; lingid</p>
+            <ul class="links-list list-unstyled">
+              <li>
+                <a [routerLink]="'/'">Korduma kippuvad küsimused</a>
+              </li>
+              <li>
+                <a [routerLink]="'/'">Abi</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col">
+          <div class="logo pl-md-3 text-center text-md-left mt-md-0 mt-3">
+            <a href="https://www.ria.ee/">
+              <img src="assets/images/base/RIA.png" alt="Riigi Infosüsteemi Amet"></a>
+            <img src="assets/images/base/EL.png" alt="Eruoopa Liidu Regionaalarengufond">
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,29 @@
+<app-page-header [text]="'Infosüsteemid'"></app-page-header>
+<section class="col card p-3">
+  <div class="my-1">
+    <div class="table-responsive">
+      <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+        <thead class="thead-default">
+        <tr>
+          <th class="owner" data-filter="input">Omanik</th>
+          <th class="name" data-filter="input">Infosüsteemi nimi</th>
+          <th class="last-modified" data-filter="input" data-placeholder="AAAA-KK-PP">Viimati muudetud</th>
+          <th class="status" data-filter="select">Staatus</th>
+          <th class="approved" data-filter="input" data-placeholder="AAAA-KK-PP">Kooskõlastatud</th>
+          <th class="approval-status" data-filter="select">Kooskõlastamise staatus</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let system of systems">
+            <td class="owner">{{system.description.owner}}</td>
+            <td class="name">{{system.description.name}}</td>
+            <td class="last-modified text-nowrap">{{system.description.modified_date}}</td>
+            <td class="status">{{system.description.status}}</td>
+            <td class="approved text-nowrap">{{system.description.approved}}</td>
+            <td class="approval-status text-nowrap">{{system.description.approvalStatus}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,27 @@
+<app-page-header [text]="'Kirjeldaja'"></app-page-header>
+<section class="col card p-3">
+  <div class="container">
+    <div class="table-responsive">
+      <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+        <thead class="thead-default">
+        <th>Nimi</th>
+        <th>Lühinimi</th>
+        <th>Dokumentatsiooni URL</th>
+        <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let system of systems">
+            <td class="name"></td>
+            <td class="short-name"></td>
+            <td class="documentation"></td>
+            <td>
+              <button class="btn btn-success edit">Muuda</button>
+              <button class="btn btn-danger delete">Kustuta</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <a class="btn btn-primary" [routerLink]="['/Kirjelda/Detailid']">Lisa uus</a>
+    </div>
+  </div>
+</section>
