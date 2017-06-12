@@ -2,10 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {TranslateService} from '@ngx-translate/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateService } from '@ngx-translate/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 
 import missingTranslationHandler from './app.missingTranslation';
@@ -13,6 +13,11 @@ import missingTranslationHandler from './app.missingTranslation';
 import { AppComponent } from './app.component';
 import { RihaNavbarComponent } from './components/riha-navbar/riha-navbar.component';
 import { JsonDataService } from './json-data.service';
+
+//services
+import { SystemsService } from './services/systems.service';
+
+//components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
 import { ProducerListComponent } from './components/producer-list/producer-list.component';
 import { ProducerDetailsComponent } from './components/producer-details/producer-details.component';
@@ -81,7 +86,7 @@ const routes: Routes = [
     NgbModule.forRoot()
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService]
+  providers: [JsonDataService, SystemsService]
 })
 
 export class AppModule {}

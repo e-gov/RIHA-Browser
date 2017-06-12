@@ -15,12 +15,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let system of systems">
-            <td class="owner">{{system.owner}}</td>
-            <td class="name">{{system.name}}</td>
-            <td class="last-modified text-nowrap">{{system.lastModified}}</td>
-            <td class="status">{{system.status}}</td>
-            <td class="approved text-nowrap">{{system.approved}}</td>
-            <td class="approval-status text-nowrap">{{system.approvalStatus}}</td>
+            <td class="owner">{{system.description.owner}}</td>
+            <td class="name">{{system.description.name}}</td>
+            <td class="last-modified text-nowrap">{{system.description.modified_date}}</td>
+            <td class="status">{{system.description.status}}</td>
+            <td class="approved text-nowrap">{{system.description.approved}}</td>
+            <td class="approval-status text-nowrap">{{system.description.approvalStatus}}</td>
           </tr>
         </tbody>
       </table>
