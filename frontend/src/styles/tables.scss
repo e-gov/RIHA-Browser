@@ -1,0 +1,264 @@
+/*------------------------------------*\
+$TABLES
+\*------------------------------------*/
+.table-wrap {
+    margin-bottom: 25px;
+    &.scrollable {
+        overflow-x: auto;
+    }
+    table {
+        margin-bottom: 0px;
+    }
+    .mCS-riha {
+        &.mCSB_horizontal.mCSB_inside > .mCSB_container {
+            margin-bottom: 20px;
+        }
+        .mCSB_scrollTools.mCSB_scrollTools_horizontal {
+            height: 20px;
+            background: $grey;
+        }
+        .mCSB_scrollTools .mCSB_draggerContainer {
+            left: 6px;
+            right: 6px;
+        }
+        .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+            background: $primary;
+            height: 10px;
+            border-radius: 5px;
+            margin: 5px auto;
+        }
+        .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_draggerRail {
+            display: none;
+        }
+    }
+    &+.table,
+    &+.dataTables_wrapper,
+    &+.table-wrap {
+        margin-top: 30px;
+    }
+}
+.table-actions-left,
+.table-collapsible {
+    thead,
+    tbody,
+    tfoot {
+        tr {
+            th,
+            td {
+                box-sizing: border-box;
+                &:first-child {
+                    width: 0px;
+                    padding-left: 13px;
+                    width: 39px;
+                    .custom-control {
+                        padding-left: 16px;
+                        margin: 0px;
+                        vertical-align: bottom;
+                        width: 0px;
+                        .custom-control-indicator {
+                            top: 2px;
+                            left: 0px;
+                            position: absolute;
+                            margin-right: 0px;
+                        }
+                        .custom-control-input {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.thead-default {
+    tr {
+        th {
+            border-top: 0px;
+            border-bottom: 0px;
+            position: unset!important;
+            &:first-child {
+                border-left: 1px solid $primary;
+            }
+            &:last-child {
+                border-right: 1px solid $primary;
+            }
+        }
+    }
+}
+.tfoot-default {
+    tr {
+        &:first-child {
+            td {
+                border-top: 0px;
+            }
+        }
+        td {
+            background: $primary;
+            line-height: 20px;
+            padding-top: 9px;
+            padding-bottom: 10px;
+            font-size: 14px;
+            color: $white;
+        }
+        &:not(:first-child) {
+            td {
+                border-color: $primary-dark;
+            }
+        }
+    }
+}
+.thead-groups {
+    tr {
+        &:not(:last-child) {
+            th[colspan][rowspan="1"]:not([colspan="1"]) {
+                text-align: center;
+                border-bottom: 1px solid $primary-light;
+            }
+        }
+        &:last-child {
+            th {
+                border-bottom: 0px;
+            }
+        }
+        th[rowspan] {
+            vertical-align: middle;
+        }
+    }
+}
+.table {
+    margin-bottom: 25px;
+    thead {
+        th {
+            line-height: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            .fa {
+                margin-left: 8px;
+            }
+        }
+    }
+    tbody {
+        tr {
+            border-left: 1px solid $grey;
+            border-right: 1px solid $grey;
+            td {
+                line-height: 20px;
+                padding-top: 9px;
+                padding-bottom: 10px;
+                font-size: 14px;
+                a:not(.btn) {
+                    text-decoration: underline;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+                small {
+                    display: block;
+                    a:not(.btn) {
+                        .fa {
+                            margin-left: 4px;
+                        }
+                    }
+                }
+            }
+            &.caption {
+                td {
+                    background: $grey;
+                    font-size: 16px;
+                    font-weight: bold;
+                    padding-top: 14px;
+                    padding-bottom: 15px;
+                }
+            }
+            &:last-child {
+                td {
+                    border-bottom: 1px solid $grey;
+                }
+            }
+        }
+    }
+    .badge {
+        padding: 0px 5px;
+        font-weight: normal;
+        font-size: 14px;
+        border-radius: 3px;
+        color: $dark;
+        &-danger {
+            color: $white;
+        }
+    }
+    &+.table,
+    &+.dataTables_wrapper,
+    &+.table-wrap {
+        margin-top: 30px;
+    }
+}
+.table-hover {
+    .table-warning {
+        &:hover,
+        &:hover>td {
+            background-color: rgba($brand-warning, .6)
+        }
+    }
+    .table-success {
+        &:hover,
+        &:hover>td {
+            background-color: rgba($brand-success, .6)
+        }
+    }
+    .table-danger {
+        &:hover,
+        &:hover>td {
+            background-color: rgba($brand-danger, .6)
+        }
+    }
+}
+.table-active {
+    box-shadow: 0px 1px 8px 0px rgba($black, 0.2);
+    &>td {
+        background-color: $grey;
+    }
+}
+.table-danger {
+    &>td {
+        background-color: $brand-danger;
+        color: $white;
+        a:not(.btn) {
+            color: $white;
+        }
+    }
+    &+tr {
+        td {
+            border-color: $danger-dark;
+        }
+    }
+    .badge {
+        color: $white;
+    }
+}
+.table-warning {
+    &>td {
+        background-color: $brand-warning;
+        a:not(.btn) {
+            color: $dark;
+        }
+    }
+    &+tr {
+        td {
+            border-color: $warning-dark;
+        }
+    }
+}
+.table-success {
+    &>td {
+        background-color: $brand-success;
+        a:not(.btn) {
+            color: $dark;
+        }
+    }
+    &+tr {
+        td {
+            border-color: $success-dark;
+        }
+    }
+}

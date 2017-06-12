@@ -1,0 +1,33 @@
+{
+  "name": "default_proto",
+  "description": "default html proto",
+  "main": "index.html",
+  "authors": [
+    "WE"
+  ],
+  "license": "UNLICENSED",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.6",
+    "jquery": "^3.1.0",
+    "tether": "^1.3.7",
+    "font-awesome": "fontawesome#^4.7.0",
+    "chart.js": "^2.5.0",
+    "select2": "^4.0.3",
+    "jquery-ui": "^1.12.1",
+    "datatables": "^1.10.13",
+    "bower": "*",
+    "install": "^1.0.4",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
+    "datatables-responsive": "^2.1.1"
+  },
+  "devDependencies": {}
+}
