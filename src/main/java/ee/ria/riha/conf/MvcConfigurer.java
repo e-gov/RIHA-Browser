@@ -1,5 +1,6 @@
 package ee.ria.riha.conf;
 
+import ee.ria.riha.web.util.FilterableArgumentResolver;
 import ee.ria.riha.web.util.PageableArgumentResolver;
 import freemarker.core.HTMLOutputFormat;
 import freemarker.template.TemplateException;
@@ -21,6 +22,7 @@ public class MvcConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new PageableArgumentResolver());
+        argumentResolvers.add(new FilterableArgumentResolver());
     }
 
     @Bean

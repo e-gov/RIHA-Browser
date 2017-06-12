@@ -4,3 +4,4 @@ target/
 *.ipr
 *.iml
 node_modules/
+.project

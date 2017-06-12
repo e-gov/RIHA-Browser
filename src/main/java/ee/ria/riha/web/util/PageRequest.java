@@ -1,16 +1,18 @@
 package ee.ria.riha.web.util;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.util.Assert;
 
 /**
  * @author Valentin Suhnjov
  */
 @Getter
+@ToString
 public class PageRequest implements Pageable {
 
-    private final int pageNumber;
-    private final int pageSize;
+    private int pageNumber;
+    private int pageSize;
     private int offset;
 
     public PageRequest(int page, int size) {
@@ -21,4 +23,5 @@ public class PageRequest implements Pageable {
         pageSize = size;
         offset = page * size;
     }
+
 }

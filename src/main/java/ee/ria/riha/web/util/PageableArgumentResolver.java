@@ -21,11 +21,13 @@ public class PageableArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return Pageable.class.equals(parameter.getParameterType());
+        Class<?> type = parameter.getParameterType();
+        return Pageable.class.isAssignableFrom(type);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String pageString = webRequest.getParameter(PAGE_PARAMETER);
         String sizeString = webRequest.getParameter(SIZE_PARAMETER);
 
