@@ -14,19 +14,18 @@ test:
     before_script:
         - node -v
         - npm -v
-        - npm install
     script:
-        - mvn clean test
+        - ./test.sh
     tags:
         - riha
 
 build:
     stage: build
     script:
-        - mvn clean package
+        - ./build.sh
     artifacts:
         paths:
-            - target/*.jar
+            - backend/target/*.jar
     tags:
         - riha
 
@@ -37,7 +36,7 @@ deploy_development:
         - chmod 700 id_rsa
         - mkdir $HOME/.ssh
         - echo "$SSH_HOST_KEY" > $HOME/.ssh/known_hosts
-        - scp -i id_rsa target/*.jar deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
+        - scp -i id_rsa backend/target/*.jar deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
         - ssh -i id_rsa deployer@$SSH_HOST "/sbin/service $CI_PROJECT_NAME restart"
     environment:
         name: development

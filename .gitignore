@@ -1,10 +1,5 @@
-target/
 .idea/
 *.iws
 *.ipr
 *.iml
-node_modules/
-src/frontend/node/
-src/frontend/node_modules/
-src/frontend/bower_components/
 .project
