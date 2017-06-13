@@ -3,20 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>backend</artifactId>
-    <name>backend</name>
-    <description>RIHA-Browser backend</description>
+    <artifactId>browser-backend</artifactId>
+    <name>Backend</name>
+    <description>backend</description>
 
     <parent>
         <groupId>ee.ria.riha</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>browser</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>ee.ria.riha</groupId>
-            <artifactId>frontend</artifactId>
+            <artifactId>browser-frontend</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
