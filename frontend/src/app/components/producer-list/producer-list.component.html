@@ -40,6 +40,7 @@
           </tr>
         </tbody>
       </table>
+      <ngb-pagination (pageChange)="onPageChange(newPage)" [collectionSize]="gridData.totalElements" [page]="gridData.page"></ngb-pagination>
       <a class="btn btn-primary" [routerLink]="['/Kirjelda/Detailid']">Lisa uus</a>
     </div>
   </div>
