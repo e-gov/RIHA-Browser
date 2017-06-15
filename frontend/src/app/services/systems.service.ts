@@ -8,7 +8,15 @@ export class SystemsService {
 
   private systemsUrl = '/systems';
 
-  public getSystems(filters?, page?): any {
+  public getOwnSystems(filters?, page?){
+    filters = filters || {};
+    //set current user as owner
+    //filters.owner = '';
+
+    return this.getSystems(filters, page);
+  }
+
+  public getSystems(filters?, page?) {
 
     let params: URLSearchParams = new URLSearchParams();
     let filtersArr: string[] = [];
@@ -16,6 +24,9 @@ export class SystemsService {
     if (!isNullOrUndefined(filters)){
       if (filters.name){
         filtersArr.push(`name,ilike,%${ filters.name }%`);
+      }
+      if (filters.shortName){
+        filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
       if (filters.owner){
         filtersArr.push(`owner,ilike,%${ filters.owner }%`);
