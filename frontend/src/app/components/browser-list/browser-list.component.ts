@@ -17,10 +17,8 @@ export class BrowserListComponent implements OnInit {
   }
 
   onPageChange(newPage){
-    if (isNumber(newPage)){
-      this.gridData.page = newPage - 1;
-      this.getSystems();
-    }
+    this.gridData.page = newPage - 1;
+    this.getSystems();
   }
 
   getSystems(): void {

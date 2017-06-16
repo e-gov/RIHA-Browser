@@ -17,10 +17,8 @@ export class ProducerListComponent implements OnInit {
   }
 
   onPageChange(newPage){
-    if (isNumber(newPage)){
-      this.gridData.page = newPage - 1;
-      this.getOwnSystems();
-    }
+    this.gridData.page = newPage - 1;
+    this.getOwnSystems();
   }
 
   getOwnSystems(): void {
