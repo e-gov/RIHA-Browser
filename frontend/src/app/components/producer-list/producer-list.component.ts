@@ -16,13 +16,18 @@ export class ProducerListComponent implements OnInit {
     shortName: string
   }
 
-  onPageChange(newPage){
+  onPageChange(newPage): void{
     this.gridData.page = newPage - 1;
     this.getOwnSystems();
   }
 
+  onSortChange(property): void{
+    this.gridData.changeSortOrder(property);
+    this.getOwnSystems();
+  }
+
   getOwnSystems(): void {
-    this.systemsService.getOwnSystems(this.filters, this.gridData.page).then(
+    this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
       })

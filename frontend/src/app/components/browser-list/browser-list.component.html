@@ -24,12 +24,12 @@
       <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
         <thead class="thead-default">
         <tr>
-          <th class="owner" data-filter="input">Omanik</th>
-          <th class="name" data-filter="input">Infosüsteemi nimi</th>
-          <th class="last-modified" data-filter="input" data-placeholder="AAAA-KK-PP">Viimati muudetud</th>
-          <th class="status" data-filter="select">Staatus</th>
-          <th class="approved" data-filter="input" data-placeholder="AAAA-KK-PP">Kooskõlastatud</th>
-          <th class="approval-status" data-filter="select">Kooskõlastamise staatus</th>
+          <th><button (click)="onSortChange('owner')" class="btn btn-primary btn-sm">Omanik</button></th>
+          <th><button (click)="onSortChange('name')" class="btn btn-primary btn-sm">Infosüsteemi nimi</button></th>
+          <th><button (click)="onSortChange('modified_date')" class="btn btn-primary btn-sm">Viimati muudetud</button></th>
+          <th><button (click)="onSortChange('status')" class="btn btn-primary btn-sm">Staatus</button></th>
+          <th><button (click)="onSortChange('approved')" class="btn btn-primary btn-sm">Kooskõlastatud</button></th>
+          <th><button (click)="onSortChange('approvalStatus')" class="btn btn-primary btn-sm">Kooskõlastamise staatus</button></th>
         </tr>
         </thead>
         <tbody>

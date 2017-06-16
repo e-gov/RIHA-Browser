@@ -21,8 +21,13 @@ export class BrowserListComponent implements OnInit {
     this.getSystems();
   }
 
+  onSortChange(property): void{
+    this.gridData.changeSortOrder(property);
+    this.getSystems();
+  }
+
   getSystems(): void {
-    this.systemsService.getSystems(this.filters, this.gridData.page).then(
+    this.systemsService.getSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
     })

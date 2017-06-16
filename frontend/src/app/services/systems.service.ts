@@ -8,15 +8,15 @@ export class SystemsService {
 
   private systemsUrl = '/systems';
 
-  public getOwnSystems(filters?, page?){
+  public getOwnSystems(filters?, gridData?){
     filters = filters || {};
     //set current user as owner
     //filters.owner = '';
 
-    return this.getSystems(filters, page);
+    return this.getSystems(filters, gridData);
   }
 
-  public getSystems(filters?, page?) {
+  public getSystems(filters?, gridData?) {
 
     let params: URLSearchParams = new URLSearchParams();
     let filtersArr: string[] = [];
@@ -36,8 +36,12 @@ export class SystemsService {
       }
     }
 
-    if (!isNullOrUndefined(page)){
-      params.set('page', page);
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
     }
 
     return this.http.get(this.systemsUrl, {
