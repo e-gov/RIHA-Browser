@@ -5,22 +5,22 @@
       <p>
         RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva eraõigusliku isiku infosüsteemid, mis asutatakse ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises lepingus sätestatud ülesannete täitmiseks.
       </p>
-      <div class="form-group row">
+      <div class="form-group row" [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched)}">
         <label for="name-input" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Nimi:</label>
         <div class="col-sm-10">
-          <input class="form-control" [(ngModel)]="system.name" type="text" id="name-input" placeholder="nt. Andmeomanike ametlik register" required>
+          <input #name="ngModel" class="form-control" [(ngModel)]="system.name" type="text" id="name-input" placeholder="nt. Andmeomanike ametlik register" required>
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row" [ngClass]="{'has-danger': shortName.invalid  && (shortName.dirty || shortName.touched)}">
         <label for="short-name-input" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Lühinimi:</label>
         <div class="col-sm-10">
-          <input class="form-control" [(ngModel)]="system.short_name" type="text" id="short-name-input"  placeholder="nt. AARE" required>
+          <input #shortName="ngModel" class="form-control" [(ngModel)]="system.short_name" type="text" id="short-name-input"  placeholder="nt. AARE" required>
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row" [ngClass]="{'has-danger': purpose.invalid  && (purpose.dirty || purpose.touched)}">
         <label for="purpose-textarea" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Infosüsteemi eesmärk:</label>
         <div class="col-sm-10">
-          <textarea class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
+          <textarea #purpose="ngModel" [(ngModel)]="system.purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
         </div>
       </div>
       <button type="submit" class="btn btn-default pull-right">Salvesta</button>
