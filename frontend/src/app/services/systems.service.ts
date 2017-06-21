@@ -49,6 +49,17 @@ export class SystemsService {
     }).toPromise();
   }
 
+  public addSystem(value) {
+    let system = {
+      details: {
+        short_name: value.short_name,
+        name: value.name,
+        purpose: value.purpose
+      }
+    }
+    return this.http.post(this.systemsUrl, system).toPromise();
+  }
+
   constructor(private http: Http) { }
 
 }

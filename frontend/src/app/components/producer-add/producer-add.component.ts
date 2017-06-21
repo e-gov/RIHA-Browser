@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SystemsService } from '../../services/systems.service';
 
 @Component({
   selector: 'app-producer-add',
@@ -7,10 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProducerAddComponent implements OnInit {
 
-  system: any;
+  onSubmit(f) :void {
+    if (f.valid){
+      this.systemsService.addSystem(f.value).then(
+        res => {
+          this.router.navigate(['/Kirjelda']);
+        })
+    }
+  }
 
-  constructor() {
-    this.system = {};
+  constructor(private systemsService: SystemsService,
+              private router: Router) {
   }
 
   ngOnInit() {
