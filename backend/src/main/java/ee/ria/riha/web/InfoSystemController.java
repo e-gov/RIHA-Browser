@@ -1,8 +1,8 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.service.InfoSystemService;
-import ee.ria.riha.web.util.Filterable;
-import ee.ria.riha.web.util.Pageable;
+import ee.ria.riha.storage.util.Filterable;
+import ee.ria.riha.storage.util.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

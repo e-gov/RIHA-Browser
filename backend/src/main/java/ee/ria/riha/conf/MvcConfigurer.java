@@ -1,7 +1,7 @@
 package ee.ria.riha.conf;
 
-import ee.ria.riha.web.util.FilterableArgumentResolver;
-import ee.ria.riha.web.util.PageableArgumentResolver;
+import ee.ria.riha.storage.util.FilterableArgumentResolver;
+import ee.ria.riha.storage.util.PageableArgumentResolver;
 import freemarker.core.HTMLOutputFormat;
 import freemarker.template.TemplateException;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +21,7 @@ public class MvcConfigurer extends WebMvcConfigurerAdapter {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        super.addArgumentResolvers(argumentResolvers);
         argumentResolvers.add(new PageableArgumentResolver());
         argumentResolvers.add(new FilterableArgumentResolver());
     }
