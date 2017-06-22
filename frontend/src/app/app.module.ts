@@ -30,6 +30,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { ProducerAddComponent } from './components/producer-add/producer-add.component';
 import { ProducerDetailsComponent } from './components/producer-details/producer-details.component';
 import { ProducerEditComponent } from './components/producer-edit/producer-edit.component';
+import { DateRowComponent } from './components/date-row/date-row.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -74,7 +75,8 @@ const routes: Routes = [
     PageNotFoundComponent,
     LoginFormComponent,
     ProducerAddComponent,
-    ProducerEditComponent
+    ProducerEditComponent,
+    DateRowComponent
   ],
   imports: [
     BrowserModule,

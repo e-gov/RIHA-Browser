@@ -49,6 +49,10 @@ export class SystemsService {
     }).toPromise();
   }
 
+  public getSystem(id) {
+    return this.http.get(this.systemsUrl + '/' + id).toPromise();
+  }
+
   public addSystem(value) {
     let system = {
       details: {
