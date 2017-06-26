@@ -7,14 +7,14 @@
   <div class="my-1">
     <h1>{{ system.details.name }}</h1>
     <h2>{{ system.details.short_name }}</h2>
-    <p>
-      <span class="text-muted separated-text">Infosüsteemi eesmärk:</span><br>
-      <strong>{{ system.details.purpose }}</strong>
-    </p>
-    <p>
-      <span class="text-muted separated-text">Omanik:</span><br>
-      <span class="text-primary">{{ system.details.owner.code }}</span>
-    </p>
+    <div class="form-group">
+      <label class="text-muted separated-text">Infosüsteemi eesmärk:</label>
+      <p>{{ system.details.purpose }}</p>
+    </div>
+    <div class="form-group">
+      <label class="text-muted separated-text">Omanik:</label>
+      <p class="text-primary">{{ system.details.owner.code }}</p>
+    </div>
     <hr>
     <p>
       <app-date-row [text]="'Andmed uuendati viimati'" [date]="system.details.creation_date"></app-date-row>
