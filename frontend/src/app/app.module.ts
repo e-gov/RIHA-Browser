@@ -7,6 +7,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
+import { TagInputModule } from 'ng2-tag-input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -82,6 +84,8 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
+    TagInputModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       missingTranslationHandler,

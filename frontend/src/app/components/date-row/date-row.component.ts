@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DateRowComponent implements OnInit {
 
   @Input() text: string;
+  @Input() icon: string;
   @Input() date: string;
 
   formattedDate: string;

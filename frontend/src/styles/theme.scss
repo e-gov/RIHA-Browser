@@ -713,6 +713,23 @@ $CONTENTS
         }
     }
 }
+.form-group {
+    &.row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+}
+.col-form-label {
+   &.advanced-label {
+     display: block;
+     font-size: inherit;
+     margin-left: 0;
+     margin-right: 0;
+   }
+  .fa {
+    margin-right: 15px;
+  }
+}
 .card-columns {
     .card {
         margin-bottom: 20px;
@@ -892,6 +909,10 @@ $CONTENTS
     margin-bottom: 20px;
     text-transform: uppercase;
     color: $primary;
+  }
+  .separate-block {
+    margin-top: 60px;
+    margin-bottom: 50px;
   }
 }
 h2,
