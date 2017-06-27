@@ -22,7 +22,7 @@ export class ProducerEditComponent implements OnInit {
   onSubmit(f) :void {
     if (f.valid) {
       this.systemsService.updateSystem(this.system).then(response => {
-        this.router.navigate(['/Kirjelda/Vaata/', this.system.id]);
+        this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
       });
     }
   }
