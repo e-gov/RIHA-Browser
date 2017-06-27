@@ -24,6 +24,11 @@ export class ProducerEditComponent implements OnInit {
     return false;
   }
 
+  changeInDevelopmentStatus(inDevelopment){
+    this.system.setInDevelopment(inDevelopment);
+    return false;
+  }
+
   constructor(private systemsService: SystemsService,
               private route: ActivatedRoute) {
     this.system = new System();

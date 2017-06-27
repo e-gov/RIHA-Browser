@@ -33,7 +33,13 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
+        <label *ngIf="system.isInDevelopment()" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
+        <label *ngIf="!system.isInDevelopment()" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
+        <div class="col-sm-4 form-links">
+          <span>Kas infosüsteem on arendusel?</span>
+          <a href="#" (click)="changeInDevelopmentStatus(true)">Jah</a>
+          <a href="#" (click)="changeInDevelopmentStatus(false)">Ei</a>
+        </div>
       </div>
     </div>
     <div class="form-group">
