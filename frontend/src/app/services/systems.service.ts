@@ -64,6 +64,10 @@ export class SystemsService {
     return this.http.post(this.systemsUrl, system).toPromise();
   }
 
+  public updateSystem(updatedData) {
+    return this.http.put(this.systemsUrl + '/' + updatedData.id, updatedData).toPromise();
+  }
+
   constructor(private http: Http) { }
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { System } from '../../models/system';
 
 @Component({
@@ -9,7 +9,7 @@ import { System } from '../../models/system';
   styleUrls: ['./producer-edit.component.scss']
 })
 export class ProducerEditComponent implements OnInit {
-  public system: System;
+  private system: System;
   private loaded: boolean = false;
 
   getSystem(id){
@@ -17,6 +17,12 @@ export class ProducerEditComponent implements OnInit {
       this.system.setData(response.json());
       this.loaded = true;
     })
+  }
+
+  updateSystem(){
+    this.systemsService.updateSystem(this.system).then(response => {
+      this.router.navigate(['/Kirjelda/Vaata/', this.system.id]);
+    });
   }
 
   changeSystemStatus(statusCode) {
@@ -30,7 +36,8 @@ export class ProducerEditComponent implements OnInit {
   }
 
   constructor(private systemsService: SystemsService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
     this.system = new System();
 
   }
