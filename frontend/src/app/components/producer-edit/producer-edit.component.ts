@@ -29,6 +29,9 @@ export class ProducerEditComponent implements OnInit {
 
   changeSystemStatus(statusCode) {
     this.system.setStatus(statusCode);
+    if (statusCode == 1){
+      this.system.details.active_since = null;
+    }
     return false;
   }
 
