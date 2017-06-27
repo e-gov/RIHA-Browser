@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { ActivatedRoute } from '@angular/router';
+import { System } from '../../models/system';
 
 @Component({
   selector: 'app-producer-edit',
@@ -8,23 +9,24 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./producer-edit.component.scss']
 })
 export class ProducerEditComponent implements OnInit {
-  private system: any;
+  public system: System;
   private loaded: boolean = false;
 
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
-      this.system = response.json();
+      this.system.setData(response.json());
       this.loaded = true;
     })
   }
 
   changeSystemStatus(statusCode) {
-    this.system.status.code = statusCode;
+    this.system.setStatus(statusCode);
+    return false;
   }
 
   constructor(private systemsService: SystemsService,
               private route: ActivatedRoute) {
-    this.system = {};
+    this.system = new System();
 
   }
 
