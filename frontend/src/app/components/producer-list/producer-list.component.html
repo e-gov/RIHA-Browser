@@ -32,14 +32,15 @@
             <td class="name">{{ system.description.name }}</td>
             <td class="short-name">{{ system.description.short_name }}</td>
             <td>
-              <button class="btn btn-success edit btn-sm">Muuda</button>
+              <button class="btn btn-primary view btn-sm" [routerLink]="['/Kirjelda/Vaata', system.description.main_resource_id]">Vaata</button>
+              <button class="btn btn-success edit btn-sm" [routerLink]="['/Kirjelda/Muuda', system.description.main_resource_id]">Muuda</button>
               <button class="btn btn-danger delete btn-sm">Kustuta</button>
             </td>
           </tr>
         </tbody>
       </table>
       <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="gridData.size" [collectionSize]="gridData.totalElements" [page]="gridData.page + 1"></ngb-pagination>
-      <a class="btn btn-primary" [routerLink]="['/Kirjelda/Detailid']">Lisa uus</a>
+      <a class="btn btn-primary" [routerLink]="['/Kirjelda/Uus']">Lisa uus</a>
     </div>
   </div>
 </section>

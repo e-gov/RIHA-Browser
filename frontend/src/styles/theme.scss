@@ -713,6 +713,23 @@ $CONTENTS
         }
     }
 }
+.form-group {
+    &.row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+}
+.col-form-label {
+   &.advanced-label {
+     display: block;
+     font-size: inherit;
+     margin-left: 0;
+     margin-right: 0;
+   }
+  .fa {
+    margin-right: 15px;
+  }
+}
 .card-columns {
     .card {
         margin-bottom: 20px;
@@ -881,6 +898,23 @@ $CONTENTS
         margin-bottom: 0px;
     }
 }
+.main-content {
+  h1,
+  h1 {
+    font-size: 60px;
+    font-weight: bold;
+    line-height: 25px;
+    padding-bottom: 14px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: $primary;
+  }
+  .separate-block {
+    margin-top: 60px;
+    margin-bottom: 50px;
+  }
+}
 h2,
 .h2 {
     font-size: 30px;
@@ -889,7 +923,8 @@ h2,
     padding-bottom: 14px;
     border-bottom: 1px solid $grey;
     margin-bottom: 20px;
-    &.h2-sm {
+    color: $primary;
+  &.h2-sm {
         font-size: 24px;
         line-height: 30px;
         padding-bottom: 4px;
@@ -962,6 +997,23 @@ h6,
 .h6 {
     margin-bottom: 30px;
     line-height: 20px;
+}
+.form-control {
+  &.h1 {
+    font-size: 60px;
+    font-weight: bold;
+    color: $primary;
+    line-height: inherit;
+    text-transform: none;
+  }
+  &.h2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: $primary;
+    padding: 8px 9px;
+    line-height: inherit;
+    text-transform: none;
+  }
 }
 .lead {
     font-size: 24px;
@@ -1356,4 +1408,16 @@ mark {
     .popover-content {
         font-size: 12px;
     }
+}
+.panel-action-heading {
+  margin: -20px -20px 20px -20px;
+  background-color: $grey;
+  font-size: 20px;
+  line-height: 30px;
+  padding: 15px 20px;
+  font-weight: bold;
+  box-shadow: 0px 0px 10px 0px rgba($black, 0.1);
+}
+.separated-text {
+  line-height: 40px;
 }
