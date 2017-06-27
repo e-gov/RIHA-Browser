@@ -18,6 +18,10 @@ export class ProducerEditComponent implements OnInit {
     })
   }
 
+  changeSystemStatus(statusCode) {
+    this.system.status.code = statusCode;
+  }
+
   constructor(private systemsService: SystemsService,
               private route: ActivatedRoute) {
     this.system = {};
