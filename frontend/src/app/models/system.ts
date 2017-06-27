@@ -19,8 +19,16 @@ export class System {
     }
   }
 
+  setInDevelopment(inDevelopment): void {
+    this.details.inDevelopment = inDevelopment;
+  }
+
   isUsed(): boolean{
     return this.details.status.code === 1;
+  }
+
+  isInDevelopment(): boolean{
+    return this.details.inDevelopment;
   }
 
   constructor(){
@@ -29,7 +37,9 @@ export class System {
       status: {
         code: null,
         description: 'määramata staatuses'
-      }
+      },
+      inDevelopment: false,
+      tags: []
     };
   }
 }

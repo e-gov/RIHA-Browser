@@ -20,9 +20,9 @@
         <div class="col-sm-4">
           <div class="input-group datepicker" *ngIf="system.isUsed()">
             <input id="active-since-date" class="form-control" placeholder="yyyy-mm-dd"
-                   name="dp" [(ngModel)]="system.details.active_since" ngbDatepicker #d="ngbDatepicker">
+                   name="dp" [(ngModel)]="system.details.active_since" ngbDatepicker #activeSinceDate="ngbDatepicker">
             <span class="input-group-btn">
-                <button (click)="d.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                <button (click)="activeSinceDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
           </div>
         </div>
@@ -66,8 +66,20 @@
           </div>
         </div>
       </div>
-
-      <app-date-row [icon]="'fa-times'" [text]="'Liidestatud X-teega'" [date]="system.details.creation_date"></app-date-row>
+      <div class="form-group row">
+        <label for="x_road_date" class="col-form-label advanced-label">
+          <span class="text-muted"><i class="fa fa-times" aria-hidden="true"></i>Liidestatud X-teega</span>
+        </label>
+        <div class="col-sm-4">
+          <div class="input-group datepicker">
+            <input id="x_road_date" class="form-control" placeholder="yyyy-mm-dd"
+                   name="x_road_date" [(ngModel)]="system.details.x_road_date" ngbDatepicker #xRoadDate="ngbDatepicker">
+            <span class="input-group-btn">
+                <button (click)="xRoadDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+            </span>
+          </div>
+        </div>
+      </div>
 
     </div>
     <hr>
