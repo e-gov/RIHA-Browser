@@ -19,10 +19,12 @@ export class ProducerEditComponent implements OnInit {
     })
   }
 
-  updateSystem(){
-    this.systemsService.updateSystem(this.system).then(response => {
-      this.router.navigate(['/Kirjelda/Vaata/', this.system.id]);
-    });
+  onSubmit(f) :void {
+    if (f.valid) {
+      this.systemsService.updateSystem(this.system).then(response => {
+        this.router.navigate(['/Kirjelda/Vaata/', this.system.id]);
+      });
+    }
   }
 
   changeSystemStatus(statusCode) {
