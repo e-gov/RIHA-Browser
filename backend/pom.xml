@@ -10,7 +10,7 @@
     <parent>
         <groupId>ee.ria.riha</groupId>
         <artifactId>browser</artifactId>
-        <version>0.1.1</version>
+        <version>0.2.0</version>
     </parent>
 
     <dependencies>
@@ -52,6 +52,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160810</version>
+        </dependency>
+        <dependency>
+            <groupId>ee.ria.riha</groupId>
+            <artifactId>storage-client</artifactId>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
 
