@@ -15,7 +15,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public StorageClient storageClient(ApplicationProperties applicationProperties) {
-        return new StorageClient(new RestTemplate(), applicationProperties.getStorageClient().getBaseUrl());
+        return new StorageClient(new RestTemplate(), applicationProperties.getRemoteApi().getStorageUrl());
     }
 
 }

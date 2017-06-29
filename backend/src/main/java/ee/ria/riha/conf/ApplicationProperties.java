@@ -1,6 +1,5 @@
 package ee.ria.riha.conf;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +10,30 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "browser")
 public class ApplicationProperties {
 
-    private final StorageClient storageClient = new StorageClient();
+    private final RemoteApi remoteApi = new RemoteApi();
 
-    public StorageClient getStorageClient() {
-        return storageClient;
+    public RemoteApi getRemoteApi() {
+        return remoteApi;
     }
 
-    public static class StorageClient {
-        @NotEmpty
-        private String baseUrl;
+    public static class RemoteApi {
+        String storageUrl;
+        String producerUrl;
 
-        public String getBaseUrl() {
-            return baseUrl;
+        public String getStorageUrl() {
+            return storageUrl;
         }
 
-        public void setBaseUrl(String baseUrl) {
-            this.baseUrl = baseUrl;
+        public void setStorageUrl(String storageUrl) {
+            this.storageUrl = storageUrl;
+        }
+
+        public String getProducerUrl() {
+            return producerUrl;
+        }
+
+        public void setProducerUrl(String producerUrl) {
+            this.producerUrl = producerUrl;
         }
     }
 }
