@@ -37,11 +37,11 @@ deploy_development:
         - mkdir $HOME/.ssh
         - echo "$SSH_HOST_KEY" > $HOME/.ssh/known_hosts
         - scp -i id_rsa backend/target/*.jar deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
+        - ssh -i id_rsa deployer@$SSH_HOST "/bin/chmod ug+x $DEPLOYMENT_DIR/$ARTIFACT_NAME"
         - ssh -i id_rsa deployer@$SSH_HOST "/sbin/service $CI_PROJECT_NAME restart"
     environment:
         name: development
         url: http://$SSH_HOST:$PORT/
-    only:
-        - develop
+    when: manual
     tags:
         - riha
