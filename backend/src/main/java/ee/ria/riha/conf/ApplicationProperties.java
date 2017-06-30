@@ -12,21 +12,23 @@ public class ApplicationProperties {
 
     private final RemoteApi remoteApi = new RemoteApi();
 
+    private String storageUrl;
+
     public RemoteApi getRemoteApi() {
         return remoteApi;
     }
 
+    public String getStorageUrl() {
+        return storageUrl;
+    }
+
+    public void setStorageUrl(String storageUrl) {
+        this.storageUrl = storageUrl;
+    }
+
+
     public static class RemoteApi {
-        String storageUrl;
-        String producerUrl;
-
-        public String getStorageUrl() {
-            return storageUrl;
-        }
-
-        public void setStorageUrl(String storageUrl) {
-            this.storageUrl = storageUrl;
-        }
+        private String producerUrl;
 
         public String getProducerUrl() {
             return producerUrl;
