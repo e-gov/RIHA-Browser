@@ -33,6 +33,8 @@ import { ProducerAddComponent } from './components/producer-add/producer-add.com
 import { ProducerDetailsComponent } from './components/producer-details/producer-details.component';
 import { ProducerEditComponent } from './components/producer-edit/producer-edit.component';
 import { DateRowComponent } from './components/date-row/date-row.component';
+import { ProducerDetailsObjectsComponent } from './components/producer-details-objects/producer-details-objects.component';
+import { ProducerEditObjectsComponent } from './components/producer-edit-objects/producer-edit-objects.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -78,7 +80,9 @@ const routes: Routes = [
     LoginFormComponent,
     ProducerAddComponent,
     ProducerEditComponent,
-    DateRowComponent
+    DateRowComponent,
+    ProducerDetailsObjectsComponent,
+    ProducerEditObjectsComponent
   ],
   imports: [
     BrowserModule,
