@@ -903,7 +903,7 @@ $CONTENTS
   h1 {
     font-size: 60px;
     font-weight: bold;
-    line-height: 25px;
+    line-height: 1;
     padding-bottom: 14px;
     margin-top: 30px;
     margin-bottom: 20px;
@@ -1052,6 +1052,18 @@ ol {
             margin-right: 2px;
         }
     }
+}
+ul.circle-bullets {
+  padding-left: 5px;
+  list-style-type: none;
+  li {
+    margin: 0 0 10px 0;
+  }
+  li::before {
+    content: "⬤";
+    color: $primary;
+    margin-right: 10px;
+  }
 }
 mark {
     background-color: $yellow;
