@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { SystemsService } from '../../services/systems.service';
-import { System } from '../../models/system';
+import { SystemsService } from '../../../services/systems.service';
+import { System } from '../../../models/system';
 import { Router } from '@angular/router';
 
 @Component({

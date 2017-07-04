@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { System } from '../../models/system';
-import { SystemsService } from '../../services/systems.service';
+import { System } from '../../../models/system';
+import { SystemsService } from '../../../services/systems.service';
 import { Router } from '@angular/router';
 
 @Component({

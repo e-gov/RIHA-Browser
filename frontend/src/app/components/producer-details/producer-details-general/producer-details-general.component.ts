@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { System } from '../../models/system';
+import { System } from '../../../models/system';
 
 @Component({
   selector: 'app-producer-details-general',

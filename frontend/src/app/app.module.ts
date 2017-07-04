@@ -33,10 +33,10 @@ import { ProducerAddComponent } from './components/producer-add/producer-add.com
 import { ProducerDetailsComponent } from './components/producer-details/producer-details.component';
 import { ProducerEditComponent } from './components/producer-edit/producer-edit.component';
 import { DateRowComponent } from './components/date-row/date-row.component';
-import { ProducerDetailsObjectsComponent } from './components/producer-details-objects/producer-details-objects.component';
-import { ProducerEditObjectsComponent } from './components/producer-edit-objects/producer-edit-objects.component';
-import { ProducerDetailsGeneralComponent } from './components/producer-details-general/producer-details-general.component';
-import { ProducerEditGeneralComponent } from './components/producer-edit-generalral/producer-edit-general.component';
+import { ProducerDetailsObjectsComponent } from './components/producer-details/producer-details-objects/producer-details-objects.component';
+import { ProducerEditObjectsComponent } from './components/producer-edit/producer-edit-objects/producer-edit-objects.component';
+import { ProducerDetailsGeneralComponent } from './components/producer-details/producer-details-general/producer-details-general.component';
+import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-generalral/producer-edit-general.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

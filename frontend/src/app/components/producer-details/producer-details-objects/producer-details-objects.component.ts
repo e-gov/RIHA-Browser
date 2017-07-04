@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProducerEditObjectsComponent } from '../producer-edit-objects/producer-edit-objects.component';
-import { System } from '../../models/system';
+import { ProducerEditObjectsComponent } from '../../producer-edit/producer-edit-objects/producer-edit-objects.component';
+import { System } from '../../../models/system';
 
 @Component({
   selector: 'app-producer-details-objects',
