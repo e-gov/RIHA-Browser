@@ -1,0 +1,22 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Õigusaktid
+    <button (click)="openLegislationsEdit()" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
+  </div>
+  <div class="form-group">
+    <label class="text-muted separated-text">Infosüsteemi õigusaktid:</label>
+    <p *ngIf="!system.details.legislations || system.details.legislations.length == 0">
+      Õigusaktid puuduvad.
+    </p>
+    <table class="details-list-table">
+      <tr *ngFor="let legislation of system.details.legislations">
+        <td>
+          <i class="fa fa-external-link text-primary"></i>
+        </td>
+        <td>
+          <a href="{{ legislation.text || legislation.uri }}" target="_blank">{{ (!legislation.text || legislation.text.trim()=='') ? legislation.url : legislation.text }}</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</section>

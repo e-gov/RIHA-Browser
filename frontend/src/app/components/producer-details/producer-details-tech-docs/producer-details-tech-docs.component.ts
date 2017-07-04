@@ -12,7 +12,7 @@ export class ProducerDetailsTechDocsComponent implements OnInit {
 
   @Input() system: System;
 
-  openObjectsEdit(content) {
+  openTechDocsEdit(content) {
     const modalRef = this.modalService.open(ProducerEditTechDocsComponent);
     this.system.details.tech_docs = this.system.details.tech_docs || [];
     modalRef.componentInstance.system = this.system;

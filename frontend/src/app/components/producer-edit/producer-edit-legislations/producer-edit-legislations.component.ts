@@ -5,30 +5,30 @@ import { System } from '../../../models/system';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-producer-edit-tech-docs',
-  templateUrl: './producer-edit-tech-docs.component.html',
-  styleUrls: ['./producer-edit-tech-docs.component.scss']
+  selector: 'app-producer-edit-legislations',
+  templateUrl: './producer-edit-legislations.component.html',
+  styleUrls: ['./producer-edit-legislations.component.scss']
 })
-export class ProducerEditTechDocsComponent implements OnInit {
+export class ProducerEditLegislationsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() tech_docs: any[];
+  @Input() legislations: any[];
 
-  addTechDoc(urlInput, textInput): void {
+  addLegislation(urlInput, textInput): void {
     if (urlInput.value.length > 0 && urlInput.checkValidity()){
-      this.tech_docs.push({url: urlInput.value,
-                          text: textInput.value.trim()});
+      this.legislations.push({url: urlInput.value,
+                              text: textInput.value.trim()});
       urlInput.value = '';
       textInput.value = '';
     }
   }
 
-  deleteTechDoc(i): void {
-    this.tech_docs.splice(i, 1);
+  deleteLegislation(i): void {
+    this.legislations.splice(i, 1);
   }
 
   saveSystem(){
-    this.system.details.tech_docs = this.tech_docs;
+    this.system.details.legislations = this.legislations;
     this.systemsService.updateSystem(this.system).then(response => {
       this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
     });

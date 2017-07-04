@@ -39,6 +39,8 @@ import { ProducerDetailsGeneralComponent } from './components/producer-details/p
 import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-generalral/producer-edit-general.component';
 import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-tech-docs/producer-details-tech-docs.component';
 import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
+import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
+import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -90,7 +92,9 @@ const routes: Routes = [
     ProducerDetailsGeneralComponent,
     ProducerEditGeneralComponent,
     ProducerDetailsTechDocsComponent,
-    ProducerEditTechDocsComponent
+    ProducerEditTechDocsComponent,
+    ProducerEditLegislationsComponent,
+    ProducerDetailsLegislationsComponent
   ],
   imports: [
     BrowserModule,
@@ -111,7 +115,8 @@ const routes: Routes = [
   ],
   entryComponents: [
     ProducerEditObjectsComponent,
-    ProducerEditTechDocsComponent
+    ProducerEditTechDocsComponent,
+    ProducerEditLegislationsComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService]
