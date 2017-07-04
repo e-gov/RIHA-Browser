@@ -101,6 +101,9 @@ const routes: Routes = [
     }),
     NgbModule.forRoot()
   ],
+  entryComponents: [
+    ProducerEditObjectsComponent
+  ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService]
 })
