@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { ActivatedRoute } from '@angular/router';
+import { System } from '../../models/system';
 
 @Component({
   selector: 'app-producer-details',
@@ -8,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./producer-details.component.scss']
 })
 export class ProducerDetailsComponent implements OnInit {
-  private system: any;
+  private system: System;
   private loaded: boolean = false;
 
   getSystem(id){
@@ -20,7 +21,7 @@ export class ProducerDetailsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private route: ActivatedRoute) {
-    this.system = {};
+    this.system = new System();
 
   }
 
