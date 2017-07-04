@@ -37,6 +37,8 @@ import { ProducerDetailsObjectsComponent } from './components/producer-details/p
 import { ProducerEditObjectsComponent } from './components/producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { ProducerDetailsGeneralComponent } from './components/producer-details/producer-details-general/producer-details-general.component';
 import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-generalral/producer-edit-general.component';
+import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-tech-docs/producer-details-tech-docs.component';
+import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -86,7 +88,9 @@ const routes: Routes = [
     ProducerDetailsObjectsComponent,
     ProducerEditObjectsComponent,
     ProducerDetailsGeneralComponent,
-    ProducerEditGeneralComponent
+    ProducerEditGeneralComponent,
+    ProducerDetailsTechDocsComponent,
+    ProducerEditTechDocsComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +110,8 @@ const routes: Routes = [
     NgbModule.forRoot()
   ],
   entryComponents: [
-    ProducerEditObjectsComponent
+    ProducerEditObjectsComponent,
+    ProducerEditTechDocsComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService]
