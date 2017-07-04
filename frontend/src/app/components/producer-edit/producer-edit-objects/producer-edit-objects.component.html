@@ -16,13 +16,23 @@
         </div>
       </div>
     </div>
-    <ul *ngIf="system" class="circle-bullets">
-      <li *ngFor="let object of objects; let i = index">{{object}} <button (click)="deleteObject(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button></li>
-    </ul>
+    <table *ngIf="system" class="details-list-table">
+      <tr *ngFor="let object of objects; let i = index">
+        <td>
+          <i class="fa fa-circle text-primary"></i>
+        </td>
+        <td>
+          {{ object }}
+        </td>
+        <td>
+          <button (click)="deleteObject(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+        </td>
+      </tr>
+    </table>
     <div class="actions-bar">
       <div class="buttons pull-right">
         <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
-        <button (click)="saveSystem()" class="btn btn-success pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i> Salvesta</button>
+        <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
       </div>
     </div>
   </div>

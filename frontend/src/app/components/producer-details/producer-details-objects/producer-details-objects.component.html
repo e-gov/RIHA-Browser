@@ -8,8 +8,15 @@
     <p *ngIf="!system.details.objects || system.details.objects.length == 0">
       Objektid puuduvad.
     </p>
-    <ul class="circle-bullets">
-      <li *ngFor="let object of system.details.objects">{{object}}</li>
-    </ul>
+    <table class="details-list-table">
+      <tr *ngFor="let object of system.details.objects">
+        <td>
+          <i class="fa fa-circle text-primary"></i>
+        </td>
+        <td>
+          {{ object }}
+        </td>
+      </tr>
+    </table>
   </div>
 </section>
