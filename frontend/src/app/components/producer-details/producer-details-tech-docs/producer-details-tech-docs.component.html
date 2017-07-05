@@ -1,0 +1,22 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Dokumentatsioon
+    <button (click)="openTechDocsEdit()" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
+  </div>
+  <div class="form-group">
+    <label class="text-muted separated-text">Infosüsteemi tehniline dokumentatsioon:</label>
+    <p *ngIf="!system.details.tech_docs || system.details.tech_docs.length == 0">
+      Dokumentatsioon puudub.
+    </p>
+    <table class="details-list-table">
+      <tr *ngFor="let doc of system.details.tech_docs">
+        <td>
+          <i class="fa fa-external-link text-primary"></i>
+        </td>
+        <td>
+          <a href="{{ doc.url }}" target="_blank">{{ (!doc.text || doc.text.trim()=='') ? doc.url : doc.text }}</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</section>

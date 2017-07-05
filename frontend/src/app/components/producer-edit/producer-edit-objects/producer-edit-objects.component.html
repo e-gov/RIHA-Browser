@@ -1,0 +1,44 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Andmed
+  </div>
+  <div class="my-1">
+    <div class="form-group">
+      <label for="object" class="text-muted separated-text">Sisestama peab infosüsteemi põhiandmed, mida mujal registrites ei koguta:</label>
+      <div class="row">
+        <input id="object" class="form-control col-10"
+               #object
+               placeholder="Eesti kodanike elukohaandmed"
+               (keyup.enter)="addObject(object)"
+               name="object">
+        <div class="col-2">
+          <button class="btn btn-default" (click)="addObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row" [ngClass]="{'text-danger': objects.length == 10}">
+      Hetkel sisestatud {{ objects.length }} / 10
+    </div>
+    <div class="dataTables_wrapper">
+      <table *ngIf="system" class="details-list-table">
+        <tr *ngFor="let object of objects; let i = index">
+          <td>
+            <i class="fa fa-circle text-primary"></i>
+          </td>
+          <td>
+            {{ object }}
+          </td>
+          <td>
+            <button (click)="deleteObject(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="actions-bar">
+      <div class="buttons pull-right">
+        <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
+        <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+      </div>
+    </div>
+  </div>
+</section>

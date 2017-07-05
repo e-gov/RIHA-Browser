@@ -33,6 +33,14 @@ import { ProducerAddComponent } from './components/producer-add/producer-add.com
 import { ProducerDetailsComponent } from './components/producer-details/producer-details.component';
 import { ProducerEditComponent } from './components/producer-edit/producer-edit.component';
 import { DateRowComponent } from './components/date-row/date-row.component';
+import { ProducerDetailsObjectsComponent } from './components/producer-details/producer-details-objects/producer-details-objects.component';
+import { ProducerEditObjectsComponent } from './components/producer-edit/producer-edit-objects/producer-edit-objects.component';
+import { ProducerDetailsGeneralComponent } from './components/producer-details/producer-details-general/producer-details-general.component';
+import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-generalral/producer-edit-general.component';
+import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-tech-docs/producer-details-tech-docs.component';
+import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
+import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
+import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -78,7 +86,15 @@ const routes: Routes = [
     LoginFormComponent,
     ProducerAddComponent,
     ProducerEditComponent,
-    DateRowComponent
+    DateRowComponent,
+    ProducerDetailsObjectsComponent,
+    ProducerEditObjectsComponent,
+    ProducerDetailsGeneralComponent,
+    ProducerEditGeneralComponent,
+    ProducerDetailsTechDocsComponent,
+    ProducerEditTechDocsComponent,
+    ProducerEditLegislationsComponent,
+    ProducerDetailsLegislationsComponent
   ],
   imports: [
     BrowserModule,
@@ -96,6 +112,11 @@ const routes: Routes = [
       }
     }),
     NgbModule.forRoot()
+  ],
+  entryComponents: [
+    ProducerEditObjectsComponent,
+    ProducerEditTechDocsComponent,
+    ProducerEditLegislationsComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService]

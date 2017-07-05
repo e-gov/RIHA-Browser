@@ -1,0 +1,53 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Õigusaktid
+  </div>
+  <div class="my-1">
+    <div class="form-group">
+      <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
+      <input id="url" class="form-control col-12"
+             #url
+             type="url"
+             placeholder="https://www.riigiteataja.ee/akt/126082015036"
+             (keyup.enter)="addLegislation(url, text)"
+             name="url">
+
+    </div>
+    <div class="form-group">
+      <label for="text" class="text-muted separated-text">Õigusakti pealkiri:</label>
+      <input id="text" class="form-control col-12"
+             #text
+             placeholder="Põllumajandustoetuste ja põllumassiivide registri põhimäärus"
+             (keyup.enter)="addLegislation(url, text)"
+             name="text">
+
+    </div>
+    <div class="form-group row">
+      <div class="col-12">
+        <button class="btn btn-default pull-right" (click)="addLegislation(url, text)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+      </div>
+    </div>
+    <div class="dataTables_wrapper">
+      <table *ngIf="system" class="details-list-table">
+        <tr *ngFor="let legislation of legislations; let i = index">
+          <td>
+            <i class="fa fa-external-link text-primary"></i>
+          </td>
+          <td>
+            <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.text || legislation.text.trim()=='') ? legislation.url : legislation.text }}</a>
+          </td>
+          <td>
+            <button (click)="deleteLegislation(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="actions-bar">
+      <div class="buttons pull-right">
+        <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
+        <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+      </div>
+    </div>
+  </div>
+</section>
+
