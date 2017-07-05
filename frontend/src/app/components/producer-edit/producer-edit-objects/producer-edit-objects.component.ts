@@ -15,7 +15,7 @@ export class ProducerEditObjectsComponent implements OnInit {
   @Input() objects: string[];
 
   addObject(input): void {
-    if (input.value.length > 0){
+    if (input.value.length > 0 && this.objects.length < 10){
       this.objects.push(input.value);
       input.value = '';
     }
