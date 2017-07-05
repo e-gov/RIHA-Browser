@@ -1,15 +1,15 @@
 <app-page-header></app-page-header>
-<div *ngIf="loaded">
-  <div>
+<div *ngIf="loaded" class="separate-blocks">
+  <div class="separate-block">
     <app-producer-details-general [system]="system"></app-producer-details-general>
   </div>
-  <div style="margin-top: 30px;">
+  <div class="separate-block">
     <app-producer-details-objects [system]="system"></app-producer-details-objects>
   </div>
-  <div style="margin-top: 30px;">
+  <div class="separate-block">
     <app-producer-details-tech-docs [system]="system"></app-producer-details-tech-docs>
   </div>
-  <div style="margin-top: 30px;">
+  <div class="separate-block">
     <app-producer-details-legislations [system]="system"></app-producer-details-legislations>
   </div>
 </div>

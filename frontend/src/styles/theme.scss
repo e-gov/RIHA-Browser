@@ -1425,3 +1425,8 @@ mark {
 .separated-text {
   line-height: 40px;
 }
+.separate-blocks {
+  .separate-block:not(:first-child){
+    margin-top: 30px;
+  }
+}
