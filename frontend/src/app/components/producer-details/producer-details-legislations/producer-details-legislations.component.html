@@ -14,7 +14,7 @@
           <i class="fa fa-external-link text-primary"></i>
         </td>
         <td>
-          <a href="{{ legislation.text || legislation.uri }}" target="_blank">{{ (!legislation.text || legislation.text.trim()=='') ? legislation.url : legislation.text }}</a>
+          <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.text || legislation.text.trim()=='') ? legislation.url : legislation.text }}</a>
         </td>
       </tr>
     </table>
