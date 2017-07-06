@@ -1,5 +1,6 @@
 package ee.ria.riha.conf;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,21 +12,29 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationProperties {
 
     private final RemoteApi remoteApi = new RemoteApi();
-
-    private String storageUrl;
+    private final StorageClientProperties storageClient = new StorageClientProperties();
 
     public RemoteApi getRemoteApi() {
         return remoteApi;
     }
 
-    public String getStorageUrl() {
-        return storageUrl;
+    public StorageClientProperties getStorageClient() {
+        return storageClient;
     }
 
-    public void setStorageUrl(String storageUrl) {
-        this.storageUrl = storageUrl;
-    }
+    public static class StorageClientProperties {
 
+        @NotEmpty
+        private String baseUrl;
+
+        public String getBaseUrl() {
+            return baseUrl;
+        }
+
+        public void setBaseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+        }
+    }
 
     public static class RemoteApi {
         private String producerUrl;

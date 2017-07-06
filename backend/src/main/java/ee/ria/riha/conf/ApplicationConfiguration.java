@@ -1,6 +1,7 @@
 package ee.ria.riha.conf;
 
 import ee.ria.riha.storage.client.StorageClient;
+import ee.ria.riha.storage.domain.MainResourceRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,13 @@ import org.springframework.web.client.RestTemplate;
 public class ApplicationConfiguration {
 
     @Bean
-    public StorageClient storageClient(ApplicationProperties applicationProperties) {
-        return new StorageClient(new RestTemplate(), applicationProperties.getStorageUrl());
+    public MainResourceRepository mainResourceRepository(ApplicationProperties applicationProperties) {
+        return new MainResourceRepository(getStorageClient(applicationProperties));
+    }
+
+    private StorageClient getStorageClient(ApplicationProperties applicationProperties) {
+        RestTemplate restTemplate = new RestTemplate();
+        return new StorageClient(restTemplate, applicationProperties.getStorageClient().getBaseUrl());
     }
 
 }
