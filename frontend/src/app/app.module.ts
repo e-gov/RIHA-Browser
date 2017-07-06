@@ -42,6 +42,7 @@ import { ProducerDetailsTechDocsComponent } from './components/producer-details/
 import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
 import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
+import { AlertComponent } from './components/alert/alert.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -95,7 +96,8 @@ const routes: Routes = [
     ProducerDetailsTechDocsComponent,
     ProducerEditTechDocsComponent,
     ProducerEditLegislationsComponent,
-    ProducerDetailsLegislationsComponent
+    ProducerDetailsLegislationsComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
