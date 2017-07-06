@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
 import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
@@ -18,6 +18,7 @@ import { JsonDataService } from './json-data.service';
 
 //services
 import { SystemsService } from './services/systems.service';
+import { EnvironmentService } from './services/environment.service';
 
 //components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
@@ -44,6 +45,10 @@ import { ProducerDetailsLegislationsComponent } from './components/producer-deta
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+export function setGlobalEnvironment(environmentService: EnvironmentService){
+  return () => environmentService.load();
 }
 
 const routes: Routes = [
@@ -119,7 +124,7 @@ const routes: Routes = [
     ProducerEditLegislationsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService]
+  providers: [JsonDataService, SystemsService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}
