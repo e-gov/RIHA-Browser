@@ -18,6 +18,7 @@ import { JsonDataService } from './json-data.service';
 
 //services
 import { SystemsService } from './services/systems.service';
+import { WindowRefService } from './services/window-ref.service';
 
 //components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
@@ -119,7 +120,7 @@ const routes: Routes = [
     ProducerEditLegislationsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService]
+  providers: [JsonDataService, SystemsService, WindowRefService]
 })
 
 export class AppModule {}
