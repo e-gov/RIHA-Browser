@@ -9,6 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -106,6 +107,7 @@ const routes: Routes = [
     TagInputModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
+    ToastrModule.forRoot(),
     TranslateModule.forRoot({
       missingTranslationHandler,
       loader: {
