@@ -29,4 +29,11 @@
         <module>backend</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>ria-artifactory</id>
+            <url>https://artifactory.tt.kit/artifactory/public</url>
+        </repository>
+    </repositories>
+
 </project>
