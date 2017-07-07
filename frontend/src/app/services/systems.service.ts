@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, URLSearchParams  } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
+import { EnvironmentService } from './environment.service';
 
 @Injectable()
 export class SystemsService {
@@ -50,7 +51,7 @@ export class SystemsService {
   }
 
   public getSystem(id) {
-    return this.http.get(this.systemsUrl + '/' + id).toPromise();
+    return this.http.get(`${ this.environmentService.getProducerUrl() }/systems/${ id }`).toPromise();
   }
 
   public addSystem(value) {
@@ -61,13 +62,14 @@ export class SystemsService {
         purpose: value.purpose
       }
     }
-    return this.http.post(this.systemsUrl, system).toPromise();
+    return this.http.post(`${ this.environmentService.getProducerUrl() }/systems`, system).toPromise();
   }
 
   public updateSystem(updatedData) {
-    return this.http.put(this.systemsUrl + '/' + updatedData.id, updatedData).toPromise();
+    return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ updatedData.id }`, updatedData).toPromise();
   }
 
-  constructor(private http: Http) { }
+  constructor(private http: Http,
+              private environmentService: EnvironmentService) { }
 
 }
