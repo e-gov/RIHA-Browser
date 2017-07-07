@@ -16,10 +16,27 @@ These prerequisites are not strict but reflect an actual build environment:
 sudo apt-get install openjdk-8-jdk
 ~~~
 
-### Install Maven
+### Install and configure Maven
 ~~~bash
 sudo apt-get install maven
 ~~~
+
+Project pom file contains `ria-artifactory` repository definition. This repository holds artifacts used by RIHA-Browser like RIHA-Storage-Client, for example. As this repository may not be accessible, please consider using mirror repository. Mirror repository can be configured in `~/.m2/settings.xml` file the following way
+~~~xml
+<settings>
+  ...
+  <mirrors>
+    <mirror>
+      <id>ria-artifactory-mirror</id>
+      <name>Mirror of RIA artifactory</name>
+      <url>http://example.com/maven2</url>
+      <mirrorOf>ria-artifactory</mirrorOf>
+    </mirror>
+  </mirrors>
+  ...
+</settings>
+~~~
+Change at least `url` to the URL of repository you would like to use as a mirror.
 
 ### Install Node.js, NPM and additional packages
 Install Node.js and make symlink since some NPM packages (like `karma-jasmine-jquery`) depend on it
@@ -100,7 +117,6 @@ Backend is a Spring Boot web application serving UI as well.
 **NOTE!** Following commands are executed inside project root directory.
 
 #### Build using maven
-
 Package application as executable Spring Boot jar file. Packaged application will be outputted to the `backend/target` directory with name `browser-backend-<version>.jar`
 ~~~bash
 mvn package
