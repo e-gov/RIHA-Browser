@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, trigger, transition, style, animate } from '@angular/core';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { WindowRefService } from '../../../services/window-ref.service';
@@ -7,7 +7,21 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-producer-edit-general',
   templateUrl: './producer-edit-general.component.html',
-  styleUrls: ['./producer-edit-general.component.scss']
+  styleUrls: ['./producer-edit-general.component.scss'],
+  animations: [
+    trigger(
+      'enterAnimation', [
+        transition(':enter', [
+          style({transform: 'translateX(100%)', opacity: 0}),
+          animate('500ms', style({transform: 'translateX(0)', opacity: 1}))
+        ]),
+        transition(':leave', [
+          style({transform: 'translateX(0)', opacity: 1}),
+          animate('500ms', style({transform: 'translateX(100%)', opacity: 0}))
+        ])
+      ]
+    )
+  ],
 })
 export class ProducerEditGeneralComponent implements OnInit {
 
@@ -31,7 +45,8 @@ export class ProducerEditGeneralComponent implements OnInit {
       this.systemsService.updateSystem(this.system).then(response => {
         this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
       }, error => {
-        this.showValidationError();
+        //show error on server side validation failure
+        //this.showValidationError();
       });
     }
   }

@@ -4,7 +4,7 @@
   </div>
   <div class="my-1">
     <form class="col-12" #editForm="ngForm" >
-      <app-alert *ngIf="showAlert" [conf]="alertConf"></app-alert>
+      <app-alert *ngIf="showAlert" [conf]="alertConf" [@enterAnimation]></app-alert>
       <div class="form-group" [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched || editForm.submitted)}">
         <label for="name-input" class="text-muted">Infosüsteemi nimi:</label>
         <input #name="ngModel" class="form-control h1" [(ngModel)]="system.details.name" name="system.details.name" type="text" id="name-input" required>
