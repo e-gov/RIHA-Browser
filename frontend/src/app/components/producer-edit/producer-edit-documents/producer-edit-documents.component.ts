@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './producer-edit-documents.component.html',
   styleUrls: ['./producer-edit-documents.component.scss']
 })
-export class ProducerEditTechDocsComponent implements OnInit {
+export class ProducerEditDocumentsComponent implements OnInit {
 
   @Input() system: System;
   @Input() documents: any[];
