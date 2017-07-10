@@ -38,7 +38,7 @@ import { DateRowComponent } from './components/date-row/date-row.component';
 import { ProducerDetailsObjectsComponent } from './components/producer-details/producer-details-objects/producer-details-objects.component';
 import { ProducerEditObjectsComponent } from './components/producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { ProducerDetailsGeneralComponent } from './components/producer-details/producer-details-general/producer-details-general.component';
-import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-generalral/producer-edit-general.component';
+import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-general/producer-edit-general.component';
 import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-tech-docs/producer-details-tech-docs.component';
 import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
 import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';

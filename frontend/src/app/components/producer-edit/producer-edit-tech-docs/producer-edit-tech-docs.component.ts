@@ -14,12 +14,12 @@ export class ProducerEditTechDocsComponent implements OnInit {
   @Input() system: System;
   @Input() tech_docs: any[];
 
-  addTechDoc(urlInput, textInput): void {
+  addTechDoc(urlInput, nameInput): void {
     if (urlInput.value.length > 0 && urlInput.checkValidity()){
       this.tech_docs.push({url: urlInput.value,
-                          text: textInput.value.trim()});
+                          name: nameInput.value.trim()});
       urlInput.value = '';
-      textInput.value = '';
+      nameInput.value = '';
     }
   }
 

@@ -9,19 +9,19 @@
         <input id="object" class="form-control col-10"
                #object
                placeholder="Eesti kodanike elukohaandmed"
-               (keyup.enter)="addObject(object)"
+               (keyup.enter)="addStoredDataObject(object)"
                name="object">
         <div class="col-2">
-          <button class="btn btn-default" (click)="addObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          <button class="btn btn-default" (click)="addStoredDataObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
         </div>
       </div>
     </div>
-    <div class="form-group row" [ngClass]="{'text-danger': objects.length == 10}">
-      Hetkel sisestatud {{ objects.length }} / 10
+    <div class="form-group row" [ngClass]="{'text-danger': stored_data.length == 10}">
+      Hetkel sisestatud {{ stored_data.length }} / 10
     </div>
     <div class="dataTables_wrapper">
       <table *ngIf="system" class="details-list-table">
-        <tr *ngFor="let object of objects; let i = index">
+        <tr *ngFor="let object of stored_data; let i = index">
           <td>
             <i class="fa fa-circle text-primary"></i>
           </td>
@@ -29,7 +29,7 @@
             {{ object }}
           </td>
           <td>
-            <button (click)="deleteObject(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+            <button (click)="deleteStoredDataObject(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
           </td>
         </tr>
       </table>

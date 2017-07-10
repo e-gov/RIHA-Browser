@@ -9,22 +9,22 @@
              #url
              type="url"
              placeholder="https://www.riigiteataja.ee/akt/126082015036"
-             (keyup.enter)="addLegislation(url, text)"
+             (keyup.enter)="addLegislation(url, name)"
              name="url">
 
     </div>
     <div class="form-group">
-      <label for="text" class="text-muted separated-text">Õigusakti pealkiri:</label>
-      <input id="text" class="form-control col-12"
-             #text
+      <label for="name" class="text-muted separated-text">Õigusakti pealkiri:</label>
+      <input id="name" class="form-control col-12"
+             #name
              placeholder="Põllumajandustoetuste ja põllumassiivide registri põhimäärus"
-             (keyup.enter)="addLegislation(url, text)"
-             name="text">
+             (keyup.enter)="addLegislation(url, name)"
+             name="name">
 
     </div>
     <div class="form-group row">
       <div class="col-12">
-        <button class="btn btn-default pull-right" (click)="addLegislation(url, text)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        <button class="btn btn-default pull-right" (click)="addLegislation(url, name)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
     </div>
     <div class="dataTables_wrapper">
@@ -34,7 +34,7 @@
             <i class="fa fa-external-link text-primary"></i>
           </td>
           <td>
-            <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.text || legislation.text.trim()=='') ? legislation.url : legislation.text }}</a>
+            <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
           </td>
           <td>
             <button (click)="deleteLegislation(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>

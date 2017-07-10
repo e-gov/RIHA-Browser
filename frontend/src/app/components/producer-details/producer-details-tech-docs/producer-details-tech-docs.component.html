@@ -14,7 +14,7 @@
           <i class="fa fa-external-link text-primary"></i>
         </td>
         <td>
-          <a href="{{ doc.url }}" target="_blank">{{ (!doc.text || doc.text.trim()=='') ? doc.url : doc.text }}</a>
+          <a href="{{ doc.url }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? doc.url : doc.name }}</a>
         </td>
       </tr>
     </table>

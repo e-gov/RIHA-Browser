@@ -5,11 +5,11 @@
   </div>
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi kogutavad põhiandmed:</label>
-    <p *ngIf="!system.details.objects || system.details.objects.length == 0">
+    <p *ngIf="!system.details.stored_data || system.details.stored_data.length == 0">
       Objektid puuduvad.
     </p>
     <table class="details-list-table">
-      <tr *ngFor="let object of system.details.objects">
+      <tr *ngFor="let object of system.details.stored_data">
         <td>
           <i class="fa fa-circle text-primary"></i>
         </td>

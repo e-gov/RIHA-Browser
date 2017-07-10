@@ -12,21 +12,21 @@ import { Router } from '@angular/router';
 export class ProducerEditObjectsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() objects: string[];
+  @Input() stored_data: string[];
 
-  addObject(input): void {
-    if (input.value.length > 0 && this.objects.length < 10){
-      this.objects.push(input.value);
+  addStoredDataObject(input): void {
+    if (input.value.length > 0 && this.stored_data.length < 10){
+      this.stored_data.push(input.value);
       input.value = '';
     }
   }
 
-  deleteObject(i): void {
-    this.objects.splice(i, 1);
+  deleteStoredDataObject(i): void {
+    this.stored_data.splice(i, 1);
   }
 
   saveSystem(){
-    this.system.details.objects = this.objects;
+    this.system.details.stored_data = this.stored_data;
     this.systemsService.updateSystem(this.system).then(response => {
       this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
     });

@@ -14,12 +14,12 @@ export class ProducerEditLegislationsComponent implements OnInit {
   @Input() system: System;
   @Input() legislations: any[];
 
-  addLegislation(urlInput, textInput): void {
+  addLegislation(urlInput, nameInput): void {
     if (urlInput.value.length > 0 && urlInput.checkValidity()){
       this.legislations.push({url: urlInput.value,
-                              text: textInput.value.trim()});
+                              name: nameInput.value.trim()});
       urlInput.value = '';
-      textInput.value = '';
+      nameInput.value = '';
     }
   }
 
