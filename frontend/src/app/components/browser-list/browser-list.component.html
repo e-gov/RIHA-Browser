@@ -34,12 +34,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let system of gridData.content">
-            <td class="owner">{{system.description.owner}}</td>
+            <td class="owner">{{system.description.owner.name ? system.description.owner.name : system.description.owner.code}}</td>
             <td class="name">{{system.description.name}}</td>
             <td class="last-modified text-nowrap">{{system.description.modified_date}}</td>
-            <td class="status">{{system.description.status}}</td>
+            <td class="status">{{ getSystemStatus(system) }}</td>
             <td class="approved text-nowrap">{{system.description.approved}}</td>
-            <td class="approval-status text-nowrap">{{system.description.approvalStatus}}</td>
+            <td class="approval-status text-nowrap">{{ getApprovalStatus(system) }}</td>
           </tr>
         </tbody>
       </table>
