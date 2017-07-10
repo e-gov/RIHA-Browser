@@ -16,21 +16,21 @@
       <div class="separate-block">
         <div class="form-group row">
           <label for="active-since-date" class="col-form-label advanced-label">
-            <span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">{{ system.details.status.description }}</strong> <span *ngIf="system.isUsed()">alates</span>
+            <span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">{{ system.getStatusDescription() }}</strong> <span *ngIf="system.isUsed()">alates</span>
           </label>
           <div class="col-sm-4">
             <div class="input-group datepicker" *ngIf="system.isUsed()">
               <input id="active-since-date" class="form-control" placeholder="yyyy-mm-dd"
-                     name="active_since" [(ngModel)]="system.details.active_since" ngbDatepicker #activeSinceDate="ngbDatepicker">
+                     name="active_since" [(ngModel)]="system.details.meta.system_status.timestamp" ngbDatepicker #activeSinceDate="ngbDatepicker">
               <span class="input-group-btn">
                 <button (click)="activeSinceDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
             </div>
           </div>
           <div class="col-sm-8 form-links">
-            <a href="#" (click)="changeSystemStatus(1)">kasutusel</a>
-            <a href="#" (click)="changeSystemStatus(0)">asutamisel</a>
-            <a href="#" (click)="changeSystemStatus(2)">lõpetatud</a>
+            <a href="#" (click)="changeSystemStatus('IN_USE')">kasutusel</a>
+            <a href="#" (click)="changeSystemStatus('ESTABLISHING')">asutamisel</a>
+            <a href="#" (click)="changeSystemStatus('FINISHED')">lõpetatud</a>
           </div>
         </div>
         <div class="form-group">
@@ -49,7 +49,11 @@
       </div>
       <div class="form-group">
         <label for="purpose-textarea" class="text-muted">Infosüsteemi valdkond:</label>
-        <tag-input [(ngModel)]="system.details.tags" name="tags" [theme]="'bootstrap'" [placeholder]="'lisa uus'" [secondaryPlaceholder]="'valdkonnad'"></tag-input>
+        <tag-input [(ngModel)]="system.details.topics" name="topics"
+                   [theme]="'bootstrap'"
+                   [placeholder]="'lisa uus'"
+                   [modelAsStrings]="true"
+                   [secondaryPlaceholder]="'valdkonnad'"></tag-input>
       </div>
       <p>
         <span class="text-muted">Omanik:</span><br>
@@ -64,7 +68,7 @@
             <div class="input-group">
               <input id="available-at" class="form-control"
                      placeholder="http://"
-                     name="available-at" [(ngModel)]="system.details.url">
+                     name="available-at" [(ngModel)]="system.details.homepage">
             </div>
           </div>
         </div>
@@ -75,7 +79,7 @@
           <div class="col-sm-4">
             <div class="input-group datepicker">
               <input id="x_road_date" class="form-control" placeholder="yyyy-mm-dd"
-                     name="x_road_date" [(ngModel)]="system.details.x_road_date" ngbDatepicker #xRoadDate="ngbDatepicker">
+                     name="x_road_date" [(ngModel)]="system.details.meta.x_road_status.timestamp" ngbDatepicker #xRoadDate="ngbDatepicker">
               <span class="input-group-btn">
                 <button (click)="xRoadDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
