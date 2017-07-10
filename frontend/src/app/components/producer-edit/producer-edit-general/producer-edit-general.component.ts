@@ -45,8 +45,18 @@ export class ProducerEditGeneralComponent implements OnInit {
       this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system)).then(response => {
         this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
       }, error => {
+        this.system = this.systemsService.prepareSystemForDisplay(this.system);
         //show error on server side validation failure
-        //this.showValidationError();
+        let responseError = error.json();
+        let isValidationError = false;
+        responseError.forEach(obj => {
+          if (obj.level === 'error' && obj.domain === 'validation'){
+            isValidationError = true;
+          }
+        });
+        if (isValidationError){
+          this.showValidationError();
+        }
       });
     }
   }
