@@ -9,12 +9,55 @@ export class SystemsService {
 
   private systemsUrl = '/systems';
 
+  private dateObjToTimestamp(dateObj: any): any {
+    if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
+      let year = dateObj.year.toString();
+      let month = dateObj.month.toString();
+      let day = dateObj.day.toString();
+
+      if (month.length === 1) month = '0' + month;
+      if (day.length === 1) day = '0' + day;
+      return `${ year }-${ month }-${ day }`;
+    } else {
+      return dateObj;
+    }
+  }
+
+  private timestampToDateObj(timestamp: string): any {
+    if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
+      let year = parseInt(timestamp.substr(0, 4), 10);
+      let month = parseInt(timestamp.substr(5, 2), 10);
+      let day = parseInt(timestamp.substr(8, 2), 10);
+      return {
+        year: year,
+        month: month,
+        day: day
+      };
+    } else {
+      return timestamp;
+    }
+  }
+
   public getOwnSystems(filters?, gridData?){
     filters = filters || {};
     //set current user as owner
     //filters.owner = '';
 
     return this.getSystems(filters, gridData);
+  }
+
+  public prepareSystemForDisplay(system: any){
+    system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
+    system.details.meta.x_road_status.timestamp = this.timestampToDateObj(system.details.meta.x_road_status.timestamp);
+    system.details.meta.system_status.timestamp = this.timestampToDateObj(system.details.meta.system_status.timestamp);
+    return system;
+  }
+
+  public prepareSystemForSending(system: any){
+    system.details.meta.approval_status.timestamp = this.dateObjToTimestamp(system.details.meta.approval_status.timestamp);
+    system.details.meta.x_road_status.timestamp = this.dateObjToTimestamp(system.details.meta.x_road_status.timestamp);
+    system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
+    return system;
   }
 
   public getSystems(filters?, gridData?) {

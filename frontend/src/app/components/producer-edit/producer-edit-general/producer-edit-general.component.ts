@@ -42,7 +42,7 @@ export class ProducerEditGeneralComponent implements OnInit {
 
   onSubmit(f) :void {
     if (f.valid) {
-      this.systemsService.updateSystem(this.system).then(response => {
+      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system)).then(response => {
         this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
       }, error => {
         //show error on server side validation failure
