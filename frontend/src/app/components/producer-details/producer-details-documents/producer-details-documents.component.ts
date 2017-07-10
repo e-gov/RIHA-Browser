@@ -1,12 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProducerEditTechDocsComponent } from '../../producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
+import { ProducerEditTechDocsComponent } from '../../producer-edit/producer-edit-documents/producer-edit-documents.component';
 import { System } from '../../../models/system';
 
 @Component({
   selector: 'app-producer-details-tech-docs',
-  templateUrl: './producer-details-tech-docs.component.html',
-  styleUrls: ['./producer-details-tech-docs.component.scss']
+  templateUrl: './producer-details-documents.component.html',
+  styleUrls: ['./producer-details-documents.component.scss']
 })
 export class ProducerDetailsTechDocsComponent implements OnInit {
 
@@ -14,9 +14,9 @@ export class ProducerDetailsTechDocsComponent implements OnInit {
 
   openTechDocsEdit(content) {
     const modalRef = this.modalService.open(ProducerEditTechDocsComponent);
-    this.system.details.tech_docs = this.system.details.tech_docs || [];
+    this.system.details.documents = this.system.details.documents || [];
     modalRef.componentInstance.system = this.system;
-    modalRef.componentInstance.tech_docs = [].concat(this.system.details.tech_docs);
+    modalRef.componentInstance.documents = [].concat(this.system.details.documents);
   }
 
   constructor(private modalService: NgbModal) { }

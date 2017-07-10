@@ -39,8 +39,8 @@ import { ProducerDetailsObjectsComponent } from './components/producer-details/p
 import { ProducerEditObjectsComponent } from './components/producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { ProducerDetailsGeneralComponent } from './components/producer-details/producer-details-general/producer-details-general.component';
 import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-general/producer-edit-general.component';
-import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-tech-docs/producer-details-tech-docs.component';
-import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
+import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-documents/producer-details-documents.component';
+import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-documents/producer-edit-documents.component';
 import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
 import { AlertComponent } from './components/alert/alert.component';

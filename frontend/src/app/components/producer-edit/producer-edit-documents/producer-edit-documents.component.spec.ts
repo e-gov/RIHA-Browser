@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProducerEditTechDocsComponent } from './producer-edit-tech-docs.component';
+import { ProducerEditTechDocsComponent } from './producer-edit-documents.component';
 
 describe('ProducerEditTechDocsComponent', () => {
   let component: ProducerEditTechDocsComponent;
