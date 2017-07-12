@@ -67,7 +67,7 @@ export class SystemsService {
   public getOwnSystems(filters?, gridData?){
     filters = filters || {};
 
-    return this.getSystems(filters, gridData, this.environmentService.getProducerUrl());
+    return this.getSystems(filters, gridData, `${ this.environmentService.getProducerUrl() }/systems`);
   }
 
   public getSystems(filters?, gridData?, url?) {
