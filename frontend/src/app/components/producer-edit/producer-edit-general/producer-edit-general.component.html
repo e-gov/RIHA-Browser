@@ -28,9 +28,9 @@
             </div>
           </div>
           <div class="col-sm-8 form-links">
-            <a href="#" (click)="changeSystemStatus('IN_USE')">kasutusel</a>
-            <a href="#" (click)="changeSystemStatus('ESTABLISHING')">asutamisel</a>
-            <a href="#" (click)="changeSystemStatus('FINISHED')">lõpetatud</a>
+            <a href="#" (click)="changeSystemStatus(globals.system_status.IN_USE)">kasutusel</a>
+            <a href="#" (click)="changeSystemStatus(globals.system_status.ESTABLISHING)">asutamisel</a>
+            <a href="#" (click)="changeSystemStatus(globals.system_status.FINISHED)">lõpetatud</a>
           </div>
         </div>
         <div class="form-group">

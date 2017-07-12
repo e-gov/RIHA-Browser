@@ -3,6 +3,7 @@ import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { WindowRefService } from '../../../services/window-ref.service';
 import { Router } from '@angular/router';
+import { G } from '../../../globals/globals';
 
 @Component({
   selector: 'app-producer-edit-general',
@@ -28,6 +29,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   @Input() system: System;
   showAlert: boolean;
   alertConf: any;
+  globals: any = G;
 
   showValidationError() {
     this.alertConf = {
@@ -61,10 +63,10 @@ export class ProducerEditGeneralComponent implements OnInit {
     }
   }
 
-  changeSystemStatus(statusCode) {
-    this.system.setStatus(statusCode);
-    if (statusCode == 1){
-      this.system.details.active_since = null;
+  changeSystemStatus(status) {
+    this.system.setStatus(status);
+    if (status != G.system_status.IN_USE){
+      this.system.details.meta.system_status.timestamp = null;
     }
     return false;
   }

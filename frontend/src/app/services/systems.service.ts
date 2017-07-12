@@ -17,7 +17,7 @@ export class SystemsService {
 
       if (month.length === 1) month = '0' + month;
       if (day.length === 1) day = '0' + day;
-      return `${ year }-${ month }-${ day }`;
+      return `${ year }-${ month }-${ day }T00:00:00Z`;
     } else {
       return dateObj;
     }
@@ -47,16 +47,28 @@ export class SystemsService {
   }
 
   public prepareSystemForDisplay(system: any){
-    system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
-    system.details.meta.x_road_status.timestamp = this.timestampToDateObj(system.details.meta.x_road_status.timestamp);
-    system.details.meta.system_status.timestamp = this.timestampToDateObj(system.details.meta.system_status.timestamp);
+    if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp){
+      system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
+    }
+    if (system.details.meta.x_road_status && system.details.meta.x_road_status.timestamp){
+      system.details.meta.x_road_status.timestamp = this.timestampToDateObj(system.details.meta.x_road_status.timestamp);
+    }
+    if (system.details.meta.system_status && system.details.meta.system_status.timestamp){
+      system.details.meta.system_status.timestamp = this.timestampToDateObj(system.details.meta.system_status.timestamp);
+    }
     return system;
   }
 
   public prepareSystemForSending(system: any){
-    system.details.meta.approval_status.timestamp = this.dateObjToTimestamp(system.details.meta.approval_status.timestamp);
-    system.details.meta.x_road_status.timestamp = this.dateObjToTimestamp(system.details.meta.x_road_status.timestamp);
-    system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
+    if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp) {
+      system.details.meta.approval_status.timestamp = this.dateObjToTimestamp(system.details.meta.approval_status.timestamp);
+    }
+    if (system.details.meta.x_road_status && system.details.meta.x_road_status.timestamp) {
+      system.details.meta.x_road_status.timestamp = this.dateObjToTimestamp(system.details.meta.x_road_status.timestamp);
+    }
+    if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
+      system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
+    }
     return system;
   }
 
