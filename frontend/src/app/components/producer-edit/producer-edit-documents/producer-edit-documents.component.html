@@ -9,32 +9,32 @@
              #url
              type="url"
              placeholder="http://www.example.com"
-             (keyup.enter)="addTechDoc(url, text)"
+             (keyup.enter)="addTechDoc(url, name)"
              name="url">
 
     </div>
     <div class="form-group">
-      <label for="text" class="text-muted separated-text">URLi sisu:</label>
-      <input id="text" class="form-control col-12"
-             #text
+      <label for="name" class="text-muted separated-text">URLi sisu:</label>
+      <input id="name" class="form-control col-12"
+             #name
              placeholder="Lähtekood"
-             (keyup.enter)="addTechDoc(url, text)"
-             name="text">
+             (keyup.enter)="addTechDoc(url, name)"
+             name="name">
 
     </div>
     <div class="form-group row">
       <div class="col-12">
-        <button class="btn btn-default pull-right" (click)="addTechDoc(url, text)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        <button class="btn btn-default pull-right" (click)="addTechDoc(url, name)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
     </div>
     <div class="dataTables_wrapper">
       <table *ngIf="system" class="details-list-table">
-        <tr *ngFor="let doc of tech_docs; let i = index">
+        <tr *ngFor="let doc of documents; let i = index">
           <td>
             <i class="fa fa-external-link text-primary"></i>
           </td>
           <td>
-            <a href="{{ doc.url }}" target="_blank">{{ (!doc.text || doc.text.trim()=='') ? doc.url : doc.text }}</a>
+            <a href="{{ doc.url }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? doc.url : doc.name }}</a>
           </td>
           <td>
             <button (click)="deleteTechDoc(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>

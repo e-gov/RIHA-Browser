@@ -1,3 +1,5 @@
+import { G } from '../globals/globals';
+
 export class System {
   id: number;
   details: any;
@@ -7,39 +9,60 @@ export class System {
     this.details = Object.assign(this.details, system.details);
   }
 
-  setStatus(statusCode): void {
-    this.details.status.code = statusCode;
-    switch (statusCode) {
-      case 0: this.details.status.description = 'asutamisel'
-            break;
-      case 1: this.details.status.description = 'kasutusel'
-            break;
-      case 2: this.details.status.description = 'lõpetatud'
-            break;
-    }
+  setStatus(status): void {
+    this.details.meta.system_status.status = status;
   }
 
-  setInDevelopment(inDevelopment): void {
-    this.details.inDevelopment = inDevelopment;
+  getStatusDescription(): string {
+    let description = 'tundmatu staatuses';
+    switch(this.details.meta.system_status.status){
+      case G.system_status.ESTABLISHING: description = 'asutamisel';
+        break;
+      case G.system_status.IN_USE: description = 'kasutusel';
+        break;
+      case G.system_status.FINISHED: description = 'lõpetatud';
+        break;
+    }
+    return description;
   }
 
   isUsed(): boolean{
-    return this.details.status.code === 1;
+    return this.details.meta.system_status.status === G.system_status.IN_USE;
+  }
+
+  setInDevelopment(inDevelopment): void {
+    if (inDevelopment === true){
+      this.details.meta.development_status = G.development_status.IN_DEVELOPMENT;
+    } else if (inDevelopment === false){
+      this.details.meta.development_status = G.development_status.NOT_IN_DEVELOPMENT;
+    }
   }
 
   isInDevelopment(): boolean{
-    return this.details.inDevelopment;
+    return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
   }
 
   constructor(){
     this.id = null;
     this.details = {
-      status: {
-        code: null,
-        description: 'määramata staatuses'
+      meta: {
+        development_status: null,
+        system_status: {
+          status: null,
+          timestamp: null
+        },
+        x_road_status: {
+          status: null,
+          timestamp: null
+        }
       },
-      inDevelopment: false,
-      tags: []
+      topics: [],
+      stored_data: [],
+      legislations: [],
+      documents: [],
+      homepage: null,
+      purpose: null,
+      short_name: null
     };
   }
 }

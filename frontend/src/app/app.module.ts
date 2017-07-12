@@ -9,6 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -18,6 +19,7 @@ import { JsonDataService } from './json-data.service';
 
 //services
 import { SystemsService } from './services/systems.service';
+import { WindowRefService } from './services/window-ref.service';
 import { EnvironmentService } from './services/environment.service';
 
 //components
@@ -37,11 +39,12 @@ import { DateRowComponent } from './components/date-row/date-row.component';
 import { ProducerDetailsObjectsComponent } from './components/producer-details/producer-details-objects/producer-details-objects.component';
 import { ProducerEditObjectsComponent } from './components/producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { ProducerDetailsGeneralComponent } from './components/producer-details/producer-details-general/producer-details-general.component';
-import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-generalral/producer-edit-general.component';
-import { ProducerDetailsTechDocsComponent } from './components/producer-details/producer-details-tech-docs/producer-details-tech-docs.component';
-import { ProducerEditTechDocsComponent } from './components/producer-edit/producer-edit-tech-docs/producer-edit-tech-docs.component';
+import { ProducerEditGeneralComponent } from './components/producer-edit/producer-edit-general/producer-edit-general.component';
+import { ProducerDetailsDocumentsComponent } from './components/producer-details/producer-details-documents/producer-details-documents.component';
+import { ProducerEditDocumentsComponent } from './components/producer-edit/producer-edit-documents/producer-edit-documents.component';
 import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
+import { AlertComponent } from './components/alert/alert.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -96,10 +99,11 @@ const routes: Routes = [
     ProducerEditObjectsComponent,
     ProducerDetailsGeneralComponent,
     ProducerEditGeneralComponent,
-    ProducerDetailsTechDocsComponent,
-    ProducerEditTechDocsComponent,
+    ProducerDetailsDocumentsComponent,
+    ProducerEditDocumentsComponent,
     ProducerEditLegislationsComponent,
-    ProducerDetailsLegislationsComponent
+    ProducerDetailsLegislationsComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -108,6 +112,7 @@ const routes: Routes = [
     TagInputModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
+    ToastrModule.forRoot(),
     TranslateModule.forRoot({
       missingTranslationHandler,
       loader: {
@@ -120,11 +125,11 @@ const routes: Routes = [
   ],
   entryComponents: [
     ProducerEditObjectsComponent,
-    ProducerEditTechDocsComponent,
+    ProducerEditDocumentsComponent,
     ProducerEditLegislationsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
+  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}

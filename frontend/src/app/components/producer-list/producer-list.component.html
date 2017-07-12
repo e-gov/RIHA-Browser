@@ -29,11 +29,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let system of gridData.content">
-            <td class="name">{{ system.description.name }}</td>
-            <td class="short-name">{{ system.description.short_name }}</td>
+            <td class="name">{{ system.details.name }}</td>
+            <td class="short-name">{{ system.details.short_name }}</td>
             <td>
-              <button class="btn btn-primary view btn-sm" [routerLink]="['/Kirjelda/Vaata', system.description.main_resource_id]">Vaata</button>
-              <button class="btn btn-success edit btn-sm" [routerLink]="['/Kirjelda/Muuda', system.description.main_resource_id]">Muuda</button>
+              <button class="btn btn-primary view btn-sm" [routerLink]="['/Kirjelda/Vaata', system.details.main_resource_id]">Vaata</button>
+              <button class="btn btn-success edit btn-sm" [routerLink]="['/Kirjelda/Muuda', system.details.main_resource_id]">Muuda</button>
               <button class="btn btn-danger delete btn-sm">Kustuta</button>
             </td>
           </tr>

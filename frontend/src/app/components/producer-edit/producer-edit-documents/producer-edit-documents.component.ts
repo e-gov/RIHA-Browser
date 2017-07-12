@@ -6,29 +6,29 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
-  templateUrl: './producer-edit-tech-docs.component.html',
-  styleUrls: ['./producer-edit-tech-docs.component.scss']
+  templateUrl: './producer-edit-documents.component.html',
+  styleUrls: ['./producer-edit-documents.component.scss']
 })
-export class ProducerEditTechDocsComponent implements OnInit {
+export class ProducerEditDocumentsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() tech_docs: any[];
+  @Input() documents: any[];
 
-  addTechDoc(urlInput, textInput): void {
+  addTechDoc(urlInput, nameInput): void {
     if (urlInput.value.length > 0 && urlInput.checkValidity()){
-      this.tech_docs.push({url: urlInput.value,
-                          text: textInput.value.trim()});
+      this.documents.push({url: urlInput.value,
+                          name: nameInput.value.trim()});
       urlInput.value = '';
-      textInput.value = '';
+      nameInput.value = '';
     }
   }
 
   deleteTechDoc(i): void {
-    this.tech_docs.splice(i, 1);
+    this.documents.splice(i, 1);
   }
 
   saveSystem(){
-    this.system.details.tech_docs = this.tech_docs;
+    this.system.details.documents = this.documents;
     this.systemsService.updateSystem(this.system).then(response => {
       this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
     });
