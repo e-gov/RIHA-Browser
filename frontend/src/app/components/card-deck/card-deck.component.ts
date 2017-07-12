@@ -21,9 +21,7 @@ export class CardDeckComponent implements OnInit {
             "teistele asutustele ja arendajatele teada, mis andmed sul on ja kuidas neid kasutada saab",
             "teadmise, kas infosüsteem vastab riigi IT nõuetele",
             "sulle endale kindluse, et oled täitnud tublisti seadust"
-          ],
-          "example additional paragraph",
-          ["example other list:", "point one", "point two"]
+          ]
         ],
         "actions": {
           "links": [{
