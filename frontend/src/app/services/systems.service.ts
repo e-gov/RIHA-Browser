@@ -38,14 +38,6 @@ export class SystemsService {
     }
   }
 
-  public getOwnSystems(filters?, gridData?){
-    filters = filters || {};
-    //set current user as owner
-    //filters.owner = '';
-
-    return this.getSystems(filters, gridData);
-  }
-
   public prepareSystemForDisplay(system: any){
     if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp){
       system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
@@ -72,7 +64,13 @@ export class SystemsService {
     return system;
   }
 
-  public getSystems(filters?, gridData?) {
+  public getOwnSystems(filters?, gridData?){
+    filters = filters || {};
+
+    return this.getSystems(filters, gridData, this.environmentService.getProducerUrl());
+  }
+
+  public getSystems(filters?, gridData?, url?) {
 
     let params: URLSearchParams = new URLSearchParams();
     let filtersArr: string[] = [];
@@ -100,7 +98,9 @@ export class SystemsService {
       params.set('sort', gridData.sort);
     }
 
-    return this.http.get(this.systemsUrl, {
+    let urlToUse = url || this.systemsUrl;
+
+    return this.http.get(urlToUse, {
       search: params
     }).toPromise();
   }

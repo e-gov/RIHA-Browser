@@ -14,7 +14,7 @@ export class ProducerListComponent implements OnInit {
   filters: {
     name: string,
     shortName: string
-  }
+  };
 
   onPageChange(newPage): void{
     this.gridData.page = newPage - 1;
