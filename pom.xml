@@ -32,7 +32,7 @@
     <repositories>
         <repository>
             <id>ria-artifactory</id>
-            <url>https://artifactory.tt.kit/artifactory/public</url>
+            <url>http://ftp.aso.ee/pub/artifactory/RIHA-libs-release-local</url>
         </repository>
     </repositories>
 
