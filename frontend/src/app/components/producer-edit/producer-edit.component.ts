@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
 
 @Component({
@@ -14,41 +14,22 @@ export class ProducerEditComponent implements OnInit {
 
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
-      this.system.setData(response.json());
+      let s = new System;
+      s.setData(response.json());
+      this.system = this.systemsService.prepareSystemForDisplay(s);
       this.loaded = true;
     })
   }
 
-  onSubmit(f) :void {
-    if (f.valid) {
-      this.systemsService.updateSystem(this.system).then(response => {
-        this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
-      });
-    }
-  }
-
-  changeSystemStatus(statusCode) {
-    this.system.setStatus(statusCode);
-    if (statusCode == 1){
-      this.system.details.active_since = null;
-    }
-    return false;
-  }
-
-  changeInDevelopmentStatus(inDevelopment){
-    this.system.setInDevelopment(inDevelopment);
-    return false;
-  }
-
   constructor(private systemsService: SystemsService,
-              private route: ActivatedRoute,
-              private router: Router) {
+              private route: ActivatedRoute) {
     this.system = new System();
 
   }
 
   ngOnInit() {
     this.loaded = false;
+    this.system = new System();
     this.route.params.subscribe( params => {
       this.getSystem(params['id']);
     });

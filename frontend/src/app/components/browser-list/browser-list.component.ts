@@ -26,6 +26,22 @@ export class BrowserListComponent implements OnInit {
     this.getSystems();
   }
 
+  getSystemStatus(system){
+    if (system.description.meta && system.description.meta.system_status) {
+      return system.description.meta.system_status.status;
+    } else {
+      return '';
+    }
+  }
+
+  getApprovalStatus(system){
+    if (system.description.meta && system.description.meta.approval_status) {
+      return system.description.meta.approval_status.status;
+    } else {
+      return '';
+    }
+  }
+
   getSystems(): void {
     this.systemsService.getSystems(this.filters, this.gridData).then(
       res => {

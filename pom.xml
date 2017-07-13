@@ -29,4 +29,11 @@
         <module>backend</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>ria-artifactory</id>
+            <url>http://ftp.aso.ee/pub/artifactory/RIHA-libs-release-local</url>
+        </repository>
+    </repositories>
+
 </project>

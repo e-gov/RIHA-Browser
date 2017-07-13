@@ -1,0 +1,22 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Andmed
+    <button (click)="openObjectsEdit()" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
+  </div>
+  <div class="form-group">
+    <label class="text-muted separated-text">Infosüsteemi kogutavad põhiandmed:</label>
+    <p *ngIf="!system.details.stored_data || system.details.stored_data.length == 0">
+      Objektid puuduvad.
+    </p>
+    <table class="details-list-table">
+      <tr *ngFor="let object of system.details.stored_data">
+        <td>
+          <i class="fa fa-circle text-primary"></i>
+        </td>
+        <td>
+          {{ object }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</section>

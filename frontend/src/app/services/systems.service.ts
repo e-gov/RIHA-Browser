@@ -2,21 +2,75 @@ import { Injectable } from '@angular/core';
 import { Http, URLSearchParams  } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
+import { EnvironmentService } from './environment.service';
 
 @Injectable()
 export class SystemsService {
 
   private systemsUrl = '/systems';
 
-  public getOwnSystems(filters?, gridData?){
-    filters = filters || {};
-    //set current user as owner
-    //filters.owner = '';
+  private dateObjToTimestamp(dateObj: any): any {
+    if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
+      let year = dateObj.year.toString();
+      let month = dateObj.month.toString();
+      let day = dateObj.day.toString();
 
-    return this.getSystems(filters, gridData);
+      if (month.length === 1) month = '0' + month;
+      if (day.length === 1) day = '0' + day;
+      return `${ year }-${ month }-${ day }T00:00:00Z`;
+    } else {
+      return dateObj;
+    }
   }
 
-  public getSystems(filters?, gridData?) {
+  private timestampToDateObj(timestamp: string): any {
+    if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
+      let year = parseInt(timestamp.substr(0, 4), 10);
+      let month = parseInt(timestamp.substr(5, 2), 10);
+      let day = parseInt(timestamp.substr(8, 2), 10);
+      return {
+        year: year,
+        month: month,
+        day: day
+      };
+    } else {
+      return timestamp;
+    }
+  }
+
+  public prepareSystemForDisplay(system: any){
+    if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp){
+      system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
+    }
+    if (system.details.meta.x_road_status && system.details.meta.x_road_status.timestamp){
+      system.details.meta.x_road_status.timestamp = this.timestampToDateObj(system.details.meta.x_road_status.timestamp);
+    }
+    if (system.details.meta.system_status && system.details.meta.system_status.timestamp){
+      system.details.meta.system_status.timestamp = this.timestampToDateObj(system.details.meta.system_status.timestamp);
+    }
+    return system;
+  }
+
+  public prepareSystemForSending(system: any){
+    if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp) {
+      system.details.meta.approval_status.timestamp = this.dateObjToTimestamp(system.details.meta.approval_status.timestamp);
+    }
+    if (system.details.meta.x_road_status && system.details.meta.x_road_status.timestamp) {
+      system.details.meta.x_road_status.timestamp = this.dateObjToTimestamp(system.details.meta.x_road_status.timestamp);
+    }
+    if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
+      system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
+    }
+    return system;
+  }
+
+  public getOwnSystems(filters?, gridData?){
+    filters = filters || {};
+
+    return this.getSystems(filters, gridData, `${ this.environmentService.getProducerUrl() }/systems`);
+  }
+
+  public getSystems(filters?, gridData?, url?) {
 
     let params: URLSearchParams = new URLSearchParams();
     let filtersArr: string[] = [];
@@ -44,13 +98,15 @@ export class SystemsService {
       params.set('sort', gridData.sort);
     }
 
-    return this.http.get(this.systemsUrl, {
+    let urlToUse = url || this.systemsUrl;
+
+    return this.http.get(urlToUse, {
       search: params
     }).toPromise();
   }
 
   public getSystem(id) {
-    return this.http.get(this.systemsUrl + '/' + id).toPromise();
+    return this.http.get(`${ this.environmentService.getProducerUrl() }/systems/${ id }`).toPromise();
   }
 
   public addSystem(value) {
@@ -61,13 +117,14 @@ export class SystemsService {
         purpose: value.purpose
       }
     }
-    return this.http.post(this.systemsUrl, system).toPromise();
+    return this.http.post(`${ this.environmentService.getProducerUrl() }/systems`, system).toPromise();
   }
 
   public updateSystem(updatedData) {
-    return this.http.put(this.systemsUrl + '/' + updatedData.id, updatedData).toPromise();
+    return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ updatedData.id }`, updatedData).toPromise();
   }
 
-  constructor(private http: Http) { }
+  constructor(private http: Http,
+              private environmentService: EnvironmentService) { }
 
 }

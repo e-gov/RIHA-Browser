@@ -11,10 +11,12 @@ export class AppComponent {
 
   constructor(private translate: TranslateService) {
     translate.addLangs(['en', 'et']);
-    let currentLang = translate.getBrowserLang() || 'en';
+    let currentLang = translate.getBrowserLang() || 'et';
     if (translate.getLangs().indexOf(currentLang) === -1) {
-      currentLang = 'en';
+      currentLang = 'et';
     }
-    translate.use(currentLang);
+
+    // 'en' not supported yet
+    translate.use('et');
   }
 }

@@ -6,6 +6,7 @@
   <artifactId>browser-frontend</artifactId>
   <name>Frontend</name>
   <description>Frontend</description>
+  <version>0.3.0</version>
 
   <parent>
     <groupId>ee.ria.riha</groupId>

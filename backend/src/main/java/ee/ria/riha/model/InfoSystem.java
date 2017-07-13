@@ -1,5 +1,6 @@
 package ee.ria.riha.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.*;
 
@@ -16,18 +17,19 @@ import lombok.*;
 public class InfoSystem {
 
     @JsonRawValue
-    private String description;
+    @JsonProperty(value = "description")
+    private String details;
 
     /**
-     * Creates {@link ee.ria.riha.model.InfoSystem} with description data.
+     * Creates {@link ee.ria.riha.model.InfoSystem} with details data.
      *
-     * @param description description
+     * @param details details
      */
-    public InfoSystem(String description) {
-        this.description = description;
+    public InfoSystem(String details) {
+        this.details = details;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetails() {
+        return details;
     }
 }

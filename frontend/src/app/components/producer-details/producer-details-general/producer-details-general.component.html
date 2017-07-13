@@ -1,0 +1,20 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Infosüsteemi üldkirjeldus
+    <button [routerLink]="['/Kirjelda/Muuda', system.details.main_resource_id]" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
+  </div>
+  <div class="my-1 card-content">
+    <h1>{{ system.details.name }}</h1>
+    <h2>{{ system.details.short_name }}</h2>
+    <div class="form-group">
+      <label class="text-muted separated-text">Infosüsteemi eesmärk:</label>
+      <p>{{ system.details.purpose }}</p>
+    </div>
+    <div class="form-group">
+      <label class="text-muted separated-text">Omanik:</label>
+      <p class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</p>
+    </div>
+    <hr>
+    <app-date-row [icon]="'fa-retweet'" [text]="'Andmed uuendati viimati'" [date]="system.details.creation_date"></app-date-row>
+  </div>
+</section>
