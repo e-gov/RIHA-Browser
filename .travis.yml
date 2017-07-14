@@ -3,6 +3,6 @@ jdk:
   - oraclejdk8
 
 before_script:
-        - npm install karma-jasmine karma-junit-reporter karma-jasmine-jquery karma-jasmine-ajax karma-coverage karma-phantomjs2-launcher 
+        - npm install karma-cli karma jasmine-core karma-jasmine karma-junit-reporter karma-jasmine-jquery karma-jasmine-ajax karma-coverage karma-phantomjs2-launcher coffee-script@1.8.0 bower-installer@0.8.4
 
 script: ./test.sh && ./build.sh
