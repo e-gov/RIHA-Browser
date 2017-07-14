@@ -2,14 +2,9 @@
 
 # RIHA-Browser [![Build Status](https://travis-ci.org/e-gov/RIHA-Browser.svg?branch=master)](https://travis-ci.org/e-gov/RIHA-Browser)
 
-Software application that allows a human user to browse descriptions and approval decisions. Browser takes descriptions from the Publisher.
+Software application that allows a human user to browse descriptions and approval decisions. Project is divided into frontend and backend modules. Frontend is an Angular 4 module which interacts with the bakcend java application's API.
 
-## Prerequisites
-- java8
-- npm
-- maven
 
-## Packaging
-```
-build.sh
-```
+## Installation
+
+Installation manual is divided into two: [build process](https://github.com/e-gov/RIHA-Browser/blob/master/docs/build.md) and [deployment process](https://github.com/e-gov/RIHA-Browser/blob/master/docs/deploy.md)
