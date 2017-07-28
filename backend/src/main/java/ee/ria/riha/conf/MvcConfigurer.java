@@ -6,6 +6,8 @@ import freemarker.core.HTMLOutputFormat;
 import freemarker.template.TemplateException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 public class MvcConfigurer extends WebMvcConfigurerAdapter {
@@ -46,5 +49,18 @@ public class MvcConfigurer extends WebMvcConfigurerAdapter {
         configuration.setOutputFormat(HTMLOutputFormat.INSTANCE);
         result.setConfiguration(configuration);
         return result;
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        super.addFormatters(registry);
+        registry.addConverter(new UUIDConverter());
+    }
+
+    static class UUIDConverter implements Converter<String, UUID> {
+        @Override
+        public UUID convert(String source) {
+            return UUID.fromString(source);
+        }
     }
 }
