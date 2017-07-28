@@ -2,8 +2,10 @@ package ee.ria.riha.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRawValue;
-import lombok.*;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Represents information system. Holds information system data as JSON.

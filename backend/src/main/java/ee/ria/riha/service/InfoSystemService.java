@@ -19,13 +19,9 @@ import java.util.stream.Collectors;
 @Service
 public class InfoSystemService {
 
-    private static final Function<MainResource, InfoSystem> mainResourceToInfoSystem = new Function<MainResource, InfoSystem>() {
-        @Override
-        public InfoSystem apply(MainResource mainResource) {
-            return new InfoSystem(mainResource.getJsonObject().toString());
-        }
-    };
-    
+    private static final Function<MainResource, InfoSystem> MAIN_RESOURCE_TO_INFO_SYSTEM = mainResource -> new InfoSystem(
+            mainResource.getJson_context());
+
     @Autowired
     private MainResourceRepository mainResourceRepository;
 
@@ -35,7 +31,7 @@ public class InfoSystemService {
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
                                    response.getTotalElements(),
                                    response.getContent().stream()
-                                           .map(mainResourceToInfoSystem)
+                                           .map(MAIN_RESOURCE_TO_INFO_SYSTEM)
                                            .collect(Collectors.toList())
         );
     }
