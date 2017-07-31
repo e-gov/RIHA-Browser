@@ -3,6 +3,7 @@ import { Http, URLSearchParams  } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
 import { EnvironmentService } from './environment.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class SystemsService {
@@ -61,6 +62,7 @@ export class SystemsService {
     if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
       system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
     }
+    system.details.meta.description_timestamp = moment().toISOString();
     return system;
   }
 
