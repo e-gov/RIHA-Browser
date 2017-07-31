@@ -14,7 +14,7 @@ export class BrowserListComponent implements OnInit {
   filters: {
     owner: string,
     name: string
-  }
+  };
 
   onPageChange(newPage){
     this.gridData.page = newPage - 1;
@@ -27,16 +27,16 @@ export class BrowserListComponent implements OnInit {
   }
 
   getSystemStatus(system){
-    if (system.description.meta && system.description.meta.system_status) {
-      return system.description.meta.system_status.status;
+    if (system.details.meta && system.details.meta.system_status) {
+      return system.details.meta.system_status.status;
     } else {
       return '';
     }
   }
 
   getApprovalStatus(system){
-    if (system.description.meta && system.description.meta.approval_status) {
-      return system.description.meta.approval_status.status;
+    if (system.details.meta && system.details.meta.approval_status) {
+      return system.details.meta.approval_status.status;
     } else {
       return '';
     }

@@ -34,11 +34,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let system of gridData.content">
-            <td class="owner">{{system.description.owner.name ? system.description.owner.name : system.description.owner.code}}</td>
-            <td class="name">{{system.description.name}}</td>
-            <td class="last-modified text-nowrap">{{system.description.modified_date}}</td>
+            <td class="owner">{{system.details.owner.name ? system.details.owner.name : system.details.owner.code}}</td>
+            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.main_resource_id]">{{system.details.name}}</a></td>
+            <td class="last-modified text-nowrap">{{system.details.modified_date}}</td>
             <td class="status">{{ getSystemStatus(system) }}</td>
-            <td class="approved text-nowrap">{{system.description.approved}}</td>
+            <td class="approved text-nowrap">{{system.details.approved}}</td>
             <td class="approval-status text-nowrap">{{ getApprovalStatus(system) }}</td>
           </tr>
         </tbody>

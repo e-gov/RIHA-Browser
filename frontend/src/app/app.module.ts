@@ -63,6 +63,8 @@ const routes: Routes = [
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
+  { path: 'Infosüsteemid/Vaata/:id', component: ProducerDetailsComponent },
+  { path: 'Systems/Vaata/:id', component: ProducerDetailsComponent },
   { path: 'Kirjelda/Vaata/:id', component: ProducerDetailsComponent },
   { path: 'Describe/View/:id', component: ProducerDetailsComponent },
   { path: 'Kirjelda/Muuda/:id', component: ProducerEditComponent },
