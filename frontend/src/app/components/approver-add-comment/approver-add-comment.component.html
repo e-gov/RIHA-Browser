@@ -1,0 +1,29 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Uus arutelu
+  </div>
+  <div class="my-1">
+    <div class="form-group">
+      <input id="heading" class="form-control col-12"
+             #url
+             placeholder="lühikirjeldus hinnangust"
+             (keyup.enter)="addComment(url, name)"
+             name="heading" required>
+
+    </div>
+    <div class="form-group">
+      <textarea id="comment" class="form-control col-12"
+             #name
+             placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
+             (keyup.enter)="addComment(url, name)"
+                name="comment"></textarea>
+    </div>
+    <div class="actions-bar">
+      <div class="buttons pull-right">
+        <button (click)="activeModal.close()" class="btn btn-default pull-right">Katkesta</button>
+        <button (click)="addComment()" class="btn btn-success pull-right">Salvesta</button>
+      </div>
+    </div>
+  </div>
+</section>
+

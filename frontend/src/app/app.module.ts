@@ -45,6 +45,8 @@ import { ProducerEditDocumentsComponent } from './components/producer-edit/produ
 import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { ProducerDetailsCommentsComponent } from './components/producer-details/producer-details-comments/producer-details-comments.component';
+import { ApproverAddCommentComponent } from './components/approver-add-comment/approver-add-comment.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -105,7 +107,9 @@ const routes: Routes = [
     ProducerEditDocumentsComponent,
     ProducerEditLegislationsComponent,
     ProducerDetailsLegislationsComponent,
-    AlertComponent
+    AlertComponent,
+    ProducerDetailsCommentsComponent,
+    ApproverAddCommentComponent
   ],
   imports: [
     BrowserModule,
@@ -128,7 +132,8 @@ const routes: Routes = [
   entryComponents: [
     ProducerEditObjectsComponent,
     ProducerEditDocumentsComponent,
-    ProducerEditLegislationsComponent
+    ProducerEditLegislationsComponent,
+    ApproverAddCommentComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
