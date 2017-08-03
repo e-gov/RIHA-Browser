@@ -3,27 +3,31 @@
     Uus arutelu
   </div>
   <div class="my-1">
-    <div class="form-group">
-      <input id="heading" class="form-control col-12"
-             #url
-             placeholder="lühikirjeldus hinnangust"
-             (keyup.enter)="addComment(url, name)"
-             name="heading" required>
+    <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)" >
+      <div class="form-group" [ngClass]="{'has-danger': title.invalid  && (title.dirty || title.touched || addForm.submitted)}">
+        <input id="title" class="form-control col-12"
+               ngModel
+               #title="ngModel"
+               placeholder="lühikirjeldus hinnangust"
+               (keyup.enter)="addComment(url, name)"
+               name="title" required>
 
-    </div>
-    <div class="form-group">
-      <textarea id="comment" class="form-control col-12"
-             #name
-             placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
-             (keyup.enter)="addComment(url, name)"
-                name="comment"></textarea>
-    </div>
-    <div class="actions-bar">
-      <div class="buttons pull-right">
-        <button (click)="activeModal.close()" class="btn btn-default pull-right">Katkesta</button>
-        <button (click)="addComment()" class="btn btn-success pull-right">Salvesta</button>
       </div>
-    </div>
+      <div class="form-group" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || addForm.submitted)}">
+        <textarea id="comment" class="form-control col-12"
+               ngModel
+               #comment="ngModel"
+               placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
+               (keyup.enter)="addComment(url, name)"
+               name="comment" required></textarea>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="activeModal.close()" class="btn btn-default pull-right">Katkesta</button>
+          <button type="submit" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+      </div>
+    </form>
   </div>
 </section>
 
