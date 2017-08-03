@@ -10,6 +10,10 @@ export class EnvironmentService {
     return this.globalEnvironment.remotes.producerUrl;
   }
 
+  public getApproverUrl(): string {
+    return this.globalEnvironment.remotes.approverUrl;
+  }
+
   load(): Promise<any> {
     let promise = this.http.get('/environment').toPromise();
     promise.then(response => this.globalEnvironment = response.json());

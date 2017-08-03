@@ -4,23 +4,47 @@
   </div>
   <ngb-tabset>
     <ngb-tab>
-      <ng-template ngbTabTitle><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Hetkel aktiivsed</ng-template>
+      <ng-template ngbTabTitle><i class="fa fa-exclamation-circle text-danger tab-icon" aria-hidden="true"></i> Hetkel aktiivsed</ng-template>
       <ng-template ngbTabContent>
-        <app-alert [conf]="{
+        <app-alert *ngIf="activeComments.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi aktiivset arutelu ei leidu',
           text: 'Arutelusid algatada ja kommenteerida saavad vaid infosüsteemi kontaktid ning RIHA hindajad'
         }"></app-alert>
+        <div class="my-1" *ngIf="activeComments.length > 0">
+          <div class="table-responsive">
+            <table class="table table-striped dataTable" cellspacing="0" width="100%">
+              <tbody>
+              <tr *ngFor="let comment of activeComments">
+                <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
+                <td><a href="#" (click)="showDiscussion()">{{ comment.title }}</a></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab>
-      <ng-template ngbTabTitle><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</ng-template>
+      <ng-template ngbTabTitle><i class="fa fa-check-circle text-success tab-icon" aria-hidden="true"></i> Suletud</ng-template>
       <ng-template ngbTabContent>
-        <app-alert [conf]="{
+        <app-alert *ngIf="closedComments.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi suletud arutelu ei leidu',
           text: 'Arutelusid algatada ja kommenteerida saavad vaid infosüsteemi kontaktid ning RIHA hindajad'
         }"></app-alert>
+        <div class="my-1" *ngIf="closedComments.length > 0">
+          <div class="table-responsive">
+            <table class="table table-striped dataTable" cellspacing="0" width="100%">
+              <tbody>
+              <tr *ngFor="let comment of closedComments">
+                <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
+                <td><a href="#" (click)="showDiscussion()">{{ comment.title }}</a></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
