@@ -1299,6 +1299,12 @@ mark {
         }
     }
 }
+.tab-content {
+  .alert {
+    border: none;
+    box-shadow: none;
+  }
+}
 .header-alert {
     position: fixed;
     left: 0px;

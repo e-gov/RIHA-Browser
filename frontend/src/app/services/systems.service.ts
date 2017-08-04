@@ -126,6 +126,14 @@ export class SystemsService {
     return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ updatedData.id }`, updatedData).toPromise();
   }
 
+  public getSystemComments(uuid) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals?size=1000`).toPromise();
+  }
+
+  public addSystemComment(uuid, comment) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals`, comment).toPromise();
+  }
+
   constructor(private http: Http,
               private environmentService: EnvironmentService) { }
 
