@@ -21,6 +21,9 @@ export class ProducerDetailsCommentsComponent implements OnInit {
     const modalRef = this.modalService.open(ApproverAddCommentComponent);
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
+    modalRef.result.then(res => {
+      this.refreshComments();
+    });
   }
 
   showDiscussion(){
@@ -28,6 +31,8 @@ export class ProducerDetailsCommentsComponent implements OnInit {
   }
 
   refreshComments(){
+    this.activeComments = [];
+    this.closedComments = [];
     this.systemsService.getSystemComments(this.system.details.uuid).then(
       res => {
         res.json().content.map(c => {
