@@ -127,7 +127,7 @@ export class SystemsService {
   }
 
   public getSystemComments(uuid) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals`).toPromise();
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals?size=1000`).toPromise();
   }
 
   public addSystemComment(uuid, comment) {
