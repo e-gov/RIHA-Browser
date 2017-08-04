@@ -16,6 +16,7 @@ export class ProducerDetailsCommentsComponent implements OnInit {
   comments: any[] = [];
   activeComments: any[] = [];
   closedComments: any[] = [];
+  newAdded: boolean = false;
 
   openAddCommentModal(){
     const modalRef = this.modalService.open(ApproverAddCommentComponent);
@@ -23,6 +24,10 @@ export class ProducerDetailsCommentsComponent implements OnInit {
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
       this.refreshComments();
+      this.newAdded = true;
+      setTimeout(()=> {
+        this.newAdded = false;
+      }, 5000)
     });
   }
 

@@ -2,6 +2,11 @@
   <div class="panel-action-heading">
     Hindajate tagasiside
   </div>
+  <app-alert *ngIf="newAdded" [conf]="{
+          type: 'success',
+          heading: 'Uus arutelu',
+          text: 'Uus arutelu on edukalt lisatud'
+        }"></app-alert>
   <ngb-tabset>
     <ngb-tab>
       <ng-template ngbTabTitle><i class="fa fa-exclamation-circle text-danger tab-icon" aria-hidden="true"></i> Hetkel aktiivsed</ng-template>
