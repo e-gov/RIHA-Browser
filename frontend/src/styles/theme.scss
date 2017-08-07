@@ -788,6 +788,8 @@ $CONTENTS
 }
 #sidemenu {
     box-shadow: 0px 0px 10px 0px rgba($black, 0.1);
+    position: sticky;
+    top: 10px;
     .list-group {
         &.collapse {
             display: none;
@@ -798,7 +800,7 @@ $CONTENTS
         .list-group-item {
             color: $dark;
             border: 0px;
-            border-bottom: 1px solid $secondary-dark;
+            border-bottom: 1px solid $grey-dark;
             margin-bottom: 0px;
             padding: 15px 20px 14px 20px;
             font-size: 18px;
@@ -824,16 +826,16 @@ $CONTENTS
     }
     &>.list-group {
         &>.list-group-item {
-            background: $secondary;
+            background: $grey;
             &[aria-expanded="true"] {
                 background: $white;
                 font-weight: bold;
                 &:not(:hover) {
-                    border-color: $grey;
+                    border-color: $grey-dark;
                 }
             }
             &:hover {
-                background: $secondary-light;
+                background: $white;
             }
         }
         &>.list-group {

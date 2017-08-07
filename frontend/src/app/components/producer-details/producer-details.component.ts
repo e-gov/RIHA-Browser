@@ -22,7 +22,6 @@ export class ProducerDetailsComponent implements OnInit {
   constructor(private systemsService: SystemsService,
               private route: ActivatedRoute) {
     this.system = new System();
-
   }
 
   ngOnInit() {
