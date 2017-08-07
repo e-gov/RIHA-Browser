@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { PageScrollConfig } from 'ng2-page-scroll';
 
 @Component({
   selector: 'app-root',
@@ -18,5 +19,7 @@ export class AppComponent {
 
     // 'en' not supported yet
     translate.use('et');
+
+    PageScrollConfig.defaultDuration = 400;
   }
 }

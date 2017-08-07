@@ -3,38 +3,38 @@
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
-        <a pageScroll href="#system-general" class="list-group-item justify-content-between">
+        <a pageScroll [pageScrollAdjustHash]="true" href="#üldkirjeldus" class="list-group-item justify-content-between">
           Infosüsteemi üldkirjeldus
         </a>
-        <a pageScroll href="#system-feedback" class="list-group-item justify-content-between">
+        <a pageScroll [pageScrollAdjustHash]="true" href="#tagasiside" class="list-group-item justify-content-between">
           Hindajate tagasiside
         </a>
-        <a pageScroll href="#system-data" class="list-group-item justify-content-between">
+        <a pageScroll [pageScrollAdjustHash]="true" href="#andmed" class="list-group-item justify-content-between">
           Andmed
         </a>
-        <a pageScroll href="#system-documents" class="list-group-item justify-content-between">
+        <a pageScroll [pageScrollAdjustHash]="true" href="#dokumentatsioon" class="list-group-item justify-content-between">
           Dokumentatsioon
         </a>
-        <a pageScroll href="#system-legislations" class="list-group-item justify-content-between">
+        <a pageScroll [pageScrollAdjustHash]="true" href="#õigusaktid" class="list-group-item justify-content-between">
           Õigusaktid
         </a>
       </div>
     </nav>
   </aside>
   <article class="col separate-blocks">
-    <div id="system-general" class="separate-block">
+    <div id="üldkirjeldus" class="separate-block">
       <app-producer-details-general [system]="system"></app-producer-details-general>
     </div>
-    <div id="system-feedback" class="separate-block">
+    <div id="tagasiside" class="separate-block">
       <app-producer-details-comments [system]="system"></app-producer-details-comments>
     </div>
-    <div id="system-data" class="separate-block">
+    <div id="andmed" class="separate-block">
       <app-producer-details-objects [system]="system"></app-producer-details-objects>
     </div>
-    <div id="system-documents" class="separate-block">
+    <div id="dokumentatsioon" class="separate-block">
       <app-producer-details-tech-docs [system]="system"></app-producer-details-tech-docs>
     </div>
-    <div id="system-legislations" class="separate-block">
+    <div id="õigusaktid" class="separate-block">
       <app-producer-details-legislations [system]="system"></app-producer-details-legislations>
     </div>
   </article>
