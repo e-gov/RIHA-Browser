@@ -1,18 +1,41 @@
 <app-page-header></app-page-header>
-<div *ngIf="loaded" class="separate-blocks">
-  <div class="separate-block">
-    <app-producer-details-general [system]="system"></app-producer-details-general>
-  </div>
-  <div class="separate-block">
-    <app-producer-details-comments [system]="system"></app-producer-details-comments>
-  </div>
-  <div class="separate-block">
-    <app-producer-details-objects [system]="system"></app-producer-details-objects>
-  </div>
-  <div class="separate-block">
-    <app-producer-details-tech-docs [system]="system"></app-producer-details-tech-docs>
-  </div>
-  <div class="separate-block">
-    <app-producer-details-legislations [system]="system"></app-producer-details-legislations>
-  </div>
-</div>
+<section id="page" class="row no-gutters" *ngIf="loaded">
+  <aside class="col sidebar">
+    <nav id="sidemenu" class="sidenav">
+      <div class="list-group">
+        <a pageScroll [pageScrollAdjustHash]="true" href="#üldkirjeldus" class="list-group-item justify-content-between">
+          Infosüsteemi üldkirjeldus
+        </a>
+        <a pageScroll [pageScrollAdjustHash]="true" href="#tagasiside" class="list-group-item justify-content-between">
+          Hindajate tagasiside
+        </a>
+        <a pageScroll [pageScrollAdjustHash]="true" href="#andmed" class="list-group-item justify-content-between">
+          Andmed
+        </a>
+        <a pageScroll [pageScrollAdjustHash]="true" href="#dokumentatsioon" class="list-group-item justify-content-between">
+          Dokumentatsioon
+        </a>
+        <a pageScroll [pageScrollAdjustHash]="true" href="#õigusaktid" class="list-group-item justify-content-between">
+          Õigusaktid
+        </a>
+      </div>
+    </nav>
+  </aside>
+  <article class="col separate-blocks">
+    <div id="üldkirjeldus" class="separate-block">
+      <app-producer-details-general [system]="system"></app-producer-details-general>
+    </div>
+    <div id="tagasiside" class="separate-block">
+      <app-producer-details-comments [system]="system"></app-producer-details-comments>
+    </div>
+    <div id="andmed" class="separate-block">
+      <app-producer-details-objects [system]="system"></app-producer-details-objects>
+    </div>
+    <div id="dokumentatsioon" class="separate-block">
+      <app-producer-details-tech-docs [system]="system"></app-producer-details-tech-docs>
+    </div>
+    <div id="õigusaktid" class="separate-block">
+      <app-producer-details-legislations [system]="system"></app-producer-details-legislations>
+    </div>
+  </article>
+</section>
