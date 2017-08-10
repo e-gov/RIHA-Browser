@@ -134,6 +134,10 @@ export class SystemsService {
     return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals`, comment).toPromise();
   }
 
+  public getSystemCommentById(uuid, commentId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }`).toPromise();
+  }
+
   constructor(private http: Http,
               private environmentService: EnvironmentService) { }
 

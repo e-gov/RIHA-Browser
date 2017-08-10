@@ -33,11 +33,15 @@ export class ProducerDetailsCommentsComponent implements OnInit {
   }
 
   openFeedbackDetailsModal(comment){
-    const modalRef = this.modalService.open(ApproverFeedbackDetailsComponent);
-    this.system.details.legislations = this.system.details.legislations || [];
-    modalRef.componentInstance.comment = comment;
-    modalRef.result.then(res => {
-      this.refreshComments();
+    this.systemsService.getSystemCommentById(comment.infoSystemUuid, comment.id).then(res => {
+      const modalRef = this.modalService.open(ApproverFeedbackDetailsComponent);
+      modalRef.componentInstance.feedback = res.json();
+      modalRef.result.then(res => {
+        this.refreshComments();
+      },
+      err => {
+
+      });
     });
     return false;
   }

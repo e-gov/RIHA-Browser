@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ApproverFeedbackDetailsComponent implements OnInit {
 
-  @Input() comment: any;
+  @Input() feedback: any;
 
   constructor() {
 
