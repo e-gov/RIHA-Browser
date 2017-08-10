@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { System } from '../../../models/system';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApproverAddCommentComponent } from '../../approver-add-comment/approver-add-comment.component';
+import { ApproverFeedbackDetailsComponent } from '../../approver-feedback-details/approver-feedback-details.component';
 import { SystemsService } from '../../../services/systems.service';
 
 @Component({
@@ -31,7 +32,13 @@ export class ProducerDetailsCommentsComponent implements OnInit {
     });
   }
 
-  showDiscussion(){
+  openFeedbackDetailsModal(comment){
+    const modalRef = this.modalService.open(ApproverFeedbackDetailsComponent);
+    this.system.details.legislations = this.system.details.legislations || [];
+    modalRef.componentInstance.comment = comment;
+    modalRef.result.then(res => {
+      this.refreshComments();
+    });
     return false;
   }
 

@@ -22,7 +22,7 @@
               <tbody>
               <tr *ngFor="let comment of activeComments">
                 <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
-                <td><a href="#" (click)="showDiscussion()">{{ comment.title }}</a></td>
+                <td><a href="#" (click)="openFeedbackDetailsModal(comment)">{{ comment.title }}</a></td>
               </tr>
               </tbody>
             </table>
@@ -44,7 +44,7 @@
               <tbody>
               <tr *ngFor="let comment of closedComments">
                 <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
-                <td><a href="#" (click)="showDiscussion()">{{ comment.title }}</a></td>
+                <td><a href="#" (click)="openFeedbackDetailsModal(comment)">{{ comment.title }}</a></td>
               </tr>
               </tbody>
             </table>

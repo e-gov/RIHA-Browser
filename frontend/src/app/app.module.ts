@@ -48,6 +48,7 @@ import { ProducerDetailsLegislationsComponent } from './components/producer-deta
 import { AlertComponent } from './components/alert/alert.component';
 import { ProducerDetailsCommentsComponent } from './components/producer-details/producer-details-comments/producer-details-comments.component';
 import { ApproverAddCommentComponent } from './components/approver-add-comment/approver-add-comment.component';
+import { ApproverFeedbackDetailsComponent } from './components/approver-feedback-details/approver-feedback-details.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -110,7 +111,8 @@ const routes: Routes = [
     ProducerDetailsLegislationsComponent,
     AlertComponent,
     ProducerDetailsCommentsComponent,
-    ApproverAddCommentComponent
+    ApproverAddCommentComponent,
+    ApproverFeedbackDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -135,7 +137,8 @@ const routes: Routes = [
     ProducerEditObjectsComponent,
     ProducerEditDocumentsComponent,
     ProducerEditLegislationsComponent,
-    ApproverAddCommentComponent
+    ApproverAddCommentComponent,
+    ApproverFeedbackDetailsComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
