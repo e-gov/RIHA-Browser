@@ -138,6 +138,14 @@ export class SystemsService {
     return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }`).toPromise();
   }
 
+  public getSystemCommentReplies(uuid, commentId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }/comments`).toPromise();
+  }
+
+  public postReplyToComment(uuid, commentId, reply) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }/comments`, reply).toPromise();
+  }
+
   constructor(private http: Http,
               private environmentService: EnvironmentService) { }
 

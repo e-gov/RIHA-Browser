@@ -3,6 +3,40 @@
     {{ feedback.title }}
   </div>
   <div class="my-1">
-    {{ feedback.comment }}
+    <div  class="table-responsive">
+      <table class="table table-striped dataTable" width="100%" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              {{ feedback.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+            </td>
+            <td>
+              {{ feedback.comment }}
+            </td>
+          </tr>
+          <tr *ngFor="let reply of replies">
+            <td>
+              {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+            </td>
+            <td>
+              {{ reply.comment }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div>
+    <form class="col-12" #commentForm="ngForm">
+      <div class="form-group" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
+          <textarea #comment="ngModel" ngModel name="comment" class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar" required></textarea>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="markResolved(commentForm)" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+          <button (click)="postReply(commentForm)" class="btn btn-primary pull-right">Lisa kommentaar</button>
+        </div>
+      </div>
+    </form>
   </div>
 </section>
