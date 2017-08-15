@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-approver-feedback-details',
@@ -19,6 +20,20 @@ export class ApproverFeedbackDetailsComponent implements OnInit {
       });
   }
 
+  markResolved(f){
+    //comment can be empty
+    this.systemService.markCommentResolved(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
+      res => {
+        this.refreshReplies();
+        this.toastrService.success('Lahendatud');
+        this.activeModal.close();
+      },
+      err => {
+        this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
+      }
+    )
+  }
+
   postReply(f){
     if (f.valid){
       this.systemService.postReplyToComment(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
@@ -35,7 +50,8 @@ export class ApproverFeedbackDetailsComponent implements OnInit {
   }
 
   constructor(private systemService: SystemsService,
-              private toastrService: ToastrService) {
+              private toastrService: ToastrService,
+              private activeModal: NgbActiveModal) {
 
   }
 
