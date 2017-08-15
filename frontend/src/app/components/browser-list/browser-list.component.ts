@@ -48,14 +48,6 @@ export class BrowserListComponent implements OnInit {
     return statusDescription;
   }
 
-  getLastModifiedDate(system) {
-    if (system.details.meta) {
-      return system.details.meta.description_timestamp;
-    } else {
-      return '';
-    }
-  }
-
   getSystems(): void {
     this.systemsService.getSystems(this.filters, this.gridData).then(
       res => {
