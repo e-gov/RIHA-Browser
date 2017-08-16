@@ -11,7 +11,13 @@
       </div>
       <div class="form-group" [ngClass]="{'has-danger': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}">
         <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
-        <input #shortName="ngModel" class="form-control h2" [(ngModel)]="system.details.short_name" name="short_name" type="text" id="short-name-input" required>
+        <input #shortName="ngModel"
+               class="form-control h2"
+               [(ngModel)]="system.details.short_name"
+               name="short_name"
+               pattern="[a-zA-ZÕõÄäÖöÜü0-9.-]*"
+               type="text"
+               id="short-name-input" required>
       </div>
       <div class="separate-block">
         <div class="form-group row">
