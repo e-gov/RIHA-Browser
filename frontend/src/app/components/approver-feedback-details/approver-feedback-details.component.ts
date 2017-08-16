@@ -51,7 +51,7 @@ export class ApproverFeedbackDetailsComponent implements OnInit {
 
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
-              private activeModal: NgbActiveModal) {
+              public activeModal: NgbActiveModal) {
 
   }
 

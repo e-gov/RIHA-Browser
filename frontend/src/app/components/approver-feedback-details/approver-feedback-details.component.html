@@ -28,13 +28,14 @@
   </div>
   <div>
     <form class="col-12" #commentForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
+      <div class="form-group" *ngIf="feedback.status == 'OPEN'" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
           <textarea #comment="ngModel" ngModel name="comment" class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar" required></textarea>
       </div>
       <div class="actions-bar">
         <div class="buttons pull-right">
-          <button (click)="markResolved(commentForm)" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
-          <button (click)="postReply(commentForm)" class="btn btn-primary pull-right">Lisa kommentaar</button>
+          <button (click)="activeModal.dismiss()" class="btn btn-default pull-right">Sulge</button>
+          <button (click)="markResolved(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+          <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
         </div>
       </div>
     </form>
