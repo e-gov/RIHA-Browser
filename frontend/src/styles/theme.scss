@@ -822,6 +822,9 @@ $CONTENTS
                 padding-top: 20px;
                 padding-bottom: 19px;
             }
+            &.active {
+              font-weight: bold;
+            }
         }
     }
     &>.list-group {
