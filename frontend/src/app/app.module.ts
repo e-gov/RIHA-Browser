@@ -11,7 +11,6 @@ import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
-import { ScrollSpyModule } from 'ng-scroll-spy';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -119,7 +118,6 @@ const routes: Routes = [
     HttpModule,
     TagInputModule,
     BrowserAnimationsModule,
-    ScrollSpyModule,
     Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
