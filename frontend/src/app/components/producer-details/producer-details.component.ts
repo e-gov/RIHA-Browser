@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
 import { WindowRefService } from '../../services/window-ref.service';
+
+declare var $: any;
 
 @Component({
   selector: 'app-producer-details',
@@ -18,14 +20,29 @@ export class ProducerDetailsComponent implements OnInit {
       let hash = this.winRef.nativeWindow.location.hash;
       if (hash){
         let elId = decodeURI(hash.replace('#',''));
-        let el = this.winRef.nativeWindow.document.getElementById(elId);
+        let el = $(hash)[0];
         if (el){
-          this.winRef.nativeWindow.scrollTo(el.offsetLeft,el.offsetTop);
+          this.winRef.nativeWindow.scrollTo(0,$(el).offset().top);
         } else {
           attempt++;
           setTimeout(()=>{this.adjustSection(attempt)}, 1000);
         }
       }
+    }
+  }
+
+  isMenuActive(blockId, first?){
+    let element = $(`#${blockId}`)[0];
+    if (element){
+      let yOffset = $(element).offset().top - $(document).scrollTop();
+      let height = element.offsetHeight;
+      if (first === true) {
+        return yOffset + height > 0;
+      } else {
+        return yOffset <= 0 && (yOffset + height > 0)
+      }
+    } else {
+      return false
     }
   }
 
@@ -50,4 +67,8 @@ export class ProducerDetailsComponent implements OnInit {
     });
   }
 
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+
+  }
 }
