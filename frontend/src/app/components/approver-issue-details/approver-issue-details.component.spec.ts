@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApproverFeedbackDetailsComponent } from './approver-feedback-details.component';
+import { ApproverIssueDetailsComponent } from './approver-issue-details.component';
 
-describe('ApproverFeedbackDetailsComponent', () => {
-  let component: ApproverFeedbackDetailsComponent;
-  let fixture: ComponentFixture<ApproverFeedbackDetailsComponent>;
+describe('ApproverIssueDetailsComponent', () => {
+  let component: ApproverIssueDetailsComponent;
+  let fixture: ComponentFixture<ApproverIssueDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApproverFeedbackDetailsComponent ]
+      declarations: [ ApproverIssueDetailsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApproverFeedbackDetailsComponent);
+    fixture = TestBed.createComponent(ApproverIssueDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

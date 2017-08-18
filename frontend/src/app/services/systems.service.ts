@@ -126,28 +126,28 @@ export class SystemsService {
     return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ updatedData.id }`, updatedData).toPromise();
   }
 
-  public getSystemComments(uuid) {
+  public getSystemIssues(uuid) {
     return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals?size=1000`).toPromise();
   }
 
-  public addSystemComment(uuid, comment) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals`, comment).toPromise();
+  public addSystemIssue(uuid, comment) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues`, comment).toPromise();
   }
 
-  public getSystemCommentById(uuid, commentId) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }`).toPromise();
+  public getSystemIssueById(uuid, commentId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }`).toPromise();
   }
 
-  public getSystemCommentReplies(uuid, commentId) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }/comments`).toPromise();
+  public getSystemIssueComments(uuid, commentId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }/comments`).toPromise();
   }
 
-  public postReplyToComment(uuid, commentId, reply) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }/comments`, reply).toPromise();
+  public postIssueComment(uuid, commentId, reply) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }/comments`, reply).toPromise();
   }
 
-  public markCommentResolved(uuid, commentId, reply) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals/${ commentId }/comments`, reply).toPromise();
+  public closeIssue(uuid, commentId, reply) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }/comments`, reply).toPromise();
   }
 
   constructor(private http: Http,

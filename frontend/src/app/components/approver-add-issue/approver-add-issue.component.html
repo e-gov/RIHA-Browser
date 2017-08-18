@@ -9,17 +9,15 @@
                ngModel
                #title="ngModel"
                placeholder="lühikirjeldus hinnangust"
-               (keyup.enter)="addComment(url, name)"
                name="title" required>
 
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || addForm.submitted)}">
-        <textarea id="comment" class="form-control col-12"
+      <div class="form-group" [ngClass]="{'has-danger': issue.invalid  && (issue.dirty || issue.touched || addForm.submitted)}">
+        <textarea id="issue" class="form-control col-12"
                ngModel
-               #comment="ngModel"
+               #issue="ngModel"
                placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
-               (keyup.enter)="addComment(url, name)"
-               name="comment" required></textarea>
+               name="issue" required></textarea>
       </div>
       <div class="actions-bar">
         <div class="buttons pull-right">

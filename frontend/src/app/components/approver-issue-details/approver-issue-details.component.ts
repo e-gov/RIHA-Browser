@@ -5,10 +5,10 @@ import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-approver-feedback-details',
-  templateUrl: './approver-feedback-details.component.html',
-  styleUrls: ['./approver-feedback-details.component.scss']
+  templateUrl: './approver-issue-details.component.html',
+  styleUrls: ['./approver-issue-details.component.scss']
 })
-export class ApproverFeedbackDetailsComponent implements OnInit {
+export class ApproverIssueDetailsComponent implements OnInit {
 
   @Input() feedback: any;
   replies: any[] = [];

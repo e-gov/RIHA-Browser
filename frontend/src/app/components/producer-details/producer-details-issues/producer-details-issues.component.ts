@@ -7,10 +7,10 @@ import { SystemsService } from '../../../services/systems.service';
 
 @Component({
   selector: 'app-producer-details-comments',
-  templateUrl: './producer-details-comments.component.html',
-  styleUrls: ['./producer-details-comments.component.scss']
+  templateUrl: './producer-details-issues.component.html',
+  styleUrls: ['./producer-details-issues.component.scss']
 })
-export class ProducerDetailsCommentsComponent implements OnInit {
+export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
 
@@ -49,7 +49,7 @@ export class ProducerDetailsCommentsComponent implements OnInit {
   refreshComments(){
     this.activeComments = [];
     this.closedComments = [];
-    this.systemsService.getSystemComments(this.system.details.uuid).then(
+    this.systemsService.getSystemIssues(this.system.details.uuid).then(
       res => {
         res.json().content.map(c => {
           if (c.status === 'OPEN'){

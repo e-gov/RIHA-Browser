@@ -6,16 +6,16 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-approver-add-comment',
-  templateUrl: './approver-add-comment.component.html',
-  styleUrls: ['./approver-add-comment.component.scss']
+  templateUrl: './approver-add-issue.component.html',
+  styleUrls: ['./approver-add-issue.component.scss']
 })
-export class ApproverAddCommentComponent implements OnInit {
+export class ApproverAddIssueComponent implements OnInit {
 
   @Input() system: System;
 
   onSubmit(f) :void {
     if (f.valid){
-      this.systemsService.addSystemComment(this.system.details.uuid, f.value).then(
+      this.systemsService.addSystemIssue(this.system.details.uuid, f.value).then(
         res => {
           this.activeModal.close();
         },
