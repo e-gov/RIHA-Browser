@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { System } from '../../../models/system';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ApproverAddCommentComponent } from '../../approver-add-comment/approver-add-comment.component';
-import { ApproverFeedbackDetailsComponent } from '../../approver-feedback-details/approver-feedback-details.component';
+import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
+import { ApproverIssueDetailsComponent } from '../../approver-issue-details/approver-issue-details.component';
 import { SystemsService } from '../../../services/systems.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class ProducerDetailsCommentsComponent implements OnInit {
   newAdded: boolean = false;
 
   openAddCommentModal(){
-    const modalRef = this.modalService.open(ApproverAddCommentComponent);
+    const modalRef = this.modalService.open(ApproverAddIssueComponent);
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
@@ -33,8 +33,8 @@ export class ProducerDetailsCommentsComponent implements OnInit {
   }
 
   openFeedbackDetailsModal(comment){
-    this.systemsService.getSystemCommentById(comment.infoSystemUuid, comment.id).then(res => {
-      const modalRef = this.modalService.open(ApproverFeedbackDetailsComponent);
+    this.systemsService.getSystemIssueById(comment.infoSystemUuid, comment.id).then(res => {
+      const modalRef = this.modalService.open(ApproverIssueDetailsComponent);
       modalRef.componentInstance.feedback = res.json();
       modalRef.result.then(res => {
         this.refreshComments();

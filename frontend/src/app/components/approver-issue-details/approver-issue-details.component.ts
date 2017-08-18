@@ -14,7 +14,7 @@ export class ApproverFeedbackDetailsComponent implements OnInit {
   replies: any[] = [];
 
   refreshReplies(){
-    this.systemService.getSystemCommentReplies(this.feedback.infoSystemUuid, this.feedback.id).then(
+    this.systemService.getSystemIssueComments(this.feedback.infoSystemUuid, this.feedback.id).then(
       res => {
         this.replies = res.json().content;
       });
@@ -22,7 +22,7 @@ export class ApproverFeedbackDetailsComponent implements OnInit {
 
   markResolved(f){
     //comment can be empty
-    this.systemService.markCommentResolved(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
+    this.systemService.closeIssue(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
@@ -36,7 +36,7 @@ export class ApproverFeedbackDetailsComponent implements OnInit {
 
   postReply(f){
     if (f.valid){
-      this.systemService.postReplyToComment(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
+      this.systemService.postIssueComment(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
         res => {
           f.reset();
           this.refreshReplies();
