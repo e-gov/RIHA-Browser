@@ -11,18 +11,18 @@
     <ngb-tab>
       <ng-template ngbTabTitle><i class="fa fa-exclamation-circle text-danger tab-icon" aria-hidden="true"></i> Hetkel aktiivsed</ng-template>
       <ng-template ngbTabContent>
-        <app-alert *ngIf="activeComments.length == 0" [conf]="{
+        <app-alert *ngIf="activeIssues.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi aktiivset arutelu ei leidu',
           text: 'Arutelusid algatada ja kommenteerida saavad vaid infosüsteemi kontaktid ning RIHA hindajad'
         }"></app-alert>
-        <div class="my-1" *ngIf="activeComments.length > 0">
+        <div class="my-1" *ngIf="activeIssues.length > 0">
           <div class="table-responsive">
             <table class="table table-striped dataTable" cellspacing="0" width="100%">
               <tbody>
-              <tr *ngFor="let comment of activeComments">
+              <tr *ngFor="let comment of activeIssues">
                 <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
-                <td><a href="#" (click)="openFeedbackDetailsModal(comment)">{{ comment.title }}</a></td>
+                <td><a href="#" (click)="openIssueDetailsModal(comment)">{{ comment.title }}</a></td>
               </tr>
               </tbody>
             </table>
@@ -33,18 +33,18 @@
     <ngb-tab>
       <ng-template ngbTabTitle><i class="fa fa-check-circle text-success tab-icon" aria-hidden="true"></i> Suletud</ng-template>
       <ng-template ngbTabContent>
-        <app-alert *ngIf="closedComments.length == 0" [conf]="{
+        <app-alert *ngIf="closedIssues.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi suletud arutelu ei leidu',
           text: 'Arutelusid algatada ja kommenteerida saavad vaid infosüsteemi kontaktid ning RIHA hindajad'
         }"></app-alert>
-        <div class="my-1" *ngIf="closedComments.length > 0">
+        <div class="my-1" *ngIf="closedIssues.length > 0">
           <div class="table-responsive">
             <table class="table table-striped dataTable" cellspacing="0" width="100%">
               <tbody>
-              <tr *ngFor="let comment of closedComments">
+              <tr *ngFor="let comment of closedIssues">
                 <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
-                <td><a href="#" (click)="openFeedbackDetailsModal(comment)">{{ comment.title }}</a></td>
+                <td><a href="#" (click)="openIssueDetailsModal(comment)">{{ comment.title }}</a></td>
               </tr>
               </tbody>
             </table>
@@ -58,6 +58,6 @@
       <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
       </table>
     </div>
-    <button class="btn btn-primary" (click)="openAddCommentModal()">Lisa uus arutelu</button>
+    <button class="btn btn-primary" (click)="openAddIssueModal()">Lisa uus arutelu</button>
   </div>
 </section>

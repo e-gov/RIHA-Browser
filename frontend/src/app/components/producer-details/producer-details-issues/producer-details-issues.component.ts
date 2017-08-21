@@ -15,11 +15,11 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   @Input() system: System;
 
   comments: any[] = [];
-  activeComments: any[] = [];
-  closedComments: any[] = [];
+  activeIssues: any[] = [];
+  closedIssues: any[] = [];
   newAdded: boolean = false;
 
-  openAddCommentModal(){
+  openAddIssueModal(){
     const modalRef = this.modalService.open(ApproverAddIssueComponent);
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
@@ -32,7 +32,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     });
   }
 
-  openFeedbackDetailsModal(comment){
+  openIssueDetailsModal(comment){
     this.systemsService.getSystemIssueById(comment.id).then(res => {
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent);
       modalRef.componentInstance.feedback = res.json();
@@ -49,14 +49,14 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   refreshIssues(){
     this.systemsService.getSystemIssues(this.system.details.uuid).then(
       res => {
-        this.activeComments = [];
-        this.closedComments = [];
-        
+        this.activeIssues = [];
+        this.closedIssues = [];
+
         res.json().content.map(c => {
           if (c.status === 'OPEN'){
-            this.activeComments.push(c);
+            this.activeIssues.push(c);
           } else if (c.status === 'CLOSED'){
-            this.closedComments.push(c);
+            this.closedIssues.push(c);
           }
         });
       }
