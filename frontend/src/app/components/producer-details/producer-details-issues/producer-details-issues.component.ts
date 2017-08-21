@@ -24,7 +24,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
-      this.refreshComments();
+      this.refreshIssues();
       this.newAdded = true;
       setTimeout(()=> {
         this.newAdded = false;
@@ -33,11 +33,11 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   openFeedbackDetailsModal(comment){
-    this.systemsService.getSystemIssueById(comment.infoSystemUuid, comment.id).then(res => {
+    this.systemsService.getSystemIssueById(comment.id).then(res => {
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent);
       modalRef.componentInstance.feedback = res.json();
       modalRef.result.then(res => {
-        this.refreshComments();
+        this.refreshIssues();
       },
       err => {
 
@@ -46,11 +46,12 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     return false;
   }
 
-  refreshComments(){
-    this.activeComments = [];
-    this.closedComments = [];
+  refreshIssues(){
     this.systemsService.getSystemIssues(this.system.details.uuid).then(
       res => {
+        this.activeComments = [];
+        this.closedComments = [];
+        
         res.json().content.map(c => {
           if (c.status === 'OPEN'){
             this.activeComments.push(c);
@@ -66,7 +67,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
               private systemsService: SystemsService) { }
 
   ngOnInit() {
-    this.refreshComments();
+    this.refreshIssues();
   }
 
 }

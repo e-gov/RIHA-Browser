@@ -127,27 +127,30 @@ export class SystemsService {
   }
 
   public getSystemIssues(uuid) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/approvals?size=1000`).toPromise();
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues?size=1000`).toPromise();
   }
 
-  public addSystemIssue(uuid, comment) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues`, comment).toPromise();
+  public addSystemIssue(uuid, issue) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues`, issue).toPromise();
   }
 
-  public getSystemIssueById(uuid, commentId) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }`).toPromise();
+  public getSystemIssueById(issueId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }`).toPromise();
   }
 
-  public getSystemIssueComments(uuid, commentId) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }/comments`).toPromise();
+  public getSystemIssueTimeline(uuid, commentId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/issues/${ commentId }/timeline`).toPromise();
   }
 
-  public postIssueComment(uuid, commentId, reply) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }/comments`, reply).toPromise();
+  public postSystemIssueComment(issueId, reply) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }/comments`, reply).toPromise();
   }
 
-  public closeIssue(uuid, commentId, reply) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues/${ commentId }/comments`, reply).toPromise();
+  public closeSystemIssue(issueId, reply) {
+    return this.http.put(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }`, {
+      comment: reply.comment,
+      status: 'CLOSED'
+    }).toPromise();
   }
 
   constructor(private http: Http,

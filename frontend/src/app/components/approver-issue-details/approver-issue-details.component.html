@@ -18,8 +18,11 @@
             <td>
               {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
             </td>
-            <td>
+            <td *ngIf="reply.entityType == 'ISSUE_COMMENT'">
               {{ reply.comment }}
+            </td>
+            <td *ngIf="reply.entityType == 'ISSUE_EVENT'">
+              <span *ngIf="reply.type == 'CLOSED'">Arutelu on suletud!</span>
             </td>
           </tr>
         </tbody>

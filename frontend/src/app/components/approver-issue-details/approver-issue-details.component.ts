@@ -14,7 +14,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   replies: any[] = [];
 
   refreshReplies(){
-    this.systemService.getSystemIssueComments(this.feedback.infoSystemUuid, this.feedback.id).then(
+    this.systemService.getSystemIssueTimeline(this.feedback.infoSystemUuid, this.feedback.id).then(
       res => {
         this.replies = res.json().content;
       });
@@ -22,7 +22,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   markResolved(f){
     //comment can be empty
-    this.systemService.closeIssue(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
+    this.systemService.closeSystemIssue(this.feedback.id, f.value).then(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
@@ -36,7 +36,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   postReply(f){
     if (f.valid){
-      this.systemService.postIssueComment(this.feedback.infoSystemUuid, this.feedback.id, f.value).then(
+      this.systemService.postSystemIssueComment(this.feedback.id, f.value).then(
         res => {
           f.reset();
           this.refreshReplies();
