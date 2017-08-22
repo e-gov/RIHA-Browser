@@ -6,12 +6,11 @@
     <artifactId>browser-backend</artifactId>
     <name>Backend</name>
     <description>backend</description>
-    <version>0.3.0</version>
 
     <parent>
         <groupId>ee.ria.riha</groupId>
         <artifactId>browser</artifactId>
-        <version>0.2.0</version>
+        <version>0.4.0</version>
     </parent>
 
     <dependencies>
@@ -20,10 +19,6 @@
             <artifactId>browser-frontend</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,14 +45,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160810</version>
-        </dependency>
-        <dependency>
             <groupId>ee.ria.riha</groupId>
             <artifactId>storage-client</artifactId>
-            <version>0.2.0</version>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
 

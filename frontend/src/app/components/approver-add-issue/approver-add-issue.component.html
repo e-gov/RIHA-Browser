@@ -1,0 +1,31 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Uus arutelu
+  </div>
+  <div class="my-1">
+    <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)" >
+      <div class="form-group" [ngClass]="{'has-danger': title.invalid  && (title.dirty || title.touched || addForm.submitted)}">
+        <input id="title" class="form-control col-12"
+               ngModel
+               #title="ngModel"
+               placeholder="lühikirjeldus hinnangust"
+               name="title" required>
+
+      </div>
+      <div class="form-group" [ngClass]="{'has-danger': issue.invalid  && (issue.dirty || issue.touched || addForm.submitted)}">
+        <textarea id="issue" class="form-control col-12"
+               ngModel
+               #issue="ngModel"
+               placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
+               name="comment" required></textarea>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="activeModal.dismiss()" class="btn btn-default pull-right">Katkesta</button>
+          <button type="submit" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+

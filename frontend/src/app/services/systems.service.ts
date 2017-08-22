@@ -3,6 +3,7 @@ import { Http, URLSearchParams  } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
 import { EnvironmentService } from './environment.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class SystemsService {
@@ -61,6 +62,7 @@ export class SystemsService {
     if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
       system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
     }
+    system.details.meta.description_timestamp = moment().toISOString();
     return system;
   }
 
@@ -122,6 +124,33 @@ export class SystemsService {
 
   public updateSystem(updatedData) {
     return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ updatedData.id }`, updatedData).toPromise();
+  }
+
+  public getSystemIssues(uuid) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues?size=1000`).toPromise();
+  }
+
+  public addSystemIssue(uuid, issue) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues`, issue).toPromise();
+  }
+
+  public getSystemIssueById(issueId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }`).toPromise();
+  }
+
+  public getSystemIssueTimeline(uuid, commentId) {
+    return this.http.get(`${ this.environmentService.getApproverUrl() }/issues/${ commentId }/timeline`).toPromise();
+  }
+
+  public postSystemIssueComment(issueId, reply) {
+    return this.http.post(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }/comments`, reply).toPromise();
+  }
+
+  public closeSystemIssue(issueId, reply) {
+    return this.http.put(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }`, {
+      comment: reply.comment,
+      status: 'CLOSED'
+    }).toPromise();
   }
 
   constructor(private http: Http,

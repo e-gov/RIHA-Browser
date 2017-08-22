@@ -1,0 +1,46 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    {{ feedback.title }}
+  </div>
+  <div class="my-1">
+    <div  class="table-responsive">
+      <table class="table table-striped dataTable" width="100%" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              {{ feedback.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+            </td>
+            <td>
+              {{ feedback.comment }}
+            </td>
+          </tr>
+          <tr *ngFor="let reply of replies">
+            <td>
+              {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+            </td>
+            <td *ngIf="reply.entityType == 'ISSUE_COMMENT'">
+              {{ reply.comment }}
+            </td>
+            <td *ngIf="reply.entityType == 'ISSUE_EVENT'">
+              <span *ngIf="reply.type == 'CLOSED'">Arutelu on suletud!</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div>
+    <form class="col-12" #commentForm="ngForm">
+      <div class="form-group" *ngIf="feedback.status == 'OPEN'" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
+          <textarea #comment="ngModel" ngModel name="comment" class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar" required></textarea>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="activeModal.dismiss()" class="btn btn-default pull-right">Sulge</button>
+          <button (click)="markResolved(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+          <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

@@ -10,6 +10,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { Ng2PageScrollModule } from 'ng2-page-scroll';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -45,6 +46,9 @@ import { ProducerEditDocumentsComponent } from './components/producer-edit/produ
 import { ProducerEditLegislationsComponent } from './components/producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { ProducerDetailsLegislationsComponent } from './components/producer-details/producer-details-legislations/producer-details-legislations.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { ProducerDetailsIssuesComponent } from './components/producer-details/producer-details-issues/producer-details-issues.component';
+import { ApproverAddIssueComponent } from './components/approver-add-issue/approver-add-issue.component';
+import { ApproverIssueDetailsComponent } from './components/approver-issue-details/approver-issue-details.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -63,6 +67,8 @@ const routes: Routes = [
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
+  { path: 'Infosüsteemid/Vaata/:id', component: ProducerDetailsComponent },
+  { path: 'Systems/Vaata/:id', component: ProducerDetailsComponent },
   { path: 'Kirjelda/Vaata/:id', component: ProducerDetailsComponent },
   { path: 'Describe/View/:id', component: ProducerDetailsComponent },
   { path: 'Kirjelda/Muuda/:id', component: ProducerEditComponent },
@@ -103,7 +109,10 @@ const routes: Routes = [
     ProducerEditDocumentsComponent,
     ProducerEditLegislationsComponent,
     ProducerDetailsLegislationsComponent,
-    AlertComponent
+    AlertComponent,
+    ProducerDetailsIssuesComponent,
+    ApproverAddIssueComponent,
+    ApproverIssueDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -111,6 +120,7 @@ const routes: Routes = [
     HttpModule,
     TagInputModule,
     BrowserAnimationsModule,
+    Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
@@ -126,7 +136,9 @@ const routes: Routes = [
   entryComponents: [
     ProducerEditObjectsComponent,
     ProducerEditDocumentsComponent,
-    ProducerEditLegislationsComponent
+    ProducerEditLegislationsComponent,
+    ApproverAddIssueComponent,
+    ApproverIssueDetailsComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]

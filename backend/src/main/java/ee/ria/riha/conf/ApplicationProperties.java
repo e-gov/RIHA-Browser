@@ -38,6 +38,7 @@ public class ApplicationProperties {
 
     public static class RemoteApi {
         private String producerUrl;
+        private String approverUrl;
 
         public String getProducerUrl() {
             return producerUrl;
@@ -45,6 +46,14 @@ public class ApplicationProperties {
 
         public void setProducerUrl(String producerUrl) {
             this.producerUrl = producerUrl;
+        }
+
+        public String getApproverUrl() {
+            return approverUrl;
+        }
+
+        public void setApproverUrl(String approverUrl) {
+            this.approverUrl = approverUrl;
         }
     }
 }

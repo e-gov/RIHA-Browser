@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { GridData } from '../../models/grid-data';
-import { isNumber } from "util";
+import { G } from '../../globals/globals';
 
 @Component({
   selector: 'app-browser-list',
@@ -14,7 +14,7 @@ export class BrowserListComponent implements OnInit {
   filters: {
     owner: string,
     name: string
-  }
+  };
 
   onPageChange(newPage){
     this.gridData.page = newPage - 1;
@@ -26,20 +26,26 @@ export class BrowserListComponent implements OnInit {
     this.getSystems();
   }
 
-  getSystemStatus(system){
-    if (system.description.meta && system.description.meta.system_status) {
-      return system.description.meta.system_status.status;
-    } else {
-      return '';
+  getSystemStatusText(system){
+    let statusDescription = 'määramata';
+    if (system.details.meta && system.details.meta.system_status) {
+      let status = system.details.meta.system_status.status;
+      switch (status) {
+        case G.system_status.IN_USE: {
+          statusDescription = 'kasutusel';
+          break;
+        }
+        case G.system_status.ESTABLISHING: {
+          statusDescription = 'asutamisel';
+          break;
+        }
+        case G.system_status.FINISHED: {
+          statusDescription = 'lõpetatud';
+          break
+        }
+      }
     }
-  }
-
-  getApprovalStatus(system){
-    if (system.description.meta && system.description.meta.approval_status) {
-      return system.description.meta.approval_status.status;
-    } else {
-      return '';
-    }
+    return statusDescription;
   }
 
   getSystems(): void {

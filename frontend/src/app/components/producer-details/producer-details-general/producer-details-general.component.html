@@ -15,6 +15,6 @@
       <p class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</p>
     </div>
     <hr>
-    <app-date-row [icon]="'fa-retweet'" [text]="'Andmed uuendati viimati'" [date]="system.details.creation_date"></app-date-row>
+    <app-date-row [icon]="'fa-retweet'" [text]="'Andmed uuendati viimati'" [date]="system.details.meta.description_timestamp || system.details.creation_date"></app-date-row>
   </div>
 </section>

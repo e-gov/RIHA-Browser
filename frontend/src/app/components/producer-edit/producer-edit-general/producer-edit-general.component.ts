@@ -22,7 +22,7 @@ import { G } from '../../../globals/globals';
         ])
       ]
     )
-  ],
+  ]
 })
 export class ProducerEditGeneralComponent implements OnInit {
 
