@@ -30,7 +30,7 @@ export class ProducerEditLegislationsComponent implements OnInit {
   saveSystem(){
     this.system.details.legislations = this.legislations;
     this.systemsService.updateSystem(this.system).then(response => {
-      this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
+      this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
     });
     this.activeModal.close('saved');
   }
