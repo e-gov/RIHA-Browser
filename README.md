@@ -1,6 +1,6 @@
 ![Estonian Information System Authority](https://github.com/e-gov/RIHA-Frontend/raw/master/logo/gov-CVI/lions.png "Estonian Information System Authority") ![European Regional Development Fund](https://github.com/e-gov/RIHA-Frontend/raw/master/logo/EU/EU.png "European Regional Development Fund")
 
-# RIHA-Browser [![Build Status](https://travis-ci.org/e-gov/RIHA-Browser.svg?branch=master)](https://travis-ci.org/e-gov/RIHA-Browser)
+# RIHA-Browser [![RIHA Beta version](https://raw.githubusercontent.com/e-gov/RIHA-Frontend/master/logo/RIHA-beta-env.png)](https://test.riha.ee/)
 
 Software application that allows a human user to browse descriptions and approval decisions. Project is divided into frontend and backend modules. Frontend is an Angular 4 module which interacts with the bakcend java application's API.
 
