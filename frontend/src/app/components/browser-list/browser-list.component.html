@@ -34,8 +34,8 @@
         <tbody>
           <tr *ngFor="let system of gridData.content">
             <td class="owner">{{system.details.owner.name ? system.details.owner.name : system.details.owner.code}}</td>
-            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.main_resource_id]">{{system.details.short_name}}</a></td>
-            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.main_resource_id]">{{system.details.name}}</a></td>
+            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.short_name}}</a></td>
+            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.name}}</a></td>
             <td class="status">{{ getSystemStatusText(system) }}</td>
             <td class="last-modified text-nowrap">{{ system.details.creation_date | date:'y-MM-dd HH:mm:ss'}}</td>
           </tr>

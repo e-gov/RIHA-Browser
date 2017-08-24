@@ -31,7 +31,7 @@ export class ProducerEditComponent implements OnInit {
     this.loaded = false;
     this.system = new System();
     this.route.params.subscribe( params => {
-      this.getSystem(params['id']);
+      this.getSystem(params['short_name']);
     });
   }
 
