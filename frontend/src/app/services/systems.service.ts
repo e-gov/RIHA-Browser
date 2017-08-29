@@ -62,7 +62,6 @@ export class SystemsService {
     if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
       system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
     }
-    system.details.meta.description_timestamp = moment().toISOString();
     return system;
   }
 
