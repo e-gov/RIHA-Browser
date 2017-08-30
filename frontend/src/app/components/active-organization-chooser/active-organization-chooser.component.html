@@ -5,7 +5,7 @@
       <tbody>
         <tr style="cursor: pointer" *ngFor="let organization of user.getOrganizations()" (click)="selectOrganization(organization.id)" >
           <td class="icon-column"><i class="fa fa-check-circle-o"
-                                     [ngClass]="{'text-muted': organization.id == user.activeOrganizationId, 'text-success': organization.id != user.activeOrganizationId}"
+                                     [ngClass]="{'text-success': organization.id == user.activeOrganizationId, 'text-muted': organization.id != user.activeOrganizationId}"
                                      aria-hidden="true"></i></td>
           <td>{{ organization.name }}</td>
         </tr>
