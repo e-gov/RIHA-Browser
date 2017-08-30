@@ -19,7 +19,7 @@
           <span class="fa fa-user"></span>
         </button>
       </div>
-      <div class="row align-items-center" *ngIf="isUserLoggedIn()">
+      <div class="row align-items-center text-nowrap" *ngIf="isUserLoggedIn()">
         <div class="col" *ngIf="!isAllowedToChangeOrganization()">
           {{ getUserText() }}
         </div>

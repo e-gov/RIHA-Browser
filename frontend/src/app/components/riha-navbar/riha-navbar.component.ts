@@ -37,7 +37,7 @@ export class RihaNavbarComponent implements OnInit {
 
   getUserText(): string {
     let user = this.environmentService.getActiveUser();
-    return user.getFullName();
+    return user.getFullNameWithActiveOrganization();
   }
 
   constructor(private jsonDataService: JsonDataService,
