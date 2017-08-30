@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SystemsService } from '../../services/systems.service';
+import { EnvironmentService} from "../../services/environment.service";
 
 @Component({
   selector: 'app-producer-add',
@@ -18,7 +19,12 @@ export class ProducerAddComponent implements OnInit {
     }
   }
 
+  isLoggedIn(){
+    return this.environmentService.getActiveUser() != null;
+  }
+
   constructor(private systemsService: SystemsService,
+              private environmentService: EnvironmentService,
               private router: Router) {
   }
 

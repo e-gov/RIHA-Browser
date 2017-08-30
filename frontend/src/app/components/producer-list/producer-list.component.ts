@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
+import { EnvironmentService } from '../../services/environment.service';
 import { GridData } from '../../models/grid-data';
 import { isNumber } from "util";
 
@@ -33,7 +34,12 @@ export class ProducerListComponent implements OnInit {
       })
   }
 
-  constructor(private systemsService: SystemsService) {
+  isLoggedIn(){
+    return this.environmentService.getActiveUser() != null;
+  }
+
+  constructor(private systemsService: SystemsService,
+              private environmentService: EnvironmentService) {
     this.gridData = new GridData();
     this.filters = {
       name: null,

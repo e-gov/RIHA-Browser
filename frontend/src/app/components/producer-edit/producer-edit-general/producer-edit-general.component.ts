@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, trigger, transition, style, animate } from '@angular/core';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
+import { EnvironmentService } from "../../../services/environment.service";
 import { WindowRefService } from '../../../services/window-ref.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { G } from '../../../globals/globals';
@@ -77,10 +78,15 @@ export class ProducerEditGeneralComponent implements OnInit {
     return false;
   }
 
+  isLoggedIn(){
+    return this.environmentService.getActiveUser() != null;
+  }
+
   constructor(private systemsService: SystemsService,
               private router: Router,
               private route: ActivatedRoute,
-              private winRef: WindowRefService) {
+              private winRef: WindowRefService,
+              private environmentService: EnvironmentService) {
     this.showAlert = false;
     this.alertConf = {};
   }

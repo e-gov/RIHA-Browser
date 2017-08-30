@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
+import { EnvironmentService } from "../../services/environment.service";
 import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
 import { WindowRefService } from '../../services/window-ref.service';
@@ -54,7 +55,12 @@ export class ProducerDetailsComponent implements OnInit {
     })
   }
 
+  isEditingAllowed(){
+    return this.environmentService.getActiveUser() != null;
+  }
+
   constructor(private systemsService: SystemsService,
+              private environmentService: EnvironmentService,
               private route: ActivatedRoute,
               private winRef: WindowRefService) {
     this.system = new System();
