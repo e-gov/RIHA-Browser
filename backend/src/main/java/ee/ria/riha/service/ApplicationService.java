@@ -50,6 +50,7 @@ public class ApplicationService {
             model.setPersonalCode(userDetails.getPersonalCode());
             model.setFirstName(userDetails.getFirstName());
             model.setLastName(userDetails.getLastName());
+            model.getOrganizations().addAll(userDetails.getOrganizations());
         }
 
         return model;

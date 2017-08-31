@@ -15,6 +15,7 @@ public class UserDetailsModel {
     private String firstName;
     private String lastName;
 
+    private List<Organization> organizations = new ArrayList<>();
     private List<String> roles = new ArrayList<>();
 
 }
