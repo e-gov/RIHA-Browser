@@ -4,7 +4,13 @@
       <h1>Portaali sisenemine</h1>
     </div>
   </header>
-  <div class="row justify-content-center">
+  <app-alert *ngIf="isLoggedIn()" [conf]="{
+    type: 'success',
+    heading: 'Sisse logimine',
+    text: 'Olete juba sisse logitud!'
+  }"></app-alert>
+  <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
+  <div *ngIf="!isLoggedIn()" class="row justify-content-center">
     <div class="col-6">
       <div class="card-deck">
         <div class="card card-alt">
