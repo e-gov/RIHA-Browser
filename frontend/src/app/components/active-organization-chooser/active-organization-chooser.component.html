@@ -1,12 +1,9 @@
 <section class="col card p-3 main-content">
   Palun valige asutus, mille alt soovite RIHAs toiminguid sooritada. Asutust saate hiljem vahetada klikates enda nimele üleval menüüribal.
   <div class="table-responsive">
-    <table class="table table-striped dataTable table-hover" cellspacing="0" width="100%">
+    <table class="table dataTable table-hover" cellspacing="0" width="100%">
       <tbody>
-        <tr style="cursor: pointer" *ngFor="let organization of user.getOrganizations()" (click)="selectOrganization(organization.id)" >
-          <td class="icon-column"><i class="fa fa-check-circle-o"
-                                     [ngClass]="{'text-success': organization.id == user.activeOrganizationId, 'text-muted': organization.id != user.activeOrganizationId}"
-                                     aria-hidden="true"></i></td>
+        <tr [ngClass]="{'table-info': organization.id == user.activeOrganizationId}" style="cursor: pointer" *ngFor="let organization of user.getOrganizations()" (click)="selectOrganization(organization.id)" >
           <td>{{ organization.name }}</td>
         </tr>
       </tbody>
