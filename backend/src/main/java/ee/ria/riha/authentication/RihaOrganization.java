@@ -1,18 +1,18 @@
-package ee.ria.riha.model;
+package ee.ria.riha.authentication;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
  * @author Valentin Suhnjov
  */
 @EqualsAndHashCode(of = "code")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Organization {
+@Getter
+public class RihaOrganization {
 
     private String code;
     private String name;

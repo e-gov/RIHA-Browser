@@ -1,8 +1,9 @@
 package ee.ria.riha.authentication;
 
-import ee.ria.riha.model.Organization;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class RihaUserDetails implements UserDetails {
     private String personalCode;
     private String firstName;
     private String lastName;
-    private Set<Organization> organizations = new HashSet<>();
+    private MultiValueMap<RihaOrganization, String> organizations = new LinkedMultiValueMap<>();
 
     public RihaUserDetails(UserDetails delegate, String personalCode) {
         this.delegate = delegate;
@@ -45,12 +46,8 @@ public class RihaUserDetails implements UserDetails {
         this.lastName = lastName;
     }
 
-    public Set<Organization> getOrganizations() {
+    public MultiValueMap<RihaOrganization, String> getOrganizations() {
         return organizations;
-    }
-
-    public void addOrganization(Organization organization) {
-        this.organizations.add(organization);
     }
 
     @Override
