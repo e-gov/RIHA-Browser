@@ -11,7 +11,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ActiveOrganizationChooserComponent implements OnInit {
   user: User;
 
-  selectOrganization(id): void {
+  selectOrganization(organizationCode): void {
     this.activeModal.close();
   }
 

@@ -2,7 +2,7 @@ export class User {
   personalCode: string;
   firstName: string;
   lastName: string;
-  activeOrganizationId: number;
+  activeOrganization: any;
   organizations: any[];
 
   public getOrganizations(): any[]{
@@ -16,11 +16,8 @@ export class User {
   public getFullNameWithActiveOrganization(): string {
     let ret = `${this.firstName} ${this.lastName}`;
 
-    if (this.activeOrganizationId){
-      let activeOrganization = this.organizations.filter(o => {return o.id == this.activeOrganizationId})[0];
-      if (activeOrganization){
-        ret += ` (${ activeOrganization.name })`
-      }
+    if (this.activeOrganization){
+        ret += ` (${ this.activeOrganization.name })`
     }
     return ret;
   }
@@ -29,7 +26,7 @@ export class User {
     this.personalCode = options.personalCode || null;
     this.firstName = options.firstName || null;
     this.lastName = options.lastName || null;
-    this.activeOrganizationId = options.activeOrganizationId || null;
+    this.activeOrganization = options.activeOrganization || null;
     this.organizations = options.organizations || [];
   }
 }
