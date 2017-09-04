@@ -5,6 +5,8 @@ import { User } from '../../models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
+import { Http } from '@angular/http';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -22,7 +24,11 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   doLogout(){
-    this.environmentService.setActiveUser(null);
+    this.http.get('/browser/logout').toPromise().then(res => {
+      this.environmentService.load().then(env => {
+        this.router.navigate(['/']);
+      });
+    });
   }
 
   openOrganizationsModal() {
@@ -42,7 +48,9 @@ export class RihaNavbarComponent implements OnInit {
 
   constructor(private jsonDataService: JsonDataService,
               private environmentService: EnvironmentService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private http: Http,
+              private router: Router) {
     jsonDataService.routes.subscribe(this.updateRoutes.bind(this));
   }
 
