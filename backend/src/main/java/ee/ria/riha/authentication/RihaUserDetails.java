@@ -1,9 +1,10 @@
 package ee.ria.riha.authentication;
 
+import ee.ria.riha.model.Organization;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  * RIHA user details including additional information like personal code and name.
@@ -17,6 +18,7 @@ public class RihaUserDetails implements UserDetails {
     private String personalCode;
     private String firstName;
     private String lastName;
+    private Set<Organization> organizations = new HashSet<>();
 
     public RihaUserDetails(UserDetails delegate, String personalCode) {
         this.delegate = delegate;
@@ -41,6 +43,14 @@ public class RihaUserDetails implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Set<Organization> getOrganizations() {
+        return organizations;
+    }
+
+    public void addOrganization(Organization organization) {
+        this.organizations.add(organization);
     }
 
     @Override

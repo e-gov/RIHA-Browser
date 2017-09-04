@@ -1,14 +1,20 @@
 package ee.ria.riha.conf;
 
 import ee.ria.riha.authentication.EstEIDRequestHeaderAuthenticationFilter;
+import ee.ria.riha.authentication.RihaLdapUserDetailsContextMapper;
+import ee.ria.riha.conf.ApplicationProperties.AuthenticationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper;
+import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 /**
  * @author Valentin Suhnjov
@@ -16,22 +22,53 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private static final String ALL_NON_OPERATIONAL_ATTRIBUTES = "*";
+    private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
+
+    @Autowired
+    private LdapUserDetailsService ldapUserDetailsService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(getEsteidPreAuthenticatedAuthenticationProvider());
+    }
 
-        auth.inMemoryAuthentication();
+    @Bean
+    public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
+                                                         LdapContextSource contextSource) {
+        AuthenticationProperties authentication = applicationProperties.getAuthentication();
+        FilterBasedLdapUserSearch userSearch = new FilterBasedLdapUserSearch(
+                authentication.getUserSearchBase(),
+                authentication.getUserSearchFilter(),
+                contextSource);
+        userSearch.setReturningAttributes(new String[]{ALL_NON_OPERATIONAL_ATTRIBUTES, MEMBER_OF_ATTRIBUTE});
+        userSearch.setSearchSubtree(true);
+
+        LdapUserDetailsService userDetailsService = new LdapUserDetailsService(userSearch);
+        userDetailsService.setUserDetailsMapper(new RihaLdapUserDetailsContextMapper(contextSource));
+
+        return userDetailsService;
+    }
+
+    @Bean
+    public LdapContextSource contextSource(ApplicationProperties applicationProperties) {
+        LdapContextSource contextSource = new LdapContextSource();
+
+        AuthenticationProperties authentication = applicationProperties.getAuthentication();
+        contextSource.setUrl(authentication.getLdapUrl());
+        contextSource.setBase(authentication.getLdapBaseDn());
+        contextSource.setUserDn(authentication.getLdapUser());
+        contextSource.setPassword(authentication.getLdapPassword());
+
+        return contextSource;
     }
 
     private PreAuthenticatedAuthenticationProvider getEsteidPreAuthenticatedAuthenticationProvider() {
         PreAuthenticatedAuthenticationProvider authenticationProvider = new PreAuthenticatedAuthenticationProvider();
-        authenticationProvider.setPreAuthenticatedUserDetailsService(getPreAuthenticatedUserDetailsService());
+        authenticationProvider.setPreAuthenticatedUserDetailsService(
+                new UserDetailsByNameServiceWrapper<>(ldapUserDetailsService));
 
         return authenticationProvider;
-    }
-
-    private UserDetailsByNameServiceWrapper<PreAuthenticatedAuthenticationToken> getPreAuthenticatedUserDetailsService() {
-        return new UserDetailsByNameServiceWrapper<PreAuthenticatedAuthenticationToken>(userDetailsService());
     }
 
     @Override
