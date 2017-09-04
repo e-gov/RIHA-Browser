@@ -24,7 +24,7 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   doLogout(){
-    this.http.get('/browser/logout').toPromise().then(res => {
+    this.http.get('/logout').toPromise().then(res => {
       this.environmentService.load().then(env => {
         this.router.navigate(['/']);
       });
