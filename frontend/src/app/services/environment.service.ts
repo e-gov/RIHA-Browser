@@ -26,7 +26,7 @@ export class EnvironmentService {
 
   load(): Promise<any> {
     let promise = this.http.get('/environment').toPromise();
-    promise.then(response => this.globalEnvironment = response.json());
+    promise.then(response => this.globalEnvironment = new Environment(response.json()));
     return promise;
   }
 
