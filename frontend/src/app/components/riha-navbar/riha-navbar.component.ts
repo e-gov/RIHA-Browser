@@ -37,8 +37,11 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   isAllowedToChangeOrganization(): boolean {
-    let user = this.environmentService.getActiveUser();
-    return user.organizations.length > 1;
+    /*let user = this.environmentService.getActiveUser();
+    return user.organizations.length > 1;*/
+
+    // organization changing disabled until backend support is available
+    return false;
   }
 
   getUserText(): string {
