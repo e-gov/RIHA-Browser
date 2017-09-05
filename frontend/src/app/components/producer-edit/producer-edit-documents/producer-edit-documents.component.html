@@ -3,50 +3,54 @@
     Dokumentatsioon
   </div>
   <div class="my-1">
-    <div class="form-group">
-      <label for="url" class="text-muted separated-text">URL:</label>
-      <input id="url" class="form-control col-12"
-             #url
-             type="url"
-             placeholder="http://www.example.com"
-             (keyup.enter)="addTechDoc(url, name)"
-             name="url">
+    <form #addForm="ngForm">
+      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+        <label for="url" class="text-muted separated-text">URL:</label>
+        <input id="url" class="form-control col-12"
+               #url="ngModel"
+               [(ngModel)]="data.url"
+               type="url"
+               placeholder="http://www.example.com"
+               (keyup.enter)="addTechDoc(addForm)"
+               name="url" url required>
 
-    </div>
-    <div class="form-group">
-      <label for="name" class="text-muted separated-text">URLi sisu:</label>
-      <input id="name" class="form-control col-12"
-             #name
-             placeholder="Lähtekood"
-             (keyup.enter)="addTechDoc(url, name)"
-             name="name">
+      </div>
+      <div class="form-group">
+        <label for="name" class="text-muted separated-text">URLi sisu:</label>
+        <input id="name" class="form-control col-12"
+               #name="ngModel"
+               [(ngModel)]="data.name"
+               placeholder="Lähtekood"
+               (keyup.enter)="addTechDoc(addForm)"
+               name="name">
 
-    </div>
-    <div class="form-group row">
-      <div class="col-12">
-        <button class="btn btn-default pull-right" (click)="addTechDoc(url, name)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
-    </div>
-    <div class="dataTables_wrapper">
-      <table *ngIf="system" class="details-list-table">
-        <tr *ngFor="let doc of documents; let i = index">
-          <td>
-            <i class="fa fa-external-link text-primary"></i>
-          </td>
-          <td>
-            <a href="{{ doc.url }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? doc.url : doc.name }}</a>
-          </td>
-          <td>
-            <button (click)="deleteTechDoc(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="actions-bar">
-      <div class="buttons pull-right">
-        <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
-        <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+      <div class="form-group row">
+        <div class="col-12">
+          <button class="btn btn-default pull-right" (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        </div>
       </div>
-    </div>
+      <div class="dataTables_wrapper">
+        <table *ngIf="system" class="details-list-table">
+          <tr *ngFor="let doc of documents; let i = index">
+            <td>
+              <i class="fa fa-external-link text-primary"></i>
+            </td>
+            <td>
+              <a href="{{ doc.url }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? doc.url : doc.name }}</a>
+            </td>
+            <td>
+              <button (click)="deleteTechDoc(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
+          <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+      </div>
+    </form>
   </div>
 </section>

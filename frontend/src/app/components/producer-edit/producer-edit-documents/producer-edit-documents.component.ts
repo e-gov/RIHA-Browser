@@ -14,12 +14,14 @@ export class ProducerEditDocumentsComponent implements OnInit {
   @Input() system: System;
   @Input() documents: any[];
 
-  addTechDoc(urlInput, nameInput): void {
-    if (urlInput.value.length > 0 && urlInput.checkValidity()){
-      this.documents.push({url: urlInput.value,
-                          name: nameInput.value.trim()});
-      urlInput.value = '';
-      nameInput.value = '';
+  data: any = {url: '', name: ''};
+
+  addTechDoc(addForm): void {
+    if (addForm.valid){
+      this.documents.push({url: this.data.url,
+                          name: this.data.name ? this.data.name.trim() : ''});
+      this.data = {url: '', name: ''};
+      addForm.reset();
     }
   }
 
@@ -30,7 +32,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
   saveSystem(){
     this.system.details.documents = this.documents;
     this.systemsService.updateSystem(this.system).then(response => {
-      this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
+      this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
     });
     this.activeModal.close('saved');
   }

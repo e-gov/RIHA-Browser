@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, trigger, transition, style, animate } from '@angular/core';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
+import { EnvironmentService } from "../../../services/environment.service";
 import { WindowRefService } from '../../../services/window-ref.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { G } from '../../../globals/globals';
 
 @Component({
@@ -27,6 +28,7 @@ import { G } from '../../../globals/globals';
 export class ProducerEditGeneralComponent implements OnInit {
 
   @Input() system: System;
+  shortName: string;
   showAlert: boolean;
   alertConf: any;
   globals: any = G;
@@ -44,8 +46,8 @@ export class ProducerEditGeneralComponent implements OnInit {
 
   onSubmit(f) :void {
     if (f.valid) {
-      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system)).then(response => {
-        this.router.navigate(['/Kirjelda/Vaata/', response.json().id]);
+      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system), this.shortName).then(response => {
+        this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
       }, error => {
         this.system = this.systemsService.prepareSystemForDisplay(this.system);
         //show error on server side validation failure
@@ -76,14 +78,23 @@ export class ProducerEditGeneralComponent implements OnInit {
     return false;
   }
 
+  isLoggedIn(){
+    return this.environmentService.getActiveUser() != null;
+  }
+
   constructor(private systemsService: SystemsService,
               private router: Router,
-              private winRef: WindowRefService) {
+              private route: ActivatedRoute,
+              private winRef: WindowRefService,
+              private environmentService: EnvironmentService) {
     this.showAlert = false;
     this.alertConf = {};
   }
 
   ngOnInit() {
+    this.route.params.subscribe( params => {
+      this.shortName = params['short_name'];
+    });
   }
 
 }

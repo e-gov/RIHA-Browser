@@ -3,51 +3,55 @@
     Õigusaktid
   </div>
   <div class="my-1">
-    <div class="form-group">
-      <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
-      <input id="url" class="form-control col-12"
-             #url
-             type="url"
-             placeholder="https://www.riigiteataja.ee/akt/126082015036"
-             (keyup.enter)="addLegislation(url, name)"
-             name="url">
+    <form #addForm="ngForm">
+      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+        <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
+        <input id="url" class="form-control col-12"
+               #url="ngModel"
+               [(ngModel)]="data.url"
+               type="url"
+               placeholder="https://www.riigiteataja.ee/akt/126082015036"
+               (keyup.enter)="addLegislation(addForm)"
+               name="url" url required>
 
-    </div>
-    <div class="form-group">
-      <label for="name" class="text-muted separated-text">Õigusakti pealkiri:</label>
-      <input id="name" class="form-control col-12"
-             #name
-             placeholder="Põllumajandustoetuste ja põllumassiivide registri põhimäärus"
-             (keyup.enter)="addLegislation(url, name)"
-             name="name">
+      </div>
+      <div class="form-group">
+        <label for="name" class="text-muted separated-text">Õigusakti pealkiri:</label>
+        <input id="name" class="form-control col-12"
+               #name="ngModel"
+               [(ngModel)]="data.name"
+               placeholder="Põllumajandustoetuste ja põllumassiivide registri põhimäärus"
+               (keyup.enter)="addLegislation(addForm)"
+               name="name">
 
-    </div>
-    <div class="form-group row">
-      <div class="col-12">
-        <button class="btn btn-default pull-right" (click)="addLegislation(url, name)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
-    </div>
-    <div class="dataTables_wrapper">
-      <table *ngIf="system" class="details-list-table">
-        <tr *ngFor="let legislation of legislations; let i = index">
-          <td>
-            <i class="fa fa-external-link text-primary"></i>
-          </td>
-          <td>
-            <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
-          </td>
-          <td>
-            <button (click)="deleteLegislation(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="actions-bar">
-      <div class="buttons pull-right">
-        <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
-        <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+      <div class="form-group row">
+        <div class="col-12">
+          <button class="btn btn-default pull-right" (click)="addLegislation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        </div>
       </div>
-    </div>
+      <div class="dataTables_wrapper">
+        <table *ngIf="system" class="details-list-table">
+          <tr *ngFor="let legislation of legislations; let i = index">
+            <td>
+              <i class="fa fa-external-link text-primary"></i>
+            </td>
+            <td>
+              <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
+            </td>
+            <td>
+              <button (click)="deleteLegislation(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
+          <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+      </div>
+    </form>
   </div>
 </section>
 

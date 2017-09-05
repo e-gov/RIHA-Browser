@@ -1,5 +1,7 @@
 package ee.ria.riha.conf;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -9,51 +11,35 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConfigurationProperties(prefix = "browser")
+@Getter
 public class ApplicationProperties {
 
     private final RemoteApi remoteApi = new RemoteApi();
     private final StorageClientProperties storageClient = new StorageClientProperties();
+    private final AuthenticationProperties authentication = new AuthenticationProperties();
 
-    public RemoteApi getRemoteApi() {
-        return remoteApi;
-    }
-
-    public StorageClientProperties getStorageClient() {
-        return storageClient;
-    }
-
+    @Getter
+    @Setter
     public static class StorageClientProperties {
-
         @NotEmpty
         private String baseUrl;
-
-        public String getBaseUrl() {
-            return baseUrl;
-        }
-
-        public void setBaseUrl(String baseUrl) {
-            this.baseUrl = baseUrl;
-        }
     }
 
+    @Getter
+    @Setter
     public static class RemoteApi {
         private String producerUrl;
         private String approverUrl;
+    }
 
-        public String getProducerUrl() {
-            return producerUrl;
-        }
-
-        public void setProducerUrl(String producerUrl) {
-            this.producerUrl = producerUrl;
-        }
-
-        public String getApproverUrl() {
-            return approverUrl;
-        }
-
-        public void setApproverUrl(String approverUrl) {
-            this.approverUrl = approverUrl;
-        }
+    @Getter
+    @Setter
+    public static class AuthenticationProperties {
+        private String userSearchBase;
+        private String userSearchFilter;
+        private String ldapUrl;
+        private String ldapBaseDn;
+        private String ldapUser;
+        private String ldapPassword;
     }
 }

@@ -62,7 +62,6 @@ export class SystemsService {
     if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
       system.details.meta.system_status.timestamp = this.dateObjToTimestamp(system.details.meta.system_status.timestamp);
     }
-    system.details.meta.description_timestamp = moment().toISOString();
     return system;
   }
 
@@ -107,8 +106,8 @@ export class SystemsService {
     }).toPromise();
   }
 
-  public getSystem(id) {
-    return this.http.get(`${ this.environmentService.getProducerUrl() }/systems/${ id }`).toPromise();
+  public getSystem(short_name) {
+    return this.http.get(`${ this.environmentService.getProducerUrl() }/systems/${ short_name }`).toPromise();
   }
 
   public addSystem(value) {
@@ -122,8 +121,8 @@ export class SystemsService {
     return this.http.post(`${ this.environmentService.getProducerUrl() }/systems`, system).toPromise();
   }
 
-  public updateSystem(updatedData) {
-    return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ updatedData.id }`, updatedData).toPromise();
+  public updateSystem(updatedData, shortName?) {
+    return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ shortName || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
   public getSystemIssues(uuid) {

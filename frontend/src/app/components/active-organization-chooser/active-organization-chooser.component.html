@@ -1,0 +1,12 @@
+<section class="col card p-3 main-content">
+  Palun valige asutus, mille alt soovite RIHAs toiminguid sooritada. Asutust saate hiljem vahetada klikates enda nimele üleval menüüribal.
+  <div class="table-responsive">
+    <table class="table dataTable table-hover" cellspacing="0" width="100%">
+      <tbody>
+        <tr [ngClass]="{'table-info': (user.activeOrganization && (user.activeOrganization.code == organization.code))}" style="cursor: pointer" *ngFor="let organization of user.getOrganizations()" (click)="selectOrganization(organization.code)" >
+          <td>{{ organization.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,7 +1,7 @@
 <section class="col card p-3 main-content">
   <div class="panel-action-heading">
     Dokumentatsioon
-    <button (click)="openTechDocsEdit()" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
+    <button *ngIf="allowEdit" (click)="openTechDocsEdit()" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
   </div>
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi tehniline dokumentatsioon:</label>

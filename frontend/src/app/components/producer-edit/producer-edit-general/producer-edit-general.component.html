@@ -1,4 +1,8 @@
-<section class="col card p-3 main-content">
+<div *ngIf="!isLoggedIn()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun logige sisse</h3>
+  <p class="mb-0">Muutmise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
+</div>
+<section *ngIf="isLoggedIn()" class="col card p-3 main-content">
   <div class="panel-action-heading">
     Infosüsteemi üldkirjeldus
   </div>
@@ -66,15 +70,17 @@
         <span class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</span>
       </p>
       <div class="separate-block">
-        <div class="form-group row">
-          <label for="available-at" class="col-form-label advanced-label">
+        <div class="form-group row" [ngClass]="{'has-danger': homepage.invalid}">
+          <label for="homepage" class="col-form-label advanced-label">
             <i class="fa fa-external-link text-muted" aria-hidden="true"></i><strong>Avalik kasutajaliides</strong>
           </label>
           <div class="col">
             <div class="input-group">
-              <input id="available-at" class="form-control"
+              <input id="homepage" class="form-control"
                      placeholder="http://"
-                     name="available-at" [(ngModel)]="system.details.homepage">
+                     type="url"
+                     #homepage="ngModel"
+                     name="homepage" [(ngModel)]="system.details.homepage" url>
             </div>
           </div>
         </div>

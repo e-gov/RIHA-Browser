@@ -11,6 +11,7 @@ import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { CustomFormsModule } from 'ng2-validation';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -49,6 +50,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { ProducerDetailsIssuesComponent } from './components/producer-details/producer-details-issues/producer-details-issues.component';
 import { ApproverAddIssueComponent } from './components/approver-add-issue/approver-add-issue.component';
 import { ApproverIssueDetailsComponent } from './components/approver-issue-details/approver-issue-details.component';
+import { ActiveOrganizationChooserComponent } from './components/active-organization-chooser/active-organization-chooser.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -67,18 +69,18 @@ const routes: Routes = [
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
-  { path: 'Infosüsteemid/Vaata/:id', component: ProducerDetailsComponent },
-  { path: 'Systems/Vaata/:id', component: ProducerDetailsComponent },
-  { path: 'Kirjelda/Vaata/:id', component: ProducerDetailsComponent },
-  { path: 'Describe/View/:id', component: ProducerDetailsComponent },
-  { path: 'Kirjelda/Muuda/:id', component: ProducerEditComponent },
-  { path: 'Describe/Edit/:id', component: ProducerEditComponent },
+  { path: 'Infosüsteemid/Vaata/:short_name', component: ProducerDetailsComponent },
+  { path: 'Systems/Vaata/:short_name', component: ProducerDetailsComponent },
+  { path: 'Kirjelda/Vaata/:short_name', component: ProducerDetailsComponent },
+  { path: 'Describe/View/:short_name', component: ProducerDetailsComponent },
+  { path: 'Kirjelda/Muuda/:short_name', component: ProducerEditComponent },
+  { path: 'Describe/Edit/:short_name', component: ProducerEditComponent },
   { path: 'Kirjelda/Uus', component: ProducerAddComponent },
   { path: 'Describe/New', component: ProducerAddComponent },
   { path: 'Hinda', component: ApproverListComponent },
   { path: 'Approve', component: ApproverListComponent },
-  { path: 'Hinda/Detailid/:id', component: ApproverDetailsComponent },
-  { path: 'Approve/Details/:id', component: ApproverDetailsComponent },
+  { path: 'Hinda/Detailid/:short_name', component: ApproverDetailsComponent },
+  { path: 'Approve/Details/:short_name', component: ApproverDetailsComponent },
   { path: 'Hinda/Detailid', component: ApproverDetailsComponent },
   { path: 'Approve/Details', component: ApproverDetailsComponent },
   { path: '**', component: PageNotFoundComponent }
@@ -112,7 +114,8 @@ const routes: Routes = [
     AlertComponent,
     ProducerDetailsIssuesComponent,
     ApproverAddIssueComponent,
-    ApproverIssueDetailsComponent
+    ApproverIssueDetailsComponent,
+    ActiveOrganizationChooserComponent
   ],
   imports: [
     BrowserModule,
@@ -120,6 +123,7 @@ const routes: Routes = [
     HttpModule,
     TagInputModule,
     BrowserAnimationsModule,
+    CustomFormsModule,
     Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
@@ -138,7 +142,8 @@ const routes: Routes = [
     ProducerEditDocumentsComponent,
     ProducerEditLegislationsComponent,
     ApproverAddIssueComponent,
-    ApproverIssueDetailsComponent
+    ApproverIssueDetailsComponent,
+    ActiveOrganizationChooserComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]

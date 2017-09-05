@@ -4,8 +4,14 @@
       <h1>Portaali sisenemine</h1>
     </div>
   </header>
-  <div class="row">
-    <div class="col-12">
+  <app-alert *ngIf="isLoggedIn()" [conf]="{
+    type: 'success',
+    heading: 'Sisse logimine',
+    text: 'Olete juba sisse logitud!'
+  }"></app-alert>
+  <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
+  <div *ngIf="!isLoggedIn()" class="row justify-content-center">
+    <div class="col-6">
       <div class="card-deck">
         <div class="card card-alt">
           <div class="card-title">
@@ -18,13 +24,13 @@
             <div class="actions-bar row align-items-center">
               <div class="col">
                 <div class="buttons mt-3 justify-content-end">
-                  <a class="btn btn-primary btn-lg btn-01" [routerLink]="'/'" role="button">Jätka</a>
+                  <a class="btn btn-primary btn-lg btn-01" href="#" (click)="doLogin()" role="button">Jätka</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="card card-alt">
+        <!--div class="card card-alt">
           <form>
             <div class="card-title">
               Sisenege Mobiil ID-ga
@@ -53,7 +59,7 @@
               </div>
             </div>
           </form>
-        </div>
+        </div -->
       </div>
     </div>
   </div>
