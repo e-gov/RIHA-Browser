@@ -1,5 +1,9 @@
 <app-page-header [text]="'Sisesta infosüsteemi andmed'"></app-page-header>
-<section class="col card p-3">
+<div *ngIf="!isLoggedIn()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun logige sisse</h3>
+  <p class="mb-0">Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
+</div>
+<section *ngIf="isLoggedIn()" class="col card p-3">
   <div class="my-1">
     <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)" >
       <p>

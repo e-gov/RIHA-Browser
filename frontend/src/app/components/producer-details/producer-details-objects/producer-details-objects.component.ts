@@ -11,6 +11,7 @@ import { System } from '../../../models/system';
 export class ProducerDetailsObjectsComponent implements OnInit {
 
   @Input() system: System;
+  @Input() allowEdit: boolean;
 
   openObjectsEdit(content) {
     const modalRef = this.modalService.open(ProducerEditObjectsComponent);

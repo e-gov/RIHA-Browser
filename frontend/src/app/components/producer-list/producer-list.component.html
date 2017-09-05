@@ -1,5 +1,9 @@
 <app-page-header [text]="'Minu infosüsteemid'"></app-page-header>
-<section class="col card p-3">
+<div *ngIf="!isLoggedIn()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun logige sisse</h3>
+  <p class="mb-0">Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
+</div>
+<section *ngIf="isLoggedIn()" class="col card p-3">
   <div class="row">
     <div class="col-12 col-md-6">
       <div class="form-group row">

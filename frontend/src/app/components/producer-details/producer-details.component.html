@@ -23,19 +23,19 @@
   </aside>
   <article class="col separate-blocks">
     <div id="üldkirjeldus" class="separate-block">
-      <app-producer-details-general [system]="system"></app-producer-details-general>
+      <app-producer-details-general [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-general>
     </div>
     <div id="tagasiside" class="separate-block">
       <app-producer-details-comments [system]="system"></app-producer-details-comments>
     </div>
     <div id="andmed" class="separate-block">
-      <app-producer-details-objects [system]="system"></app-producer-details-objects>
+      <app-producer-details-objects [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-objects>
     </div>
     <div id="dokumentatsioon" class="separate-block">
-      <app-producer-details-tech-docs [system]="system"></app-producer-details-tech-docs>
+      <app-producer-details-tech-docs [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
     </div>
     <div id="õigusaktid" class="separate-block">
-      <app-producer-details-legislations [system]="system"></app-producer-details-legislations>
+      <app-producer-details-legislations [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
     </div>
   </article>
 </section>

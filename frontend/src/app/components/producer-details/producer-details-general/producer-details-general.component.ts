@@ -9,6 +9,7 @@ import { System } from '../../../models/system';
 export class ProducerDetailsGeneralComponent implements OnInit {
 
   @Input() system: System;
+  @Input() allowEdit: boolean;
 
   constructor() { }
 
