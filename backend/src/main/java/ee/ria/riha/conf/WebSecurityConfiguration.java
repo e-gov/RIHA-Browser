@@ -1,7 +1,9 @@
 package ee.ria.riha.conf;
 
 import ee.ria.riha.authentication.EstEIDRequestHeaderAuthenticationFilter;
+import ee.ria.riha.authentication.RihaFilterBasedLdapUserSearch;
 import ee.ria.riha.authentication.RihaLdapUserDetailsContextMapper;
+import ee.ria.riha.authentication.RihaPreAuthenticatedUserDetailsService;
 import ee.ria.riha.conf.ApplicationProperties.AuthenticationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +14,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper;
-import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
@@ -23,9 +23,6 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
  */
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    private static final String ALL_NON_OPERATIONAL_ATTRIBUTES = "*";
-    private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
 
     @Autowired
     private LdapUserDetailsService ldapUserDetailsService;
@@ -38,13 +35,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
-        AuthenticationProperties authentication = applicationProperties.getAuthentication();
-        FilterBasedLdapUserSearch userSearch = new FilterBasedLdapUserSearch(
-                authentication.getUserSearchBase(),
-                authentication.getUserSearchFilter(),
+        AuthenticationProperties authenticationProperties = applicationProperties.getAuthentication();
+        RihaFilterBasedLdapUserSearch userSearch = new RihaFilterBasedLdapUserSearch(
+                authenticationProperties.getUserSearchBase(),
+                authenticationProperties.getUserSearchFilter(),
                 contextSource);
-        userSearch.setReturningAttributes(new String[]{ALL_NON_OPERATIONAL_ATTRIBUTES, MEMBER_OF_ATTRIBUTE});
-        userSearch.setSearchSubtree(true);
 
         LdapUserDetailsService userDetailsService = new LdapUserDetailsService(userSearch);
         userDetailsService.setUserDetailsMapper(new RihaLdapUserDetailsContextMapper(contextSource));
@@ -68,7 +63,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private PreAuthenticatedAuthenticationProvider getEsteidPreAuthenticatedAuthenticationProvider() {
         PreAuthenticatedAuthenticationProvider authenticationProvider = new PreAuthenticatedAuthenticationProvider();
         authenticationProvider.setPreAuthenticatedUserDetailsService(
-                new UserDetailsByNameServiceWrapper<>(ldapUserDetailsService));
+                new RihaPreAuthenticatedUserDetailsService(ldapUserDetailsService));
 
         return authenticationProvider;
     }
@@ -89,9 +84,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private EstEIDRequestHeaderAuthenticationFilter esteidRequestHeaderAuthenticationFilter(
             AuthenticationManager authenticationManager) {
         EstEIDRequestHeaderAuthenticationFilter filter = new EstEIDRequestHeaderAuthenticationFilter();
-        filter.setExceptionIfHeaderMissing(false);
-        filter.setPrincipalRequestHeader("SSL_CLIENT_S_DN");
-        filter.setCredentialsRequestHeader("SSL_CLIENT_CERT");
         filter.setAuthenticationManager(authenticationManager);
 
         return filter;

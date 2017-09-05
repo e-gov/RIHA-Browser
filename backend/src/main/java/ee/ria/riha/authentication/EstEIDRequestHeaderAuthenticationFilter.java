@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter;
 
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
@@ -13,7 +11,10 @@ import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
+import static org.springframework.ldap.support.LdapUtils.newLdapName;
 import static org.springframework.util.StringUtils.hasText;
 
 /**
@@ -32,6 +33,14 @@ public class EstEIDRequestHeaderAuthenticationFilter extends RequestHeaderAuthen
     private static final String NON_BASE_64_CHARACTER = "[^A-Za-z0-9+/=]";
 
     private static final String SERIAL_NUMBER = "serialnumber";
+    private static final String GIVEN_NAME = "gn";
+    private static final String SURNAME = "sn";
+
+    public EstEIDRequestHeaderAuthenticationFilter() {
+        setExceptionIfHeaderMissing(false);
+        setPrincipalRequestHeader("SSL_CLIENT_S_DN");
+        setCredentialsRequestHeader("SSL_CLIENT_CERT");
+    }
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
@@ -42,19 +51,22 @@ public class EstEIDRequestHeaderAuthenticationFilter extends RequestHeaderAuthen
         }
 
         log.debug("Extracting principal from subject DN: {}", subjectDn);
-        try {
-            for (Rdn rdn : new LdapName(subjectDn).getRdns()) {
-                if (rdn.getType().equalsIgnoreCase(SERIAL_NUMBER)) {
-                    String serialNumber = (String) rdn.getValue();
-                    return new EstEIDPrincipal(serialNumber);
-                }
-            }
 
+        Map<String, String> principalParts = new HashMap<>();
+        for (Rdn rdn : newLdapName(subjectDn).getRdns()) {
+            principalParts.put(rdn.getType().toLowerCase(), ((String) rdn.getValue()));
+        }
+
+        if (!principalParts.containsKey(SERIAL_NUMBER)) {
             throw new BadCredentialsException(
                     "Subject DN does not contain serial number needed for principal extraction");
-        } catch (InvalidNameException e) {
-            throw new BadCredentialsException("Could not retrieve RDNs from subject DN", e);
         }
+
+        EstEIDPrincipal principal = new EstEIDPrincipal(principalParts.get(SERIAL_NUMBER));
+        principal.setGivenName(principalParts.get(GIVEN_NAME));
+        principal.setSurname(principalParts.get(SURNAME));
+
+        return principal;
     }
 
     @Override
