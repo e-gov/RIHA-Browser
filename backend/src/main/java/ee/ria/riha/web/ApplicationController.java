@@ -33,7 +33,7 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getEnvironment());
     }
 
-    @GetMapping(value = "/idlogin")
+    @GetMapping(value = "/login/esteid")
     public ResponseEntity estEIDLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean authenticated = authentication != null && authentication.getPrincipal() instanceof UserDetails;

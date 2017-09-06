@@ -75,7 +75,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilter(esteidRequestHeaderAuthenticationFilter(authenticationManager()));
 
         http.authorizeRequests()
-                .antMatchers("/idlogin").authenticated()
+                .antMatchers("/login/esteid").authenticated()
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)));
