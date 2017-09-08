@@ -6,14 +6,52 @@
   <div class="my-1 card-content">
     <h1>{{ system.details.name }}</h1>
     <h2>{{ system.details.short_name }}</h2>
+    <div class="separate-block">
+      <div class="form-group row">
+        <label class="col-form-label advanced-label">
+          <span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">{{ system.getStatusDescription() }}</strong> <span *ngIf="system.isUsed()">alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label *ngIf="system.isInDevelopment()" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
+        <label *ngIf="!system.isInDevelopment()" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
+      </div>
+    </div>
     <div class="form-group">
       <label class="text-muted separated-text">Infosüsteemi eesmärk:</label>
       <p>{{ system.details.purpose }}</p>
     </div>
     <div class="form-group">
+      <label class="text-muted">Infosüsteemi valdkond:</label>
+      <div class="row">
+        <button *ngFor="let topic of system.details.topics" class="btn btn-primary btn-sm ml-1">{{ topic }}</button>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label class="text-muted separated-text">Omanik:</label>
       <p class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</p>
     </div>
+    <div class="separate-block">
+      <div class="form-group row">
+        <label class="col-form-label advanced-label" *ngIf="system.details.homepage">
+          <i class="fa fa-external-link text-muted" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}">{{ system.details.homepage }}</a>
+        </label>
+        <label class="col-form-label advanced-label" *ngIf="!system.details.homepage">
+          <i class="fa fa-external-link text-muted" aria-hidden="true"></i>Avalik kasutajaliides on määramata
+        </label>
+      </div>
+      <div class="form-group row">
+        <label *ngIf="system.details.meta.x_road_status.timestamp" class="col-form-label advanced-label">
+          <span class="text-muted"><i class="fa fa-times" aria-hidden="true"></i>Liidestatud X-teega {{ system.details.meta.x_road_status.timestamp | date:'y-MM-dd'}}</span>
+        </label>
+        <label *ngIf="!system.details.meta.x_road_status.timestamp" class="col-form-label advanced-label">
+          <span class="text-muted"><i class="fa fa-times" aria-hidden="true"></i>Ei ole liidestatud X-teega</span>
+        </label>
+      </div>
+
+    </div>
+
     <hr>
     <app-date-row [icon]="'fa-retweet'" [text]="'Andmed uuendati viimati'" [date]="system.details.creation_date"></app-date-row>
   </div>
