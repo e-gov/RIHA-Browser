@@ -49,7 +49,7 @@ export class ProducerDetailsComponent implements OnInit {
 
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
-      this.system = response.json();
+      this.system.setData(response.json());
       this.loaded = true;
       this.adjustSection(0);
     })
