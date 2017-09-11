@@ -14,7 +14,7 @@ export class LoginFormComponent implements OnInit {
   alertConf: any = null;
 
   doLogin(){
-    this.http.get('/idlogin').toPromise().then(res => {
+    this.http.get('/login/esteid').toPromise().then(res => {
       this.environmentService.load().then(res => {
         this.router.navigate(['/']);
       });

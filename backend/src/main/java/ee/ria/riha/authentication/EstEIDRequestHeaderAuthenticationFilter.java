@@ -3,8 +3,14 @@ package ee.ria.riha.authentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.Assert;
 
 import javax.naming.ldap.Rdn;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -36,10 +42,29 @@ public class EstEIDRequestHeaderAuthenticationFilter extends RequestHeaderAuthen
     private static final String GIVEN_NAME = "gn";
     private static final String SURNAME = "sn";
 
-    public EstEIDRequestHeaderAuthenticationFilter() {
+    private RequestMatcher requestMatcher;
+
+    public EstEIDRequestHeaderAuthenticationFilter(RequestMatcher requestMatcher) {
+        setRequestMatcher(requestMatcher);
         setExceptionIfHeaderMissing(false);
         setPrincipalRequestHeader("SSL_CLIENT_S_DN");
         setCredentialsRequestHeader("SSL_CLIENT_CERT");
+    }
+
+    public void setRequestMatcher(RequestMatcher requestMatcher) {
+        Assert.notNull(requestMatcher, "requestMatcher should not be null");
+        this.requestMatcher = requestMatcher;
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws IOException, ServletException {
+        if (!requestMatcher.matches(((HttpServletRequest) request))) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        super.doFilter(request, response, chain);
     }
 
     @Override

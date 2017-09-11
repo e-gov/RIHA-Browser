@@ -107,7 +107,7 @@ Please see [application.properties](../backend/src/main/resources/application.pr
 ### Apache HTTP Server
 Use of Apache HTTP Server is not strongly required and can be replaced by any server or application that are capable of client authentication during SSL handshake.
 
-Apache HTTP Server is used for Estonian eID citizen smart card authentication. Apache HTTP Server acts as a proxy/load balancer and must be configured to use SSL (mod_ssl) and require client certificate for predefined resource `/idlogin`. In case of successful negotiation, Apache HTTP Server forwards request to proxied host and sets two request headers `SSL_CLIENT_S_DN` and `SSL_CLIENT_CERT` from corresponding mod_ssl values.
+Apache HTTP Server is used for Estonian eID citizen smart card authentication. Apache HTTP Server acts as a proxy/load balancer and must be configured to use SSL (mod_ssl) and require client certificate for predefined resource `/login/esteid`. In case of successful negotiation, Apache HTTP Server forwards request to proxied host and sets two request headers `SSL_CLIENT_S_DN` and `SSL_CLIENT_CERT` from corresponding mod_ssl values.
 
 Here is Apache HTTP Server as a proxy configuration example:
 ~~~
@@ -126,7 +126,7 @@ Here is Apache HTTP Server as a proxy configuration example:
     ProxyPass / http://riha.example.com/
     ProxyPassReverse / http://riha.example.com/
             
-    <Location "/idlogin">
+    <Location "/login/esteid">
        SSLVerifyClient require
        SSLVerifyDepth 2
     
