@@ -3,19 +3,42 @@
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
-        <a pageScroll [pageScrollAdjustHash]="true" [ngClass]="{'active': isMenuActive('üldkirjeldus', true)}" href="#üldkirjeldus" class="list-group-item justify-content-between">
+        <a pageScroll
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('üldkirjeldus', true)}"
+           href="#üldkirjeldus"
+           class="list-group-item justify-content-between">
           Infosüsteemi üldkirjeldus
         </a>
-        <a pageScroll [pageScrollAdjustHash]="true" [ngClass]="{'active': isMenuActive('tagasiside')}" href="#tagasiside" class="list-group-item justify-content-between">
+        <a pageScroll
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('tagasiside')}"
+           href="#tagasiside"
+           class="list-group-item justify-content-between">
           Hindajate tagasiside
         </a>
-        <a pageScroll [pageScrollAdjustHash]="true" [ngClass]="{'active': isMenuActive('andmed')}" href="#andmed" class="list-group-item justify-content-between">
+        <a pageScroll
+           *ngIf="system.hasDataObjects()"
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('andmed')}"
+           href="#andmed"
+           class="list-group-item justify-content-between">
           Andmed
         </a>
-        <a pageScroll [pageScrollAdjustHash]="true" [ngClass]="{'active': isMenuActive('dokumentatsioon')}" href="#dokumentatsioon" class="list-group-item justify-content-between">
+        <a pageScroll
+           *ngIf="system.hasDocuments()"
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('dokumentatsioon')}"
+           href="#dokumentatsioon"
+           class="list-group-item justify-content-between">
           Dokumentatsioon
         </a>
-        <a pageScroll [pageScrollAdjustHash]="true" [ngClass]="{'active': isMenuActive('õigusaktid')}" href="#õigusaktid" class="list-group-item justify-content-between">
+        <a pageScroll
+           *ngIf="system.hasLegislations()"
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('õigusaktid')}"
+           href="#õigusaktid"
+           class="list-group-item justify-content-between">
           Õigusaktid
         </a>
       </div>
@@ -28,13 +51,19 @@
     <div id="tagasiside" class="separate-block">
       <app-producer-details-comments [system]="system"></app-producer-details-comments>
     </div>
-    <div id="andmed" class="separate-block">
+    <div id="andmed"
+         *ngIf="system.hasDataObjects()"
+         class="separate-block">
       <app-producer-details-objects [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-objects>
     </div>
-    <div id="dokumentatsioon" class="separate-block">
+    <div id="dokumentatsioon"
+         *ngIf="system.hasDocuments()"
+         class="separate-block">
       <app-producer-details-tech-docs [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
     </div>
-    <div id="õigusaktid" class="separate-block">
+    <div id="õigusaktid"
+         *ngIf="system.hasLegislations()"
+         class="separate-block">
       <app-producer-details-legislations [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
     </div>
   </article>
