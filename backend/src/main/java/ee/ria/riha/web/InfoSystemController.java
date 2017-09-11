@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
+
 @RestController
-@RequestMapping("/systems")
+@RequestMapping(API_V1_PREFIX + "/systems")
 public class InfoSystemController {
 
     @Autowired
