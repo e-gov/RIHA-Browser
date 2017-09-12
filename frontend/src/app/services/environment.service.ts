@@ -41,7 +41,7 @@ export class EnvironmentService {
   }
 
   public setActiveOrganization(organizationCode): Promise<any> {
-    return this.http.put('/login/organization', organizationCode).toPromise();
+    return this.http.put(this.environmentUrl + '/organization', organizationCode).toPromise();
   }
 
   constructor(private http: Http) {
