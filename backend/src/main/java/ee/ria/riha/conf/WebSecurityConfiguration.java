@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @author Valentin Suhnjov
@@ -75,7 +76,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilter(esteidRequestHeaderAuthenticationFilter(authenticationManager()));
 
         http.authorizeRequests()
-                .antMatchers("/idlogin").authenticated()
                 .anyRequest().permitAll();
 
         http.logout().logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)));
@@ -83,7 +83,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private EstEIDRequestHeaderAuthenticationFilter esteidRequestHeaderAuthenticationFilter(
             AuthenticationManager authenticationManager) {
-        EstEIDRequestHeaderAuthenticationFilter filter = new EstEIDRequestHeaderAuthenticationFilter();
+        EstEIDRequestHeaderAuthenticationFilter filter = new EstEIDRequestHeaderAuthenticationFilter(
+                new AntPathRequestMatcher("/login/esteid", "GET"));
         filter.setAuthenticationManager(authenticationManager);
 
         return filter;

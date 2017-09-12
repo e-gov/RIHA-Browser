@@ -9,6 +9,10 @@ export class User {
     return this.organizations;
   }
 
+  public getActiveOrganization(): any{
+    return this.activeOrganization;
+  }
+
   public getFullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }

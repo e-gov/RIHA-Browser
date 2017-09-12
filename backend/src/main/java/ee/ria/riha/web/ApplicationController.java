@@ -8,9 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -33,10 +31,20 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getEnvironment());
     }
 
-    @GetMapping(value = "/idlogin")
+    @PutMapping(value = "/environment/organization")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+        applicationService.changeActiveOrganization(organizationCode);
+
+        return environment();
+    }
+
+    @GetMapping(value = "/login/esteid")
     public ResponseEntity estEIDLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean authenticated = authentication != null && authentication.getPrincipal() instanceof UserDetails;
         return ResponseEntity.status(authenticated ? HttpStatus.OK : HttpStatus.FORBIDDEN).build();
     }
+
+
 }

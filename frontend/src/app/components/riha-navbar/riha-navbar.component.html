@@ -24,10 +24,11 @@
           {{ getUserText() }}
         </div>
         <div class="col" *ngIf="isAllowedToChangeOrganization()">
-          <a href="#" (click)="openOrganizationsModal()">{{ getUserText() }}</a>
+          <i *ngIf="noOrganizationSelected()" ngbTooltip="asutus ei ole valitud" class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+          <a href="#" style="outline: none" (click)="openOrganizationsModal()">{{ getUserText() }}</a>
         </div>
         <div class="btn-group col">
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="doLogout()">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="logout()">
             <span>Logi Välja</span>
             <span class="fa fa-sign-out"></span>
           </button>
