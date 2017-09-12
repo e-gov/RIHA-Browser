@@ -31,6 +31,14 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getEnvironment());
     }
 
+    @PutMapping(value = "/environment/organization")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+        applicationService.changeActiveOrganization(organizationCode);
+
+        return environment();
+    }
+
     @GetMapping(value = "/login/esteid")
     public ResponseEntity estEIDLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -38,11 +46,5 @@ public class ApplicationController {
         return ResponseEntity.status(authenticated ? HttpStatus.OK : HttpStatus.FORBIDDEN).build();
     }
 
-    @PutMapping(value = "/login/organization")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
-        applicationService.changeActiveOrganization(organizationCode);
 
-        return environment();
-    }
 }
