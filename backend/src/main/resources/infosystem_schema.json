@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "https://riha.ee/infosystem_schema.json",
+  "properties": {
+    "stored_data": {
+      "items": {
+        "description": "Infosüsteemi põhiandmed kuni 10 objektina. Näiteks rahvastikuregistris \"Eesti kodanike elukohaandmed\", \"Eesti kodanike nimed\" jne",
+        "type": "string"
+      },
+      "maxItems": 10,
+      "type": "array"
+    },
+    "documents": {
+      "items": {
+        "properties": {
+          "url": {
+            "description": "URL, mis viitab süsteemi dokumentatsiooni avalikule asukohale",
+            "type": "string"
+          },
+          "name": {
+            "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "name"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "homepage": {
+      "type": ["string", "null"],
+      "description": "URL, mis viitab infosüsteemi avalikule kasutajaliidesele"
+    },
+    "meta": {
+      "properties": {
+        "approval_status": {
+          "properties": {
+            "status": {
+              "description": "Staatuse tekstiline kirjeldus: kooskõlastatud / mitte kooskõlastatud",
+              "type": ["string", "null"]
+            },
+            "timestamp": {
+              "type": ["string", "null"],
+              "format": "date-time",
+              "description": "Staatuse saamise aeg"
+            }
+          },
+          "type": "object",
+          "description": "Süsteemi kooskõlastuse olek - Infosüsteemi hinnangute koondstaatus"
+        },
+        "description_timestamp": {
+          "description": "Infosüsteemi RIHA kirjelduse viimase muutmise aeg",
+          "type": "string",
+          "format": "date-time"
+        },
+        "development_status": {
+          "type": ["string", "null"],
+          "description": "Infosüsteemi arendamise tekstiline kirjeldus: aktiivses arenduses / ei ole aktiivses arenduses"
+        },
+        "system_status": {
+          "properties": {
+            "status": {
+              "description": "Infosüsteemi staatuse tekstiline kirjeldus: kasutusel, asutamisel, lõpetatud",
+              "type": ["string", "null"]
+            },
+            "timestamp": {
+              "description": "Staatuse saamise aeg -  millal infosüsteem kasutusele võeti, lõpetati või arendama (asutama) hakati",
+              "type": ["string", "null"],
+              "format": "date-time"
+            }
+          },
+          "type": "object",
+          "description": "Süsteemi olek"
+        },
+        "x_road_status": {
+          "properties": {
+            "status": {
+              "description": "Kas infosüsteem on X-teega liidestatud",
+              "type": ["string", "null"]
+            },
+            "timestamp": {
+              "description": "Millisest ajast alates on infosüsteem X-teega liidestatud",
+              "type": ["string", "null"],
+              "format": "date-time"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "Infosüsteemi täispikk, ametlik nimi",
+      "type": "string"
+    },
+    "owner": {
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Süsteemi vastutava töötleja registrikood"
+        },
+        "name": {
+          "type": "string",
+          "description": "Süsteemi vastutava töötleja nimi"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "legislations": {
+      "items": {
+        "properties": {
+          "url": {
+            "description": "Viide infosüsteemi reguleerivale õigusaktile (Riigi Teatajas)",
+            "type": "string"
+          },
+          "name": {
+            "description": "Õigusakti nimi",
+            "type": ["string", "null"]
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ]
+      },
+      "type": "array"
+    },
+    "short_name": {
+      "description": "Infosüsteemi lühinimi",
+      "type": "string",
+      "pattern": "^[a-zA-ZõÕäÄöÖüÜ0-9.-]*$"
+    },
+    "topics": {
+      "items": {
+        "description": "Valdkonnad, millega infosüsteem on seotud. Näiteks \"Rahvastik\", \"Avalik haldus\", \"Elukoht\" ja muud tag-id hõlbustamaks RIHA kataloogiteabe paremat grupperimist ja otsingut",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "uuid": {
+      "type": "string",
+      "description": "Infosüsteemi unikaalne ID"
+    }
+  },
+  "required": [
+    "name",
+    "purpose",
+    "owner",
+    "short_name",
+    "uuid"
+  ],
+  "type": "object",
+  "description": "Süsteemi lühiandmestik. Andmed, mis on peamiselt olulised süsteemi elutsükli mõttes"
+}

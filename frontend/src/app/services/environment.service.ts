@@ -10,10 +10,6 @@ export class EnvironmentService {
 
   public globalEnvironment: any;
 
-  public getProducerUrl(): string {
-    return this.globalEnvironment.remotes.producerUrl;
-  }
-
   public getApproverUrl(): string {
     return this.globalEnvironment.remotes.approverUrl;
   }
