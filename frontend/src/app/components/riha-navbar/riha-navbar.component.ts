@@ -23,8 +23,8 @@ export class RihaNavbarComponent implements OnInit {
     return this.environmentService.getActiveUser() != null;
   }
 
-  doLogout(){
-    this.http.get('/logout').toPromise().then(res => {
+  logout(){
+    this.environmentService.doLogout().then(res => {
       this.environmentService.load().then(env => {
         this.router.navigate(['/']);
       });
@@ -37,11 +37,13 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   isAllowedToChangeOrganization(): boolean {
-    /*let user = this.environmentService.getActiveUser();
-    return user.organizations.length > 1;*/
+    let user = this.environmentService.getActiveUser();
+    return user.getOrganizations().length > 1 || (user.getOrganizations().length == 1 && user.getActiveOrganization() == null);
+  }
 
-    // organization changing disabled until backend support is available
-    return false;
+  noOrganizationSelected(): boolean {
+    let user = this.environmentService.getActiveUser();
+    return user.getActiveOrganization() == null;
   }
 
   getUserText(): string {
