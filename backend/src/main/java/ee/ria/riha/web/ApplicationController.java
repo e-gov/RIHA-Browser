@@ -20,11 +20,6 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
 
-    @GetMapping(value = "/")
-    public ModelAndView index(Model model) {
-        return new ModelAndView("index");
-    }
-
     @GetMapping(value = "/environment")
     public ResponseEntity environment() {
         return ResponseEntity.ok(applicationService.getEnvironment());
