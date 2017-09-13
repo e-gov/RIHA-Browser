@@ -4,12 +4,11 @@ import ee.ria.riha.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import static ee.ria.riha.service.SecurityContextUtil.isUserAuthenticated;
 
 /**
  * @author Valentin Suhnjov
@@ -35,16 +34,11 @@ public class ApplicationController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
         applicationService.changeActiveOrganization(organizationCode);
-
         return environment();
     }
 
     @GetMapping(value = "/login/esteid")
     public ResponseEntity estEIDLogin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean authenticated = authentication != null && authentication.getPrincipal() instanceof UserDetails;
-        return ResponseEntity.status(authenticated ? HttpStatus.OK : HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(isUserAuthenticated() ? HttpStatus.OK : HttpStatus.FORBIDDEN).build();
     }
-
-
 }

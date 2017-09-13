@@ -1,4 +1,4 @@
-package ee.ria.riha.model;
+package ee.ria.riha.web.model;
 
 import lombok.Data;
 
