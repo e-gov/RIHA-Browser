@@ -6,7 +6,7 @@ import { User } from '../models/user';
 @Injectable()
 export class EnvironmentService {
 
-  private environmentUrl = '/environment';
+  private environmentUrl = '/api/v1/environment';
 
   public globalEnvironment: any;
 

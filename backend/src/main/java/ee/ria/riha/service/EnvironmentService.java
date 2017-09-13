@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author Valentin Suhnjov
  */
 @Service
-public class ApplicationService {
+public class EnvironmentService {
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -82,6 +82,7 @@ public class ApplicationService {
 
         return organizationModel;
     }
+
 
     public void changeActiveOrganization(String organizationCode) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
