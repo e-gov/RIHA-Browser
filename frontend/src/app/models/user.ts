@@ -18,6 +18,10 @@ export class User {
     return `${this.firstName} ${this.lastName}`;
   }
 
+  public getRoles(): string[] {
+    return this.roles;
+  }
+
   public canEdit(organizationCode): boolean {
     let ao = this.getActiveOrganization()
     if (ao != null && ao.code == organizationCode){

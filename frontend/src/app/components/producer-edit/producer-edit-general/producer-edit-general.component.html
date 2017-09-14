@@ -2,7 +2,11 @@
   <h3 class="alert-heading">Palun logige sisse</h3>
   <p class="mb-0">Muutmise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
 </div>
-<section *ngIf="isLoggedIn()" class="col card p-3 main-content">
+<div *ngIf="!canDescribe()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
+  <p class="mb-0">Sul ei ole kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
+</div>
+<section *ngIf="isLoggedIn() && canDescribe()" class="col card p-3 main-content">
   <div class="panel-action-heading">
     Infosüsteemi üldkirjeldus
   </div>
@@ -26,10 +30,10 @@
       <div class="separate-block">
         <div class="form-group row">
           <label for="active-since-date" class="col-form-label advanced-label">
-            <span *ngIf="system.getStatus() == globals.system_status.IN_USE"><span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
-            <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">asutamisel</strong></span>
-            <span *ngIf="system.getStatus() == globals.system_status.FINISHED"><span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
-            <span *ngIf="!system.getStatus()"><span class="text-muted"><i class="fa fa-question-circle-o" aria-hidden="true"></i></span> Süsteemi staatus on <strong>määramata</strong></span>
+            <span *ngIf="system.getStatus() == globals.system_status.IN_USE"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
+            <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
+            <span *ngIf="system.getStatus() == globals.system_status.FINISHED"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
+            <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
           </label>
           <div class="col-sm-4">
             <div class="input-group datepicker" *ngIf="system.isUsed()">
@@ -89,17 +93,28 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="x_road_date" class="col-form-label advanced-label">
-            <span class="text-muted"><i class="fa fa-times" aria-hidden="true"></i>Liidestatud X-teega</span>
+          <label *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" for="x_road_date" class="col-form-label advanced-label">
+            <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">on liidestatud</strong> X-teega
+          </label>
+          <label *ngIf="system.getXRoadStatus() == globals.x_road_status.NOT_JOINED" for="x_road_date" class="col-form-label advanced-label">
+            <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">ei ole liidestatud</strong> X-teega
+          </label>
+          <label *ngIf="!system.getXRoadStatus()" class="col-form-label advanced-label">
+            <i class="fa fa-question-circle-o" aria-hidden="true"></i>X-teega liidestamine staatus on <strong>määramata</strong>
           </label>
           <div class="col-sm-4">
-            <div class="input-group datepicker">
+            <div *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" class="input-group datepicker">
               <input id="x_road_date" class="form-control" placeholder="yyyy-mm-dd"
                      name="x_road_date" [(ngModel)]="system.details.meta.x_road_status.timestamp" ngbDatepicker #xRoadDate="ngbDatepicker">
               <span class="input-group-btn">
                 <button (click)="xRoadDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
+              </span>
             </div>
+          </div>
+          <div class="col-sm-8 form-links">
+            <span>Kas infosüsteem on liidestatud X-teega?</span>
+            <a href="#" (click)="changeXRoadStatus(globals.x_road_status.JOINED)">Jah</a>
+            <a href="#" (click)="changeXRoadStatus(globals.x_road_status.NOT_JOINED)">Ei</a>
           </div>
         </div>
 

@@ -58,6 +58,14 @@ export class System {
     return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
   }
 
+  getXRoadStatus() {
+    return this.details.meta.x_road_status.status;
+  }
+
+  setXRoadStatus(xRoadStatus): void {
+    this.details.meta.x_road_status.status = xRoadStatus;
+  }
+
   getTopics() {
     return this.details.topics;
   }

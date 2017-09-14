@@ -38,21 +38,24 @@
       <p class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</p>
     </div>
 
-    <div class="separate-block">
-      <div class="form-group row">
+    <div *ngIf="system.details.homepage || system.getXRoadStatus() || allowEdit" class="separate-block">
+      <div *ngIf="system.details.homepage || allowEdit" class="form-group row">
         <label class="col-form-label advanced-label" *ngIf="system.details.homepage">
           <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}">{{ system.details.homepage }}</a>
         </label>
         <label class="col-form-label advanced-label" *ngIf="!system.details.homepage && allowEdit">
-          <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides on <strong>määramata</strong>
+          <i class="fa fa-question-circle-o" aria-hidden="true"></i>Avalik kasutajaliides on <strong>määramata</strong>
         </label>
       </div>
-      <div class="form-group row">
-        <label *ngIf="system.details.meta.x_road_status.timestamp" class="col-form-label advanced-label">
-          <span><i class="fa fa-times" aria-hidden="true"></i>Liidestatud X-teega {{ system.details.meta.x_road_status.timestamp | date:'y-MM-dd'}}</span>
+      <div *ngIf="system.getXRoadStatus() || allowEdit" class="form-group row">
+        <label *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" class="col-form-label advanced-label">
+          <i class="fa fa-times" aria-hidden="true"></i>Liidestatud X-teega {{ system.details.meta.x_road_status.timestamp | date:'y-MM-dd'}}
         </label>
-        <label *ngIf="!system.details.meta.x_road_status.timestamp" class="col-form-label advanced-label">
-          <span><i class="fa fa-times" aria-hidden="true"></i>Ei ole liidestatud X-teega</span>
+        <label *ngIf="system.getXRoadStatus() == globals.x_road_status.NOT_JOINED" class="col-form-label advanced-label">
+          <i class="fa fa-times" aria-hidden="true"></i>Ei ole liidestatud X-teega
+        </label>
+        <label *ngIf="!system.getXRoadStatus() && allowEdit" class="col-form-label advanced-label">
+          <i class="fa fa-question-circle-o" aria-hidden="true"></i>X-teega liidestamine staatus on <strong>määramata</strong>
         </label>
       </div>
     </div>
