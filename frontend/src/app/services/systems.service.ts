@@ -39,7 +39,7 @@ export class SystemsService {
     }
   }
 
-  public prepareSystemForDisplay(system: any){
+  public prepareSystemForDisplay(system: any): any {
     if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp){
       system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
     }
@@ -68,6 +68,11 @@ export class SystemsService {
   public getOwnSystems(filters?, gridData?){
     filters = filters || {};
 
+    let user = this.environmentService.getActiveUser();
+    if (user && user.getActiveOrganization()){
+      filters.owner = user.getActiveOrganization().code;
+    }
+
     return this.getSystems(filters, gridData, `/api/v1/systems`);
   }
 
@@ -84,7 +89,7 @@ export class SystemsService {
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
       if (filters.owner){
-        filtersArr.push(`owner,ilike,%${ filters.owner }%`);
+        filtersArr.push(`owner.code,jilike,%${ filters.owner }%`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
