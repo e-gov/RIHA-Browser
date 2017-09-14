@@ -26,7 +26,10 @@
       <div class="separate-block">
         <div class="form-group row">
           <label for="active-since-date" class="col-form-label advanced-label">
-            <span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">{{ system.getStatusDescription() }}</strong> <span *ngIf="system.isUsed()">alates</span>
+            <span *ngIf="system.getStatus() == globals.system_status.IN_USE"><span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
+            <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">asutamisel</strong></span>
+            <span *ngIf="system.getStatus() == globals.system_status.FINISHED"><span class="text-muted"><i class="fa fa-exchange" aria-hidden="true"></i></span> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
+            <span *ngIf="!system.getStatus()"><span class="text-muted"><i class="fa fa-question-circle-o" aria-hidden="true"></i></span> Süsteemi staatus on <strong>määramata</strong></span>
           </label>
           <div class="col-sm-4">
             <div class="input-group datepicker" *ngIf="system.isUsed()">
@@ -44,8 +47,9 @@
           </div>
         </div>
         <div class="form-group">
-          <label *ngIf="system.isInDevelopment()" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
-          <label *ngIf="!system.isInDevelopment()" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
+          <label *ngIf="system.getDevelopmentStatus() == globals.development_status.IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
+          <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
+          <label *ngIf="!system.getDevelopmentStatus()" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
           <div class="col-sm-4 form-links">
             <span>Kas infosüsteem on arendusel?</span>
             <a href="#" (click)="changeInDevelopmentStatus(true)">Jah</a>

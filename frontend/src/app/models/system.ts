@@ -4,9 +4,21 @@ export class System {
   id: number;
   details: any;
 
+  getOwnerCode(): any {
+    if (this.details && this.details.owner){
+      return this.details.owner.code;
+    } else {
+      return null;
+    }
+  }
+
   setData(system): void {
     this.id = system.id;
     this.details = Object.assign(this.details, system.details);
+  }
+
+  getStatus(){
+    return this.details.meta.system_status.status;
   }
 
   setStatus(status): void {
@@ -38,20 +50,24 @@ export class System {
     }
   }
 
+  getDevelopmentStatus(){
+    return this.details.meta.development_status;
+  }
+
   isInDevelopment(): boolean{
     return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
   }
 
   hasDocuments(): boolean{
-    return this.details.documents && this.details.documents > 0;
+    return this.details.documents && this.details.documents.length > 0;
   }
 
   hasLegislations(): boolean{
-    return this.details.legislations && this.details.legislations > 0;
+    return this.details.legislations && this.details.legislations.length > 0;
   }
 
   hasDataObjects(): boolean{
-    return this.details.stored_data && this.details.stored_data > 0;
+    return this.details.stored_data && this.details.stored_data.length > 0;
   }
 
   constructor(){
