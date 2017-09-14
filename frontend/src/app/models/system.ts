@@ -58,6 +58,10 @@ export class System {
     return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
   }
 
+  getTopics() {
+    return this.details.topics;
+  }
+
   hasDocuments(): boolean{
     return this.details.documents && this.details.documents.length > 0;
   }
