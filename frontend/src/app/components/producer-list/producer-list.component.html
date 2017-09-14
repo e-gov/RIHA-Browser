@@ -3,7 +3,11 @@
   <h3 class="alert-heading">Palun logige sisse</h3>
   <p class="mb-0">Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
 </div>
-<section *ngIf="isLoggedIn()" class="col card p-3">
+<div *ngIf="isLoggedIn() && noOrganizationSelected()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun valige asutus</h3>
+  <p class="mb-0">Kirjeldamise alustamiseks on vaja valida enda asutus.</p>
+</div>
+<section *ngIf="isLoggedIn() && !noOrganizationSelected()" class="col card p-3">
   <div class="row">
     <div class="col-12 col-md-6">
       <div class="form-group row">
@@ -37,14 +41,14 @@
             <td class="short-name">{{ system.details.short_name }}</td>
             <td>
               <button class="btn btn-primary view btn-sm" [routerLink]="['/Kirjelda/Vaata', system.details.short_name]">Vaata</button>
-              <button class="btn btn-success edit btn-sm" [routerLink]="['/Kirjelda/Muuda', system.details.short_name]">Muuda</button>
-              <button class="btn btn-danger delete btn-sm">Kustuta</button>
+              <button *ngIf="canDescribe()" class="btn btn-success edit btn-sm" [routerLink]="['/Kirjelda/Muuda', system.details.short_name]">Muuda</button>
+              <button *ngIf="canDescribe()" class="btn btn-danger delete btn-sm">Kustuta</button>
             </td>
           </tr>
         </tbody>
       </table>
       <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="gridData.size" [collectionSize]="gridData.totalElements" [page]="gridData.page + 1"></ngb-pagination>
-      <a class="btn btn-primary" [routerLink]="['/Kirjelda/Uus']">Lisa uus</a>
+      <a *ngIf="canDescribe()" class="btn btn-primary" [routerLink]="['/Kirjelda/Uus']">Lisa uus</a>
     </div>
   </div>
 </section>

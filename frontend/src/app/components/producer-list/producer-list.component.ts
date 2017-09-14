@@ -38,6 +38,21 @@ export class ProducerListComponent implements OnInit {
     return this.environmentService.getActiveUser() != null;
   }
 
+  noOrganizationSelected(){
+    let user = this.environmentService.getActiveUser();
+    return user.getOrganizations().length > 1 && !user.getActiveOrganization();
+  }
+
+  canDescribe(){
+    let user = this.environmentService.getActiveUser();
+    let ret = false;
+    if (user){
+      ret = user.getRoles().indexOf('ROLE_KIRJELDAJA') != -1
+    }
+
+    return ret;
+  }
+
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService) {
     this.gridData = new GridData();
