@@ -18,7 +18,7 @@
           Hindajate tagasiside
         </a>
         <a pageScroll
-           *ngIf="system.hasDataObjects()"
+           *ngIf="isBlockVisible('dataObjects')"
            [pageScrollAdjustHash]="true"
            [ngClass]="{'active': isMenuActive('andmed')}"
            href="#andmed"
@@ -26,7 +26,7 @@
           Andmed
         </a>
         <a pageScroll
-           *ngIf="system.hasDocuments()"
+           *ngIf="isBlockVisible('documents')"
            [pageScrollAdjustHash]="true"
            [ngClass]="{'active': isMenuActive('dokumentatsioon')}"
            href="#dokumentatsioon"
@@ -34,7 +34,7 @@
           Dokumentatsioon
         </a>
         <a pageScroll
-           *ngIf="system.hasLegislations()"
+           *ngIf="isBlockVisible('legislations')"
            [pageScrollAdjustHash]="true"
            [ngClass]="{'active': isMenuActive('õigusaktid')}"
            href="#õigusaktid"
@@ -52,17 +52,17 @@
       <app-producer-details-comments [system]="system"></app-producer-details-comments>
     </div>
     <div id="andmed"
-         *ngIf="system.hasDataObjects()"
+         *ngIf="isBlockVisible('dataObjects')"
          class="separate-block">
       <app-producer-details-objects [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-objects>
     </div>
     <div id="dokumentatsioon"
-         *ngIf="system.hasDocuments()"
+         *ngIf="isBlockVisible('documents')"
          class="separate-block">
       <app-producer-details-tech-docs [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
     </div>
     <div id="õigusaktid"
-         *ngIf="system.hasLegislations()"
+         *ngIf="isBlockVisible('legislations')"
          class="separate-block">
       <app-producer-details-legislations [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
     </div>
