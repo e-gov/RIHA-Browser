@@ -73,12 +73,4 @@ public class InfoSystemController {
         return model;
     }
 
-    @ExceptionHandler(JsonValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<JsonNode> handleJsonValidationException(JsonValidationException e) {
-        return e.getMessages().stream()
-                .map(ProcessingMessage::asJson)
-                .collect(toList());
-    }
-
 }
