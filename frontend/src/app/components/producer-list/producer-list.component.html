@@ -7,7 +7,11 @@
   <h3 class="alert-heading">Palun valige asutus</h3>
   <p class="mb-0">Kirjeldamise alustamiseks on vaja valida enda asutus.</p>
 </div>
-<section *ngIf="isLoggedIn() && !noOrganizationSelected()" class="col card p-3">
+<div *ngIf="isLoggedIn() && !noOrganizationSelected() && !canDescribe()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
+  <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
+</div>
+<section *ngIf="isLoggedIn() && !noOrganizationSelected() && canDescribe()" class="col card p-3">
   <div class="row">
     <div class="col-12 col-md-6">
       <div class="form-group row">
@@ -48,7 +52,7 @@
         </tbody>
       </table>
       <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="gridData.size" [collectionSize]="gridData.totalElements" [page]="gridData.page + 1"></ngb-pagination>
-      <a *ngIf="canDescribe()" class="btn btn-primary" [routerLink]="['/Kirjelda/Uus']">Lisa uus</a>
+      <a class="btn btn-primary" [routerLink]="['/Kirjelda/Uus']">Lisa uus</a>
     </div>
   </div>
 </section>
