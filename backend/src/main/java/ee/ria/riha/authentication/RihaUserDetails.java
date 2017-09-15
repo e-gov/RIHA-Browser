@@ -46,9 +46,9 @@ public class RihaUserDetails implements UserDetails {
         if (organizationRoles != null && !organizationRoles.isEmpty()) {
             this.organizationRoles = ImmutableListMultimap.copyOf(organizationRoles);
 
-            Map<String, RihaOrganization> organizations = new HashMap<>();
-            organizationRoles.keys().forEach(o -> organizations.put(o.getCode(), o));
-            this.organizations = ImmutableMap.copyOf(organizations);
+            Map<String, RihaOrganization> orgRoles = new HashMap<>();
+            organizationRoles.keys().forEach(o -> orgRoles.put(o.getCode(), o));
+            this.organizations = ImmutableMap.copyOf(orgRoles);
         }
 
         this.effectiveAuthorities = getEffectiveAuthorities();

@@ -6,13 +6,9 @@ import { User } from '../models/user';
 @Injectable()
 export class EnvironmentService {
 
-  private environmentUrl = '/environment';
+  private environmentUrl = '/api/v1/environment';
 
   public globalEnvironment: any;
-
-  public getProducerUrl(): string {
-    return this.globalEnvironment.remotes.producerUrl;
-  }
 
   public getApproverUrl(): string {
     return this.globalEnvironment.remotes.approverUrl;

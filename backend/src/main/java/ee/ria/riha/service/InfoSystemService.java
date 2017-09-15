@@ -1,53 +1,102 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.model.InfoSystem;
-import ee.ria.riha.storage.domain.MainResourceRepository;
-import ee.ria.riha.storage.domain.model.MainResource;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.authentication.RihaOrganization;
+import ee.ria.riha.authentication.RihaUserDetails;
+import ee.ria.riha.domain.InfoSystemRepository;
+import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.storage.util.Filterable;
+import ee.ria.riha.storage.util.Pageable;
+import ee.ria.riha.storage.util.PagedResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 
 /**
  * @author Valentin Suhnjov
  */
 @Service
+@Slf4j
 public class InfoSystemService {
 
-    private static final Function<MainResource, InfoSystem> MAIN_RESOURCE_TO_INFO_SYSTEM = mainResource -> new InfoSystem(
-            mainResource.getJson_context());
+    @Autowired
+    private InfoSystemRepository infoSystemRepository;
 
     @Autowired
-    private MainResourceRepository mainResourceRepository;
+    private JsonValidationService infoSystemValidationService;
 
     public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
-        PagedResponse<MainResource> pagedResponse = mainResourceRepository.list(pageable, filterable);
-
-        return new PagedResponse<>(new PageRequest(pagedResponse.getPage(), pagedResponse.getSize()),
-                                   pagedResponse.getTotalElements(),
-                                   pagedResponse.getContent().stream()
-                                           .map(MAIN_RESOURCE_TO_INFO_SYSTEM)
-                                           .collect(Collectors.toList())
-        );
+        return infoSystemRepository.list(pageable, filterable);
     }
 
-    public InfoSystem findByUuid(UUID uuid) {
-        if (uuid == null) {
-            return null;
+    /**
+     * Creates new {@link InfoSystem}. Newly created {@link InfoSystem} will be filled with owner information and
+     * generated UUID.
+     *
+     * @param model new {@link InfoSystem} model
+     * @return created {@link InfoSystem}
+     */
+    public InfoSystem create(InfoSystem model) {
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        if (rihaUserDetails == null) {
+            throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
         }
 
-        FilterRequest filter = new FilterRequest("uuid,=," + uuid.toString(), null, null);
-        List<MainResource> mainResources = mainResourceRepository.find(filter);
-
-        if (mainResources.isEmpty()) {
-            return null;
+        RihaOrganization organization = rihaUserDetails.getActiveOrganization();
+        if (organization == null) {
+            throw new IllegalBrowserStateException("Active organization must be set");
         }
 
-        return MAIN_RESOURCE_TO_INFO_SYSTEM.apply(mainResources.get(0));
+        InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
+        infoSystem.setUuid(UUID.randomUUID());
+        infoSystem.setOwnerCode(organization.getCode());
+        infoSystem.setOwnerName(organization.getName());
+
+        infoSystemValidationService.validate(infoSystem.asJson());
+        log.info("User with ID {} is going to create a new IS with short name {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), infoSystem.getOwnerName());
+
+        return infoSystemRepository.add(infoSystem);
+    }
+
+    /**
+     * Retrieves {@link InfoSystem} by its short name
+     *
+     * @param shortName info system short name
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(String shortName) {
+        return infoSystemRepository.load(shortName);
+    }
+
+    /**
+     * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated from model.
+     *
+     * @param shortName info system short name
+     * @param model     updated {@link InfoSystem} model
+     * @return new {@link InfoSystem}
+     */
+    public InfoSystem update(String shortName, InfoSystem model) {
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        if (rihaUserDetails == null) {
+            throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
+        }
+        InfoSystem existingInfoSystem = get(shortName);
+
+        InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
+        updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
+        updatedInfoSystem.setOwnerCode(existingInfoSystem.getOwnerCode());
+        updatedInfoSystem.setOwnerName(existingInfoSystem.getOwnerName());
+
+        infoSystemValidationService.validate(updatedInfoSystem.asJson());
+        log.info("User with ID {} is going to update an IS with ID {} and short name {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
+                existingInfoSystem.getOwnerName());
+
+        return infoSystemRepository.add(updatedInfoSystem);
     }
 
 }
