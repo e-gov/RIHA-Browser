@@ -3,6 +3,7 @@ import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from "../../services/environment.service";
 import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
+import { User } from '../../models/user';
 import { WindowRefService } from '../../services/window-ref.service';
 
 declare var $: any;
@@ -14,6 +15,7 @@ declare var $: any;
 })
 export class ProducerDetailsComponent implements OnInit {
   private system: System;
+  private user: User;
   private loaded: boolean = false;
 
   adjustSection(attempt){
@@ -47,16 +49,41 @@ export class ProducerDetailsComponent implements OnInit {
     }
   }
 
+  isEditingAllowed(){
+    let editable = false;
+    let user = this.environmentService.getActiveUser();
+    if (user) {
+      editable = user.canEdit(this.system.getOwnerCode());
+    }
+    return editable;
+  }
+
+  isBlockVisible(blockName){
+    let editable = this.isEditingAllowed();
+    let ret = false;
+    switch (blockName) {
+      case 'legislations': {
+        ret = this.system.hasLegislations() || editable;
+        break;
+      }
+      case 'documents': {
+        ret = this.system.hasDocuments() || editable;
+        break;
+      }
+      case 'dataObjects': {
+        ret = this.system.hasDataObjects() || editable;
+        break;
+      }
+    }
+    return ret;
+  }
+
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
-      this.system = response.json();
+      this.system.setData(response.json());
       this.loaded = true;
       this.adjustSection(0);
     })
-  }
-
-  isEditingAllowed(){
-    return this.environmentService.getActiveUser() != null;
   }
 
   constructor(private systemsService: SystemsService,
@@ -64,6 +91,7 @@ export class ProducerDetailsComponent implements OnInit {
               private route: ActivatedRoute,
               private winRef: WindowRefService) {
     this.system = new System();
+    this.user = this.environmentService.getActiveUser();
   }
 
   ngOnInit() {

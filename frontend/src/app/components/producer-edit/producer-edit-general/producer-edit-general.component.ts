@@ -73,9 +73,27 @@ export class ProducerEditGeneralComponent implements OnInit {
     return false;
   }
 
+  changeXRoadStatus(xRoadStatus) {
+    this.system.setXRoadStatus(xRoadStatus);
+    if (xRoadStatus != G.x_road_status.JOINED){
+      this.system.details.meta.x_road_status.timestamp = null;
+    }
+    return false;
+  }
+
   changeInDevelopmentStatus(inDevelopment){
     this.system.setInDevelopment(inDevelopment);
     return false;
+  }
+
+  canDescribe(){
+    let user = this.environmentService.getActiveUser();
+    let ret = false;
+    if (user){
+      ret = user.canEdit(this.system.getOwnerCode());
+    }
+
+    return ret;
   }
 
   isLoggedIn(){
