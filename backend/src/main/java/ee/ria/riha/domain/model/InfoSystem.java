@@ -21,6 +21,7 @@ public class InfoSystem {
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "name";
     private static final String OWNER_CODE_KEY = "code";
+    private static final String SHORT_NAME_KEY = "short_name";
 
     private JSONObject jsonObject = new JSONObject();
 
@@ -28,6 +29,7 @@ public class InfoSystem {
     private UUID uuid;
     private String ownerName;
     private String ownerCode;
+    private String shortName;
 
     public InfoSystem() {
         this("{}");
@@ -41,6 +43,8 @@ public class InfoSystem {
 
         String uuidString = ((String) getPath(UUID_KEY).queryFrom(jsonObject));
         this.uuid = hasText(uuidString) ? UUID.fromString(uuidString) : null;
+
+        this.shortName = ((String) getPath(SHORT_NAME_KEY).queryFrom(jsonObject));
 
         JSONObject owner = getOwner();
         this.ownerName = ((String) getPath(OWNER_NAME_KEY).queryFrom(owner));
@@ -113,5 +117,14 @@ public class InfoSystem {
     public void setOwnerCode(String code) {
         this.ownerCode = code;
         getOwner().putOpt(OWNER_CODE_KEY, code);
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+        jsonObject.putOpt(SHORT_NAME_KEY, shortName);
     }
 }

@@ -56,8 +56,8 @@ public class InfoSystemService {
         infoSystem.setOwnerName(organization.getName());
 
         infoSystemValidationService.validate(infoSystem.asJson());
-        log.info("User with ID {} is going to create a new IS for next organization: {}",
-                rihaUserDetails.getPersonalCode(), infoSystem.getOwnerName());
+        log.info("User with ID {} is going to create a new IS with short name {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), infoSystem.getOwnerName());
 
         return infoSystemRepository.add(infoSystem);
     }
@@ -80,11 +80,11 @@ public class InfoSystemService {
      * @return new {@link InfoSystem}
      */
     public InfoSystem update(String shortName, InfoSystem model) {
-        InfoSystem existingInfoSystem = get(shortName);
         RihaUserDetails rihaUserDetails = getRihaUserDetails();
         if (rihaUserDetails == null) {
             throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
         }
+        InfoSystem existingInfoSystem = get(shortName);
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
         updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
@@ -92,8 +92,9 @@ public class InfoSystemService {
         updatedInfoSystem.setOwnerName(existingInfoSystem.getOwnerName());
 
         infoSystemValidationService.validate(updatedInfoSystem.asJson());
-        log.info("User with ID {} is going to update an IS with ID {} for next organization: {}",
-                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), existingInfoSystem.getOwnerName());
+        log.info("User with ID {} is going to update an IS with ID {} and short name {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
+                existingInfoSystem.getOwnerName());
 
         return infoSystemRepository.add(updatedInfoSystem);
     }
