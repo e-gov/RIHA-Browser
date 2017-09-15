@@ -7,6 +7,7 @@ import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
  * @author Valentin Suhnjov
  */
 @Service
+@Slf4j
 public class InfoSystemService {
 
     @Autowired
@@ -54,6 +56,8 @@ public class InfoSystemService {
         infoSystem.setOwnerName(organization.getName());
 
         infoSystemValidationService.validate(infoSystem.asJson());
+        log.info("User with ID {} is going to create a new IS for next organization: {}",
+                rihaUserDetails.getPersonalCode(), infoSystem.getOwnerName());
 
         return infoSystemRepository.add(infoSystem);
     }
@@ -77,6 +81,10 @@ public class InfoSystemService {
      */
     public InfoSystem update(String shortName, InfoSystem model) {
         InfoSystem existingInfoSystem = get(shortName);
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        if (rihaUserDetails == null) {
+            throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
+        }
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
         updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
@@ -84,6 +92,8 @@ public class InfoSystemService {
         updatedInfoSystem.setOwnerName(existingInfoSystem.getOwnerName());
 
         infoSystemValidationService.validate(updatedInfoSystem.asJson());
+        log.info("User with ID {} is going to update an IS with ID {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), existingInfoSystem.getOwnerName());
 
         return infoSystemRepository.add(updatedInfoSystem);
     }
