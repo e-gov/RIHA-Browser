@@ -13,6 +13,5 @@ public class OrganizationModel {
 
     private String code;
     private String name;
-    private List<String> roles = new ArrayList<>();
 
 }
