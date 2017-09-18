@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 
 /**
@@ -20,10 +22,16 @@ public class EnvironmentController {
     @Autowired
     private EnvironmentService environmentService;
 
+    @Autowired
+    private UserController userController;
+
     @GetMapping
     @ApiOperation("Retrieve environment")
     public ResponseEntity environment() {
-        return ResponseEntity.ok(environmentService.getEnvironment());
+        Map<String, Object> environment = environmentService.getEnvironment();
+        environment.put("userDetails", userController.createUserDetailsModel());
+
+        return ResponseEntity.ok(environment);
     }
 
     /**

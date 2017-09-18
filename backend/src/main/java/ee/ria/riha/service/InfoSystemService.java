@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 
 /**
@@ -45,7 +46,7 @@ public class InfoSystemService {
             throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
         }
 
-        RihaOrganization organization = rihaUserDetails.getActiveOrganization();
+        RihaOrganization organization = getActiveOrganization();
         if (organization == null) {
             throw new IllegalBrowserStateException("Active organization must be set");
         }
@@ -57,7 +58,7 @@ public class InfoSystemService {
 
         infoSystemValidationService.validate(infoSystem.asJson());
         log.info("User with ID {} is going to create a new IS with short name {} for next organization: {}",
-                rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), infoSystem.getOwnerName());
+                 rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), infoSystem.getOwnerName());
 
         return infoSystemRepository.add(infoSystem);
     }
@@ -93,8 +94,8 @@ public class InfoSystemService {
 
         infoSystemValidationService.validate(updatedInfoSystem.asJson());
         log.info("User with ID {} is going to update an IS with ID {} and short name {} for next organization: {}",
-                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
-                existingInfoSystem.getOwnerName());
+                 rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
+                 existingInfoSystem.getOwnerName());
 
         return infoSystemRepository.add(updatedInfoSystem);
     }
