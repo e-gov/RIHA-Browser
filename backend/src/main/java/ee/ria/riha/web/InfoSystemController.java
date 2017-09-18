@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -38,6 +39,7 @@ public class InfoSystemController {
     }
 
     @PostMapping
+    @Secured({"ROLE_KIRJELDAJA"})
     @ApiOperation("Create new information system")
     public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
@@ -52,6 +54,7 @@ public class InfoSystemController {
     }
 
     @PutMapping("/{shortName}")
+    @Secured("ROLE_KIRJELDAJA")
     @ApiOperation("Update existing information system")
     public ResponseEntity<InfoSystemModel> update(@PathVariable("shortName") String shortName,
                                                   @RequestBody InfoSystemModel model) {

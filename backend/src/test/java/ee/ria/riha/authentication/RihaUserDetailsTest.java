@@ -1,16 +1,15 @@
 package ee.ria.riha.authentication;
 
-import com.google.common.collect.ImmutableMultimap;
 import org.junit.Test;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
 /**
@@ -22,20 +21,11 @@ public class RihaUserDetailsTest {
     private final String PASSWORD = "strong";
     private final String PERSONAL_CODE = "12345";
 
-    private final SimpleGrantedAuthority ROLE_TEST = new SimpleGrantedAuthority("ROLE_TEST");
+    private final SimpleGrantedAuthority CUSTOM_ROLE = new SimpleGrantedAuthority("ROLE_TEST");
 
-    private final List<SimpleGrantedAuthority> WRAPPED_ROLES = Arrays.asList(ROLE_TEST);
-
-    private final String TEST_ORG_CODE = "70000001";
-    private final RihaOrganization TEST_ORG = new RihaOrganization(TEST_ORG_CODE, "Test AS");
-    private final GrantedAuthority TEST_ORG_ROLE = new SimpleGrantedAuthority("ROLE_TEST_AS_USER");
+    private final List<SimpleGrantedAuthority> WRAPPED_ROLES = Collections.singletonList(CUSTOM_ROLE);
 
     private final User WRAPPED_USER_DETAILS = new User(USERNAME, PASSWORD, WRAPPED_ROLES);
-
-    private RihaUserDetails createRihaUserDetails() {
-        return new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE,
-                                   ImmutableMultimap.of(TEST_ORG, TEST_ORG_ROLE));
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void failsWhenDelegateIsNull() {
@@ -67,53 +57,7 @@ public class RihaUserDetailsTest {
     public void doesNotCombineAuthoritiesWhenNoActiveOrganizationSet() {
         RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE);
 
-        assertThat(rihaUserDetails.getAuthorities(), contains(ROLE_TEST));
-    }
-
-    @Test
-    public void combinesWrappedAndOrganizationalAuthoritiesWhenOrganizationActive() {
-        RihaUserDetails rihaUserDetails = createRihaUserDetails();
-        rihaUserDetails.setActiveOrganization(TEST_ORG_CODE);
-
-        assertThat(rihaUserDetails.getAuthorities(), containsInAnyOrder(ROLE_TEST, TEST_ORG_ROLE));
-    }
-
-    @Test
-    public void doesNotDuplicateAuthoritiesWhenCombined() {
-        SimpleGrantedAuthority organizationRole = new SimpleGrantedAuthority(ROLE_TEST.getAuthority());
-        RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE,
-                                                              ImmutableMultimap.of(TEST_ORG, organizationRole));
-        rihaUserDetails.setActiveOrganization(TEST_ORG_CODE);
-
-        assertThat(rihaUserDetails.getAuthorities(), contains(ROLE_TEST));
-    }
-
-    @Test
-    public void setsActiveOrganizationWhenValidCodeProvided() {
-        RihaUserDetails rihaUserDetails = createRihaUserDetails();
-
-        rihaUserDetails.setActiveOrganization(TEST_ORG_CODE);
-
-        assertThat(rihaUserDetails.getActiveOrganization(), is(equalTo(TEST_ORG)));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void failsWhenSettingNonExistentActiveOrganizationCode() {
-        RihaUserDetails rihaUserDetails = createRihaUserDetails();
-
-        rihaUserDetails.setActiveOrganization("nonexistent");
-
-        assertThat(rihaUserDetails.getActiveOrganization(), is(equalTo(TEST_ORG)));
-    }
-
-    @Test
-    public void resetsActiveOrganizationWhenCodeIsNull() {
-        RihaUserDetails rihaUserDetails = createRihaUserDetails();
-
-        rihaUserDetails.setActiveOrganization(TEST_ORG_CODE);
-        rihaUserDetails.setActiveOrganization(null);
-
-        assertThat(rihaUserDetails.getActiveOrganization(), is(nullValue()));
+        assertThat(rihaUserDetails.getAuthorities(), contains(CUSTOM_ROLE));
     }
 
 }

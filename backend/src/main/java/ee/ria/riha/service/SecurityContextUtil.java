@@ -1,5 +1,7 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.authentication.RihaOrganization;
+import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.authentication.RihaUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +13,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class SecurityContextUtil {
 
     private SecurityContextUtil() {
+    }
+
+    /**
+     * Retrieves {@link RihaOrganization} from security context authentication. Returns null in case security context
+     * holds no authentication, or authentication is not of {@link RihaOrganizationAwareAuthenticationToken} type, or
+     * active organization is not set.
+     *
+     * @return
+     */
+    public static RihaOrganization getActiveOrganization() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof RihaOrganizationAwareAuthenticationToken)) {
+            return null;
+        }
+
+        return ((RihaOrganizationAwareAuthenticationToken) authentication).getActiveOrganization();
     }
 
     /**

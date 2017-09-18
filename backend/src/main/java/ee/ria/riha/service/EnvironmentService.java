@@ -23,7 +23,6 @@ public class EnvironmentService {
         HashMap<String, Object> environment = new HashMap<>();
 
         environment.put("remotes", applicationProperties.getRemoteApi());
-        environment.put("userDetails", userService.getUserDetails());
 
         return environment;
     }
