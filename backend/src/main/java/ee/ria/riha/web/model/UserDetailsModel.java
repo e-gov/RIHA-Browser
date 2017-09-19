@@ -1,4 +1,4 @@
-package ee.ria.riha.model;
+package ee.ria.riha.web.model;
 
 import lombok.Data;
 
@@ -16,5 +16,8 @@ public class UserDetailsModel {
     private String lastName;
 
     private List<OrganizationModel> organizations = new ArrayList<>();
+    private OrganizationModel activeOrganization;
+
+    private List<String> roles = new ArrayList<>();
 
 }

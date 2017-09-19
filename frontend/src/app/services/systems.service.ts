@@ -8,7 +8,7 @@ import * as moment from 'moment';
 @Injectable()
 export class SystemsService {
 
-  private systemsUrl = '/systems';
+  private systemsUrl = '/api/v1/systems';
 
   private dateObjToTimestamp(dateObj: any): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
@@ -39,7 +39,7 @@ export class SystemsService {
     }
   }
 
-  public prepareSystemForDisplay(system: any){
+  public prepareSystemForDisplay(system: any): any {
     if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp){
       system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
     }
@@ -68,7 +68,12 @@ export class SystemsService {
   public getOwnSystems(filters?, gridData?){
     filters = filters || {};
 
-    return this.getSystems(filters, gridData, `${ this.environmentService.getProducerUrl() }/systems`);
+    let user = this.environmentService.getActiveUser();
+    if (user && user.getActiveOrganization()){
+      filters.owner = user.getActiveOrganization().code;
+    }
+
+    return this.getSystems(filters, gridData, `/api/v1/systems`);
   }
 
   public getSystems(filters?, gridData?, url?) {
@@ -84,7 +89,7 @@ export class SystemsService {
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
       if (filters.owner){
-        filtersArr.push(`owner,ilike,%${ filters.owner }%`);
+        filtersArr.push(`owner.code,jilike,%${ filters.owner }%`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
@@ -107,7 +112,7 @@ export class SystemsService {
   }
 
   public getSystem(short_name) {
-    return this.http.get(`${ this.environmentService.getProducerUrl() }/systems/${ short_name }`).toPromise();
+    return this.http.get(`/api/v1/systems/${ short_name }`).toPromise();
   }
 
   public addSystem(value) {
@@ -118,11 +123,11 @@ export class SystemsService {
         purpose: value.purpose
       }
     }
-    return this.http.post(`${ this.environmentService.getProducerUrl() }/systems`, system).toPromise();
+    return this.http.post(`/api/v1/systems`, system).toPromise();
   }
 
   public updateSystem(updatedData, shortName?) {
-    return this.http.put(`${ this.environmentService.getProducerUrl() }/systems/${ shortName || updatedData.details.short_name }`, updatedData).toPromise();
+    return this.http.put(`/api/v1/systems/${ shortName || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
   public getSystemIssues(uuid) {

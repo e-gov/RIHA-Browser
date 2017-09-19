@@ -1,9 +1,12 @@
 package ee.ria.riha.authentication;
 
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
 
@@ -12,6 +15,7 @@ import java.util.Collection;
  *
  * @author Valentin Suhnjov
  */
+@Slf4j
 public class RihaUserDetails implements UserDetails {
 
     private UserDetails delegate;
@@ -19,11 +23,22 @@ public class RihaUserDetails implements UserDetails {
     private String personalCode;
     private String firstName;
     private String lastName;
-    private MultiValueMap<RihaOrganization, String> organizations = new LinkedMultiValueMap<>();
+    private Multimap<RihaOrganization, GrantedAuthority> organizationAuthorities;
 
     public RihaUserDetails(UserDetails delegate, String personalCode) {
+        this(delegate, personalCode, null);
+    }
+
+    public RihaUserDetails(UserDetails delegate, String personalCode,
+                           Multimap<RihaOrganization, GrantedAuthority> organizationAuthorities) {
+        Assert.notNull(delegate, "delegate should not be null");
+        Assert.hasText(personalCode, "personalCode should not be empty");
+
         this.delegate = delegate;
         this.personalCode = personalCode;
+        this.organizationAuthorities = organizationAuthorities != null
+                ? ImmutableListMultimap.copyOf(organizationAuthorities)
+                : ImmutableMultimap.of();
     }
 
     public String getPersonalCode() {
@@ -46,8 +61,8 @@ public class RihaUserDetails implements UserDetails {
         this.lastName = lastName;
     }
 
-    public MultiValueMap<RihaOrganization, String> getOrganizations() {
-        return organizations;
+    public Multimap<RihaOrganization, GrantedAuthority> getOrganizationAuthorities() {
+        return organizationAuthorities;
     }
 
     @Override
@@ -84,4 +99,5 @@ public class RihaUserDetails implements UserDetails {
     public boolean isEnabled() {
         return delegate.isEnabled();
     }
+
 }

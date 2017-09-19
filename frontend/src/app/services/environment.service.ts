@@ -6,11 +6,9 @@ import { User } from '../models/user';
 @Injectable()
 export class EnvironmentService {
 
-  public globalEnvironment: any;
+  private environmentUrl = '/api/v1/environment';
 
-  public getProducerUrl(): string {
-    return this.globalEnvironment.remotes.producerUrl;
-  }
+  public globalEnvironment: any;
 
   public getApproverUrl(): string {
     return this.globalEnvironment.remotes.approverUrl;
@@ -24,10 +22,22 @@ export class EnvironmentService {
     return this.globalEnvironment.getUserDetails();
   };
 
-  load(): Promise<any> {
-    let promise = this.http.get('/environment').toPromise();
+  public load(): Promise<any> {
+    let promise = this.http.get(this.environmentUrl).toPromise();
     promise.then(response => this.globalEnvironment = new Environment(response.json()));
     return promise;
+  }
+
+  public doLogout(): Promise<any> {
+    return this.http.get('/logout').toPromise();
+  }
+
+  public doLogin(): Promise<any> {
+    return this.http.get('/login/esteid').toPromise();
+  }
+
+  public setActiveOrganization(organizationCode): Promise<any> {
+    return this.http.put(this.environmentUrl + '/organization', organizationCode).toPromise();
   }
 
   constructor(private http: Http) {

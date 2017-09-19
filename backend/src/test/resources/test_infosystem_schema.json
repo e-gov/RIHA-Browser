@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://riha.ee/test_infosystem_schema.json",
+  "properties": {
+    "sub-item": {
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date time sub item"
+        }
+      }
+    },
+    "name": {
+      "description": "First required value",
+      "type": "string"
+    },
+    "short_name": {
+      "description": "Value validated using pattern",
+      "type": "string",
+      "pattern": "^[a-zA-ZÕõÄäÖöÜü0-9.-]*$"
+    }
+  },
+  "required": [
+    "name",
+    "uuid"
+  ],
+  "type": "object",
+  "description": "Test schema base"
+}

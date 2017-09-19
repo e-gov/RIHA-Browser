@@ -4,13 +4,31 @@ export class User {
   lastName: string;
   activeOrganization: any;
   organizations: any[];
+  roles: string[];
 
   public getOrganizations(): any[]{
     return this.organizations;
   }
 
+  public getActiveOrganization(): any{
+    return this.activeOrganization;
+  }
+
   public getFullName(): string {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  public getRoles(): string[] {
+    return this.roles;
+  }
+
+  public canEdit(organizationCode): boolean {
+    let ao = this.getActiveOrganization()
+    if (ao != null && ao.code == organizationCode){
+      return this.roles.indexOf('ROLE_KIRJELDAJA') != -1;
+    } else {
+      return false;
+    }
   }
 
   public getFullNameWithActiveOrganization(): string {
@@ -28,5 +46,6 @@ export class User {
     this.lastName = options.lastName || null;
     this.activeOrganization = options.activeOrganization || null;
     this.organizations = options.organizations || [];
+    this.roles = options.roles || [];
   }
 }
