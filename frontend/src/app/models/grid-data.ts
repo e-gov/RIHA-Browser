@@ -1,3 +1,5 @@
+import {isNullOrUndefined} from "util";
+
 export class GridData {
   totalElements: number;
   content: any[];
@@ -6,13 +8,21 @@ export class GridData {
   page: number;
   sort: string;
 
+  getSize(): number {
+    return this.totalElements;
+  }
+
+  getPageNumber(): number {
+    return this.page + 1;
+  }
+
   updateData(data: any): void {
-    if (data.totalElements) this.totalElements = data.totalElements;
-    if (data.content) this.content = data.content;
-    if (data.size) this.size = data.size;
-    if (data.totalPages) this.totalPages = data.totalPages;
-    if (data.page) this.page = data.page;
-    if (data.sort) this.sort = data.sort;
+    if (!isNullOrUndefined(data.totalElements)) this.totalElements = data.totalElements;
+    if (!isNullOrUndefined(data.content)) this.content = data.content;
+    if (!isNullOrUndefined(data.size)) this.size = data.size;
+    if (!isNullOrUndefined(data.totalPages)) this.totalPages = data.totalPages;
+    if (!isNullOrUndefined(data.page)) this.page = data.page;
+    if (!isNullOrUndefined(data.sort)) this.sort = data.sort;
   }
 
   changeSortOrder(prop: string): void {

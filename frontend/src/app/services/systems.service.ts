@@ -89,7 +89,7 @@ export class SystemsService {
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
       if (filters.owner){
-        filtersArr.push(`owner.code,jilike,%${ filters.owner }%`);
+        filtersArr.push(`owner.name,jilike,%${ filters.owner }%`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
