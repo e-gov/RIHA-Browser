@@ -29,7 +29,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       setTimeout(()=> {
         this.newAdded = false;
       }, 5000)
-    });
+    }, err => {});
   }
 
   openIssueDetailsModal(comment){
