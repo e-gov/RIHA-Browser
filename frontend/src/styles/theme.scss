@@ -1393,6 +1393,10 @@ mark {
         }
     }
 }
+.tooltip-inner {
+  background-color: $grey2;
+  color: $grey3;
+}
 .actions-bar {
     .links {
         a {

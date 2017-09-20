@@ -51,6 +51,7 @@ import { ProducerDetailsIssuesComponent } from './components/producer-details/pr
 import { ApproverAddIssueComponent } from './components/approver-add-issue/approver-add-issue.component';
 import { ApproverIssueDetailsComponent } from './components/approver-issue-details/approver-issue-details.component';
 import { ActiveOrganizationChooserComponent } from './components/active-organization-chooser/active-organization-chooser.component';
+import { TooltipComponent } from './components/tooltip/tooltip.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -115,7 +116,8 @@ const routes: Routes = [
     ProducerDetailsIssuesComponent,
     ApproverAddIssueComponent,
     ApproverIssueDetailsComponent,
-    ActiveOrganizationChooserComponent
+    ActiveOrganizationChooserComponent,
+    TooltipComponent
   ],
   imports: [
     BrowserModule,
