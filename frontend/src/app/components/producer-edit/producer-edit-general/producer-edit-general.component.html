@@ -2,7 +2,7 @@
   <h3 class="alert-heading">Palun logige sisse</h3>
   <p class="mb-0">Muutmise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
 </div>
-<div *ngIf="!canDescribe()" class="alert alert-info" role="alert">
+<div *ngIf="isLoggedIn() && !canDescribe()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
   <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
@@ -66,7 +66,9 @@
         <textarea #purpose="ngModel" [(ngModel)]="system.details.purpose" name="purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
       </div>
       <div class="form-group">
-        <label class="text-muted">Infosüsteemi valdkond:</label>
+        <label class="text-muted">Infosüsteemi valdkond:
+          <app-tooltip [text]='"Valdkonnad ja märksõnad, mis infosüsteemi iseloomustavad. Näiteks \"majandus\", \"x-tee alamsüsteem\", \"standardlahendus\" jne. Uue märksõna lisamiseks kasuta reavahetust"'></app-tooltip>
+        </label>
         <tag-input [(ngModel)]="system.details.topics" name="topics"
                    [theme]="'bootstrap'"
                    [placeholder]="'lisa uus'"

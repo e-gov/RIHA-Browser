@@ -4,7 +4,9 @@
   </div>
   <div class="my-1">
     <div class="form-group">
-      <label for="object" class="text-muted separated-text">Sisestama peab infosüsteemi põhiandmed, mida mujal registrites ei koguta:</label>
+      <label for="object" class="text-muted separated-text">Sisestama peab infosüsteemi põhiandmed, mida mujal registrites ei koguta:
+        <app-tooltip [placement]="'bottom-right'" [text]="'Kirjelda põhiandmed, mida mujal registrites ei koguta, kuni 10 kergesti hoomatava objektina, et tekitada parem arusaamine, milliseid andmeid infosüsteemis kogutakse. Näiteks rahvastikuregistri puhul “Eesti elanike elukohandmed”, “Eesti elanike sugulussuhted” jne. Ära mine liialt detailidesse, püüa andmeobjekte grupeerida. Üks objekt võib koosneda mitmest sõnast, uus objekt tekib reavahetuse ja uue välja lisamisega'"></app-tooltip>
+      </label>
       <div class="row">
         <input id="object" class="form-control col-10"
                #object
