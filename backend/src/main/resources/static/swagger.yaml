@@ -178,10 +178,6 @@ definitions:
         type: "string"
       name:
         type: "string"
-      roles:
-        type: "array"
-        items:
-          type: "string"
   UserDetailsModel:
     type: "object"
     properties:
