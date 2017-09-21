@@ -16,7 +16,6 @@ public class ApplicationProperties {
 
     public static final String API_V1_PREFIX = "/api/v1";
 
-    private final RemoteApi remoteApi = new RemoteApi();
     private final StorageClientProperties storageClient = new StorageClientProperties();
     private final AuthenticationProperties authentication = new AuthenticationProperties();
     private final ValidationProperties validation = new ValidationProperties();
@@ -26,12 +25,6 @@ public class ApplicationProperties {
     public static class StorageClientProperties {
         @NotEmpty
         private String baseUrl;
-    }
-
-    @Getter
-    @Setter
-    public static class RemoteApi {
-        private String approverUrl;
     }
 
     @Getter
