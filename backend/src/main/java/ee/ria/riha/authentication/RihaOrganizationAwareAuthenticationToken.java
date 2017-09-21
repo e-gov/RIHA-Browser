@@ -57,7 +57,7 @@ public class RihaOrganizationAwareAuthenticationToken extends PreAuthenticatedAu
             combinedAuthorities.addAll(organizationAuthorities.get(this.activeOrganization));
         }
 
-        return combinedAuthorities.isEmpty() ? null : ImmutableSet.copyOf(combinedAuthorities);
+        return combinedAuthorities.isEmpty() ? ImmutableSet.of() : ImmutableSet.copyOf(combinedAuthorities);
     }
 
     @Override
