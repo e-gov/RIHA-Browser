@@ -70,7 +70,7 @@ export class SystemsService {
 
     let user = this.environmentService.getActiveUser();
     if (user && user.getActiveOrganization()){
-      filters.owner = user.getActiveOrganization().code;
+      filters.ownerCode = user.getActiveOrganization().code;
     }
 
     return this.getSystems(filters, gridData, `/api/v1/systems`);
@@ -88,8 +88,11 @@ export class SystemsService {
       if (filters.shortName){
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
-      if (filters.owner){
-        filtersArr.push(`owner.name,jilike,%${ filters.owner }%`);
+      if (filters.ownerCode){
+        filtersArr.push(`owner.code,jilike,%${ filters.ownerCode }%`);
+      }
+      if (filters.ownerName){
+        filtersArr.push(`owner.name,jilike,%${ filters.ownerName }%`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
