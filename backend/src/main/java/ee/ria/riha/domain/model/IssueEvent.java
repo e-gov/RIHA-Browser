@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
-import static ee.ria.riha.domain.model.EntityType.ISSUE_EVENT;
+import static ee.ria.riha.domain.model.IssueEntityType.ISSUE_EVENT;
 
 /**
  * Issue status update event
@@ -17,7 +17,7 @@ import static ee.ria.riha.domain.model.EntityType.ISSUE_EVENT;
 @Getter
 @Setter
 @Builder
-public class IssueEvent implements Entity {
+public class IssueEvent implements IssueEntity {
 
     private Long id;
     private Long issueId;
@@ -30,7 +30,7 @@ public class IssueEvent implements Entity {
     private String organizationCode;
 
     @Override
-    public EntityType getEntityType() {
+    public IssueEntityType getEntityType() {
         return ISSUE_EVENT;
     }
 }

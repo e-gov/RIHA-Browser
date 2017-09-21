@@ -3,7 +3,7 @@ package ee.ria.riha.domain.model;
 /**
  * @author Valentin Suhnjov
  */
-public enum EntityType {
+public enum IssueEntityType {
     /**
      * Issue entity discriminator
      */

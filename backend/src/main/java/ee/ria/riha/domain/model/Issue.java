@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.UUID;
 
-import static ee.ria.riha.domain.model.EntityType.ISSUE;
+import static ee.ria.riha.domain.model.IssueEntityType.ISSUE;
 
 /**
  * Issue entity model
@@ -19,7 +19,7 @@ import static ee.ria.riha.domain.model.EntityType.ISSUE;
 @Setter
 @Builder
 @AllArgsConstructor
-public class Issue implements Entity {
+public class Issue implements IssueEntity {
 
     private Long id;
     private UUID infoSystemUuid;
@@ -36,7 +36,7 @@ public class Issue implements Entity {
     }
 
     @Override
-    public EntityType getEntityType() {
+    public IssueEntityType getEntityType() {
         return ISSUE;
     }
 }

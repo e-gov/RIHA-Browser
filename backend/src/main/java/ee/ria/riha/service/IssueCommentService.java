@@ -1,6 +1,6 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.domain.model.EntityType;
+import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.domain.model.IssueComment;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
@@ -42,7 +42,7 @@ public class IssueCommentService {
             return null;
         }
         Comment comment = new Comment();
-        comment.setType(EntityType.ISSUE_COMMENT.name());
+        comment.setType(IssueEntityType.ISSUE_COMMENT.name());
         comment.setComment_id(issueComment.getId());
         comment.setComment_parent_id(issueComment.getIssueId());
         comment.setComment(issueComment.getComment());
@@ -102,7 +102,7 @@ public class IssueCommentService {
     public IssueComment getIssueCommentById(Long issueCommentId) {
         Comment comment = commentRepository.get(issueCommentId);
 
-        if (EntityType.valueOf(comment.getType()) != EntityType.ISSUE_COMMENT) {
+        if (IssueEntityType.valueOf(comment.getType()) != IssueEntityType.ISSUE_COMMENT) {
             throw new IllegalArgumentException("Not an issue comment");
         }
 
@@ -110,7 +110,7 @@ public class IssueCommentService {
     }
 
     private String getIssueCommentTypeFilter() {
-        return "type,=," + EntityType.ISSUE_COMMENT.name();
+        return "type,=," + IssueEntityType.ISSUE_COMMENT.name();
     }
 
     private String getIssueIdEqFilter(Long issueId) {

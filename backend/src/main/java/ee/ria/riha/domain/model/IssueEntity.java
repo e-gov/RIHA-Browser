@@ -3,8 +3,8 @@ package ee.ria.riha.domain.model;
 /**
  * @author Valentin Suhnjov
  */
-public interface Entity {
+public interface IssueEntity {
 
-    EntityType getEntityType();
+    IssueEntityType getEntityType();
 
 }

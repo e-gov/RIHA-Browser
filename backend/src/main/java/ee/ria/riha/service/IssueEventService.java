@@ -1,6 +1,6 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.domain.model.EntityType;
+import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.domain.model.IssueEvent;
 import ee.ria.riha.domain.model.IssueEventType;
 import ee.ria.riha.storage.domain.CommentRepository;
@@ -41,7 +41,7 @@ public class IssueEventService {
         }
 
         Comment comment = new Comment();
-        comment.setType(EntityType.ISSUE_EVENT.name());
+        comment.setType(IssueEntityType.ISSUE_EVENT.name());
         comment.setSub_type(issueEvent.getType().name());
         comment.setComment_id(issueEvent.getId());
         comment.setComment_parent_id(issueEvent.getIssueId());

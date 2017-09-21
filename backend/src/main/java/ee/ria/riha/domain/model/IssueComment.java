@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
-import static ee.ria.riha.domain.model.EntityType.ISSUE_COMMENT;
+import static ee.ria.riha.domain.model.IssueEntityType.ISSUE_COMMENT;
 
 /**
  * Issue comment entity model
@@ -18,7 +18,7 @@ import static ee.ria.riha.domain.model.EntityType.ISSUE_COMMENT;
 @Setter
 @Builder
 @AllArgsConstructor
-public class IssueComment implements Entity {
+public class IssueComment implements IssueEntity {
 
     private Long id;
     private Long issueId;
@@ -33,7 +33,7 @@ public class IssueComment implements Entity {
     }
 
     @Override
-    public EntityType getEntityType() {
+    public IssueEntityType getEntityType() {
         return ISSUE_COMMENT;
     }
 }

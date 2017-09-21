@@ -1,7 +1,7 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.domain.model.Entity;
-import ee.ria.riha.domain.model.EntityType;
+import ee.ria.riha.domain.model.IssueEntity;
+import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
@@ -21,7 +21,7 @@ public class IssueTimelineService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public PagedResponse<Entity> listTimeline(Long issueId, Pageable pageable) {
+    public PagedResponse<IssueEntity> listTimeline(Long issueId, Pageable pageable) {
         Filterable filter = new FilterRequest(null, "comment_id", null)
                 .addFilter(getIssueIdEqFilter(issueId));
 
@@ -31,10 +31,10 @@ public class IssueTimelineService {
                                    response.getTotalElements(),
                                    response.getContent().stream()
                                            .map(comment -> {
-                                               if (comment.getType().equals(EntityType.ISSUE_COMMENT.name())) {
+                                               if (comment.getType().equals(IssueEntityType.ISSUE_COMMENT.name())) {
                                                    return IssueCommentService.COMMENT_TO_ISSUE_COMMENT.apply(comment);
                                                } else if (comment.getType().equals(
-                                                       EntityType.ISSUE_EVENT.name())) {
+                                                       IssueEntityType.ISSUE_EVENT.name())) {
                                                    return IssueEventService.COMMENT_TO_ISSUE_EVENT.apply(comment);
                                                }
 

@@ -1,6 +1,6 @@
 package ee.ria.riha.web;
 
-import ee.ria.riha.domain.model.Entity;
+import ee.ria.riha.domain.model.IssueEntity;
 import ee.ria.riha.service.IssueTimelineService;
 import ee.ria.riha.storage.util.ApiPageableParams;
 import ee.ria.riha.storage.util.Pageable;
@@ -39,7 +39,7 @@ public class IssueTimelineController {
     @GetMapping("/{issueId}/timeline")
     @ApiOperation("Get issue timeline")
     @ApiPageableParams
-    public ResponseEntity<PagedResponse<Entity>> getTimeline(@PathVariable("issueId") Long issueId, Pageable pageable) {
+    public ResponseEntity<PagedResponse<IssueEntity>> getTimeline(@PathVariable("issueId") Long issueId, Pageable pageable) {
         return ResponseEntity.ok(issueTimelineService.listTimeline(issueId, pageable));
     }
 

@@ -48,7 +48,7 @@ public class IssueService {
             return null;
         }
         Comment comment = new Comment();
-        comment.setType(EntityType.ISSUE.name());
+        comment.setType(IssueEntityType.ISSUE.name());
         comment.setComment_id(issue.getId());
         comment.setInfosystem_uuid(issue.getInfoSystemUuid());
         comment.setTitle(issue.getTitle());
@@ -129,7 +129,7 @@ public class IssueService {
     public Issue getIssueById(Long issueId) {
         Comment issue = commentRepository.get(issueId);
 
-        if (EntityType.valueOf(issue.getType()) != EntityType.ISSUE) {
+        if (IssueEntityType.valueOf(issue.getType()) != IssueEntityType.ISSUE) {
             throw new IllegalBrowserStateException("Retrieved entity is not an issue");
         }
 
@@ -199,7 +199,7 @@ public class IssueService {
     }
 
     private String getIssueTypeFilter() {
-        return "type,=," + EntityType.ISSUE.name();
+        return "type,=," + IssueEntityType.ISSUE.name();
     }
 
     private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
