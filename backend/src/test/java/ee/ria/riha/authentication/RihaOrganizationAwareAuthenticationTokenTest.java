@@ -29,11 +29,8 @@ public class RihaOrganizationAwareAuthenticationTokenTest {
 
     private RihaUserDetails principal = new RihaUserDetails(MARY_ANN_USER, MARY_ANN_USER.getUsername(),
                                                             ImmutableMultimap.of(TEST_ORG, TEST_ORG_ROLE));
-    private RihaUserDetails principalNoAuthorities = new RihaUserDetails(MARY_ANN_USER, MARY_ANN_USER.getUsername(),
-            ImmutableMultimap.of());
     private Object credentials = null;
-    private Collection<? extends GrantedAuthority> authorities = Collections.singletonList(DEFAULT_ROLE);
-    private Collection<? extends GrantedAuthority> missingAuthorities = Collections.emptyList();
+    private Collection<? extends GrantedAuthority> baseAuthorities = Collections.singletonList(DEFAULT_ROLE);
 
     @Test
     public void combinesBaseAuthoritiesAndActiveOrganizationAuthorities() {
@@ -45,7 +42,7 @@ public class RihaOrganizationAwareAuthenticationTokenTest {
     }
 
     private RihaOrganizationAwareAuthenticationToken createAuthenticationToken() {
-        return new RihaOrganizationAwareAuthenticationToken(principal, credentials, authorities);
+        return new RihaOrganizationAwareAuthenticationToken(principal, credentials, baseAuthorities);
     }
 
     @Test
@@ -55,7 +52,7 @@ public class RihaOrganizationAwareAuthenticationTokenTest {
                                         ImmutableMultimap.of(TEST_ORG, CUSTOM_ROLE));
 
         // Base role is also ROLE_TEST
-        authorities = Collections.singletonList(CUSTOM_ROLE);
+        baseAuthorities = Collections.singletonList(CUSTOM_ROLE);
 
         RihaOrganizationAwareAuthenticationToken authenticationToken = createAuthenticationToken();
 
@@ -99,17 +96,10 @@ public class RihaOrganizationAwareAuthenticationTokenTest {
     }
 
     @Test
-    public void authoritiesIsNotNullWhenUserHasNoAuthorities() {
-        RihaOrganizationAwareAuthenticationToken authenticationToken = new RihaOrganizationAwareAuthenticationToken(
-                principalNoAuthorities, credentials, missingAuthorities);
-
-        assertThat(authenticationToken.getAuthorities(), is(notNullValue()));
-    }
-
-    @Test
-    public void authoritiesIsEmptyWhenUserHasNoAuthorities() {
-        RihaOrganizationAwareAuthenticationToken authenticationToken = new RihaOrganizationAwareAuthenticationToken(
-                principalNoAuthorities, credentials, missingAuthorities);
+    public void doesNotProduceNullWhenCombinedAuthorityListIsEmpty() {
+        // authentication has no base baseAuthorities and no active organization set
+        baseAuthorities = AuthorityUtils.NO_AUTHORITIES;
+        RihaOrganizationAwareAuthenticationToken authenticationToken = createAuthenticationToken();
 
         assertThat(authenticationToken.getAuthorities(), is(emptyCollectionOf(GrantedAuthority.class)));
     }
