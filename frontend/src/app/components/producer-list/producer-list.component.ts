@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { GridData } from '../../models/grid-data';
-import { isNumber } from "util";
+import { UserMatrix } from '../../models/user-matrix';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-producer-list',
@@ -16,6 +18,7 @@ export class ProducerListComponent implements OnInit {
     name: string,
     shortName: string
   };
+  userMatrix: UserMatrix;
 
   onPageChange(newPage): void{
     this.gridData.page = newPage - 1;
@@ -34,36 +37,26 @@ export class ProducerListComponent implements OnInit {
       })
   }
 
-  isLoggedIn(){
-    return this.environmentService.getActiveUser() != null;
-  }
-
-  noOrganizationSelected(){
-    let user = this.environmentService.getActiveUser();
-    return user.getOrganizations().length > 1 && !user.getActiveOrganization();
-  }
-
-  canDescribe(){
-    let user = this.environmentService.getActiveUser();
-    let ret = false;
-    if (user){
-      ret = user.getRoles().indexOf('ROLE_KIRJELDAJA') != -1
-    }
-
-    return ret;
+  openOrganizationsModal() {
+    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
+    return false;
   }
 
   constructor(private systemsService: SystemsService,
-              private environmentService: EnvironmentService) {
+              private environmentService: EnvironmentService,
+              private modalService: NgbModal) {
     this.gridData = new GridData();
     this.filters = {
       name: null,
       shortName: null
-    }
+    };
+    this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
-    this.getOwnSystems();
+    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
+      this.getOwnSystems();
+    }
   }
 
 }

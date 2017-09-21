@@ -12,7 +12,7 @@ export class BrowserListComponent implements OnInit {
 
   gridData: GridData;
   filters: {
-    owner: string,
+    ownerName: string,
     name: string
   };
 
@@ -58,7 +58,7 @@ export class BrowserListComponent implements OnInit {
   constructor(private systemsService: SystemsService) {
     this.gridData = new GridData();
     this.filters = {
-      owner: null,
+      ownerName: null,
       name: null
     }
   }
