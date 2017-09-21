@@ -130,28 +130,28 @@ export class SystemsService {
     return this.http.put(`/api/v1/systems/${ shortName || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
-  public getSystemIssues(uuid) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues?size=1000`).toPromise();
+  public getSystemIssues(shortName) {
+    return this.http.get(`/api/v1/systems/${ shortName }/issues?size=1000`).toPromise();
   }
 
-  public addSystemIssue(uuid, issue) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/systems/${ uuid }/issues`, issue).toPromise();
+  public addSystemIssue(shortName, issue) {
+    return this.http.post(`/api/v1/systems/${ shortName }/issues`, issue).toPromise();
   }
 
   public getSystemIssueById(issueId) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }`).toPromise();
+    return this.http.get(`/api/v1/issues/${ issueId }`).toPromise();
   }
 
-  public getSystemIssueTimeline(uuid, commentId) {
-    return this.http.get(`${ this.environmentService.getApproverUrl() }/issues/${ commentId }/timeline`).toPromise();
+  public getSystemIssueTimeline(issueId) {
+    return this.http.get(`/api/v1/issues/${ issueId }/timeline`).toPromise();
   }
 
   public postSystemIssueComment(issueId, reply) {
-    return this.http.post(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }/comments`, reply).toPromise();
+    return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
   }
 
   public closeSystemIssue(issueId, reply) {
-    return this.http.put(`${ this.environmentService.getApproverUrl() }/issues/${ issueId }`, {
+    return this.http.put(`/api/v1/issues/${ issueId }`, {
       comment: reply.comment,
       status: 'CLOSED'
     }).toPromise();

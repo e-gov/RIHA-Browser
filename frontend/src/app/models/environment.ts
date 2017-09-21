@@ -1,7 +1,6 @@
 import { User } from './user';
 
 export class Environment {
-  private remotes: any[];
   private userDetails: User;
 
   public getUserDetails(): User {
@@ -17,7 +16,6 @@ export class Environment {
   }
 
   constructor(options){
-    this.remotes = options.remotes || [];
     this.userDetails = options.userDetails ? new User(options.userDetails) : null;
   }
 

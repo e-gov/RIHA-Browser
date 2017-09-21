@@ -14,7 +14,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   replies: any[] = [];
 
   refreshReplies(){
-    this.systemService.getSystemIssueTimeline(this.feedback.infoSystemUuid, this.feedback.id).then(
+    this.systemService.getSystemIssueTimeline(this.feedback.id).then(
       res => {
         this.replies = res.json().content;
       });

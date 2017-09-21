@@ -15,7 +15,7 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onSubmit(f) :void {
     if (f.valid){
-      this.systemsService.addSystemIssue(this.system.details.uuid, f.value).then(
+      this.systemsService.addSystemIssue(this.system.details.short_name, f.value).then(
         res => {
           this.activeModal.close();
         },
