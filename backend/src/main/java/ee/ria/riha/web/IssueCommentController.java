@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -21,6 +22,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
  */
 @RestController
 @RequestMapping(API_V1_PREFIX + "/issues")
+@Secured("ROLE_RIHA_USER")
 @Api("Issue events")
 public class IssueCommentController {
 
