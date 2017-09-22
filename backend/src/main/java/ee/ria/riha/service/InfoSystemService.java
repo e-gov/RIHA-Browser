@@ -4,6 +4,7 @@ import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.storage.util.FilterRequest;
 import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
@@ -52,13 +54,14 @@ public class InfoSystemService {
         }
 
         InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
+        log.info("User with ID {} is going to create a new IS with short name {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), organization.getName());
+        validateThatShortNameIsNotInUseYet(infoSystem.getShortName());
         infoSystem.setUuid(UUID.randomUUID());
         infoSystem.setOwnerCode(organization.getCode());
         infoSystem.setOwnerName(organization.getName());
 
         infoSystemValidationService.validate(infoSystem.asJson());
-        log.info("User with ID {} is going to create a new IS with short name {} for next organization: {}",
-                 rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), infoSystem.getOwnerName());
 
         return infoSystemRepository.add(infoSystem);
     }
@@ -86,18 +89,30 @@ public class InfoSystemService {
             throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
         }
         InfoSystem existingInfoSystem = get(shortName);
+        log.info("User with ID {} is going to update an IS with ID {} and short name {} for next organization: {}",
+                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
+                existingInfoSystem.getOwnerName());
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
+        if (!shortName.equals(updatedInfoSystem.getShortName())) {
+            validateThatShortNameIsNotInUseYet(updatedInfoSystem.getShortName());
+        }
         updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
         updatedInfoSystem.setOwnerCode(existingInfoSystem.getOwnerCode());
         updatedInfoSystem.setOwnerName(existingInfoSystem.getOwnerName());
 
         infoSystemValidationService.validate(updatedInfoSystem.asJson());
-        log.info("User with ID {} is going to update an IS with ID {} and short name {} for next organization: {}",
-                 rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
-                 existingInfoSystem.getOwnerName());
 
         return infoSystemRepository.add(updatedInfoSystem);
+    }
+
+    private void validateThatShortNameIsNotInUseYet(String shortName) {
+        log.info("Checking IS short name uniqueness: {}", shortName);
+        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
+        List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
+        if (!infoSystems.isEmpty()) throw new IllegalBrowserStateException("This IS short name already exists and" +
+            " cannot be used: " + shortName);
+        log.info("This IS short name is unique and can be used: {}", shortName);
     }
 
 }
