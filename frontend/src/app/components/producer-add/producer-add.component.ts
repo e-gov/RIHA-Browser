@@ -4,6 +4,11 @@ import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService} from "../../services/environment.service";
 import { Location } from '@angular/common';
 import { ToastrService } from "ngx-toastr";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
+import { UserMatrix } from '../../models/user-matrix';
+
+
 
 @Component({
   selector: 'app-producer-add',
@@ -11,6 +16,8 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ['./producer-add.component.scss']
 })
 export class ProducerAddComponent implements OnInit {
+
+  userMatrix: UserMatrix;
 
   onSubmit(f) :void {
     if (f.valid){
@@ -24,24 +31,18 @@ export class ProducerAddComponent implements OnInit {
     }
   }
 
-  isLoggedIn(){
-    return this.environmentService.getActiveUser() != null;
-  }
-
-  canDescribe(){
-    let ret = false;
-    let user = this.environmentService.getActiveUser();
-    if (user){
-      ret = user.getRoles().indexOf('ROLE_KIRJELDAJA') != -1;
-    }
-    return ret;
+  openOrganizationsModal() {
+    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
+    return false;
   }
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private router: Router,
               private location: Location,
-              private toastrService: ToastrService) {
+              private toastrService: ToastrService,
+              private modalService: NgbModal) {
+    this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {

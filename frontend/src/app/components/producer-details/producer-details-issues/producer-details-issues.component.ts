@@ -4,20 +4,24 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
 import { ApproverIssueDetailsComponent } from '../../approver-issue-details/approver-issue-details.component';
 import { SystemsService } from '../../../services/systems.service';
+import { EnvironmentService } from '../../../services/environment.service';
+import { UserMatrix } from '../../../models/user-matrix';
 
 @Component({
-  selector: 'app-producer-details-comments',
+  selector: 'app-producer-details-issues',
   templateUrl: './producer-details-issues.component.html',
   styleUrls: ['./producer-details-issues.component.scss']
 })
 export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
+  @Input() allowEdit: boolean;
 
   comments: any[] = [];
   activeIssues: any[] = [];
   closedIssues: any[] = [];
   newAdded: boolean = false;
+  userMatrix: UserMatrix;
 
   openAddIssueModal(){
     const modalRef = this.modalService.open(ApproverAddIssueComponent);
@@ -64,7 +68,10 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   };
 
   constructor(private modalService: NgbModal,
-              private systemsService: SystemsService) { }
+              private systemsService: SystemsService,
+              private environmentService: EnvironmentService) {
+    this.userMatrix = this.environmentService.getUserMatrix();
+  }
 
   ngOnInit() {
     this.refreshIssues();

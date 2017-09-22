@@ -1,13 +1,17 @@
 <app-page-header [text]="'Sisesta infosüsteemi andmed'"></app-page-header>
-<div *ngIf="!isLoggedIn()" class="alert alert-info" role="alert">
+<div *ngIf="!userMatrix.isLoggedIn" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Palun logige sisse</h3>
   <p class="mb-0">Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
 </div>
-<div *ngIf="isLoggedIn() && !canDescribe()" class="alert alert-info" role="alert">
+<div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun valige asutus</h3>
+  <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
+</div>
+<div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole || !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
   <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
-<section *ngIf="canDescribe()" class="col card p-3">
+<section *ngIf="userMatrix.isLoggedIn && userMatrix.hasDescriberRole" class="col card p-3">
   <div class="my-1">
     <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)" >
       <p>
