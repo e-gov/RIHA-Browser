@@ -12,6 +12,7 @@ import java.security.Principal;
 @ToString
 public class EstEIDPrincipal implements Principal {
 
+    private static final String PREFIX = "EE";
     private String serialNumber;
     private String givenName;
     private String surname;
@@ -22,7 +23,7 @@ public class EstEIDPrincipal implements Principal {
 
     @Override
     public String getName() {
-        return serialNumber;
+        return PREFIX + serialNumber;
     }
 
     public String getSerialNumber() {

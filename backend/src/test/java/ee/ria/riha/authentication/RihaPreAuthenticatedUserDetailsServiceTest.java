@@ -47,7 +47,7 @@ public class RihaPreAuthenticatedUserDetailsServiceTest {
 
         estEidAuthenticationToken = new PreAuthenticatedAuthenticationToken(principal, null);
 
-        when(userDetailsService.loadUserByUsername(SERIAL_NUMBER)).thenReturn(EXISTING_USER);
+        when(userDetailsService.loadUserByUsername(principal.getName())).thenReturn(EXISTING_USER);
     }
 
     @Test
