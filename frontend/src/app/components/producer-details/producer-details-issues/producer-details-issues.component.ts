@@ -65,7 +65,11 @@ export class ProducerDetailsIssuesComponent implements OnInit {
         });
       }
     )
-  };
+  }
+
+  canApprove(){
+    return this.allowEdit || this.userMatrix.hasApproverRole;
+  }
 
   constructor(private modalService: NgbModal,
               private systemsService: SystemsService,
