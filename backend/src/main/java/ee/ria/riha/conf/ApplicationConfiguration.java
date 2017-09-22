@@ -5,6 +5,7 @@ import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.RihaStorageInfoSystemRepository;
 import ee.ria.riha.service.JsonValidationService;
 import ee.ria.riha.storage.client.StorageClient;
+import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.MainResourceRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,11 @@ public class ApplicationConfiguration {
         return new RihaStorageInfoSystemRepository(mainResourceRepository);
     }
 
+    @Bean
+    public CommentRepository commentRepository(ApplicationProperties applicationProperties) {
+        return new CommentRepository(getStorageClient(applicationProperties));
+    }
+    
     @Bean
     public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties) throws IOException {
         return new JsonValidationService(

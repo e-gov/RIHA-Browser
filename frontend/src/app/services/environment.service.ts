@@ -10,10 +10,6 @@ export class EnvironmentService {
 
   public globalEnvironment: any;
 
-  public getApproverUrl(): string {
-    return this.globalEnvironment.remotes.approverUrl;
-  }
-
   public setActiveUser(details?): void {
     this.globalEnvironment.setActiveUser(details);
   }

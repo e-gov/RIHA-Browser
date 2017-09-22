@@ -47,7 +47,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   refreshIssues(){
-    this.systemsService.getSystemIssues(this.system.details.uuid).then(
+    this.systemsService.getSystemIssues(this.system.details.short_name).then(
       res => {
         this.activeIssues = [];
         this.closedIssues = [];
