@@ -2,6 +2,7 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.IssueComment;
 import ee.ria.riha.service.IssueCommentService;
+import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.storage.util.ApiPageableAndFilterableParams;
 import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
@@ -10,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -22,7 +23,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
  */
 @RestController
 @RequestMapping(API_V1_PREFIX + "/issues")
-@Secured("ROLE_RIHA_USER")
+@PreAuthorize("hasRole('ROLE_RIHA_USER')")
 @Api("Issue events")
 public class IssueCommentController {
 
@@ -38,6 +39,7 @@ public class IssueCommentController {
      * @return paginated list of issue comments
      */
     @GetMapping("/{issueId}/comments")
+    @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("List all issue comments")
     @ApiPageableAndFilterableParams
     public ResponseEntity<PagedResponse<IssueComment>> listIssueComments(
@@ -56,6 +58,7 @@ public class IssueCommentController {
      * @return single concrete comment or null
      */
     @GetMapping("/{issueId}/comments/{commentId}")
+    @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Get single issue comment")
     public ResponseEntity<IssueComment> getIssueComment(
             @PathVariable("issueId") Long issueId,
@@ -72,6 +75,7 @@ public class IssueCommentController {
      * @return created issue comment
      */
     @PostMapping("/{issueId}/comments")
+    @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Create new issue comment")
     public ResponseEntity<IssueComment> createIssueComment(
             @PathVariable("issueId") Long issueId,
