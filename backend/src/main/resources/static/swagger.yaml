@@ -45,44 +45,6 @@ paths:
         default:
           description: "successful operation"
       deprecated: true
-  /api/v1/issues:
-    get:
-      tags:
-      - "Issues"
-      summary: "List all issues of all information systems"
-      description: ""
-      operationId: "listIssues"
-      parameters:
-      - name: "page"
-        in: "query"
-        description: "page number"
-        required: false
-        type: "integer"
-      - name: "size"
-        in: "query"
-        description: "page size"
-        required: false
-        type: "integer"
-      - name: "filter"
-        in: "query"
-        description: "filter options"
-        required: false
-        type: "string"
-      - name: "sort"
-        in: "query"
-        description: "sorting options"
-        required: false
-        type: "string"
-      - name: "fields"
-        in: "query"
-        description: "field list"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/PagedResponseIssue"
   /api/v1/issues/{issueId}:
     get:
       tags:

@@ -58,20 +58,6 @@ public class IssueController {
     }
 
     /**
-     * Retrieve paginated and filtered list of all issues.
-     *
-     * @param pageable   paging definition
-     * @param filterable filter definition
-     * @return paginated list of issues
-     */
-    @GetMapping(API_V1_PREFIX + "/issues")
-    @ApiOperation("List all issues of all information systems")
-    @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<Issue>> listIssues(Pageable pageable, Filterable filterable) {
-        return ResponseEntity.ok(issueService.listIssues(pageable, filterable));
-    }
-
-    /**
      * Retrieve single issue by id.
      *
      * @param issueId id of an issue
