@@ -74,6 +74,16 @@ public class InfoSystemService {
     }
 
     /**
+     * Retrieves {@link InfoSystem} by its short name
+     *
+     * @param uuid info system uuid
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(UUID uuid) {
+        return infoSystemRepository.load(uuid);
+    }
+
+    /**
      * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated from model.
      *
      * @param shortName info system short name

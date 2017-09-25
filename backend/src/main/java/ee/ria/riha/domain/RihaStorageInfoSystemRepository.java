@@ -7,6 +7,7 @@ import ee.ria.riha.storage.domain.model.MainResource;
 import ee.ria.riha.storage.util.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,18 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
 
         if (infoSystems.isEmpty()) {
             throw new ObjectNotFoundException("Could not resolve info system by short name " + shortName);
+        }
+
+        return infoSystems.get(0);
+    }
+
+    @Override
+    public InfoSystem load(UUID uuid) {
+        FilterRequest filter = new FilterRequest("uuid,=," + uuid.toString(), null, null);
+        List<InfoSystem> infoSystems = find(filter);
+
+        if (infoSystems.isEmpty()) {
+            throw new ObjectNotFoundException("Could not resolve info system by uuid " + uuid.toString());
         }
 
         return infoSystems.get(0);
