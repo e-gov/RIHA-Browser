@@ -1,7 +1,6 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.storage.util.FilterRequest;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
-import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
+import static ee.ria.riha.service.SecurityContextUtil.getRihaUserPersonalCode;
 
 /**
  * @author Valentin Suhnjov
@@ -43,20 +42,16 @@ public class InfoSystemService {
      * @return created {@link InfoSystem}
      */
     public InfoSystem create(InfoSystem model) {
-        RihaUserDetails rihaUserDetails = getRihaUserDetails();
-        if (rihaUserDetails == null) {
-            throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
-        }
-
         RihaOrganization organization = getActiveOrganization();
         if (organization == null) {
-            throw new IllegalBrowserStateException("Active organization must be set");
+            throw new ValidationException("User active organization is not set");
         }
 
         InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
-        log.info("User with ID {} is going to create a new IS with short name {} for next organization: {}",
-                rihaUserDetails.getPersonalCode(), infoSystem.getShortName(), organization.getName());
-        validateThatShortNameIsNotInUseYet(infoSystem.getShortName());
+        log.info("User '{}' with active organization '{}'" +
+                         " is creating new info system with short name '{}'",
+                 getRihaUserPersonalCode(), organization, infoSystem.getShortName());
+        validateInfoSystemExistence(infoSystem.getShortName());
         infoSystem.setUuid(UUID.randomUUID());
         infoSystem.setOwnerCode(organization.getCode());
         infoSystem.setOwnerName(organization.getName());
@@ -84,18 +79,15 @@ public class InfoSystemService {
      * @return new {@link InfoSystem}
      */
     public InfoSystem update(String shortName, InfoSystem model) {
-        RihaUserDetails rihaUserDetails = getRihaUserDetails();
-        if (rihaUserDetails == null) {
-            throw new IllegalBrowserStateException("User must be valid RIHA logged in user");
-        }
         InfoSystem existingInfoSystem = get(shortName);
-        log.info("User with ID {} is going to update an IS with ID {} and short name {} for next organization: {}",
-                rihaUserDetails.getPersonalCode(), existingInfoSystem.getId(), shortName,
-                existingInfoSystem.getOwnerName());
+        log.info("User '{}' with active organization '{}'" +
+                         " is updating info system with id {}, owner code '{}' and short name '{}'",
+                 getRihaUserPersonalCode(), getActiveOrganization(), existingInfoSystem.getId(),
+                 existingInfoSystem.getOwnerCode(), existingInfoSystem.getShortName());
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
         if (!shortName.equals(updatedInfoSystem.getShortName())) {
-            validateThatShortNameIsNotInUseYet(updatedInfoSystem.getShortName());
+            validateInfoSystemExistence(updatedInfoSystem.getShortName());
         }
         updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
         updatedInfoSystem.setOwnerCode(existingInfoSystem.getOwnerCode());
@@ -106,13 +98,13 @@ public class InfoSystemService {
         return infoSystemRepository.add(updatedInfoSystem);
     }
 
-    private void validateThatShortNameIsNotInUseYet(String shortName) {
-        log.info("Checking IS short name uniqueness: {}", shortName);
+    private void validateInfoSystemExistence(String shortName) {
+        log.debug("Checking info system '{}' existence", shortName);
         FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
         List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
-        if (!infoSystems.isEmpty()) throw new IllegalBrowserStateException("This IS short name already exists and" +
-            " cannot be used: " + shortName);
-        log.info("This IS short name is unique and can be used: {}", shortName);
+        if (!infoSystems.isEmpty()) {
+            throw new ValidationException("Info system with short name '" + shortName + "' already exists");
+        }
     }
 
 }

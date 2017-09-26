@@ -20,7 +20,7 @@ public class SecurityContextUtil {
      * holds no authentication, or authentication is not of {@link RihaOrganizationAwareAuthenticationToken} type, or
      * active organization is not set.
      *
-     * @return
+     * @return instance of {@link RihaOrganization} or null if active organization is not set
      */
     public static RihaOrganization getActiveOrganization() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -49,6 +49,16 @@ public class SecurityContextUtil {
         }
 
         return ((RihaUserDetails) principal);
+    }
+
+    /**
+     * Retrieved personal code from {@link RihaUserDetails}.
+     *
+     * @return personal code or null in case context {@link UserDetails} is not of {@link RihaUserDetails} type
+     */
+    public static String getRihaUserPersonalCode() {
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        return rihaUserDetails != null ? rihaUserDetails.getPersonalCode() : null;
     }
 
     /**

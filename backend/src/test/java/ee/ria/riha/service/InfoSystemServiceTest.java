@@ -6,9 +6,8 @@ import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.storage.util.FilterRequest;
 import org.assertj.core.util.Lists;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,33 +15,20 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InfoSystemServiceTest {
 
-    private static final String PERSONAL_CODE = "12345";
-    private static final String USERNAME = "john.doe";
-    private static final String PASSWORD = "strong";
-    private static final SimpleGrantedAuthority CUSTOM_ROLE = new SimpleGrantedAuthority("ROLE_TEST");
-    private static final List<SimpleGrantedAuthority> WRAPPED_ROLES = Collections.singletonList(CUSTOM_ROLE);
-    private static final User WRAPPED_USER_DETAILS = new User(USERNAME, PASSWORD, WRAPPED_ROLES);
-
-    private static final String EXISTING_SHORT_NAME = "sys1";
-    private static final String DISTINGUISH_SHORT_NAME = "sys2";
-    private final InfoSystem infoSystemWithExistingShortName = new InfoSystem(new JSONObject("{\n\"short_name\": \"sys1\"\n}"));
-    private final InfoSystem infoSystemWithDistinguishShortName = new InfoSystem(new JSONObject("{\n\"short_name\": \"sys2\"\n}"));
-    private List<InfoSystem> foundInfoSystems = Lists.newArrayList();
+    private static final String EXISTING_INFO_SYSTEM_SHORT_NAME = "sys1";
 
     @Mock
     private InfoSystemRepository infoSystemRepository;
@@ -53,12 +39,25 @@ public class InfoSystemServiceTest {
     @InjectMocks
     private InfoSystemService infoSystemService;
 
+    private InfoSystem existingInfoSystem = new InfoSystem(
+            "{\n" +
+                    "  \"main_resource_id\": 2357,\n" +
+                    "  \"short_name\": \"" + EXISTING_INFO_SYSTEM_SHORT_NAME + "\",\n" +
+                    "  \"owner\": {\n" +
+                    "    \"code\": \"555000\"\n" +
+                    "  }\n" +
+                    "}");
+    private List<InfoSystem> foundInfoSystems = Lists.newArrayList();
+
     @BeforeClass
     public static void setAuthorization() {
         RihaOrganizationAwareAuthenticationToken authenticationToken = new RihaOrganizationAwareAuthenticationToken(
-                new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE,
-                        ImmutableMultimap.of(new RihaOrganization("123", "test_org"),
-                                CUSTOM_ROLE)), null, null);
+                new RihaUserDetails(new User("john.doe", "strong", AuthorityUtils.NO_AUTHORITIES),
+                                    "EE12345678901",
+                                    ImmutableMultimap.of(new RihaOrganization("123", "test_org"),
+                                                         new SimpleGrantedAuthority("ROLE_TEST"))),
+                null,
+                null);
 
         authenticationToken.setActiveOrganization("123");
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -67,44 +66,57 @@ public class InfoSystemServiceTest {
     @Before
     public void setUp() {
         when(infoSystemRepository.find(any(FilterRequest.class))).thenReturn(foundInfoSystems);
-        when(infoSystemRepository.load(EXISTING_SHORT_NAME)).thenReturn(infoSystemWithExistingShortName);
-        when(infoSystemRepository.load(DISTINGUISH_SHORT_NAME)).thenReturn(infoSystemWithDistinguishShortName);
+        when(infoSystemRepository.load(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test(expected = ValidationException.class)
     public void creatingInfoSystemMustFailIfSuggestedShortNameIsAlreadyInUse() {
-        foundInfoSystems.add(infoSystemWithExistingShortName);
-        infoSystemService.create(infoSystemWithExistingShortName);
-        verify(infoSystemRepository, times(1)).find(any(FilterRequest.class));
-        verify(infoSystemRepository, times(0)).add(any(InfoSystem.class));
+        InfoSystem createdInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+
+        // When at least one info system with updated short name is found, test should fail
+        foundInfoSystems.add(createdInfoSystem);
+
+        infoSystemService.create(createdInfoSystem);
     }
 
     @Test
     public void creatingInfoSystemMustSucceedIfSuggestedShortNameIsNotInUseYet() {
-        infoSystemService.create(infoSystemWithDistinguishShortName);
-        verify(infoSystemRepository, times(1)).find(any(FilterRequest.class));
-        verify(infoSystemRepository, times(1)).add(any(InfoSystem.class));
+        InfoSystem createdInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        infoSystemService.create(createdInfoSystem);
+
+        verify(infoSystemRepository).find(any(FilterRequest.class));
+        verify(infoSystemRepository).add(any(InfoSystem.class));
     }
 
     @Test
     public void updatingInfoSystemMustSucceedIfUpdatedShortNameIsNotInUseYet() {
-        infoSystemService.update(EXISTING_SHORT_NAME, infoSystemWithDistinguishShortName);
-        verify(infoSystemRepository, times(1)).find(any(FilterRequest.class));
-        verify(infoSystemRepository, times(1)).add(any(InfoSystem.class));
+        InfoSystem updatedInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        updatedInfoSystem.setShortName("new-short-name");
+
+        infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
+
+        verify(infoSystemRepository).find(any(FilterRequest.class));
+        verify(infoSystemRepository).add(any(InfoSystem.class));
     }
 
     @Test
     public void updatingInfoSystemMustSucceedIfShortNameStaysUnchanged() {
-        infoSystemService.update(EXISTING_SHORT_NAME, infoSystemWithExistingShortName);
-        verify(infoSystemRepository, times(0)).find(any(FilterRequest.class));
-        verify(infoSystemRepository, times(1)).add(any(InfoSystem.class));
+        InfoSystem updatedInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+
+        infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
+
+        verify(infoSystemRepository, never()).find(any(FilterRequest.class));
+        verify(infoSystemRepository).add(any(InfoSystem.class));
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test(expected = ValidationException.class)
     public void updatingInfoSystemMustFailIfUpdatedShortNameIsAlreadyInUse() {
-        foundInfoSystems.add(infoSystemWithExistingShortName);
-        infoSystemService.update(infoSystemWithDistinguishShortName.getShortName(), infoSystemWithExistingShortName);
-        verify(infoSystemRepository, times(1)).find(any(FilterRequest.class));
-        verify(infoSystemRepository, times(0)).add(any(InfoSystem.class));
+        InfoSystem updatedInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        updatedInfoSystem.setShortName("new-short-name");
+
+        // When at least one info system with updated short name is found, test should fail
+        foundInfoSystems.add(updatedInfoSystem);
+
+        infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
     }
 }
