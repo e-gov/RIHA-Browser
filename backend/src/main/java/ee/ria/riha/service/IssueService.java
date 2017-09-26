@@ -77,26 +77,6 @@ public class IssueService {
     private IssueCommentService issueCommentService;
 
     /**
-     * List issues of all info systems.
-     *
-     * @param pageable   paging definition
-     * @param filterable filter definition
-     * @return paginated list of issues
-     */
-    public PagedResponse<Issue> listIssues(Pageable pageable, Filterable filterable) {
-        Filterable filter = new FilterRequest(filterable.getFilter(), filterable.getSort(), filterable.getFields())
-                .addFilter(getIssueTypeFilter());
-
-        PagedResponse<Comment> response = commentRepository.list(pageable, filter);
-
-        return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
-                                   response.getTotalElements(),
-                                   response.getContent().stream()
-                                           .map(COMMENT_TO_ISSUE)
-                                           .collect(toList()));
-    }
-
-    /**
      * List concrete info system issues.
      *
      * @param shortName  info system short name

@@ -2,6 +2,8 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.service.IssueService;
+import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
+import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.storage.util.ApiPageableAndFilterableParams;
 import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
@@ -49,24 +51,11 @@ public class IssueController {
      * @return created issue
      */
     @PostMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
+    @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Create new issue for information system")
     public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("shortName") String shortName,
                                                        @RequestBody Issue issue) {
         return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, issue));
-    }
-
-    /**
-     * Retrieve paginated and filtered list of all issues.
-     *
-     * @param pageable   paging definition
-     * @param filterable filter definition
-     * @return paginated list of issues
-     */
-    @GetMapping(API_V1_PREFIX + "/issues")
-    @ApiOperation("List all issues of all information systems")
-    @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<Issue>> listIssues(Pageable pageable, Filterable filterable) {
-        return ResponseEntity.ok(issueService.listIssues(pageable, filterable));
     }
 
     /**
@@ -76,6 +65,7 @@ public class IssueController {
      * @return issue or null
      */
     @GetMapping(API_V1_PREFIX + "/issues/{issueId}")
+    @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Get single information system issue")
     public ResponseEntity<Issue> getInfoSystemIssue(@PathVariable("issueId") Long issueId) {
         return ResponseEntity.ok(issueService.getIssueById(issueId));
@@ -89,6 +79,7 @@ public class IssueController {
      * @return updated issue
      */
     @PutMapping(API_V1_PREFIX + "/issues/{issueId}")
+    @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Update issue")
     public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId,
                                               @RequestBody Issue issue) {
