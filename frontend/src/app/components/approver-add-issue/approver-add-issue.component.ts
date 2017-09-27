@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SystemsService } from '../../services/systems.service';
+import { EnvironmentService } from '../../services/environment.service';
 import { System } from '../../models/system';
 import { ToastrService } from 'ngx-toastr';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-approver-add-comment',
@@ -12,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ApproverAddIssueComponent implements OnInit {
 
   @Input() system: System;
+  activeUser: User;
 
   onSubmit(f) :void {
     if (f.valid){
@@ -27,7 +30,10 @@ export class ApproverAddIssueComponent implements OnInit {
 
   constructor(public activeModal: NgbActiveModal,
               private systemsService: SystemsService,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService,
+              private environmentService: EnvironmentService) {
+    this.activeUser = this.environmentService.getActiveUser();
+  }
 
   ngOnInit() {
   }
