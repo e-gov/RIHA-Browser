@@ -25,7 +25,7 @@ public class JsonValidationServiceTest {
                 JsonLoader.fromResource("/test_infosystem_schema.json"));
     }
 
-    @Test(expected = JsonValidationServiceException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsOnEmptyJson() {
         infoSystemValidationService.validate("");
     }

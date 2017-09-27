@@ -9,4 +9,15 @@ public class IllegalBrowserStateException extends BrowserException {
         super(message);
     }
 
+    public IllegalBrowserStateException() {
+        super();
+    }
+
+    public IllegalBrowserStateException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public IllegalBrowserStateException(Throwable cause) {
+        super(cause);
+    }
 }
