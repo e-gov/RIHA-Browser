@@ -21,8 +21,8 @@ public class IssueEvent implements IssueEntity {
 
     private Long id;
     private Long issueId;
-    private @NonNull
-    IssueEventType type;
+    @NonNull
+    private IssueEventType type;
     private Date dateCreated;
     private String authorName;
     private String authorPersonalCode;

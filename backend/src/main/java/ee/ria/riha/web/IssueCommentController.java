@@ -42,12 +42,9 @@ public class IssueCommentController {
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("List all issue comments")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<IssueComment>> listIssueComments(
-            @PathVariable("issueId") Long issueId,
-            Pageable pageable,
-            Filterable filterable) {
-        return ResponseEntity.ok(
-                issueEventService.listIssueComments(issueId, pageable, filterable));
+    public ResponseEntity<PagedResponse<IssueComment>> listIssueComments(@PathVariable("issueId") Long issueId,
+                                                                         Pageable pageable, Filterable filterable) {
+        return ResponseEntity.ok(issueEventService.listIssueComments(issueId, pageable, filterable));
     }
 
     /**
@@ -60,28 +57,24 @@ public class IssueCommentController {
     @GetMapping("/{issueId}/comments/{commentId}")
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Get single issue comment")
-    public ResponseEntity<IssueComment> getIssueComment(
-            @PathVariable("issueId") Long issueId,
-            @PathVariable("commentId") Long commentId) {
-        return ResponseEntity.ok(
-                issueEventService.getIssueCommentById(commentId));
+    public ResponseEntity<IssueComment> getIssueComment(@PathVariable("issueId") Long issueId,
+                                                        @PathVariable("commentId") Long commentId) {
+        return ResponseEntity.ok(issueEventService.getIssueCommentById(commentId));
     }
 
     /**
      * Adds single comment to the issue.
      *
      * @param issueId      an id of an issue
-     * @param issueComment comment model
+     * @param model comment model
      * @return created issue comment
      */
     @PostMapping("/{issueId}/comments")
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Create new issue comment")
-    public ResponseEntity<IssueComment> createIssueComment(
-            @PathVariable("issueId") Long issueId,
-            @RequestBody IssueComment issueComment) {
-        return ResponseEntity.ok(
-                issueEventService.createIssueComment(issueId, issueComment));
+    public ResponseEntity<IssueComment> createIssueComment(@PathVariable("issueId") Long issueId,
+                                                           @RequestBody IssueComment model) {
+        return ResponseEntity.ok(issueEventService.createIssueComment(issueId, model.getComment()));
     }
 
 }

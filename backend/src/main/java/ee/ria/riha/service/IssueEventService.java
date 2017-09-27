@@ -8,6 +8,7 @@ import ee.ria.riha.storage.domain.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -61,12 +62,15 @@ public class IssueEventService {
      *
      * @param issueId    an id of an issue
      * @param issueEvent a new issue event
-     * @return
+     * @return created issue event
      */
     public IssueEvent createEvent(Long issueId, IssueEvent issueEvent) {
         issueEvent.setIssueId(issueId);
-        Long issueEventId = commentRepository.add(ISSUE_EVENT_TO_COMMENT.apply(issueEvent)).get(0);
+        List<Long> createdIssueEventIds = commentRepository.add(ISSUE_EVENT_TO_COMMENT.apply(issueEvent));
+        if (createdIssueEventIds.isEmpty()) {
+            throw new IllegalBrowserStateException("Issue event was not created");
+        }
 
-        return COMMENT_TO_ISSUE_EVENT.apply(commentRepository.get(issueEventId));
+        return COMMENT_TO_ISSUE_EVENT.apply(commentRepository.get(createdIssueEventIds.get(0)));
     }
 }

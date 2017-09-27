@@ -1,5 +1,7 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.authentication.RihaOrganization;
+import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
@@ -8,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
 import static ee.ria.riha.domain.model.IssueStatus.OPEN;
+import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
+import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -120,58 +125,82 @@ public class IssueService {
      * Creates issue for info system with a given short name
      *
      * @param shortName info system short name
-     * @param issue     issue model
+     * @param title     issue title
+     * @param comment   issue comment
      * @return create issue
      */
-    public Issue createInfoSystemIssue(String shortName, Issue issue) {
+    public Issue createInfoSystemIssue(String shortName, String title, String comment) {
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        if (rihaUserDetails == null) {
+            throw new IllegalBrowserStateException("User details not present in security context");
+        }
+
+        RihaOrganization organization = getActiveOrganization();
+        if (organization == null) {
+            throw new ValidationException("User active organization is not set");
+        }
+
         InfoSystem infoSystem = infoSystemService.get(shortName);
 
-        issue.setInfoSystemUuid(infoSystem.getUuid());
-        issue.setStatus(OPEN);
+        Issue issue = Issue.builder()
+                .infoSystemUuid(infoSystem.getUuid())
+                .title(title)
+                .comment(comment)
+                .authorName(rihaUserDetails.getFullName())
+                .authorPersonalCode(rihaUserDetails.getPersonalCode())
+                .organizationCode(organization.getCode())
+                .organizationName(organization.getName())
+                .status(OPEN)
+                .build();
 
-        Long issueId = commentRepository.add(ISSUE_TO_COMMENT.apply(issue)).get(0);
+        List<Long> createIssueIds = commentRepository.add(ISSUE_TO_COMMENT.apply(issue));
+        if (createIssueIds.isEmpty()) {
+            throw new IllegalBrowserStateException("Issue was not created");
+        }
 
-        return COMMENT_TO_ISSUE.apply(commentRepository.get(issueId));
+        return COMMENT_TO_ISSUE.apply(commentRepository.get(createIssueIds.get(0)));
     }
 
     /**
      * Updates issue status. Throws exception in case current status is not {@link IssueStatus#OPEN}.
      *
-     * @param issueId id of an issue
-     * @param model   updated issue model
-     * @return updated issue
+     * @param issueId   id of an issue
+     * @param newStatus updated issue status
+     * @param comment   @return updated issue
      */
-    public Issue updateIssue(Long issueId, Issue model) {
+    public Issue updateIssueStatus(Long issueId, IssueStatus newStatus, String comment) {
         Issue issue = getIssueById(issueId);
 
         if (issue.getStatus() == CLOSED) {
             throw new IllegalBrowserStateException("Can't modify closed issue");
         }
 
-        if (StringUtils.hasText(model.getComment())) {
-            IssueComment issueComment = IssueComment.builder()
-                    .comment(model.getComment())
-                    .authorName(model.getAuthorName())
-                    .authorPersonalCode(model.getAuthorPersonalCode())
-                    .organizationName(model.getOrganizationName())
-                    .organizationCode(model.getOrganizationCode())
-                    .build();
-
-            issueCommentService.createIssueComment(issueId, issueComment);
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        if (rihaUserDetails == null) {
+            throw new IllegalBrowserStateException("User details not present in security context");
         }
 
-        if (issue.getStatus() != model.getStatus()) {
+        RihaOrganization organization = getActiveOrganization();
+        if (organization == null) {
+            throw new ValidationException("User active organization is not set");
+        }
+
+        if (StringUtils.hasText(comment)) {
+            issueCommentService.createIssueComment(issueId, comment);
+        }
+
+        if (issue.getStatus() != newStatus) {
             IssueEvent issueClosedEvent = IssueEvent.builder()
                     .type(IssueEventType.CLOSED)
-                    .authorName(model.getAuthorName())
-                    .authorPersonalCode(model.getAuthorPersonalCode())
-                    .organizationName(model.getOrganizationName())
-                    .organizationCode(model.getOrganizationCode())
+                    .authorName(rihaUserDetails.getFullName())
+                    .authorPersonalCode(rihaUserDetails.getPersonalCode())
+                    .organizationName(organization.getName())
+                    .organizationCode(organization.getCode())
                     .build();
 
             issueEventService.createEvent(issueId, issueClosedEvent);
 
-            issue.setStatus(model.getStatus());
+            issue.setStatus(newStatus);
         }
 
         commentRepository.update(issueId, ISSUE_TO_COMMENT.apply(issue));

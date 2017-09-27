@@ -22,13 +22,13 @@ public class JsonValidationService {
         try {
             this.schema = JsonSchemaFactory.byDefault().getJsonSchema(schema);
         } catch (ProcessingException e) {
-            throw new JsonValidationServiceException("Error initializing validating schema", e);
+            throw new IllegalBrowserStateException("Error initializing validating schema", e);
         }
     }
 
     /**
-     * Validates given JSON against schema. Will throw {@link JsonValidationException} if required or return
-     * {@link ProcessingReport} otherwise.
+     * Validates given JSON against schema. Will throw {@link JsonValidationException} if required or return {@link
+     * ProcessingReport} otherwise.
      *
      * @param json                  validated json
      * @param exceptionMustBeThrown exception throwing flag
@@ -45,7 +45,7 @@ public class JsonValidationService {
 
             return report;
         } catch (IOException | ProcessingException e) {
-            throw new JsonValidationServiceException("Could not validate json", e);
+            throw new IllegalBrowserStateException("Could not validate json", e);
         }
     }
 
