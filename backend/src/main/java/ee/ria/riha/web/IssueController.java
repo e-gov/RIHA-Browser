@@ -37,9 +37,8 @@ public class IssueController {
     @GetMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
     @ApiOperation("List all issues of information system")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<Issue>> listInfoSystemIssues(
-            @PathVariable("shortName") String shortName,
-            Pageable pageable, Filterable filterable) {
+    public ResponseEntity<PagedResponse<Issue>> listInfoSystemIssues(@PathVariable("shortName") String shortName,
+                                                                     Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(issueService.listInfoSystemIssues(shortName, pageable, filterable));
     }
 
@@ -47,15 +46,15 @@ public class IssueController {
      * Adds single issue to the info system.
      *
      * @param shortName a short name of info system
-     * @param issue     issue model
+     * @param model     issue model
      * @return created issue
      */
     @PostMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Create new issue for information system")
     public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("shortName") String shortName,
-                                                       @RequestBody Issue issue) {
-        return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, issue));
+                                                       @RequestBody Issue model) {
+        return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, model.getTitle(), model.getComment()));
     }
 
     /**
@@ -75,15 +74,14 @@ public class IssueController {
      * Update issue.
      *
      * @param issueId id of an issue
-     * @param issue   updated issue model
+     * @param model   updated issue model
      * @return updated issue
      */
     @PutMapping(API_V1_PREFIX + "/issues/{issueId}")
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Update issue")
-    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId,
-                                              @RequestBody Issue issue) {
-        return ResponseEntity.ok(issueService.updateIssue(issueId, issue));
+    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody Issue model) {
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model.getStatus(), model.getComment()));
     }
 
 }

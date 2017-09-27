@@ -1,15 +1,20 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.domain.model.IssueEntityType;
+import ee.ria.riha.authentication.RihaOrganization;
+import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.model.IssueComment;
+import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Function;
 
+import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
+import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -82,15 +87,36 @@ public class IssueCommentService {
     /**
      * Creates comment associated with an issue
      *
-     * @param issueId      an id of an issue
-     * @param issueComment comment content
+     * @param issueId an id of an issue
+     * @param comment comment
      * @return created comment
      */
-    public IssueComment createIssueComment(Long issueId, IssueComment issueComment) {
-        issueComment.setIssueId(issueId);
-        Long issueCommentId = commentRepository.add(ISSUE_COMMENT_TO_COMMENT.apply(issueComment)).get(0);
+    public IssueComment createIssueComment(Long issueId, String comment) {
+        RihaUserDetails rihaUserDetails = getRihaUserDetails();
+        if (rihaUserDetails == null) {
+            throw new IllegalBrowserStateException("User details not present in security context");
+        }
 
-        return COMMENT_TO_ISSUE_COMMENT.apply(commentRepository.get(issueCommentId));
+        RihaOrganization organization = getActiveOrganization();
+        if (organization == null) {
+            throw new ValidationException("User active organization is not set");
+        }
+
+        IssueComment issueComment = IssueComment.builder()
+                .issueId(issueId)
+                .comment(comment)
+                .authorName(rihaUserDetails.getFullName())
+                .authorPersonalCode(rihaUserDetails.getPersonalCode())
+                .organizationName(organization.getName())
+                .organizationCode(organization.getCode())
+                .build();
+
+        List<Long> createdIssueCommentIds = commentRepository.add(ISSUE_COMMENT_TO_COMMENT.apply(issueComment));
+        if (createdIssueCommentIds.isEmpty()) {
+            throw new IllegalBrowserStateException("Issue comment was not created");
+        }
+
+        return COMMENT_TO_ISSUE_COMMENT.apply(commentRepository.get(createdIssueCommentIds.get(0)));
     }
 
     /**
