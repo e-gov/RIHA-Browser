@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
+import { EnvironmentService } from '../../services/environment.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-approver-feedback-details',
@@ -12,6 +14,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   @Input() feedback: any;
   replies: any[] = [];
+  activeUser: User;
 
   refreshReplies(){
     this.systemService.getSystemIssueTimeline(this.feedback.id).then(
@@ -49,9 +52,15 @@ export class ApproverIssueDetailsComponent implements OnInit {
     }
   }
 
+  getOrganizationWithUser(o){
+    return `${o.organizationName} (${o.authorName})`;
+  }
+
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
-              public activeModal: NgbActiveModal) {
+              public activeModal: NgbActiveModal,
+              private environmentService: EnvironmentService) {
+    this.activeUser = this.environmentService.getActiveUser();
 
   }
 
