@@ -24,7 +24,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   userMatrix: UserMatrix;
 
   openAddIssueModal(){
-    const modalRef = this.modalService.open(ApproverAddIssueComponent);
+    const modalRef = this.modalService.open(ApproverAddIssueComponent, {
+      size: "lg"
+    });
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
@@ -38,7 +40,10 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   openIssueDetailsModal(comment){
     this.systemsService.getSystemIssueById(comment.id).then(res => {
-      const modalRef = this.modalService.open(ApproverIssueDetailsComponent);
+      const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
+        {
+          size: "lg"
+        });
       modalRef.componentInstance.feedback = res.json();
       modalRef.result.then(res => {
         this.refreshIssues();
