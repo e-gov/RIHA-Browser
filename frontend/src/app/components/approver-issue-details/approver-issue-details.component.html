@@ -1,7 +1,7 @@
 <section class="col card p-3 main-content">
   <div class="my-1">
-    <div class="m-4">
-      <span class="h2 text-gray-dark">{{ feedback.title }}</span>
+    <div class="m-4 h2">
+      <span class="text-gray-dark">{{ feedback.title }}</span>
       <app-tooltip
         [placement]="'bottom'"
         [text]='"Arutelude kommentaarid ei ole avalikud, need on nähtavad infosüsteemi kirjeldusõigusega isikutele ning kõigile RIHA hindajatele. RIHA arutelusid võib sulgeda siis, kui hindaja poolt raporteeritud puudus on lahenduse leidnud."'>
@@ -12,8 +12,8 @@
       <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span>
     </div>
     <div class="card card-text m-4">
-      <div class="card-header font-weight-bold">
-        {{ getOrganizationWithUser(feedback) }} - {{ feedback.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      <div class="card-header pl-2">
+        <strong>{{ getOrganizationWithUser(feedback) }}</strong> - {{ feedback.dateCreated | date:'y-MM-dd HH:mm:ss'}}
       </div>
       <div class="card-content p-2">
         {{ feedback.comment }}
@@ -21,20 +21,20 @@
     </div>
     <div *ngFor="let reply of replies" class="m-4">
       <div *ngIf="reply.entityType == 'ISSUE_COMMENT'" class="card card-text">
-        <div class="card-header font-weight-bold">
-          {{ getOrganizationWithUser(reply) }} - {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+        <div class="card-header pl-2">
+          <strong>{{ getOrganizationWithUser(reply) }}</strong> - {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
         </div>
         <div class="card-content p-2">
           {{ reply.comment }}
         </div>
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED'" class="card-text ml-4">
-        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}!
+        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
       </div>
     </div>
     <form class="col-12" #commentForm="ngForm" class="m-4">
       <div *ngIf="feedback.status == 'OPEN'" class="card card-text">
-        <div class="card-header font-weight-bold">
+        <div class="card-header font-weight-bold pl-2">
           {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
         </div>
         <div class="card-content p-2">
