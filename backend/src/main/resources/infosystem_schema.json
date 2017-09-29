@@ -31,6 +31,27 @@
       },
       "type": "array"
     },
+    "contacts": {
+      "items": {
+        "properties": {
+          "name": {
+            "description": "Kontaktisiku nimi",
+            "type": "string"
+          },
+          "email": {
+            "description": "Kontaktisiku email",
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
     "homepage": {
       "type": ["string", "null"],
       "description": "URL, mis viitab infosüsteemi avalikule kasutajaliidesele"
