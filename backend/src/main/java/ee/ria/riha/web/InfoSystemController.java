@@ -23,6 +23,9 @@ public class InfoSystemController {
     @Autowired
     private InfoSystemService infoSystemService;
 
+    @Autowired
+    private InfoSystemModelMapper infoSystemModelMapper;
+
     @GetMapping
     @ApiOperation("List all existing information systems")
     @ApiPageableAndFilterableParams
@@ -35,7 +38,7 @@ public class InfoSystemController {
         return new PagedResponse<>(new PageRequest(list.getPage(), list.getSize()),
                                    list.getTotalElements(),
                                    list.getContent().stream()
-                                           .map(this::createModel)
+                                           .map(infoSystemModelMapper::map)
                                            .collect(toList()));
     }
 
@@ -44,14 +47,14 @@ public class InfoSystemController {
     @ApiOperation("Create new information system")
     public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
-        return ResponseEntity.ok(createModel(infoSystem));
+        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
     @GetMapping("/{shortName}")
     @ApiOperation("Get existing information system")
     public ResponseEntity<InfoSystemModel> get(@PathVariable("shortName") String shortName) {
         InfoSystem infoSystem = infoSystemService.get(shortName);
-        return ResponseEntity.ok(createModel(infoSystem));
+        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
     @PutMapping("/{shortName}")
@@ -60,15 +63,7 @@ public class InfoSystemController {
     public ResponseEntity<InfoSystemModel> update(@PathVariable("shortName") String shortName,
                                                   @RequestBody InfoSystemModel model) {
         InfoSystem infoSystem = infoSystemService.update(shortName, new InfoSystem(model.getJson()));
-        return ResponseEntity.ok(createModel(infoSystem));
-    }
-
-    private InfoSystemModel createModel(InfoSystem infoSystem) {
-        InfoSystemModel model = new InfoSystemModel();
-        model.setId(infoSystem.getId());
-        model.setJson(infoSystem.getJsonObject().toString());
-
-        return model;
+        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
 }
