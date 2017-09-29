@@ -74,6 +74,10 @@ export class ProducerDetailsComponent implements OnInit {
         ret = this.system.hasDataObjects() || editable;
         break;
       }
+      case 'contacts': {
+        ret = (this.system.hasContacts() && this.user != null) || editable;
+        break;
+      }
     }
     return ret;
   }

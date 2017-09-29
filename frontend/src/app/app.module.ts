@@ -52,6 +52,8 @@ import { ApproverAddIssueComponent } from './components/approver-add-issue/appro
 import { ApproverIssueDetailsComponent } from './components/approver-issue-details/approver-issue-details.component';
 import { ActiveOrganizationChooserComponent } from './components/active-organization-chooser/active-organization-chooser.component';
 import { TooltipComponent } from './components/tooltip/tooltip.component';
+import { ProducerDetailsContactsComponent } from './components/producer-details/producer-details-contacts/producer-details-contacts.component';
+import { ProducerEditContactsComponent } from './components/producer-edit/producer-edit-contacts/producer-edit-contacts.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -117,7 +119,9 @@ const routes: Routes = [
     ApproverAddIssueComponent,
     ApproverIssueDetailsComponent,
     ActiveOrganizationChooserComponent,
-    TooltipComponent
+    TooltipComponent,
+    ProducerDetailsContactsComponent,
+    ProducerEditContactsComponent
   ],
   imports: [
     BrowserModule,
@@ -145,7 +149,8 @@ const routes: Routes = [
     ProducerEditLegislationsComponent,
     ApproverAddIssueComponent,
     ApproverIssueDetailsComponent,
-    ActiveOrganizationChooserComponent
+    ActiveOrganizationChooserComponent,
+    ProducerEditContactsComponent
   ],
   bootstrap: [AppComponent],
   providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]

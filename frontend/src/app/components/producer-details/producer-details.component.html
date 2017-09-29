@@ -5,10 +5,10 @@
       <div class="list-group">
         <a pageScroll
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('üldkirjeldus', true)}"
-           href="#üldkirjeldus"
+           [ngClass]="{'active': isMenuActive('uldkirjeldus', true)}"
+           href="#uldkirjeldus"
            class="list-group-item justify-content-between">
-          Infosüsteemi üldkirjeldus
+          Infosüsteemi uldkirjeldus
         </a>
         <a pageScroll
            [pageScrollAdjustHash]="true"
@@ -36,10 +36,18 @@
         <a pageScroll
            *ngIf="isBlockVisible('legislations')"
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('õigusaktid')}"
-           href="#õigusaktid"
+           [ngClass]="{'active': isMenuActive('oigusaktid')}"
+           href="#kontaktid"
            class="list-group-item justify-content-between">
           Õigusaktid
+        </a>
+        <a pageScroll
+           *ngIf="isBlockVisible('contacts')"
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('kontaktid')}"
+           href="#kontaktid"
+           class="list-group-item justify-content-between">
+          Kontaktid
         </a>
       </div>
     </nav>
@@ -61,10 +69,15 @@
          class="separate-block">
       <app-producer-details-tech-docs [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
     </div>
-    <div id="õigusaktid"
+    <div id="oigusaktid"
          *ngIf="isBlockVisible('legislations')"
          class="separate-block">
       <app-producer-details-legislations [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
+    </div>
+    <div id="kontaktid"
+         *ngIf="isBlockVisible('contacts')"
+         class="separate-block">
+      <app-producer-details-contacts [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-contacts>
     </div>
   </article>
 </section>
