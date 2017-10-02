@@ -82,6 +82,10 @@ export class System {
     return this.details.stored_data && this.details.stored_data.length > 0;
   }
 
+  hasContacts(): boolean{
+    return this.details.contacts && this.details.contacts.length > 0;
+  }
+
   constructor(){
     this.id = null;
     this.details = {
@@ -100,6 +104,7 @@ export class System {
       stored_data: [],
       legislations: [],
       documents: [],
+      contacts: [],
       homepage: null,
       purpose: null,
       short_name: null
