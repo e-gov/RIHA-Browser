@@ -44,14 +44,14 @@ public class InfoSystemService {
     public InfoSystem create(InfoSystem model) {
         RihaOrganization organization = getActiveOrganization();
         if (organization == null) {
-            throw new ValidationException("User active organization is not set");
+            throw new ValidationException("validation.generic.activeOrganization.notSet");
         }
 
         InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
         log.info("User '{}' with active organization '{}'" +
                          " is creating new info system with short name '{}'",
                  getRihaUserPersonalCode(), organization, infoSystem.getShortName());
-        validateInfoSystemExistence(infoSystem.getShortName());
+        validateInfoSystemShortName(infoSystem.getShortName());
         infoSystem.setUuid(UUID.randomUUID());
         infoSystem.setOwnerCode(organization.getCode());
         infoSystem.setOwnerName(organization.getName());
@@ -97,7 +97,7 @@ public class InfoSystemService {
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
         if (!shortName.equals(updatedInfoSystem.getShortName())) {
-            validateInfoSystemExistence(updatedInfoSystem.getShortName());
+            validateInfoSystemShortName(updatedInfoSystem.getShortName());
         }
         updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
         updatedInfoSystem.setOwnerCode(existingInfoSystem.getOwnerCode());
@@ -108,12 +108,12 @@ public class InfoSystemService {
         return infoSystemRepository.add(updatedInfoSystem);
     }
 
-    private void validateInfoSystemExistence(String shortName) {
+    private void validateInfoSystemShortName(String shortName) {
         log.debug("Checking info system '{}' existence", shortName);
         FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
         List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
         if (!infoSystems.isEmpty()) {
-            throw new ValidationException("Info system with short name '" + shortName + "' already exists");
+            throw new ValidationException("validation.system.shortName.alreadyTaken", shortName);
         }
     }
 

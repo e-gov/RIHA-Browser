@@ -99,7 +99,7 @@ public class IssueCommentService {
 
         RihaOrganization organization = getActiveOrganization();
         if (organization == null) {
-            throw new ValidationException("User active organization is not set");
+            throw new ValidationException("validation.generic.activeOrganization.notSet");
         }
 
         IssueComment issueComment = IssueComment.builder()

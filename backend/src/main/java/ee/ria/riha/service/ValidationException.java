@@ -5,19 +5,25 @@ package ee.ria.riha.service;
  */
 public class ValidationException extends BrowserException {
 
-    public ValidationException() {
-        super();
+    private String code;
+    private Object[] args;
+
+    public ValidationException(String code) {
+        super(code);
+        this.code = code;
     }
 
-    public ValidationException(String message) {
-        super(message);
+    public ValidationException(String code, Object... args) {
+        super(code);
+        this.code = code;
+        this.args = args;
     }
 
-    public ValidationException(String message, Throwable cause) {
-        super(message, cause);
+    public String getCode() {
+        return code;
     }
 
-    public ValidationException(Throwable cause) {
-        super(cause);
+    public Object[] getArgs() {
+        return args;
     }
 }

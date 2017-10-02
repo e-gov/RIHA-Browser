@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Valentin Suhnjov
  */
-public class JsonValidationException extends ValidationException {
+public class JsonValidationException extends BrowserException {
 
     private final ProcessingReport processingReport;
 

@@ -137,7 +137,7 @@ public class IssueService {
 
         RihaOrganization organization = getActiveOrganization();
         if (organization == null) {
-            throw new ValidationException("User active organization is not set");
+            throw new ValidationException("validation.generic.activeOrganization.notSet");
         }
 
         InfoSystem infoSystem = infoSystemService.get(shortName);
@@ -182,7 +182,7 @@ public class IssueService {
 
         RihaOrganization organization = getActiveOrganization();
         if (organization == null) {
-            throw new ValidationException("User active organization is not set");
+            throw new ValidationException("validation.generic.activeOrganization.notSet");
         }
 
         if (StringUtils.hasText(comment)) {
