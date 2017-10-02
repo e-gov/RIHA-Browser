@@ -13,25 +13,32 @@ These prerequisites are not strict but reflect an actual deployment environment:
 During build step, a deployable war should have been produced. War contains all files Tomcat needs in order to run an application.
 
 #### Run
-Tomcat will automatically run the application right after having been launched. In order to launch Tomcat execute the following
-shell script: `CATALINA_HOME/bin/startup.sh`
+Tomcat will automatically run the application right after having been launched. In order to launch Tomcat execute the following shell script: 
+~~~
+CATALINA_HOME/bin/startup.sh
+~~~
 
 #### Logs
-Logs are written to `CATALINA_HOME/logs` by default. A concrete file to keep logs can be specified in the following way:
+Logs are written to `CATALINA_HOME/logs/catalina.out` by default. A concrete file to keep logs can be specified in the following way:
+
+1. Create your own external `application.properties` file (see [Application configuration chapter](#application-configuration) for extra references)
+2. Add this property: `logging.file=path_to_log_file/logfile_name.log`
+
+For example: 
 ~~~
-1. Create your own external application.properties file (see Application configuration chapter)
-2. Add this property: logging.file=path_to_log_file/file_name.log
-For example: logging.file=${catalina.home}/logs/riha-browser.log
+logging.file=${catalina.home}/logs/riha-browser.log
 ~~~
 
-**NB!** Default Spring base.xml configuration allows to backup max 7 logs archives (10MB each), which will be saved as `file_name.log.1 ... file_name.log.7`. You can create your own `logback-spring.xml` file and specify it's location by adding `logging.config=path_to_your_logback-spring.xml` to external `application.properties` file.
+**NB!** Default Spring base.xml configuration allows to backup max 7 logs archives (10MB each), which will be saved as `logfile_name.log.1 ... logfile_name.log.7`. You can create your own `logback-spring.xml` file and specify it's location by adding `logging.config=path_to_your_logback-spring.xml` to external `application.properties` file.
 
 ### Application configuration
 Sensible application default properties are packaged inside war with name `application.properties`.
 
-It is possible to override application properties by passing parameters on the Command Line when executing the application, or setting system variables. Another way is to create and place `riha-browser.xml` file in `CATALINA_HOME/conf/Catalina/localhost` where you can specify external `application.properties` file location.
+It is possible to override application properties by passing parameters on the Command Line when executing the application, or setting system variables. Another way is to create and place `application_name.xml` file in `CATALINA_HOME/conf/Catalina/localhost` where you can specify external `application.properties` file location.
 
-Example of `riha-browser.xml`:
+**NOTE!** `application_name` is the application's name in Tomcat context. In other words,  it must be the same as in `CATALINA_HOME/webapps`
+
+Example of `application_name.xml`:
 ~~~
 <Context>
     <Parameter name="spring.config.location" value="path_to_external_application.properties_file" />

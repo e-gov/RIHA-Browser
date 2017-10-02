@@ -2,7 +2,7 @@ image: riha-test-env
 
 variables:
     DEPLOYMENT_DIR: "/opt/tomcat/webapps"
-    ARTIFACT_NAME: "$CI_PROJECT_NAME.war"
+    ARTIFACT_NAME: "ROOT.war"
 
 stages:
     - test
