@@ -8,8 +8,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { UserMatrix } from '../../models/user-matrix';
 
-
-
 @Component({
   selector: 'app-producer-add',
   templateUrl: './producer-add.component.html',
@@ -18,15 +16,25 @@ import { UserMatrix } from '../../models/user-matrix';
 export class ProducerAddComponent implements OnInit {
 
   userMatrix: UserMatrix;
+  alertConf: any = null;
+  timeoutId: any = null;
 
   onSubmit(f) :void {
+    this.alertConf = null;
     if (f.valid){
       this.systemsService.addSystem(f.value).then(
         res => {
           this.router.navigate(['/Kirjelda/Vaata', res.json().details.short_name]);
         }, err => {
-          this.toastrService.error('Infosüsteemi lisamine ebaõnnestus');
-          this.location.back();
+          this.alertConf = {
+            type: 'danger',
+            heading: 'Viga',
+            text: this.systemsService.getAlertText(err.json())
+          };
+          clearTimeout(this.timeoutId);
+          this.timeoutId = setTimeout(()=>{
+            this.alertConf = null
+          }, 10000);
         })
     }
   }

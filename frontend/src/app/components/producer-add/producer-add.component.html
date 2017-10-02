@@ -14,6 +14,7 @@
 <section *ngIf="userMatrix.isLoggedIn && userMatrix.hasDescriberRole" class="col card p-3">
   <div class="my-1">
     <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)" >
+      <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
       <p>
         RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva eraõigusliku isiku infosüsteemid, mis asutatakse ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises lepingus sätestatud ülesannete täitmiseks.
       </p>

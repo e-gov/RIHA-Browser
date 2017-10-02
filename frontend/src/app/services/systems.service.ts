@@ -65,6 +65,17 @@ export class SystemsService {
     return system;
   }
 
+  public getAlertText(errObj): string{
+    let ret = null;
+    let code = errObj.code;
+    if (code === 'validation.system.shortName.alreadyTaken'){
+      ret = 'Lühinimi on juba kasutusel';
+    } else {
+      ret = errObj.message;
+    }
+    return ret;
+  }
+
   public getOwnSystems(filters?, gridData?){
     filters = filters || {};
 
