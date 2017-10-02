@@ -1,8 +1,8 @@
 image: riha-test-env
 
 variables:
-    DEPLOYMENT_DIR: "/opt/riha/$CI_PROJECT_NAME"
-    ARTIFACT_NAME: "$CI_PROJECT_NAME.jar"
+    DEPLOYMENT_DIR: "/opt/tomcat/webapps"
+    ARTIFACT_NAME: "$CI_PROJECT_NAME.war"
 
 stages:
     - test
@@ -25,7 +25,7 @@ build:
         - ./build.sh
     artifacts:
         paths:
-            - backend/target/*.jar
+            - backend/target/*.war
     tags:
         - riha
 
@@ -36,12 +36,10 @@ deploy_development:
         - chmod 700 id_rsa
         - mkdir $HOME/.ssh
         - echo "$SSH_HOST_KEY" > $HOME/.ssh/known_hosts
-        - scp -i id_rsa backend/target/*.jar deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
-        - ssh -i id_rsa deployer@$SSH_HOST "/bin/chmod ug+x $DEPLOYMENT_DIR/$ARTIFACT_NAME"
-        - ssh -i id_rsa deployer@$SSH_HOST "/sbin/service $CI_PROJECT_NAME restart"
+        - scp -i id_rsa backend/target/*.war deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
     environment:
         name: development
-        url: http://$SSH_HOST:$PORT/
+        url: http://$SSH_HOST:$PORT/$CI_PROJECT_NAME
     when: manual
     tags:
         - riha
