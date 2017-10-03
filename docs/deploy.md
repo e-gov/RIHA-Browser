@@ -1,5 +1,5 @@
 # Build process
-This document describes deployment process using Spring Boot executable jar on linux machine.
+This document describes deployment process using war file on Linux machine.
 
 ## Prerequisites
 These prerequisites are not strict but reflect an actual deployment environment:
@@ -10,49 +10,40 @@ These prerequisites are not strict but reflect an actual deployment environment:
  - Apache HTTP Server (or similar)
 
 ## Deployment
-During build step, an Spring Boot executable jar should have been produced. Jar contains Spring Boot application that can be easily started as Unix/Linux service using either `init.d` or `systemd`. For complete documentation please see [Installing Spring Boot applications](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html#deployment-install).
-
-### Install as a service
-Install as a `init.d` service
-~~~bash
-sudo ln -s /var/riha-browser/backend/target/browser-backend-0.3.0.jar /etc/init.d/riha-browser
-~~~
-Here `riha-browser` will become a service name that will be used system wide.
-
-Configure automatic start (optional)
-~~~bash
-sudo update-rc.d riha-browser defaults <priority>
-~~~
-
-Secure jar file and restrict its modification (optional)
-~~~bash
-sudo chmod 500 riha-browser.jar
-sudo chattr +i riha-browser.jar
-~~~
+During build step, a deployable war should have been produced. War contains all files Tomcat needs in order to run an application.
 
 #### Run
-Service will be executed as a user that owns the jar file even when started automatically at boot. Please make sure to change jar file owner to anything but `root`
-
-Start application service. **Note!** Service will be started as the user that owns the jar file
-~~~bash
-sudo service riha-browser start
+Tomcat will automatically run the application right after having been launched. In order to launch Tomcat execute the following shell script: 
+~~~
+CATALINA_HOME/bin/startup.sh
 ~~~
 
 #### Logs
-Logs are written to `/var/log/riha-browser.log`
+Logs are written to `CATALINA_HOME/logs/catalina.out` by default. A concrete file to keep logs can be specified in the following way:
 
-#### PID file
-Application`s PID is tracked using `/var/run/riha-browser/riha-browser.pid`
+1. Create your own external `application.properties` file (see [Application configuration chapter](#application-configuration) for extra references)
+2. Add this property: `logging.file=path_to_log_file/logfile_name.log`
 
-#### Init script configuration
-It is possible to configure init script without modifying jar file. Script can be customized by creating configuration file is expected to be placed next to the jar file with same name as jar but suffixed with `.conf`. For example if jar path is `/var/riha-browser/backend/target/browser-backend-0.3.0.jar`, then configuration should be placed to `/var/riha-browser/backend/target/browser-backend-0.3.0.conf` file.
+For example: 
+~~~
+logging.file=${catalina.home}/logs/riha-browser.log
+~~~
+
+**NB!** Default Spring base.xml configuration allows to backup max 7 logs archives (10MB each), which will be saved as `logfile_name.log.1 ... logfile_name.log.7`. You can create your own `logback-spring.xml` file and specify it's location by adding `logging.config=path_to_your_logback-spring.xml` to external `application.properties` file.
 
 ### Application configuration
-Sensible application default properties are packaged inside jar with name `application.properties`.
+Sensible application default properties are packaged inside war with name `application.properties`.
 
-Spring Boot provides numerous ways to configure application like command line arguments, configuration JSON embedded in an environment variable or system property, JNDI attributes, etc. One of the easiest ways to configure Spring Boot application is to place configuration file named `application.properties` next to the jar file.
+It is possible to override application properties by passing parameters on the Command Line when executing the application, or setting system variables. Another way is to create and place `application_name.xml` file in `CATALINA_HOME/conf/Catalina/localhost` where you can specify external `application.properties` file location.
 
-Please refer to Spring Boot [Externalized Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config) documentation for more information.
+**NOTE!** `application_name` is the application's name in Tomcat context. In other words,  it must be the same as in `CATALINA_HOME/webapps`
+
+Example of `application_name.xml`:
+~~~
+<Context>
+    <Parameter name="spring.config.location" value="path_to_external_application.properties_file" />
+</Context>
+~~~
 
 #### Configuration file example
 Please see [application.properties](../backend/src/main/resources/application.properties) file for up to date configuration.

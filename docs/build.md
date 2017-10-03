@@ -112,12 +112,12 @@ mvn frontend:yarn@args -Dyarn.args="run build -- -prod"
 This will result in `yarn run build -- -prod` command being called which in effect will run `ng build -prod`.
 
 ### Backend
-Backend is a Spring Boot web application serving UI as well.
+Backend is a Tomcat-based web application serving UI as well.
 
 **NOTE!** Following commands are executed inside project root directory.
 
 #### Build using maven
-Package application as executable Spring Boot jar file. Packaged application will be outputted to the `backend/target` directory with name `browser-backend-<version>.jar`
+Package application as deployable Tomcat war file. Packaged application will be outputted to the `backend/target` directory with name `browser-backend-<version>.war`
 ~~~bash
 mvn package
 ~~~

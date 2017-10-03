@@ -1,46 +1,55 @@
 <section class="col card p-3 main-content">
-  <div class="panel-action-heading">
-    {{ feedback.title }}
-  </div>
   <div class="my-1">
-    <div  class="table-responsive">
-      <table class="table table-striped dataTable" width="100%" cellspacing="0">
-        <tbody>
-          <tr>
-            <td>
-              {{ feedback.dateCreated | date:'y-MM-dd HH:mm:ss'}}
-            </td>
-            <td>
-              {{ feedback.comment }}
-            </td>
-          </tr>
-          <tr *ngFor="let reply of replies">
-            <td>
-              {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
-            </td>
-            <td *ngIf="reply.entityType == 'ISSUE_COMMENT'">
-              {{ reply.comment }}
-            </td>
-            <td *ngIf="reply.entityType == 'ISSUE_EVENT'">
-              <span *ngIf="reply.type == 'CLOSED'">Arutelu on suletud!</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="m-4 h2">
+      <span class="text-gray-dark">{{ feedback.title }}</span>
+      <app-tooltip
+        [placement]="'bottom'"
+        [text]='"Arutelude kommentaarid ei ole avalikud, need on nähtavad infosüsteemi kirjeldusõigusega isikutele ning kõigile RIHA hindajatele. RIHA arutelusid võib sulgeda siis, kui hindaja poolt raporteeritud puudus on lahenduse leidnud."'>
+      </app-tooltip>
     </div>
-  </div>
-  <div>
-    <form class="col-12" #commentForm="ngForm">
-      <div class="form-group" *ngIf="feedback.status == 'OPEN'" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
-          <textarea #comment="ngModel" ngModel name="comment" class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar" required></textarea>
+    <div class="ml-4 my-1 card-text">
+      <span *ngIf="feedback.status == 'OPEN'"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Aktiivne</span>
+      <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span>
+    </div>
+    <div class="card card-text m-4">
+      <div class="card-header pl-2">
+        <strong>{{ getOrganizationWithUser(feedback) }}</strong> - {{ feedback.dateCreated | date:'y-MM-dd HH:mm:ss'}}
       </div>
-      <div class="actions-bar">
-        <div class="buttons pull-right">
-          <button (click)="activeModal.dismiss()" class="btn btn-default pull-right">Sulge</button>
-          <button (click)="markResolved(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
-          <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
+      <div class="card-content p-2">
+        {{ feedback.comment }}
+      </div>
+    </div>
+    <div *ngFor="let reply of replies" class="m-4">
+      <div *ngIf="reply.entityType == 'ISSUE_COMMENT'" class="card card-text">
+        <div class="card-header pl-2">
+          <strong>{{ getOrganizationWithUser(reply) }}</strong> - {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+        </div>
+        <div class="card-content p-2">
+          {{ reply.comment }}
+        </div>
+      </div>
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED'" class="card-text ml-4">
+        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      </div>
+    </div>
+    <form class="col-12" #commentForm="ngForm" class="m-4">
+      <div *ngIf="feedback.status == 'OPEN'" class="card card-text">
+        <div class="card-header font-weight-bold pl-2">
+          {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
+        </div>
+        <div class="card-content p-2">
+            <div class="form-group" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
+                <textarea #comment="ngModel" ngModel name="comment" class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar" required></textarea>
+            </div>
         </div>
       </div>
     </form>
+    <div class="actions-bar">
+      <div class="buttons pull-right">
+        <button (click)="activeModal.dismiss()" class="btn btn-default pull-right">Sulge</button>
+        <button (click)="markResolved(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+        <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
+      </div>
+    </div>
   </div>
 </section>

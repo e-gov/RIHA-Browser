@@ -5,7 +5,7 @@
       <div class="form-group row">
         <label for="owner-input" class="col-sm-4 col-form-label pr-sm-0 text-sm-right">Omanik:</label>
         <div class="col-sm-8">
-          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.owner" type="text" id="owner-input">
+          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.ownerName" type="text" id="owner-input">
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
           </tr>
         </tbody>
       </table>
-      <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="gridData.size" [collectionSize]="gridData.totalElements" [page]="gridData.page + 1"></ngb-pagination>
+      <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="gridData.size" [collectionSize]="gridData.getSize()" [page]="gridData.getPageNumber()"></ngb-pagination>
     </div>
   </div>
 </section>

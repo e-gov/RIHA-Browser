@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -28,7 +29,7 @@ public class EnvironmentController {
     @GetMapping
     @ApiOperation("Retrieve environment")
     public ResponseEntity environment() {
-        Map<String, Object> environment = environmentService.getEnvironment();
+        Map<String, Object> environment = new HashMap<>();
         environment.put("userDetails", userController.createUserDetailsModel());
 
         return ResponseEntity.ok(environment);

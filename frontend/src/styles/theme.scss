@@ -975,6 +975,10 @@ h2,
             }
         }
     }
+  app-tooltip {
+    vertical-align: text-top;
+    margin-left: 5px;
+  }
 }
 h3,
 .h3 {
@@ -1392,6 +1396,10 @@ mark {
             }
         }
     }
+}
+.tooltip-inner {
+  background-color: $grey2;
+  color: $grey3;
 }
 .actions-bar {
     .links {

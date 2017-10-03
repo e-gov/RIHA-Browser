@@ -2,13 +2,14 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.InfoSystemService;
+import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.storage.util.*;
 import ee.ria.riha.web.model.InfoSystemModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -22,6 +23,9 @@ public class InfoSystemController {
     @Autowired
     private InfoSystemService infoSystemService;
 
+    @Autowired
+    private InfoSystemModelMapper infoSystemModelMapper;
+
     @GetMapping
     @ApiOperation("List all existing information systems")
     @ApiPageableAndFilterableParams
@@ -34,40 +38,32 @@ public class InfoSystemController {
         return new PagedResponse<>(new PageRequest(list.getPage(), list.getSize()),
                                    list.getTotalElements(),
                                    list.getContent().stream()
-                                           .map(this::createModel)
+                                           .map(infoSystemModelMapper::map)
                                            .collect(toList()));
     }
 
     @PostMapping
-    @Secured({"ROLE_KIRJELDAJA"})
+    @PreAuthorize("hasRole('ROLE_KIRJELDAJA')")
     @ApiOperation("Create new information system")
     public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
-        return ResponseEntity.ok(createModel(infoSystem));
+        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
     @GetMapping("/{shortName}")
     @ApiOperation("Get existing information system")
     public ResponseEntity<InfoSystemModel> get(@PathVariable("shortName") String shortName) {
         InfoSystem infoSystem = infoSystemService.get(shortName);
-        return ResponseEntity.ok(createModel(infoSystem));
+        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
     @PutMapping("/{shortName}")
-    @Secured("ROLE_KIRJELDAJA")
+    @PreAuthorizeInfoSystemOwner
     @ApiOperation("Update existing information system")
     public ResponseEntity<InfoSystemModel> update(@PathVariable("shortName") String shortName,
                                                   @RequestBody InfoSystemModel model) {
         InfoSystem infoSystem = infoSystemService.update(shortName, new InfoSystem(model.getJson()));
-        return ResponseEntity.ok(createModel(infoSystem));
-    }
-
-    private InfoSystemModel createModel(InfoSystem infoSystem) {
-        InfoSystemModel model = new InfoSystemModel();
-        model.setId(infoSystem.getId());
-        model.setJson(infoSystem.getJsonObject().toString());
-
-        return model;
+        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
 }

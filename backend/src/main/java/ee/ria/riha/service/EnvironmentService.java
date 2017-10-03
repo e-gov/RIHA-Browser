@@ -4,9 +4,6 @@ import ee.ria.riha.conf.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Valentin Suhnjov
  */
@@ -18,14 +15,6 @@ public class EnvironmentService {
 
     @Autowired
     private UserService userService;
-
-    public Map<String, Object> getEnvironment() {
-        HashMap<String, Object> environment = new HashMap<>();
-
-        environment.put("remotes", applicationProperties.getRemoteApi());
-
-        return environment;
-    }
 
     /**
      * @deprecated use user service instead

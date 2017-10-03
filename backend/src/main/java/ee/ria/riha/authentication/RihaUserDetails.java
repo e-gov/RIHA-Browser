@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
+import java.util.StringJoiner;
+
+import static org.springframework.util.StringUtils.hasText;
 
 /**
  * RIHA user details including additional information like personal code and name.
@@ -59,6 +62,19 @@ public class RihaUserDetails implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (hasText(firstName)) {
+            stringJoiner.add(firstName);
+        }
+
+        if (hasText(lastName)) {
+            stringJoiner.add(lastName);
+        }
+
+        return stringJoiner.toString();
     }
 
     public Multimap<RihaOrganization, GrantedAuthority> getOrganizationAuthorities() {

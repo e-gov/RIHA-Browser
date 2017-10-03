@@ -27,4 +27,5 @@ public class JsonValidationException extends BrowserException {
 
         return messages;
     }
+
 }

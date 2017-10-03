@@ -45,19 +45,37 @@ public class RihaUserDetailsTest {
     @Test
     public void propagatesWrappedUserDetails() {
         RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE);
+
         assertThat(rihaUserDetails.getUsername(), is(equalTo("john.doe")));
         assertThat(rihaUserDetails.getPassword(), is(equalTo("strong")));
         assertThat(rihaUserDetails.isEnabled(), is(true));
         assertThat(rihaUserDetails.isAccountNonExpired(), is(true));
         assertThat(rihaUserDetails.isAccountNonLocked(), is(true));
         assertThat(rihaUserDetails.isCredentialsNonExpired(), is(true));
-    }
-
-    @Test
-    public void doesNotCombineAuthoritiesWhenNoActiveOrganizationSet() {
-        RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE);
-
         assertThat(rihaUserDetails.getAuthorities(), contains(CUSTOM_ROLE));
     }
 
+    @Test
+    public void constructsFullNameFromFirstAndLastNames() {
+        RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE);
+        rihaUserDetails.setFirstName("John");
+        rihaUserDetails.setLastName("Doe");
+
+        assertThat(rihaUserDetails.getFullName(), is(equalTo("John Doe")));
+    }
+
+    @Test
+    public void skipsFirstNameInFullNameWhenFirstNameNotDefined() {
+        RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE);
+        rihaUserDetails.setLastName("Doe");
+
+        assertThat(rihaUserDetails.getFullName(), is(equalTo("Doe")));
+    }
+    @Test
+    public void skipsLastNameInFullNameWhenLastNameNotDefined() {
+        RihaUserDetails rihaUserDetails = new RihaUserDetails(WRAPPED_USER_DETAILS, PERSONAL_CODE);
+        rihaUserDetails.setFirstName("John");
+
+        assertThat(rihaUserDetails.getFullName(), is(equalTo("John")));
+    }
 }

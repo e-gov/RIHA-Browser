@@ -4,23 +4,29 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
 import { ApproverIssueDetailsComponent } from '../../approver-issue-details/approver-issue-details.component';
 import { SystemsService } from '../../../services/systems.service';
+import { EnvironmentService } from '../../../services/environment.service';
+import { UserMatrix } from '../../../models/user-matrix';
 
 @Component({
-  selector: 'app-producer-details-comments',
+  selector: 'app-producer-details-issues',
   templateUrl: './producer-details-issues.component.html',
   styleUrls: ['./producer-details-issues.component.scss']
 })
 export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
+  @Input() allowEdit: boolean;
 
   comments: any[] = [];
   activeIssues: any[] = [];
   closedIssues: any[] = [];
   newAdded: boolean = false;
+  userMatrix: UserMatrix;
 
   openAddIssueModal(){
-    const modalRef = this.modalService.open(ApproverAddIssueComponent);
+    const modalRef = this.modalService.open(ApproverAddIssueComponent, {
+      size: "lg"
+    });
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
@@ -29,12 +35,15 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       setTimeout(()=> {
         this.newAdded = false;
       }, 5000)
-    });
+    }, err => {});
   }
 
   openIssueDetailsModal(comment){
     this.systemsService.getSystemIssueById(comment.id).then(res => {
-      const modalRef = this.modalService.open(ApproverIssueDetailsComponent);
+      const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
+        {
+          size: "lg"
+        });
       modalRef.componentInstance.feedback = res.json();
       modalRef.result.then(res => {
         this.refreshIssues();
@@ -47,7 +56,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   refreshIssues(){
-    this.systemsService.getSystemIssues(this.system.details.uuid).then(
+    this.systemsService.getSystemIssues(this.system.details.short_name).then(
       res => {
         this.activeIssues = [];
         this.closedIssues = [];
@@ -61,10 +70,17 @@ export class ProducerDetailsIssuesComponent implements OnInit {
         });
       }
     )
-  };
+  }
+
+  canApprove(){
+    return this.allowEdit || this.userMatrix.hasApproverRole;
+  }
 
   constructor(private modalService: NgbModal,
-              private systemsService: SystemsService) { }
+              private systemsService: SystemsService,
+              private environmentService: EnvironmentService) {
+    this.userMatrix = this.environmentService.getUserMatrix();
+  }
 
   ngOnInit() {
     this.refreshIssues();

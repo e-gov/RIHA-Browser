@@ -20,9 +20,10 @@
           <div class="table-responsive">
             <table class="table table-striped dataTable" cellspacing="0" width="100%">
               <tbody>
-              <tr *ngFor="let comment of activeIssues">
+              <tr *ngFor="let issue of activeIssues">
                 <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
-                <td><a href="#" (click)="openIssueDetailsModal(comment)">{{ comment.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="!canApprove()">{{ issue.title }}</td>
               </tr>
               </tbody>
             </table>
@@ -42,9 +43,10 @@
           <div class="table-responsive">
             <table class="table table-striped dataTable" cellspacing="0" width="100%">
               <tbody>
-              <tr *ngFor="let comment of closedIssues">
+              <tr *ngFor="let issue of closedIssues">
                 <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
-                <td><a href="#" (click)="openIssueDetailsModal(comment)">{{ comment.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="!canApprove()">{{ issue.title }}</td>
               </tr>
               </tbody>
             </table>
@@ -53,11 +55,7 @@
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
-  <div class="my-1">
-    <div class="table-responsive">
-      <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
-      </table>
-    </div>
+  <div *ngIf="canApprove()" class="actions-bar" >
     <button class="btn btn-primary" (click)="openAddIssueModal()">Lisa uus arutelu</button>
   </div>
 </section>
