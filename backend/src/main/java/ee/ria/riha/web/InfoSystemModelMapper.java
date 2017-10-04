@@ -20,6 +20,8 @@ import static ee.ria.riha.service.SecurityContextUtil.isUserAuthenticated;
 @Component
 public class InfoSystemModelMapper {
 
+    private static final Predicate<String> EVICTED_NAMES_PREDICATE = name -> name.equalsIgnoreCase("contacts");
+
     /**
      * Maps {@link InfoSystem} to {@link InfoSystemModel} performing additional transformations that depend on user
      * authentication. Unauthenticated users will not see some json properties like contacts.
@@ -44,15 +46,11 @@ public class InfoSystemModelMapper {
 
         JSONObject originalJsonObject = infoSystem.getJsonObject();
         List<String> filteredNames = Arrays.stream(JSONObject.getNames(originalJsonObject))
-                .filter(getEvictedNamesPredicate().negate())
+                .filter(EVICTED_NAMES_PREDICATE.negate())
                 .collect(Collectors.toList());
 
         JSONObject shallowJsonObjectCopy = new JSONObject(originalJsonObject, filteredNames.toArray(new String[0]));
         return new InfoSystem(shallowJsonObjectCopy);
-    }
-
-    private Predicate<String> getEvictedNamesPredicate() {
-        return name -> name.equalsIgnoreCase("contacts");
     }
 
 }
