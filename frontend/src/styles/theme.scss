@@ -420,10 +420,10 @@ $CONTENTS
     }
     h1,
     .h1 {
-        font-weight: bold;
-        font-size: 60px;
+    	font-weight: bold;
+        font-size: 44px;
         line-height: 1;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
     &.welcome {
         min-height: 500px;
@@ -906,7 +906,7 @@ $CONTENTS
 .main-content {
   h1,
   h1 {
-    font-size: 60px;
+    font-size: 44px;
     font-weight: bold;
     line-height: 1;
     padding-bottom: 14px;
@@ -1009,7 +1009,7 @@ h6,
 }
 .form-control {
   &.h1 {
-    font-size: 60px;
+    font-size: 44px;
     font-weight: bold;
     color: $primary;
     line-height: inherit;
@@ -1025,7 +1025,7 @@ h6,
   }
 }
 .lead {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: normal;
     line-height: 1.458;
 }
