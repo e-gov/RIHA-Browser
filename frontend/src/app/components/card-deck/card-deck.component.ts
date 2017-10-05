@@ -12,8 +12,32 @@ export class CardDeckComponent implements OnInit {
   constructor(private jsonDataService: JsonDataService) {
     this.cards = [
       {
+        "iconType": "search",
+        "title": "RIHA kataloogi sirvimine",
+        "content": [
+          "Kõik RIHAsse kirja pandud infosüsteemid on leitavad avalikust RIHA kataloogist. Kataloog annab infot, kui palju erinevaid süsteeme Eesti riigi infosüsteemi üleüldse moodustavad.",
+          [
+            "Infosüsteemi sirvimine RIHA-s:",
+            "annab teadmise erinevatest infosüsteemidest riigis, nende eesmärgist ja andmetest",
+            "hõlbustab infosüsteemi eest vastutavate inimeste leidmist",
+            "annab infosüsteemi omanikule teadmise, kust leida talle vajalikku andmekomplekti"
+          ]
+        ],
+        "actions": {
+          "links": [{
+            "label": "Loe lähemalt",
+            "hash":"https://abi.riha.ee/kataloogi-kasutamine",
+            "type": "external"
+          }],
+          "buttons": [{
+            "label": "Alustan",
+            "link":"/Infosüsteemid"
+          }]
+        }
+      },
+      {
         "iconType": "pencil",
-        "title": "Infosüsteemi kirjeldamine",
+        "title": "Infosüsteemi haldamine",
         "content": [
           "Selleks, et teised leiaksid sinu infosüsteemi, tuleb see esmalt kirja panna. Olgu tegemist alles loodava või juba aastaid kasutuselolevaga, siis kirjelda see RIHAs.",
           [
@@ -26,7 +50,8 @@ export class CardDeckComponent implements OnInit {
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
-            "hash":"Abi/Kirjeldamine"
+            "hash": "https://abi.riha.ee/RIHAs-kirjeldamine",
+            "type": "external"
           }],
           "buttons": [{
             "label": "Alustan",
@@ -45,26 +70,16 @@ export class CardDeckComponent implements OnInit {
             "annab teistele turvalise ligipääsu sinu andmetele",
             "võimaldab sul keskenduda infosüsteemi funktsionaalsuse ja andmekvaliteedile ning jätta andmevahetus X-tee hooleks"
           ]
-        ]
-      },
-      {
-        "iconType": "magic",
-        "title": "Infosüsteemi hindamine",
-        "content": [
-          "Riigis on mitmeid IT nõuete seadjaid, kelle ülesanne on kontrollida, kas infosüsteemid neile nõuetele vastavad. See tagab riigi infosüsteemi läbipaistvuse, koosvõimelisuse ja turvalisuse.",
-          [
-            "Infosüsteemi hindamine RIHA-s:",
-            "lihtsustab infosüsteemi omaniku arendusi, kuna kõik riigi IT nõuded on teada ja arusaadavad"
-          ]
         ],
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
-            "hash":"Abi/X-teega-liitumine"
+            "hash": "https://abi.riha.ee/X-tee-alamsysteem",
+            "type": "external"
           }],
           "buttons": [{
             "label": "Alustan",
-            "link":"/Hinda"
+            "link": "/Kirjelda/Uus"
           }]
         }
       }

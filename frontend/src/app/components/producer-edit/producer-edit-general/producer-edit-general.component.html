@@ -10,14 +10,14 @@
   <div class="panel-action-heading">
     Infosüsteemi üldkirjeldus
   </div>
-  <div class="my-1">
+  <div class="my-1 col-lg-10">
     <form class="col-12" #editForm="ngForm" >
       <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
-      <div class="form-group" [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched || editForm.submitted)}">
+      <div [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched || editForm.submitted)}">
         <label for="name-input" class="text-muted">Infosüsteemi nimi:</label>
         <input #name="ngModel" class="form-control h1" [(ngModel)]="system.details.name" name="system.details.name" type="text" id="name-input" required>
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}">
+      <div class="mb-4" [ngClass]="{'has-danger': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}">
         <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
         <input #shortName="ngModel"
                class="form-control h2"
@@ -27,8 +27,11 @@
                type="text"
                id="short-name-input" required>
       </div>
-      <div class="separate-block">
-        <div class="form-group row">
+
+      <hr>
+
+      <div>
+        <div class="row ml-0 mb-3">
           <label for="active-since-date" class="col-form-label advanced-label">
             <span *ngIf="system.getStatus() == globals.system_status.IN_USE"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
             <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
@@ -50,7 +53,7 @@
             <a href="#" (click)="changeSystemStatus(globals.system_status.FINISHED)">lõpetatud</a>
           </div>
         </div>
-        <div class="form-group">
+        <div class="mb-4">
           <label *ngIf="system.getDevelopmentStatus() == globals.development_status.IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
           <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
           <label *ngIf="!system.getDevelopmentStatus()" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
@@ -61,11 +64,14 @@
           </div>
         </div>
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': purpose.invalid  && (purpose.dirty || purpose.touched || editForm.submitted)}">
+
+      <hr class="short" align="left">
+
+      <div class="mb-3" [ngClass]="{'has-danger': purpose.invalid  && (purpose.dirty || purpose.touched || editForm.submitted)}">
         <label for="purpose-textarea" class="text-muted">Infosüsteemi eesmärk:</label>
         <textarea #purpose="ngModel" [(ngModel)]="system.details.purpose" name="purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
       </div>
-      <div class="form-group">
+      <div>
         <label class="text-muted">Infosüsteemi valdkond:
           <app-tooltip [text]='"Valdkonnad ja märksõnad, mis infosüsteemi iseloomustavad. Näiteks \"majandus\", \"x-tee alamsüsteem\", \"standardlahendus\" jne. Uue märksõna lisamiseks kasuta reavahetust"'></app-tooltip>
         </label>
@@ -75,12 +81,18 @@
                    [modelAsStrings]="true"
                    [secondaryPlaceholder]="'valdkonnad'"></tag-input>
       </div>
+
+      <hr class="short" align="left">
+
       <p>
         <span class="text-muted">Omanik:</span><br>
         <span class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</span>
       </p>
-      <div class="separate-block">
-        <div class="form-group row" [ngClass]="{'has-danger': homepage.invalid}">
+
+      <hr class="short" align="left">
+
+      <div>
+        <div class="row ml-0 mb-3" [ngClass]="{'has-danger': homepage.invalid}">
           <label for="homepage" class="col-form-label advanced-label">
             <i class="fa fa-external-link text-muted" aria-hidden="true"></i><strong>Avalik kasutajaliides</strong>
           </label>
@@ -94,7 +106,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
+        <div class="row ml-0 mb-4">
           <label *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" for="x_road_date" class="col-form-label advanced-label">
             <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">on liidestatud</strong> X-teega
           </label>
