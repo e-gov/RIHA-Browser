@@ -4,6 +4,7 @@ GLOBAL
 body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
+    font-size: 0.875rem;
 }
 a:not(.btn) {
     &.external,
@@ -803,7 +804,7 @@ $CONTENTS
             border-bottom: 1px solid $grey-dark;
             margin-bottom: 0px;
             padding: 15px 20px 14px 20px;
-            font-size: 18px;
+            font-size: 1rem;
             line-height: 20px;
             transition: all 200ms ease;
             min-height: 50px;
@@ -914,10 +915,6 @@ $CONTENTS
     margin-bottom: 20px;
     text-transform: uppercase;
     color: $primary;
-  }
-  .separate-block {
-    margin-top: 60px;
-    margin-bottom: 50px;
   }
 }
 h2,
@@ -1434,17 +1431,23 @@ mark {
 }
 .panel-action-heading {
   margin: -20px -20px 20px -20px;
+  padding: 10px 20px;
   background-color: $grey;
-  font-size: 20px;
+  font-size: 1rem;
   line-height: 30px;
   padding: 15px 20px;
   font-weight: bold;
 }
 .separated-text {
-  line-height: 40px;
+  line-height: 1.75rem;
 }
 .separate-blocks {
   .separate-block:not(:first-child){
     padding-top: 30px;
+  }
+}
+hr {
+  &.short {
+    width: 25%;
   }
 }
