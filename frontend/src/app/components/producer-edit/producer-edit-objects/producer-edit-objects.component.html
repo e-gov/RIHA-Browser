@@ -4,8 +4,8 @@
   </div>
   <div class="my-1">
     <div class="form-group">
-      <label for="object" class="text-muted separated-text">Sisestama peab infosüsteemi põhiandmed, mida mujal registrites ei koguta:
-        <app-tooltip [placement]="'bottom-right'" [text]="'Kirjelda põhiandmed, mida mujal registrites ei koguta, kuni 10 kergesti hoomatava objektina, et tekitada parem arusaamine, milliseid andmeid infosüsteemis kogutakse. Näiteks rahvastikuregistri puhul “Eesti elanike elukohandmed”, “Eesti elanike sugulussuhted” jne. Ära mine liialt detailidesse, püüa andmeobjekte grupeerida. Üks objekt võib koosneda mitmest sõnast, uus objekt tekib reavahetuse ja uue välja lisamisega'"></app-tooltip>
+      <label for="object" class="separated-text">Infosüsteemi põhiandmed:
+        <app-tooltip [placement]="'bottom-right'" [text]="'Põhiandmed, mida mujal registrites ei koguta, kuni 10 kergesti hoomatava objektina, et tekitada parem arusaamine, milliseid andmeid infosüsteemis kogutakse. Näiteks rahvastikuregistri puhul ‘Eesti elanike elukohandmed’, ‘Eesti elanike sugulussuhted’ jne. Üks objekt võib koosneda mitmest sõnast, uus objekt lisatakse ‘lisa’ nupu vajutamisega või reavahetusega'"></app-tooltip>
       </label>
       <div class="row">
         <input id="object" class="form-control col-10"
@@ -18,8 +18,8 @@
         </div>
       </div>
     </div>
-    <div class="form-group row" [ngClass]="{'text-danger': stored_data.length == 10}">
-      Hetkel sisestatud {{ stored_data.length }} / 10
+    <div class="form-group text-muted row" [ngClass]="{'text-danger': stored_data.length == 10}">
+      Sisestatud {{ stored_data.length }} / 10
     </div>
     <div class="dataTables_wrapper">
       <table *ngIf="system" class="details-list-table">
@@ -36,11 +36,35 @@
         </tr>
       </table>
     </div>
-    <div class="actions-bar">
-      <div class="buttons pull-right">
-        <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
-        <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
-      </div>
+    <div class="form-group">
+      Detailine andmekoosseis:
+      <app-tooltip [placement]="'bottom-right'" [text]="'Infosüsteemi detailne andmete koosseis, mis on andmeobjektideks lahti kirjutatud ning annab ülevaate kogu infost, mida andmekogus hoitakse. Lisatuna csv, xmi või andmebaasi skeema kirjeldusena, milles on põhiandmed on eraldi välja toodud'"></app-tooltip>
+    </div>
+    <div class="form-group">
+      <label for="url" class="separated-text">URL:</label>
+      <input id="url" class="form-control"
+             #url
+             placeholder="http://www.example.com"
+             name="url">
+    </div>
+    <div class="form-group">
+      või <button class="btn btn-default"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</button>
+    </div>
+    <div class="form-group">
+      <label for="name" class="separated-text">URL:</label>
+      <input id="name" class="form-control"
+             #name
+             placeholder="nt. Rakenduse lähtekood"
+             name="name">
+    </div>
+    <div class="form-group col-12">
+      <button class="btn btn-default pull-right" (click)="addStoredDataObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+    </div>
+  </div>
+  <div class="actions-bar mt-2 mb-1">
+    <div class="buttons pull-right">
+      <button (click)="activeModal.close()" class="btn btn-default pull-right">Tühista</button>
+      <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
     </div>
   </div>
 </section>
