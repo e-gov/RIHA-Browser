@@ -5,8 +5,8 @@
   </div>
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi kogutavad põhiandmed:</label>
-    <p *ngIf="!system.details.stored_data || system.details.stored_data.length == 0">
-      Objektid puuduvad.
+    <p *ngIf="(!system.details.stored_data || system.details.stored_data.length == 0) && (!system.details.data_files || system.details.data_files.length == 0)">
+      Objektid ja failid puuduvad.
     </p>
     <table class="details-list-table">
       <tr *ngFor="let object of system.details.stored_data">
@@ -15,6 +15,16 @@
         </td>
         <td>
           {{ object }}
+        </td>
+      </tr>
+    </table>
+    <table class="details-list-table">
+      <tr *ngFor="let file of system.details.data_files">
+        <td>
+          <i class="fa fa-file-o text-primary"></i>
+        </td>
+        <td>
+          <a href="{{ file.url }}" target="_blank">{{ file.name }}</a>
         </td>
       </tr>
     </table>

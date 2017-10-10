@@ -82,6 +82,10 @@ export class System {
     return this.details.stored_data && this.details.stored_data.length > 0;
   }
 
+  hasDataFiles(): boolean{
+    return this.details.data_files && this.details.data_files.length > 0;
+  }
+
   hasContacts(): boolean{
     return this.details.contacts && this.details.contacts.length > 0;
   }
@@ -102,6 +106,7 @@ export class System {
       },
       topics: [],
       stored_data: [],
+      data_files: [],
       legislations: [],
       documents: [],
       contacts: [],

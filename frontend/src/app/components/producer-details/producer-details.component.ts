@@ -71,7 +71,7 @@ export class ProducerDetailsComponent implements OnInit {
         break;
       }
       case 'dataObjects': {
-        ret = this.system.hasDataObjects() || editable;
+        ret = this.system.hasDataObjects() || this.system.hasDataFiles() || editable;
         break;
       }
       case 'contacts': {

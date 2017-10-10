@@ -58,8 +58,23 @@
              name="name">
     </div>
     <div class="form-group col-12">
-      <button class="btn btn-default pull-right" (click)="addStoredDataObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+      <button class="btn btn-default pull-right" (click)="addDataFile(url, name)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
     </div>
+  </div>
+  <div class="dataTables_wrapper">
+    <table *ngIf="system" class="details-list-table">
+      <tr *ngFor="let file of data_files; let i = index">
+        <td>
+          <i class="fa fa-file-o text-primary"></i>
+        </td>
+        <td>
+          <a href="{{ file.url }}" target="_blank">{{ file.name }}</a>
+        </td>
+        <td>
+          <button (click)="deleteDataFile(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+        </td>
+      </tr>
+    </table>
   </div>
   <div class="actions-bar mt-2 mb-1">
     <div class="buttons pull-right">

@@ -15,9 +15,11 @@ export class ProducerDetailsObjectsComponent implements OnInit {
 
   openObjectsEdit(content) {
     const modalRef = this.modalService.open(ProducerEditObjectsComponent);
-    this.system.details.stored_data = this.system.details.stored_data || [];
     modalRef.componentInstance.system = this.system;
+    this.system.details.stored_data = this.system.details.stored_data || [];
     modalRef.componentInstance.stored_data = [].concat(this.system.details.stored_data);
+    this.system.details.data_files = this.system.details.data_files || [];
+    modalRef.componentInstance.data_files = [].concat(this.system.details.data_files);
   }
 
   constructor(private modalService: NgbModal) {

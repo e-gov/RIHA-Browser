@@ -13,6 +13,7 @@ export class ProducerEditObjectsComponent implements OnInit {
 
   @Input() system: System;
   @Input() stored_data: string[];
+  @Input() data_files: any[];
 
   addStoredDataObject(input): void {
     if (input.value.length > 0 && this.stored_data.length < 10){
@@ -25,8 +26,24 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.stored_data.splice(i, 1);
   }
 
+  addDataFile(url, name): void{
+    if (url.value != '' && name.value != ''){
+      this.data_files.push({
+        url: url.value,
+        name: name.value
+      });
+      url.value = '';
+      name.value = '';
+    }
+  }
+
+  deleteDataFile(i): void{
+    this.data_files.splice(i, 1);
+  }
+
   saveSystem(){
     this.system.details.stored_data = this.stored_data;
+    this.system.details.data_files = this.data_files;
     this.systemsService.updateSystem(this.system).then(response => {
       this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
     });
