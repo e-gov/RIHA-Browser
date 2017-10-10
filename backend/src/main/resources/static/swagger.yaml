@@ -9,6 +9,7 @@ info:
 basePath: "/"
 tags:
 - name: "Environment configuration"
+- name: "File resources"
 - name: "Information systems"
 - name: "Issue events"
 - name: "Issue timeline"
@@ -45,6 +46,21 @@ paths:
         default:
           description: "successful operation"
       deprecated: true
+  /api/v1/files:
+    post:
+      tags:
+      - "File resources"
+      summary: "Upload file"
+      description: ""
+      operationId: "upload"
+      parameters:
+      - name: "file"
+        in: "query"
+        required: true
+        type: "ref"
+      responses:
+        default:
+          description: "successful operation"
   /api/v1/issues/{issueId}:
     get:
       tags:
