@@ -14,6 +14,15 @@ export class ProducerEditObjectsComponent implements OnInit {
   @Input() system: System;
   @Input() stored_data: string[];
   @Input() data_files: any[];
+  dataFile: any = null;
+  dataFileUuid: string = null;
+  uploading: boolean = false;
+  data: any = {
+    name: '',
+    url: ''
+  };
+
+  // string data objects
 
   addStoredDataObject(input): void {
     if (input.value.length > 0 && this.stored_data.length < 10){
@@ -26,14 +35,45 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.stored_data.splice(i, 1);
   }
 
-  addDataFile(url, name): void{
-    if (url.value != '' && name.value != ''){
+  // data files
+
+  fileChange(event, form){
+    this.dataFile = event.target.files[0];
+    this.dataFileUuid = null;
+    this.uploading = true;
+
+    this.systemsService.postDataFile(this.dataFile).then(res =>{
+      this.uploading = false;
+      this.dataFileUuid = res.text();
+      this.data.name = this.dataFile.name;
+
+    }, err =>{
+      this.uploading = false;
+      this.dataFile = null;
+    });
+  }
+
+  private resetDataFile(){
+    this.data.url = '';
+    this.data.name = '';
+    this.dataFileUuid = null;
+    this.dataFile = null;
+    this.uploading = false;
+  }
+
+  resetFileForm(form){
+    form.reset();
+    this.resetDataFile();
+  }
+
+  addDataFile(form): void{
+    if (form.valid){
       this.data_files.push({
-        url: url.value,
-        name: name.value
+        url: this.dataFileUuid ? 'file://' + this.dataFileUuid : this.data.url,
+        name: this.data.name.trim()
       });
-      url.value = '';
-      name.value = '';
+      form.reset();
+      this.resetDataFile();
     }
   }
 
