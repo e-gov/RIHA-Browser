@@ -40,10 +40,11 @@ public class ApplicationConfiguration {
     public CommentRepository commentRepository(ApplicationProperties applicationProperties) {
         return new CommentRepository(getStorageClient(applicationProperties));
     }
-    
+
     @Bean
     public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties) throws IOException {
         return new JsonValidationService(
                 JsonLoader.fromResource(applicationProperties.getValidation().getJsonSchemaUrl()));
     }
+
 }

@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +31,8 @@ public class InfoSystemService {
 
     @Autowired
     private JsonValidationService infoSystemValidationService;
+
+    private DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
         return infoSystemRepository.list(pageable, filterable);
@@ -49,12 +53,15 @@ public class InfoSystemService {
 
         InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
         log.info("User '{}' with active organization '{}'" +
-                         " is creating new info system with short name '{}'",
-                 getRihaUserPersonalCode(), organization, infoSystem.getShortName());
+                        " is creating new info system with short name '{}'",
+                getRihaUserPersonalCode(), organization, infoSystem.getShortName());
         validateInfoSystemShortName(infoSystem.getShortName());
         infoSystem.setUuid(UUID.randomUUID());
         infoSystem.setOwnerCode(organization.getCode());
         infoSystem.setOwnerName(organization.getName());
+        String creationTimestamp = isoDateTimeFormatter.format(ZonedDateTime.now());
+        infoSystem.setCreationTimestamp(creationTimestamp);
+        infoSystem.setUpdateTimestamp(creationTimestamp);
 
         infoSystemValidationService.validate(infoSystem.asJson());
 
@@ -91,9 +98,9 @@ public class InfoSystemService {
     public InfoSystem update(String shortName, InfoSystem model) {
         InfoSystem existingInfoSystem = get(shortName);
         log.info("User '{}' with active organization '{}'" +
-                         " is updating info system with id {}, owner code '{}' and short name '{}'",
-                 getRihaUserPersonalCode(), getActiveOrganization(), existingInfoSystem.getId(),
-                 existingInfoSystem.getOwnerCode(), existingInfoSystem.getShortName());
+                        " is updating info system with id {}, owner code '{}' and short name '{}'",
+                getRihaUserPersonalCode(), getActiveOrganization(), existingInfoSystem.getId(),
+                existingInfoSystem.getOwnerCode(), existingInfoSystem.getShortName());
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
         if (!shortName.equals(updatedInfoSystem.getShortName())) {
@@ -102,6 +109,8 @@ public class InfoSystemService {
         updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
         updatedInfoSystem.setOwnerCode(existingInfoSystem.getOwnerCode());
         updatedInfoSystem.setOwnerName(existingInfoSystem.getOwnerName());
+        updatedInfoSystem.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
+        updatedInfoSystem.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
 
         infoSystemValidationService.validate(updatedInfoSystem.asJson());
 

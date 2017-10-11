@@ -58,6 +58,16 @@
     },
     "meta": {
       "properties": {
+        "creation_timestamp": {
+          "description": "Infosüsteemi RIHA kirjelduse loomise aeg",
+          "type": "string",
+          "format": "date-time"
+        },
+        "update_timestamp": {
+          "description": "Infosüsteemi RIHA kirjelduse viimase muutmise aeg",
+          "type": "string",
+          "format": "date-time"
+        },
         "approval_status": {
           "properties": {
             "status": {
@@ -72,11 +82,6 @@
           },
           "type": "object",
           "description": "Süsteemi kooskõlastuse olek - Infosüsteemi hinnangute koondstaatus"
-        },
-        "description_timestamp": {
-          "description": "Infosüsteemi RIHA kirjelduse viimase muutmise aeg",
-          "type": "string",
-          "format": "date-time"
         },
         "development_status": {
           "type": ["string", "null"],

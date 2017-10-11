@@ -1,27 +1,23 @@
 package ee.ria.riha.service;
 
-import com.google.common.collect.ImmutableMultimap;
-import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.storage.util.FilterRequest;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.mockito.stubbing.Answer;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -45,28 +41,24 @@ public class InfoSystemServiceTest {
                     "  \"short_name\": \"" + EXISTING_INFO_SYSTEM_SHORT_NAME + "\",\n" +
                     "  \"owner\": {\n" +
                     "    \"code\": \"555000\"\n" +
+                    "  },\n" +
+                    "  \"meta\": {\n" +
+                    "    \"creation_timestamp\": \"2017-10-04T14:44:45.404+03:00\",\n" +
+                    "    \"update_timestamp\": \"2017-10-04T14:44:45.404+03:00\"\n" +
                     "  }\n" +
                     "}");
     private List<InfoSystem> foundInfoSystems = Lists.newArrayList();
 
-    @BeforeClass
-    public static void setAuthorization() {
-        RihaOrganizationAwareAuthenticationToken authenticationToken = new RihaOrganizationAwareAuthenticationToken(
-                new RihaUserDetails(new User("john.doe", "strong", AuthorityUtils.NO_AUTHORITIES),
-                                    "EE12345678901",
-                                    ImmutableMultimap.of(new RihaOrganization("123", "test_org"),
-                                                         new SimpleGrantedAuthority("ROLE_TEST"))),
-                null,
-                null);
-
-        authenticationToken.setActiveOrganization("123");
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    }
-
     @Before
     public void setUp() {
+        RihaOrganizationAwareAuthenticationToken authenticationToken = JaneAuthenticationTokenBuilder.builder().build();
+        authenticationToken.setActiveOrganization("555010203");
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
         when(infoSystemRepository.find(any(FilterRequest.class))).thenReturn(foundInfoSystems);
         when(infoSystemRepository.load(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
+        when(infoSystemRepository.add(any(InfoSystem.class)))
+                .thenAnswer((Answer<InfoSystem>) invocation -> invocation.getArgumentAt(0, InfoSystem.class));
     }
 
     @Test(expected = ValidationException.class)
@@ -118,5 +110,33 @@ public class InfoSystemServiceTest {
         foundInfoSystems.add(updatedInfoSystem);
 
         infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
+    }
+
+    @Test
+    public void setsCreationAndUpdateTimestampDuringInfoSystemCreation() {
+        InfoSystem model = new InfoSystem();
+
+        InfoSystem infoSystem = infoSystemService.create(model);
+
+        assertThat(infoSystem.getCreationTimestamp(), is(notNullValue()));
+        assertThat(infoSystem.getUpdateTimestamp(), is(notNullValue()));
+    }
+
+    @Test
+    public void setsNewUpdateTimestampDuringInfoSystemUpdate() {
+        InfoSystem model = new InfoSystem(existingInfoSystem.getJsonObject());
+
+        InfoSystem infoSystem = infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, model);
+
+        assertThat(infoSystem.getUpdateTimestamp(), is(not(equalTo(existingInfoSystem.getUpdateTimestamp()))));
+    }
+
+    @Test
+    public void doesNotChangeCreationTimestampDuringUpdate() {
+        InfoSystem model = new InfoSystem(existingInfoSystem.getJsonObject());
+
+        InfoSystem infoSystem = infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, model);
+
+        assertThat(infoSystem.getCreationTimestamp(), is(equalTo(existingInfoSystem.getCreationTimestamp())));
     }
 }
