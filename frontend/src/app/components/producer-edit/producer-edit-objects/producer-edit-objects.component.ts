@@ -81,6 +81,14 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.data_files.splice(i, 1);
   }
 
+  getFileUrl(url){
+    if (url.substring(0,7) === 'file://'){
+      return '/api/v1/files/' + url.substring(7);
+    } else {
+      return url;
+    }
+  }
+
   saveSystem(){
     this.system.details.stored_data = this.stored_data;
     this.system.details.data_files = this.data_files;
