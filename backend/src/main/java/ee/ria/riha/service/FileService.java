@@ -3,8 +3,10 @@ package ee.ria.riha.service;
 import ee.ria.riha.storage.domain.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -22,6 +24,10 @@ public class FileService {
         log.info("File uploaded with uuid: {}", fileUuid);
 
         return fileUuid;
+    }
+
+    public ResponseEntity download(UUID fileUuid) throws IOException {
+        return fileRepository.download(fileUuid);
     }
 
 }
