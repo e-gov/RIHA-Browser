@@ -15,7 +15,6 @@ export class ProducerEditObjectsComponent implements OnInit {
   @Input() stored_data: string[];
   @Input() data_files: any[];
   dataFile: any = null;
-  dataFileUuid: string = null;
   uploading: boolean = false;
   data: any = {
     name: '',
@@ -39,41 +38,28 @@ export class ProducerEditObjectsComponent implements OnInit {
 
   fileChange(event, form){
     this.dataFile = event.target.files[0];
-    this.dataFileUuid = null;
     this.uploading = true;
 
     this.systemsService.postDataFile(this.dataFile).then(res =>{
       this.uploading = false;
-      this.dataFileUuid = res.text();
-      this.data.name = this.dataFile.name;
-
+      this.data_files.push({
+        url: 'file://' + res.text(),
+        name: this.dataFile.name
+      });
+      this.dataFile = null;
     }, err =>{
       this.uploading = false;
       this.dataFile = null;
     });
   }
 
-  private resetDataFile(){
-    this.data.url = '';
-    this.data.name = '';
-    this.dataFileUuid = null;
-    this.dataFile = null;
-    this.uploading = false;
-  }
-
-  resetFileForm(form){
-    form.reset();
-    this.resetDataFile();
-  }
-
   addDataFile(form): void{
     if (form.valid){
       this.data_files.push({
-        url: this.dataFileUuid ? 'file://' + this.dataFileUuid : this.data.url,
+        url: this.data.url,
         name: this.data.name.trim()
       });
       form.reset();
-      this.resetDataFile();
     }
   }
 

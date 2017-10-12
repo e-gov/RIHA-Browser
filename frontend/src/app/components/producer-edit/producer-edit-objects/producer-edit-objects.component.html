@@ -40,28 +40,32 @@
       Detailine andmekoosseis:
       <app-tooltip [placement]="'bottom-right'" [text]="'Infosüsteemi detailne andmete koosseis, mis on andmeobjektideks lahti kirjutatud ning annab ülevaate kogu infost, mida andmekogus hoitakse. Lisatuna csv, xmi või andmebaasi skeema kirjeldusena, milles on põhiandmed on eraldi välja toodud'"></app-tooltip>
     </div>
+    <div *ngIf="dataFile == null" class="form-group">
+      <label class="btn btn-default input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
+      <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event, dataFilesForm)">
+    </div>
+    <div *ngIf="dataFile != null" class="form-group">
+      {{ dataFile.name }}
+      <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
+    </div>
+    <div class="form-group">
+      või lisa viide
+    </div>
     <form #dataFilesForm="ngForm">
-      <div *ngIf="dataFile == null" class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
         <label for="url" class="separated-text">URL:</label>
         <input id="url" class="form-control"
+               [disabled]="uploading"
                #url="ngModel"
                [(ngModel)]="data.url"
                placeholder="http://www.example.com"
                name="url"
                url required>
       </div>
-      <div *ngIf="dataFile == null" class="form-group">
-        või <label class="btn btn-default input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
-        <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event, dataFilesForm)">
-      </div>
-      <div *ngIf="dataFile != null" class="form-group">
-        {{ dataFile.name }}
-        <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
-        <button *ngIf="!uploading" (click)="resetFileForm(dataFilesForm)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-      </div>
       <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
         <label for="name" class="separated-text">Dokumendi pealkiri:</label>
         <input id="name" class="form-control"
+               [disabled]="uploading"
                #name="ngModel"
                [(ngModel)]="data.name"
                placeholder="nt. Rakenduse lähtekood"
