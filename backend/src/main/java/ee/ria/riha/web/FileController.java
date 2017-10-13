@@ -38,7 +38,7 @@ public class FileController {
 
     @GetMapping("/{uuid}")
     @ApiOperation("Download file")
-    public ResponseEntity download(@PathVariable("uuid") UUID fileUuid, final HttpServletResponse response) throws IOException {
+    public ResponseEntity download(@PathVariable("uuid") UUID fileUuid) throws IOException {
         log.info("Downloading file {}", fileUuid);
         return fileService.download(fileUuid);
     }
