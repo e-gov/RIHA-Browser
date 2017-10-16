@@ -13,6 +13,15 @@ export class ProducerEditObjectsComponent implements OnInit {
 
   @Input() system: System;
   @Input() stored_data: string[];
+  @Input() data_files: any[];
+  dataFile: any = null;
+  uploading: boolean = false;
+  data: any = {
+    name: '',
+    url: ''
+  };
+
+  // string data objects
 
   addStoredDataObject(input): void {
     if (input.value.length > 0 && this.stored_data.length < 10){
@@ -25,8 +34,50 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.stored_data.splice(i, 1);
   }
 
+  // data files
+
+  fileChange(event, form){
+    this.dataFile = event.target.files[0];
+    this.uploading = true;
+
+    this.systemsService.postDataFile(this.dataFile).then(res =>{
+      this.uploading = false;
+      this.data_files.push({
+        url: 'file://' + res.text(),
+        name: this.dataFile.name
+      });
+      this.dataFile = null;
+    }, err =>{
+      this.uploading = false;
+      this.dataFile = null;
+    });
+  }
+
+  addDataFile(form): void{
+    if (form.valid){
+      this.data_files.push({
+        url: this.data.url,
+        name: this.data.name.trim()
+      });
+      form.reset();
+    }
+  }
+
+  deleteDataFile(i): void{
+    this.data_files.splice(i, 1);
+  }
+
+  getFileUrl(url){
+    if (url.substring(0,7) === 'file://'){
+      return '/api/v1/files/' + url.substring(7);
+    } else {
+      return url;
+    }
+  }
+
   saveSystem(){
     this.system.details.stored_data = this.stored_data;
+    this.system.details.data_files = this.data_files;
     this.systemsService.updateSystem(this.system).then(response => {
       this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
     });

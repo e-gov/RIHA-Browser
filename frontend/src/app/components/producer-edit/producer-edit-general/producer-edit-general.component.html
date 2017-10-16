@@ -11,7 +11,7 @@
     Infosüsteemi üldkirjeldus
   </div>
   <div class="my-1 col-lg-10">
-    <form class="col-12" #editForm="ngForm" >
+    <form class="col-12" #editForm="ngForm" (keydown.enter)="$event.preventDefault()">
       <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
       <div [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched || editForm.submitted)}">
         <label for="name-input" class="text-muted">Infosüsteemi nimi:</label>

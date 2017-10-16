@@ -11,6 +11,27 @@
       "maxItems": 10,
       "type": "array"
     },
+    "data_files": {
+      "items": {
+        "properties": {
+          "url": {
+            "description": "URL, mis viitab infosüsteemi faili avalikule asukohale",
+            "type": "string"
+          },
+          "name": {
+            "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "name"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "description": "Infosüsteemi detailne andmekoosseis, lisatuna csv, xmi või andmebaasi skeema kirjeldusena, milles on põhiandmed on eraldi välja toodud"
+    },
     "documents": {
       "items": {
         "properties": {
