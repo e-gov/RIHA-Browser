@@ -101,8 +101,15 @@ public class CreatedInfoSystemsOverviewNotificationJob {
             MimeMessageHelper helper = new MimeMessageHelper(message);
             helper.setFrom(from);
             helper.setTo(to);
-            helper.setCc(cc);
-            helper.setBcc(bcc);
+
+            if (cc != null) {
+                helper.setCc(cc);
+            }
+
+            if (bcc != null) {
+                helper.setBcc(bcc);
+            }
+
             helper.setSubject(getMessageSubject());
             helper.setSentDate(new Date());
             helper.setText(getMessageText(infoSystems), true);
