@@ -15,6 +15,20 @@ export class System {
   setData(system): void {
     this.id = system.id;
     this.details = Object.assign(this.details, system.details);
+    if (this.details.meta != null){
+      if (!this.details.meta.system_status){
+        this.details.meta.system_status = {
+          status: null,
+          timestamp: null
+        }
+      }
+      if (!this.details.meta.x_road_status){
+        this.details.meta.x_road_status = {
+          status: null,
+          timestamp: null
+        }
+      }
+    }
   }
 
   getStatus(){
