@@ -22,6 +22,7 @@ public class InfoSystem {
     private static final String OWNER_NAME_KEY = "name";
     private static final String OWNER_CODE_KEY = "code";
     private static final String SHORT_NAME_KEY = "short_name";
+    private static final String FULL_NAME_KEY = "name";
     private static final String META_KEY = "meta";
     private static final String META_CREATION_TIMESTAMP_KEY = "creation_timestamp";
     private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
@@ -33,6 +34,7 @@ public class InfoSystem {
     private String ownerName;
     private String ownerCode;
     private String shortName;
+    private String fullName;
     private String creationTimestamp;
     private String updateTimestamp;
 
@@ -50,6 +52,7 @@ public class InfoSystem {
         this.uuid = hasText(uuidString) ? UUID.fromString(uuidString) : null;
 
         this.shortName = ((String) getPath(SHORT_NAME_KEY).queryFrom(jsonObject));
+        this.fullName = ((String) getPath(FULL_NAME_KEY).queryFrom(jsonObject));
 
         JSONObject owner = getOwner();
         this.ownerName = ((String) getPath(OWNER_NAME_KEY).queryFrom(owner));
@@ -134,6 +137,15 @@ public class InfoSystem {
     public void setShortName(String shortName) {
         this.shortName = shortName;
         jsonObject.putOpt(SHORT_NAME_KEY, shortName);
+    }
+
+    public String getFullName() {
+    	return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+        jsonObject.putOpt(FULL_NAME_KEY, fullName);
     }
 
     private JSONObject getMeta() {
