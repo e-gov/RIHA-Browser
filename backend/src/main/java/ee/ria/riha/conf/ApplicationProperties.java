@@ -19,6 +19,10 @@ public class ApplicationProperties {
     private final StorageClientProperties storageClient = new StorageClientProperties();
     private final AuthenticationProperties authentication = new AuthenticationProperties();
     private final ValidationProperties validation = new ValidationProperties();
+    private final NotificationProperties notification = new NotificationProperties();
+
+    @Setter
+    private String baseUrl;
 
     @Getter
     @Setter
@@ -42,5 +46,20 @@ public class ApplicationProperties {
     @Setter
     public static class ValidationProperties {
         private String jsonSchemaUrl;
+    }
+
+    @Getter
+    @Setter
+    public static class NotificationProperties {
+        private final CreatedInfoSystemsOverview createdInfoSystemsOverview = new CreatedInfoSystemsOverview();
+        private String from;
+    }
+
+    @Getter
+    @Setter
+    public static class CreatedInfoSystemsOverview {
+        private String[] to;
+        private String[] cc;
+        private String[] bcc;
     }
 }

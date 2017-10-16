@@ -10,6 +10,7 @@ import ee.ria.riha.storage.domain.MainResourceRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.io.IOException;
  */
 @Configuration
 @EnableConfigurationProperties(ApplicationProperties.class)
+@EnableScheduling
 public class ApplicationConfiguration {
 
     @Bean
