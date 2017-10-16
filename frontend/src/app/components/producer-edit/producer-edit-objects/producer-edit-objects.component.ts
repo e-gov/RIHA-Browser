@@ -14,6 +14,8 @@ export class ProducerEditObjectsComponent implements OnInit {
   @Input() system: System;
   @Input() stored_data: string[];
   @Input() data_files: any[];
+  isChanged: boolean = false;
+
   dataFile: any = null;
   uploading: boolean = false;
   data: any = {
@@ -27,11 +29,13 @@ export class ProducerEditObjectsComponent implements OnInit {
     if (input.value.length > 0 && this.stored_data.length < 10){
       this.stored_data.push(input.value);
       input.value = '';
+      this.isChanged = true;
     }
   }
 
   deleteStoredDataObject(i): void {
     this.stored_data.splice(i, 1);
+    this.isChanged = true;
   }
 
   // data files
@@ -47,6 +51,7 @@ export class ProducerEditObjectsComponent implements OnInit {
         name: this.dataFile.name
       });
       this.dataFile = null;
+      this.isChanged = true;
     }, err =>{
       this.uploading = false;
       this.dataFile = null;
@@ -60,11 +65,13 @@ export class ProducerEditObjectsComponent implements OnInit {
         name: this.data.name.trim()
       });
       form.reset();
+      this.isChanged = true;
     }
   }
 
   deleteDataFile(i): void{
     this.data_files.splice(i, 1);
+    this.isChanged = true;
   }
 
   getFileUrl(url){
@@ -84,7 +91,19 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.activeModal.close('saved');
   }
 
-  constructor(public activeModal: NgbActiveModal,
+  closeModal(f, i){
+    if (this.isChanged || f.form.dirty || i.value.length > 0){
+      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
+        this.activeModal.close();
+      } else {
+        return false;
+      }
+    } else {
+      this.activeModal.close();
+    }
+  }
+
+  constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
               private router: Router) {
   }

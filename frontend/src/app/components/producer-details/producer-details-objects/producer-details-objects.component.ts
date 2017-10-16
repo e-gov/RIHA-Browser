@@ -14,7 +14,10 @@ export class ProducerDetailsObjectsComponent implements OnInit {
   @Input() allowEdit: boolean;
 
   openObjectsEdit(content) {
-    const modalRef = this.modalService.open(ProducerEditObjectsComponent);
+    const modalRef = this.modalService.open(ProducerEditObjectsComponent,{
+      backdrop: 'static',
+      keyboard: false
+    });
     modalRef.componentInstance.system = this.system;
     this.system.details.stored_data = this.system.details.stored_data || [];
     modalRef.componentInstance.stored_data = [].concat(this.system.details.stored_data);

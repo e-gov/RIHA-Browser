@@ -13,6 +13,7 @@ export class ProducerEditContactsComponent implements OnInit {
 
   @Input() system: System;
   @Input() contacts: any[];
+  isChanged: boolean = false;
 
   data: any = {email: '', name: ''};
 
@@ -22,11 +23,13 @@ export class ProducerEditContactsComponent implements OnInit {
         name: this.data.name ? this.data.name.trim() : ''});
       this.data = {email: '', name: ''};
       addForm.reset();
+      this.isChanged = true;
     }
   }
 
   deleteContact(i): void {
     this.contacts.splice(i, 1);
+    this.isChanged = true;
   }
 
   saveSystem(){
@@ -37,7 +40,19 @@ export class ProducerEditContactsComponent implements OnInit {
     this.activeModal.close('saved');
   }
 
-  constructor(public activeModal: NgbActiveModal,
+  closeModal(f){
+    if (this.isChanged || f.form.dirty){
+      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
+        this.activeModal.close();
+      } else {
+        return false;
+      }
+    } else {
+      this.activeModal.close();
+    }
+  }
+
+  constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
               private router: Router) { }
 
