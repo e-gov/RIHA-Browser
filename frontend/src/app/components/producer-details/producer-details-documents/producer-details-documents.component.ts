@@ -14,7 +14,10 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
   @Input() allowEdit: boolean;
 
   openTechDocsEdit(content) {
-    const modalRef = this.modalService.open(ProducerEditDocumentsComponent);
+    const modalRef = this.modalService.open(ProducerEditDocumentsComponent,{
+      backdrop: 'static',
+      keyboard: false
+    });
     this.system.details.documents = this.system.details.documents || [];
     modalRef.componentInstance.system = this.system;
     modalRef.componentInstance.documents = [].concat(this.system.details.documents);

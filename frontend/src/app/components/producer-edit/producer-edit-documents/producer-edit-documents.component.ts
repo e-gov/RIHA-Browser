@@ -13,6 +13,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   @Input() system: System;
   @Input() documents: any[];
+  isChanged: boolean = false;
 
   data: any = {url: '', name: ''};
 
@@ -22,11 +23,13 @@ export class ProducerEditDocumentsComponent implements OnInit {
                           name: this.data.name ? this.data.name.trim() : ''});
       this.data = {url: '', name: ''};
       addForm.reset();
+      this.isChanged = true;
     }
   }
 
   deleteTechDoc(i): void {
     this.documents.splice(i, 1);
+    this.isChanged = true;
   }
 
   saveSystem(){
@@ -37,7 +40,19 @@ export class ProducerEditDocumentsComponent implements OnInit {
     this.activeModal.close('saved');
   }
 
-  constructor(public activeModal: NgbActiveModal,
+  closeModal(f){
+    if (this.isChanged || f.form.dirty){
+      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
+        this.activeModal.close();
+      } else {
+        return false;
+      }
+    } else {
+      this.activeModal.close();
+    }
+  }
+
+  constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
               private router: Router) { }
 

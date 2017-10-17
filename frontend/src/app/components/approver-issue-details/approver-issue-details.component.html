@@ -46,7 +46,7 @@
     </form>
     <div class="actions-bar">
       <div class="buttons pull-right">
-        <button (click)="activeModal.dismiss()" class="btn btn-default pull-right">Sulge</button>
+        <button (click)="closeModal(commentForm)" class="btn btn-default pull-right">Sulge</button>
         <button (click)="markResolved(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
         <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
       </div>

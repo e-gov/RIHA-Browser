@@ -139,7 +139,7 @@
       </p>
       <div class="actions-bar">
         <div class="buttons pull-right">
-          <button class="btn btn-default" [routerLink]="['/Kirjelda/Vaata', system.details.short_name]">Tühista</button>
+          <button class="btn btn-default" (click)="goBackToDetails(editForm)">Tühista</button>
           <button class="btn btn-success" (click)="onSubmit(editForm)"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i> Salvesta</button>
         </div>
       </div>

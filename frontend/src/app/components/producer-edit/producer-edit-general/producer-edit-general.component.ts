@@ -76,6 +76,18 @@ export class ProducerEditGeneralComponent implements OnInit {
     return this.environmentService.getActiveUser() != null;
   }
 
+  goBackToDetails(f){
+    if (f.form.dirty){
+      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
+        this.router.navigate(['/Kirjelda/Vaata', this.shortName]);
+      } else {
+        return false;
+      }
+    } else {
+      this.router.navigate(['/Kirjelda/Vaata', this.shortName]);
+    }
+  }
+
   constructor(private systemsService: SystemsService,
               private router: Router,
               private route: ActivatedRoute,

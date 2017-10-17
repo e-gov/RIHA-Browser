@@ -16,11 +16,13 @@
         "properties": {
           "url": {
             "description": "URL, mis viitab infosüsteemi faili avalikule asukohale",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": [
@@ -37,11 +39,13 @@
         "properties": {
           "url": {
             "description": "URL, mis viitab süsteemi dokumentatsiooni avalikule asukohale",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": [
@@ -57,12 +61,14 @@
         "properties": {
           "name": {
             "description": "Kontaktisiku nimi",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "email": {
             "description": "Kontaktisiku email",
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "minLength": 1
           }
         },
         "required": [
@@ -168,7 +174,8 @@
         "properties": {
           "url": {
             "description": "Viide infosüsteemi reguleerivale õigusaktile (Riigi Teatajas)",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "description": "Õigusakti nimi",
