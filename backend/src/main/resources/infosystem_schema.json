@@ -148,7 +148,8 @@
     },
     "name": {
       "description": "Infosüsteemi täispikk, ametlik nimi",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "owner": {
       "properties": {
@@ -167,7 +168,8 @@
       "type": "object"
     },
     "purpose": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "legislations": {
       "items": {
@@ -192,7 +194,8 @@
     "short_name": {
       "description": "Infosüsteemi lühinimi",
       "type": "string",
-      "pattern": "^[a-zA-ZõÕäÄöÖüÜ0-9.-]*$"
+      "pattern": "^[a-zA-ZõÕäÄöÖüÜ0-9.-]*$",
+      "minLength": 1
     },
     "topics": {
       "items": {
