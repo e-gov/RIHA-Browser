@@ -22,7 +22,10 @@
           <div class="col">
             <div class="links">
               <ng-container *ngIf="card.actions && card.actions.links">
-                <a *ngFor="let link of card.actions.links" [routerLink]="link.hash">{{link.label}}</a>
+                <span *ngFor="let link of card.actions.links">
+                  <a *ngIf="link.type !== 'external'" [routerLink]="link.hash">{{link.label}}</a>
+                  <a *ngIf="link.type === 'external'" target="_blank" href="{{link.hash}}">{{link.label}}</a>
+                </span>
               </ng-container>
             </div>
           </div>

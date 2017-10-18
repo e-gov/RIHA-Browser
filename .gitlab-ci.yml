@@ -5,19 +5,8 @@ variables:
     ARTIFACT_NAME: "ROOT.war"
 
 stages:
-    - test
     - build
     - deploy
-
-test:
-    stage: test
-    before_script:
-        - node -v
-        - npm -v
-    script:
-        - ./test.sh
-    tags:
-        - riha
 
 build:
     stage: build

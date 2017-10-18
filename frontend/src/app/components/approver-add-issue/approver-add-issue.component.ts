@@ -28,7 +28,19 @@ export class ApproverAddIssueComponent implements OnInit {
     }
   }
 
-  constructor(public activeModal: NgbActiveModal,
+  closeModal(f){
+    if (f.form.dirty){
+      if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
+        this.activeModal.dismiss();
+      } else {
+        return false;
+      }
+    } else {
+      this.activeModal.dismiss();
+    }
+  }
+
+  constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
               private environmentService: EnvironmentService) {

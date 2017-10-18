@@ -56,9 +56,21 @@ export class ApproverIssueDetailsComponent implements OnInit {
     return `${o.organizationName} (${o.authorName})`;
   }
 
+  closeModal(f){
+    if (f.form.dirty){
+      if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
+        this.activeModal.close();
+      } else {
+        return false;
+      }
+    } else {
+      this.activeModal.close();
+    }
+  }
+
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
-              public activeModal: NgbActiveModal,
+              private activeModal: NgbActiveModal,
               private environmentService: EnvironmentService) {
     this.activeUser = this.environmentService.getActiveUser();
 

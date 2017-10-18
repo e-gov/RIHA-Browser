@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams  } from '@angular/http';
+import { Http, URLSearchParams, Headers, RequestOptions  } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
 import { EnvironmentService } from './environment.service';
@@ -138,6 +138,16 @@ export class SystemsService {
       }
     }
     return this.http.post(`/api/v1/systems`, system).toPromise();
+  }
+
+  public postDataFile(file){
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new Headers({});
+    let options = new RequestOptions({ headers });
+
+    return this.http.post(`/api/v1/files`, formData, options).toPromise();
   }
 
   public updateSystem(updatedData, shortName?) {

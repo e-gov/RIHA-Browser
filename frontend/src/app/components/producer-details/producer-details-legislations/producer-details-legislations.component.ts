@@ -14,7 +14,10 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
   @Input() allowEdit: boolean;
 
   openLegislationsEdit(content) {
-    const modalRef = this.modalService.open(ProducerEditLegislationsComponent);
+    const modalRef = this.modalService.open(ProducerEditLegislationsComponent, {
+        backdrop: 'static',
+        keyboard: false
+      });
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.componentInstance.legislations = [].concat(this.system.details.legislations);

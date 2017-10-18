@@ -13,7 +13,10 @@ export class ProducerDetailsContactsComponent implements OnInit {
   @Input() allowEdit: boolean;
 
   openContactsEdit(content) {
-    const modalRef = this.modalService.open(ProducerEditContactsComponent);
+    const modalRef = this.modalService.open(ProducerEditContactsComponent,{
+      backdrop: 'static',
+      keyboard: false
+    });
     this.system.details.contacts = this.system.details.contacts || [];
     modalRef.componentInstance.system = this.system;
     modalRef.componentInstance.contacts = [].concat(this.system.details.contacts);

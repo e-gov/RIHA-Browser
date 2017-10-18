@@ -3,43 +3,47 @@
     Infosüsteemi üldkirjeldus
     <button *ngIf="allowEdit" [routerLink]="['/Kirjelda/Muuda', system.details.short_name]" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
   </div>
-  <div class="my-1 card-content">
-    <h1>{{ system.details.name }}</h1>
+  <div class="my-1 card-content col-lg-10">
+    <h1 class="mt-0">{{ system.details.name }}</h1>
     <h2>{{ system.details.short_name }}</h2>
-    <div *ngIf="system.getStatus() || system.getDevelopmentStatus() || allowEdit" class="separate-block">
-      <div *ngIf="system.getStatus() || allowEdit" class="form-group">
+    <div *ngIf="system.getStatus() || system.getDevelopmentStatus() || allowEdit">
+      <div *ngIf="system.getStatus() || allowEdit">
           <label *ngIf="system.getStatus() == globals.system_status.IN_USE" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></label>
           <label *ngIf="system.getStatus() == globals.system_status.ESTABLISHING" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></label>
           <label *ngIf="system.getStatus() == globals.system_status.FINISHED" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></label>
           <label *ngIf="!system.getStatus() && allowEdit" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></label>
       </div>
-      <div *ngIf="system.getDevelopmentStatus() || allowEdit" class="form-group">
+      <div *ngIf="system.getDevelopmentStatus() || allowEdit">
         <label *ngIf="system.getDevelopmentStatus() == globals.development_status.IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
         <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
         <label *ngIf="!system.getDevelopmentStatus() && allowEdit" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
       </div>
+      <hr class="short" align="left">
     </div>
-    <div class="form-group">
+    <div>
       <label class="text-muted separated-text">Infosüsteemi eesmärk:</label>
       <p>{{ system.details.purpose }}</p>
     </div>
-    <div *ngIf="system.getTopics().length > 0" class="form-group">
+    <div *ngIf="system.getTopics().length > 0" class="pb-2">
       <label class="text-muted">Infosüsteemi valdkond:</label>
       <div class="row">
         <button *ngFor="let topic of system.getTopics()" class="btn btn-primary btn-sm ml-1">{{ topic }}</button>
       </div>
     </div>
-    <div *ngIf="system.getTopics().length == 0 && allowEdit" class="form-group">
+    <div *ngIf="system.getTopics().length == 0 && allowEdit" class="pb-2">
       <label>Infosüsteemi valdkond on <strong>määramata</strong></label>
     </div>
 
-    <div class="form-group">
+    <hr class="short" align="left">
+
+    <div>
       <label class="text-muted separated-text">Omanik:</label>
       <p class="text-primary">{{ system.details.owner.name || system.details.owner.code }}</p>
     </div>
 
-    <div *ngIf="system.details.homepage || system.getXRoadStatus() || allowEdit" class="separate-block">
-      <div *ngIf="system.details.homepage || allowEdit" class="form-group row">
+    <div *ngIf="system.details.homepage || system.getXRoadStatus() || allowEdit">
+      <hr class="short" align="left">
+      <div *ngIf="system.details.homepage || allowEdit">
         <label class="col-form-label advanced-label" *ngIf="system.details.homepage">
           <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}">{{ system.details.homepage }}</a>
         </label>
@@ -47,7 +51,7 @@
           <i class="fa fa-question-circle-o" aria-hidden="true"></i>Avalik kasutajaliides on <strong>määramata</strong>
         </label>
       </div>
-      <div *ngIf="system.getXRoadStatus() || allowEdit" class="form-group row">
+      <div *ngIf="system.getXRoadStatus() || allowEdit">
         <label *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" class="col-form-label advanced-label">
           <i class="fa fa-times" aria-hidden="true"></i>Liidestatud X-teega {{ system.details.meta.x_road_status.timestamp | date:'y-MM-dd'}}
         </label>
@@ -61,6 +65,6 @@
     </div>
 
     <hr>
-    <app-date-row [icon]="'fa-retweet'" [text]="'Andmed uuendati viimati'" [date]="system.details.creation_date"></app-date-row>
+    <app-date-row [icon]="'fa-retweet'" [text]="'Andmed uuendati viimati'" [date]="system.details.meta.update_timestamp"></app-date-row>
   </div>
 </section>

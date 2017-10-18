@@ -11,16 +11,41 @@
       "maxItems": 10,
       "type": "array"
     },
+    "data_files": {
+      "items": {
+        "properties": {
+          "url": {
+            "description": "URL, mis viitab infosüsteemi faili avalikule asukohale",
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "url",
+          "name"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "description": "Infosüsteemi detailne andmekoosseis, lisatuna csv, xmi või andmebaasi skeema kirjeldusena, milles on põhiandmed on eraldi välja toodud"
+    },
     "documents": {
       "items": {
         "properties": {
           "url": {
             "description": "URL, mis viitab süsteemi dokumentatsiooni avalikule asukohale",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": [
@@ -36,12 +61,14 @@
         "properties": {
           "name": {
             "description": "Kontaktisiku nimi",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "email": {
             "description": "Kontaktisiku email",
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "minLength": 1
           }
         },
         "required": [
@@ -58,6 +85,16 @@
     },
     "meta": {
       "properties": {
+        "creation_timestamp": {
+          "description": "Infosüsteemi RIHA kirjelduse loomise aeg",
+          "type": "string",
+          "format": "date-time"
+        },
+        "update_timestamp": {
+          "description": "Infosüsteemi RIHA kirjelduse viimase muutmise aeg",
+          "type": "string",
+          "format": "date-time"
+        },
         "approval_status": {
           "properties": {
             "status": {
@@ -72,11 +109,6 @@
           },
           "type": "object",
           "description": "Süsteemi kooskõlastuse olek - Infosüsteemi hinnangute koondstaatus"
-        },
-        "description_timestamp": {
-          "description": "Infosüsteemi RIHA kirjelduse viimase muutmise aeg",
-          "type": "string",
-          "format": "date-time"
         },
         "development_status": {
           "type": ["string", "null"],
@@ -116,7 +148,8 @@
     },
     "name": {
       "description": "Infosüsteemi täispikk, ametlik nimi",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "owner": {
       "properties": {
@@ -135,14 +168,16 @@
       "type": "object"
     },
     "purpose": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "legislations": {
       "items": {
         "properties": {
           "url": {
             "description": "Viide infosüsteemi reguleerivale õigusaktile (Riigi Teatajas)",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "description": "Õigusakti nimi",
@@ -159,7 +194,8 @@
     "short_name": {
       "description": "Infosüsteemi lühinimi",
       "type": "string",
-      "pattern": "^[a-zA-ZõÕäÄöÖüÜ0-9.-]*$"
+      "pattern": "^[a-zA-ZõÕäÄöÖüÜ0-9.-]*$",
+      "minLength": 1
     },
     "topics": {
       "items": {

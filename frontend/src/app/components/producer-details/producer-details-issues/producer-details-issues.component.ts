@@ -25,7 +25,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   openAddIssueModal(){
     const modalRef = this.modalService.open(ApproverAddIssueComponent, {
-      size: "lg"
+      size: "lg",
+      backdrop: "static",
+      keyboard: false
     });
     this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
@@ -42,7 +44,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     this.systemsService.getSystemIssueById(comment.id).then(res => {
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
         {
-          size: "lg"
+          size: "lg",
+          backdrop: "static",
+          keyboard: false
         });
       modalRef.componentInstance.feedback = res.json();
       modalRef.result.then(res => {

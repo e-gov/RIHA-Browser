@@ -4,6 +4,7 @@ GLOBAL
 body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
+    font-size: 0.875rem;
 }
 a:not(.btn) {
     &.external,
@@ -420,10 +421,10 @@ $CONTENTS
     }
     h1,
     .h1 {
-        font-weight: bold;
-        font-size: 60px;
+    	font-weight: bold;
+        font-size: 44px;
         line-height: 1;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
     &.welcome {
         min-height: 500px;
@@ -803,7 +804,7 @@ $CONTENTS
             border-bottom: 1px solid $grey-dark;
             margin-bottom: 0px;
             padding: 15px 20px 14px 20px;
-            font-size: 18px;
+            font-size: 1rem;
             line-height: 20px;
             transition: all 200ms ease;
             min-height: 50px;
@@ -906,7 +907,7 @@ $CONTENTS
 .main-content {
   h1,
   h1 {
-    font-size: 60px;
+    font-size: 44px;
     font-weight: bold;
     line-height: 1;
     padding-bottom: 14px;
@@ -914,10 +915,6 @@ $CONTENTS
     margin-bottom: 20px;
     text-transform: uppercase;
     color: $primary;
-  }
-  .separate-block {
-    margin-top: 60px;
-    margin-bottom: 50px;
   }
 }
 h2,
@@ -1009,7 +1006,7 @@ h6,
 }
 .form-control {
   &.h1 {
-    font-size: 60px;
+    font-size: 44px;
     font-weight: bold;
     color: $primary;
     line-height: inherit;
@@ -1025,7 +1022,7 @@ h6,
   }
 }
 .lead {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: normal;
     line-height: 1.458;
 }
@@ -1434,17 +1431,23 @@ mark {
 }
 .panel-action-heading {
   margin: -20px -20px 20px -20px;
+  padding: 10px 20px;
   background-color: $grey;
-  font-size: 20px;
+  font-size: 1rem;
   line-height: 30px;
   padding: 15px 20px;
   font-weight: bold;
 }
 .separated-text {
-  line-height: 40px;
+  line-height: 1.75rem;
 }
 .separate-blocks {
   .separate-block:not(:first-child){
     padding-top: 30px;
+  }
+}
+hr {
+  &.short {
+    width: 25%;
   }
 }

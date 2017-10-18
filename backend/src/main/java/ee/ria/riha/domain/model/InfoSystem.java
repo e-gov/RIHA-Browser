@@ -22,6 +22,10 @@ public class InfoSystem {
     private static final String OWNER_NAME_KEY = "name";
     private static final String OWNER_CODE_KEY = "code";
     private static final String SHORT_NAME_KEY = "short_name";
+    private static final String FULL_NAME_KEY = "name";
+    private static final String META_KEY = "meta";
+    private static final String META_CREATION_TIMESTAMP_KEY = "creation_timestamp";
+    private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
 
     private JSONObject jsonObject = new JSONObject();
 
@@ -30,6 +34,9 @@ public class InfoSystem {
     private String ownerName;
     private String ownerCode;
     private String shortName;
+    private String fullName;
+    private String creationTimestamp;
+    private String updateTimestamp;
 
     public InfoSystem() {
         this("{}");
@@ -45,10 +52,14 @@ public class InfoSystem {
         this.uuid = hasText(uuidString) ? UUID.fromString(uuidString) : null;
 
         this.shortName = ((String) getPath(SHORT_NAME_KEY).queryFrom(jsonObject));
+        this.fullName = ((String) getPath(FULL_NAME_KEY).queryFrom(jsonObject));
 
         JSONObject owner = getOwner();
         this.ownerName = ((String) getPath(OWNER_NAME_KEY).queryFrom(owner));
         this.ownerCode = ((String) getPath(OWNER_CODE_KEY).queryFrom(owner));
+
+        this.creationTimestamp = (String) getPath(META_CREATION_TIMESTAMP_KEY).queryFrom(getMeta());
+        this.updateTimestamp = (String) getPath(META_UPDATE_TIMESTAMP_KEY).queryFrom(getMeta());
     }
 
     public InfoSystem(String json) {
@@ -126,5 +137,43 @@ public class InfoSystem {
     public void setShortName(String shortName) {
         this.shortName = shortName;
         jsonObject.putOpt(SHORT_NAME_KEY, shortName);
+    }
+
+    public String getFullName() {
+    	return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+        jsonObject.putOpt(FULL_NAME_KEY, fullName);
+    }
+
+    private JSONObject getMeta() {
+        JSONObject meta = ((JSONObject) getPath(META_KEY).queryFrom(jsonObject));
+
+        if (meta == null) {
+            meta = new JSONObject();
+            jsonObject.put(META_KEY, meta);
+        }
+
+        return meta;
+    }
+
+    public String getCreationTimestamp() {
+        return this.creationTimestamp;
+    }
+
+    public void setCreationTimestamp(String creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+        getMeta().putOpt(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
+    }
+
+    public String getUpdateTimestamp() {
+        return updateTimestamp;
+    }
+
+    public void setUpdateTimestamp(String updateTimestamp) {
+        this.updateTimestamp = updateTimestamp;
+        getMeta().putOpt(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
     }
 }
