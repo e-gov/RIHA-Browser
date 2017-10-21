@@ -14,7 +14,7 @@ import { G } from '../../globals/globals';
 })
 export class ProducerListComponent implements OnInit {
 
-  gridData: GridData;
+  gridData: GridData  = new GridData();
   filters: {
     name: string,
     shortName: string
@@ -68,7 +68,6 @@ export class ProducerListComponent implements OnInit {
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private modalService: NgbModal) {
-    this.gridData = new GridData();
     this.filters = {
       name: null,
       shortName: null
@@ -78,6 +77,7 @@ export class ProducerListComponent implements OnInit {
 
   ngOnInit() {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
+      this.gridData.changeSortOrder('meta.update_timestamp');
       this.getOwnSystems();
     }
   }

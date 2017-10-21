@@ -10,7 +10,7 @@ import { G } from '../../globals/globals';
 })
 export class BrowserListComponent implements OnInit {
 
-  gridData: GridData;
+  gridData: GridData = new GridData();
   filters: {
     ownerName: string,
     name: string
@@ -56,7 +56,6 @@ export class BrowserListComponent implements OnInit {
   }
 
   constructor(private systemsService: SystemsService) {
-    this.gridData = new GridData();
     this.filters = {
       ownerName: null,
       name: null
@@ -64,6 +63,7 @@ export class BrowserListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.gridData.changeSortOrder('meta.update_timestamp');
     this.getSystems();
   }
 
