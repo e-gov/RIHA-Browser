@@ -35,19 +35,17 @@
     <div class="table-responsive">
       <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
         <thead class="thead-default">
-        <th><button (click)="onSortChange('name')" class="btn btn-primary btn-sm">Nimi</button></th>
-        <th><button (click)="onSortChange('short_name')" class="btn btn-primary btn-sm">Lühinimi</button></th>
-        <th></th>
+          <th><button (click)="onSortChange('short_name')" class="btn btn-primary btn-sm">Lühinimi</button></th>
+          <th><button (click)="onSortChange('name')" class="btn btn-primary btn-sm">Infosüsteemi nimi</button></th>
+          <th><button (click)="onSortChange('meta.system_status.status')" class="btn btn-primary btn-sm">Staatus</button></th>
+          <th><button (click)="onSortChange('meta.update_timestamp')" class="btn btn-primary btn-sm">Viimati muudetud</button></th>
         </thead>
         <tbody>
           <tr *ngFor="let system of gridData.content">
-            <td class="name">{{ system.details.name }}</td>
-            <td class="short-name">{{ system.details.short_name }}</td>
-            <td>
-              <button class="btn btn-primary view btn-sm" [routerLink]="['/Kirjelda/Vaata', system.details.short_name]">Vaata</button>
-              <button *ngIf="userMatrix.hasDescriberRole" class="btn btn-success edit btn-sm" [routerLink]="['/Kirjelda/Muuda', system.details.short_name]">Muuda</button>
-              <button *ngIf="userMatrix.hasDescriberRole" class="btn btn-danger delete btn-sm">Kustuta</button>
-            </td>
+            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.short_name}}</a></td>
+            <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.name}}</a></td>
+            <td class="status">{{ getSystemStatusText(system) }}</td>
+            <td class="last-modified text-nowrap">{{ system.details.meta.update_timestamp | date:'y-MM-dd HH:mm:ss'}}</td>
           </tr>
         </tbody>
       </table>
