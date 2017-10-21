@@ -32,10 +32,12 @@ export class ProducerListComponent implements OnInit {
   }
 
   getOwnSystems(): void {
-    this.systemsService.getOwnSystems(this.filters, this.gridData).then(
+    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
+      this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
       })
+    }
   }
 
   openOrganizationsModal() {
@@ -76,10 +78,8 @@ export class ProducerListComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
-      this.gridData.changeSortOrder('meta.update_timestamp');
-      this.getOwnSystems();
-    }
+    this.gridData.changeSortOrder('meta.update_timestamp');
+    this.getOwnSystems();
   }
 
 }
