@@ -41,7 +41,12 @@
           </tr>
         </tbody>
       </table>
-      <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="gridData.size" [collectionSize]="gridData.getSize()" [page]="gridData.getPageNumber()"></ngb-pagination>
+      <ngb-pagination
+        (pageChange)="onPageChange($event)"
+        [pageSize]="gridData.size"
+        [maxSize]="5"
+        [collectionSize]="gridData.getSize()"
+        [page]="gridData.getPageNumber()"></ngb-pagination>
     </div>
   </div>
 </section>
