@@ -5,7 +5,7 @@ import { GridData } from '../../models/grid-data';
 import { UserMatrix } from '../../models/user-matrix';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
-import { G } from '../../globals/globals';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-list',
@@ -45,30 +45,9 @@ export class ProducerListComponent implements OnInit {
     return false;
   }
 
-  getSystemStatusText(system){
-    let statusDescription = 'määramata';
-    if (system.details.meta && system.details.meta.system_status) {
-      let status = system.details.meta.system_status.status;
-      switch (status) {
-        case G.system_status.IN_USE: {
-          statusDescription = 'kasutusel';
-          break;
-        }
-        case G.system_status.ESTABLISHING: {
-          statusDescription = 'asutamisel';
-          break;
-        }
-        case G.system_status.FINISHED: {
-          statusDescription = 'lõpetatud';
-          break
-        }
-      }
-    }
-    return statusDescription;
-  }
-
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
+              public  generalHelperService: GeneralHelperService,
               private modalService: NgbModal) {
     this.filters = {
       name: null,

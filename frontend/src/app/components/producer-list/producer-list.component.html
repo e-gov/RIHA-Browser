@@ -44,7 +44,7 @@
           <tr *ngFor="let system of gridData.content">
             <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.short_name}}</a></td>
             <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.name}}</a></td>
-            <td class="status">{{ getSystemStatusText(system) }}</td>
+            <td class="status">{{ generalHelperService.getSystemStatusText(system) }}</td>
             <td class="last-modified text-nowrap">{{ system.details.meta.update_timestamp | date:'y-MM-dd HH:mm:ss'}}</td>
           </tr>
         </tbody>
