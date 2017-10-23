@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SystemsService } from '../../../services/systems.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 import { System } from '../../../models/system';
 import { Router } from '@angular/router';
 
@@ -74,14 +75,6 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.isChanged = true;
   }
 
-  getFileUrl(url){
-    if (url.substring(0,7) === 'file://'){
-      return '/api/v1/files/' + url.substring(7);
-    } else {
-      return url;
-    }
-  }
-
   saveSystem(){
     this.system.details.stored_data = this.stored_data;
     this.system.details.data_files = this.data_files;
@@ -105,6 +98,7 @@ export class ProducerEditObjectsComponent implements OnInit {
 
   constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
+              public generalHelperService: GeneralHelperService,
               private router: Router) {
   }
 

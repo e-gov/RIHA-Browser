@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProducerEditObjectsComponent } from '../../producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { System } from '../../../models/system';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-details-objects',
@@ -25,15 +26,8 @@ export class ProducerDetailsObjectsComponent implements OnInit {
     modalRef.componentInstance.data_files = [].concat(this.system.details.data_files);
   }
 
-  getFileUrl(url){
-    if (url.substring(0,7) === 'file://'){
-      return '/api/v1/files/' + url.substring(7);
-    } else {
-      return url;
-    }
-  }
-
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal,
+              public generalHelperService: GeneralHelperService) {
 
   }
 
