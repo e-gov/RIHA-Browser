@@ -73,7 +73,9 @@
                required>
       </div>
       <div class="form-group col-12">
-        <button class="btn btn-default pull-right" (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        <button class="btn btn-default pull-right"
+                [disabled]="uploading"
+                (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
       <div class="dataTables_wrapper">
         <table *ngIf="system" class="details-list-table">

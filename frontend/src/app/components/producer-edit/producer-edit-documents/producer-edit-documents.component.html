@@ -4,10 +4,22 @@
   </div>
   <div class="my-1">
     <form #addForm="ngForm">
+      <div *ngIf="dataFile == null" class="form-group">
+        <label class="btn btn-default input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
+        <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event, addForm)">
+      </div>
+      <div *ngIf="docFile != null" class="form-group">
+        {{ docFile.name }}
+        <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
+      </div>
+      <div class="form-group">
+        või lisa viide
+      </div>
       <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
         <label for="url" class="text-muted separated-text">URL:</label>
         <input id="url" class="form-control col-12"
                #url="ngModel"
+               [disabled]="uploading"
                [(ngModel)]="data.url"
                type="url"
                placeholder="http://www.example.com"
@@ -19,6 +31,7 @@
         <label for="name" class="text-muted separated-text">URLi sisu:</label>
         <input id="name" class="form-control col-12"
                #name="ngModel"
+               [disabled]="uploading"
                [(ngModel)]="data.name"
                placeholder="Lähtekood"
                (keyup.enter)="addTechDoc(addForm)"
@@ -27,7 +40,9 @@
       </div>
       <div class="form-group row">
         <div class="col-12">
-          <button class="btn btn-default pull-right" (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          <button class="btn btn-default pull-right"
+                  [disabled]="uploading"
+                  (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
         </div>
       </div>
       <div class="dataTables_wrapper">
