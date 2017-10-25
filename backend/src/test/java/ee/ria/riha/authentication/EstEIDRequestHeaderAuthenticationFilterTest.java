@@ -73,11 +73,11 @@ public class EstEIDRequestHeaderAuthenticationFilterTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.request(HttpMethod.GET, "/login/esteid");
 
         if (hasText(subjectDn)) {
-            request.header("SSL_CLIENT_S_DN", subjectDn);
+            request.header("SSLCLIENTSDN", subjectDn);
         }
 
         if (hasText(cert)) {
-            request.header("SSL_CLIENT_CERT", cert);
+            request.header("SSLCLIENTCERT", cert);
         }
 
         return request.buildRequest(new MockServletContext());

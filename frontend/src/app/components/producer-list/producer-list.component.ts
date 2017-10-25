@@ -5,6 +5,7 @@ import { GridData } from '../../models/grid-data';
 import { UserMatrix } from '../../models/user-matrix';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-list',
@@ -13,7 +14,7 @@ import { ActiveOrganizationChooserComponent } from '../active-organization-choos
 })
 export class ProducerListComponent implements OnInit {
 
-  gridData: GridData;
+  gridData: GridData  = new GridData();
   filters: {
     name: string,
     shortName: string
@@ -31,10 +32,12 @@ export class ProducerListComponent implements OnInit {
   }
 
   getOwnSystems(): void {
-    this.systemsService.getOwnSystems(this.filters, this.gridData).then(
+    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
+      this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
       })
+    }
   }
 
   openOrganizationsModal() {
@@ -44,8 +47,8 @@ export class ProducerListComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
+              public  generalHelperService: GeneralHelperService,
               private modalService: NgbModal) {
-    this.gridData = new GridData();
     this.filters = {
       name: null,
       shortName: null
@@ -54,9 +57,8 @@ export class ProducerListComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
-      this.getOwnSystems();
-    }
+    this.gridData.changeSortOrder('meta.update_timestamp');
+    this.getOwnSystems();
   }
 
 }

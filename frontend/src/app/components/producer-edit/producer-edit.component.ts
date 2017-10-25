@@ -14,9 +14,8 @@ export class ProducerEditComponent implements OnInit {
 
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
-      let s = new System();
-      s.setData(response.json());
-      this.system.setData(this.systemsService.prepareSystemForDisplay(s));
+      let s = new System(response.json());
+      this.system = new System(this.systemsService.prepareSystemForDisplay(s));
       this.loaded = true;
     })
   }

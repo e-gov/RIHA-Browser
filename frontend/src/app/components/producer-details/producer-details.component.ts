@@ -14,7 +14,7 @@ declare var $: any;
   styleUrls: ['./producer-details.component.scss']
 })
 export class ProducerDetailsComponent implements OnInit {
-  private system: System;
+  private system: System = new System();
   private user: User;
   private loaded: boolean = false;
 
@@ -84,7 +84,7 @@ export class ProducerDetailsComponent implements OnInit {
 
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
-      this.system.setData(response.json());
+      this.system = new System(response.json());
       this.loaded = true;
       this.adjustSection(0);
     })
@@ -94,7 +94,6 @@ export class ProducerDetailsComponent implements OnInit {
               private environmentService: EnvironmentService,
               private route: ActivatedRoute,
               private winRef: WindowRefService) {
-    this.system = new System();
     this.user = this.environmentService.getActiveUser();
   }
 
