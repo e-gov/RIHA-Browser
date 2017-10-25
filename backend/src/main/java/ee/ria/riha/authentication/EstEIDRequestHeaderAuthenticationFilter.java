@@ -44,8 +44,8 @@ public class EstEIDRequestHeaderAuthenticationFilter extends AbstractPreAuthenti
     private static final String GIVEN_NAME = "gn";
     private static final String SURNAME = "sn";
 
-    private String principalHeader = "SSL_CLIENT_S_DN";
-    private String credentialsHeader = "SSL_CLIENT_CERT";
+    private String principalHeader = "SSLCLIENTSDN";
+    private String credentialsHeader = "SSLCLIENTCERT";
     private RequestMatcher requestMatcher = new AntPathRequestMatcher("/login/esteid", "GET");
 
     public EstEIDRequestHeaderAuthenticationFilter() {

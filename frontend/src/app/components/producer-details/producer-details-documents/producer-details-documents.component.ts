@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProducerEditDocumentsComponent } from '../../producer-edit/producer-edit-documents/producer-edit-documents.component';
 import { System } from '../../../models/system';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-details-tech-docs',
@@ -23,7 +24,8 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
     modalRef.componentInstance.documents = [].concat(this.system.details.documents);
   }
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,
+              public generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
   }

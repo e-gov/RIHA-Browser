@@ -23,6 +23,7 @@ import { JsonDataService } from './json-data.service';
 import { SystemsService } from './services/systems.service';
 import { WindowRefService } from './services/window-ref.service';
 import { EnvironmentService } from './services/environment.service';
+import { GeneralHelperService } from './services/general-helper.service';
 
 //components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
@@ -153,7 +154,7 @@ const routes: Routes = [
     ProducerEditContactsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
+  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}

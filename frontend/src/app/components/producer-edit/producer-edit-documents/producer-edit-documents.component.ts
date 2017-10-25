@@ -15,6 +15,8 @@ export class ProducerEditDocumentsComponent implements OnInit {
   @Input() documents: any[];
   isChanged: boolean = false;
 
+  docFile: any = null;
+  uploading: boolean = false;
   data: any = {url: '', name: ''};
 
   addTechDoc(addForm): void {
@@ -25,6 +27,24 @@ export class ProducerEditDocumentsComponent implements OnInit {
       addForm.reset();
       this.isChanged = true;
     }
+  }
+
+  fileChange(event, form){
+    this.docFile = event.target.files[0];
+    this.uploading = true;
+
+    this.systemsService.postDataFile(this.docFile).then(res =>{
+      this.uploading = false;
+      this.documents.push({
+        url: 'file://' + res.text(),
+        name: this.docFile.name
+      });
+      this.docFile = null;
+      this.isChanged = true;
+    }, err =>{
+      this.uploading = false;
+      this.docFile = null;
+    });
   }
 
   deleteTechDoc(i): void {
