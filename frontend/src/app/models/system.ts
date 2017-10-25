@@ -29,6 +29,12 @@ export class System {
         }
       }
     }
+    this.details.topics = this.details.topics || [];
+    this.details.stored_data = this.details.stored_data || [];
+    this.details.data_files = this.details.data_files || [];
+    this.details.legislations = this.details.legislations || [];
+    this.details.documents = this.details.documents || [];
+    this.details.contacts = this.details.contacts || [];
   }
 
   getStatus(){
