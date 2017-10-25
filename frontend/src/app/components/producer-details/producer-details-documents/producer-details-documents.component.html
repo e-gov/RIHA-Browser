@@ -14,7 +14,7 @@
           <i class="fa fa-external-link text-primary"></i>
         </td>
         <td>
-          <a href="{{ doc.url }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? doc.url : doc.name }}</a>
+          <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
         </td>
       </tr>
     </table>

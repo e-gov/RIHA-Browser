@@ -73,7 +73,9 @@
                required>
       </div>
       <div class="form-group col-12">
-        <button class="btn btn-default pull-right" (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        <button class="btn btn-default pull-right"
+                [disabled]="uploading"
+                (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
       <div class="dataTables_wrapper">
         <table *ngIf="system" class="details-list-table">
@@ -82,7 +84,7 @@
               <i class="fa fa-file-o text-primary"></i>
             </td>
             <td>
-              <a href="{{ getFileUrl(file.url) }}" target="_blank">{{ file.name }}</a>
+              <a href="{{ generalHelperService.getFileUrl(file.url) }}" target="_blank">{{ file.name }}</a>
             </td>
             <td>
               <button (click)="deleteDataFile(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
