@@ -1,8 +1,8 @@
 import { G } from '../globals/globals';
 
 export class System {
-  id: number;
-  details: any;
+  id: number = null;
+  details: any = {};
 
   getOwnerCode(): any {
     if (this.details && this.details.owner){
@@ -12,50 +12,12 @@ export class System {
     }
   }
 
-  setData(system): void {
-    this.id = system.id;
-    this.details = Object.assign(this.details, system.details);
-    if (this.details.meta != null){
-      if (!this.details.meta.system_status){
-        this.details.meta.system_status = {
-          status: null,
-          timestamp: null
-        }
-      }
-      if (!this.details.meta.x_road_status){
-        this.details.meta.x_road_status = {
-          status: null,
-          timestamp: null
-        }
-      }
-    }
-    this.details.topics = this.details.topics || [];
-    this.details.stored_data = this.details.stored_data || [];
-    this.details.data_files = this.details.data_files || [];
-    this.details.legislations = this.details.legislations || [];
-    this.details.documents = this.details.documents || [];
-    this.details.contacts = this.details.contacts || [];
-  }
-
   getStatus(){
     return this.details.meta.system_status.status;
   }
 
   setStatus(status): void {
     this.details.meta.system_status.status = status;
-  }
-
-  getStatusDescription(): string {
-    let description = 'tundmatu staatuses';
-    switch(this.details.meta.system_status.status){
-      case G.system_status.ESTABLISHING: description = 'asutamisel';
-        break;
-      case G.system_status.IN_USE: description = 'kasutusel';
-        break;
-      case G.system_status.FINISHED: description = 'lõpetatud';
-        break;
-    }
-    return description;
   }
 
   isUsed(): boolean{
@@ -110,10 +72,29 @@ export class System {
     return this.details.contacts && this.details.contacts.length > 0;
   }
 
-  constructor(){
-    this.id = null;
-    this.details = {
-      meta: {
+  constructor(system?){
+    system = system || {};
+    this.id = system.id || null;
+    this.details = system.details || {};
+    if (this.details.meta != null){
+      if (!this.details.meta.development_status){
+        this.details.meta.development_status = null;
+      }
+      if (!this.details.meta.system_status){
+        this.details.meta.system_status = {
+          status: null,
+          timestamp: null
+        }
+      }
+      if (!this.details.meta.x_road_status){
+        this.details.meta.x_road_status = {
+          status: null,
+          timestamp: null
+        }
+      }
+    }
+    else {
+      this.details.meta = {
         development_status: null,
         system_status: {
           status: null,
@@ -123,16 +104,16 @@ export class System {
           status: null,
           timestamp: null
         }
-      },
-      topics: [],
-      stored_data: [],
-      data_files: [],
-      legislations: [],
-      documents: [],
-      contacts: [],
-      homepage: null,
-      purpose: null,
-      short_name: null
-    };
+      }
+    }
+    this.details.topics = this.details.topics || [];
+    this.details.stored_data = this.details.stored_data || [];
+    this.details.data_files = this.details.data_files || [];
+    this.details.legislations = this.details.legislations || [];
+    this.details.documents = this.details.documents || [];
+    this.details.contacts = this.details.contacts || [];
+    this.details.homepage = this.details.homepage || null;
+    this.details.purpose = this.details.purpose || null;
+    this.details.short_name = this.details.short_name || null;
   }
 }
