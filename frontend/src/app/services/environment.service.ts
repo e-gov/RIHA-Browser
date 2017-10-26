@@ -4,6 +4,8 @@ import { Environment } from '../models/environment';
 import { User } from '../models/user';
 import { UserMatrix } from '../models/user-matrix';
 
+declare let ga: Function;
+
 @Injectable()
 export class EnvironmentService {
 
@@ -41,9 +43,41 @@ export class EnvironmentService {
     });
   }
 
-  public load(): Promise<any> {
+  private runTrackingScripts(environment){
+    if (environment.gaId){
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * <any>new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', environment.gaId/*'UA-106544640-1'*/, 'auto');
+      ga('send', 'pageview');
+    }
+  }
+
+  public onAppStart(): Promise<any> {
     let promise = this.http.get(this.environmentUrl).toPromise();
-    promise.then(response => this.globalEnvironment = new Environment(response.json()));
+    promise.then(response => {
+      this.globalEnvironment = new Environment(response.json());
+      this.globalEnvironment.gaId = 'UA-106544640-1';
+      this.runTrackingScripts(this.globalEnvironment);
+    });
+    return promise;
+  }
+
+  public loadEnvironmentData(){
+    let promise = this.http.get(this.environmentUrl).toPromise();
+    promise.then(res => {
+      this.globalEnvironment = new Environment(res.json());
+      this.globalEnvironment.gaId = 'UA-106544640-1';
+    });
     return promise;
   }
 

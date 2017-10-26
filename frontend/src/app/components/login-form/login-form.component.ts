@@ -18,7 +18,7 @@ export class LoginFormComponent implements OnInit {
 
   login(){
     this.environmentService.doLogin().then(res => {
-      this.environmentService.load().then(res => {
+      this.environmentService.loadEnvironmentData().then(res => {
         this.router.navigate(['/']);
         let user = this.environmentService.getActiveUser();
         let organizations = user.getOrganizations();

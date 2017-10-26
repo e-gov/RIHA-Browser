@@ -60,8 +60,8 @@ export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function setGlobalEnvironment(environmentService: EnvironmentService){
-  return () => environmentService.load();
+export function onApplicationStart(environmentService: EnvironmentService){
+  return () => environmentService.onAppStart();
 }
 
 const routes: Routes = [
@@ -154,7 +154,7 @@ const routes: Routes = [
     ProducerEditContactsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
+  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}
