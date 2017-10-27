@@ -57,7 +57,7 @@ export class EnvironmentService {
         m.parentNode.insertBefore(a, m)
       })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', environment.gaId/*'UA-106544640-1'*/, 'auto');
+      ga('create', environment.gaId, 'auto');
       ga('send', 'pageview');
     }
   }
@@ -66,7 +66,6 @@ export class EnvironmentService {
     let promise = this.http.get(this.environmentUrl).toPromise();
     promise.then(response => {
       this.globalEnvironment = new Environment(response.json());
-      this.globalEnvironment.gaId = 'UA-106544640-1';
       this.runTrackingScripts(this.globalEnvironment);
     });
     return promise;
@@ -76,7 +75,6 @@ export class EnvironmentService {
     let promise = this.http.get(this.environmentUrl).toPromise();
     promise.then(res => {
       this.globalEnvironment = new Environment(res.json());
-      this.globalEnvironment.gaId = 'UA-106544640-1';
     });
     return promise;
   }
