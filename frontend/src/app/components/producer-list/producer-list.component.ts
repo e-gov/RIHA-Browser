@@ -57,7 +57,7 @@ export class ProducerListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gridData.changeSortOrder('meta.update_timestamp', '-');
+    this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
     this.getOwnSystems();
   }
 
