@@ -10,6 +10,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.Collections;
@@ -24,6 +25,11 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         super.addArgumentResolvers(argumentResolvers);
         argumentResolvers.add(new PageableArgumentResolver());
         argumentResolvers.add(new FilterableArgumentResolver());
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(false);
     }
 
     @Override
