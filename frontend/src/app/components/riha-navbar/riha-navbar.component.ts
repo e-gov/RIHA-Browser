@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { JsonDataService } from '../../json-data.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { User } from '../../models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
-import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 
@@ -16,7 +14,6 @@ declare var $: any;
   styleUrls: ['./riha-navbar.component.scss']
 })
 export class RihaNavbarComponent implements OnInit {
-  private routes = [];
   public activeUser: User = null;
 
   isUserLoggedIn(): boolean {
@@ -51,16 +48,10 @@ export class RihaNavbarComponent implements OnInit {
     return user.getFullNameWithActiveOrganization();
   }
 
-  constructor(private jsonDataService: JsonDataService,
-              private environmentService: EnvironmentService,
+  constructor(private environmentService: EnvironmentService,
               private modalService: NgbModal,
               private http: Http,
               private router: Router) {
-    jsonDataService.routes.subscribe(this.updateRoutes.bind(this));
-  }
-
-  updateRoutes(routes) {
-    this.routes = routes;
   }
 
   ngOnInit() {

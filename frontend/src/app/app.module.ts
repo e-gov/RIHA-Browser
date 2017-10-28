@@ -17,7 +17,6 @@ import missingTranslationHandler from './app.missingTranslation';
 
 import { AppComponent } from './app.component';
 import { RihaNavbarComponent } from './components/riha-navbar/riha-navbar.component';
-import { JsonDataService } from './json-data.service';
 
 //services
 import { SystemsService } from './services/systems.service';
@@ -154,7 +153,7 @@ const routes: Routes = [
     ProducerEditContactsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
+  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}
