@@ -923,6 +923,7 @@ $CONTENTS
     margin-bottom: 20px;
     text-transform: uppercase;
     color: $primary;
+    word-break: break-all;
   }
 }
 h2,
@@ -934,6 +935,7 @@ h2,
     border-bottom: 1px solid $grey;
     margin-bottom: 20px;
     color: $primary;
+    word-break: break-all;
   &.h2-sm {
         font-size: 24px;
         line-height: 30px;

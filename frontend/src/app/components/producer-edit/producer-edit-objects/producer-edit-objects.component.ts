@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SystemsService } from '../../../services/systems.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 import { System } from '../../../models/system';
-import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-producer-edit-objects',
@@ -76,30 +76,32 @@ export class ProducerEditObjectsComponent implements OnInit {
   }
 
   saveSystem(){
-    this.system.details.stored_data = this.stored_data;
-    this.system.details.data_files = this.data_files;
-    this.systemsService.updateSystem(this.system).then(response => {
-      this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
+    let s = this.generalHelperService.cloneObject(this.system);
+    s.details.stored_data = this.stored_data;
+    s.details.data_files = this.data_files;
+    this.systemsService.updateSystem(s).then(response => {
+      this.activeModal.close({system: new System(response.json())});
+    }, err => {
+      this.toastrService.error('Serveri viga.')
     });
-    this.activeModal.close('saved');
   }
 
   closeModal(f, i){
     if (this.isChanged || f.form.dirty || i.value.length > 0){
       if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.activeModal.close();
+        this.activeModal.dismiss();
       } else {
         return false;
       }
     } else {
-      this.activeModal.close();
+      this.activeModal.dismiss();
     }
   }
 
   constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
               public generalHelperService: GeneralHelperService,
-              private router: Router) {
+              private toastrService: ToastrService) {
   }
 
   ngOnInit() {

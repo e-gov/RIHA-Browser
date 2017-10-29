@@ -22,6 +22,11 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
     this.system.details.documents = this.system.details.documents || [];
     modalRef.componentInstance.system = this.system;
     modalRef.componentInstance.documents = [].concat(this.system.details.documents);
+    modalRef.result.then( result => {
+      if (result.system) {
+        this.system = result.system;
+      }
+    })
   }
 
   constructor(private modalService: NgbModal,
