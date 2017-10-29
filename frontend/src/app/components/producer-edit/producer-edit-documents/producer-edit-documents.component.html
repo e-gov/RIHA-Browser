@@ -27,7 +27,7 @@
                name="url" url required>
 
       </div>
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
         <label for="name" class="text-muted separated-text">URLi sisu:</label>
         <input id="name" class="form-control col-12"
                #name="ngModel"
@@ -35,7 +35,7 @@
                [(ngModel)]="data.name"
                placeholder="Lähtekood"
                (keyup.enter)="addTechDoc(addForm)"
-               name="name">
+               name="name" required>
 
       </div>
       <div class="form-group row">
@@ -52,7 +52,7 @@
               <i class="fa fa-external-link text-primary"></i>
             </td>
             <td>
-              <a href="{{ doc.url }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? doc.url : doc.name }}</a>
+              <a href="{{ doc.url }}" target="_blank">{{ doc.name }}</a>
             </td>
             <td>
               <button (click)="deleteTechDoc(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>

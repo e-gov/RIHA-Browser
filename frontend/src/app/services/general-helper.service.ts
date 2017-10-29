@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { G } from '../globals/globals';
 
+declare var $: any;
+
 @Injectable()
 export class GeneralHelperService {
 
@@ -32,6 +34,10 @@ export class GeneralHelperService {
     } else {
       return url;
     }
+  }
+
+  public cloneObject(obj){
+    return $.extend(true, {}, obj);
   }
 
   constructor() { }
