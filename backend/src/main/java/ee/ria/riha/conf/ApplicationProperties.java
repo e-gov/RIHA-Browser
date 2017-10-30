@@ -20,6 +20,7 @@ public class ApplicationProperties {
     private final AuthenticationProperties authentication = new AuthenticationProperties();
     private final ValidationProperties validation = new ValidationProperties();
     private final NotificationProperties notification = new NotificationProperties();
+    private final CorsProperties cors = new CorsProperties();
 
     @Setter
     private String baseUrl;
@@ -61,5 +62,11 @@ public class ApplicationProperties {
         private String[] to;
         private String[] cc;
         private String[] bcc;
+    }
+
+    @Getter
+    @Setter
+    public static class CorsProperties {
+        private String[] allowedOrigins;
     }
 }
