@@ -22,7 +22,7 @@ export class RihaNavbarComponent implements OnInit {
 
   logout(){
     this.environmentService.doLogout().then(res => {
-      this.environmentService.load().then(env => {
+      this.environmentService.loadEnvironmentData().then(env => {
         this.router.navigate(['/']);
       });
     });

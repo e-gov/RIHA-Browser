@@ -20,6 +20,7 @@ public class ApplicationProperties {
     private final AuthenticationProperties authentication = new AuthenticationProperties();
     private final ValidationProperties validation = new ValidationProperties();
     private final NotificationProperties notification = new NotificationProperties();
+    private final TrackingProperties tracking = new TrackingProperties();
 
     @Setter
     private String baseUrl;
@@ -62,4 +63,26 @@ public class ApplicationProperties {
         private String[] cc;
         private String[] bcc;
     }
+
+    @Getter
+    @Setter
+    public static class TrackingProperties {
+        private final GoogleAnalyticsProperties googleAnalytics = new GoogleAnalyticsProperties();
+        private final HotjarProperties hotjar = new HotjarProperties();
+    }
+
+    @Getter
+    @Setter
+    public static class GoogleAnalyticsProperties {
+        private String id;
+    }
+
+    @Getter
+    @Setter
+    public static class HotjarProperties {
+        private String hjid;
+        private String hjsv;
+    }
+
+
 }
