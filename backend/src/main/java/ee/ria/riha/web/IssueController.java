@@ -4,10 +4,8 @@ import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
-import ee.ria.riha.storage.util.ApiPageableAndFilterableParams;
-import ee.ria.riha.storage.util.Filterable;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
+import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Info system issues
@@ -25,6 +24,9 @@ public class IssueController {
 
     @Autowired
     private IssueService issueService;
+
+    @Autowired
+    private IssueSummaryModelMapper issueSummaryModelMapper;
 
     /**
      * Retrieve paginated and filtered list of issues for given info system.
@@ -37,9 +39,16 @@ public class IssueController {
     @GetMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
     @ApiOperation("List all issues of information system")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<Issue>> listInfoSystemIssues(@PathVariable("shortName") String shortName,
-                                                                     Pageable pageable, Filterable filterable) {
-        return ResponseEntity.ok(issueService.listInfoSystemIssues(shortName, pageable, filterable));
+    public ResponseEntity<PagedResponse<IssueSummaryModel>> listInfoSystemIssues(@PathVariable("shortName") String shortName,
+                                                                                 Pageable pageable, Filterable filterable) {
+        PagedResponse<Issue> issues = issueService.listInfoSystemIssues(shortName, pageable, filterable);
+
+        return ResponseEntity.ok(
+                new PagedResponse<>(new PageRequest(issues.getPage(), issues.getSize()),
+                        issues.getTotalElements(),
+                        issues.getContent().stream()
+                                .map(issueSummaryModelMapper::map)
+                                .collect(toList())));
     }
 
     /**
