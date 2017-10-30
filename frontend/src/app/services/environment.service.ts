@@ -44,7 +44,8 @@ export class EnvironmentService {
   }
 
   private runTrackingScripts(environment){
-    if (environment.gaId){
+    let googleAnalyticsId = environment.getGoogleAnalyticsId();
+    if (googleAnalyticsId){
       (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
@@ -57,14 +58,16 @@ export class EnvironmentService {
         m.parentNode.insertBefore(a, m)
       })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', environment.gaId, 'auto');
+      ga('create',googleAnalyticsId, 'auto');
       ga('send', 'pageview');
     }
 
-    if (environment.hjid && environment.hjsv){
+    let hjid = environment.getHotjarHjid();
+    let hjsv = environment.getHotjarHjsv();
+    if (hjid && hjsv){
       (function(h,o,t,j,a,r){
         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:environment.hjid,hjsv:environment.hjsv};
+        h._hjSettings={hjid:hjid,hjsv:hjsv};
         a=o.getElementsByTagName('head')[0];
         r=o.createElement('script');r.async=1;
         r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;

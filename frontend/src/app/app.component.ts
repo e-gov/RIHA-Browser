@@ -28,7 +28,8 @@ export class AppComponent {
 
     PageScrollConfig.defaultDuration = 400;
 
-    if (environmentService.globalEnvironment.gaId){
+    let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
+    if (googleAnalyticsId){
       // USED FOR GOOGLE ANALYTICS
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
