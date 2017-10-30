@@ -127,3 +127,5 @@ Here is Apache HTTP Server as a proxy configuration example:
 </VirtualHost>
 ~~~
 More information on `SSLCACerificateFile` generation can be found [here](https://eid.eesti.ee/index.php/Authenticating_in_web_applications#Implementing_authentication_with_an_ID_card)
+
+**NB! OCSP request are not implemented in the application. Sertificate status check must be implemented on the Apache HTTP Server (or similar, e.g F5) level**
