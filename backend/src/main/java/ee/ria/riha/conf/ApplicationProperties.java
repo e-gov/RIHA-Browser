@@ -20,6 +20,7 @@ public class ApplicationProperties {
     private final AuthenticationProperties authentication = new AuthenticationProperties();
     private final ValidationProperties validation = new ValidationProperties();
     private final NotificationProperties notification = new NotificationProperties();
+    private final CorsProperties cors = new CorsProperties();
     private final TrackingProperties tracking = new TrackingProperties();
 
     @Setter
@@ -62,6 +63,12 @@ public class ApplicationProperties {
         private String[] to;
         private String[] cc;
         private String[] bcc;
+    }
+
+    @Getter
+    @Setter
+    public static class CorsProperties {
+        private String[] allowedOrigins;
     }
 
     @Getter
