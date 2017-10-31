@@ -25,8 +25,14 @@ export class GridData {
     if (!isNullOrUndefined(data.sort)) this.sort = data.sort;
   }
 
-  changeSortOrder(prop: string): void {
-    if (-1 != prop.indexOf(this.sort)){
+  changeSortOrder(prop: string, dir?: string): void {
+    if (dir && (dir == 'ASC' || dir == 'DESC')){
+      if (dir == 'ASC'){
+        this.sort = prop;
+      } else if (dir == 'DESC'){
+        this.sort = '-' + prop;
+      }
+    } else if (-1 != prop.indexOf(this.sort)){
       if (-1 != '-'.indexOf(this.sort)){
         this.sort = prop;
       } else {

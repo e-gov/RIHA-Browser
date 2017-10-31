@@ -54,12 +54,13 @@ public class InfoSystem {
         this.shortName = ((String) getPath(SHORT_NAME_KEY).queryFrom(jsonObject));
         this.fullName = ((String) getPath(FULL_NAME_KEY).queryFrom(jsonObject));
 
-        JSONObject owner = getOwner();
-        this.ownerName = ((String) getPath(OWNER_NAME_KEY).queryFrom(owner));
-        this.ownerCode = ((String) getPath(OWNER_CODE_KEY).queryFrom(owner));
+        JSONObject owner = getOrCreateOwner();
+        this.ownerName = owner.optString(OWNER_NAME_KEY, null);
+        this.ownerCode = owner.optString(OWNER_CODE_KEY, null);
 
-        this.creationTimestamp = (String) getPath(META_CREATION_TIMESTAMP_KEY).queryFrom(getMeta());
-        this.updateTimestamp = (String) getPath(META_UPDATE_TIMESTAMP_KEY).queryFrom(getMeta());
+        JSONObject meta = getOrCreateMeta();
+        this.creationTimestamp = meta.optString(META_CREATION_TIMESTAMP_KEY, null);
+        this.updateTimestamp = meta.optString(META_UPDATE_TIMESTAMP_KEY, null);
     }
 
     public InfoSystem(String json) {
@@ -101,12 +102,12 @@ public class InfoSystem {
         jsonObject.putOpt(UUID_KEY, uuid != null ? uuid.toString() : null);
     }
 
-    private JSONObject getOwner() {
-        JSONObject owner = ((JSONObject) getPath(OWNER_KEY).queryFrom(jsonObject));
+    private JSONObject getOrCreateOwner() {
+        JSONObject owner = this.jsonObject.optJSONObject(OWNER_KEY);
 
         if (owner == null) {
             owner = new JSONObject();
-            jsonObject.put(OWNER_KEY, owner);
+            this.jsonObject.put(OWNER_KEY, owner);
         }
 
         return owner;
@@ -118,7 +119,7 @@ public class InfoSystem {
 
     public void setOwnerName(String name) {
         this.ownerName = name;
-        getOwner().putOpt(OWNER_NAME_KEY, name);
+        getOrCreateOwner().putOpt(OWNER_NAME_KEY, name);
     }
 
     public String getOwnerCode() {
@@ -127,7 +128,7 @@ public class InfoSystem {
 
     public void setOwnerCode(String code) {
         this.ownerCode = code;
-        getOwner().putOpt(OWNER_CODE_KEY, code);
+        getOrCreateOwner().putOpt(OWNER_CODE_KEY, code);
     }
 
     public String getShortName() {
@@ -140,7 +141,7 @@ public class InfoSystem {
     }
 
     public String getFullName() {
-    	return fullName;
+        return fullName;
     }
 
     public void setFullName(String fullName) {
@@ -148,8 +149,8 @@ public class InfoSystem {
         jsonObject.putOpt(FULL_NAME_KEY, fullName);
     }
 
-    private JSONObject getMeta() {
-        JSONObject meta = ((JSONObject) getPath(META_KEY).queryFrom(jsonObject));
+    private JSONObject getOrCreateMeta() {
+        JSONObject meta = this.jsonObject.optJSONObject(META_KEY);
 
         if (meta == null) {
             meta = new JSONObject();
@@ -165,7 +166,7 @@ public class InfoSystem {
 
     public void setCreationTimestamp(String creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
-        getMeta().putOpt(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
+        getOrCreateMeta().putOpt(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
     }
 
     public String getUpdateTimestamp() {
@@ -174,6 +175,6 @@ public class InfoSystem {
 
     public void setUpdateTimestamp(String updateTimestamp) {
         this.updateTimestamp = updateTimestamp;
-        getMeta().putOpt(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
+        getOrCreateMeta().putOpt(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
     }
 }

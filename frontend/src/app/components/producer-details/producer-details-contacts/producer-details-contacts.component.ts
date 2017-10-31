@@ -20,6 +20,11 @@ export class ProducerDetailsContactsComponent implements OnInit {
     this.system.details.contacts = this.system.details.contacts || [];
     modalRef.componentInstance.system = this.system;
     modalRef.componentInstance.contacts = [].concat(this.system.details.contacts);
+    modalRef.result.then( result => {
+      if (result.system) {
+        this.system = result.system;
+      }
+    })
   }
 
   constructor(private modalService: NgbModal) { }

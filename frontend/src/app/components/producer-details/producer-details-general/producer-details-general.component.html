@@ -8,7 +8,7 @@
     <h2>{{ system.details.short_name }}</h2>
     <div *ngIf="system.getStatus() || system.getDevelopmentStatus() || allowEdit">
       <div *ngIf="system.getStatus() || allowEdit">
-          <label *ngIf="system.getStatus() == globals.system_status.IN_USE" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></label>
+          <label *ngIf="system.getStatus() == globals.system_status.IN_USE" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed() && system.details.meta.system_status.timestamp">alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></label>
           <label *ngIf="system.getStatus() == globals.system_status.ESTABLISHING" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></label>
           <label *ngIf="system.getStatus() == globals.system_status.FINISHED" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></label>
           <label *ngIf="!system.getStatus() && allowEdit" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></label>

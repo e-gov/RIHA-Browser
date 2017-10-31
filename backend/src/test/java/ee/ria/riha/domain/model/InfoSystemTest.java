@@ -6,8 +6,11 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 public class InfoSystemTest {
 
@@ -74,4 +77,28 @@ public class InfoSystemTest {
         JSONAssert.assertEquals(new JSONObject(expectedJson), infoSystem.getJsonObject(), false);
     }
 
+    @Test
+    public void doesNotFailWhenOwnerIsNull() {
+        String json = "{\n" +
+                "  \"owner\": null\n" +
+                "}";
+        InfoSystem infoSystem = new InfoSystem(json);
+
+        assertThat(infoSystem.getOwnerCode(), is(nullValue()));
+        assertThat(infoSystem.getOwnerName(), is(nullValue()));
+    }
+
+    @Test
+    public void doesNotFailWhenOwnerCodeOrNameIsNull() {
+        String json = "{\n" +
+                "  \"owner\": {\n" +
+                "    \"code\": null,\n" +
+                "    \"name\": null\n" +
+                "  }\n" +
+                "}";
+        InfoSystem infoSystem = new InfoSystem(json);
+
+        assertThat(infoSystem.getOwnerCode(), is(nullValue()));
+        assertThat(infoSystem.getOwnerName(), is(nullValue()));
+    }
 }

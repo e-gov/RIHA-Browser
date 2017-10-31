@@ -1,5 +1,6 @@
 package ee.ria.riha.web;
 
+import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.service.EnvironmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,11 +27,15 @@ public class EnvironmentController {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
     @GetMapping
     @ApiOperation("Retrieve environment")
     public ResponseEntity environment() {
         Map<String, Object> environment = new HashMap<>();
         environment.put("userDetails", userController.createUserDetailsModel());
+        environment.put("tracking", applicationProperties.getTracking());
 
         return ResponseEntity.ok(environment);
     }

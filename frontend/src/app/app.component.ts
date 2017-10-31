@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PageScrollConfig } from 'ng2-page-scroll';
 import { Router, NavigationEnd } from '@angular/router';
+import { EnvironmentService } from './services/environment.service';
 
 declare let ga: Function;
 
@@ -14,6 +15,7 @@ export class AppComponent {
   title = 'title';
 
   constructor(private translate: TranslateService,
+              private environmentService: EnvironmentService,
               private router: Router) {
     translate.addLangs(['en', 'et']);
     let currentLang = translate.getBrowserLang() || 'et';
@@ -26,13 +28,16 @@ export class AppComponent {
 
     PageScrollConfig.defaultDuration = 400;
 
-    // USED FOR GOOGLE ANALYTICS
-    // this.router.events.subscribe(event => {
-    //   if (event instanceof NavigationEnd) {
-    //     ga('set', 'page', event.urlAfterRedirects);
-    //     ga('send', 'pageview');
-    //   }
-    // });
+    let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
+    if (googleAnalyticsId){
+      // USED FOR GOOGLE ANALYTICS
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          ga('set', 'page', event.urlAfterRedirects);
+          ga('send', 'pageview');
+        }
+      });
+    }
 
   }
 }

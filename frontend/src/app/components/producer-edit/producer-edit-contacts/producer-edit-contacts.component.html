@@ -4,14 +4,14 @@
   </div>
   <div class="my-1">
     <form #addForm="ngForm">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
         <label for="name" class="text-muted separated-text">Nimi:</label>
         <input id="name" class="form-control col-12"
                #name="ngModel"
                [(ngModel)]="data.name"
                placeholder="kontakti nimi või kontakti tüüp (kasutajatugi)"
                (keyup.enter)="addContact(addForm)"
-               name="name">
+               name="name" required>
 
       </div>
       <div class="form-group" [ngClass]="{'has-danger': email.invalid && (email.dirty || email.touched)}">

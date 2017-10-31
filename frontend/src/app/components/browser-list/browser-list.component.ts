@@ -42,7 +42,7 @@ export class BrowserListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gridData.changeSortOrder('meta.update_timestamp');
+    this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
     this.getSystems();
   }
 

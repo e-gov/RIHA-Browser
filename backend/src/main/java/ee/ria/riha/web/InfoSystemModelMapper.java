@@ -18,7 +18,7 @@ import static ee.ria.riha.service.SecurityContextUtil.isUserAuthenticated;
  * @author Valentin Suhnjov
  */
 @Component
-public class InfoSystemModelMapper {
+public class InfoSystemModelMapper implements ModelMapper<InfoSystem, InfoSystemModel> {
 
     private static final Predicate<String> EVICTED_NAMES_PREDICATE = name -> name.equalsIgnoreCase("contacts");
 
@@ -29,6 +29,7 @@ public class InfoSystemModelMapper {
      * @param infoSystem an info system to be mapped
      * @return info system model
      */
+    @Override
     public InfoSystemModel map(InfoSystem infoSystem) {
         InfoSystem filteredInfoSystem = getFilteredInfoSystem(infoSystem);
 

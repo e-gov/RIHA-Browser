@@ -17,7 +17,6 @@ import missingTranslationHandler from './app.missingTranslation';
 
 import { AppComponent } from './app.component';
 import { RihaNavbarComponent } from './components/riha-navbar/riha-navbar.component';
-import { JsonDataService } from './json-data.service';
 
 //services
 import { SystemsService } from './services/systems.service';
@@ -60,8 +59,8 @@ export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function setGlobalEnvironment(environmentService: EnvironmentService){
-  return () => environmentService.load();
+export function onApplicationStart(environmentService: EnvironmentService){
+  return () => environmentService.onAppStart();
 }
 
 const routes: Routes = [
@@ -154,7 +153,7 @@ const routes: Routes = [
     ProducerEditContactsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [JsonDataService, SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: setGlobalEnvironment, deps: [EnvironmentService], multi: true }]
+  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}

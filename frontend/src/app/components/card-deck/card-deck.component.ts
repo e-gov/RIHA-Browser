@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { JsonDataService } from '../../json-data.service';
 
 @Component({
   selector: 'app-card-deck',
@@ -9,7 +8,7 @@ import { JsonDataService } from '../../json-data.service';
 export class CardDeckComponent implements OnInit {
   private cards = [];
 
-  constructor(private jsonDataService: JsonDataService) {
+  constructor() {
     this.cards = [
       {
         "iconType": "search",
