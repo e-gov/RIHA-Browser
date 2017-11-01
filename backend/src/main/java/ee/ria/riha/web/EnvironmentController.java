@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +33,11 @@ public class EnvironmentController {
 
     @GetMapping
     @ApiOperation("Retrieve environment")
-    public ResponseEntity environment() {
+    public ResponseEntity environment(HttpSession session) {
         Map<String, Object> environment = new HashMap<>();
         environment.put("userDetails", userController.createUserDetailsModel());
         environment.put("tracking", applicationProperties.getTracking());
+        environment.put("sessionMaxInactiveInterval", session.getMaxInactiveInterval() * 1000);
 
         return ResponseEntity.ok(environment);
     }
@@ -46,8 +48,8 @@ public class EnvironmentController {
     @Deprecated
     @PutMapping("/organization")
     @ApiOperation("Change active organization of the current user")
-    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode, HttpSession session) {
         environmentService.changeActiveOrganization(organizationCode);
-        return environment();
+        return environment(session);
     }
 }
