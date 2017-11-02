@@ -923,8 +923,11 @@ $CONTENTS
     margin-bottom: 20px;
     text-transform: uppercase;
     color: $primary;
-    word-break: break-all;
+    word-break: break-word;
   }
+}
+.main-content .card-content {
+    flex: 0 0 auto;
 }
 h2,
 .h2 {
@@ -935,7 +938,7 @@ h2,
     border-bottom: 1px solid $grey;
     margin-bottom: 20px;
     color: $primary;
-    word-break: break-all;
+    word-break: break-word;
   &.h2-sm {
         font-size: 24px;
         line-height: 30px;
