@@ -39,7 +39,7 @@ export class ProducerEditContactsComponent implements OnInit {
     this.systemsService.updateSystem(s).then(response => {
       this.activeModal.close({system: new System(response.json())});
     }, err => {
-      this.toastrService.error('Serveri viga.')
+      this.toastrService.error('Serveri viga.');
     });
   }
 

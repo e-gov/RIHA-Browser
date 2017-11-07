@@ -54,6 +54,8 @@ import { ActiveOrganizationChooserComponent } from './components/active-organiza
 import { TooltipComponent } from './components/tooltip/tooltip.component';
 import { ProducerDetailsContactsComponent } from './components/producer-details/producer-details-contacts/producer-details-contacts.component';
 import { ProducerEditContactsComponent } from './components/producer-edit/producer-edit-contacts/producer-edit-contacts.component';
+import { WarningModalComponent } from './components/session-timeout/warning-modal/warning-modal.component';
+import { InfoModalComponent } from './components/session-timeout/info-modal/info-modal.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -121,7 +123,9 @@ const routes: Routes = [
     ActiveOrganizationChooserComponent,
     TooltipComponent,
     ProducerDetailsContactsComponent,
-    ProducerEditContactsComponent
+    ProducerEditContactsComponent,
+    WarningModalComponent,
+    InfoModalComponent
   ],
   imports: [
     BrowserModule,
@@ -150,7 +154,9 @@ const routes: Routes = [
     ApproverAddIssueComponent,
     ApproverIssueDetailsComponent,
     ActiveOrganizationChooserComponent,
-    ProducerEditContactsComponent
+    ProducerEditContactsComponent,
+    InfoModalComponent,
+    WarningModalComponent
   ],
   bootstrap: [AppComponent],
   providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
