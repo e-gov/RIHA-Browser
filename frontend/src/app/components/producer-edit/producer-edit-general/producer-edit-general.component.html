@@ -40,7 +40,7 @@
         <div class="row ml-0 mb-3">
           <label for="active-since-date" class="col-form-label advanced-label">
             <span *ngIf="system.getStatus() == globals.system_status.IN_USE"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
-            <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutatud</strong></span>
+            <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
             <span *ngIf="system.getStatus() == globals.system_status.FINISHED"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
             <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
           </label>
@@ -55,7 +55,7 @@
           </div>
           <div class="col-sm-8 form-links">
             <a href="#" (click)="changeSystemStatus(globals.system_status.IN_USE)">kasutusel</a>
-            <a href="#" (click)="changeSystemStatus(globals.system_status.ESTABLISHING)">asutatud</a>
+            <a href="#" (click)="changeSystemStatus(globals.system_status.ESTABLISHING)">asutamisel</a>
             <a href="#" (click)="changeSystemStatus(globals.system_status.FINISHED)">lõpetatud</a>
           </div>
         </div>
