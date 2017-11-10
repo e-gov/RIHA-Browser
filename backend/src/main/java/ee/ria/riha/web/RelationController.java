@@ -3,6 +3,7 @@ package ee.ria.riha.web;
 import ee.ria.riha.domain.model.Relation;
 import ee.ria.riha.service.RelationService;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
+import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.RelationSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +60,15 @@ public class RelationController {
         return relations.stream()
                 .map(RELATION_TO_RELATION_SUMMARY_MODEL)
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/{shortName}/relations")
+    @PreAuthorizeIssueOwnerOrReviewer
+    @ApiOperation("Create new relation for information system")
+    public ResponseEntity<RelationSummaryModel> add(@PathVariable("shortName") String shortName,
+                                                    @RequestBody RelationModel relationModel) {
+        Relation createdRelation = relationService.createRelation(shortName, relationModel);
+        return ResponseEntity.ok(createModel(createdRelation));
     }
 
     @Autowired
