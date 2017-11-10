@@ -2,7 +2,6 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.service.notifications.EmailNotificationSenderService;
 import ee.ria.riha.service.notifications.model.InfoSystemDataModel;
 import ee.ria.riha.service.notifications.model.NewInfoSystemsNotification;
 import ee.ria.riha.storage.util.FilterRequest;
@@ -35,7 +34,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     private InfoSystemRepository infoSystemRepository;
-    private EmailNotificationSenderService emailNotificationSenderService;
+    private NotificationService notificationService;
 
     @Scheduled(cron = "${browser.notification.createdInfoSystemsOverview.cron}")
     public void sendCreatedInfoSystemsOverviewNotification() {
@@ -51,7 +50,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
                     .map(INFO_SYSTEM_TO_DATA_MODEL)
                     .collect(Collectors.toList());
 
-            emailNotificationSenderService.sendNotification(new NewInfoSystemsNotification(infoSystemDataModels));
+            notificationService.sendNewInfoSystemsNotification(new NewInfoSystemsNotification(infoSystemDataModels));
         } catch (Exception e) {
             log.warn("Job execution failed", e);
         }
@@ -83,7 +82,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     }
 
     @Autowired
-    public void setEmailNotificationSenderService(EmailNotificationSenderService emailNotificationSenderService) {
-        this.emailNotificationSenderService = emailNotificationSenderService;
+    public void setNotificationService(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 }

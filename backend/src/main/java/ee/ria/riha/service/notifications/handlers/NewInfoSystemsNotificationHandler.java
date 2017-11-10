@@ -11,21 +11,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailPreparationException;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.Assert;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-@Service
+@Component
 @Slf4j
 @Getter
-public class NewInfoSystemsNotificationHandler extends BaseEmailNotificationHandler {
+public class NewInfoSystemsNotificationHandler implements EmailNotificationHandler {
 
     private static final String TEMPLATE_NAME = "new-IS-broadcast-template.ftl";
     private static final String SUBJECT_KEY = "notifications.createdInfoSystemsOverview.subject";
@@ -36,6 +39,7 @@ public class NewInfoSystemsNotificationHandler extends BaseEmailNotificationHand
 
     private Configuration freeMarkerConfiguration;
     private MessageSource messageSource;
+    private JavaMailSenderImpl mailSender;
 
     public NewInfoSystemsNotificationHandler(ApplicationProperties applicationProperties) {
         baseUrl = applicationProperties.getBaseUrl();
@@ -54,30 +58,31 @@ public class NewInfoSystemsNotificationHandler extends BaseEmailNotificationHand
     }
 
     @Override
-    String getFrom() {
-        return from;
+    public MimeMessage createMessage(NotificationDataModel model) {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        NewInfoSystemsNotification dataModel = (NewInfoSystemsNotification) model;
+
+        try {
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSentDate(new Date());
+            helper.setSubject(getSubject());
+            helper.setText(getText(dataModel), true);
+            return message;
+        } catch (MessagingException e) {
+            throw new MailPreparationException("Error preparing notification message", e);
+        }
     }
 
-    @Override
-    String[] getTo() {
-        return to;
-    }
-
-    @Override
-    String getSubject() {
+    private String getSubject() {
         return messageSource.getMessage(SUBJECT_KEY, null, Locale.getDefault());
     }
 
-    @Override
-    void setText(MimeMessageHelper helper) throws MessagingException {
-        helper.setText(getText(), true);
-    }
-
-    private String getText() {
+    private String getText(NewInfoSystemsNotification dataModel) {
         try {
             Template template = freeMarkerConfiguration.getTemplate(TEMPLATE_NAME);
             Map<String, Object> model = new HashMap<>();
-            NewInfoSystemsNotification dataModel = (NewInfoSystemsNotification) super.getModel();
 
             model.put("baseUrl", baseUrl);
             model.put("infoSystems", dataModel.getInfoSystems());
@@ -96,5 +101,10 @@ public class NewInfoSystemsNotificationHandler extends BaseEmailNotificationHand
     @Autowired
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+
+    @Autowired
+    public void setMailSender(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
     }
 }

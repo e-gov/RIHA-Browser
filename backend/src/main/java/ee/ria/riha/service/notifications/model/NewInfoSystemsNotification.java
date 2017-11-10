@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Holds data for new info systems notification messages.
+ */
 @Getter
 @Setter
 @Builder
@@ -14,8 +17,4 @@ import java.util.List;
 public class NewInfoSystemsNotification implements NotificationDataModel {
 
     private List<InfoSystemDataModel> infoSystems;
-
-    public NewInfoSystemsNotification() {
-
-    }
 }

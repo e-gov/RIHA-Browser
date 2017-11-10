@@ -1,23 +1,17 @@
 package ee.ria.riha.service.notifications.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- *
+ * Simplified info system data model that is used to operate with FreeMarker templates.
  */
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 public class InfoSystemDataModel {
 
     private String fullName;
     private String shortName;
-
-    public InfoSystemDataModel() {
-
-    }
 }

@@ -1,7 +1,7 @@
 package ee.ria.riha.service.notifications.model;
 
 /**
- * Marker interface for Data Transfer Object classes.
+ * Marker interface for classes that hold notification messages data.
  */
 public interface NotificationDataModel {
 
