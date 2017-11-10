@@ -156,6 +156,25 @@ public class RelationService {
         return relation.reverse();
     }
 
+    /**
+     * Deletes single {@link Relation} if info system with given short name is part of this relation.
+     *
+     * @param shortName  info system short name that is part of relation
+     * @param relationId id of a relation
+     */
+    public void delete(String shortName, Long relationId) {
+        InfoSystem infoSystem = infoSystemService.get(shortName);
+
+        MainResourceRelation mainResourceRelation = mainResourceRelationRepository.get(relationId);
+
+        if (!mainResourceRelation.getInfosystem_uuid().equals(infoSystem.getUuid())
+                && !mainResourceRelation.getRelated_infosystem_uuid().equals(infoSystem.getUuid())) {
+            throw new IllegalStateException("Info system is not part of deleted relation");
+        }
+
+        mainResourceRelationRepository.remove(relationId);
+    }
+
     @Autowired
     public void setMainResourceRelationRepository(
             MainResourceRelationRepository mainResourceRelationRepository) {
