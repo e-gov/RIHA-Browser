@@ -6,6 +6,7 @@ import ee.ria.riha.domain.model.RelationType;
 import ee.ria.riha.storage.domain.MainResourceRelationRepository;
 import ee.ria.riha.storage.domain.model.MainResourceRelation;
 import ee.ria.riha.storage.util.FilterRequest;
+import ee.ria.riha.web.model.RelationModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,26 @@ public class RelationService {
                 .creationDate(mainResourceRelation.getCreation_date())
                 .modifiedDate(mainResourceRelation.getModified_date())
                 .build();
+    };
+
+    private static final Function<Relation, MainResourceRelation> RELATION_TO_MAIN_RESOURCE_RELATION = relation -> {
+        if (relation == null) {
+            return null;
+        }
+
+        MainResourceRelation mainResourceRelation = new MainResourceRelation();
+        mainResourceRelation.setMain_resource_relation_id(relation.getId());
+        mainResourceRelation.setInfosystem_uuid(relation.getInfoSystemUuid());
+        mainResourceRelation.setInfosystem_name(relation.getInfoSystemName());
+        mainResourceRelation.setInfosystem_short_name(relation.getInfoSystemShortName());
+        mainResourceRelation.setRelated_infosystem_uuid(relation.getRelatedInfoSystemUuid());
+        mainResourceRelation.setRelated_infosystem_name(relation.getRelatedInfoSystemName());
+        mainResourceRelation.setRelated_infosystem_short_name(relation.getRelatedInfoSystemShortName());
+        mainResourceRelation.setType(relation.getType().name());
+        mainResourceRelation.setCreation_date(relation.getCreationDate());
+        mainResourceRelation.setModified_date(relation.getModifiedDate());
+
+        return mainResourceRelation;
     };
 
     private MainResourceRelationRepository mainResourceRelationRepository;
@@ -81,6 +102,58 @@ public class RelationService {
     private List<MainResourceRelation> getDirectRelations(InfoSystem infoSystem) {
         return mainResourceRelationRepository.find(
                 new FilterRequest("infosystem_uuid,=," + infoSystem.getUuid(), null, null));
+    }
+
+    /**
+     * Creates {@link Relation} from info system with given short name to another info system with given type.
+     *
+     * @param shortName    source info system short name
+     * @param relatedModel related info system model
+     * @return created {@link Relation}
+     */
+    public Relation createRelation(String shortName, RelationModel relatedModel) {
+        Relation relation = createRelationFromModel(shortName, relatedModel);
+
+        Relation normalizedRelation = normalizeRelation(relation);
+
+        List<Long> createRelationIds = mainResourceRelationRepository.add(
+                RELATION_TO_MAIN_RESOURCE_RELATION.apply(normalizedRelation));
+
+        if (createRelationIds.isEmpty()) {
+            throw new IllegalBrowserStateException("Relation was not created");
+        }
+
+        Relation createdRelation = MAIN_RESOURCE_RELATION_TO_RELATION.apply(
+                mainResourceRelationRepository.get(createRelationIds.get(0)));
+        createdRelation.setReversed(normalizedRelation.isReversed());
+
+        return createdRelation;
+    }
+
+    private Relation createRelationFromModel(String shortName, RelationModel model) {
+        InfoSystem infoSystem = infoSystemService.get(shortName);
+        InfoSystem relatedInfoSystem = infoSystemService.get(model.getInfoSystemShortName());
+
+        Relation relation = new Relation();
+        relation.setInfoSystemUuid(infoSystem.getUuid());
+        relation.setRelatedInfoSystemUuid(relatedInfoSystem.getUuid());
+        relation.setType(model.getType());
+        return relation;
+    }
+
+    /**
+     * Normalizes {@link Relation} by choosing minimal ordinal value of {@link RelationType} or its opposite type. In
+     * case opposite value has lower ordinal value, {@link Relation} is reversed.
+     *
+     * @param relation relation to normalize
+     * @return normalized relation
+     */
+    private Relation normalizeRelation(Relation relation) {
+        if (relation.getType().ordinal() < relation.getType().getOpposite().ordinal()) {
+            return relation;
+        }
+
+        return relation.reverse();
     }
 
     @Autowired
