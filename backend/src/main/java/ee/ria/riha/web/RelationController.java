@@ -71,6 +71,13 @@ public class RelationController {
         return ResponseEntity.ok(createModel(createdRelation));
     }
 
+    @DeleteMapping("/{shortName}/relations/{relationId}")
+    @PreAuthorizeIssueOwnerOrReviewer
+    @ApiOperation("Deletes single relation of information system")
+    public void delete(@PathVariable("shortName") String shortName, @PathVariable("relationId") Long relationId) {
+        relationService.delete(shortName, relationId);
+    }
+
     @Autowired
     public void setRelationService(RelationService relationService) {
         this.relationService = relationService;
