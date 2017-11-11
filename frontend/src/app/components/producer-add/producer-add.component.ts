@@ -4,7 +4,7 @@ import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService} from "../../services/environment.service";
 import { Location } from '@angular/common';
 import { ToastrService } from "ngx-toastr";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { UserMatrix } from '../../models/user-matrix';
 
@@ -49,7 +49,7 @@ export class ProducerAddComponent implements OnInit {
               private router: Router,
               private location: Location,
               private toastrService: ToastrService,
-              private modalService: NgbModal) {
+              private modalService: ModalHelperService) {
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
