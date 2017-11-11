@@ -3,6 +3,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { PageScrollConfig } from 'ng2-page-scroll';
 import { Router, NavigationEnd } from '@angular/router';
 import { EnvironmentService } from './services/environment.service';
+import { HttpInterceptorService } from 'ng-http-interceptor';
+import { SessionHelperService } from './services/session-helper.service';
 
 declare let ga: Function;
 
@@ -12,11 +14,12 @@ declare let ga: Function;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'title';
 
   constructor(private translate: TranslateService,
               private environmentService: EnvironmentService,
-              private router: Router) {
+              private router: Router,
+              private sessionHelper: SessionHelperService,
+              private httpInterceptor: HttpInterceptorService) {
     translate.addLangs(['en', 'et']);
     let currentLang = translate.getBrowserLang() || 'et';
     if (translate.getLangs().indexOf(currentLang) === -1) {
@@ -38,6 +41,12 @@ export class AppComponent {
         }
       });
     }
+
+    sessionHelper.refreshSessionTimer();
+    this.httpInterceptor.request().addInterceptor((data, method) => {
+      sessionHelper.refreshSessionTimer();
+      return data;
+    });
 
   }
 }
