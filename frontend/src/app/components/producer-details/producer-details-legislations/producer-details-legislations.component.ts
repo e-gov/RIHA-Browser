@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditLegislationsComponent } from '../../producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { System } from '../../../models/system';
 
@@ -28,7 +28,7 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
     })
   }
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: ModalHelperService) { }
 
   ngOnInit() {
   }
