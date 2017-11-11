@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CustomFormsModule } from 'ng2-validation';
+import { HttpInterceptorModule } from 'ng-http-interceptor';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -23,6 +24,9 @@ import { SystemsService } from './services/systems.service';
 import { WindowRefService } from './services/window-ref.service';
 import { EnvironmentService } from './services/environment.service';
 import { GeneralHelperService } from './services/general-helper.service';
+import { SessionHelperService } from './services/session-helper.service';
+import { ModalHelperService } from './services/modal-helper.service';
+
 
 //components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
@@ -136,6 +140,7 @@ const routes: Routes = [
     CustomFormsModule,
     Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
+    HttpInterceptorModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
       missingTranslationHandler,
@@ -159,7 +164,7 @@ const routes: Routes = [
     WarningModalComponent
   ],
   bootstrap: [AppComponent],
-  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
+  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, SessionHelperService, ModalHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}

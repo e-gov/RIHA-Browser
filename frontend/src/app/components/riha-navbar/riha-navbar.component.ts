@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { EnvironmentService } from '../../services/environment.service';
 import { User } from '../../models/user';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
-import { Http } from '@angular/http';
 import { Router } from '@angular/router';
+import { SessionHelperService } from '../../services/session-helper.service';
 
 declare var $: any;
 
@@ -23,6 +23,7 @@ export class RihaNavbarComponent implements OnInit {
   logout(){
     this.environmentService.doLogout().then(res => {
       this.environmentService.loadEnvironmentData().then(env => {
+        this.sessionHelperService.refreshSessionTimer();
         this.router.navigate(['/']);
       });
     });
@@ -49,8 +50,8 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   constructor(private environmentService: EnvironmentService,
-              private modalService: NgbModal,
-              private http: Http,
+              private modalService: ModalHelperService,
+              private sessionHelperService: SessionHelperService,
               private router: Router) {
   }
 

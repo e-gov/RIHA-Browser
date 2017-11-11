@@ -3,7 +3,7 @@ import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { GridData } from '../../models/grid-data';
 import { UserMatrix } from '../../models/user-matrix';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { GeneralHelperService } from '../../services/general-helper.service';
 
@@ -48,7 +48,7 @@ export class ProducerListComponent implements OnInit {
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               public  generalHelperService: GeneralHelperService,
-              private modalService: NgbModal) {
+              private modalService: ModalHelperService) {
     this.filters = {
       name: null,
       shortName: null

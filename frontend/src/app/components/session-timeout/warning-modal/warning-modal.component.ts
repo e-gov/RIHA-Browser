@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { EnvironmentService } from '../../../services/environment.service';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
 
 @Component({
@@ -11,9 +11,27 @@ import { InfoModalComponent } from '../info-modal/info-modal.component';
   templateUrl: './warning-modal.component.html',
   styleUrls: ['./warning-modal.component.scss']
 })
-export class WarningModalComponent implements OnInit {
+export class WarningModalComponent implements OnInit, OnDestroy {
 
-  minutesLeft: number = 5;
+  @Input() timerStart;
+  private minutesLeft: number;
+  private timerId = null;
+
+  private getMilisecondsLeft(){
+    return this.environmentService.getSessionTimeoutInterval() - (new Date().getTime() - this.timerStart);
+  }
+
+  startCountdown(){
+    this.timerId = setTimeout(() =>{
+      let ml = this.getMilisecondsLeft();
+      if (ml > 0) {
+        this.minutesLeft = Math.ceil((this.getMilisecondsLeft()/1000)/60);
+        this.startCountdown();
+      } else {
+        this.forceLogout();
+      }
+    }, 1000)
+  }
 
   forceLogout(){
     this.environmentService.doLogout().then(
@@ -52,14 +70,19 @@ export class WarningModalComponent implements OnInit {
   }
 
   constructor(private environmentService: EnvironmentService,
-              private modalService: NgbModal,
+              private modalService: ModalHelperService,
               private activeModal: NgbActiveModal,
               private toastrService: ToastrService,
               private router: Router) {
-    setTimeout(()=> {this.forceLogout()},10000);
   }
 
   ngOnInit() {
+    this.minutesLeft = Math.ceil((this.getMilisecondsLeft()/1000)/60);
+    this.startCountdown();
+  }
+
+  ngOnDestroy(){
+    clearTimeout(this.timerId);
   }
 
 }
