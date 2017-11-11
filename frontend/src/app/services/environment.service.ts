@@ -19,7 +19,11 @@ export class EnvironmentService {
 
   public getActiveUser(): User {
     return this.globalEnvironment.getUserDetails();
-  };
+  }
+
+  public getSessionTimeoutInterval(): number{
+   return this.globalEnvironment.getSessionMaxInactiveInterval();
+  }
 
   public getUserMatrix(): UserMatrix{
     let activeUser = this.getActiveUser();
