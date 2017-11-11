@@ -5,6 +5,10 @@ export class Environment {
   private tracking: any;
   private sessionMaxInactiveInterval: number;
 
+  public getSessionMaxInactiveInterval(){
+    return this.sessionMaxInactiveInterval;
+  }
+
   public getGoogleAnalyticsId(){
     let ret = null;
     if (this.tracking && this.tracking.googleAnalytics && this.tracking.googleAnalytics.id){
