@@ -19,7 +19,8 @@ export class ProducerListComponent implements OnInit {
   gridData: GridData  = new GridData();
   filters: {
     name: string,
-    shortName: string
+    shortName: string,
+    topic: string
   };
   userMatrix: UserMatrix;
 
@@ -36,7 +37,8 @@ export class ProducerListComponent implements OnInit {
   getOwnSystems(): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
       let q = this.generalHelperService.generateQueryString({name: this.filters.name,
-                                                                  shortName: this.filters.shortName});
+                                                                  shortName: this.filters.shortName,
+                                                                  topic: this.filters.topic});
       this.location.replaceState('/Kirjelda', q);
       this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
@@ -63,7 +65,8 @@ export class ProducerListComponent implements OnInit {
     this.route.queryParams.subscribe( params => {
       this.filters = {
         shortName: params['shortName'],
-        name: params['name']
+        name: params['name'],
+        topic: params['topic']
       };
     });
 

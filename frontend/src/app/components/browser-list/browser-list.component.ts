@@ -15,7 +15,8 @@ export class BrowserListComponent implements OnInit {
   gridData: GridData = new GridData();
   filters: {
     ownerName: string,
-    name: string
+    name: string,
+    topic: string
   };
 
   onPageChange(newPage){
@@ -47,7 +48,8 @@ export class BrowserListComponent implements OnInit {
     this.route.queryParams.subscribe( params => {
       this.filters = {
         ownerName: params['ownerName'],
-        name: params['name']
+        name: params['name'],
+        topic: params['topic']
       };
     });
 
