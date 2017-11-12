@@ -28,6 +28,16 @@ export class GeneralHelperService {
     return statusDescription;
   }
 
+  public generateQueryString(obj){
+    let newObj = {};
+    Object.keys(obj).forEach(function(key) {
+      if (obj[key]){
+        newObj[key] = obj[key];
+      }
+    });
+    return $.param(newObj);
+  }
+
   public getFileUrl(url){
     if (url.substring(0,7) === 'file://'){
       return '/api/v1/files/' + url.substring(7);
