@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { System } from '../../../models/system';
 import { G } from '../../../globals/globals';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-producer-details-general',
@@ -13,7 +14,12 @@ export class ProducerDetailsGeneralComponent implements OnInit {
   @Input() allowEdit: boolean;
   globals: any = G;
 
-  constructor() { }
+  listSystemsWithTopic(topic){
+    //this.router.navigate(['/Infosüsteemid'], {queryParams: {topic: topic}});
+    return false;
+  }
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
