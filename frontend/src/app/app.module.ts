@@ -54,6 +54,8 @@ import { ActiveOrganizationChooserComponent } from './components/active-organiza
 import { TooltipComponent } from './components/tooltip/tooltip.component';
 import { ProducerDetailsContactsComponent } from './components/producer-details/producer-details-contacts/producer-details-contacts.component';
 import { ProducerEditContactsComponent } from './components/producer-edit/producer-edit-contacts/producer-edit-contacts.component';
+import { ProducerDetailsRelationsComponent } from './components/producer-details/producer-details-relations/producer-details-relations.component';
+import { ProducerEditRelationsComponent } from './components/producer-edit/producer-edit-relations/producer-edit-relations.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -121,7 +123,9 @@ const routes: Routes = [
     ActiveOrganizationChooserComponent,
     TooltipComponent,
     ProducerDetailsContactsComponent,
-    ProducerEditContactsComponent
+    ProducerEditContactsComponent,
+    ProducerDetailsRelationsComponent,
+    ProducerEditRelationsComponent
   ],
   imports: [
     BrowserModule,

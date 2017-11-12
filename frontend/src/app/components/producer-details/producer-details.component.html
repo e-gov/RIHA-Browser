@@ -49,6 +49,13 @@
            class="list-group-item justify-content-between">
           Kontaktid
         </a>
+        <a pageScroll
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('seosed')}"
+           href="#seosed"
+           class="list-group-item justify-content-between">
+          Seosed süsteemidega
+        </a>
       </div>
     </nav>
   </aside>
@@ -78,6 +85,10 @@
          *ngIf="isBlockVisible('contacts')"
          class="separate-block">
       <app-producer-details-contacts [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-contacts>
+    </div>
+    <div id="seosed"
+         class="separate-block">
+      <app-producer-details-relations [allowEdit]="isEditingAllowed()"></app-producer-details-relations>
     </div>
   </article>
 </section>
