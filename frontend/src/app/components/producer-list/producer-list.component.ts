@@ -6,6 +6,8 @@ import { UserMatrix } from '../../models/user-matrix';
 import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { GeneralHelperService } from '../../services/general-helper.service';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-producer-list',
@@ -33,6 +35,9 @@ export class ProducerListComponent implements OnInit {
 
   getOwnSystems(): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
+      let q = this.generalHelperService.generateQueryString({name: this.filters.name,
+                                                                  shortName: this.filters.shortName});
+      this.location.replaceState('/Kirjelda', q);
       this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
@@ -47,16 +52,21 @@ export class ProducerListComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
+              private route: ActivatedRoute,
+              private location: Location,
               public  generalHelperService: GeneralHelperService,
               private modalService: ModalHelperService) {
-    this.filters = {
-      name: null,
-      shortName: null
-    };
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe( params => {
+      this.filters = {
+        shortName: params['shortName'],
+        name: params['name']
+      };
+    });
+
     this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
     this.getOwnSystems();
   }
