@@ -25,6 +25,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 /**
  * @author Valentin Suhnjov
@@ -50,6 +51,9 @@ public class IssueServiceTest {
 
     @Mock
     private IssueCommentService issueCommentService;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private IssueService issueService;
@@ -77,6 +81,8 @@ public class IssueServiceTest {
 
         when(commentRepository.get(EXISTING_ISSUE_ID)).thenReturn(existingIssueEntity);
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ID));
+
+        doNothing().when(notificationService).sendNewIssueNotification(any(InfoSystem.class));
     }
 
     @Test
