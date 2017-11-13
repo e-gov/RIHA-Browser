@@ -105,6 +105,9 @@ export class SystemsService {
       if (filters.ownerName){
         filtersArr.push(`owner.name,jilike,%${ filters.ownerName }%`);
       }
+      if (filters.topic){
+        filtersArr.push(`topics,jarr,%${ filters.topic }%`);
+      }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
       }
