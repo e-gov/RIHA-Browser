@@ -81,6 +81,9 @@ public class IssueService {
     @Autowired
     private IssueCommentService issueCommentService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
      * List concrete info system issues.
      *
@@ -157,6 +160,8 @@ public class IssueService {
         if (createIssueIds.isEmpty()) {
             throw new IllegalBrowserStateException("Issue was not created");
         }
+
+        notificationService.sendNewIssueNotification(infoSystem);
 
         return COMMENT_TO_ISSUE.apply(commentRepository.get(createIssueIds.get(0)));
     }

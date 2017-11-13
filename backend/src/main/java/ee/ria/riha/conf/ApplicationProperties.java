@@ -54,7 +54,14 @@ public class ApplicationProperties {
     @Setter
     public static class NotificationProperties {
         private final CreatedInfoSystemsOverview createdInfoSystemsOverview = new CreatedInfoSystemsOverview();
+        private final NewIssue newIssue = new NewIssue();
         private String from;
+    }
+
+    @Getter
+    @Setter
+    public static class NewIssue {
+        private boolean enabled;
     }
 
     @Getter
