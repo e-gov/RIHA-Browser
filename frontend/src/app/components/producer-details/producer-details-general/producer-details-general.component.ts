@@ -15,8 +15,7 @@ export class ProducerDetailsGeneralComponent implements OnInit {
   globals: any = G;
 
   listSystemsWithTopic(topic){
-    //this.router.navigate(['/Infosüsteemid'], {queryParams: {topic: topic}});
-    return false;
+    this.router.navigate(['/Infosüsteemid'], {queryParams: {topic: topic}});
   }
 
   constructor(private router: Router) { }
