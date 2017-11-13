@@ -52,7 +52,7 @@ public class NotificationService {
 
     private String[] getSystemContacts(InfoSystem infoSystem) {
         JSONArray jsonContactsArray = infoSystem.getJsonObject().optJSONArray("contacts");
-        if (jsonContactsArray.length() == 0) {
+        if (jsonContactsArray == null || jsonContactsArray.length() == 0) {
             return new String[0];
         }
 
