@@ -25,7 +25,7 @@ export class SessionHelperService {
           });
           modalRef.componentInstance.timerStart = this.timerStart;
         }
-      }, this.environmentService.getSessionTimeoutInterval() - (5*60*1000));
+      }, this.environmentService.getSessionTimeoutInterval() - (6*60*1000));
     }
   }
 

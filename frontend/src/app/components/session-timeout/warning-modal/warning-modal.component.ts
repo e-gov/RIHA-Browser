@@ -25,7 +25,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
     this.timerId = setTimeout(() =>{
       let ml = this.getMilisecondsLeft();
       if (ml > 0) {
-        this.minutesLeft = Math.ceil((this.getMilisecondsLeft()/1000)/60);
+        this.minutesLeft = Math.floor((this.getMilisecondsLeft()/1000)/60);
         this.startCountdown();
       } else {
         this.forceLogout();
@@ -39,6 +39,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
         this.environmentService.loadEnvironmentData().then(env => {
           this.activeModal.dismiss();
           this.modalService.open(InfoModalComponent);
+          this.router.navigate(['/']);
         });
       }, err => {
         this.toastrService.error('Serveri viga.');
