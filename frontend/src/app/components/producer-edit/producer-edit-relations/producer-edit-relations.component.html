@@ -5,7 +5,7 @@
   <div class="my-1">
     <form #addForm="ngForm">
       <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
-        <label for="infoSystem" class="text-muted separated-text">Süüsteem:</label>
+        <label for="infoSystem" class="text-muted separated-text">Infosüsteemi lühinimi:</label>
         <input id="infoSystem" class="form-control col-12"
                #infoSystem="ngModel"
                [ngbTypeahead]="search"
@@ -21,8 +21,8 @@
                 #type="ngModel"
                 [(ngModel)]="relation.type"
                 name="type" required>
-          <option [value]="globals.relation_type.SUB_SYSTEM" selected>Alamsüüsteem</option>
-          <option [value]="globals.relation_type.SUPER_SYSTEM">Ülemsüüsteem</option>
+          <option [value]="globals.relation_type.SUB_SYSTEM" selected>alaminfosüsteem</option>
+          <option [value]="globals.relation_type.SUPER_SYSTEM">üleminfosüsteem</option>
         </select>
       </div>
       <div class="form-group row">
@@ -38,8 +38,8 @@
             </td>
             <td>
               <a href="/Infosüsteemid/Vaata/{{ relation.infoSystemShortName }}" target="_blank" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
-              <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alamsüsteem</span>
-              <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">ülemsüüsteem</span>
+              <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alaminfosüsteem</span>
+              <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">üleminfosüsteem</span>
             </td>
             <td>
               <button (click)="deleteRelation(relation.id)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
