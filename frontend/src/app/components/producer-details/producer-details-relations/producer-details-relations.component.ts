@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { G } from '../../../globals/globals';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditRelationsComponent } from '../../producer-edit/producer-edit-relations/producer-edit-relations.component';
 import { Router } from '@angular/router';
 
@@ -49,7 +49,7 @@ export class ProducerDetailsRelationsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private router: Router,
-              private modalService: NgbModal) {
+              private modalService: ModalHelperService) {
 
   }
 
