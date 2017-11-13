@@ -14,7 +14,7 @@
           <i class="fa fa-circle text-primary"></i>
         </td>
         <td>
-          <span class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</span><br />
+          <a href="#" (click)="openSystemDetails(relation.infoSystemShortName)" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
           <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alamsüsteem</span>
           <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">ülemsüüsteem</span>
         </td>
