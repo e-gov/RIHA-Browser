@@ -131,7 +131,7 @@ const routes: Routes = [
     ProducerDetailsContactsComponent,
     ProducerEditContactsComponent,
     WarningModalComponent,
-    InfoModalComponent
+    InfoModalComponent,
     ProducerDetailsRelationsComponent,
     ProducerEditRelationsComponent
   ],
