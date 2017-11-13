@@ -10,6 +10,7 @@ basePath: "/"
 tags:
 - name: "Environment configuration"
 - name: "File resources"
+- name: "Information system relations"
 - name: "Information systems"
 - name: "Issue events"
 - name: "Issue timeline"
@@ -58,6 +59,22 @@ paths:
         in: "query"
         required: true
         type: "ref"
+      responses:
+        default:
+          description: "successful operation"
+  /api/v1/files/{uuid}:
+    get:
+      tags:
+      - "File resources"
+      summary: "Download file"
+      description: ""
+      operationId: "download"
+      parameters:
+      - name: "uuid"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
         default:
           description: "successful operation"
@@ -349,7 +366,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/PagedResponseIssue"
+            $ref: "#/definitions/PagedResponseIssueSummaryModel"
     post:
       tags:
       - "Issues"
@@ -371,6 +388,66 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Issue"
+  /api/v1/systems/{shortName}/relations:
+    get:
+      tags:
+      - "Information system relations"
+      summary: "List all info system relations"
+      description: ""
+      operationId: "list"
+      parameters:
+      - name: "shortName"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/RelationSummaryModel"
+    post:
+      tags:
+      - "Information system relations"
+      summary: "Create new relation for information system"
+      description: ""
+      operationId: "add"
+      parameters:
+      - name: "shortName"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/RelationModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/RelationSummaryModel"
+  /api/v1/systems/{shortName}/relations/{relationId}:
+    delete:
+      tags:
+      - "Information system relations"
+      summary: "Deletes single relation of information system"
+      description: ""
+      operationId: "delete"
+      parameters:
+      - name: "shortName"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "relationId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        default:
+          description: "successful operation"
   /api/v1/user:
     get:
       tags:
@@ -481,6 +558,29 @@ definitions:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueSummaryModel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      infoSystemUuid:
+        type: "string"
+        format: "uuid"
+      dateCreated:
+        type: "string"
+        format: "date-time"
+      title:
+        type: "string"
+      organizationName:
+        type: "string"
+      organizationCode:
+        type: "string"
+      status:
+        type: "string"
+        enum:
+        - "OPEN"
+        - "CLOSED"
   OrganizationModel:
     type: "object"
     properties:
@@ -498,25 +598,6 @@ definitions:
         type: "array"
         items:
           type: "object"
-      size:
-        type: "integer"
-        format: "int32"
-      page:
-        type: "integer"
-        format: "int32"
-      totalPages:
-        type: "integer"
-        format: "int32"
-  PagedResponseIssue:
-    type: "object"
-    properties:
-      totalElements:
-        type: "integer"
-        format: "int64"
-      content:
-        type: "array"
-        items:
-          $ref: "#/definitions/Issue"
       size:
         type: "integer"
         format: "int32"
@@ -564,6 +645,56 @@ definitions:
       totalPages:
         type: "integer"
         format: "int32"
+  PagedResponseIssueSummaryModel:
+    type: "object"
+    properties:
+      totalElements:
+        type: "integer"
+        format: "int64"
+      content:
+        type: "array"
+        items:
+          $ref: "#/definitions/IssueSummaryModel"
+      size:
+        type: "integer"
+        format: "int32"
+      page:
+        type: "integer"
+        format: "int32"
+      totalPages:
+        type: "integer"
+        format: "int32"
+  RelationModel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      infoSystemShortName:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+        - "SUB_SYSTEM"
+        - "SUPER_SYSTEM"
+  RelationSummaryModel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      infoSystemUuid:
+        type: "string"
+        format: "uuid"
+      infoSystemName:
+        type: "string"
+      infoSystemShortName:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+        - "SUB_SYSTEM"
+        - "SUPER_SYSTEM"
   UserDetailsModel:
     type: "object"
     properties:

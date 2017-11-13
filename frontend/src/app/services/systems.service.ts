@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
 import { EnvironmentService } from './environment.service';
 import * as moment from 'moment';
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class SystemsService {
@@ -128,6 +129,25 @@ export class SystemsService {
     }).toPromise();
   }
 
+  public getSystemsForAutocomplete(text, ownShortName?, url?): Observable<any> {
+    let params: URLSearchParams = new URLSearchParams();
+    let filtersArr: string[] = [];
+
+    filtersArr.push(`name,ilike,%${ text }%`);
+
+    params.set('filter', filtersArr.join());
+
+    params.set('size', '10');
+
+    let urlToUse = url || this.systemsUrl;
+
+    return this.http.get(urlToUse, {
+      search: params
+    }).map(response => {
+      return <any>response.json().content;
+    });
+  }
+
   public getSystem(short_name) {
     return this.http.get(`/api/v1/systems/${ short_name }`).toPromise();
   }
@@ -175,6 +195,18 @@ export class SystemsService {
 
   public postSystemIssueComment(issueId, reply) {
     return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
+  }
+
+  public getSystemRelations(shortName) {
+    return this.http.get(`/api/v1/systems/${ shortName }/relations`).toPromise();
+  }
+
+  public addSystemRelation(shortName, relation) {
+    return this.http.post(`/api/v1/systems/${ shortName }/relations`, relation).toPromise();
+  }
+
+  public deleteSystemRelation(shortName, relationId) {
+    return this.http.delete(`/api/v1/systems/${ shortName }/relations/${ relationId }`).toPromise();
   }
 
   public closeSystemIssue(issueId, reply) {

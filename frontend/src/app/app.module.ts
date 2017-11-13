@@ -60,6 +60,8 @@ import { ProducerDetailsContactsComponent } from './components/producer-details/
 import { ProducerEditContactsComponent } from './components/producer-edit/producer-edit-contacts/producer-edit-contacts.component';
 import { WarningModalComponent } from './components/session-timeout/warning-modal/warning-modal.component';
 import { InfoModalComponent } from './components/session-timeout/info-modal/info-modal.component';
+import { ProducerDetailsRelationsComponent } from './components/producer-details/producer-details-relations/producer-details-relations.component';
+import { ProducerEditRelationsComponent } from './components/producer-edit/producer-edit-relations/producer-edit-relations.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -130,6 +132,8 @@ const routes: Routes = [
     ProducerEditContactsComponent,
     WarningModalComponent,
     InfoModalComponent
+    ProducerDetailsRelationsComponent,
+    ProducerEditRelationsComponent
   ],
   imports: [
     BrowserModule,

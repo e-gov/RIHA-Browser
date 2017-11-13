@@ -11,5 +11,9 @@ export const G = Object.freeze({
   x_road_status: {
     JOINED: 'JOINED',
     NOT_JOINED: 'NOT_JOINED'
+  },
+  relation_type: {
+    SUB_SYSTEM: 'SUB_SYSTEM',
+    SUPER_SYSTEM: 'SUPER_SYSTEM'
   }
 });
