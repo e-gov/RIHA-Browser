@@ -1,0 +1,57 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Seosed süsteemidega
+  </div>
+  <div class="my-1">
+    <form #addForm="ngForm">
+      <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
+        <label for="infoSystem" class="text-muted separated-text">Süüsteem:</label>
+        <input id="infoSystem" class="form-control col-12"
+               #infoSystem="ngModel"
+               [ngbTypeahead]="search"
+               [inputFormatter]="inputFormatter"
+               [resultFormatter]="dropDownFormatter"
+               [(ngModel)]="relation.infoSystem"
+               name="infoSystem" required>
+
+      </div>
+      <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">
+        <label for="type" class="text-muted separated-text">Seose tüüp:</label>
+        <select id="type" class="form-control col-12"
+                #type="ngModel"
+                [(ngModel)]="relation.type"
+                name="type" required>
+          <option [value]="globals.relation_type.SUB_SYSTEM" selected>Alamsüüsteem</option>
+          <option [value]="globals.relation_type.SUPER_SYSTEM">Ülemsüüsteem</option>
+        </select>
+      </div>
+      <div class="form-group row">
+        <div class="col-12">
+          <button class="btn btn-success pull-right" (click)="addRelation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Salvesta seos</button>
+        </div>
+      </div>
+      <div class="dataTables_wrapper">
+        <table class="details-list-table">
+          <tr *ngFor="let relation of relations; let i = index">
+            <td>
+              <i class="fa fa-circle text-primary"></i>
+            </td>
+            <td>
+              <a href="/Infosüsteemid/Vaata/{{ relation.infoSystemShortName }}" target="_blank" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
+              <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alamsüsteem</span>
+              <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">ülemsüüsteem</span>
+            </td>
+            <td>
+              <button (click)="deleteRelation(relation.id)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="closeModal(addForm)" class="btn btn-default pull-right">Sulge</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
