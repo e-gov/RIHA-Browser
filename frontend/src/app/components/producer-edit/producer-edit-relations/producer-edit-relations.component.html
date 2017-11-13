@@ -4,27 +4,27 @@
   </div>
   <div class="my-1">
     <form #addForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': systemId.invalid && (systemId.dirty || systemId.touched)}">
-        <label for="systemId" class="text-muted separated-text">Süüsteem:</label>
-        <input id="systemId" class="form-control col-12"
-               #systemId="ngModel"
-               [(ngModel)]="relation.systemId"
-               (keyup.enter)="addRelation(addForm)"
-               name="systemId" required>
+      <div class="form-group" [ngClass]="{'has-danger': infoSystemShortName.invalid && (infoSystemShortName.dirty || infoSystemShortName.touched)}">
+        <label for="infoSystemShortName" class="text-muted separated-text">Süüsteem:</label>
+        <input id="infoSystemShortName" class="form-control col-12"
+               #infoSystemShortName="ngModel"
+               [(ngModel)]="relation.infoSystemShortName"
+               name="infoSystemShortName" required>
 
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': relationType.invalid && (relationType.dirty || relationType.touched)}">
-        <label for="relationType" class="text-muted separated-text">Seose tüüp:</label>
-        <input id="relationType" class="form-control col-12"
-               #relationType="ngModel"
-               [(ngModel)]="relation.relationType"
-               (keyup.enter)="addRelation(addForm)"
-               name="relationType" required>
-
+      <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">
+        <label for="type" class="text-muted separated-text">Seose tüüp:</label>
+        <select id="type" class="form-control col-12"
+                #type="ngModel"
+                [(ngModel)]="relation.type"
+                name="type" required>
+          <option [value]="globals.relation_type.SUB_SYSTEM" selected>Alamsüüsteem</option>
+          <option [value]="globals.relation_type.SUPER_SYSTEM">Ülemsüüsteem</option>
+        </select>
       </div>
       <div class="form-group row">
         <div class="col-12">
-          <button class="btn btn-default pull-right" (click)="addRelation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          <button class="btn btn-success pull-right" (click)="addRelation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Salvesta seos</button>
         </div>
       </div>
       <div class="dataTables_wrapper">
@@ -34,19 +34,19 @@
               <i class="fa fa-circle text-primary"></i>
             </td>
             <td>
-              <span class="font-weight-bold">{{ relation.system }}</span><br />
-              <a class="text-gray-dark small" href="{{ relation.type }}">{{ relation.type }}</a>
+              <span class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</span><br />
+              <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alamsüsteem</span>
+              <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">ülemsüüsteem</span>
             </td>
             <td>
-              <button (click)="deleteRelation(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+              <button (click)="deleteRelation(relation.id)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>
         </table>
       </div>
       <div class="actions-bar">
         <div class="buttons pull-right">
-          <button (click)="closeModal(addForm)" class="btn btn-default pull-right">Tühista</button>
-          <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+          <button (click)="closeModal(addForm)" class="btn btn-default pull-right">Sulge</button>
         </div>
       </div>
     </form>

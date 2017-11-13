@@ -174,6 +174,18 @@ export class SystemsService {
     return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
   }
 
+  public getSystemRelations(shortName) {
+    return this.http.get(`/api/v1/systems/${ shortName }/relations`).toPromise();
+  }
+
+  public addSystemRelation(shortName, relation) {
+    return this.http.post(`/api/v1/systems/${ shortName }/relations`, relation).toPromise();
+  }
+
+  public deleteSystemRelation(shortName, relationId) {
+    return this.http.delete(`/api/v1/systems/${ shortName }/relations/${ relationId }`).toPromise();
+  }
+
   public closeSystemIssue(issueId, reply) {
     return this.http.put(`/api/v1/issues/${ issueId }`, {
       comment: reply.comment,

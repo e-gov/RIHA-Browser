@@ -154,7 +154,8 @@ const routes: Routes = [
     ApproverAddIssueComponent,
     ApproverIssueDetailsComponent,
     ActiveOrganizationChooserComponent,
-    ProducerEditContactsComponent
+    ProducerEditContactsComponent,
+    ProducerEditRelationsComponent
   ],
   bootstrap: [AppComponent],
   providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]

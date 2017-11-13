@@ -37,7 +37,7 @@
            *ngIf="isBlockVisible('legislations')"
            [pageScrollAdjustHash]="true"
            [ngClass]="{'active': isMenuActive('oigusaktid')}"
-           href="#kontaktid"
+           href="#oigusaktid"
            class="list-group-item justify-content-between">
           Õigusaktid
         </a>
@@ -88,7 +88,7 @@
     </div>
     <div id="seosed"
          class="separate-block">
-      <app-producer-details-relations [allowEdit]="isEditingAllowed()"></app-producer-details-relations>
+      <app-producer-details-relations [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-relations>
     </div>
   </article>
 </section>
