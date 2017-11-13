@@ -165,7 +165,8 @@ const routes: Routes = [
     ActiveOrganizationChooserComponent,
     ProducerEditContactsComponent,
     InfoModalComponent,
-    WarningModalComponent
+    WarningModalComponent,
+    ProducerEditRelationsComponent
   ],
   bootstrap: [AppComponent],
   providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, SessionHelperService, ModalHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
