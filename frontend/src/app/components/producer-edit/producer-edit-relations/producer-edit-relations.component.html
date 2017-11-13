@@ -4,12 +4,15 @@
   </div>
   <div class="my-1">
     <form #addForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': infoSystemShortName.invalid && (infoSystemShortName.dirty || infoSystemShortName.touched)}">
-        <label for="infoSystemShortName" class="text-muted separated-text">Süüsteem:</label>
-        <input id="infoSystemShortName" class="form-control col-12"
-               #infoSystemShortName="ngModel"
-               [(ngModel)]="relation.infoSystemShortName"
-               name="infoSystemShortName" required>
+      <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
+        <label for="infoSystem" class="text-muted separated-text">Süüsteem:</label>
+        <input id="infoSystem" class="form-control col-12"
+               #infoSystem="ngModel"
+               [ngbTypeahead]="search"
+               [inputFormatter]="inputFormatter"
+               [resultFormatter]="dropDownFormatter"
+               [(ngModel)]="relation.infoSystem"
+               name="infoSystem" required>
 
       </div>
       <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">

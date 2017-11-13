@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import { isNullOrUndefined } from 'util';
 import { EnvironmentService } from './environment.service';
 import * as moment from 'moment';
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class SystemsService {
@@ -123,6 +124,25 @@ export class SystemsService {
     return this.http.get(urlToUse, {
       search: params
     }).toPromise();
+  }
+
+  public getSystemsForAutocomplete(text, ownShortName?, url?): Observable<any> {
+    let params: URLSearchParams = new URLSearchParams();
+    let filtersArr: string[] = [];
+
+    filtersArr.push(`name,ilike,%${ text }%`);
+
+    params.set('filter', filtersArr.join());
+
+    params.set('size', '10');
+
+    let urlToUse = url || this.systemsUrl;
+
+    return this.http.get(urlToUse, {
+      search: params
+    }).map(response => {
+      return <any>response.json().content;
+    });
   }
 
   public getSystem(short_name) {

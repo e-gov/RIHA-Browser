@@ -5,7 +5,6 @@ import { G } from '../../../globals/globals';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProducerEditRelationsComponent } from '../../producer-edit/producer-edit-relations/producer-edit-relations.component';
 import { Router } from '@angular/router';
-import { WindowRefService } from '../../../services/window-ref.service';
 
 @Component({
   selector: 'app-producer-details-relations',
@@ -21,7 +20,6 @@ export class ProducerDetailsRelationsComponent implements OnInit {
   relations: any[] = [];
 
   openSystemDetails(shortName){
-    this.winRef.nativeWindow.scrollTo(0, 0);
     this.router.navigate(['/Infosüsteemid/Vaata', shortName]);
     return false;
   }
@@ -50,9 +48,10 @@ export class ProducerDetailsRelationsComponent implements OnInit {
   };
 
   constructor(private systemsService: SystemsService,
-              private winRef: WindowRefService,
               private router: Router,
-              private modalService: NgbModal) { }
+              private modalService: NgbModal) {
+
+  }
 
   ngOnInit() {
     this.refreshRelations();
