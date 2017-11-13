@@ -2,7 +2,7 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.Relation;
 import ee.ria.riha.service.RelationService;
-import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
+import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.RelationSummaryModel;
 import io.swagger.annotations.Api;
@@ -63,7 +63,7 @@ public class RelationController {
     }
 
     @PostMapping("/{shortName}/relations")
-    @PreAuthorizeIssueOwnerOrReviewer
+    @PreAuthorizeInfoSystemOwner
     @ApiOperation("Create new relation for information system")
     public ResponseEntity<RelationSummaryModel> add(@PathVariable("shortName") String shortName,
                                                     @RequestBody RelationModel relationModel) {
@@ -72,7 +72,7 @@ public class RelationController {
     }
 
     @DeleteMapping("/{shortName}/relations/{relationId}")
-    @PreAuthorizeIssueOwnerOrReviewer
+    @PreAuthorizeInfoSystemOwner
     @ApiOperation("Deletes single relation of information system")
     public void delete(@PathVariable("shortName") String shortName, @PathVariable("relationId") Long relationId) {
         relationService.delete(shortName, relationId);
