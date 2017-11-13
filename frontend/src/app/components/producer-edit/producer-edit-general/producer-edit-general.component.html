@@ -64,7 +64,7 @@
           <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
           <label *ngIf="!system.getDevelopmentStatus()" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
           <div class="col-sm-4 form-links">
-            <span>Kas infosüsteem on arendusel?</span>
+            <span>Kas infosüsteemi arendatakse aktiivselt?</span>
             <a href="#" (click)="changeInDevelopmentStatus(true)">Jah</a>
             <a href="#" (click)="changeInDevelopmentStatus(false)">Ei</a>
           </div>
@@ -78,7 +78,7 @@
         <textarea #purpose="ngModel" [(ngModel)]="system.details.purpose" name="purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
       </div>
       <div>
-        <label class="text-muted">Infosüsteemi valdkond:
+        <label class="text-muted">Infosüsteemi märksõnad:
           <app-tooltip [text]='"Valdkonnad ja märksõnad, mis infosüsteemi iseloomustavad. Näiteks \"majandus\", \"x-tee alamsüsteem\", \"standardlahendus\" jne. Uue märksõna lisamiseks kasuta reavahetust"'></app-tooltip>
         </label>
         <tag-input [(ngModel)]="system.details.topics" name="topics"
@@ -87,7 +87,7 @@
                    [modelAsStrings]="true"
                    [addOnBlur]="true"
                    [separatorKeys]="[',']"
-                   [secondaryPlaceholder]="'valdkonnad'"></tag-input>
+                   [secondaryPlaceholder]="'Sisesta märksõnad'"></tag-input>
       </div>
 
       <hr class="short" align="left">
