@@ -114,6 +114,6 @@ public class SecurityContextUtilTest {
     public void hasRoleReturnsFalseWhenSpecifiedRoleIsNull() {
         SecurityContextHolder.getContext().setAuthentication(rihaAuthenticationToken);
 
-        assertFalse(SecurityContextUtil.hasRole(null));
+        assertFalse(SecurityContextUtil.hasRole((String) null));
     }
 }

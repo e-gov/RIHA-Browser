@@ -3,6 +3,7 @@ package ee.ria.riha.service;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.authentication.RihaUserDetails;
+import ee.ria.riha.service.auth.RoleType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -85,6 +86,16 @@ public class SecurityContextUtil {
 
                     return null;
                 });
+    }
+
+    /**
+     * Checks list of authentication authorities for specified role.
+     *
+     * @param role role to check
+     * @return true in case user is in role, false otherwise
+     */
+    public static boolean hasRole(RoleType role) {
+        return hasRole(role.getRole());
     }
 
     /**
