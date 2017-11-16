@@ -78,10 +78,18 @@ public class IssueCommentService {
         PagedResponse<Comment> response = commentRepository.list(pageable, filter);
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
-                                   response.getTotalElements(),
-                                   response.getContent().stream()
-                                           .map(COMMENT_TO_ISSUE_COMMENT)
-                                           .collect(toList()));
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_ISSUE_COMMENT)
+                        .collect(toList()));
+    }
+
+    private String getIssueCommentTypeFilter() {
+        return "type,=," + IssueEntityType.ISSUE_COMMENT.name();
+    }
+
+    private String getIssueIdEqFilter(Long issueId) {
+        return "comment_parent_id,=," + issueId;
     }
 
     /**
@@ -128,14 +136,6 @@ public class IssueCommentService {
         }
 
         return COMMENT_TO_ISSUE_COMMENT.apply(comment);
-    }
-
-    private String getIssueCommentTypeFilter() {
-        return "type,=," + IssueEntityType.ISSUE_COMMENT.name();
-    }
-
-    private String getIssueIdEqFilter(Long issueId) {
-        return "comment_parent_id,=," + issueId;
     }
 
 }

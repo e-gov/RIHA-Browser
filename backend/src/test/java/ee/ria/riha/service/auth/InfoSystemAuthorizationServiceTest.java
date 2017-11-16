@@ -44,19 +44,19 @@ public class InfoSystemAuthorizationServiceTest {
     private InfoSystemAuthorizationService infoSystemAuthorization;
 
     private InfoSystem infoSystem = new InfoSystem("{\n" +
-                                                           "  \"owner\": {\n" +
-                                                           "    \"code\": \"777\"\n" +
-                                                           "  }\n" +
-                                                           "}");
+            "  \"owner\": {\n" +
+            "    \"code\": \"777\"\n" +
+            "  }\n" +
+            "}");
 
     @Before
     public void setUp() {
         User jane = new User("janedoe", "", AuthorityUtils.NO_AUTHORITIES);
         RihaUserDetails principal = new RihaUserDetails(jane,
-                                                        jane.getUsername(),
-                                                        ImmutableMultimap.of(
-                                                                new RihaOrganization(ACME_ORG_CODE, "Acme org"),
-                                                                new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")));
+                jane.getUsername(),
+                ImmutableMultimap.of(
+                        new RihaOrganization(ACME_ORG_CODE, "Acme org"),
+                        new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")));
 
         authenticationToken = new RihaOrganizationAwareAuthenticationToken(
                 principal, null, null);
@@ -90,10 +90,10 @@ public class InfoSystemAuthorizationServiceTest {
     @Test
     public void isOwnerReturnsFalseWhenActiveOrganizationAndInfoSystemOwnerCodeAreNotEqual() {
         infoSystem = new InfoSystem("{\n" +
-                                            "  \"owner\": {\n" +
-                                            "    \"code\": \"000\"\n" +
-                                            "  }\n" +
-                                            "}");
+                "  \"owner\": {\n" +
+                "    \"code\": \"000\"\n" +
+                "  }\n" +
+                "}");
         assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
     }
 

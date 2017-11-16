@@ -71,14 +71,13 @@ public class InfoSystemService {
         return infoSystemRepository.add(infoSystem);
     }
 
-    /**
-     * Retrieves {@link InfoSystem} by its short name
-     *
-     * @param shortName info system short name
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(String shortName) {
-        return infoSystemRepository.load(shortName);
+    private void validateInfoSystemShortName(String shortName) {
+        log.debug("Checking info system '{}' existence", shortName);
+        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
+        List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
+        if (!infoSystems.isEmpty()) {
+            throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
+        }
     }
 
     /**
@@ -123,13 +122,14 @@ public class InfoSystemService {
         return infoSystemRepository.add(updatedInfoSystem);
     }
 
-    private void validateInfoSystemShortName(String shortName) {
-        log.debug("Checking info system '{}' existence", shortName);
-        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
-        List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
-        if (!infoSystems.isEmpty()) {
-            throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
-        }
+    /**
+     * Retrieves {@link InfoSystem} by its short name
+     *
+     * @param shortName info system short name
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(String shortName) {
+        return infoSystemRepository.load(shortName);
     }
 
 }

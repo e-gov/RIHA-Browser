@@ -102,10 +102,10 @@ public class IssueService {
         PagedResponse<Comment> response = commentRepository.list(pageable, filter);
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
-                                   response.getTotalElements(),
-                                   response.getContent().stream()
-                                           .map(COMMENT_TO_ISSUE)
-                                           .collect(toList()));
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_ISSUE)
+                        .collect(toList()));
     }
 
     /**
@@ -166,7 +166,8 @@ public class IssueService {
      *
      * @param issueId   id of an issue
      * @param newStatus updated issue status
-     * @param comment   @return updated issue
+     * @param comment   status update comment
+     * @return updated issue
      */
     public Issue updateIssueStatus(Long issueId, IssueStatus newStatus, String comment) {
         Issue issue = getIssueById(issueId);
