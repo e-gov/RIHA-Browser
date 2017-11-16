@@ -62,7 +62,7 @@ public class IssueCommentServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringCommentCreation() {
         authenticationToken.setActiveOrganization(null);
 
