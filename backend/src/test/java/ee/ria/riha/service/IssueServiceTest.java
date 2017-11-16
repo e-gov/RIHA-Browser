@@ -112,7 +112,7 @@ public class IssueServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueCreation() {
         authenticationToken.setActiveOrganization(null);
 
@@ -162,7 +162,7 @@ public class IssueServiceTest {
         issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, null);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueUpdate() {
         authenticationToken.setActiveOrganization(null);
 

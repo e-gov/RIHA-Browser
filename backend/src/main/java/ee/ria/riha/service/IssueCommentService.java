@@ -92,15 +92,10 @@ public class IssueCommentService {
      * @return created comment
      */
     public IssueComment createIssueComment(Long issueId, String comment) {
-        RihaUserDetails rihaUserDetails = getRihaUserDetails();
-        if (rihaUserDetails == null) {
-            throw new IllegalBrowserStateException("User details not present in security context");
-        }
-
-        RihaOrganization organization = getActiveOrganization();
-        if (organization == null) {
-            throw new ValidationException("validation.generic.activeOrganization.notSet");
-        }
+        RihaUserDetails rihaUserDetails = getRihaUserDetails()
+                .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
+        RihaOrganization organization = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
 
         IssueComment issueComment = IssueComment.builder()
                 .issueId(issueId)
