@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
+import static ee.ria.riha.service.auth.RoleType.PRODUCER;
+import static ee.ria.riha.service.auth.RoleType.AUTHENTICATED_USER;
+
 /**
  * Builder for Jane Doe authentication token. <p> Jane is a user with first name <strong>Jane</strong> and last name
  * <strong>Doe</strong>. Her personal code is <strong>EE40102031234</strong>. Jane user name is
@@ -27,13 +30,13 @@ public class JaneAuthenticationTokenBuilder {
 
     private String username = "jane.doe";
     private String password = "strong";
-    private List<GrantedAuthority> baseAuthorities = AuthorityUtils.createAuthorityList("ROLE_RIHA_USER");
+    private List<GrantedAuthority> baseAuthorities = AuthorityUtils.createAuthorityList(AUTHENTICATED_USER.getRole());
 
     private String personalCode = "EE40102031234";
 
     private ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
             new RihaOrganization("555010203", "Acme org"),
-            new SimpleGrantedAuthority("ROLE_KIRJELDAJA"));
+            new SimpleGrantedAuthority(PRODUCER.getRole()));
 
     public static JaneAuthenticationTokenBuilder builder() {
         return new JaneAuthenticationTokenBuilder();

@@ -1,6 +1,7 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganization;
+import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.storage.util.FilterRequest;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
-import static ee.ria.riha.service.SecurityContextUtil.getRihaUserPersonalCode;
+import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 
 /**
  * @author Valentin Suhnjov
@@ -25,6 +26,8 @@ import static ee.ria.riha.service.SecurityContextUtil.getRihaUserPersonalCode;
 @Service
 @Slf4j
 public class InfoSystemService {
+
+    private static final String NOT_SET_VALUE = "[NOT SET]";
 
     @Autowired
     private InfoSystemRepository infoSystemRepository;
@@ -46,16 +49,16 @@ public class InfoSystemService {
      * @return created {@link InfoSystem}
      */
     public InfoSystem create(InfoSystem model) {
-        RihaOrganization organization = getActiveOrganization();
-        if (organization == null) {
-            throw new ValidationException("validation.generic.activeOrganization.notSet");
-        }
-
+        RihaOrganization organization = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
         InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
-        log.info("User '{}' with active organization '{}'" +
-                        " is creating new info system with short name '{}'",
-                getRihaUserPersonalCode(), organization, infoSystem.getShortName());
         validateInfoSystemShortName(infoSystem.getShortName());
+
+        log.info("User '{}' with active organization '{}' is creating new info system with short name '{}'",
+                getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
+                organization,
+                infoSystem.getShortName());
+
         infoSystem.setUuid(UUID.randomUUID());
         infoSystem.setOwnerCode(organization.getCode());
         infoSystem.setOwnerName(organization.getName());
@@ -68,14 +71,13 @@ public class InfoSystemService {
         return infoSystemRepository.add(infoSystem);
     }
 
-    /**
-     * Retrieves {@link InfoSystem} by its short name
-     *
-     * @param shortName info system short name
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(String shortName) {
-        return infoSystemRepository.load(shortName);
+    private void validateInfoSystemShortName(String shortName) {
+        log.debug("Checking info system '{}' existence", shortName);
+        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
+        List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
+        if (!infoSystems.isEmpty()) {
+            throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
+        }
     }
 
     /**
@@ -99,8 +101,11 @@ public class InfoSystemService {
         InfoSystem existingInfoSystem = get(shortName);
         log.info("User '{}' with active organization '{}'" +
                         " is updating info system with id {}, owner code '{}' and short name '{}'",
-                getRihaUserPersonalCode(), getActiveOrganization(), existingInfoSystem.getId(),
-                existingInfoSystem.getOwnerCode(), existingInfoSystem.getShortName());
+                getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
+                getActiveOrganization().orElse(new RihaOrganization(NOT_SET_VALUE, NOT_SET_VALUE)),
+                existingInfoSystem.getId(),
+                existingInfoSystem.getOwnerCode(),
+                existingInfoSystem.getShortName());
 
         InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
         if (!shortName.equals(updatedInfoSystem.getShortName())) {
@@ -117,13 +122,14 @@ public class InfoSystemService {
         return infoSystemRepository.add(updatedInfoSystem);
     }
 
-    private void validateInfoSystemShortName(String shortName) {
-        log.debug("Checking info system '{}' existence", shortName);
-        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
-        List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
-        if (!infoSystems.isEmpty()) {
-            throw new ValidationException("validation.system.shortName.alreadyTaken", shortName);
-        }
+    /**
+     * Retrieves {@link InfoSystem} by its short name
+     *
+     * @param shortName info system short name
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(String shortName) {
+        return infoSystemRepository.load(shortName);
     }
 
 }
