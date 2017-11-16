@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 import java.util.Collections;
 
+import static ee.ria.riha.service.auth.RoleType.AUTHENTICATED_USER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -20,7 +21,7 @@ public class RihaOrganizationAwareAuthenticationTokenTest {
 
     private static final User MARY_ANN_USER = new User("11412090004", "", AuthorityUtils.NO_AUTHORITIES);
 
-    private static final SimpleGrantedAuthority DEFAULT_ROLE = new SimpleGrantedAuthority("ROLE_RIHA_USER");
+    private static final SimpleGrantedAuthority DEFAULT_ROLE = new SimpleGrantedAuthority(AUTHENTICATED_USER.getRole());
     private static final SimpleGrantedAuthority CUSTOM_ROLE = new SimpleGrantedAuthority("ROLE_CUSTOM");
 
     private static final String TEST_ORG_CODE = "70000001";
