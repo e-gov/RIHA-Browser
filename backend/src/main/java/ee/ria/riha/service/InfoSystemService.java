@@ -128,7 +128,7 @@ public class InfoSystemService {
         FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
         List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
         if (!infoSystems.isEmpty()) {
-            throw new ValidationException("validation.system.shortName.alreadyTaken", shortName);
+            throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
         }
     }
 
