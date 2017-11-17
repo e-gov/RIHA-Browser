@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { ToastrService } from 'ngx-toastr';
-import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../models/user';
+import { ModalHelperService } from "../../services/modal-helper.service";
 
 @Component({
   selector: 'app-approver-feedback-details',
@@ -29,7 +29,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
-        this.activeModal.close();
+        this.modalService.closeActiveModal();
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
@@ -59,18 +59,18 @@ export class ApproverIssueDetailsComponent implements OnInit {
   closeModal(f){
     if (f.form.dirty){
       if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.activeModal.close();
+        this.modalService.closeActiveModal();
       } else {
         return false;
       }
     } else {
-      this.activeModal.close();
+      this.modalService.closeActiveModal();
     }
   }
 
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
-              private activeModal: NgbActiveModal,
+              private modalService: ModalHelperService,
               private environmentService: EnvironmentService) {
     this.activeUser = this.environmentService.getActiveUser();
 
