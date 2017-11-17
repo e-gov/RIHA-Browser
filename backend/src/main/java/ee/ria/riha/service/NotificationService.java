@@ -4,12 +4,14 @@ import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.notifications.EmailNotificationSenderService;
 import ee.ria.riha.service.notifications.model.NewInfoSystemsNotification;
+import ee.ria.riha.service.notifications.model.NewIssueCommentNotification;
 import ee.ria.riha.service.notifications.model.NewIssueNotification;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @Getter
@@ -17,16 +19,45 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
     private final boolean newIssueNotificationEnabled;
+    private final boolean newIssueCommentNotificationEnabled;
 
     private EmailNotificationSenderService emailNotificationSenderService;
+    private IssueCommentService issueCommentService;
+    private UserService userService;
+    private InfoSystemService infoSystemService;
 
     @Autowired
     public NotificationService(ApplicationProperties applicationProperties) {
         newIssueNotificationEnabled = applicationProperties.getNotification().getNewIssue().isEnabled();
+        newIssueCommentNotificationEnabled = applicationProperties.getNotification().getNewIssueComment().isEnabled();
     }
 
     public void sendNewInfoSystemsNotification(NewInfoSystemsNotification notification) {
         emailNotificationSenderService.sendNotification(notification);
+    }
+
+    public void sendNewIssueCommentNotification(Long issueId) {
+        if (!isNewIssueCommentNotificationEnabled()) {
+            log.warn("New issue comment notifications sending is disabled.");
+            return;
+        }
+
+        Set<String> authorsPersonalCodes = issueCommentService.getAllAuthorsPersonalCodes(issueId);
+        Set<String> emails = userService.getUsersEmailsByUsersIds(authorsPersonalCodes);
+
+        if (emails.isEmpty()) {
+            log.info("New issue comment has been recently added for issue with id {}, but none of issue participants have emails.", issueId);
+            return;
+        }
+
+        InfoSystem infoSystem = infoSystemService.get(issueId);
+        NewIssueCommentNotification model = NewIssueCommentNotification.builder()
+                .infoSystemFullName(infoSystem.getFullName())
+                .infoSystemShortName(infoSystem.getShortName())
+                .to(emails.toArray(new String[emails.size()]))
+                .build();
+
+        emailNotificationSenderService.sendNotification(model);
     }
 
     public void sendNewIssueNotification(InfoSystem infoSystem) {
@@ -35,7 +66,7 @@ public class NotificationService {
             return;
         }
 
-        String[] to = getSystemContacts(infoSystem);
+        String[] to = infoSystemService.getSystemContacts(infoSystem);
         if (to.length == 0) {
             log.info("New issue has been recently added, but info system '{}' has no contacts.", infoSystem.getFullName());
             return;
@@ -50,21 +81,23 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(model);
     }
 
-    private String[] getSystemContacts(InfoSystem infoSystem) {
-        JSONArray jsonContactsArray = infoSystem.getJsonObject().optJSONArray("contacts");
-        if (jsonContactsArray.length() == 0) {
-            return new String[0];
-        }
-
-        String[] contacts = new String[jsonContactsArray.length()];
-        for (int i = 0; i < jsonContactsArray.length(); i++) {
-            contacts[i] = jsonContactsArray.optJSONObject(i).optString("email");
-        }
-        return contacts;
-    }
-
     @Autowired
     public void setEmailNotificationSenderService(EmailNotificationSenderService emailNotificationSenderService) {
         this.emailNotificationSenderService = emailNotificationSenderService;
+    }
+
+    @Autowired
+    public void setIssueCommentService(IssueCommentService issueCommentService) {
+        this.issueCommentService = issueCommentService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setInfoSystemService(InfoSystemService infoSystemService) {
+        this.infoSystemService = infoSystemService;
     }
 }

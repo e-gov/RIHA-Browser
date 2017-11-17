@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 /**
  * @author Valentin Suhnjov
@@ -36,6 +37,9 @@ public class IssueCommentServiceTest {
     @Mock
     private CommentRepository commentRepository;
 
+    @Mock
+    private NotificationService notificationService;
+
     @InjectMocks
     private IssueCommentService issueCommentService;
 
@@ -46,6 +50,7 @@ public class IssueCommentServiceTest {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
+        doNothing().when(notificationService).sendNewIssueCommentNotification(any(Long.class));
     }
 
     @Test

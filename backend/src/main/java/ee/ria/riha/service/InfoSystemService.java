@@ -3,11 +3,13 @@ package ee.ria.riha.service;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.storage.util.FilterRequest;
 import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,7 @@ public class InfoSystemService {
 
     @Autowired
     private JsonValidationService infoSystemValidationService;
+    private IssueService issueService;
 
     private DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
@@ -89,6 +92,17 @@ public class InfoSystemService {
     }
 
     /**
+     * Retrieves {@link InfoSystem} by issue id
+     *
+     * @param issueId - issue id
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(Long issueId) {
+        Issue issue = issueService.getIssueById(issueId);
+        return get(issue.getInfoSystemUuid());
+    }
+
+    /**
      * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated from model.
      *
      * @param shortName info system short name
@@ -117,6 +131,25 @@ public class InfoSystemService {
         return infoSystemRepository.add(updatedInfoSystem);
     }
 
+    /**
+     * Extracts info system contacts from JSON.
+     *
+     * @param infoSystem - info system object
+     * @return array of info system contacts
+     */
+    public String[] getSystemContacts(InfoSystem infoSystem) {
+        JSONArray jsonContactsArray = infoSystem.getJsonObject().optJSONArray("contacts");
+        if (jsonContactsArray == null || jsonContactsArray.length() == 0) {
+            return new String[0];
+        }
+
+        String[] contacts = new String[jsonContactsArray.length()];
+        for (int i = 0; i < jsonContactsArray.length(); i++) {
+            contacts[i] = jsonContactsArray.optJSONObject(i).optString("email");
+        }
+        return contacts;
+    }
+
     private void validateInfoSystemShortName(String shortName) {
         log.debug("Checking info system '{}' existence", shortName);
         FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
@@ -126,4 +159,8 @@ public class InfoSystemService {
         }
     }
 
+    @Autowired
+    public void setIssueService(IssueService issueService) {
+        this.issueService = issueService;
+    }
 }
