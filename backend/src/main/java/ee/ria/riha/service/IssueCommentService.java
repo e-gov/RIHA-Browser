@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
@@ -61,6 +63,7 @@ public class IssueCommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    private NotificationService notificationService;
 
     /**
      * List concrete info system concrete issue comments.
@@ -116,6 +119,8 @@ public class IssueCommentService {
             throw new IllegalBrowserStateException("Issue comment was not created");
         }
 
+        notificationService.sendNewIssueCommentNotification(issueId);
+
         return COMMENT_TO_ISSUE_COMMENT.apply(commentRepository.get(createdIssueCommentIds.get(0)));
     }
 
@@ -135,6 +140,27 @@ public class IssueCommentService {
         return COMMENT_TO_ISSUE_COMMENT.apply(comment);
     }
 
+    /**
+     * Retrieves set of unique users personal codes. The set contains only codes of issue comments authors, including
+     * issue author's one.
+     *
+     * @param issueId issue id
+     * @return retrieved set of unique users personal codes
+     */
+    public Set<String> getAllAuthorsPersonalCodes(Long issueId) {
+        FilterRequest request = new FilterRequest();
+        request.addFilter(getIssueIdEqFilter(issueId));
+
+        Set<String> issueCommentsAuthorsPersonalCodes = commentRepository.find(request).stream()
+                .map(Comment::getAuthor_personal_code)
+                .collect(Collectors.toSet());
+
+        String issueAuthorPersonalCode = commentRepository.get(issueId).getAuthor_personal_code();
+        issueCommentsAuthorsPersonalCodes.add(issueAuthorPersonalCode);
+
+        return issueCommentsAuthorsPersonalCodes;
+    }
+
     private String getIssueCommentTypeFilter() {
         return "type,=," + IssueEntityType.ISSUE_COMMENT.name();
     }
@@ -143,4 +169,8 @@ public class IssueCommentService {
         return "comment_parent_id,=," + issueId;
     }
 
+    @Autowired
+    public void setNotificationService(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 }
