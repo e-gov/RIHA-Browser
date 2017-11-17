@@ -38,7 +38,7 @@ export class LoginFormComponent implements OnInit {
         type: 'danger',
         heading: 'Viga',
         text: 'Viga sisse logimisel'
-      }
+      };
       setTimeout(()=> this.alertConf = null, 5000)
     });
     return false;

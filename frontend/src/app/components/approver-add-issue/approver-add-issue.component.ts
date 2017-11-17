@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { System } from '../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user';
+import { ModalHelperService } from '../../services/modal-helper.service';
 
 @Component({
   selector: 'app-approver-add-comment',
@@ -20,7 +20,7 @@ export class ApproverAddIssueComponent implements OnInit {
     if (f.valid){
       this.systemsService.addSystemIssue(this.system.details.short_name, f.value).then(
         res => {
-          this.activeModal.close();
+          this.modalService.closeActiveModal();
         },
         err => {
           this.toastrService.error('Serveri viga! Proovige uuesti!');
@@ -31,16 +31,16 @@ export class ApproverAddIssueComponent implements OnInit {
   closeModal(f){
     if (f.form.dirty){
       if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.activeModal.dismiss();
+        this.modalService.dismissActiveModal();
       } else {
         return false;
       }
     } else {
-      this.activeModal.dismiss();
+      this.modalService.dismissActiveModal();
     }
   }
 
-  constructor(private activeModal: NgbActiveModal,
+  constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
               private environmentService: EnvironmentService) {

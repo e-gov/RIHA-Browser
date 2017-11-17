@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralHelperService } from '../../../services/general-helper.service';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 
 @Component({
   selector: 'app-producer-edit-legislations',
@@ -36,12 +36,12 @@ export class ProducerEditLegislationsComponent implements OnInit {
   closeModal(f){
     if (this.isChanged || f.form.dirty){
       if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.activeModal.dismiss();
+        this.modalService.dismissActiveModal();
       } else {
         return false;
       }
     } else {
-      this.activeModal.dismiss();
+      this.modalService.dismissActiveModal();
     }
   }
 
@@ -49,13 +49,13 @@ export class ProducerEditLegislationsComponent implements OnInit {
     let s = this.generalHelperService.cloneObject(this.system);
     s.details.legislations = this.legislations;
     this.systemsService.updateSystem(s).then(response => {
-      this.activeModal.close({system: new System(response.json())});
+      this.modalService.closeActiveModal({system: new System(response.json())});
     }, err => {
       this.toastrService.error('Serveri viga.')
     });
   }
 
-  constructor(private activeModal: NgbActiveModal,
+  constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
               private generalHelperService: GeneralHelperService) { }
