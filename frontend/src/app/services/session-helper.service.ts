@@ -17,12 +17,11 @@ export class SessionHelperService {
       this.timerStart = new Date().getTime();
       this.sessionTimerId = setTimeout(()=> {
         if (this.environmentService.getActiveUser()){
-          this.modalService.dismissActiveModal();
           const modalRef = this.modalService.open(WarningModalComponent, {
             size: "sm",
             backdrop: "static",
             keyboard: false
-          });
+          }, true);
           modalRef.componentInstance.timerStart = this.timerStart;
         }
       }, this.environmentService.getSessionTimeoutInterval() - (6*60*1000));
