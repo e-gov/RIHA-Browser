@@ -16,7 +16,7 @@ declare var $: any;
 export class ProducerDetailsComponent implements OnInit {
   private system: System = new System();
   private user: User;
-  private loaded: boolean = false;
+  private loaded: boolean;
 
   adjustSection(attempt){
     if (attempt < 5){

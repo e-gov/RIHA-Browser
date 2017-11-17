@@ -26,7 +26,9 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
       if (result.system) {
         this.system = result.system;
       }
-    })
+    }, reason => {
+
+    });
   }
 
   constructor(private modalService: ModalHelperService,

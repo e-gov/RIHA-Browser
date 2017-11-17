@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 
 @Component({
   selector: 'app-info-modal',
@@ -10,13 +10,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class InfoModalComponent implements OnInit {
 
   goToLogin(){
-    this.activeModal.dismiss();
+    this.modalService.dismissAllModals();
     this.router.navigate(['/Login']);
     return false;
   }
 
   constructor(private router: Router,
-              private activeModal: NgbActiveModal) { }
+              private modalService: ModalHelperService) { }
 
   ngOnInit() {
   }
