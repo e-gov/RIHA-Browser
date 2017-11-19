@@ -2,7 +2,7 @@ package ee.ria.riha.conf;
 
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.RihaStorageInfoSystemRepository;
-import ee.ria.riha.domain.UserDetailsLdapRepository;
+import ee.ria.riha.domain.LdapRepository;
 import ee.ria.riha.storage.client.StorageClient;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.FileRepository;
@@ -41,7 +41,7 @@ public class StorageConfiguration {
     }
 
     @Bean
-    public UserDetailsLdapRepository userDetailsLdapRepository(LdapContextSource ldapContextSource, ApplicationProperties applicationProperties) {
-        return new UserDetailsLdapRepository(ldapContextSource, applicationProperties);
+    public LdapRepository ldapRepository(LdapContextSource ldapContextSource, ApplicationProperties applicationProperties) {
+        return new LdapRepository(ldapContextSource, applicationProperties);
     }
 }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -22,7 +23,7 @@ public class NotificationService {
     private final boolean newIssueCommentNotificationEnabled;
 
     private EmailNotificationSenderService emailNotificationSenderService;
-    private IssueCommentService issueCommentService;
+    private IssueService issueService;
     private UserService userService;
     private InfoSystemService infoSystemService;
 
@@ -42,15 +43,15 @@ public class NotificationService {
             return;
         }
 
-        Set<String> authorsPersonalCodes = issueCommentService.getAllAuthorsPersonalCodes(issueId);
-        Set<String> emails = userService.getUsersEmailsByUsersIds(authorsPersonalCodes);
+        Set<String> participantsPersonalCodes = issueService.getParticipantsPersonalCodes(issueId);
+        Set<String> emails = userService.getEmailsByPersonalCodes(participantsPersonalCodes);
 
         if (emails.isEmpty()) {
             log.info("New issue comment has been recently added for issue with id {}, but none of issue participants have emails.", issueId);
             return;
         }
 
-        InfoSystem infoSystem = infoSystemService.get(issueId);
+        InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         NewIssueCommentNotification model = NewIssueCommentNotification.builder()
                 .infoSystemFullName(infoSystem.getFullName())
                 .infoSystemShortName(infoSystem.getShortName())
@@ -66,8 +67,8 @@ public class NotificationService {
             return;
         }
 
-        String[] to = infoSystemService.getSystemContacts(infoSystem);
-        if (to.length == 0) {
+        List<String> to = infoSystemService.getSystemContactsEmails(infoSystem);
+        if (to.isEmpty()) {
             log.info("New issue has been recently added, but info system '{}' has no contacts.", infoSystem.getFullName());
             return;
         }
@@ -75,7 +76,7 @@ public class NotificationService {
         NewIssueNotification model = NewIssueNotification.builder()
                 .infoSystemFullName(infoSystem.getFullName())
                 .infoSystemShortName(infoSystem.getShortName())
-                .to(to)
+                .to(to.toArray(new String[to.size()]))
                 .build();
 
         emailNotificationSenderService.sendNotification(model);
@@ -87,8 +88,8 @@ public class NotificationService {
     }
 
     @Autowired
-    public void setIssueCommentService(IssueCommentService issueCommentService) {
-        this.issueCommentService = issueCommentService;
+    public void setIssueService(IssueService issueService) {
+        this.issueService = issueService;
     }
 
     @Autowired

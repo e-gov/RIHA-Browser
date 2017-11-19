@@ -1,14 +1,17 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.domain.UserDetailsLdapRepository;
+import ee.ria.riha.domain.LdapRepository;
+import ee.ria.riha.domain.model.LdapUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Valentin Suhnjov
@@ -16,7 +19,7 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    private UserDetailsLdapRepository userDetailsLdapRepository;
+    private LdapRepository ldapRepository;
 
     /**
      * Changes active organization of currently logged in user.
@@ -37,15 +40,18 @@ public class UserService {
     /**
      * Returns users emails (if any exist) by users personal codes.
      *
-     * @param ids - set of unique personal codes
+     * @param personalCodes - set of unique personal codes
      * @return - set of unique emails, excluding null values
      */
-    public Set<String> getUsersEmailsByUsersIds(Set<String> ids) {
-        return userDetailsLdapRepository.getEmailsByIds(ids);
+    public Set<String> getEmailsByPersonalCodes(Set<String> personalCodes) {
+        return ldapRepository.findLdapUsersByPersonalCodes(personalCodes).stream()
+                .map(LdapUser::getMail)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
     @Autowired
-    public void setUserDetailsLdapRepository(UserDetailsLdapRepository userDetailsLdapRepository) {
-        this.userDetailsLdapRepository = userDetailsLdapRepository;
+    public void setLdapRepository(LdapRepository ldapRepository) {
+        this.ldapRepository = ldapRepository;
     }
 }
