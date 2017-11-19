@@ -1,7 +1,8 @@
 package ee.ria.riha.domain;
 
 import ee.ria.riha.conf.ApplicationProperties;
-import ee.ria.riha.domain.model.User;
+import ee.ria.riha.domain.model.LdapUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -9,11 +10,12 @@ import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.OrFilter;
 import org.springframework.util.Assert;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class UserDetailsLdapRepository {
+@Slf4j
+public class LdapRepository {
 
     private static final String PERSONAL_CODE_ATTRIBUTE = "uid";
     private static final String GIVEN_NAME_ATTRIBUTE = "givenName";
@@ -21,7 +23,7 @@ public class UserDetailsLdapRepository {
     private static final String COMMON_NAME_ATTRIBUTE = "cn";
     private static final String EMAIL_ATTRIBUTE = "mail";
 
-    public static final AttributesMapper<User> USER_ATTRIBUTES_MAPPER = attributes -> User.builder()
+    public static final AttributesMapper<LdapUser> LDAP_USER_ATTRIBUTES_MAPPER = attributes -> LdapUser.builder()
             .personalCode((String) attributes.get(PERSONAL_CODE_ATTRIBUTE).get())
             .givenName(attributes.get(GIVEN_NAME_ATTRIBUTE) == null ?
                     null : (String) attributes.get(GIVEN_NAME_ATTRIBUTE).get())
@@ -36,21 +38,23 @@ public class UserDetailsLdapRepository {
     private final String userSearchBase;
     private LdapTemplate ldapTemplate;
 
-    public UserDetailsLdapRepository(LdapContextSource ldapContextSource, ApplicationProperties applicationProperties) {
+    public LdapRepository(LdapContextSource ldapContextSource, ApplicationProperties applicationProperties) {
         Assert.notNull(ldapContextSource, "LDAP context source must not be null");
         ldapTemplate = new LdapTemplate(ldapContextSource);
-        userSearchBase = applicationProperties.getAuthentication().getUserSearchBase();
+        userSearchBase = applicationProperties.getLdapSearch().getUserSearchBase();
     }
 
-    public Set<String> getEmailsByIds(Set<String> ids) {
-        OrFilter filter = new OrFilter();
-        for (String id : ids) {
-            filter.or(new EqualsFilter(PERSONAL_CODE_ATTRIBUTE, id));
+    public List<LdapUser> findLdapUsersByPersonalCodes(Set<String> personalCodes) {
+        if (personalCodes.isEmpty()) {
+            log.info("Nothing to look for as personal codes were not provided");
+            return new ArrayList<>();
         }
 
-        return ldapTemplate.search(userSearchBase, filter.encode(), USER_ATTRIBUTES_MAPPER).stream()
-                .map(User::getMail)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+        OrFilter filter = new OrFilter();
+        for (String personalCode : personalCodes) {
+            filter.or(new EqualsFilter(PERSONAL_CODE_ATTRIBUTE, personalCode));
+        }
+
+        return ldapTemplate.search(userSearchBase, filter.encode(), LDAP_USER_ATTRIBUTES_MAPPER);
     }
 }

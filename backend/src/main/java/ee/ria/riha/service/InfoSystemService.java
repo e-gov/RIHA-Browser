@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,7 +98,7 @@ public class InfoSystemService {
      * @param issueId - issue id
      * @return retrieved {@link InfoSystem}
      */
-    public InfoSystem get(Long issueId) {
+    public InfoSystem getByIssueId(Long issueId) {
         Issue issue = issueService.getIssueById(issueId);
         return get(issue.getInfoSystemUuid());
     }
@@ -135,17 +136,17 @@ public class InfoSystemService {
      * Extracts info system contacts from JSON.
      *
      * @param infoSystem - info system object
-     * @return array of info system contacts
+     * @return list of info system contacts
      */
-    public String[] getSystemContacts(InfoSystem infoSystem) {
+    public List<String> getSystemContactsEmails(InfoSystem infoSystem) {
         JSONArray jsonContactsArray = infoSystem.getJsonObject().optJSONArray("contacts");
+        List<String> contacts = new ArrayList<>();
         if (jsonContactsArray == null || jsonContactsArray.length() == 0) {
-            return new String[0];
+            return contacts;
         }
 
-        String[] contacts = new String[jsonContactsArray.length()];
         for (int i = 0; i < jsonContactsArray.length(); i++) {
-            contacts[i] = jsonContactsArray.optJSONObject(i).optString("email");
+            contacts.add(jsonContactsArray.optJSONObject(i).optString("email"));
         }
         return contacts;
     }

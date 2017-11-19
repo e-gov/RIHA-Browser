@@ -18,6 +18,7 @@ public class ApplicationProperties {
 
     private final StorageClientProperties storageClient = new StorageClientProperties();
     private final AuthenticationProperties authentication = new AuthenticationProperties();
+    private final LdapSearchProperties ldapSearch = new LdapSearchProperties();
     private final ValidationProperties validation = new ValidationProperties();
     private final NotificationProperties notification = new NotificationProperties();
     private final CorsProperties cors = new CorsProperties();
@@ -42,6 +43,12 @@ public class ApplicationProperties {
         private String ldapBaseDn;
         private String ldapUser;
         private String ldapPassword;
+    }
+
+    @Getter
+    @Setter
+    public static class LdapSearchProperties {
+        private String userSearchBase;
     }
 
     @Getter

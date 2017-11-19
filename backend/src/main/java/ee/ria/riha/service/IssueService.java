@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
 import static ee.ria.riha.domain.model.IssueStatus.OPEN;
@@ -210,6 +212,23 @@ public class IssueService {
 
         commentRepository.update(issueId, ISSUE_TO_COMMENT.apply(issue));
         return getIssueById(issueId);
+    }
+
+    /**
+     * Retrieves set of unique participants personal codes.
+     *
+     * @param issueId - issue id
+     * @return retrieved set of unique participants personal codes
+     */
+    public Set<String> getParticipantsPersonalCodes(Long issueId) {
+        Set<String> issueCommentsAuthorsPersonalCodes = issueCommentService.listByIssueId(issueId).stream()
+                .map(IssueComment::getAuthorPersonalCode)
+                .collect(Collectors.toSet());
+
+        String issueAuthorPersonalCode = getIssueById(issueId).getAuthorPersonalCode();
+        issueCommentsAuthorsPersonalCodes.add(issueAuthorPersonalCode);
+
+        return issueCommentsAuthorsPersonalCodes;
     }
 
     private String getIssueTypeFilter() {
