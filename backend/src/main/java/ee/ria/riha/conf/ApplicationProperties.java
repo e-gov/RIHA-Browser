@@ -18,6 +18,7 @@ public class ApplicationProperties {
 
     private final StorageClientProperties storageClient = new StorageClientProperties();
     private final AuthenticationProperties authentication = new AuthenticationProperties();
+    private final LdapSearchProperties ldapSearch = new LdapSearchProperties();
     private final ValidationProperties validation = new ValidationProperties();
     private final NotificationProperties notification = new NotificationProperties();
     private final CorsProperties cors = new CorsProperties();
@@ -46,6 +47,12 @@ public class ApplicationProperties {
 
     @Getter
     @Setter
+    public static class LdapSearchProperties {
+        private String userSearchBase;
+    }
+
+    @Getter
+    @Setter
     public static class ValidationProperties {
         private String jsonSchemaUrl;
     }
@@ -55,12 +62,19 @@ public class ApplicationProperties {
     public static class NotificationProperties {
         private final CreatedInfoSystemsOverview createdInfoSystemsOverview = new CreatedInfoSystemsOverview();
         private final NewIssue newIssue = new NewIssue();
+        private final NewIssueComment newIssueComment = new NewIssueComment();
         private String from;
     }
 
     @Getter
     @Setter
     public static class NewIssue {
+        private boolean enabled;
+    }
+
+    @Getter
+    @Setter
+    public static class NewIssueComment {
         private boolean enabled;
     }
 
