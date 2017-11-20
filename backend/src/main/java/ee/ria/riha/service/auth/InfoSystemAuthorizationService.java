@@ -3,10 +3,11 @@ package ee.ria.riha.service.auth;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.InfoSystemService;
-import ee.ria.riha.service.SecurityContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 
 /**
  * Provides info system authorization methods
@@ -42,12 +43,14 @@ public class InfoSystemAuthorizationService {
             return false;
         }
 
-        RihaOrganization activeOrganization = SecurityContextUtil.getActiveOrganization();
-        if (activeOrganization == null) {
+        String ownerCode = infoSystem.getOwnerCode();
+        if (!StringUtils.hasText(ownerCode)) {
             return false;
         }
 
-        String ownerCode = infoSystem.getOwnerCode();
-        return StringUtils.hasText(ownerCode) && ownerCode.equals(activeOrganization.getCode());
+        return getActiveOrganization()
+                .map(RihaOrganization::getCode)
+                .map(ownerCode::equals)
+                .orElse(false);
     }
 }
