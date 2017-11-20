@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
@@ -61,6 +62,7 @@ public class IssueCommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    private NotificationService notificationService;
 
     /**
      * List concrete info system concrete issue comments.
@@ -119,6 +121,8 @@ public class IssueCommentService {
             throw new IllegalBrowserStateException("Issue comment was not created");
         }
 
+        notificationService.sendNewIssueCommentNotification(issueId);
+
         return COMMENT_TO_ISSUE_COMMENT.apply(commentRepository.get(createdIssueCommentIds.get(0)));
     }
 
@@ -138,4 +142,23 @@ public class IssueCommentService {
         return COMMENT_TO_ISSUE_COMMENT.apply(comment);
     }
 
+    /**
+     * List concrete info system concrete issue comments.
+     *
+     * @param issueId - issue id
+     * @return list of issue comments related to provided issue id
+     */
+    public List<IssueComment> listByIssueId(Long issueId) {
+        FilterRequest request = new FilterRequest();
+        request.addFilter(getIssueIdEqFilter(issueId));
+
+        return commentRepository.find(request).stream()
+                .map(COMMENT_TO_ISSUE_COMMENT)
+                .collect(Collectors.toList());
+    }
+
+    @Autowired
+    public void setNotificationService(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 }
