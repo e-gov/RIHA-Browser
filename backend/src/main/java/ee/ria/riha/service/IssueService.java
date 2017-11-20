@@ -104,10 +104,10 @@ public class IssueService {
         PagedResponse<Comment> response = commentRepository.list(pageable, filter);
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
-                                   response.getTotalElements(),
-                                   response.getContent().stream()
-                                           .map(COMMENT_TO_ISSUE)
-                                           .collect(toList()));
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_ISSUE)
+                        .collect(toList()));
     }
 
     /**
@@ -135,15 +135,10 @@ public class IssueService {
      * @return create issue
      */
     public Issue createInfoSystemIssue(String shortName, String title, String comment) {
-        RihaUserDetails rihaUserDetails = getRihaUserDetails();
-        if (rihaUserDetails == null) {
-            throw new IllegalBrowserStateException("User details not present in security context");
-        }
-
-        RihaOrganization organization = getActiveOrganization();
-        if (organization == null) {
-            throw new ValidationException("validation.generic.activeOrganization.notSet");
-        }
+        RihaUserDetails rihaUserDetails = getRihaUserDetails()
+                .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
+        RihaOrganization organization = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
 
         InfoSystem infoSystem = infoSystemService.get(shortName);
 
@@ -173,7 +168,8 @@ public class IssueService {
      *
      * @param issueId   id of an issue
      * @param newStatus updated issue status
-     * @param comment   @return updated issue
+     * @param comment   status update comment
+     * @return updated issue
      */
     public Issue updateIssueStatus(Long issueId, IssueStatus newStatus, String comment) {
         Issue issue = getIssueById(issueId);
@@ -182,15 +178,10 @@ public class IssueService {
             throw new IllegalBrowserStateException("Can't modify closed issue");
         }
 
-        RihaUserDetails rihaUserDetails = getRihaUserDetails();
-        if (rihaUserDetails == null) {
-            throw new IllegalBrowserStateException("User details not present in security context");
-        }
-
-        RihaOrganization organization = getActiveOrganization();
-        if (organization == null) {
-            throw new ValidationException("validation.generic.activeOrganization.notSet");
-        }
+        RihaUserDetails rihaUserDetails = getRihaUserDetails()
+                .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
+        RihaOrganization organization = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
 
         if (StringUtils.hasText(comment)) {
             issueCommentService.createIssueComment(issueId, comment);

@@ -1,9 +1,11 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -30,6 +32,9 @@ public class IssueCommentServiceTest {
 
     private static final long EXISTING_ISSUE_ID = 15503L;
     private static final Long CREATED_COMMENT_ENTITY_ID = 42L;
+
+    @Rule
+    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     private RihaOrganizationAwareAuthenticationToken authenticationToken =
             JaneAuthenticationTokenBuilder.builder().build();
@@ -67,7 +72,7 @@ public class IssueCommentServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringCommentCreation() {
         authenticationToken.setActiveOrganization(null);
 

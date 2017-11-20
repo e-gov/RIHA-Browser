@@ -80,10 +80,18 @@ public class IssueCommentService {
         PagedResponse<Comment> response = commentRepository.list(pageable, filter);
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
-                                   response.getTotalElements(),
-                                   response.getContent().stream()
-                                           .map(COMMENT_TO_ISSUE_COMMENT)
-                                           .collect(toList()));
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_ISSUE_COMMENT)
+                        .collect(toList()));
+    }
+
+    private String getIssueCommentTypeFilter() {
+        return "type,=," + IssueEntityType.ISSUE_COMMENT.name();
+    }
+
+    private String getIssueIdEqFilter(Long issueId) {
+        return "comment_parent_id,=," + issueId;
     }
 
     /**
@@ -94,15 +102,10 @@ public class IssueCommentService {
      * @return created comment
      */
     public IssueComment createIssueComment(Long issueId, String comment) {
-        RihaUserDetails rihaUserDetails = getRihaUserDetails();
-        if (rihaUserDetails == null) {
-            throw new IllegalBrowserStateException("User details not present in security context");
-        }
-
-        RihaOrganization organization = getActiveOrganization();
-        if (organization == null) {
-            throw new ValidationException("validation.generic.activeOrganization.notSet");
-        }
+        RihaUserDetails rihaUserDetails = getRihaUserDetails()
+                .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
+        RihaOrganization organization = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
 
         IssueComment issueComment = IssueComment.builder()
                 .issueId(issueId)
@@ -152,14 +155,6 @@ public class IssueCommentService {
         return commentRepository.find(request).stream()
                 .map(COMMENT_TO_ISSUE_COMMENT)
                 .collect(Collectors.toList());
-    }
-
-    private String getIssueCommentTypeFilter() {
-        return "type,=," + IssueEntityType.ISSUE_COMMENT.name();
-    }
-
-    private String getIssueIdEqFilter(Long issueId) {
-        return "comment_parent_id,=," + issueId;
     }
 
     @Autowired
