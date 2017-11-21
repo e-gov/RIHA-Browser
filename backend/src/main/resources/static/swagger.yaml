@@ -515,6 +515,13 @@ definitions:
         enum:
         - "OPEN"
         - "CLOSED"
+      type:
+        type: "string"
+        enum:
+        - "ESTABLISHMENT_REQUEST"
+        - "TAKE_INTO_USE_REQUEST"
+        - "MODIFICATION_REQUEST"
+        - "FINALIZATION_REQUEST"
       entityType:
         type: "string"
         enum:
@@ -581,6 +588,13 @@ definitions:
         enum:
         - "OPEN"
         - "CLOSED"
+      type:
+        type: "string"
+        enum:
+        - "ESTABLISHMENT_REQUEST"
+        - "TAKE_INTO_USE_REQUEST"
+        - "MODIFICATION_REQUEST"
+        - "FINALIZATION_REQUEST"
   OrganizationModel:
     type: "object"
     properties:
