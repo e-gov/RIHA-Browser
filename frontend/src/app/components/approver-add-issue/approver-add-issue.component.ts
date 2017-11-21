@@ -5,6 +5,7 @@ import { EnvironmentService } from '../../services/environment.service';
 import { System } from '../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user';
+import { G } from '../../globals/globals';
 
 @Component({
   selector: 'app-approver-add-comment',
@@ -15,8 +16,24 @@ export class ApproverAddIssueComponent implements OnInit {
 
   @Input() system: System;
   activeUser: User;
+  globals: any = G;
+  isApprovalRequest: boolean = false;
+  approvalRequest: any = {
+    title: null,
+    comment: null,
+    issueType: null
+  };
 
-  onSubmit(f) :void {
+  switchView(){
+    this.isApprovalRequest = !this.isApprovalRequest;
+    this.approvalRequest = {
+      title: null,
+      comment: null,
+      issueType: null
+    };
+  };
+
+  onSubmitNewIssue(f) :void {
     if (f.valid){
       this.systemsService.addSystemIssue(this.system.details.short_name, f.value).then(
         res => {
@@ -25,6 +42,39 @@ export class ApproverAddIssueComponent implements OnInit {
         err => {
           this.toastrService.error('Serveri viga! Proovige uuesti!');
         })
+    }
+  }
+
+  onSubmitApprovalRequest(f) :void {
+    if (f.valid) {
+      this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).then(
+        res => {
+          this.activeModal.close();
+        },
+        err => {
+          this.toastrService.error('Serveri viga! Proovige uuesti!');
+        });
+    }
+  }
+
+  onIssueTypeChange(issueType){
+    switch (issueType){
+      case this.globals.issue_type.ESTABLISHMENT_REQUEST: {
+        this.approvalRequest.title = 'Infosüsteemil puudub asutamise kooskõlastus';
+        break;
+      }
+      case this.globals.issue_type.FINALIZATION_REQUEST: {
+        this.approvalRequest.title = 'Infosüsteemil puudub lõpetamise kooskõlastus';
+        break;
+      }
+      case this.globals.issue_type.MODIFICATION_REQUEST: {
+        this.approvalRequest.title = 'Infosüsteemil puudub andmekoosseisu muutmise kooskõlastus';
+        break;
+      }
+      case this.globals.issue_type.TAKE_INTO_USE_REQUEST: {
+        this.approvalRequest.title = 'Infosüsteemil puudub kasutusele võtmise kooskõlastus';
+        break;
+      }
     }
   }
 
