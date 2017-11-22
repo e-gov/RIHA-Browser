@@ -21,7 +21,7 @@ export class ApproverAddIssueComponent implements OnInit {
   approvalRequest: any = {
     title: null,
     comment: null,
-    issueType: null
+    type: null
   };
 
   switchView(){
@@ -29,7 +29,7 @@ export class ApproverAddIssueComponent implements OnInit {
     this.approvalRequest = {
       title: null,
       comment: null,
-      issueType: null
+      type: null
     };
   };
 

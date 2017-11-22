@@ -50,22 +50,22 @@
             <small class="label-small-text text-muted">vali, millist kooskõlastust on andmekogule vaja</small>
             <div class="custom-controls-stacked ml-2">
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.issueType" [value]="globals.issue_type.ESTABLISHMENT_REQUEST" name="issueType" (change)="onIssueTypeChange(globals.issue_type.ESTABLISHMENT_REQUEST)" required>
+                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.ESTABLISHMENT_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.ESTABLISHMENT_REQUEST)" required>
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">asutamiseks</span>
               </label>
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.issueType" [value]="globals.issue_type.TAKE_INTO_USE_REQUEST" name="issueType" (change)="onIssueTypeChange(globals.issue_type.TAKE_INTO_USE_REQUEST)" required> kasutusele võtmiseks<br>
+                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.TAKE_INTO_USE_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.TAKE_INTO_USE_REQUEST)" required>
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">kasutusele võtmiseks</span>
               </label>
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.issueType" [value]="globals.issue_type.MODIFICATION_REQUEST" name="issueType" (change)="onIssueTypeChange(globals.issue_type.MODIFICATION_REQUEST)" required> andmekoosseisu muutmiseks<br>
+                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.MODIFICATION_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.MODIFICATION_REQUEST)" required>
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">andmekoosseisu muutmiseks</span>
               </label>
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.issueType" [value]="globals.issue_type.FINALIZATION_REQUEST" name="issueType" (change)="onIssueTypeChange(globals.issue_type.FINALIZATION_REQUEST)" required> lõpetamiseks
+                <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.FINALIZATION_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.FINALIZATION_REQUEST)" required>
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">lõpetamiseks</span>
               </label>
