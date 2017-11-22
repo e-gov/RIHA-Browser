@@ -29,7 +29,6 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       backdrop: "static",
       keyboard: false
     });
-    this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
       this.refreshIssues();

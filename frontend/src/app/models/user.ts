@@ -23,7 +23,7 @@ export class User {
   }
 
   public canEdit(organizationCode): boolean {
-    let ao = this.getActiveOrganization()
+    let ao = this.getActiveOrganization();
     if (ao != null && ao.code == organizationCode){
       return this.roles.indexOf('ROLE_KIRJELDAJA') != -1;
     } else {

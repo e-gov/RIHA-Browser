@@ -17,7 +17,7 @@ export class ApproverAddIssueComponent implements OnInit {
   @Input() system: System;
   activeUser: User;
   globals: any = G;
-  isApprovalRequest: boolean = false;
+  isApprovalRequest: boolean;
   approvalRequest: any = {
     title: null,
     comment: null,
@@ -31,7 +31,7 @@ export class ApproverAddIssueComponent implements OnInit {
       comment: null,
       type: null
     };
-  };
+  }
 
   onSubmitNewIssue(f) :void {
     if (f.valid){
@@ -94,10 +94,11 @@ export class ApproverAddIssueComponent implements OnInit {
               private systemsService: SystemsService,
               private toastrService: ToastrService,
               private environmentService: EnvironmentService) {
-    this.activeUser = this.environmentService.getActiveUser();
   }
 
   ngOnInit() {
+    this.activeUser = this.environmentService.getActiveUser();
+    this.isApprovalRequest = this.activeUser.canEdit(this.system.getOwnerCode());
   }
 
 }
