@@ -48,6 +48,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
           keyboard: false
         });
       modalRef.componentInstance.feedback = res.json();
+      modalRef.componentInstance.system = this.system;
       modalRef.result.then(res => {
         this.refreshIssues();
       },
