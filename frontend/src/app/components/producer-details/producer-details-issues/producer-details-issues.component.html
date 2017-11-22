@@ -55,7 +55,7 @@
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
-  <div *ngIf="canApprove()" class="actions-bar" >
-    <button class="btn btn-primary" (click)="openAddIssueModal()">Lisa uus arutelu</button>
+  <div *ngIf="canApprove()" class="actions-bar">
+    <button class="btn btn-primary" (click)="openAddIssueModal()">{{ allowEdit ? 'Küsi hinnangut' : 'Lisa uus arutelu' }}</button>
   </div>
 </section>
