@@ -87,7 +87,7 @@ public class IssueServiceTest {
         when(commentRepository.get(EXISTING_ISSUE_ID)).thenReturn(existingIssueEntity);
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ID));
 
-        doNothing().when(notificationService).sendNewIssueNotification(any(InfoSystem.class));
+        doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
     }
 
     @Test

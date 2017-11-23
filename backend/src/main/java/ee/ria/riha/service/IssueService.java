@@ -158,7 +158,8 @@ public class IssueService {
             throw new IllegalBrowserStateException("Issue was not created");
         }
 
-        notificationService.sendNewIssueNotification(infoSystem);
+        notificationService.sendNewIssueToSystemContactsNotification(infoSystem);
+        notificationService.sendNewIssueToAssessorsNotification(title, infoSystem);
 
         return COMMENT_TO_ISSUE.apply(commentRepository.get(createIssueIds.get(0)));
     }
