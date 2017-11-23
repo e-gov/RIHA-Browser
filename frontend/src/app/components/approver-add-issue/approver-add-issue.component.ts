@@ -90,6 +90,10 @@ export class ApproverAddIssueComponent implements OnInit {
     }
   }
 
+  canSwitchViews(){
+    return this.environmentService.getUserMatrix().hasApproverRole && this.activeUser.canEdit(this.system.getOwnerCode());
+  }
+
   constructor(private activeModal: NgbActiveModal,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
@@ -98,7 +102,7 @@ export class ApproverAddIssueComponent implements OnInit {
 
   ngOnInit() {
     this.activeUser = this.environmentService.getActiveUser();
-    this.isApprovalRequest = this.activeUser.canEdit(this.system.getOwnerCode());
+    this.isApprovalRequest = !this.activeUser.hasApproverRole();
   }
 
 }
