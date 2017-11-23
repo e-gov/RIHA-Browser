@@ -49,6 +49,7 @@ public class ApplicationProperties {
     @Setter
     public static class LdapSearchProperties {
         private String userSearchBase;
+        private String groupSearchBase;
     }
 
     @Getter

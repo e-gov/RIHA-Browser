@@ -50,6 +50,18 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Returns emails of all RIHA assessors (RIHA-hindajad).
+     *
+     * @return set of unique assessors emails, excluding null values
+     */
+    public Set<String> getAssessorsEmails() {
+        return ldapRepository.getAllAssessors().stream()
+                .map(LdapUser::getMail)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
     @Autowired
     public void setLdapRepository(LdapRepository ldapRepository) {
         this.ldapRepository = ldapRepository;

@@ -1,7 +1,7 @@
 package ee.ria.riha.service.notifications;
 
 import ee.ria.riha.service.notifications.handlers.EmailNotificationHandler;
-import ee.ria.riha.service.notifications.model.NotificationDataModel;
+import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class EmailNotificationSenderService {
     private JavaMailSenderImpl mailSender;
 
     @Async
-    public void sendNotification(NotificationDataModel model) {
+    public void sendNotification(EmailNotificationDataModel model) {
         Assert.notNull(model, "Failed to send message as data model object was not defined.");
 
         try {
@@ -46,7 +46,7 @@ public class EmailNotificationSenderService {
         }
     }
 
-    private EmailNotificationHandler findAppropriateHandler(NotificationDataModel model) {
+    private EmailNotificationHandler findAppropriateHandler(EmailNotificationDataModel model) {
         for (EmailNotificationHandler handler : handlers) {
             if (handler.supports(model)) {
                 return handler;
