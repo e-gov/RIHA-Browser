@@ -22,6 +22,10 @@ export class User {
     return this.roles;
   }
 
+  public hasApproverRole(): boolean{
+    return -1 != this.getRoles().indexOf('ROLE_HINDAJA');
+  }
+
   public canEdit(organizationCode): boolean {
     let ao = this.getActiveOrganization();
     if (ao != null && ao.code == organizationCode){
