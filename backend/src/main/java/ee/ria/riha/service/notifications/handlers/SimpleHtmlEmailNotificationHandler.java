@@ -20,12 +20,12 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
         try {
-            helper.setFrom(model.getFrom());
-            helper.setTo(model.getTo());
-            helper.setSentDate(new Date());
-            if (model.getCc() != null) helper.setCc(model.getCc());
-            if (model.getBcc() != null) helper.setBcc(model.getBcc());
-            helper.setSubject(model.getSubject());
+            helper.setFrom(getFrom(model));
+            helper.setTo(getTo(model));
+            helper.setSentDate(getSentDate(model));
+            if (getCc(model) != null) helper.setCc(getCc(model));
+            if (getBcc(model) != null) helper.setBcc(getBcc(model));
+            helper.setSubject(getSubject(model));
             helper.setText(getText(model), true);
             return message;
         } catch (MessagingException e) {
@@ -33,7 +33,29 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
         }
     }
 
-    public abstract String getText(EmailNotificationDataModel model);
+    protected String getFrom(EmailNotificationDataModel model) {
+        return model.getFrom();
+    }
+
+    protected String[] getTo(EmailNotificationDataModel model) {
+        return model.getTo();
+    }
+
+    protected Date getSentDate(EmailNotificationDataModel model) {
+        return new Date();
+    }
+
+    protected String[] getCc(EmailNotificationDataModel model) {
+        return model.getCc();
+    }
+
+    protected String[] getBcc(EmailNotificationDataModel model) {
+        return model.getBcc();
+    }
+
+    protected abstract String getSubject(EmailNotificationDataModel model);
+
+    protected abstract String getText(EmailNotificationDataModel model);
 
     @Autowired
     public void setMailSender(JavaMailSenderImpl mailSender) {

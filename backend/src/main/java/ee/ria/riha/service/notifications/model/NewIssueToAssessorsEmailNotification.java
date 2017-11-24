@@ -1,6 +1,5 @@
 package ee.ria.riha.service.notifications.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,14 +14,4 @@ public class NewIssueToAssessorsEmailNotification extends SimpleHtmlEmailNotific
     private String infoSystemShortName;
     private String issueTitle;
     private String baseUrl;
-
-    @Builder
-    public NewIssueToAssessorsEmailNotification(String from, String[] to, String subject, String[] cc, String[] bcc, String infoSystemFullName,
-                                                String infoSystemShortName, String issueTitle, String baseUrl) {
-        super(from, to, subject, cc, bcc);
-        this.infoSystemFullName = infoSystemFullName;
-        this.infoSystemShortName = infoSystemShortName;
-        this.issueTitle = issueTitle;
-        this.baseUrl = baseUrl;
-    }
 }

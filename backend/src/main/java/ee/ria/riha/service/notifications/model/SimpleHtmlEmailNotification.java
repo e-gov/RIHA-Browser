@@ -1,8 +1,6 @@
 package ee.ria.riha.service.notifications.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -10,13 +8,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class SimpleHtmlEmailNotification implements EmailNotificationDataModel {
 
     private String from;
     private String[] to;
-    private String subject;
     private String[] cc;
     private String[] bcc;
 }
