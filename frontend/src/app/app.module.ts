@@ -13,6 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CustomFormsModule } from 'ng2-validation';
 import { HttpInterceptorModule } from 'ng-http-interceptor';
+import { UiSwitchModule } from 'ngx-ui-switch/src';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -145,6 +146,7 @@ const routes: Routes = [
     Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
     HttpInterceptorModule,
+    UiSwitchModule ,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
       missingTranslationHandler,
