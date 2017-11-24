@@ -1,7 +1,6 @@
 image: riha-test-env
 
 variables:
-    DEPLOYMENT_DIR: "/opt/tomcat/webapps"
     ARTIFACT_NAME: "ROOT.war"
 
 stages:
@@ -18,7 +17,7 @@ build:
     tags:
         - riha
 
-deploy_development:
+deploy_demo:
     stage: deploy
     script:
         - echo "$SSH_PRIVATE_KEY" > id_rsa
@@ -27,8 +26,7 @@ deploy_development:
         - echo "$SSH_HOST_KEY" > $HOME/.ssh/known_hosts
         - scp -i id_rsa backend/target/*.war deployer@$SSH_HOST:$DEPLOYMENT_DIR/$ARTIFACT_NAME
     environment:
-        name: development
-        url: http://$SSH_HOST:$PORT/$CI_PROJECT_NAME
+        name: demo
     when: manual
     tags:
         - riha
