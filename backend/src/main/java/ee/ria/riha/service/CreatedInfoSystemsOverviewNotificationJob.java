@@ -8,7 +8,6 @@ import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.storage.util.FilterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -36,7 +34,6 @@ public class CreatedInfoSystemsOverviewNotificationJob {
                 .build();
     };
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    private static final String SUBJECT_KEY = "notifications.createdInfoSystemsOverview.subject";
 
     private final String baseUrl;
     private final String from;
@@ -46,7 +43,6 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
     private InfoSystemRepository infoSystemRepository;
     private NotificationService notificationService;
-    private MessageSource messageSource;
 
     @Autowired
     public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties) {
@@ -77,15 +73,13 @@ public class CreatedInfoSystemsOverviewNotificationJob {
                     .map(INFO_SYSTEM_TO_DATA_MODEL)
                     .collect(Collectors.toList());
 
-            NewInfoSystemsEmailNotification notificationModel = NewInfoSystemsEmailNotification.builder()
-                    .from(from)
-                    .to(to)
-                    .subject(messageSource.getMessage(SUBJECT_KEY, null, Locale.getDefault()))
-                    .cc(cc)
-                    .bcc(bcc)
-                    .infoSystems(infoSystemDataModels)
-                    .baseUrl(baseUrl)
-                    .build();
+            NewInfoSystemsEmailNotification notificationModel = new NewInfoSystemsEmailNotification();
+            notificationModel.setFrom(from);
+            notificationModel.setTo(to);
+            notificationModel.setCc(cc);
+            notificationModel.setBcc(bcc);
+            notificationModel.setInfoSystems(infoSystemDataModels);
+            notificationModel.setBaseUrl(baseUrl);
 
             notificationService.sendNewInfoSystemsNotification(notificationModel);
         } catch (Exception e) {
@@ -121,10 +115,5 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     @Autowired
     public void setNotificationService(NotificationService notificationService) {
         this.notificationService = notificationService;
-    }
-
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
     }
 }

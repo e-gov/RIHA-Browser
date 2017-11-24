@@ -9,8 +9,6 @@ public interface EmailNotificationDataModel {
 
     String[] getTo();
 
-    String getSubject();
-
     String[] getCc();
 
     String[] getBcc();
