@@ -1,14 +1,13 @@
 package ee.ria.riha.domain.model;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * Holds basic user data from LDAP
  */
-@Getter
-@Setter
+
+@Data
 @Builder
 public class LdapUser {
 
@@ -17,4 +16,5 @@ public class LdapUser {
     private String surname;
     private String commonName;
     private String mail;
+
 }
