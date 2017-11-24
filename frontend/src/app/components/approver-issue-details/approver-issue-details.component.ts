@@ -4,6 +4,8 @@ import { EnvironmentService } from '../../services/environment.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user';
 import { ModalHelperService } from "../../services/modal-helper.service";
+import { G } from '../../globals/globals';
+import { System } from '../../models/system';
 
 @Component({
   selector: 'app-approver-feedback-details',
@@ -13,8 +15,10 @@ import { ModalHelperService } from "../../services/modal-helper.service";
 export class ApproverIssueDetailsComponent implements OnInit {
 
   @Input() feedback: any;
+  @Input() system: System;
   replies: any[] = [];
   activeUser: User;
+  globals: any = G;
 
   refreshReplies(){
     this.systemService.getSystemIssueTimeline(this.feedback.id).then(
@@ -29,7 +33,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
-        this.modalService.closeActiveModal();
+        this.activeModal.close();
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
@@ -54,6 +58,22 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   getOrganizationWithUser(o){
     return `${o.organizationName} (${o.authorName})`;
+  }
+
+  canResolve(){
+    let ret = false;
+    if (this.feedback.status = 'OPEN'){
+      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
+        || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
+        || this.feedback.type == this.globals.issue_type.FINALIZATION_REQUEST
+        || this.feedback.type == this.globals.issue_type.ESTABLISHMENT_REQUEST){
+          ret = !!bHasApproverRole;
+      } else {
+          ret = bHasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+      }
+    }
+    return ret;
   }
 
   closeModal(f){

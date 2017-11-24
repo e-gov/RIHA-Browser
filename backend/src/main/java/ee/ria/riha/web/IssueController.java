@@ -63,7 +63,7 @@ public class IssueController {
     @ApiOperation("Create new issue for information system")
     public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("shortName") String shortName,
                                                        @RequestBody Issue model) {
-        return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, model.getTitle(), model.getComment()));
+        return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, model));
     }
 
     /**
