@@ -33,7 +33,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
-        this.activeModal.close();
+        this.modalService.closeActiveModal();
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
