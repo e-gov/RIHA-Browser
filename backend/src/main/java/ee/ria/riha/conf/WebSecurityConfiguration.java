@@ -1,7 +1,8 @@
 package ee.ria.riha.conf;
 
 import ee.ria.riha.authentication.*;
-import ee.ria.riha.conf.ApplicationProperties.AuthenticationProperties;
+import ee.ria.riha.conf.ApplicationProperties.LdapAuthenticationProperties;
+import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,13 +34,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(getEsteidPreAuthenticatedAuthenticationProvider());
     }
 
+    private PreAuthenticatedAuthenticationProvider getEsteidPreAuthenticatedAuthenticationProvider() {
+        PreAuthenticatedAuthenticationProvider authenticationProvider = new RihaPreAuthenticatedAuthenticationProvider();
+        authenticationProvider.setPreAuthenticatedUserDetailsService(
+                new RihaPreAuthenticatedUserDetailsService(ldapUserDetailsService));
+
+        return authenticationProvider;
+    }
+
     @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
-        AuthenticationProperties authenticationProperties = applicationProperties.getAuthentication();
+        LdapAuthenticationProperties ldapAuthenticationProperties = applicationProperties.getLdapAuthentication();
         RihaFilterBasedLdapUserSearch userSearch = new RihaFilterBasedLdapUserSearch(
-                authenticationProperties.getUserSearchBase(),
-                authenticationProperties.getUserSearchFilter(),
+                ldapAuthenticationProperties.getUserSearchBase(),
+                ldapAuthenticationProperties.getUserSearchFilter(),
                 contextSource);
 
         LdapUserDetailsService userDetailsService = new LdapUserDetailsService(userSearch);
@@ -52,21 +61,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public LdapContextSource contextSource(ApplicationProperties applicationProperties) {
         LdapContextSource contextSource = new LdapContextSource();
 
-        AuthenticationProperties authentication = applicationProperties.getAuthentication();
-        contextSource.setUrl(authentication.getLdapUrl());
-        contextSource.setBase(authentication.getLdapBaseDn());
-        contextSource.setUserDn(authentication.getLdapUser());
-        contextSource.setPassword(authentication.getLdapPassword());
+        LdapProperties ldapProperties = applicationProperties.getLdap();
+        contextSource.setUrl(ldapProperties.getUrl());
+        contextSource.setBase(ldapProperties.getBaseDn());
+        contextSource.setUserDn(ldapProperties.getUser());
+        contextSource.setPassword(ldapProperties.getPassword());
 
         return contextSource;
-    }
-
-    private PreAuthenticatedAuthenticationProvider getEsteidPreAuthenticatedAuthenticationProvider() {
-        PreAuthenticatedAuthenticationProvider authenticationProvider = new RihaPreAuthenticatedAuthenticationProvider();
-        authenticationProvider.setPreAuthenticatedUserDetailsService(
-                new RihaPreAuthenticatedUserDetailsService(ldapUserDetailsService));
-
-        return authenticationProvider;
     }
 
     @Override
