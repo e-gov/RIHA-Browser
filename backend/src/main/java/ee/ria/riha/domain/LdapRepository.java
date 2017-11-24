@@ -24,7 +24,7 @@ public class LdapRepository {
     private static final String COMMON_NAME_ATTRIBUTE = "cn";
     private static final String EMAIL_ATTRIBUTE = "mail";
     private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
-    private static final String ASSESSORS_GROUPS_COMMON_NAME_ATTRIBUTE_VALUE = "*-hindaja";
+    private static final String APPROVERS_GROUPS_COMMON_NAME_ATTRIBUTE_VALUE = "*-hindaja";
 
     public static final AttributesMapper<LdapUser> LDAP_USER_ATTRIBUTES_MAPPER = attributes -> LdapUser.builder()
             .personalCode((String) attributes.get(PERSONAL_CODE_ATTRIBUTE).get())
@@ -66,19 +66,19 @@ public class LdapRepository {
         return ldapTemplate.search(userSearchBase, filter.encode(), LDAP_USER_ATTRIBUTES_MAPPER);
     }
 
-    public List<LdapUser> getAllAssessors() {
-        List<String> assessorsGroupsEntryDNs = getAssessorsGroupsEntryDNs();
+    public List<LdapUser> getAllApprovers() {
+        List<String> approversGroupsEntryDNs = getApproversGroupsEntryDNs();
         OrFilter filter = new OrFilter();
 
-        for (String entryDN : assessorsGroupsEntryDNs) {
+        for (String entryDN : approversGroupsEntryDNs) {
             filter.or(new EqualsFilter(MEMBER_OF_ATTRIBUTE, entryDN));
         }
 
         return ldapTemplate.search(userSearchBase, filter.encode(), LDAP_USER_ATTRIBUTES_MAPPER);
     }
 
-    private List<String> getAssessorsGroupsEntryDNs() {
-        LikeFilter filter = new LikeFilter(COMMON_NAME_ATTRIBUTE, ASSESSORS_GROUPS_COMMON_NAME_ATTRIBUTE_VALUE);
+    private List<String> getApproversGroupsEntryDNs() {
+        LikeFilter filter = new LikeFilter(COMMON_NAME_ATTRIBUTE, APPROVERS_GROUPS_COMMON_NAME_ATTRIBUTE_VALUE);
         return ldapTemplate.search(groupSearchBase, filter.encode(), GROUP_ENTRY_DN_ATTRIBUTE_MAPPER);
     }
 }

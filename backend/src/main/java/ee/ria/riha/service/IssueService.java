@@ -159,7 +159,7 @@ public class IssueService {
         }
 
         notificationService.sendNewIssueToSystemContactsNotification(infoSystem);
-        notificationService.sendNewIssueToAssessorsNotification(title, infoSystem);
+        notificationService.sendNewIssueToApproversNotification(title, infoSystem);
 
         return COMMENT_TO_ISSUE.apply(commentRepository.get(createIssueIds.get(0)));
     }

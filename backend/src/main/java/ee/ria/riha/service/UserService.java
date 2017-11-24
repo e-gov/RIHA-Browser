@@ -51,12 +51,12 @@ public class UserService {
     }
 
     /**
-     * Returns emails of all RIHA assessors (RIHA-hindajad).
+     * Returns emails of all RIHA approvers (RIHA-hindajad).
      *
-     * @return set of unique assessors emails, excluding null values
+     * @return set of unique approvers emails, excluding null values
      */
-    public Set<String> getAssessorsEmails() {
-        return ldapRepository.getAllAssessors().stream()
+    public Set<String> getApproversEmails() {
+        return ldapRepository.getAllApprovers().stream()
                 .map(LdapUser::getMail)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());

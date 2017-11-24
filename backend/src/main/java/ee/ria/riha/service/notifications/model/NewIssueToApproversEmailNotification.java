@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Holds data for new issue email notification messages to RIHA assessors.
+ * Holds data for new issue email notification messages to RIHA approvers.
  */
 @Getter
 @Setter
-public class NewIssueToAssessorsEmailNotification extends SimpleHtmlEmailNotification {
+public class NewIssueToApproversEmailNotification extends SimpleHtmlEmailNotification {
 
     private String infoSystemFullName;
     private String infoSystemShortName;

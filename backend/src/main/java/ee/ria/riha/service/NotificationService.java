@@ -5,7 +5,7 @@ import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.notifications.EmailNotificationSenderService;
 import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.service.notifications.model.NewIssueCommentEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueToAssessorsEmailNotification;
+import ee.ria.riha.service.notifications.model.NewIssueToApproversEmailNotification;
 import ee.ria.riha.service.notifications.model.NewIssueToSystemContactsEmailNotification;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -79,17 +79,17 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    public void sendNewIssueToAssessorsNotification(String issueTitle, InfoSystem infoSystem) {
+    public void sendNewIssueToApproversNotification(String issueTitle, InfoSystem infoSystem) {
         if (!isNewIssueNotificationEnabled()) {
             log.info("New issue notifications sending is disabled.");
             return;
         }
 
-        Set<String> assessorsEmails = userService.getAssessorsEmails();
+        Set<String> approversEmails = userService.getApproversEmails();
 
-        NewIssueToAssessorsEmailNotification notificationModel = new NewIssueToAssessorsEmailNotification();
+        NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(assessorsEmails.toArray(new String[assessorsEmails.size()]));
+        notificationModel.setTo(approversEmails.toArray(new String[approversEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setIssueTitle(issueTitle);
