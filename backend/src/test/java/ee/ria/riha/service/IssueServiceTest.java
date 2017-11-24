@@ -88,7 +88,7 @@ public class IssueServiceTest {
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ID));
 
         doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
-        doNothing().when(notificationService).sendNewIssueToAssessorsNotification(any(String.class), any(InfoSystem.class));
+        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class), any(InfoSystem.class));
     }
 
     @Test
