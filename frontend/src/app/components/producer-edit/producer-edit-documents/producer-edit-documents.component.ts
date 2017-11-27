@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
-import { GeneralHelperService } from '../../../services/general-helper.service';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 
 @Component({
@@ -13,7 +12,7 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditDocumentsComponent implements OnInit {
 
   @Input() system: System;
-  documents: any[];
+  documents: any[] = [];
   isChanged: boolean = false;
 
   loaded: boolean = false;
@@ -82,14 +81,13 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
-              private toastrService: ToastrService,
-              private generalHelperService: GeneralHelperService) { }
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.systemsService.getSystem(this.system.details.short_name).then(
       res => {
         let system = res.json();
-        this.documents = system.details.documents;
+        this.documents = system.details.documents || [];
         this.loaded = true;
       }, err => {
         this.toastrService.error('Serveri viga.');

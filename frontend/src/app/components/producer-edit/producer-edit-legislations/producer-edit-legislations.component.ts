@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
-import { GeneralHelperService } from '../../../services/general-helper.service';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 
 @Component({
@@ -13,7 +12,7 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditLegislationsComponent implements OnInit {
 
   @Input() system: System;
-  legislations: any[];
+  legislations: any[] = [];
   isChanged: boolean = false;
 
   loaded: boolean = false;
@@ -62,14 +61,13 @@ export class ProducerEditLegislationsComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
-              private toastrService: ToastrService,
-              private generalHelperService: GeneralHelperService) { }
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.systemsService.getSystem(this.system.details.short_name).then(
       res => {
         let system = res.json();
-        this.legislations = system.details.legislations;
+        this.legislations = system.details.legislations || [];
         this.loaded = true;
       }, err => {
         this.toastrService.error('Serveri viga.');

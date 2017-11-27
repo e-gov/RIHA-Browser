@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditContactsComponent } from '../../producer-edit/producer-edit-contacts/producer-edit-contacts.component';
 import { System } from '../../../models/system';
+import { SystemsService } from '../../../services/systems.service';
+
 @Component({
   selector: 'app-producer-details-contacts',
   templateUrl: './producer-details-contacts.component.html',
@@ -24,11 +26,18 @@ export class ProducerDetailsContactsComponent implements OnInit {
         this.onSystemChanged.emit(result.system);
       }
     }, reason => {
+      this.systemsService.getSystem(this.system.details.short_name).then(
+        res => {
+          this.onSystemChanged.emit(new System(res.json()));
+        }, err => {
 
+        }
+      )
     });
   }
 
-  constructor(private modalService: ModalHelperService) { }
+  constructor(private modalService: ModalHelperService,
+              private systemsService: SystemsService) { }
 
   ngOnInit() {
   }

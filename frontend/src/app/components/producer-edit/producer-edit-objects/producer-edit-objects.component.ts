@@ -13,8 +13,8 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditObjectsComponent implements OnInit {
 
   @Input() system: System;
-  stored_data: string[];
-  data_files: any[];
+  stored_data: string[] =[];
+  data_files: any[] = [];
   isChanged: boolean = false;
 
   loaded: boolean = false;
@@ -113,8 +113,8 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.systemsService.getSystem(this.system.details.short_name).then(
       res => {
         let system = res.json();
-        this.stored_data = system.details.stored_data;
-        this.data_files = system.details.data_files;
+        this.stored_data = system.details.stored_data || [];
+        this.data_files = system.details.data_files || [];
         this.loaded = true;
       }, err => {
         this.toastrService.error('Serveri viga.');
