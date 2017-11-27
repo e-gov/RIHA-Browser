@@ -46,13 +46,13 @@
         </div>
       </div>
       <div class="dataTables_wrapper">
-        <table *ngIf="loaded" class="details-list-table">
+        <table class="details-list-table">
           <tr *ngFor="let doc of documents; let i = index">
             <td>
               <i class="fa fa-external-link text-primary"></i>
             </td>
             <td>
-              <a href="{{ doc.url }}" target="_blank">{{ doc.name }}</a>
+              <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ doc.name }}</a>
             </td>
             <td>
               <button (click)="deleteTechDoc(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
