@@ -22,7 +22,7 @@
       Sisestatud {{ stored_data.length }} / 10
     </div>
     <div class="dataTables_wrapper">
-      <table *ngIf="system" class="details-list-table">
+      <table *ngIf="loaded" class="details-list-table">
         <tr *ngFor="let object of stored_data; let i = index">
           <td>
             <i class="fa fa-circle text-primary"></i>
@@ -78,7 +78,7 @@
                 (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
       <div class="dataTables_wrapper">
-        <table *ngIf="system" class="details-list-table">
+        <table *ngIf="loaded" class="details-list-table">
           <tr *ngFor="let file of data_files; let i = index">
             <td>
               <i class="fa fa-file-o text-primary"></i>

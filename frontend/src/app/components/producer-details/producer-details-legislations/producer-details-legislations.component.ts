@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditLegislationsComponent } from '../../producer-edit/producer-edit-legislations/producer-edit-legislations.component';
 import { System } from '../../../models/system';
+import { SystemsService } from '../../../services/systems.service';
 
 @Component({
   selector: 'app-producer-details-legislations',
@@ -25,11 +26,18 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
         this.onSystemChanged.emit(result.system);
       }
     }, reason => {
+      this.systemsService.getSystem(this.system.details.short_name).then(
+        res => {
+          this.onSystemChanged.emit(new System(res.json()));
+        }, err => {
 
+        }
+      )
     });
   }
 
-  constructor(private modalService: ModalHelperService) { }
+  constructor(private modalService: ModalHelperService,
+              private systemsService: SystemsService) { }
 
   ngOnInit() {
   }

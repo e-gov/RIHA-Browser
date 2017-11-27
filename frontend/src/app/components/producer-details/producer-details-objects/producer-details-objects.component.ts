@@ -3,6 +3,7 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditObjectsComponent } from '../../producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { System } from '../../../models/system';
 import { GeneralHelperService } from '../../../services/general-helper.service';
+import { SystemsService } from '../../../services/systems.service';
 
 @Component({
   selector: 'app-producer-details-objects',
@@ -26,12 +27,19 @@ export class ProducerDetailsObjectsComponent implements OnInit {
         this.onSystemChanged.emit(result.system);
       }
     }, reason => {
+      this.systemsService.getSystem(this.system.details.short_name).then(
+        res => {
+          this.onSystemChanged.emit(new System(res.json()));
+        }, err => {
 
+        }
+      )
     });
   }
 
   constructor(private modalService: ModalHelperService,
-              public generalHelperService: GeneralHelperService) {
+              public generalHelperService: GeneralHelperService,
+              private systemsService: SystemsService) {
 
   }
 
