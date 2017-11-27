@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
-import { GeneralHelperService } from '../../../services/general-helper.service';
 import { ModalHelperService } from '../../../services/modal-helper.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
@@ -13,7 +13,7 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditDocumentsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() documents: any[];
+  documents: any[] = [];
   isChanged: boolean = false;
 
   docFile: any = null;
@@ -54,12 +54,16 @@ export class ProducerEditDocumentsComponent implements OnInit {
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.documents = this.documents;
-    this.systemsService.updateSystem(s).then(response => {
-      this.modalService.closeActiveModal({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.documents = this.documents;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
-      this.toastrService.error('Serveri viga.')
+      this.toastrService.error('Serveri viga.');
     });
   }
 
@@ -81,6 +85,8 @@ export class ProducerEditDocumentsComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    let system = this.generalHelperService.cloneObject(this.system);
+    this.documents = system.details.documents || [];
   }
 
 }
