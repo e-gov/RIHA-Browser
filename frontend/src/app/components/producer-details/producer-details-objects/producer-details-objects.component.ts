@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditObjectsComponent } from '../../producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { System } from '../../../models/system';
@@ -13,6 +13,7 @@ export class ProducerDetailsObjectsComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Output() onSystemChanged = new EventEmitter<System>();
 
   openObjectsEdit(content) {
     const modalRef = this.modalService.open(ProducerEditObjectsComponent,{
@@ -20,13 +21,9 @@ export class ProducerDetailsObjectsComponent implements OnInit {
       keyboard: false
     });
     modalRef.componentInstance.system = this.system;
-    this.system.details.stored_data = this.system.details.stored_data || [];
-    modalRef.componentInstance.stored_data = [].concat(this.system.details.stored_data);
-    this.system.details.data_files = this.system.details.data_files || [];
-    modalRef.componentInstance.data_files = [].concat(this.system.details.data_files);
     modalRef.result.then( result => {
       if (result.system) {
-        this.system = result.system;
+        this.onSystemChanged.emit(result.system);
       }
     }, reason => {
 

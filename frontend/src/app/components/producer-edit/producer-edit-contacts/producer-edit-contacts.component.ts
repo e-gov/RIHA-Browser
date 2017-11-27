@@ -13,9 +13,10 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditContactsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() contacts: any[];
+  contacts: any[];
   isChanged: boolean = false;
 
+  loaded: boolean = true;
   data: any = {email: '', name: ''};
 
   addContact(addForm): void {
@@ -34,10 +35,14 @@ export class ProducerEditContactsComponent implements OnInit {
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.contacts = this.contacts;
-    this.systemsService.updateSystem(s).then(response => {
-      this.modalService.closeActiveModal({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.contacts = this.contacts;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
       this.toastrService.error('Serveri viga.');
     });
@@ -61,6 +66,16 @@ export class ProducerEditContactsComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    this.systemsService.getSystem(this.system.details.short_name).then(
+      res => {
+        let system = res.json();
+        this.contacts = system.details.contacts;
+        this.loaded = true;
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+        this.modalService.dismissAllModals();
+      }
+    )
   }
 
 }
