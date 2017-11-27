@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditObjectsComponent } from '../../producer-edit/producer-edit-objects/producer-edit-objects.component';
 import { System } from '../../../models/system';
 import { GeneralHelperService } from '../../../services/general-helper.service';
+import { SystemsService } from '../../../services/systems.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-producer-details-objects',
@@ -13,28 +15,33 @@ export class ProducerDetailsObjectsComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Output() onSystemChanged = new EventEmitter<System>();
 
   openObjectsEdit(content) {
-    const modalRef = this.modalService.open(ProducerEditObjectsComponent,{
-      backdrop: 'static',
-      keyboard: false
-    });
-    modalRef.componentInstance.system = this.system;
-    this.system.details.stored_data = this.system.details.stored_data || [];
-    modalRef.componentInstance.stored_data = [].concat(this.system.details.stored_data);
-    this.system.details.data_files = this.system.details.data_files || [];
-    modalRef.componentInstance.data_files = [].concat(this.system.details.data_files);
-    modalRef.result.then( result => {
-      if (result.system) {
-        this.system = result.system;
-      }
-    }, reason => {
+    this.systemsService.getSystem(this.system.details.short_name).then( res => {
+      let system = new System(res.json());
+      this.onSystemChanged.emit(system);
+      const modalRef = this.modalService.open(ProducerEditObjectsComponent,{
+        backdrop: 'static',
+        keyboard: false
+      });
+      modalRef.componentInstance.system = this.system;
+      modalRef.result.then( result => {
+        if (result.system) {
+          this.onSystemChanged.emit(result.system);
+        }
+      }, reason => {
 
+      });
+    }, err => {
+      this.toastrService.error('Serveri viga.');
     });
   }
 
   constructor(private modalService: ModalHelperService,
-              public generalHelperService: GeneralHelperService) {
+              public generalHelperService: GeneralHelperService,
+              private systemsService: SystemsService,
+              private toastrService: ToastrService) {
 
   }
 

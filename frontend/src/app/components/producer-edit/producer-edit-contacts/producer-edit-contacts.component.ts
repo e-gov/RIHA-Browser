@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
-import { GeneralHelperService } from '../../../services/general-helper.service';
 import { ModalHelperService } from '../../../services/modal-helper.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-edit-contacts',
@@ -13,7 +13,7 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditContactsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() contacts: any[];
+  contacts: any[] = [];
   isChanged: boolean = false;
 
   data: any = {email: '', name: ''};
@@ -34,10 +34,14 @@ export class ProducerEditContactsComponent implements OnInit {
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.contacts = this.contacts;
-    this.systemsService.updateSystem(s).then(response => {
-      this.modalService.closeActiveModal({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.contacts = this.contacts;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
       this.toastrService.error('Serveri viga.');
     });
@@ -61,6 +65,7 @@ export class ProducerEditContactsComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    let system = this.generalHelperService.cloneObject(this.system);
+    this.contacts = system.details.contacts || [];
   }
-
 }

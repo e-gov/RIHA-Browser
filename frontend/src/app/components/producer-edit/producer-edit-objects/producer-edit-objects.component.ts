@@ -13,8 +13,8 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditObjectsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() stored_data: string[];
-  @Input() data_files: any[];
+  stored_data: string[] =[];
+  data_files: any[] = [];
   isChanged: boolean = false;
 
   dataFile: any = null;
@@ -76,13 +76,17 @@ export class ProducerEditObjectsComponent implements OnInit {
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.stored_data = this.stored_data;
-    s.details.data_files = this.data_files;
-    this.systemsService.updateSystem(s).then(response => {
-      this.modalService.closeActiveModal({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.stored_data = this.stored_data;
+      s.details.data_files = this.data_files;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
-      this.toastrService.error('Serveri viga.')
+      this.toastrService.error('Serveri viga.');
     });
   }
 
@@ -105,6 +109,9 @@ export class ProducerEditObjectsComponent implements OnInit {
   }
 
   ngOnInit() {
+    let system = this.generalHelperService.cloneObject(this.system);
+    this.stored_data = system.details.stored_data || [];
+    this.data_files = system.details.data_files || [];
   }
 
 }
