@@ -13,9 +13,10 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditDocumentsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() documents: any[];
+  documents: any[];
   isChanged: boolean = false;
 
+  loaded: boolean = false;
   docFile: any = null;
   uploading: boolean = false;
   data: any = {url: '', name: ''};
@@ -54,12 +55,16 @@ export class ProducerEditDocumentsComponent implements OnInit {
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.documents = this.documents;
-    this.systemsService.updateSystem(s).then(response => {
-      this.modalService.closeActiveModal({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.documents = this.documents;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
-      this.toastrService.error('Serveri viga.')
+      this.toastrService.error('Serveri viga.');
     });
   }
 
@@ -81,6 +86,16 @@ export class ProducerEditDocumentsComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    this.systemsService.getSystem(this.system.details.short_name).then(
+      res => {
+        let system = res.json();
+        this.documents = system.details.documents;
+        this.loaded = true;
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+        this.modalService.dismissAllModals();
+      }
+    )
   }
 
 }

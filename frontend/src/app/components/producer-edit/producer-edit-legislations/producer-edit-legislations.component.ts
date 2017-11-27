@@ -13,9 +13,10 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 export class ProducerEditLegislationsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() legislations: any[];
+  legislations: any[];
   isChanged: boolean = false;
 
+  loaded: boolean = false;
   data: any = {url: '', name: ''};
 
   addLegislation(addForm): void {
@@ -46,12 +47,16 @@ export class ProducerEditLegislationsComponent implements OnInit {
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.legislations = this.legislations;
-    this.systemsService.updateSystem(s).then(response => {
-      this.modalService.closeActiveModal({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.legislations = this.legislations;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
-      this.toastrService.error('Serveri viga.')
+      this.toastrService.error('Serveri viga.');
     });
   }
 
@@ -61,6 +66,16 @@ export class ProducerEditLegislationsComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    this.systemsService.getSystem(this.system.details.short_name).then(
+      res => {
+        let system = res.json();
+        this.legislations = system.details.legislations;
+        this.loaded = true;
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+        this.modalService.dismissAllModals();
+      }
+    )
   }
 
 }

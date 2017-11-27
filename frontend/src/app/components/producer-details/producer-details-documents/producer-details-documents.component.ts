@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditDocumentsComponent } from '../../producer-edit/producer-edit-documents/producer-edit-documents.component';
 import { System } from '../../../models/system';
@@ -13,18 +13,17 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Output() onSystemChanged = new EventEmitter<System>();
 
   openTechDocsEdit(content) {
     const modalRef = this.modalService.open(ProducerEditDocumentsComponent,{
       backdrop: 'static',
       keyboard: false
     });
-    this.system.details.documents = this.system.details.documents || [];
     modalRef.componentInstance.system = this.system;
-    modalRef.componentInstance.documents = [].concat(this.system.details.documents);
     modalRef.result.then( result => {
       if (result.system) {
-        this.system = result.system;
+        this.onSystemChanged.emit(result.system);
       }
     }, reason => {
 
