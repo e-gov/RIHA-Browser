@@ -3,6 +3,7 @@ import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
@@ -15,7 +16,6 @@ export class ProducerEditDocumentsComponent implements OnInit {
   documents: any[] = [];
   isChanged: boolean = false;
 
-  loaded: boolean = false;
   docFile: any = null;
   uploading: boolean = false;
   data: any = {url: '', name: ''};
@@ -81,19 +81,12 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService,
+              private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
-    this.systemsService.getSystem(this.system.details.short_name).then(
-      res => {
-        let system = res.json();
-        this.documents = system.details.documents || [];
-        this.loaded = true;
-      }, err => {
-        this.toastrService.error('Serveri viga.');
-        this.modalService.dismissAllModals();
-      }
-    )
+    let system = this.generalHelperService.cloneObject(this.system);
+    this.documents = system.details.documents || [];
   }
 
 }

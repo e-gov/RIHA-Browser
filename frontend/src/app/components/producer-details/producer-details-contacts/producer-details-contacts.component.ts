@@ -3,6 +3,7 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ProducerEditContactsComponent } from '../../producer-edit/producer-edit-contacts/producer-edit-contacts.component';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-producer-details-contacts',
@@ -16,28 +17,29 @@ export class ProducerDetailsContactsComponent implements OnInit {
   @Output() onSystemChanged = new EventEmitter<System>();
 
   openContactsEdit(content) {
-    const modalRef = this.modalService.open(ProducerEditContactsComponent,{
-      backdrop: 'static',
-      keyboard: false
-    });
-    modalRef.componentInstance.system = this.system;
-    modalRef.result.then( result => {
-      if (result.system) {
-        this.onSystemChanged.emit(result.system);
-      }
-    }, reason => {
-      this.systemsService.getSystem(this.system.details.short_name).then(
-        res => {
-          this.onSystemChanged.emit(new System(res.json()));
-        }, err => {
-
+    this.systemsService.getSystem(this.system.details.short_name).then( res => {
+      let system = new System(res.json());
+      this.onSystemChanged.emit(system);
+      const modalRef = this.modalService.open(ProducerEditContactsComponent, {
+        backdrop: 'static',
+        keyboard: false
+      });
+      modalRef.componentInstance.system = system;
+      modalRef.result.then(result => {
+        if (result.system) {
+          this.onSystemChanged.emit(result.system);
         }
-      )
+      }, reason => {
+
+      });
+    }, err => {
+      this.toastrService.error('Serveri viga.');
     });
   }
 
   constructor(private modalService: ModalHelperService,
-              private systemsService: SystemsService) { }
+              private systemsService: SystemsService,
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
   }

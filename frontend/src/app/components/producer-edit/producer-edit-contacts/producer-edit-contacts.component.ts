@@ -3,6 +3,7 @@ import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-edit-contacts',
@@ -15,7 +16,6 @@ export class ProducerEditContactsComponent implements OnInit {
   contacts: any[] = [];
   isChanged: boolean = false;
 
-  loaded: boolean = true;
   data: any = {email: '', name: ''};
 
   addContact(addForm): void {
@@ -61,19 +61,11 @@ export class ProducerEditContactsComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService,
+              private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
-    this.systemsService.getSystem(this.system.details.short_name).then(
-      res => {
-        let system = res.json();
-        this.contacts = system.details.contacts || [];
-        this.loaded = true;
-      }, err => {
-        this.toastrService.error('Serveri viga.');
-        this.modalService.dismissAllModals();
-      }
-    )
+    let system = this.generalHelperService.cloneObject(this.system);
+    this.contacts = system.details.contacts || [];
   }
-
 }
