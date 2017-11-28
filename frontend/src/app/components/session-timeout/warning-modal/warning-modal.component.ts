@@ -40,6 +40,8 @@ export class WarningModalComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         });
       }, err => {
+        this.modalService.dismissAllModals();
+        this.router.navigate(['/']);
         this.toastrService.error('Serveri viga.');
       }
     )
