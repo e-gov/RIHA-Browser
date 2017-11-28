@@ -1,18 +1,16 @@
 package ee.ria.riha.service.notifications.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Holds data for new issue comment notification messages.
+ * Holds data for new issue comment email notification messages.
  */
 @Getter
 @Setter
-@Builder
-public class NewIssueCommentNotification implements NotificationDataModel {
+public class NewIssueCommentEmailNotification extends SimpleHtmlEmailNotification {
 
-    private String[] to;
     private String infoSystemFullName;
     private String infoSystemShortName;
+    private String baseUrl;
 }

@@ -155,7 +155,8 @@ public class IssueService {
 
         Issue createdIssue = getIssueById(createdIssueIds.get(0));
 
-        notificationService.sendNewIssueNotification(infoSystem);
+        notificationService.sendNewIssueToSystemContactsNotification(infoSystem);
+        notificationService.sendNewIssueToApproversNotification(model.getTitle(), infoSystem);
 
         return createdIssue;
     }
