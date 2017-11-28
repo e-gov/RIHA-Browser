@@ -62,7 +62,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   canResolve(){
     let ret = false;
-    if (this.feedback.status = 'OPEN'){
+    if (this.feedback.status == 'OPEN'){
       let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
       if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
         || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
