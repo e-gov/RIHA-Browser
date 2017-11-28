@@ -1,39 +1,106 @@
 <section class="col card p-3 main-content">
   <div class="my-1">
     <span class="h2 align-bottom m-4 text-gray-dark">
-      Uus arutelu
+      {{ isApprovalRequest ? 'Küsi hinnangut' : 'Anna hinnang'}}
     </span>
-    <form class="col-12" #addForm="ngForm" class="m-4">
-      <div class="card card-text">
-        <div class="card-header font-weight-bold pl-2">
-          {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
-        </div>
-        <div class="card-content p-2">
-          <div class="form-group" [ngClass]="{'has-danger': title.invalid  && (title.dirty || title.touched || addForm.submitted)}">
-            <input id="title" class="form-control col-12"
-                   ngModel
-                   #title="ngModel"
-                   placeholder="lühikirjeldus hinnangust"
-                   name="title" required>
+    <div class="col-12 my-3">
+        <div class="card card-text">
+          <div class="card-header font-weight-bold pl-2">
+            {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
+          </div>
+          <div class="card-content p-2">
+            <div *ngIf="canSwitchViews()" class="my-2 mx-0 row">
+              <div [ngClass]="{'text-muted': isApprovalRequest}" class="mr-2">Anna hinnang</div>
+              <ui-switch size="small"
+                         color="#023cc1"
+                         defaultBgColor="#023cc1"
+                         defaultBoColor="#023cc1"
+                         [(ngModel)]="isApprovalRequest"></ui-switch>
+              <div [ngClass]="{'text-muted': !isApprovalRequest}" class="ml-2">Küsi hinnangut</div>
+            </div>
+            <form #newIssueForm="ngForm">
+              <div *ngIf="!isApprovalRequest">
+                <div class="form-group" [ngClass]="{'has-danger': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted)}">
+                  <input id="issueTitle" class="form-control col-12"
+                         ngModel
+                         #issueTitle="ngModel"
+                         placeholder="lühikirjeldus hinnangust"
+                         name="title" required>
 
-          </div>
-          <div class="form-group" [ngClass]="{'has-danger': issue.invalid  && (issue.dirty || issue.touched || addForm.submitted)}">
-            <textarea id="issue" class="form-control col-12"
-                   ngModel
-                   rows="10"
-                   #issue="ngModel"
-                   placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
-                   name="comment" required></textarea>
+                </div>
+                <div class="form-group" [ngClass]="{'has-danger': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted)}">
+                  <textarea id="issueText" class="form-control col-12"
+                         ngModel
+                         rows="6"
+                         #issueText="ngModel"
+                         placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
+                         name="comment" required></textarea>
+                </div>
+              </div>
+            </form>
+            <form #approvalRequestForm="ngForm">
+              <div *ngIf="isApprovalRequest">
+                <div class="form-group">
+                  <label class="text-muted mb-0">Soovin saada tagasisidet: *</label>
+                  <small class="label-small-text text-muted">vali, millist kooskõlastust on andmekogule vaja</small>
+                  <div class="custom-controls-stacked ml-2">
+                    <label class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.ESTABLISHMENT_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.ESTABLISHMENT_REQUEST)" required>
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">asutamiseks</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.TAKE_INTO_USE_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.TAKE_INTO_USE_REQUEST)" required>
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">kasutusele võtmiseks</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.MODIFICATION_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.MODIFICATION_REQUEST)" required>
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">andmekoosseisu muutmiseks</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" [(ngModel)]="approvalRequest.type" [value]="globals.issue_type.FINALIZATION_REQUEST" name="type" (change)="onIssueTypeChange(globals.issue_type.FINALIZATION_REQUEST)" required>
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">lõpetamiseks</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="requestTitle" class="text-muted mb-0">Pealkiri: *</label>
+                  <small class="label-small-text text-muted">pealkiri on avalikult nähtav kõigile kasutajatele</small>
+                  <input id="requestTitle" class="form-control col-12"
+                         readonly
+                         [value]="approvalRequest.title"
+                         placeholder="Arutelu pealkiri"
+                         name="title">
+
+                </div>
+                <div class="form-group" [ngClass]="{'has-danger': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted)}">
+                  <label for="requestText" class="text-muted mb-0">Kommentaar: *</label>
+                  <small class="label-small-text text-muted">kommentaarid on nähtavad ainult infosüsteemi omanikule ja RIHA hindajale</small>
+                  <textarea id="requestText" class="form-control col-12"
+                            [(ngModel)]="approvalRequest.comment"
+                            rows="6"
+                            #requestText="ngModel"
+                            placeholder="Sisesta vajalikud täpsustused"
+                            name="comment" required></textarea>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </form>
-    <div class="actions-bar mt-3">
-      <div class="buttons pull-right">
-        <button (click)="closeModal(addForm)" class="btn btn-default pull-right">Katkesta</button>
-        <button (click)="onSubmit(addForm)" class="btn btn-success pull-right">Salvesta</button>
+      <div class="actions-bar">
+        <div *ngIf="isApprovalRequest" class="buttons pull-right">
+          <button  (click)="closeModal(approvalRequestForm)" class="btn btn-default pull-right">Katkesta</button>
+          <button (click)="onSubmitApprovalRequest(approvalRequestForm)" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+        <div *ngIf="!isApprovalRequest" class="buttons pull-right">
+          <button (click)="closeModal(newIssueForm)" class="btn btn-default pull-right">Katkesta</button>
+          <button (click)="onSubmitNewIssue(newIssueForm)" class="btn btn-success pull-right">Salvesta</button>
+        </div>
       </div>
-    </div>
   </div>
 </section>
 

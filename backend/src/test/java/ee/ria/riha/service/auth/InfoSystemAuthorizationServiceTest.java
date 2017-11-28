@@ -5,8 +5,10 @@ import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.InfoSystemService;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,6 +31,10 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 public class InfoSystemAuthorizationServiceTest {
 
     private static final String ACME_ORG_CODE = "777";
+
+    @Rule
+    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
+
     private RihaOrganizationAwareAuthenticationToken authenticationToken;
 
     @Mock
@@ -38,19 +44,19 @@ public class InfoSystemAuthorizationServiceTest {
     private InfoSystemAuthorizationService infoSystemAuthorization;
 
     private InfoSystem infoSystem = new InfoSystem("{\n" +
-                                                           "  \"owner\": {\n" +
-                                                           "    \"code\": \"777\"\n" +
-                                                           "  }\n" +
-                                                           "}");
+            "  \"owner\": {\n" +
+            "    \"code\": \"777\"\n" +
+            "  }\n" +
+            "}");
 
     @Before
     public void setUp() {
         User jane = new User("janedoe", "", AuthorityUtils.NO_AUTHORITIES);
         RihaUserDetails principal = new RihaUserDetails(jane,
-                                                        jane.getUsername(),
-                                                        ImmutableMultimap.of(
-                                                                new RihaOrganization(ACME_ORG_CODE, "Acme org"),
-                                                                new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")));
+                jane.getUsername(),
+                ImmutableMultimap.of(
+                        new RihaOrganization(ACME_ORG_CODE, "Acme org"),
+                        new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")));
 
         authenticationToken = new RihaOrganizationAwareAuthenticationToken(
                 principal, null, null);
@@ -84,10 +90,10 @@ public class InfoSystemAuthorizationServiceTest {
     @Test
     public void isOwnerReturnsFalseWhenActiveOrganizationAndInfoSystemOwnerCodeAreNotEqual() {
         infoSystem = new InfoSystem("{\n" +
-                                            "  \"owner\": {\n" +
-                                            "    \"code\": \"000\"\n" +
-                                            "  }\n" +
-                                            "}");
+                "  \"owner\": {\n" +
+                "    \"code\": \"000\"\n" +
+                "  }\n" +
+                "}");
         assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
     }
 

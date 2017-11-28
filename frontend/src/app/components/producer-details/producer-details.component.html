@@ -69,22 +69,22 @@
     <div id="andmed"
          *ngIf="isBlockVisible('dataObjects')"
          class="separate-block">
-      <app-producer-details-objects [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-objects>
+      <app-producer-details-objects (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-objects>
     </div>
     <div id="dokumentatsioon"
          *ngIf="isBlockVisible('documents')"
          class="separate-block">
-      <app-producer-details-tech-docs [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
+      <app-producer-details-tech-docs (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
     </div>
     <div id="oigusaktid"
          *ngIf="isBlockVisible('legislations')"
          class="separate-block">
-      <app-producer-details-legislations [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
+      <app-producer-details-legislations (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
     </div>
     <div id="kontaktid"
          *ngIf="isBlockVisible('contacts')"
          class="separate-block">
-      <app-producer-details-contacts [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-contacts>
+      <app-producer-details-contacts (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-contacts>
     </div>
     <div id="seosed"
          class="separate-block">

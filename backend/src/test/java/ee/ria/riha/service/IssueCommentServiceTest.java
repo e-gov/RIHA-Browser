@@ -1,9 +1,11 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -20,6 +22,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 /**
  * @author Valentin Suhnjov
@@ -30,11 +33,17 @@ public class IssueCommentServiceTest {
     private static final long EXISTING_ISSUE_ID = 15503L;
     private static final Long CREATED_COMMENT_ENTITY_ID = 42L;
 
+    @Rule
+    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
+
     private RihaOrganizationAwareAuthenticationToken authenticationToken =
             JaneAuthenticationTokenBuilder.builder().build();
 
     @Mock
     private CommentRepository commentRepository;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private IssueCommentService issueCommentService;
@@ -46,6 +55,7 @@ public class IssueCommentServiceTest {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
+        doNothing().when(notificationService).sendNewIssueCommentNotification(any(Long.class));
     }
 
     @Test
@@ -62,7 +72,7 @@ public class IssueCommentServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringCommentCreation() {
         authenticationToken.setActiveOrganization(null);
 
