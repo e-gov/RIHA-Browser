@@ -1,14 +1,16 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.notifications.model.InfoSystemDataModel;
-import ee.ria.riha.service.notifications.model.NewInfoSystemsNotification;
+import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.storage.util.FilterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,8 +35,29 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     };
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    private final String baseUrl;
+    private final String from;
+    private final String[] to;
+    private final String[] cc;
+    private final String[] bcc;
+
     private InfoSystemRepository infoSystemRepository;
     private NotificationService notificationService;
+
+    @Autowired
+    public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties) {
+        baseUrl = applicationProperties.getBaseUrl();
+        Assert.hasText(baseUrl, "Base URL must be defined");
+
+        from = applicationProperties.getNotification().getFrom();
+        Assert.hasText(from, "Notification email sender must be defined");
+
+        to = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getTo();
+        Assert.notEmpty(to, "At least one recipient must be defined in the list of recipients");
+
+        cc = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getCc();
+        bcc = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getBcc();
+    }
 
     @Scheduled(cron = "${browser.notification.createdInfoSystemsOverview.cron}")
     public void sendCreatedInfoSystemsOverviewNotification() {
@@ -50,7 +73,15 @@ public class CreatedInfoSystemsOverviewNotificationJob {
                     .map(INFO_SYSTEM_TO_DATA_MODEL)
                     .collect(Collectors.toList());
 
-            notificationService.sendNewInfoSystemsNotification(new NewInfoSystemsNotification(infoSystemDataModels));
+            NewInfoSystemsEmailNotification notificationModel = new NewInfoSystemsEmailNotification();
+            notificationModel.setFrom(from);
+            notificationModel.setTo(to);
+            notificationModel.setCc(cc);
+            notificationModel.setBcc(bcc);
+            notificationModel.setInfoSystems(infoSystemDataModels);
+            notificationModel.setBaseUrl(baseUrl);
+
+            notificationService.sendNewInfoSystemsNotification(notificationModel);
         } catch (Exception e) {
             log.warn("Job execution failed", e);
         }

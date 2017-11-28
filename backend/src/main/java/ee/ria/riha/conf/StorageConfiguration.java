@@ -48,6 +48,6 @@ public class StorageConfiguration {
 
     @Bean
     public LdapRepository ldapRepository(LdapContextSource ldapContextSource, ApplicationProperties applicationProperties) {
-        return new LdapRepository(ldapContextSource, applicationProperties);
+        return new LdapRepository(ldapContextSource, applicationProperties.getLdapRepository());
     }
 }

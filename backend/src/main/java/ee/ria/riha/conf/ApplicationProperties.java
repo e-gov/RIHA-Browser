@@ -17,8 +17,9 @@ public class ApplicationProperties {
     public static final String API_V1_PREFIX = "/api/v1";
 
     private final StorageClientProperties storageClient = new StorageClientProperties();
-    private final AuthenticationProperties authentication = new AuthenticationProperties();
-    private final LdapSearchProperties ldapSearch = new LdapSearchProperties();
+    private final LdapProperties ldap = new LdapProperties();
+    private final LdapAuthenticationProperties ldapAuthentication = new LdapAuthenticationProperties();
+    private final LdapRepositoryProperties ldapRepository = new LdapRepositoryProperties();
     private final ValidationProperties validation = new ValidationProperties();
     private final NotificationProperties notification = new NotificationProperties();
     private final CorsProperties cors = new CorsProperties();
@@ -36,19 +37,25 @@ public class ApplicationProperties {
 
     @Getter
     @Setter
-    public static class AuthenticationProperties {
-        private String userSearchBase;
-        private String userSearchFilter;
-        private String ldapUrl;
-        private String ldapBaseDn;
-        private String ldapUser;
-        private String ldapPassword;
+    public static class LdapProperties {
+        private String url;
+        private String baseDn;
+        private String user;
+        private String password;
     }
 
     @Getter
     @Setter
-    public static class LdapSearchProperties {
+    public static class LdapAuthenticationProperties {
         private String userSearchBase;
+        private String userSearchFilter;
+    }
+
+    @Getter
+    @Setter
+    public static class LdapRepositoryProperties {
+        private String userSearchBase;
+        private String groupSearchBase;
     }
 
     @Getter

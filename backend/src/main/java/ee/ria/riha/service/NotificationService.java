@@ -3,13 +3,15 @@ package ee.ria.riha.service;
 import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.notifications.EmailNotificationSenderService;
-import ee.ria.riha.service.notifications.model.NewInfoSystemsNotification;
-import ee.ria.riha.service.notifications.model.NewIssueCommentNotification;
-import ee.ria.riha.service.notifications.model.NewIssueNotification;
+import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
+import ee.ria.riha.service.notifications.model.NewIssueCommentEmailNotification;
+import ee.ria.riha.service.notifications.model.NewIssueToApproversEmailNotification;
+import ee.ria.riha.service.notifications.model.NewIssueToSystemContactsEmailNotification;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Set;
@@ -19,27 +21,19 @@ import java.util.Set;
 @Slf4j
 public class NotificationService {
 
-    private final boolean newIssueNotificationEnabled;
-    private final boolean newIssueCommentNotificationEnabled;
-
     private EmailNotificationSenderService emailNotificationSenderService;
     private IssueService issueService;
     private UserService userService;
     private InfoSystemService infoSystemService;
+    private ApplicationProperties applicationProperties;
 
-    @Autowired
-    public NotificationService(ApplicationProperties applicationProperties) {
-        newIssueNotificationEnabled = applicationProperties.getNotification().getNewIssue().isEnabled();
-        newIssueCommentNotificationEnabled = applicationProperties.getNotification().getNewIssueComment().isEnabled();
-    }
-
-    public void sendNewInfoSystemsNotification(NewInfoSystemsNotification notification) {
-        emailNotificationSenderService.sendNotification(notification);
+    public void sendNewInfoSystemsNotification(NewInfoSystemsEmailNotification notificationModel) {
+        emailNotificationSenderService.sendNotification(notificationModel);
     }
 
     public void sendNewIssueCommentNotification(Long issueId) {
         if (!isNewIssueCommentNotificationEnabled()) {
-            log.warn("New issue comment notifications sending is disabled.");
+            log.info("New issue comment notifications sending is disabled.");
             return;
         }
 
@@ -52,18 +46,20 @@ public class NotificationService {
         }
 
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
-        NewIssueCommentNotification model = NewIssueCommentNotification.builder()
-                .infoSystemFullName(infoSystem.getFullName())
-                .infoSystemShortName(infoSystem.getShortName())
-                .to(emails.toArray(new String[emails.size()]))
-                .build();
 
-        emailNotificationSenderService.sendNotification(model);
+        NewIssueCommentEmailNotification notificationModel = new NewIssueCommentEmailNotification();
+        notificationModel.setFrom(getDefaultNotificationSender());
+        notificationModel.setTo(emails.toArray(new String[emails.size()]));
+        notificationModel.setInfoSystemFullName(infoSystem.getFullName());
+        notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+        notificationModel.setBaseUrl(getBaseUrl());
+
+        emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    public void sendNewIssueNotification(InfoSystem infoSystem) {
+    public void sendNewIssueToSystemContactsNotification(InfoSystem infoSystem) {
         if (!isNewIssueNotificationEnabled()) {
-            log.warn("New issue notifications sending is disabled.");
+            log.info("New issue notifications sending is disabled.");
             return;
         }
 
@@ -73,13 +69,53 @@ public class NotificationService {
             return;
         }
 
-        NewIssueNotification model = NewIssueNotification.builder()
-                .infoSystemFullName(infoSystem.getFullName())
-                .infoSystemShortName(infoSystem.getShortName())
-                .to(to.toArray(new String[to.size()]))
-                .build();
+        NewIssueToSystemContactsEmailNotification notificationModel = new NewIssueToSystemContactsEmailNotification();
+        notificationModel.setFrom(getDefaultNotificationSender());
+        notificationModel.setTo(to.toArray(new String[to.size()]));
+        notificationModel.setInfoSystemFullName(infoSystem.getFullName());
+        notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+        notificationModel.setBaseUrl(getBaseUrl());
 
-        emailNotificationSenderService.sendNotification(model);
+        emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    public void sendNewIssueToApproversNotification(String issueTitle, InfoSystem infoSystem) {
+        if (!isNewIssueNotificationEnabled()) {
+            log.info("New issue notifications sending is disabled.");
+            return;
+        }
+
+        Set<String> approversEmails = userService.getApproversEmails();
+
+        NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
+        notificationModel.setFrom(getDefaultNotificationSender());
+        notificationModel.setTo(approversEmails.toArray(new String[approversEmails.size()]));
+        notificationModel.setInfoSystemFullName(infoSystem.getFullName());
+        notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+        notificationModel.setIssueTitle(issueTitle);
+        notificationModel.setBaseUrl(getBaseUrl());
+
+        emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    private String getDefaultNotificationSender() {
+        String defaultNotificationSender = applicationProperties.getNotification().getFrom();
+        Assert.hasText(defaultNotificationSender, "Notification email sender must be defined");
+        return defaultNotificationSender;
+    }
+
+    private String getBaseUrl() {
+        String baseUrl = applicationProperties.getBaseUrl();
+        Assert.hasText(baseUrl, "Base URL must be defined");
+        return baseUrl;
+    }
+
+    private boolean isNewIssueNotificationEnabled() {
+        return applicationProperties.getNotification().getNewIssue().isEnabled();
+    }
+
+    private boolean isNewIssueCommentNotificationEnabled() {
+        return applicationProperties.getNotification().getNewIssueComment().isEnabled();
     }
 
     @Autowired
@@ -100,5 +136,10 @@ public class NotificationService {
     @Autowired
     public void setInfoSystemService(InfoSystemService infoSystemService) {
         this.infoSystemService = infoSystemService;
+    }
+
+    @Autowired
+    public void setApplicationProperties(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
     }
 }

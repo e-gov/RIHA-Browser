@@ -114,7 +114,8 @@ public class IssueServiceTest {
             return Arrays.asList(createdComment.getComment_id());
         });
 
-        doNothing().when(notificationService).sendNewIssueNotification(any(InfoSystem.class));
+        doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
+        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class), any(InfoSystem.class));
     }
 
     @Test
