@@ -1,7 +1,7 @@
 package ee.ria.riha.service.notifications;
 
 import ee.ria.riha.service.notifications.handlers.EmailNotificationHandler;
-import ee.ria.riha.service.notifications.model.NotificationDataModel;
+import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -23,20 +24,19 @@ public class EmailNotificationSenderService {
     private JavaMailSenderImpl mailSender;
 
     @Async
-    public void sendNotification(NotificationDataModel model) {
+    public void sendNotification(EmailNotificationDataModel model) {
         Assert.notNull(model, "Failed to send message as data model object was not defined.");
 
         try {
-            EmailNotificationHandler handler = findAppropriateHandler(model);
-
-            if (handler == null) {
-                throw new MailPreparationException("Failed to send message as appropriate email notification handler was not found.");
-            }
+            EmailNotificationHandler handler = findAppropriateHandler(model)
+                    .orElseThrow(() -> new MailPreparationException(
+                            "Failed to send message as appropriate email notification handler was not found."));
 
             MimeMessage message = handler.createMessage(model);
 
             if (log.isDebugEnabled()) {
-                log.debug("Sending notification message from '{}' to '{}' with subject '{}'", message.getFrom(), message.getAllRecipients(), message.getSubject());
+                log.debug("Sending notification message from '{}' to '{}' with subject '{}'",
+                        message.getFrom(), message.getAllRecipients(), message.getSubject());
             }
 
             mailSender.send(message);
@@ -46,13 +46,13 @@ public class EmailNotificationSenderService {
         }
     }
 
-    private EmailNotificationHandler findAppropriateHandler(NotificationDataModel model) {
+    private Optional<EmailNotificationHandler> findAppropriateHandler(EmailNotificationDataModel model) {
         for (EmailNotificationHandler handler : handlers) {
             if (handler.supports(model)) {
-                return handler;
+                return Optional.of(handler);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Autowired

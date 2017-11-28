@@ -35,7 +35,7 @@ public class EnvironmentController {
     @ApiOperation("Retrieve environment")
     public ResponseEntity environment(HttpSession session) {
         Map<String, Object> environment = new HashMap<>();
-        environment.put("userDetails", userController.createUserDetailsModel());
+        environment.put("userDetails", userController.createUserDetailsModel().orElse(null));
         environment.put("tracking", applicationProperties.getTracking());
         environment.put("sessionMaxInactiveInterval", session.getMaxInactiveInterval() * 1000);
 

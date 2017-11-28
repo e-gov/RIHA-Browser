@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { EnvironmentService } from '../../services/environment.service';
 import { User } from '../../models/user';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { Environment } from '../../models/environment';
+import { ModalHelperService } from '../../services/modal-helper.service';
 
 @Component({
   selector: 'app-active-organization-chooser',
@@ -17,12 +17,12 @@ export class ActiveOrganizationChooserComponent implements OnInit {
     this.environmentService.setActiveOrganization(organizationCode).then(res => {
       this.environmentService.globalEnvironment = new Environment(res.json());
       this.router.navigate(['/']);
-      this.activeModal.close();
+      this.modalService.closeActiveModal();
     });
   }
 
   constructor(private environmentService: EnvironmentService,
-              private activeModal: NgbActiveModal,
+              private modalService: ModalHelperService,
               private router: Router) {
     this.user = environmentService.getActiveUser();
   }

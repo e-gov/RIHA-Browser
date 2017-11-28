@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { EnvironmentService } from '../../../services/environment.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
 
@@ -37,11 +36,12 @@ export class WarningModalComponent implements OnInit, OnDestroy {
     this.environmentService.doLogout().then(
       res => {
         this.environmentService.loadEnvironmentData().then(env => {
-          this.activeModal.dismiss();
           this.modalService.open(InfoModalComponent);
           this.router.navigate(['/']);
         });
       }, err => {
+        this.modalService.dismissAllModals();
+        this.router.navigate(['/']);
         this.toastrService.error('Serveri viga.');
       }
     )
@@ -51,7 +51,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
     this.environmentService.doLogout().then(
       res => {
         this.environmentService.loadEnvironmentData().then(env => {
-          this.activeModal.dismiss();
+          this.modalService.dismissAllModals();
           this.router.navigate(['/']);
         });
       }, err => {
@@ -63,7 +63,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
   refreshSession(){
     this.environmentService.loadEnvironmentData().then(
       res => {
-        this.activeModal.close();
+        this.modalService.closeActiveModal();
       }, err => {
         this.toastrService.error('Serveri viga.');
       }
@@ -72,7 +72,6 @@ export class WarningModalComponent implements OnInit, OnDestroy {
 
   constructor(private environmentService: EnvironmentService,
               private modalService: ModalHelperService,
-              private activeModal: NgbActiveModal,
               private toastrService: ToastrService,
               private router: Router) {
   }

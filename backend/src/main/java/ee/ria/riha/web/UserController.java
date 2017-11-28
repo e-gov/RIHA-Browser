@@ -2,7 +2,6 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.service.SecurityContextUtil;
 import ee.ria.riha.service.UserService;
 import ee.ria.riha.web.model.OrganizationModel;
@@ -13,13 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
-import static ee.ria.riha.service.SecurityContextUtil.isUserAuthenticated;
 
 /**
  * @author Valentin Suhnjov
@@ -36,62 +34,63 @@ public class UserController {
     @ApiOperation("Change active organization of the current user")
     public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
         userService.changeActiveOrganization(organizationCode);
-        return ResponseEntity.ok(createUserDetailsModel());
+        return getUserDetails();
     }
 
     @GetMapping
     @ApiOperation("Retrieves user details")
     public ResponseEntity<UserDetailsModel> getUserDetails() {
-        return ResponseEntity.ok(createUserDetailsModel());
+        return ResponseEntity.ok(createUserDetailsModel().orElse(null));
     }
 
-    private void setUserDetails(UserDetailsModel model) {
-        RihaUserDetails userDetails = SecurityContextUtil.getRihaUserDetails();
-        if (userDetails == null) {
-            return;
-        }
-
-        model.setPersonalCode(userDetails.getPersonalCode());
-        model.setFirstName(userDetails.getFirstName());
-        model.setLastName(userDetails.getLastName());
-    }
-
-    public UserDetailsModel createUserDetailsModel() {
-        if (!isUserAuthenticated()) {
-            return null;
-        }
-
-        UserDetailsModel model = new UserDetailsModel();
-        setUserDetails(model);
-        setAuthorityDetails(model);
-
-        return model;
+    public Optional<UserDetailsModel> createUserDetailsModel() {
+        return SecurityContextUtil.getUserDetails()
+                .map(userDetails -> {
+                    UserDetailsModel model = new UserDetailsModel();
+                    setUserDetails(model);
+                    setAuthorityDetails(model);
+                    return model;
+                });
     }
 
     private void setAuthorityDetails(UserDetailsModel model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.setRoles(authentication.getAuthorities().stream()
-                               .map(GrantedAuthority::getAuthority)
-                               .collect(Collectors.toList()));
+        // Roles are set regardless of authentication type
+        SecurityContextUtil.getAuthentication()
+                .map(Authentication::getAuthorities)
+                .ifPresent(authorities ->
+                        model.setRoles(authorities.stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .collect(Collectors.toList())));
 
-        if (authentication instanceof RihaOrganizationAwareAuthenticationToken) {
-            RihaOrganizationAwareAuthenticationToken rihaAuthentication = (RihaOrganizationAwareAuthenticationToken) authentication;
-            model.setActiveOrganization(createOrganizationModel(rihaAuthentication.getActiveOrganization()));
+        Optional<RihaOrganizationAwareAuthenticationToken> rihaAuthentication = SecurityContextUtil.getRihaAuthentication();
 
-            for (RihaOrganization rihaOrganization : rihaAuthentication.getOrganizationAuthorities().keySet()) {
-                model.getOrganizations().add(createOrganizationModel(rihaOrganization));
-            }
-        }
+        // Create and set active organization model
+        rihaAuthentication.map(RihaOrganizationAwareAuthenticationToken::getActiveOrganization)
+                .ifPresent(rihaOrganization ->
+                        model.setActiveOrganization(createOrganizationModel(rihaOrganization)));
+
+        // Create and set list of user organizations
+        rihaAuthentication.map(RihaOrganizationAwareAuthenticationToken::getOrganizationAuthorities)
+                .ifPresent(organizationAuthorities ->
+                        organizationAuthorities.keySet()
+                                .forEach(organization ->
+                                        model.getOrganizations().add(createOrganizationModel(organization)))
+                );
     }
 
     private OrganizationModel createOrganizationModel(RihaOrganization rihaOrganization) {
-        if (rihaOrganization == null) {
-            return null;
-        }
-
         OrganizationModel organizationModel = new OrganizationModel();
         organizationModel.setCode(rihaOrganization.getCode());
         organizationModel.setName(rihaOrganization.getName());
         return organizationModel;
+    }
+
+    private void setUserDetails(UserDetailsModel model) {
+        SecurityContextUtil.getRihaUserDetails()
+                .ifPresent(userDetails -> {
+                    model.setPersonalCode(userDetails.getPersonalCode());
+                    model.setFirstName(userDetails.getFirstName());
+                    model.setLastName(userDetails.getLastName());
+                });
     }
 }

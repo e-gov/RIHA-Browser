@@ -56,7 +56,7 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
         UserDetails userDetails = super.mapUserFromContext(ctx, username, grantedAuthorities);
 
         return new RihaUserDetails(userDetails, ctx.getStringAttribute(UID_ATTRIBUTE),
-                                   getUserOrganizationRoles(ctx));
+                getUserOrganizationRoles(ctx));
     }
 
     private Multimap<RihaOrganization, GrantedAuthority> getUserOrganizationRoles(DirContextOperations ctx) {
@@ -71,7 +71,7 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
 
                     if (organizationRoleMapping != null) {
                         RihaOrganization rihaOrganization = new RihaOrganization(organizationRoleMapping.getCode(),
-                                                                                 organizationRoleMapping.getName());
+                                organizationRoleMapping.getName());
                         organizationRoles.put(rihaOrganization, organizationRoleMapping.getAuthority());
                     }
                 }
@@ -92,17 +92,6 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
         }
     }
 
-    private LdapName normalizeGroupDn(String groupDnStr) {
-        LdapName groupDn = newLdapName(groupDnStr);
-
-        Name baseDn = getBaseDn();
-        if (groupDn.startsWith(baseDn)) {
-            return LdapUtils.removeFirst(groupDn, baseDn);
-        }
-
-        return groupDn;
-    }
-
     private OrganizationRoleMapping getOrganizationRoleMapping(DirContextOperations groupCtx) {
         OrganizationRoleMapping organizationRoleMapping = new OrganizationRoleMapping();
 
@@ -115,7 +104,7 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
         String[] cnTokens = commonName.split(COMMON_NAME_TOKEN_SEPARATOR);
         if (cnTokens.length != 2) {
             log.debug("Expecting two tokens in organization common name '{}' but found {}", commonName,
-                      cnTokens.length);
+                    cnTokens.length);
         }
 
         organizationRoleMapping.setCode(cnTokens[0]);
@@ -123,6 +112,17 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
         organizationRoleMapping.setName(groupCtx.getStringAttribute(DISPLAY_NAME_ATTRIBUTE));
 
         return organizationRoleMapping;
+    }
+
+    private LdapName normalizeGroupDn(String groupDnStr) {
+        LdapName groupDn = newLdapName(groupDnStr);
+
+        Name baseDn = getBaseDn();
+        if (groupDn.startsWith(baseDn)) {
+            return LdapUtils.removeFirst(groupDn, baseDn);
+        }
+
+        return groupDn;
     }
 
     private Name getBaseDn() {
