@@ -55,7 +55,7 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         List<InfoSystem> infoSystems = find(filter);
 
         if (infoSystems.isEmpty()) {
-            throw new ObjectNotFoundException("Could not resolve info system by short name " + shortName);
+            throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystemByShortName", shortName);
         }
 
         return infoSystems.get(0);
@@ -67,7 +67,7 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         List<InfoSystem> infoSystems = find(filter);
 
         if (infoSystems.isEmpty()) {
-            throw new ObjectNotFoundException("Could not resolve info system by uuid " + uuid.toString());
+            throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystemByUuid", uuid.toString());
         }
 
         return infoSystems.get(0);
