@@ -71,6 +71,22 @@ public class IssueEventService {
             throw new IllegalBrowserStateException("Issue event was not created");
         }
 
-        return COMMENT_TO_ISSUE_EVENT.apply(commentRepository.get(createdIssueEventIds.get(0)));
+        return get(createdIssueEventIds.get(0));
+    }
+
+    /**
+     * Retrieves single issue event by its id.
+     *
+     * @param id issue id event
+     * @return IssueEvent
+     */
+    public IssueEvent get(Long id) {
+        Comment comment = commentRepository.get(id);
+
+        if (IssueEntityType.valueOf(comment.getType()) != IssueEntityType.ISSUE_EVENT) {
+            throw new IllegalBrowserStateException("Not an issue event");
+        }
+
+        return COMMENT_TO_ISSUE_EVENT.apply(comment);
     }
 }

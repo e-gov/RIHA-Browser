@@ -3,28 +3,22 @@ package ee.ria.riha.service;
 /**
  * @author Valentin Suhnjov
  */
-public class ValidationException extends BrowserException {
-
-    private final String code;
-    private final Object[] args;
+public class ValidationException extends CodedBrowserException {
 
     public ValidationException(String code) {
         super(code);
-        this.code = code;
-        this.args = new Object[0];
+    }
+
+    public ValidationException(String code, Throwable e) {
+        super(code, e);
     }
 
     public ValidationException(String code, Object... args) {
-        super(code);
-        this.code = code;
-        this.args = args;
+        super(code, args);
     }
 
-    public String getCode() {
-        return code;
+    public ValidationException(String code, Throwable e, Object... args) {
+        super(code, e, args);
     }
 
-    public Object[] getArgs() {
-        return args;
-    }
 }
