@@ -80,7 +80,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private CodedBrowserExceptionModel createBrowserExceptionModel(Throwable exception, String code, Object[] args) {
         CodedBrowserExceptionModel model = new CodedBrowserExceptionModel();
-        model.setType(exception.getClass());
+        model.setException(exception.getClass());
         model.setCode(code);
         model.setArgs(args);
 
