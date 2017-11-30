@@ -1,4 +1,4 @@
-<app-page-header></app-page-header>
+<app-page-header *ngIf="!notFound"></app-page-header>
 <section id="page" class="row no-gutters" *ngIf="loaded">
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
@@ -92,3 +92,4 @@
     </div>
   </article>
 </section>
+<app-page-not-found *ngIf="notFound"></app-page-not-found>

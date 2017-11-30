@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import ee.ria.riha.service.IllegalBrowserStateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -86,7 +87,7 @@ public class RihaOrganizationAwareAuthenticationToken extends PreAuthenticatedAu
             this.activeOrganization = null;
         } else {
             if (!organizationsByCode.containsKey(organizationCode)) {
-                throw new IllegalArgumentException("User is not part of organization with code: " + organizationCode);
+                throw new IllegalBrowserStateException("User is not part of organization with code: " + organizationCode);
             }
             this.activeOrganization = organizationsByCode.get(organizationCode);
             if (log.isDebugEnabled()) {

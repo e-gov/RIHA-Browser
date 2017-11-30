@@ -17,8 +17,8 @@ import org.springframework.web.client.RestTemplate;
 public class StorageConfiguration {
 
     @Bean
-    public StorageClient getStorageClient(RestTemplate restTemplate, ApplicationProperties applicationProperties) {
-        return new StorageClient(restTemplate, applicationProperties.getStorageClient().getBaseUrl());
+    public StorageClient getStorageClient(ApplicationProperties applicationProperties) {
+        return new StorageClient(applicationProperties.getStorageClient().getBaseUrl());
     }
 
     @Bean
