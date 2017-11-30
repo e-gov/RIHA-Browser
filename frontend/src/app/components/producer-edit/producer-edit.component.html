@@ -1,4 +1,5 @@
-<app-page-header></app-page-header>
+<app-page-header *ngIf="!notFound"></app-page-header>
 <div *ngIf="loaded">
   <app-producer-edit-general [system]="system"></app-producer-edit-general>
 </div>
+<app-page-not-found *ngIf="notFound"></app-page-not-found>

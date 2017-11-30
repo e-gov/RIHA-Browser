@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
 import { User } from '../../models/user';
 import { WindowRefService } from '../../services/window-ref.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $: any;
 
@@ -17,6 +19,7 @@ export class ProducerDetailsComponent implements OnInit {
   private system: System = new System();
   private user: User;
   private loaded: boolean;
+  private notFound: boolean;
 
   adjustSection(attempt){
     if (attempt < 5){
@@ -87,12 +90,24 @@ export class ProducerDetailsComponent implements OnInit {
       this.system = new System(response.json());
       this.loaded = true;
       this.adjustSection(0);
-    })
+    }, err => {
+      let status = err.status;
+      if (status == '404'){
+        this.notFound = true;
+      } else if (status == '500'){
+        this.toastrService.error('Serveri viga');
+        this.router.navigate(['/']);
+      } else {
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private route: ActivatedRoute,
+              private router: Router,
+              private toastrService: ToastrService,
               private winRef: WindowRefService) {
     this.user = this.environmentService.getActiveUser();
   }
@@ -100,6 +115,7 @@ export class ProducerDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe( params => {
       this.loaded = false;
+      this.notFound = false;
       this.getSystem(params['short_name']);
     });
   }
