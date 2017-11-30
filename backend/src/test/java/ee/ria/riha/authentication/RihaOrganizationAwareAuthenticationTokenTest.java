@@ -1,6 +1,7 @@
 package ee.ria.riha.authentication;
 
 import com.google.common.collect.ImmutableMultimap;
+import ee.ria.riha.service.IllegalBrowserStateException;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -72,7 +73,7 @@ public class RihaOrganizationAwareAuthenticationTokenTest {
         assertThat(authenticationToken.getActiveOrganization(), is(equalTo(TEST_ORG)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void failsWhenSettingNonExistentActiveOrganizationCode() {
         RihaOrganizationAwareAuthenticationToken authenticationToken = createAuthenticationToken();
 
