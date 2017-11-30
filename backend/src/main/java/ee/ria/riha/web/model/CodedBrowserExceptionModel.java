@@ -10,7 +10,7 @@ import java.util.Date;
 public class CodedBrowserExceptionModel {
 
     private Date timestamp = new Date();
-    private Class type;
+    private Class exception;
     private String code;
     private String message;
     private Object[] args;
@@ -23,12 +23,12 @@ public class CodedBrowserExceptionModel {
         this.timestamp = timestamp;
     }
 
-    public Class getType() {
-        return type;
+    public Class getException() {
+        return exception;
     }
 
-    public void setType(Class type) {
-        this.type = type;
+    public void setException(Class exception) {
+        this.exception = exception;
     }
 
     public String getCode() {
