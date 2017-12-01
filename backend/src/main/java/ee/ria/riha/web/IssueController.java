@@ -1,6 +1,7 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.Issue;
+import ee.ria.riha.domain.model.RihaIssueSummary;
 import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
@@ -49,6 +50,20 @@ public class IssueController {
                         issues.getContent().stream()
                                 .map(issueSummaryModelMapper::map)
                                 .collect(toList())));
+    }
+
+    /**
+     * Retrieve paginated and filtered list of all RIHA issues.
+     *
+     * @param pageable   paging definition
+     * @param filterable filter definition
+     * @return paginated and filtered list of all RIHA issues
+     */
+    @GetMapping(API_V1_PREFIX + "/issues")
+    @ApiOperation("List all RIHA issues")
+    @ApiPageableAndFilterableParams
+    public ResponseEntity<PagedResponse<RihaIssueSummary>> listIssues(Pageable pageable, Filterable filterable) {
+        return ResponseEntity.ok(issueService.listIssues(pageable, filterable));
     }
 
     /**
