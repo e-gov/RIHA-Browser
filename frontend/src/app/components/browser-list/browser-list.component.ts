@@ -4,6 +4,7 @@ import { GridData } from '../../models/grid-data';
 import { GeneralHelperService } from '../../services/general-helper.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { G } from '../../globals/globals';
 
 @Component({
   selector: 'app-browser-list',
@@ -18,6 +19,9 @@ export class BrowserListComponent implements OnInit {
     name: string,
     topic: string
   };
+  extendedSearch: boolean = false;
+
+  globals: any = G;
 
   onPageChange(newPage){
     this.gridData.page = newPage - 1;
@@ -36,6 +40,11 @@ export class BrowserListComponent implements OnInit {
       res => {
         this.gridData.updateData(res.json());
     })
+  }
+
+  toggleSearchPanel(){
+    this.extendedSearch = !this.extendedSearch;
+    return false;
   }
 
   constructor(private systemsService: SystemsService,
