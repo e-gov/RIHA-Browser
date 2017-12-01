@@ -94,6 +94,9 @@ export class SystemsService {
     let filtersArr: string[] = [];
 
     if (!isNullOrUndefined(filters)){
+      if (filters.searchText){
+        filtersArr.push(`search_text,ilike,%${ filters.searchText }%`);
+      }
       if (filters.name){
         filtersArr.push(`name,ilike,%${ filters.name }%`);
       }
@@ -106,8 +109,23 @@ export class SystemsService {
       if (filters.ownerName){
         filtersArr.push(`owner.name,jilike,%${ filters.ownerName }%`);
       }
+      if (filters.purpose){
+        filtersArr.push(`purpose,jilike,%${ filters.purpose }%`);
+      }
       if (filters.topic){
         filtersArr.push(`topics,jarr,%${ filters.topic }%`);
+      }
+      if (filters.storedData){
+        filtersArr.push(`stored_data,jarr,%${ filters.storedData }%`);
+      }
+      if (filters.systemStatus){
+        filtersArr.push(`meta.system_status.status,jilike,${ filters.systemStatus }`);
+      }
+      if (filters.developmentStatus){
+        filtersArr.push(`meta.development_status,jilike,${ filters.developmentStatus }`);
+      }
+      if (filters.xRoadStatus){
+        filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());

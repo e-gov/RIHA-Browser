@@ -48,8 +48,8 @@
                   (keyup.enter)="getSystems()"
                   [(ngModel)]="filters.developmentStatus">
             <option [value]="null" selected>määramata</option>
-            <option [value]="globals.development_status.NOT_IN_DEVELOPMENT" selected>arendamisel</option>
-            <option [value]="globals.development_status.NOT_IN_DEVELOPMENT">ei ole arendamisel</option>
+            <option [value]="globals.development_status.IN_DEVELOPMENT" selected>aktiivses arenduses</option>
+            <option [value]="globals.development_status.NOT_IN_DEVELOPMENT">ei ole arenduses</option>
           </select>
         </div>
         <div class="form-group">
@@ -60,7 +60,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
           <label for="topics-input">Märksõna</label>
-          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.topics" type="text" id="topics-input">
+          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.topic" type="text" id="topics-input">
         </div>
         <div class="form-group">
           <label for="purpose-input">Eesmärk</label>
@@ -89,10 +89,10 @@
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
-          <label for="status-input">Infosüsteemi staatus</label>
-          <select id="status-input" class="form-control"
+          <label for="system-status-input">Infosüsteemi staatus</label>
+          <select id="system-status-input" class="form-control"
                   (keyup.enter)="getSystems()"
-                  [(ngModel)]="filters.status">
+                  [(ngModel)]="filters.systemStatus">
             <option [value]="null" selected>määramata</option>
             <option [value]="globals.system_status.IN_USE">kasutusel</option>
             <option [value]="globals.system_status.ESTABLISHING">asutamisel</option>
@@ -100,8 +100,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="objects-input">Põhiandmed</label>
-          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.objects" type="text" id="objects-input">
+          <label for="stored-data-input">Põhiandmed</label>
+          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.storedData" type="text" id="stored-data-input">
         </div>
         <div class="form-group">
           <label for="date-updated-input-from">Viimati muudetud alates</label>
