@@ -11,7 +11,7 @@ export class SystemsService {
 
   private systemsUrl = '/api/v1/systems';
 
-  private dateObjToTimestamp(dateObj: any): any {
+  public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
       let year = dateObj.year.toString();
       let month = dateObj.month.toString();
@@ -19,13 +19,17 @@ export class SystemsService {
 
       if (month.length === 1) month = '0' + month;
       if (day.length === 1) day = '0' + day;
-      return `${ year }-${ month }-${ day }T00:00:00Z`;
+      if (simple === true){
+        return `${ year }-${ month }-${ day }`;
+      } else {
+        return `${ year }-${ month }-${ day }T00:00:00Z`;
+      }
     } else {
       return dateObj;
     }
   }
 
-  private timestampToDateObj(timestamp: string): any {
+  public timestampToDateObj(timestamp: string): any {
     if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
       let year = parseInt(timestamp.substr(0, 4), 10);
       let month = parseInt(timestamp.substr(5, 2), 10);
@@ -126,6 +130,18 @@ export class SystemsService {
       }
       if (filters.xRoadStatus){
         filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
+      }
+      if (filters.dateCreatedFrom){
+        filtersArr.push(`j_creation_timestamp,>,${ filters.dateCreatedFrom }`);
+      }
+      if (filters.dateCreatedTo){
+        filtersArr.push(`j_creation_timestamp,<,${ filters.dateCreatedTo }T23:59:59`);
+      }
+      if (filters.dateUpdatedFrom){
+        filtersArr.push(`j_update_timestamp,>,${ filters.dateUpdatedFrom }`);
+      }
+      if (filters.dateUpdatedTo){
+        filtersArr.push(`j_update_timestamp,<,${ filters.dateUpdatedTo }T23:59:59`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
