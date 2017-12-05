@@ -24,6 +24,7 @@
                 <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
                 <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
+                <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
               </tbody>
             </table>
@@ -47,6 +48,7 @@
                 <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
                 <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
+                <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
               </tbody>
             </table>
@@ -73,6 +75,7 @@
                 </td>
                 <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
+                <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
               </tbody>
             </table>
