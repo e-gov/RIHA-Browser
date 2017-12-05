@@ -18,6 +18,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   @Input() allowEdit: boolean;
 
   comments: any[] = [];
+  issues: any[] = [];
   activeIssues: any[] = [];
   closedIssues: any[] = [];
   newAdded: boolean = false;
@@ -62,16 +63,13 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   refreshIssues(){
     this.systemsService.getSystemIssues(this.system.details.short_name).then(
       res => {
+        this.issues = [];
         this.activeIssues = [];
         this.closedIssues = [];
 
-        res.json().content.map(c => {
-          if (c.status === 'OPEN'){
-            this.activeIssues.push(c);
-          } else if (c.status === 'CLOSED'){
-            this.closedIssues.push(c);
-          }
-        });
+        this.issues = res.json().content;
+        this.activeIssues = this.issues.filter(i => i.status == 'OPEN');
+        this.closedIssues = this.issues.filter(i => i.status == 'CLOSED');
       }
     )
   }
