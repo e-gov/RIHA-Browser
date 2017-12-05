@@ -44,7 +44,7 @@ export class BrowserListComponent implements OnInit {
   }
 
   getSystems(): void {
-    let f =this.generalHelperService.cloneObject(this.filters);
+    let f = this.generalHelperService.cloneObject(this.filters);
     if (f.dateCreatedFrom){
       f.dateCreatedFrom = this.systemsService.dateObjToTimestamp(f.dateCreatedFrom, true);
     }
@@ -95,7 +95,6 @@ export class BrowserListComponent implements OnInit {
       dateUpdatedFrom: '',
       dateUpdatedTo: ''
     };
-    this.extendedSearch = false;
     this.getSystems();
   }
 
