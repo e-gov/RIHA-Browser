@@ -178,7 +178,7 @@ export class SystemsService {
   }
 
   public getSystemIssues(shortName) {
-    return this.http.get(`/api/v1/systems/${ shortName }/issues?size=1000`).toPromise();
+    return this.http.get(`/api/v1/systems/${ shortName }/issues?size=1000&sort=-creation_date`).toPromise();
   }
 
   public addSystemIssue(shortName, issue) {
