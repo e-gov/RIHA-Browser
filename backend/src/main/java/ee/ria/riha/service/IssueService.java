@@ -80,6 +80,22 @@ public class IssueService {
         return comment;
     };
 
+    private static final Function<Comment, RihaIssueSummary> COMMENT_TO_RIHA_ISSUE_SUMMARY = comment -> {
+        if (comment == null) {
+            return null;
+        }
+
+        return RihaIssueSummary.builder()
+                .id(comment.getComment_id())
+                .infoSystemShortName(comment.getInfosystem_short_name())
+                .dateCreated(comment.getCreation_date())
+                .title(comment.getTitle())
+                .organizationName(comment.getOrganization_name())
+                .organizationCode(comment.getOrganization_code())
+                .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
+                .build();
+    };
+
     private static final List<IssueType> FEEDBACK_REQUEST_ISSUE_TYPES = Arrays.asList(
             ESTABLISHMENT_REQUEST,
             TAKE_INTO_USE_REQUEST,
@@ -123,6 +139,24 @@ public class IssueService {
                 response.getContent().stream()
                         .map(COMMENT_TO_ISSUE)
                         .collect(toList()));
+    }
+
+    /**
+     * List all RIHA issues.
+     *
+     * @param pageable   paging definition
+     * @param filterable filter definition
+     * @return paginated and filtered list of all RIHA issues
+     */
+    public PagedResponse<RihaIssueSummary> listIssues(Pageable pageable, Filterable filterable) {
+        Filterable filter = new FilterRequest(filterable.getFilter(), filterable.getSort(), filterable.getFields());
+        PagedResponse<Comment> response = commentRepository.listIssues(pageable, filter);
+
+        return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
+                response.getTotalElements(),
+                response.getContent().stream()
+                    .map(COMMENT_TO_RIHA_ISSUE_SUMMARY)
+                    .collect(toList()));
     }
 
     private String getIssueTypeFilter() {
