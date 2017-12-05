@@ -11,7 +11,7 @@ import javax.naming.Name;
  * @author Valentin Suhnjov
  */
 @Data
-@Entry(objectClasses = "organizationalRole")
+@Entry(objectClasses = {"groupOfNames"})
 public class LdapGroup {
 
     @Id
