@@ -8,6 +8,7 @@ import { ActiveOrganizationChooserComponent } from '../active-organization-choos
 import { GeneralHelperService } from '../../services/general-helper.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { G } from '../../globals/globals';
 
 @Component({
   selector: 'app-producer-list',
@@ -18,11 +19,24 @@ export class ProducerListComponent implements OnInit {
 
   gridData: GridData  = new GridData();
   filters: {
+    searchText: string,
+    purpose: string,
     name: string,
     shortName: string,
-    topic: string
+    topic: string,
+    systemStatus: string,
+    xRoadStatus: string,
+    developmentStatus: string,
+    dateCreatedFrom: string,
+    dateCreatedTo: string,
+    dateUpdatedFrom: string,
+    dateUpdatedTo: string
   };
   userMatrix: UserMatrix;
+
+  extendedSearch: boolean = true;
+
+  globals: any = G;
 
   onPageChange(newPage): void{
     this.gridData.page = newPage - 1;
@@ -36,10 +50,24 @@ export class ProducerListComponent implements OnInit {
 
   getOwnSystems(): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
-      let q = this.generalHelperService.generateQueryString({name: this.filters.name,
-                                                                  shortName: this.filters.shortName,
-                                                                  topic: this.filters.topic});
+      let f = this.generalHelperService.cloneObject(this.filters);
+      delete f.ownerName;
+      delete f.ownerCode;
+      if (f.dateCreatedFrom){
+        f.dateCreatedFrom = this.systemsService.dateObjToTimestamp(f.dateCreatedFrom, true);
+      }
+      if (f.dateCreatedTo){
+        f.dateCreatedTo = this.systemsService.dateObjToTimestamp(f.dateCreatedTo, true);
+      }
+      if (f.dateUpdatedFrom){
+        f.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(f.dateUpdatedFrom, true);
+      }
+      if (f.dateUpdatedTo){
+        f.dateUpdatedTo = this.systemsService.dateObjToTimestamp(f.dateUpdatedTo, true);
+      }
+      let q = this.generalHelperService.generateQueryString(f);
       this.location.replaceState('/Kirjelda', q);
+      this.gridData.page = 0;
       this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
@@ -50,6 +78,49 @@ export class ProducerListComponent implements OnInit {
   openOrganizationsModal() {
     const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
     return false;
+  }
+
+  toggleSearchPanel(){
+    this.extendedSearch = !this.extendedSearch;
+    return false;
+  }
+
+  hasActiveFilters(): boolean{
+    for (let key in this.filters) {
+      if (key != 'searchText' && this.filters[key]){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  clearFilters(){
+    this.filters = {
+      searchText: '',
+      purpose: '',
+      name: '',
+      shortName: '',
+      topic: '',
+      systemStatus: '',
+      xRoadStatus: '',
+      developmentStatus: '',
+      dateCreatedFrom: '',
+      dateCreatedTo: '',
+      dateUpdatedFrom: '',
+      dateUpdatedTo: ''
+    };
+  }
+
+  clearFiltersAndRefresh(){
+    this.clearFilters();
+    this.getOwnSystems();
+  }
+
+  searchSystemsByTopic(topic){
+    this.clearFilters();
+    this.filters.topic = topic;
+    this.extendedSearch = true;
+    this.getOwnSystems();
   }
 
   constructor(private systemsService: SystemsService,
@@ -64,11 +135,24 @@ export class ProducerListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe( params => {
       this.filters = {
-        shortName: params['shortName'],
+        searchText: params['searchText'],
+        purpose: params['purpose'],
         name: params['name'],
-        topic: params['topic']
+        shortName: params['shortName'],
+        topic: params['topic'],
+        systemStatus: params['systemStatus'] || '',
+        xRoadStatus: params['xRoadStatus'] || '',
+        developmentStatus: params['developmentStatus'] || '',
+        dateCreatedFrom: this.systemsService.timestampToDateObj(params['dateCreatedFrom']),
+        dateCreatedTo: this.systemsService.timestampToDateObj(params['dateCreatedTo']),
+        dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
+        dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo'])
       };
     });
+
+    if (this.hasActiveFilters()){
+      this.extendedSearch = true;
+    }
 
     this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
     this.getOwnSystems();
