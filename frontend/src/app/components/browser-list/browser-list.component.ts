@@ -59,6 +59,7 @@ export class BrowserListComponent implements OnInit {
     }
     let q = this.generalHelperService.generateQueryString(f);
     this.location.replaceState('/Infosüsteemid', q);
+    this.gridData.page = 0;
     this.systemsService.getSystems(f, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
@@ -95,6 +96,17 @@ export class BrowserListComponent implements OnInit {
       dateUpdatedFrom: '',
       dateUpdatedTo: ''
     };
+  }
+
+  clearFiltersAndRefresh(){
+    this.clearFilters();
+    this.getSystems();
+  }
+
+  searchSystemsByTopic(topic){
+    this.clearFilters();
+    this.filters.topic = topic;
+    this.extendedSearch = true;
     this.getSystems();
   }
 

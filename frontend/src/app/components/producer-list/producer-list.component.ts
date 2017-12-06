@@ -67,6 +67,7 @@ export class ProducerListComponent implements OnInit {
       }
       let q = this.generalHelperService.generateQueryString(f);
       this.location.replaceState('/Kirjelda', q);
+      this.gridData.page = 0;
       this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
@@ -108,6 +109,17 @@ export class ProducerListComponent implements OnInit {
       dateUpdatedFrom: '',
       dateUpdatedTo: ''
     };
+  }
+
+  clearFiltersAndRefresh(){
+    this.clearFilters();
+    this.getOwnSystems();
+  }
+
+  searchSystemsByTopic(topic){
+    this.clearFilters();
+    this.filters.topic = topic;
+    this.extendedSearch = true;
     this.getOwnSystems();
   }
 
