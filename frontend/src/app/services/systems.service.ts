@@ -99,7 +99,7 @@ export class SystemsService {
 
     if (!isNullOrUndefined(filters)){
       if (filters.searchText){
-        filtersArr.push(`search_text,ilike,%${ filters.searchText }%`);
+        filtersArr.push(`search_content,ilike,%${ filters.searchText }%`);
       }
       if (filters.name){
         filtersArr.push(`name,ilike,%${ filters.name }%`);
