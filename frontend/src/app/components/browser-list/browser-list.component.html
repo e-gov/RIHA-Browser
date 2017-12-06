@@ -1,6 +1,6 @@
 <app-page-header [text]="'Infosüsteemid'"></app-page-header>
 <section class="col card p-3">
-  <div class="row">
+  <!--<div class="row">
     <div class="col-12">
       <div class="form-group row">
         <input class="form-control col"
@@ -14,7 +14,7 @@
   </div>
   <div class="form-group">
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
-  </div>
+  </div>-->
   <div *ngIf="extendedSearch" id="extended-search-panel">
     <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
@@ -66,7 +66,7 @@
           <label for="purpose-input">Eesmärk</label>
           <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.purpose" type="text" id="purpose-input">
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="date-created-input-from">Sisestamise kuupäev alates</label>
           <div class="input-group datepicker">
             <input id="date-created-input-from" class="form-control" placeholder="yyyy-mm-dd"
@@ -75,8 +75,8 @@
                 <button (click)="dateCreatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
           </div>
-        </div>
-        <div class="form-group">
+        </div>-->
+        <!--<div class="form-group">
           <label for="date-created-input-to">Sisestamise kuupäev kuni</label>
           <div class="input-group datepicker">
             <input id="date-created-input-to" class="form-control" placeholder="yyyy-mm-dd"
@@ -85,7 +85,7 @@
                 <button (click)="dateCreatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
@@ -103,7 +103,7 @@
           <label for="stored-data-input">Põhiandmed</label>
           <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.storedData" type="text" id="stored-data-input">
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="date-updated-input-from">Viimati muudetud alates</label>
           <div class="input-group datepicker">
             <input id="date-updated-input-from" class="form-control" placeholder="yyyy-mm-dd"
@@ -112,8 +112,8 @@
                 <button (click)="dateUpdatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
           </div>
-        </div>
-        <div class="form-group">
+        </div>-->
+        <!--<div class="form-group">
           <label for="date-updated-input-to">Viimati muudetud kuni</label>
           <div class="input-group datepicker">
             <input id="date-updated-input-to" class="form-control" placeholder="yyyy-mm-dd"
@@ -122,7 +122,7 @@
                 <button (click)="dateUpdatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
             </span>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
     <div class="actions-bar mt-2 mb-1">

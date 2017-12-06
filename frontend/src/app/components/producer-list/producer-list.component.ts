@@ -34,7 +34,7 @@ export class ProducerListComponent implements OnInit {
   };
   userMatrix: UserMatrix;
 
-  extendedSearch: boolean = false;
+  extendedSearch: boolean = true;
 
   globals: any = G;
 
