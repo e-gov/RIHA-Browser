@@ -2,11 +2,9 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.service.notifications.EmailNotificationSenderService;
-import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueCommentEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueToApproversEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueToSystemContactsEmailNotification;
+import ee.ria.riha.service.notifications.model.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,12 @@ public class NotificationService {
             return;
         }
 
-        Set<String> participantsPersonalCodes = issueService.getParticipantsPersonalCodes(issueId);
-        Set<String> emails = userService.getEmailsByPersonalCodes(participantsPersonalCodes);
+        Set<String> emails = getIssueParticipantsEmails(issueId);
 
         if (emails.isEmpty()) {
-            log.info("New issue comment has been recently added for issue with id {}, but none of issue participants have emails.", issueId);
+            log.info(
+                    "New issue comment has been recently added for issue with id {}, but none of issue participants have emails.",
+                    issueId);
             return;
         }
 
@@ -57,6 +56,11 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
+    private Set<String> getIssueParticipantsEmails(Long issueId) {
+        Set<String> participantsPersonalCodes = issueService.getParticipantsPersonalCodes(issueId);
+        return userService.getEmailsByPersonalCodes(participantsPersonalCodes);
+    }
+
     public void sendNewIssueToSystemContactsNotification(InfoSystem infoSystem) {
         if (!isNewIssueNotificationEnabled()) {
             log.info("New issue notifications sending is disabled.");
@@ -65,7 +69,8 @@ public class NotificationService {
 
         List<String> to = infoSystemService.getSystemContactsEmails(infoSystem);
         if (to.isEmpty()) {
-            log.info("New issue has been recently added, but info system '{}' has no contacts.", infoSystem.getFullName());
+            log.info("New issue has been recently added, but info system '{}' has no contacts.",
+                    infoSystem.getFullName());
             return;
         }
 
@@ -74,6 +79,35 @@ public class NotificationService {
         notificationModel.setTo(to.toArray(new String[to.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+        notificationModel.setBaseUrl(getBaseUrl());
+
+        emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    public void sendIssueStatusUpdateNotification(Issue issue, boolean commented) {
+        if (!isIssueStatusUpdateNotificationEnabled()) {
+            log.info("Issue status update notifications sending is disabled");
+            return;
+        }
+
+        IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
+
+        Set<String> participantsEmails = getIssueParticipantsEmails(issue.getId());
+        notificationModel.setFrom(getDefaultNotificationSender());
+        notificationModel.setTo(participantsEmails.toArray(new String[0]));
+
+        notificationModel.setIssue(IssueDataModel.builder()
+                .title(issue.getTitle())
+                .status(issue.getStatus().name())
+                .build());
+
+        InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
+        notificationModel.setInfoSystem(InfoSystemDataModel.builder()
+                .fullName(infoSystem.getFullName())
+                .shortName(infoSystem.getShortName())
+                .build());
+
+        notificationModel.setCommented(commented);
         notificationModel.setBaseUrl(getBaseUrl());
 
         emailNotificationSenderService.sendNotification(notificationModel);
@@ -116,6 +150,10 @@ public class NotificationService {
 
     private boolean isNewIssueCommentNotificationEnabled() {
         return applicationProperties.getNotification().getNewIssueComment().isEnabled();
+    }
+
+    private boolean isIssueStatusUpdateNotificationEnabled() {
+        return applicationProperties.getNotification().getIssueStatusUpdate().isEnabled();
     }
 
     @Autowired

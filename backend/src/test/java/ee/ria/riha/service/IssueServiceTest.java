@@ -115,7 +115,8 @@ public class IssueServiceTest {
         });
 
         doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
-        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class), any(InfoSystem.class));
+        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class),
+                any(InfoSystem.class));
     }
 
     @Test
@@ -216,7 +217,8 @@ public class IssueServiceTest {
         issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, "closing comment");
 
         ArgumentCaptor<String> issueCommentArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(issueCommentService).createIssueComment(eq(EXISTING_ISSUE_ID), issueCommentArgumentCaptor.capture());
+        verify(issueCommentService).createIssueCommentWithoutNotification(eq(EXISTING_ISSUE_ID),
+                issueCommentArgumentCaptor.capture());
 
         assertThat(issueCommentArgumentCaptor.getValue(), is(equalTo("closing comment")));
     }
