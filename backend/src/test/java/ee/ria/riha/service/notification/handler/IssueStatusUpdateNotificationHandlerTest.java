@@ -1,8 +1,8 @@
-package ee.ria.riha.service.notifications.handlers;
+package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notifications.model.InfoSystemDataModel;
-import ee.ria.riha.service.notifications.model.IssueDataModel;
-import ee.ria.riha.service.notifications.model.IssueStatusUpdateNotification;
+import ee.ria.riha.service.notification.model.InfoSystemDataModel;
+import ee.ria.riha.service.notification.model.IssueDataModel;
+import ee.ria.riha.service.notification.model.IssueStatusUpdateNotification;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -15,7 +15,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.io.IOException;
 import java.util.Locale;

@@ -1,7 +1,7 @@
-package ee.ria.riha.service.notifications.handlers;
+package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
-import ee.ria.riha.service.notifications.model.SimpleHtmlEmailNotification;
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
+import ee.ria.riha.service.notification.model.SimpleHtmlEmailNotification;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

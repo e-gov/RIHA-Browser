@@ -1,4 +1,4 @@
-package ee.ria.riha.service.notifications.model;
+package ee.ria.riha.service.notification.model;
 
 import lombok.*;
 
