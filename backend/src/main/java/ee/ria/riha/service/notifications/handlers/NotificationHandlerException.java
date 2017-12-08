@@ -6,6 +6,7 @@ package ee.ria.riha.service.notifications.handlers;
  * @author Valentin Suhnjov
  */
 public class NotificationHandlerException extends RuntimeException {
+
     public NotificationHandlerException() {
         super();
     }
@@ -21,4 +22,5 @@ public class NotificationHandlerException extends RuntimeException {
     public NotificationHandlerException(Throwable cause) {
         super(cause);
     }
+
 }
