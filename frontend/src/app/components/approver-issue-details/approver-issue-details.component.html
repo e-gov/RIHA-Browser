@@ -52,7 +52,9 @@
     <div class="actions-bar">
       <div class="buttons pull-right">
         <button (click)="closeModal(commentForm)" class="btn btn-default pull-right">Sulge</button>
-        <button (click)="markResolved(commentForm)" *ngIf="canResolve()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+        <button (click)="markResolved(commentForm)" *ngIf="canResolveGeneral()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+        <button (click)="markResolvedWithVerdict(commentForm, false)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
+        <button (click)="markResolvedWithVerdict(commentForm, false)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
         <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
       </div>
     </div>
