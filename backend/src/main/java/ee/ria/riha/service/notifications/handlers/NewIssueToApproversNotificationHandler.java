@@ -7,7 +7,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.MailPreparationException;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -33,7 +32,8 @@ public class NewIssueToApproversNotificationHandler extends SimpleHtmlEmailNotif
     @Override
     protected String getSubject(EmailNotificationDataModel model) {
         NewIssueToApproversEmailNotification newIssueToApproversDataModel = (NewIssueToApproversEmailNotification) model;
-        return messageSource.getMessage(SUBJECT_KEY, new String[]{newIssueToApproversDataModel.getInfoSystemShortName()}, Locale.getDefault());
+        return messageSource.getMessage(SUBJECT_KEY,
+                new String[]{newIssueToApproversDataModel.getInfoSystemShortName()}, Locale.getDefault());
     }
 
     @Override
@@ -50,7 +50,8 @@ public class NewIssueToApproversNotificationHandler extends SimpleHtmlEmailNotif
 
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {
-            throw new MailPreparationException("Error generating notification message text template " + TEMPLATE_NAME, e);
+            throw new NotificationHandlerException(
+                    "Error generating notification message text template " + TEMPLATE_NAME, e);
         }
     }
 

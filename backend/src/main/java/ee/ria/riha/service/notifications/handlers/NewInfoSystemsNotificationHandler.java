@@ -7,7 +7,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.MailPreparationException;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -47,7 +46,8 @@ public class NewInfoSystemsNotificationHandler extends SimpleHtmlEmailNotificati
 
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {
-            throw new MailPreparationException("Error generating notification message text template " + TEMPLATE_NAME, e);
+            throw new NotificationHandlerException(
+                    "Error generating notification message text template " + TEMPLATE_NAME, e);
         }
     }
 
