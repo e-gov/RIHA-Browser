@@ -1,9 +1,7 @@
-package ee.ria.riha.service.notifications.handlers;
+package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-
-import javax.mail.internet.MimeMessage;
 
 /**
  * Interface for classes that prepare email notification messages

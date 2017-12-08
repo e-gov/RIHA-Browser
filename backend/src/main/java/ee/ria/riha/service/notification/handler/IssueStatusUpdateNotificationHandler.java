@@ -1,7 +1,7 @@
-package ee.ria.riha.service.notifications.handlers;
+package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
-import ee.ria.riha.service.notifications.model.IssueStatusUpdateNotification;
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
+import ee.ria.riha.service.notification.model.IssueStatusUpdateNotification;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

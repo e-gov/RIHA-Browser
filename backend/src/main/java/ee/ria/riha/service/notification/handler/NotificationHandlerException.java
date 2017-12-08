@@ -1,4 +1,4 @@
-package ee.ria.riha.service.notifications.handlers;
+package ee.ria.riha.service.notification.handler;
 
 /**
  * Indicates exception during notification handler work

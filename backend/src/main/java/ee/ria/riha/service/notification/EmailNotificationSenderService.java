@@ -1,7 +1,7 @@
-package ee.ria.riha.service.notifications;
+package ee.ria.riha.service.notification;
 
-import ee.ria.riha.service.notifications.handlers.EmailNotificationHandler;
-import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
+import ee.ria.riha.service.notification.handler.EmailNotificationHandler;
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -40,7 +40,7 @@ public class EmailNotificationSenderService {
         Assert.notNull(model, "Email notification data model must be provided");
 
         try {
-            EmailNotificationHandler handler = findAppropriateHandler(model)
+            EmailNotificationHandler handler = findMessageHandler(model)
                     .orElseThrow(() -> new MailPreparationException(
                             "Notification handler for model of type " + model.getClass().getName() + " was not found"));
 
@@ -53,7 +53,7 @@ public class EmailNotificationSenderService {
         return AsyncResult.forValue(null);
     }
 
-    private Optional<EmailNotificationHandler> findAppropriateHandler(EmailNotificationDataModel model) {
+    private Optional<EmailNotificationHandler> findMessageHandler(EmailNotificationDataModel model) {
         for (EmailNotificationHandler handler : handlers) {
             if (handler.supports(model)) {
                 return Optional.of(handler);
@@ -71,6 +71,7 @@ public class EmailNotificationSenderService {
                 throw new MailPreparationException(
                         "Handler " + handler + " did not produce preparator for model " + model.getClass().getName());
             }
+
             MimeMessage message = mailSender.createMimeMessage();
             preparator.prepare(message);
             return message;

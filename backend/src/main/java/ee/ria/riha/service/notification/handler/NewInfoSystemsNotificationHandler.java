@@ -1,7 +1,7 @@
-package ee.ria.riha.service.notifications.handlers;
+package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notifications.model.EmailNotificationDataModel;
-import ee.ria.riha.service.notifications.model.NewIssueToSystemContactsEmailNotification;
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
+import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -16,17 +16,17 @@ import java.util.Locale;
 import java.util.Map;
 
 @Component
-public class NewIssueToSystemContactsNotificationHandler extends SimpleHtmlEmailNotificationHandler {
+public class NewInfoSystemsNotificationHandler extends SimpleHtmlEmailNotificationHandler {
 
-    private static final String TEMPLATE_NAME = "new-issue-notification-system-contacts-template.ftl";
-    private static final String SUBJECT_KEY = "notifications.newIssue.toSystemContacts.subject";
+    private static final String TEMPLATE_NAME = "new-info-systems-notification-template.ftl";
+    private static final String SUBJECT_KEY = "notifications.createdInfoSystemsOverview.subject";
 
     private Configuration freeMarkerConfiguration;
     private MessageSource messageSource;
 
     @Override
     public boolean supports(EmailNotificationDataModel model) {
-        return model.getClass() == NewIssueToSystemContactsEmailNotification.class;
+        return model.getClass() == NewInfoSystemsEmailNotification.class;
     }
 
     @Override
@@ -37,13 +37,12 @@ public class NewIssueToSystemContactsNotificationHandler extends SimpleHtmlEmail
     @Override
     protected String getText(EmailNotificationDataModel dataModel) {
         try {
-            NewIssueToSystemContactsEmailNotification newIssueToSystemContactsDataModel = (NewIssueToSystemContactsEmailNotification) dataModel;
+            NewInfoSystemsEmailNotification newInfoSystemsDataModel = (NewInfoSystemsEmailNotification) dataModel;
             Template template = freeMarkerConfiguration.getTemplate(TEMPLATE_NAME);
             Map<String, Object> model = new HashMap<>();
 
-            model.put("baseUrl", newIssueToSystemContactsDataModel.getBaseUrl());
-            model.put("name", newIssueToSystemContactsDataModel.getInfoSystemFullName());
-            model.put("shortName", newIssueToSystemContactsDataModel.getInfoSystemShortName());
+            model.put("baseUrl", newInfoSystemsDataModel.getBaseUrl());
+            model.put("infoSystems", newInfoSystemsDataModel.getInfoSystems());
 
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {
