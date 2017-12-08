@@ -33,7 +33,9 @@ public class IssueStatusUpdateNotificationHandler extends SimpleHtmlEmailNotific
 
     @Override
     protected String getSubject(EmailNotificationDataModel model) {
-        return messageSource.getMessage(SUBJECT_KEY, null, Locale.getDefault());
+        IssueStatusUpdateNotification notificationModel = (IssueStatusUpdateNotification) model;
+        return messageSource.getMessage(SUBJECT_KEY, new String[]{notificationModel.getInfoSystem().getShortName()},
+                Locale.getDefault());
     }
 
     @Override
