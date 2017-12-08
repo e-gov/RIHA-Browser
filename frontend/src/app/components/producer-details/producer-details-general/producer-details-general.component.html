@@ -45,7 +45,7 @@
       <hr class="short" align="left">
       <div *ngIf="system.details.homepage || allowEdit">
         <label class="col-form-label advanced-label" *ngIf="system.details.homepage">
-          <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}">{{ system.details.homepage }}</a>
+          <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}" target="_blank" a>{{ system.details.homepage }}</a>
         </label>
         <label class="col-form-label advanced-label" *ngIf="!system.details.homepage && allowEdit">
           <i class="fa fa-question-circle-o" aria-hidden="true"></i>Avalik kasutajaliides on <strong>määramata</strong>
