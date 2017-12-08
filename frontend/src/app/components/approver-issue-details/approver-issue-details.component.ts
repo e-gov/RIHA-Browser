@@ -41,6 +41,10 @@ export class ApproverIssueDetailsComponent implements OnInit {
     )
   }
 
+  markResolvedWithVerdict(f, v){
+    this.markResolved(f);
+  }
+
   postReply(f){
     if (f.valid){
       this.systemService.postSystemIssueComment(this.feedback.id, f.value).then(
@@ -60,7 +64,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
     return `${o.organizationName} (${o.authorName})`;
   }
 
-  canResolve(){
+  /*canResolve(){
     let ret = false;
     if (this.feedback.status == 'OPEN'){
       let matrix = this.environmentService.getUserMatrix();
@@ -71,6 +75,33 @@ export class ApproverIssueDetailsComponent implements OnInit {
           ret = matrix.hasApproverRole && matrix.isRiaMember;
       } else {
           ret = matrix.hasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+      }
+    }
+    return ret;
+  }*/
+
+  canResolveGeneral(){
+    let ret = false;
+    if (this.feedback.status == 'OPEN'){
+      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      if (this.feedback.type != this.globals.issue_type.TAKE_INTO_USE_REQUEST
+        && this.feedback.type != this.globals.issue_type.MODIFICATION_REQUEST
+        && this.feedback.type != this.globals.issue_type.FINALIZATION_REQUEST
+        && this.feedback.type != this.globals.issue_type.ESTABLISHMENT_REQUEST){
+        ret = bHasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+      }
+    }
+    return ret;
+  }
+  canResolveWithVerdict(){
+    let ret = false;
+    if (this.feedback.status == 'OPEN'){
+      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
+        || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
+        || this.feedback.type == this.globals.issue_type.FINALIZATION_REQUEST
+        || this.feedback.type == this.globals.issue_type.ESTABLISHMENT_REQUEST){
+        ret = !!bHasApproverRole;
       }
     }
     return ret;
