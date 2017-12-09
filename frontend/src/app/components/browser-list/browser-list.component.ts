@@ -35,7 +35,7 @@ export class BrowserListComponent implements OnInit {
 
   onPageChange(newPage){
     this.gridData.page = newPage - 1;
-    this.getSystems();
+    this.getSystems(this.gridData.page);
   }
 
   onSortChange(property): void{
@@ -43,7 +43,7 @@ export class BrowserListComponent implements OnInit {
     this.getSystems();
   }
 
-  getSystems(): void {
+  getSystems(page?): void {
     let f = this.generalHelperService.cloneObject(this.filters);
     if (f.dateCreatedFrom){
       f.dateCreatedFrom = this.systemsService.dateObjToTimestamp(f.dateCreatedFrom, true);
@@ -59,7 +59,7 @@ export class BrowserListComponent implements OnInit {
     }
     let q = this.generalHelperService.generateQueryString(f);
     this.location.replaceState('/Infosüsteemid', q);
-    this.gridData.page = 0;
+    this.gridData.page = page || 0;
     this.systemsService.getSystems(f, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());

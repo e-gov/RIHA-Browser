@@ -40,7 +40,7 @@ export class ProducerListComponent implements OnInit {
 
   onPageChange(newPage): void{
     this.gridData.page = newPage - 1;
-    this.getOwnSystems();
+    this.getOwnSystems(this.gridData.page);
   }
 
   onSortChange(property): void{
@@ -48,7 +48,7 @@ export class ProducerListComponent implements OnInit {
     this.getOwnSystems();
   }
 
-  getOwnSystems(): void {
+  getOwnSystems(page?): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
       let f = this.generalHelperService.cloneObject(this.filters);
       delete f.ownerName;
@@ -67,7 +67,7 @@ export class ProducerListComponent implements OnInit {
       }
       let q = this.generalHelperService.generateQueryString(f);
       this.location.replaceState('/Kirjelda', q);
-      this.gridData.page = 0;
+      this.gridData.page = page || 0;
       this.systemsService.getOwnSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
