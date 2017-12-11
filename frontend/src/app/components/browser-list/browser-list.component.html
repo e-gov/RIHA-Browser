@@ -134,6 +134,7 @@
   </div>
   <div class="my-1">
     <div class="table-responsive">
+      <app-grid-total-found [gridData]="gridData"></app-grid-total-found>
       <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
         <thead class="thead-default">
         <tr>
@@ -156,12 +157,16 @@
           </tr>
         </tbody>
       </table>
-      <ngb-pagination
-        (pageChange)="onPageChange($event)"
-        [pageSize]="gridData.size"
-        [maxSize]="5"
-        [collectionSize]="gridData.getSize()"
-        [page]="gridData.getPageNumber()"></ngb-pagination>
+      <div class="pull-right">
+        <app-grid-currently-showing [gridData]="gridData"></app-grid-currently-showing>
+        <ngb-pagination
+          class="pull-right"
+          (pageChange)="onPageChange($event)"
+          [pageSize]="gridData.size"
+          [maxSize]="5"
+          [collectionSize]="gridData.getSize()"
+          [page]="gridData.getPageNumber()"></ngb-pagination>
+      </div>
     </div>
   </div>
 </section>
