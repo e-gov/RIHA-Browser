@@ -63,6 +63,8 @@ import { WarningModalComponent } from './components/session-timeout/warning-moda
 import { InfoModalComponent } from './components/session-timeout/info-modal/info-modal.component';
 import { ProducerDetailsRelationsComponent } from './components/producer-details/producer-details-relations/producer-details-relations.component';
 import { ProducerEditRelationsComponent } from './components/producer-edit/producer-edit-relations/producer-edit-relations.component';
+import { GridTotalFoundComponent } from './components/grid-view/grid-total-found/grid-total-found.component';
+import { GridCurrentlyShowingComponent } from './components/grid-view/grid-currently-showing/grid-currently-showing.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -134,7 +136,9 @@ const routes: Routes = [
     WarningModalComponent,
     InfoModalComponent,
     ProducerDetailsRelationsComponent,
-    ProducerEditRelationsComponent
+    ProducerEditRelationsComponent,
+    GridTotalFoundComponent,
+    GridCurrentlyShowingComponent
   ],
   imports: [
     BrowserModule,
