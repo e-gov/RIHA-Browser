@@ -1,4 +1,4 @@
-package ee.ria.riha.service.notifications.model;
+package ee.ria.riha.service.notification.model;
 
 /**
  * Interface for classes that hold email notification messages data.

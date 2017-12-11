@@ -38,7 +38,7 @@ public class UserService {
     }
 
     /**
-     * Returns users emails (if any exist) by users personal codes.
+     * Resolves set of emails by set of personal codes.
      *
      * @param personalCodes - set of unique personal codes
      * @return - set of unique emails, excluding null values
