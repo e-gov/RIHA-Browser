@@ -27,6 +27,7 @@ public class IssueSummaryModelMapper implements ModelMapper<Issue, IssueSummaryM
         model.setStatus(value.getStatus());
         model.setOrganizationCode(value.getOrganizationCode());
         model.setOrganizationName(value.getOrganizationName());
+        model.setType(value.getType());
 
         return model;
     }

@@ -1,0 +1,13 @@
+<section class="col card p-3 main-content">
+  <div class="my-1">
+    <p>
+      Sinu sessioon aegub <strong>{{ minutesLeft }}</strong> minuti pärast. Kas soovid jätkata?
+    </p>
+    <div class="actions-bar">
+      <div class="buttons pull-right">
+        <button (click)="doLogout()" class="btn px-3 btn-default pull-right">Ei</button>
+        <button (click)="refreshSession()" class="btn px-3 btn-success pull-right">Jah</button>
+      </div>
+    </div>
+  </div>
+</section>

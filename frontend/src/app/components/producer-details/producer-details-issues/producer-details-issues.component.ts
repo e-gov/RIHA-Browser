@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { System } from '../../../models/system';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
 import { ApproverIssueDetailsComponent } from '../../approver-issue-details/approver-issue-details.component';
 import { SystemsService } from '../../../services/systems.service';
@@ -29,7 +29,6 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       backdrop: "static",
       keyboard: false
     });
-    this.system.details.legislations = this.system.details.legislations || [];
     modalRef.componentInstance.system = this.system;
     modalRef.result.then(res => {
       this.refreshIssues();
@@ -49,6 +48,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
           keyboard: false
         });
       modalRef.componentInstance.feedback = res.json();
+      modalRef.componentInstance.system = this.system;
       modalRef.result.then(res => {
         this.refreshIssues();
       },
@@ -80,7 +80,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     return this.allowEdit || this.userMatrix.hasApproverRole;
   }
 
-  constructor(private modalService: NgbModal,
+  constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private environmentService: EnvironmentService) {
     this.userMatrix = this.environmentService.getUserMatrix();

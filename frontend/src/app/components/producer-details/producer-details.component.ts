@@ -16,7 +16,7 @@ declare var $: any;
 export class ProducerDetailsComponent implements OnInit {
   private system: System = new System();
   private user: User;
-  private loaded: boolean = false;
+  private loaded: boolean;
 
   adjustSection(attempt){
     if (attempt < 5){
@@ -98,8 +98,8 @@ export class ProducerDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loaded = false;
     this.route.params.subscribe( params => {
+      this.loaded = false;
       this.getSystem(params['short_name']);
     });
   }

@@ -22,26 +22,25 @@
       <span></span>
     </button>
     <div class="right d-flex align-items-center">
-      <div class="btn-group" *ngIf="!isUserLoggedIn()">
-        <button type="button" class="btn btn-primary btn-sm" [routerLink]="'Login'">
-          <span>Logi Sisse</span>
-          <span class="fa fa-user"></span>
-        </button>
-      </div>
-      <div class="row align-items-center text-nowrap" *ngIf="isUserLoggedIn()">
-        <div class="col" *ngIf="!isAllowedToChangeOrganization()">
+      <button *ngIf="!isUserLoggedIn()" type="button" class="btn btn-primary btn-sm" [routerLink]="'Login'">
+        <span>Logi Sisse</span>
+        <span class="fa fa-user"></span>
+      </button>
+      <div *ngIf="isUserLoggedIn()">
+        <span *ngIf="!isAllowedToChangeOrganization()">
           {{ getUserText() }}
-        </div>
-        <div class="col" *ngIf="isAllowedToChangeOrganization()">
+        </span>
+        <span *ngIf="isAllowedToChangeOrganization()">
           <i *ngIf="noOrganizationSelected()" ngbTooltip="asutus ei ole valitud" class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
           <a href="#" style="outline: none" (click)="openOrganizationsModal()">{{ getUserText() }}</a>
-        </div>
-        <div class="btn-group col">
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="logout()">
-            <span>Logi Välja</span>
-            <span class="fa fa-sign-out"></span>
-          </button>
-        </div>
+        </span>
+        <span class="px-1">
+          &nbsp;
+        </span>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="logout()">
+          <span>Logi Välja</span>
+          <span class="fa fa-sign-out"></span>
+        </button>
       </div>
     </div>
   </div>

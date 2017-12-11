@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { GridData } from '../../models/grid-data';
 import { GeneralHelperService } from '../../services/general-helper.service';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-browser-list',
@@ -13,7 +15,8 @@ export class BrowserListComponent implements OnInit {
   gridData: GridData = new GridData();
   filters: {
     ownerName: string,
-    name: string
+    name: string,
+    topic: string
   };
 
   onPageChange(newPage){
@@ -27,6 +30,8 @@ export class BrowserListComponent implements OnInit {
   }
 
   getSystems(): void {
+    let q = this.generalHelperService.generateQueryString(this.filters);
+    this.location.replaceState('/Infosüsteemid', q);
     this.systemsService.getSystems(this.filters, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
@@ -34,14 +39,20 @@ export class BrowserListComponent implements OnInit {
   }
 
   constructor(private systemsService: SystemsService,
+              private route: ActivatedRoute,
+              private location: Location,
               public generalHelperService: GeneralHelperService) {
-    this.filters = {
-      ownerName: null,
-      name: null
-    }
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe( params => {
+      this.filters = {
+        ownerName: params['ownerName'],
+        name: params['name'],
+        topic: params['topic']
+      };
+    });
+
     this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
     this.getSystems();
   }

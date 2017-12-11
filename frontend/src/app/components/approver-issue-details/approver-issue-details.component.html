@@ -9,7 +9,12 @@
     </div>
     <div class="ml-4 my-1 card-text">
       <span *ngIf="feedback.status == 'OPEN'"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Aktiivne</span>
-      <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span>
+      <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span><br>
+      <span *ngIf="feedback.type !=null" class="text-muted">Arutelu tüüp:</span>
+        <strong *ngIf="feedback.type == globals.issue_type.ESTABLISHMENT_REQUEST">Infosüsteemi asutamine</strong>
+        <strong *ngIf="feedback.type == globals.issue_type.TAKE_INTO_USE_REQUEST">Infosüsteemi kasutusele võtmine</strong>
+        <strong *ngIf="feedback.type == globals.issue_type.MODIFICATION_REQUEST">Andmekoosseisu muutmine</strong>
+        <strong *ngIf="feedback.type == globals.issue_type.FINALIZATION_REQUEST">Infosüsteemi lõpetamine</strong>
     </div>
     <div class="card card-text m-4">
       <div class="card-header pl-2">
@@ -47,7 +52,7 @@
     <div class="actions-bar">
       <div class="buttons pull-right">
         <button (click)="closeModal(commentForm)" class="btn btn-default pull-right">Sulge</button>
-        <button (click)="markResolved(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+        <button (click)="markResolved(commentForm)" *ngIf="canResolve()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
         <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
       </div>
     </div>
