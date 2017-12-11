@@ -60,7 +60,9 @@ public class IssueStatusUpdateNotificationHandlerTest {
 
     @Test
     public void generatesSubject() {
-        String subject = notificationHandler.getSubject(new IssueStatusUpdateNotification());
+        IssueStatusUpdateNotification model = new IssueStatusUpdateNotification();
+        model.setInfoSystem(new InfoSystemDataModel());
+        String subject = notificationHandler.getSubject(model);
 
         assertThat(subject, is(equalTo("mock subject")));
     }
