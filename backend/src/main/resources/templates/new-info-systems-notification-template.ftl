@@ -42,7 +42,7 @@
                       <tr>
                         <td dir="ltr" align="left"
                         style="text-align:center;font-family:Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:normal;font-size:16px;line-height:24px">
-                        <a href="${baseUrl}/Systems/Vaata/${infoSystem.shortName}"
+                        <a href="${baseUrl}/Infosüsteemid/Vaata/${infoSystem.shortName}"
                         style="color:#555555; text-decoration: none">${infoSystem.fullName}</a>
                       </td>
                     </tr>

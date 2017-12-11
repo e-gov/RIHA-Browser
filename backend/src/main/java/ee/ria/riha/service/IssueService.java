@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
@@ -155,8 +151,8 @@ public class IssueService {
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
                 response.getTotalElements(),
                 response.getContent().stream()
-                    .map(COMMENT_TO_RIHA_ISSUE_SUMMARY)
-                    .collect(toList()));
+                        .map(COMMENT_TO_RIHA_ISSUE_SUMMARY)
+                        .collect(toList()));
     }
 
     private String getIssueTypeFilter() {
@@ -253,16 +249,20 @@ public class IssueService {
         validateUpdatedIssueCurrentStatus(issue);
         validateUpdatedIssueNewStatus(issue, newStatus);
 
-        if (StringUtils.hasText(comment)) {
-            issueCommentService.createIssueComment(issueId, comment);
+        boolean commented = StringUtils.hasText(comment);
+        if (commented) {
+            issueCommentService.createIssueCommentWithoutNotification(issueId, comment);
         }
 
         prepareIssueEvent(newStatus).ifPresent(issueEvent -> issueEventService.createEvent(issueId, issueEvent));
 
         issue.setStatus(newStatus);
         commentRepository.update(issueId, ISSUE_TO_COMMENT.apply(issue));
+        Issue updatedIssue = getIssueById(issueId);
 
-        return getIssueById(issueId);
+        notificationService.sendIssueStatusUpdateNotification(updatedIssue, commented);
+
+        return updatedIssue;
     }
 
     private void validateUpdatedIssueCurrentStatus(Issue issue) {
@@ -301,14 +301,14 @@ public class IssueService {
             return Optional.of(issueClosedEvent);
         }
 
-		return Optional.empty();
+        return Optional.empty();
     }
 
     /**
-     * Retrieves set of unique participants personal codes.
+     * Retrieves set of personal codes including issue author and every commenter.
      *
-     * @param issueId - issue id
-     * @return retrieved set of unique participants personal codes
+     * @param issueId - id of an issue
+     * @return set of personal codes
      */
     public Set<String> getParticipantsPersonalCodes(Long issueId) {
         Set<String> issueCommentsAuthorsPersonalCodes = issueCommentService.listByIssueId(issueId).stream()

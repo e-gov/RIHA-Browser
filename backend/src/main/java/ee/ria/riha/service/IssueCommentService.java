@@ -95,13 +95,28 @@ public class IssueCommentService {
     }
 
     /**
-     * Creates comment associated with an issue
+     * Creates comment associated with an issue. Sends notification about created issue comment.
      *
      * @param issueId an id of an issue
      * @param comment comment
      * @return created comment
      */
     public IssueComment createIssueComment(Long issueId, String comment) {
+        IssueComment createdIssueComment = createIssueCommentWithoutNotification(issueId, comment);
+
+        notificationService.sendNewIssueCommentNotification(issueId);
+
+        return createdIssueComment;
+    }
+
+    /**
+     * Creates comment associated with an issue but does not send notification
+     *
+     * @param issueId an id of an issue
+     * @param comment comment
+     * @return created comment
+     */
+    public IssueComment createIssueCommentWithoutNotification(Long issueId, String comment) {
         RihaUserDetails rihaUserDetails = getRihaUserDetails()
                 .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
         RihaOrganization organization = getActiveOrganization()
@@ -120,8 +135,6 @@ public class IssueCommentService {
         if (createdIssueCommentIds.isEmpty()) {
             throw new IllegalBrowserStateException("Issue comment was not created");
         }
-
-        notificationService.sendNewIssueCommentNotification(issueId);
 
         return COMMENT_TO_ISSUE_COMMENT.apply(commentRepository.get(createdIssueCommentIds.get(0)));
     }
