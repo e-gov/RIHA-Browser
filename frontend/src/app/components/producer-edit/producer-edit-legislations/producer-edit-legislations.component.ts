@@ -47,7 +47,7 @@ export class ProducerEditLegislationsComponent implements OnInit {
 
   saveSystem(){
     this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-      let s = res.json();
+      let s = new System(res.json());
       s.details.legislations = this.legislations;
       this.systemsService.updateSystem(s).then(response => {
         this.modalService.closeActiveModal({system: new System(response.json())});
