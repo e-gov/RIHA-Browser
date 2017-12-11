@@ -240,3 +240,11 @@ textarea {
   color: buttontext;
   background-color: buttonface;
 }
+.label-small-text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}

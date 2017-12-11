@@ -3,34 +3,36 @@ package ee.ria.riha.service;
 import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.service.notifications.model.InfoSystemDataModel;
+import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.storage.util.FilterRequest;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.mail.MailPreparationException;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.Assert;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class CreatedInfoSystemsOverviewNotificationJob {
 
-    private static final String MESSAGE_TEMPLATE = "new-IS-broadcast-template.ftl";
+    private static final Function<InfoSystem, InfoSystemDataModel> INFO_SYSTEM_TO_DATA_MODEL = infoSystem -> {
+        if (infoSystem == null) {
+            return null;
+        }
+
+        return InfoSystemDataModel.builder()
+                .fullName(infoSystem.getFullName())
+                .shortName(infoSystem.getShortName())
+                .build();
+    };
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     private final String baseUrl;
@@ -39,10 +41,8 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     private final String[] cc;
     private final String[] bcc;
 
-    private JavaMailSenderImpl mailSender;
-    private Configuration freeMarkerConfiguration;
     private InfoSystemRepository infoSystemRepository;
-    private MessageSource messageSource;
+    private NotificationService notificationService;
 
     @Autowired
     public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties) {
@@ -63,7 +63,25 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     public void sendCreatedInfoSystemsOverviewNotification() {
         try {
             List<InfoSystem> infoSystems = getListOfCreatedInfoSystems();
-            sendNewInfoSystemsBroadcastMessage(infoSystems);
+
+            if (infoSystems.isEmpty()) {
+                log.info("Info system list is empty, nothing to send");
+                return;
+            }
+
+            List<InfoSystemDataModel> infoSystemDataModels = infoSystems.stream()
+                    .map(INFO_SYSTEM_TO_DATA_MODEL)
+                    .collect(Collectors.toList());
+
+            NewInfoSystemsEmailNotification notificationModel = new NewInfoSystemsEmailNotification();
+            notificationModel.setFrom(from);
+            notificationModel.setTo(to);
+            notificationModel.setCc(cc);
+            notificationModel.setBcc(bcc);
+            notificationModel.setInfoSystems(infoSystemDataModels);
+            notificationModel.setBaseUrl(baseUrl);
+
+            notificationService.sendNewInfoSystemsNotification(notificationModel);
         } catch (Exception e) {
             log.warn("Job execution failed", e);
         }
@@ -89,76 +107,13 @@ public class CreatedInfoSystemsOverviewNotificationJob {
         return infoSystems;
     }
 
-    private void sendNewInfoSystemsBroadcastMessage(List<InfoSystem> infoSystems) {
-        if (infoSystems.isEmpty()) {
-            log.info("Info system list is empty, nothing to send");
-            return;
-        }
-
-        MimeMessage message;
-        try {
-            message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message);
-            helper.setFrom(from);
-            helper.setTo(to);
-
-            if (cc != null) {
-                helper.setCc(cc);
-            }
-
-            if (bcc != null) {
-                helper.setBcc(bcc);
-            }
-
-            helper.setSubject(getMessageSubject());
-            helper.setSentDate(new Date());
-            helper.setText(getMessageText(infoSystems), true);
-            if (log.isDebugEnabled()) {
-                log.debug("Sending notification message from '{}' to '{}' with subject '{}'", from, to, message.getSubject());
-            }
-        } catch (MessagingException e) {
-            throw new MailPreparationException("Error preparing notification message", e);
-        }
-
-        mailSender.send(message);
-        log.info("Created info systems overview notification message has been successfully sent");
-    }
-
-    private String getMessageSubject() {
-        return messageSource.getMessage("notifications.createdInfoSystemsOverview.subject", null, Locale.getDefault());
-    }
-
-    private String getMessageText(List<InfoSystem> infoSystems) {
-        try {
-            Template template = freeMarkerConfiguration.getTemplate(MESSAGE_TEMPLATE);
-            Map<String, Object> model = new HashMap<>();
-            model.put("infosystems", infoSystems);
-            model.put("baseUrl", baseUrl);
-
-            return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
-        } catch (IOException | TemplateException e) {
-            throw new MailPreparationException("Error generating notification message text template " + MESSAGE_TEMPLATE, e);
-        }
-
-    }
-
     @Autowired
     public void setInfoSystemRepository(InfoSystemRepository infoSystemRepository) {
         this.infoSystemRepository = infoSystemRepository;
     }
 
     @Autowired
-    public void setMailSender(JavaMailSenderImpl mailSender) {
-        this.mailSender = mailSender;
-    }
-
-    @Autowired
-    public void setFreeMarkerConfiguration(Configuration freeMarkerConfiguration) {
-        this.freeMarkerConfiguration = freeMarkerConfiguration;
-    }
-
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
+    public void setNotificationService(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 }

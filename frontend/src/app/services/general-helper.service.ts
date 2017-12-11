@@ -28,12 +28,26 @@ export class GeneralHelperService {
     return statusDescription;
   }
 
+  public generateQueryString(obj){
+    let newObj = {};
+    Object.keys(obj).forEach(function(key) {
+      if (obj[key]){
+        newObj[key] = obj[key];
+      }
+    });
+    return $.param(newObj);
+  }
+
   public getFileUrl(url){
     if (url.substring(0,7) === 'file://'){
       return '/api/v1/files/' + url.substring(7);
     } else {
       return url;
     }
+  }
+
+  public truncateString(str, length){
+    return str.length > length ? str.substring(0, length - 3) + '...' : str;
   }
 
   public cloneObject(obj){

@@ -1,30 +1,41 @@
 package ee.ria.riha.service;
 
+import com.google.common.collect.ImmutableMultimap;
+import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.domain.model.IssueEvent;
 import ee.ria.riha.domain.model.IssueStatus;
+import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static ee.ria.riha.domain.model.IssueType.ESTABLISHMENT_REQUEST;
+import static ee.ria.riha.service.auth.RoleType.APPROVER;
+import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Valentin Suhnjov
@@ -34,11 +45,21 @@ public class IssueServiceTest {
 
     private static final String EXISTING_INFO_SYSTEM_SHORT_NAME = "is1";
     private static final Long EXISTING_ISSUE_ID = 15503L;
-    private static final Long CREATED_COMMENT_ID = 111L;
+
+    private static final String ACME_REG_CODE = "555010203";
+    private static final String RIA_REG_CODE = "7123456";
+
+    @Rule
+    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     private RihaOrganizationAwareAuthenticationToken authenticationToken =
-            JaneAuthenticationTokenBuilder.builder().build();
-
+            JaneAuthenticationTokenBuilder.builder()
+                    .setOrganizations(ImmutableMultimap.of(
+                            new RihaOrganization(ACME_REG_CODE, "Acme org"),
+                            new SimpleGrantedAuthority(PRODUCER.getRole()),
+                            new RihaOrganization(RIA_REG_CODE, "RIA"),
+                            new SimpleGrantedAuthority(APPROVER.getRole())))
+                    .build();
     @Mock
     private InfoSystemService infoSystemService;
 
@@ -50,6 +71,9 @@ public class IssueServiceTest {
 
     @Mock
     private IssueCommentService issueCommentService;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private IssueService issueService;
@@ -66,23 +90,40 @@ public class IssueServiceTest {
 
     private Comment existingIssueEntity = IssueService.ISSUE_TO_COMMENT.apply(existingIssue);
 
+    private Map<Long, Comment> createdIssues = new HashMap<>();
 
     @Before
     public void setUp() {
         // Reset authorization
-        authenticationToken.setActiveOrganization("555010203");
+        authenticationToken.setActiveOrganization(ACME_REG_CODE);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         when(infoSystemService.get(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
 
-        when(commentRepository.get(EXISTING_ISSUE_ID)).thenReturn(existingIssueEntity);
-        when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ID));
+        createdIssues.put(EXISTING_ISSUE_ID, existingIssueEntity);
+
+        when(commentRepository.get(any(Long.class))).thenAnswer((Answer<Comment>) invocation -> {
+                    Long commentId = invocation.getArgumentAt(0, Long.class);
+                    return createdIssues.get(commentId);
+                }
+
+        );
+        when(commentRepository.add(any(Comment.class))).thenAnswer((Answer<List<Long>>) invocation -> {
+            Comment createdComment = invocation.getArgumentAt(0, Comment.class);
+            createdIssues.put(createdComment.getComment_id(), createdComment);
+            return Arrays.asList(createdComment.getComment_id());
+        });
+
+        doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
+        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class), any(InfoSystem.class));
     }
 
     @Test
     public void createsIssueWithTitleAndComment() {
-        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, "critical issue",
-                                           "clear problem description");
+        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                .title("critical issue")
+                .comment("clear problem description")
+                .build());
 
         ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
         verify(commentRepository).add(commentArgumentCaptor.capture());
@@ -94,7 +135,10 @@ public class IssueServiceTest {
 
     @Test
     public void populatesAuthorAndOrganizationFromUserDetailsDuringIssueCreation() {
-        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, "title", "comment");
+        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                .title("title")
+                .comment("comment")
+                .build());
 
         ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
         verify(commentRepository).add(commentArgumentCaptor.capture());
@@ -106,12 +150,40 @@ public class IssueServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueCreation() {
         authenticationToken.setActiveOrganization(null);
 
-        Issue model = new Issue();
-        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, "title", "comment");
+        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                .title("title")
+                .comment("comment")
+                .build());
+    }
+
+    @Test(expected = ValidationException.class)
+    public void throwsExceptionWhenApproverTriesToCreateRequestIssue() {
+        authenticationToken.setActiveOrganization(RIA_REG_CODE);
+
+        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                .title("title")
+                .comment("comment")
+                .type(ESTABLISHMENT_REQUEST)
+                .build());
+    }
+
+    @Test
+    public void setsIssueTypeWhenKirjeldajaCreatesIssue() {
+        Issue issue = issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                .title("title")
+                .comment("comment")
+                .type(ESTABLISHMENT_REQUEST)
+                .build());
+
+        ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
+        verify(commentRepository).add(commentArgumentCaptor.capture());
+
+        Comment comment = commentArgumentCaptor.getValue();
+        assertThat(comment.getSub_type(), is(equalTo(ESTABLISHMENT_REQUEST.name())));
     }
 
     @Test
@@ -149,14 +221,14 @@ public class IssueServiceTest {
         assertThat(issueCommentArgumentCaptor.getValue(), is(equalTo("closing comment")));
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test(expected = ValidationException.class)
     public void throwsExceptionWhenUpdatingClosedIssue() {
         existingIssueEntity.setStatus(IssueStatus.CLOSED.name());
 
         issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, null);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueUpdate() {
         authenticationToken.setActiveOrganization(null);
 

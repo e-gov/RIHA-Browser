@@ -1,6 +1,7 @@
 package ee.ria.riha.web.model;
 
 import ee.ria.riha.domain.model.IssueStatus;
+import ee.ria.riha.domain.model.IssueType;
 import lombok.Data;
 
 import java.util.Date;
@@ -19,5 +20,6 @@ public class IssueSummaryModel {
     private String organizationName;
     private String organizationCode;
     private IssueStatus status;
+    private IssueType type;
 
 }

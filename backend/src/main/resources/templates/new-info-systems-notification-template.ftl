@@ -38,7 +38,7 @@
                           anda. Viimase 24 tunni jooksul on lisandunud:
                         </td>
                       </tr>
-                      <#list infosystems as infoSystem>
+                      <#list infoSystems as infoSystem>
                       <tr>
                         <td dir="ltr" align="left"
                         style="text-align:center;font-family:Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:normal;font-size:16px;line-height:24px">

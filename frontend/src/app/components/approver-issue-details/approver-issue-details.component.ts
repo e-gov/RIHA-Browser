@@ -2,8 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { ToastrService } from 'ngx-toastr';
-import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../models/user';
+import { ModalHelperService } from "../../services/modal-helper.service";
+import { G } from '../../globals/globals';
+import { System } from '../../models/system';
 
 @Component({
   selector: 'app-approver-feedback-details',
@@ -13,8 +15,10 @@ import { User } from '../../models/user';
 export class ApproverIssueDetailsComponent implements OnInit {
 
   @Input() feedback: any;
+  @Input() system: System;
   replies: any[] = [];
   activeUser: User;
+  globals: any = G;
 
   refreshReplies(){
     this.systemService.getSystemIssueTimeline(this.feedback.id).then(
@@ -29,7 +33,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
-        this.activeModal.close();
+        this.modalService.closeActiveModal();
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
@@ -56,21 +60,37 @@ export class ApproverIssueDetailsComponent implements OnInit {
     return `${o.organizationName} (${o.authorName})`;
   }
 
+  canResolve(){
+    let ret = false;
+    if (this.feedback.status == 'OPEN'){
+      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
+        || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
+        || this.feedback.type == this.globals.issue_type.FINALIZATION_REQUEST
+        || this.feedback.type == this.globals.issue_type.ESTABLISHMENT_REQUEST){
+          ret = !!bHasApproverRole;
+      } else {
+          ret = bHasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+      }
+    }
+    return ret;
+  }
+
   closeModal(f){
     if (f.form.dirty){
       if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.activeModal.close();
+        this.modalService.closeActiveModal();
       } else {
         return false;
       }
     } else {
-      this.activeModal.close();
+      this.modalService.closeActiveModal();
     }
   }
 
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
-              private activeModal: NgbActiveModal,
+              private modalService: ModalHelperService,
               private environmentService: EnvironmentService) {
     this.activeUser = this.environmentService.getActiveUser();
 

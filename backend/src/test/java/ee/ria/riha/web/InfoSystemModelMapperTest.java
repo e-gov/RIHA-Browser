@@ -1,8 +1,10 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.JaneAuthenticationTokenBuilder;
 import ee.ria.riha.web.model.InfoSystemModel;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -27,6 +29,8 @@ public class InfoSystemModelMapperTest {
                     "    }\n" +
                     "  ]\n" +
                     "}");
+    @Rule
+    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     private InfoSystemModelMapper infoSystemModelMapper = new InfoSystemModelMapper();
 

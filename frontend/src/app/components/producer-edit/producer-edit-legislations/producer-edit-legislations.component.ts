@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
+import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 export class ProducerEditLegislationsComponent implements OnInit {
 
   @Input() system: System;
-  @Input() legislations: any[];
+  legislations: any[] = [];
   isChanged: boolean = false;
 
   data: any = {url: '', name: ''};
@@ -36,31 +36,37 @@ export class ProducerEditLegislationsComponent implements OnInit {
   closeModal(f){
     if (this.isChanged || f.form.dirty){
       if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.activeModal.dismiss();
+        this.modalService.dismissActiveModal();
       } else {
         return false;
       }
     } else {
-      this.activeModal.dismiss();
+      this.modalService.dismissActiveModal();
     }
   }
 
   saveSystem(){
-    let s = this.generalHelperService.cloneObject(this.system);
-    s.details.legislations = this.legislations;
-    this.systemsService.updateSystem(s).then(response => {
-      this.activeModal.close({system: new System(response.json())});
+    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+      let s = res.json();
+      s.details.legislations = this.legislations;
+      this.systemsService.updateSystem(s).then(response => {
+        this.modalService.closeActiveModal({system: new System(response.json())});
+      }, err => {
+        this.toastrService.error('Serveri viga.');
+      });
     }, err => {
-      this.toastrService.error('Serveri viga.')
+      this.toastrService.error('Serveri viga.');
     });
   }
 
-  constructor(private activeModal: NgbActiveModal,
+  constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    let system = this.generalHelperService.cloneObject(this.system);
+    this.legislations = system.details.legislations || [];
   }
 
 }

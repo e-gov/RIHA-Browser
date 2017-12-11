@@ -3,6 +3,11 @@ import { User } from './user';
 export class Environment {
   private userDetails: User;
   private tracking: any;
+  private sessionMaxInactiveInterval: number;
+
+  public getSessionMaxInactiveInterval(){
+    return this.sessionMaxInactiveInterval;
+  }
 
   public getGoogleAnalyticsId(){
     let ret = null;
@@ -41,6 +46,7 @@ export class Environment {
   }
 
   constructor(options){
+    this.sessionMaxInactiveInterval = options.sessionMaxInactiveInterval ? options.sessionMaxInactiveInterval : 1800000;
     this.userDetails = options.userDetails ? new User(options.userDetails) : null;
     this.tracking = options.tracking ? options.tracking : {
       googleAnalytics: {

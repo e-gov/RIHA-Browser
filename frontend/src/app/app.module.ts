@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CustomFormsModule } from 'ng2-validation';
+import { HttpInterceptorModule } from 'ng-http-interceptor';
+import { UiSwitchModule } from 'ngx-ui-switch/src';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -23,6 +25,9 @@ import { SystemsService } from './services/systems.service';
 import { WindowRefService } from './services/window-ref.service';
 import { EnvironmentService } from './services/environment.service';
 import { GeneralHelperService } from './services/general-helper.service';
+import { SessionHelperService } from './services/session-helper.service';
+import { ModalHelperService } from './services/modal-helper.service';
+
 
 //components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
@@ -54,6 +59,10 @@ import { ActiveOrganizationChooserComponent } from './components/active-organiza
 import { TooltipComponent } from './components/tooltip/tooltip.component';
 import { ProducerDetailsContactsComponent } from './components/producer-details/producer-details-contacts/producer-details-contacts.component';
 import { ProducerEditContactsComponent } from './components/producer-edit/producer-edit-contacts/producer-edit-contacts.component';
+import { WarningModalComponent } from './components/session-timeout/warning-modal/warning-modal.component';
+import { InfoModalComponent } from './components/session-timeout/info-modal/info-modal.component';
+import { ProducerDetailsRelationsComponent } from './components/producer-details/producer-details-relations/producer-details-relations.component';
+import { ProducerEditRelationsComponent } from './components/producer-edit/producer-edit-relations/producer-edit-relations.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -121,7 +130,11 @@ const routes: Routes = [
     ActiveOrganizationChooserComponent,
     TooltipComponent,
     ProducerDetailsContactsComponent,
-    ProducerEditContactsComponent
+    ProducerEditContactsComponent,
+    WarningModalComponent,
+    InfoModalComponent,
+    ProducerDetailsRelationsComponent,
+    ProducerEditRelationsComponent
   ],
   imports: [
     BrowserModule,
@@ -132,6 +145,8 @@ const routes: Routes = [
     CustomFormsModule,
     Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
+    HttpInterceptorModule,
+    UiSwitchModule ,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
       missingTranslationHandler,
@@ -150,10 +165,13 @@ const routes: Routes = [
     ApproverAddIssueComponent,
     ApproverIssueDetailsComponent,
     ActiveOrganizationChooserComponent,
-    ProducerEditContactsComponent
+    ProducerEditContactsComponent,
+    InfoModalComponent,
+    WarningModalComponent,
+    ProducerEditRelationsComponent
   ],
   bootstrap: [AppComponent],
-  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
+  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, SessionHelperService, ModalHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}
