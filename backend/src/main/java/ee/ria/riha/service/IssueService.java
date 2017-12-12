@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
@@ -143,6 +146,14 @@ public class IssueService {
                         .collect(toList()));
     }
 
+    private String getIssueTypeFilter() {
+        return "type,=," + IssueEntityType.ISSUE.name();
+    }
+
+    private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
+        return "infosystem_uuid,=," + infoSystemUuid.toString();
+    }
+
     /**
      * List all RIHA issues.
      *
@@ -159,14 +170,6 @@ public class IssueService {
                 response.getContent().stream()
                         .map(COMMENT_TO_RIHA_ISSUE_SUMMARY)
                         .collect(toList()));
-    }
-
-    private String getIssueTypeFilter() {
-        return "type,=," + IssueEntityType.ISSUE.name();
-    }
-
-    private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
-        return "infosystem_uuid,=," + infoSystemUuid.toString();
     }
 
     /**
@@ -202,8 +205,7 @@ public class IssueService {
             return;
         }
 
-        if (FEEDBACK_REQUEST_ISSUE_TYPES.contains(model.getType())
-                && !SecurityContextUtil.hasRole(PRODUCER)) {
+        if (isFeedbackRequestIssue(model) && !SecurityContextUtil.hasRole(PRODUCER)) {
             throw new ValidationException("validation.issue.create.typeNotAllowed", model.getType());
         }
     }
@@ -242,72 +244,102 @@ public class IssueService {
         return COMMENT_TO_ISSUE.apply(issue);
     }
 
+    private boolean isFeedbackRequestIssue(Issue issue) {
+        return FEEDBACK_REQUEST_ISSUE_TYPES.contains(issue.getType());
+    }
+
     /**
      * Updates issue status. Throws exception in case current status is not {@link IssueStatus#OPEN}.
      *
-     * @param issueId   id of an issue
-     * @param newStatus updated issue status
-     * @param comment   status update comment
+     * @param issueId id of an issue
+     * @param model   model of an issue
      * @return updated issue
      */
-    public Issue updateIssueStatus(Long issueId, IssueStatus newStatus, String comment) {
-        Issue issue = getIssueById(issueId);
-        validateUpdatedIssueCurrentStatus(issue);
-        validateUpdatedIssueNewStatus(issue, newStatus);
+    public Issue updateIssueStatus(Long issueId, Issue model) {
+        return updateIssueStatus(getIssueById(issueId), model);
+    }
 
+    /**
+     * Updates issue status. Throws exception in case current status is not {@link IssueStatus#OPEN}.
+     *
+     * @param issue updated issue
+     * @param model model of an issue
+     * @return updated issue
+     */
+    public Issue updateIssueStatus(Issue issue, Issue model) {
+        validateUpdatedIssueStatus(issue, model);
+        validateUpdatedFeedbackRequestIssueResolution(issue, model);
+
+        String comment = model.getComment();
         boolean commented = StringUtils.hasText(comment);
         if (commented) {
-            issueCommentService.createIssueCommentWithoutNotification(issueId, comment);
+            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), comment);
         }
 
-        prepareIssueEvent(newStatus).ifPresent(issueEvent -> issueEventService.createEvent(issueId, issueEvent));
+        if (model.getStatus() == CLOSED) {
+            closeIssue(issue, model);
+        }
 
-        issue.setStatus(newStatus);
-        commentRepository.update(issueId, ISSUE_TO_COMMENT.apply(issue));
-        Issue updatedIssue = getIssueById(issueId);
-
+        Issue updatedIssue = getIssueById(issue.getId());
         notificationService.sendIssueStatusUpdateNotification(updatedIssue, commented);
 
         return updatedIssue;
     }
 
-    private void validateUpdatedIssueCurrentStatus(Issue issue) {
+    private void validateUpdatedIssueStatus(Issue issue, Issue model) {
         if (issue.getStatus() == CLOSED) {
             throw new ValidationException("validation.issue.update.alreadyClosed");
         }
-    }
 
-    private void validateUpdatedIssueNewStatus(Issue issue, IssueStatus newStatus) {
-        if (issue.getStatus() == newStatus) {
+        if (issue.getStatus() == model.getStatus()) {
             throw new ValidationException("validation.issue.update.statusDidNotChange");
         }
+    }
 
-        if (newStatus == CLOSED
-                && FEEDBACK_REQUEST_ISSUE_TYPES.contains(issue.getType())
-                && !SecurityContextUtil.hasRole(APPROVER)) {
+    private void validateUpdatedFeedbackRequestIssueResolution(Issue issue, Issue model) {
+        if (!isFeedbackRequestIssue(issue)) {
+            return;
+        }
+
+        if (!SecurityContextUtil.hasRole(APPROVER)) {
             throw new ValidationException("validation.issue.update.noRightToCloseFeedbackIssue");
+        }
+
+        if (model.getResolutionType() == null) {
+            throw new ValidationException("validation.issue.update.noResolutionForFeedbackIssue");
         }
     }
 
-    private Optional<IssueEvent> prepareIssueEvent(IssueStatus newStatus) {
+    private void closeIssue(Issue issue, Issue model) {
+        IssueResolutionType resolutionType = isFeedbackRequestIssue(issue) ? model.getResolutionType() : null;
+        createCloseEvent(issue.getId(), resolutionType);
+
+        issue.setStatus(CLOSED);
+        issue.setResolutionType(resolutionType);
+        commentRepository.update(issue.getId(), ISSUE_TO_COMMENT.apply(issue));
+    }
+
+    private void createCloseEvent(Long issueId, IssueResolutionType resolutionType) {
+        IssueEvent closeEvent = prepareIssueEvent(IssueEventType.CLOSED);
+        closeEvent.setType(IssueEventType.CLOSED);
+        closeEvent.setResolutionType(resolutionType);
+
+        issueEventService.createEvent(issueId, closeEvent);
+    }
+
+    private IssueEvent prepareIssueEvent(IssueEventType eventType) {
         RihaUserDetails rihaUserDetails = getRihaUserDetails()
                 .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
         RihaOrganization organization = getActiveOrganization()
                 .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
 
-        if (newStatus.equals(IssueStatus.CLOSED)) {
-            IssueEvent issueClosedEvent = IssueEvent.builder()
-                    .type(IssueEventType.CLOSED)
-                    .authorName(rihaUserDetails.getFullName())
-                    .authorPersonalCode(rihaUserDetails.getPersonalCode())
-                    .organizationName(organization.getName())
-                    .organizationCode(organization.getCode())
-                    .build();
-
-            return Optional.of(issueClosedEvent);
-        }
-
-        return Optional.empty();
+        return IssueEvent.builder()
+                .type(eventType)
+                .authorName(rihaUserDetails.getFullName())
+                .authorPersonalCode(rihaUserDetails.getPersonalCode())
+                .organizationName(organization.getName())
+                .organizationCode(organization.getCode())
+                .build();
     }
 
     /**

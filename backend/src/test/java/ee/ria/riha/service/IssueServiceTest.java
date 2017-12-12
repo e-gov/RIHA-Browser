@@ -3,10 +3,7 @@ package ee.ria.riha.service;
 import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.domain.model.Issue;
-import ee.ria.riha.domain.model.IssueEvent;
-import ee.ria.riha.domain.model.IssueStatus;
+import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
@@ -32,6 +29,7 @@ import static ee.ria.riha.service.auth.RoleType.APPROVER;
 import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -95,8 +93,8 @@ public class IssueServiceTest {
     @Before
     public void setUp() {
         // Reset authorization
-        authenticationToken.setActiveOrganization(ACME_REG_CODE);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        setProducerRole();
 
         when(infoSystemService.get(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
 
@@ -117,6 +115,10 @@ public class IssueServiceTest {
         doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
         doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class),
                 any(InfoSystem.class));
+    }
+
+    private void setProducerRole() {
+        authenticationToken.setActiveOrganization(ACME_REG_CODE);
     }
 
     @Test
@@ -163,13 +165,17 @@ public class IssueServiceTest {
 
     @Test(expected = ValidationException.class)
     public void throwsExceptionWhenApproverTriesToCreateRequestIssue() {
-        authenticationToken.setActiveOrganization(RIA_REG_CODE);
+        setApproverRole();
 
         issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
                 .title("title")
                 .comment("comment")
                 .type(ESTABLISHMENT_REQUEST)
                 .build());
+    }
+
+    private void setApproverRole() {
+        authenticationToken.setActiveOrganization(RIA_REG_CODE);
     }
 
     @Test
@@ -189,7 +195,9 @@ public class IssueServiceTest {
 
     @Test
     public void updatesIssueStatusWhenIssueIsClosed() {
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, null);
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .build());
 
         ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
         verify(commentRepository).update(eq(EXISTING_ISSUE_ID), commentArgumentCaptor.capture());
@@ -200,7 +208,9 @@ public class IssueServiceTest {
 
     @Test
     public void createsClosingEventWhenIssueIsClosed() {
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, null);
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .build());
 
         ArgumentCaptor<IssueEvent> issueEventArgumentCaptor = ArgumentCaptor.forClass(IssueEvent.class);
         verify(issueEventService).createEvent(eq(EXISTING_ISSUE_ID), issueEventArgumentCaptor.capture());
@@ -214,7 +224,10 @@ public class IssueServiceTest {
 
     @Test
     public void createsClosingIssueCommentWhenIssueIsClosed() {
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, "closing comment");
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .comment("closing comment")
+                .build());
 
         ArgumentCaptor<String> issueCommentArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(issueCommentService).createIssueCommentWithoutNotification(eq(EXISTING_ISSUE_ID),
@@ -227,14 +240,78 @@ public class IssueServiceTest {
     public void throwsExceptionWhenUpdatingClosedIssue() {
         existingIssueEntity.setStatus(IssueStatus.CLOSED.name());
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, null);
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .build());
     }
 
     @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueUpdate() {
         authenticationToken.setActiveOrganization(null);
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatus.CLOSED, null);
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .build());
     }
 
+    @Test
+    public void doesNotSetResolutionTypeForNonFeedbackRequestIssue() {
+        setApproverRole();
+
+        existingIssue.setType(null);
+
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .resolutionType(IssueResolutionType.POSITIVE)
+                .build());
+
+        ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
+        verify(commentRepository).update(eq(EXISTING_ISSUE_ID), commentArgumentCaptor.capture());
+
+        Comment comment = commentArgumentCaptor.getValue();
+        assertThat(comment.getStatus(), is(equalTo(IssueStatus.CLOSED.name())));
+        assertThat(comment.getResolution_type(), is(nullValue()));
+    }
+
+    @Test
+    public void setsResolutionTypeForFeedbackRequestIssue() {
+        setApproverRole();
+
+        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+
+        issueService.updateIssueStatus(existingIssue, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .resolutionType(IssueResolutionType.POSITIVE)
+                .build());
+
+        ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
+        verify(commentRepository).update(eq(EXISTING_ISSUE_ID), commentArgumentCaptor.capture());
+
+        Comment comment = commentArgumentCaptor.getValue();
+        assertThat(comment.getStatus(), is(equalTo(IssueStatus.CLOSED.name())));
+        assertThat(comment.getResolution_type(), is(equalTo(IssueResolutionType.POSITIVE.name())));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void doesNotAllowFeedbackIssueResolutionWithoutApproverRole() {
+        setProducerRole();
+
+        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+
+        issueService.updateIssueStatus(existingIssue, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .resolutionType(IssueResolutionType.POSITIVE)
+                .build());
+    }
+
+    @Test(expected = ValidationException.class)
+    public void doesNotAllowToCloseFeedbackIssueWithoutResolution() {
+        setApproverRole();
+
+        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+
+        issueService.updateIssueStatus(existingIssue, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .build());
+    }
 }
