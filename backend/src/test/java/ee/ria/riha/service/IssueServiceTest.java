@@ -45,7 +45,8 @@ public class IssueServiceTest {
     private static final Long EXISTING_ISSUE_ID = 15503L;
 
     private static final String ACME_REG_CODE = "555010203";
-    private static final String RIA_REG_CODE = "7123456";
+    private static final String EVS_REG_CODE = "70001234";
+    private static final String RIA_REG_CODE = "70006317";
 
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
@@ -55,6 +56,8 @@ public class IssueServiceTest {
                     .setOrganizations(ImmutableMultimap.of(
                             new RihaOrganization(ACME_REG_CODE, "Acme org"),
                             new SimpleGrantedAuthority(PRODUCER.getRole()),
+                            new RihaOrganization(EVS_REG_CODE, "Eesti Väikeloomaarstide Selts"),
+                            new SimpleGrantedAuthority(APPROVER.getRole()),
                             new RihaOrganization(RIA_REG_CODE, "RIA"),
                             new SimpleGrantedAuthority(APPROVER.getRole())))
                     .build();
@@ -165,7 +168,7 @@ public class IssueServiceTest {
 
     @Test(expected = ValidationException.class)
     public void throwsExceptionWhenApproverTriesToCreateRequestIssue() {
-        setApproverRole();
+        setNonRiaApproverRole();
 
         issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
                 .title("title")
@@ -174,7 +177,11 @@ public class IssueServiceTest {
                 .build());
     }
 
-    private void setApproverRole() {
+    private void setNonRiaApproverRole() {
+        authenticationToken.setActiveOrganization(EVS_REG_CODE);
+    }
+
+    private void setRiaApproverRole() {
         authenticationToken.setActiveOrganization(RIA_REG_CODE);
     }
 
@@ -256,7 +263,7 @@ public class IssueServiceTest {
 
     @Test
     public void doesNotSetResolutionTypeForNonFeedbackRequestIssue() {
-        setApproverRole();
+        setNonRiaApproverRole();
 
         existingIssue.setType(null);
 
@@ -275,7 +282,7 @@ public class IssueServiceTest {
 
     @Test
     public void setsResolutionTypeForFeedbackRequestIssue() {
-        setApproverRole();
+        setRiaApproverRole();
 
         existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
@@ -293,6 +300,18 @@ public class IssueServiceTest {
     }
 
     @Test(expected = ValidationException.class)
+    public void doesNotAllowNonRiaUsersToCloseFeedbackIssues() {
+        setNonRiaApproverRole();
+
+        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+
+        issueService.updateIssueStatus(existingIssue, Issue.builder()
+                .status(IssueStatus.CLOSED)
+                .resolutionType(IssueResolutionType.POSITIVE)
+                .build());
+    }
+
+    @Test(expected = ValidationException.class)
     public void doesNotAllowFeedbackIssueResolutionWithoutApproverRole() {
         setProducerRole();
 
@@ -306,7 +325,7 @@ public class IssueServiceTest {
 
     @Test(expected = ValidationException.class)
     public void doesNotAllowToCloseFeedbackIssueWithoutResolution() {
-        setApproverRole();
+        setNonRiaApproverRole();
 
         existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
