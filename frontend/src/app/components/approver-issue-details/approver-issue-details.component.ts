@@ -6,6 +6,7 @@ import { User } from '../../models/user';
 import { ModalHelperService } from "../../services/modal-helper.service";
 import { G } from '../../globals/globals';
 import { System } from '../../models/system';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-approver-feedback-details',
@@ -27,9 +28,13 @@ export class ApproverIssueDetailsComponent implements OnInit {
       });
   }
 
-  markResolved(f){
+  markResolved(f, resolutionType?){
     //comment can be empty
-    this.systemService.closeSystemIssue(this.feedback.id, f.value).then(
+    let reply = this.generalHelperService.cloneObject(f.value);
+    if (resolutionType){
+      reply.resolutionType = resolutionType;
+    }
+    this.systemService.closeSystemIssue(this.feedback.id, reply).then(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
@@ -39,6 +44,10 @@ export class ApproverIssueDetailsComponent implements OnInit {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
       }
     )
+  }
+
+  markResolvedWithVerdict(f, resolutionType){
+    this.markResolved(f, resolutionType);
   }
 
   postReply(f){
@@ -60,17 +69,28 @@ export class ApproverIssueDetailsComponent implements OnInit {
     return `${o.organizationName} (${o.authorName})`;
   }
 
-  canResolve(){
+  canResolveGeneral(){
     let ret = false;
     if (this.feedback.status == 'OPEN'){
-      let matrix = this.environmentService.getUserMatrix();
+      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      if (this.feedback.type != this.globals.issue_type.TAKE_INTO_USE_REQUEST
+        && this.feedback.type != this.globals.issue_type.MODIFICATION_REQUEST
+        && this.feedback.type != this.globals.issue_type.FINALIZATION_REQUEST
+        && this.feedback.type != this.globals.issue_type.ESTABLISHMENT_REQUEST){
+        ret = bHasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+      }
+    }
+    return ret;
+  }
+  canResolveWithVerdict(){
+    let ret = false;
+    if (this.feedback.status == 'OPEN'){
+      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
       if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
         || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
         || this.feedback.type == this.globals.issue_type.FINALIZATION_REQUEST
         || this.feedback.type == this.globals.issue_type.ESTABLISHMENT_REQUEST){
-          ret = matrix.hasApproverRole && matrix.isRiaMember;
-      } else {
-          ret = matrix.hasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+        ret = !!bHasApproverRole;
       }
     }
     return ret;
@@ -91,6 +111,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
               private modalService: ModalHelperService,
+              private generalHelperService: GeneralHelperService,
               private environmentService: EnvironmentService) {
     this.activeUser = this.environmentService.getActiveUser();
 
