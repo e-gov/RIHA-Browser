@@ -17,46 +17,9 @@ import java.util.Optional;
  */
 public class SecurityContextUtil {
 
+    private static final String RIA_ORGANIZATION_CODE = "70006317";
+
     private SecurityContextUtil() {
-    }
-
-    /**
-     * Retrieves optional {@link RihaOrganization} from security context authentication. Active organization is not
-     * present when security context holds no authentication, or authentication is not of {@link
-     * RihaOrganizationAwareAuthenticationToken} type, or active organization is not set.
-     *
-     * @return optional of {@link RihaOrganization}
-     */
-    public static Optional<RihaOrganization> getActiveOrganization() {
-        return getRihaAuthentication()
-                .map(RihaOrganizationAwareAuthenticationToken::getActiveOrganization);
-    }
-
-    /**
-     * Retrieves optional {@link RihaOrganizationAwareAuthenticationToken} from security context. Authentication is not
-     * present when security context holds no authentication or authentication is not an instance of {@link
-     * RihaOrganizationAwareAuthenticationToken}
-     *
-     * @return optional of {@link RihaOrganizationAwareAuthenticationToken}
-     */
-    public static Optional<RihaOrganizationAwareAuthenticationToken> getRihaAuthentication() {
-        return getAuthentication()
-                .map(authentication -> {
-                    if (authentication instanceof RihaOrganizationAwareAuthenticationToken) {
-                        return (RihaOrganizationAwareAuthenticationToken) authentication;
-                    }
-
-                    return null;
-                });
-    }
-
-    /**
-     * Retrieves optional {@link Authentication} from security context.
-     *
-     * @return optional of {@link Authentication}
-     */
-    public static Optional<Authentication> getAuthentication() {
-        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
     }
 
     /**
@@ -89,6 +52,39 @@ public class SecurityContextUtil {
     }
 
     /**
+     * Retrieves optional {@link Authentication} from security context.
+     *
+     * @return optional of {@link Authentication}
+     */
+    public static Optional<Authentication> getAuthentication() {
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    /**
+     * Checks if current user is {@link RoleType#APPROVER} and also belongs to RIA organization with code {@link
+     * #RIA_ORGANIZATION_CODE}.
+     *
+     * @return true in case user is RIA approver, false otherwise
+     */
+    public static boolean isRiaApprover() {
+        return getActiveOrganization()
+                .map(org -> RIA_ORGANIZATION_CODE.equals(org.getCode()) && hasRole(RoleType.APPROVER))
+                .orElse(false);
+    }
+
+    /**
+     * Retrieves optional {@link RihaOrganization} from security context authentication. Active organization is not
+     * present when security context holds no authentication, or authentication is not of {@link
+     * RihaOrganizationAwareAuthenticationToken} type, or active organization is not set.
+     *
+     * @return optional of {@link RihaOrganization}
+     */
+    public static Optional<RihaOrganization> getActiveOrganization() {
+        return getRihaAuthentication()
+                .map(RihaOrganizationAwareAuthenticationToken::getActiveOrganization);
+    }
+
+    /**
      * Checks list of authentication authorities for specified role.
      *
      * @param role role to check
@@ -96,6 +92,24 @@ public class SecurityContextUtil {
      */
     public static boolean hasRole(RoleType role) {
         return hasRole(role.getRole());
+    }
+
+    /**
+     * Retrieves optional {@link RihaOrganizationAwareAuthenticationToken} from security context. Authentication is not
+     * present when security context holds no authentication or authentication is not an instance of {@link
+     * RihaOrganizationAwareAuthenticationToken}
+     *
+     * @return optional of {@link RihaOrganizationAwareAuthenticationToken}
+     */
+    public static Optional<RihaOrganizationAwareAuthenticationToken> getRihaAuthentication() {
+        return getAuthentication()
+                .map(authentication -> {
+                    if (authentication instanceof RihaOrganizationAwareAuthenticationToken) {
+                        return (RihaOrganizationAwareAuthenticationToken) authentication;
+                    }
+
+                    return null;
+                });
     }
 
     /**
