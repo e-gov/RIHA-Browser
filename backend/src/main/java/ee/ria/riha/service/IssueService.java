@@ -48,6 +48,9 @@ public class IssueService {
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
                 .type(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
+                .resolutionType(comment.getResolution_type() != null
+                        ? IssueResolutionType.valueOf(comment.getResolution_type())
+                        : null)
                 .build();
     };
 
@@ -71,6 +74,9 @@ public class IssueService {
         }
         if (issue.getType() != null) {
             comment.setSub_type(issue.getType().name());
+        }
+        if (issue.getResolutionType() != null) {
+            comment.setResolution_type(issue.getResolutionType().name());
         }
 
         return comment;
