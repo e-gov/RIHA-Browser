@@ -301,7 +301,7 @@ public class IssueService {
             return;
         }
 
-        if (!SecurityContextUtil.hasRole(APPROVER)) {
+        if (!SecurityContextUtil.isRiaApprover()) {
             throw new ValidationException("validation.issue.update.noRightToCloseFeedbackIssue");
         }
 
