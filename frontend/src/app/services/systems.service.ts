@@ -246,7 +246,8 @@ export class SystemsService {
   public closeSystemIssue(issueId, reply) {
     return this.http.put(`/api/v1/issues/${ issueId }`, {
       comment: reply.comment,
-      status: 'CLOSED'
+      status: 'CLOSED',
+      resolutionType: reply.resolutionType || null
     }).toPromise();
   }
 

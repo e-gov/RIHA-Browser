@@ -105,7 +105,7 @@ public class IssueController {
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Update issue")
     public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody Issue model) {
-        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model.getStatus(), model.getComment()));
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model));
     }
 
 }
