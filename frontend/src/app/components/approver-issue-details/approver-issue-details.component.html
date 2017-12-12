@@ -33,8 +33,14 @@
           {{ reply.comment }}
         </div>
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED'" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && !reply.resolutionType" class="card-text ml-4">
         <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      </div>
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == globals.issue_resolution_type.NEGATIVE" class="card-text ml-4">
+        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-danger font-weight-bold">mittekooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      </div>
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == globals.issue_resolution_type.POSITIVE" class="card-text ml-4">
+        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-success font-weight-bold">kooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
       </div>
     </div>
     <form class="col-12" #commentForm="ngForm" class="m-4">
@@ -53,8 +59,8 @@
       <div class="buttons pull-right">
         <button (click)="closeModal(commentForm)" class="btn btn-default pull-right">Sulge</button>
         <button (click)="markResolved(commentForm)" *ngIf="canResolveGeneral()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
-        <button (click)="markResolvedWithVerdict(commentForm, false)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
-        <button (click)="markResolvedWithVerdict(commentForm, false)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
+        <button (click)="markResolvedWithVerdict(commentForm, globals.issue_resolution_type.NEGATIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
+        <button (click)="markResolvedWithVerdict(commentForm, globals.issue_resolution_type.POSITIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
         <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
       </div>
     </div>
