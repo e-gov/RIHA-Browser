@@ -32,6 +32,7 @@ public class Issue implements IssueEntity {
     private String organizationCode;
     private IssueStatus status;
     private IssueType type;
+    private IssueResolutionType resolutionType;
 
     public Issue() {
     }
