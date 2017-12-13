@@ -6,7 +6,7 @@
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi seosed:</label>
     <p *ngIf="!relations || relations.length == 0">
-      Seosed puuduvad.
+      Seosed teiste süsteemidega puuduvad
     </p>
     <table class="details-list-table">
       <tr *ngFor="let relation of relations">

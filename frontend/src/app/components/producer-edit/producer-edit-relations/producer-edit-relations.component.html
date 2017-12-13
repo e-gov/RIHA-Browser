@@ -6,6 +6,7 @@
     <form #addForm="ngForm">
       <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
         <label for="infoSystem" class="text-muted separated-text">Infosüsteemi lühinimi:</label>
+        <small class="label-small-text text-muted">Sisesta vähemalt 3 tähemärki, et otsida infosüsteemi nime alusel</small>
         <input id="infoSystem" class="form-control col-12"
                #infoSystem="ngModel"
                [ngbTypeahead]="search"
