@@ -77,7 +77,7 @@ export class ProducerEditObjectsComponent implements OnInit {
 
   saveSystem(){
     this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-      let s = res.json();
+      let s = new System(res.json());
       s.details.stored_data = this.stored_data;
       s.details.data_files = this.data_files;
       this.systemsService.updateSystem(s).then(response => {
