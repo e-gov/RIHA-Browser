@@ -85,12 +85,12 @@ export class ApproverIssueDetailsComponent implements OnInit {
   canResolveWithVerdict(){
     let ret = false;
     if (this.feedback.status == 'OPEN'){
-      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
       if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
         || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
         || this.feedback.type == this.globals.issue_type.FINALIZATION_REQUEST
         || this.feedback.type == this.globals.issue_type.ESTABLISHMENT_REQUEST){
-        ret = !!bHasApproverRole;
+          let userMatrix = this.environmentService.getUserMatrix();
+          ret = userMatrix.hasApproverRole && userMatrix.isRiaMember;
       }
     }
     return ret;
