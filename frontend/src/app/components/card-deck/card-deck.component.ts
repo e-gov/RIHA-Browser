@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./card-deck.component.scss']
 })
 export class CardDeckComponent implements OnInit {
-  private cards = [];
+  public cards = [];
 
   constructor() {
     this.cards = [

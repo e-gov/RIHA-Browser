@@ -12,8 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ProducerEditComponent implements OnInit {
   private system: System;
-  private loaded: boolean;
-  private notFound: boolean;
+  public loaded: boolean;
+  public notFound: boolean;
 
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
