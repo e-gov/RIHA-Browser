@@ -72,6 +72,7 @@ public class ApplicationProperties {
         private final NewIssueComment newIssueComment = new NewIssueComment();
         private final IssueStatusUpdate issueStatusUpdate = new IssueStatusUpdate();
         private String from;
+        private String recipientPattern;
     }
 
     @Getter
