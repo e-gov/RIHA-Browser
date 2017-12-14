@@ -8,6 +8,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-production": "ng build --prod",
     "test": "ng test --watch=false",
     "test-watcher": "ng test",
     "lint": "ng lint",
