@@ -13,7 +13,7 @@ import { InfoModalComponent } from '../info-modal/info-modal.component';
 export class WarningModalComponent implements OnInit, OnDestroy {
 
   @Input() timerStart;
-  private minutesLeft: number;
+  public minutesLeft: number;
   private timerId = null;
 
   private getMilisecondsLeft(){
