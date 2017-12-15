@@ -73,7 +73,7 @@ export class SystemsService {
   public getAlertText(errObj): string{
     let ret = null;
     let code = errObj.code;
-    if (code === 'validation.system.shortName.alreadyTaken'){
+    if (code === 'validation.system.shortNameAlreadyTaken'){
       ret = 'Lühinimi on juba kasutusel';
     } else {
       ret = errObj.message;
