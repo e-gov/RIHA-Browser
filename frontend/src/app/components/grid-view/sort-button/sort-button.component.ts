@@ -16,15 +16,15 @@ export class SortButtonComponent implements OnInit {
   getSortIcon(){
     let ret = 'fa-sort';
     let activeSortProperty = null;
-    let asc = null;
+    let desc = null;
 
     if (this.gridData.sort){
-      asc = this.gridData.sort.charAt(0) == '-';
-      activeSortProperty = asc ? this.gridData.sort.substring(1) : this.gridData.sort;
+      desc = this.gridData.sort.charAt(0) == '-';
+      activeSortProperty = desc ? this.gridData.sort.substring(1) : this.gridData.sort;
     }
 
     if (activeSortProperty == this.sortProperty){
-      ret = asc ? 'fa-sort-asc' : 'fa-sort-desc';
+      ret = desc ? 'fa-sort-desc' : 'fa-sort-asc';
     }
 
     return ret;
