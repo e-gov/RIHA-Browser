@@ -33,6 +33,7 @@ export class ProducerListComponent implements OnInit {
     dateUpdatedTo: string
   };
   userMatrix: UserMatrix;
+  loaded: boolean = false;
 
   extendedSearch: boolean = true;
 
@@ -50,27 +51,41 @@ export class ProducerListComponent implements OnInit {
 
   getOwnSystems(page?): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
-      let f = this.generalHelperService.cloneObject(this.filters);
-      delete f.ownerName;
-      delete f.ownerCode;
-      if (f.dateCreatedFrom){
-        f.dateCreatedFrom = this.systemsService.dateObjToTimestamp(f.dateCreatedFrom, true);
+      let params = this.generalHelperService.cloneObject(this.filters);
+      delete params.ownerName;
+      delete params.ownerCode;
+      if (params.dateCreatedFrom){
+        params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
       }
-      if (f.dateCreatedTo){
-        f.dateCreatedTo = this.systemsService.dateObjToTimestamp(f.dateCreatedTo, true);
+      if (params.dateCreatedTo){
+        params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
       }
-      if (f.dateUpdatedFrom){
-        f.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(f.dateUpdatedFrom, true);
+      if (params.dateUpdatedFrom){
+        params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
       }
-      if (f.dateUpdatedTo){
-        f.dateUpdatedTo = this.systemsService.dateObjToTimestamp(f.dateUpdatedTo, true);
+      if (params.dateUpdatedTo){
+        params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
       }
-      let q = this.generalHelperService.generateQueryString(f);
+
+      let sortProperty = this.gridData.getSortProperty();
+      if (sortProperty){
+        params.sort = sortProperty;
+      }
+      let sortOrder = this.gridData.getSortOrder();
+      if (sortOrder){
+        params.dir = sortOrder;
+      }
+      if (page && page != 0){
+        params.page = page + 1;
+      }
+
+      let q = this.generalHelperService.generateQueryString(params);
       this.location.replaceState('/Kirjelda', q);
       this.gridData.page = page || 0;
-      this.systemsService.getOwnSystems(this.filters, this.gridData).then(
+      this.systemsService.getOwnSystems(params, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
+        this.loaded = true;
       })
     }
   }
@@ -148,14 +163,16 @@ export class ProducerListComponent implements OnInit {
         dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
         dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo'])
       };
+
+      this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
+      this.gridData.setPageFromUrl(params['page']);
     });
 
     if (this.hasActiveFilters()){
       this.extendedSearch = true;
     }
 
-    this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
-    this.getOwnSystems();
+    this.getOwnSystems(this.gridData.page);
   }
 
 }
