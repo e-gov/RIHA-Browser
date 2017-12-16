@@ -138,12 +138,48 @@
       <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
         <thead class="thead-default">
         <tr>
-          <th><button (click)="onSortChange('owner.name')" class="btn btn-primary btn-sm">Omanik <i class="fa fa-sort" aria-hidden="true"></i></button></th>
-          <th><button (click)="onSortChange('short_name')" class="btn btn-primary btn-sm">Lühinimi <i class="fa fa-sort" aria-hidden="true"></i></button></th>
-          <th><button (click)="onSortChange('name')" class="btn btn-primary btn-sm">Infosüsteemi nimi <i class="fa fa-sort" aria-hidden="true"></i></button></th>
-          <th><button (click)="onSortChange('meta.system_status.status')" class="btn btn-primary btn-sm">Staatus <i class="fa fa-sort" aria-hidden="true"></i></button></th>
-          <th><button (click)="onSortChange('topics')" class="btn btn-primary btn-sm">Märksõnad <i class="fa fa-sort" aria-hidden="true"></i></button></th>
-          <th><button (click)="onSortChange('meta.update_timestamp')" class="btn btn-primary btn-sm">Viimati muudetud <i class="fa fa-sort" aria-hidden="true"></i></button></th>
+          <th>
+            <app-sort-button
+              [labelText]="'Omanik'"
+              [sortProperty]="'owner.name'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'Lühinimi'"
+              [sortProperty]="'short_name'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'Infosüsteemi nimi'"
+              [sortProperty]="'name'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'Staatus'"
+              [sortProperty]="'meta.system_status.status'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'Märksõnad'"
+              [sortProperty]="'topics'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'Viimati muudetud'"
+              [sortProperty]="'meta.update_timestamp'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
         </tr>
         </thead>
         <tbody>
