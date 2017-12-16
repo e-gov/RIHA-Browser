@@ -65,6 +65,7 @@ import { ProducerDetailsRelationsComponent } from './components/producer-details
 import { ProducerEditRelationsComponent } from './components/producer-edit/producer-edit-relations/producer-edit-relations.component';
 import { GridTotalFoundComponent } from './components/grid-view/grid-total-found/grid-total-found.component';
 import { GridCurrentlyShowingComponent } from './components/grid-view/grid-currently-showing/grid-currently-showing.component';
+import { SortButtonComponent } from './components/grid-view/sort-button/sort-button.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -138,7 +139,8 @@ const routes: Routes = [
     ProducerDetailsRelationsComponent,
     ProducerEditRelationsComponent,
     GridTotalFoundComponent,
-    GridCurrentlyShowingComponent
+    GridCurrentlyShowingComponent,
+    SortButtonComponent
   ],
   imports: [
     BrowserModule,
