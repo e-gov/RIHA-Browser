@@ -4,6 +4,7 @@ import { GridData } from '../../models/grid-data';
 import { GeneralHelperService } from '../../services/general-helper.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 import { G } from '../../globals/globals';
 
 @Component({
@@ -30,6 +31,7 @@ export class BrowserListComponent implements OnInit {
     dateUpdatedTo: string
   };
   extendedSearch: boolean = true;
+  loaded: boolean = false;
 
   globals: any = G;
 
@@ -44,26 +46,48 @@ export class BrowserListComponent implements OnInit {
   }
 
   getSystems(page?): void {
-    let f = this.generalHelperService.cloneObject(this.filters);
-    if (f.dateCreatedFrom){
-      f.dateCreatedFrom = this.systemsService.dateObjToTimestamp(f.dateCreatedFrom, true);
+    let params = this.generalHelperService.cloneObject(this.filters);
+    if (params.dateCreatedFrom) {
+      params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
     }
-    if (f.dateCreatedTo){
-      f.dateCreatedTo = this.systemsService.dateObjToTimestamp(f.dateCreatedTo, true);
+    if (params.dateCreatedTo) {
+      params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
     }
-    if (f.dateUpdatedFrom){
-      f.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(f.dateUpdatedFrom, true);
+    if (params.dateUpdatedFrom) {
+      params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
     }
-    if (f.dateUpdatedTo){
-      f.dateUpdatedTo = this.systemsService.dateObjToTimestamp(f.dateUpdatedTo, true);
+    if (params.dateUpdatedTo) {
+      params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
     }
-    let q = this.generalHelperService.generateQueryString(f);
+
+    let sortProperty = this.gridData.getSortProperty();
+    if (sortProperty) {
+      params.sort = sortProperty;
+    }
+    let sortOrder = this.gridData.getSortOrder();
+    if (sortOrder) {
+      params.dir = sortOrder;
+    }
+    if (page && page != 0) {
+      params.page = page + 1;
+    }
+
+    let q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Infosüsteemid', q);
     this.gridData.page = page || 0;
-    this.systemsService.getSystems(f, this.gridData).then(
+    this.systemsService.getSystems(params, this.gridData).then(
       res => {
         this.gridData.updateData(res.json());
-    })
+        if (this.gridData.getPageNumber() > this.gridData.totalPages) {
+          this.getSystems();
+        } else {
+          this.loaded = true;
+        }
+        this.loaded = true;
+      }, err => {
+        this.loaded = true;
+        this.toastrService.error('Serveri viga!');
+      });
   }
 
   toggleSearchPanel(){
@@ -113,6 +137,7 @@ export class BrowserListComponent implements OnInit {
   constructor(private systemsService: SystemsService,
               private route: ActivatedRoute,
               private location: Location,
+              private toastrService: ToastrService,
               public generalHelperService: GeneralHelperService) {
   }
 
@@ -133,14 +158,17 @@ export class BrowserListComponent implements OnInit {
         dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
         dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo'])
       };
+
+      this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
+      this.gridData.setPageFromUrl(params['page']);
     });
 
     if (this.hasActiveFilters()){
       this.extendedSearch = true;
     }
 
-    this.gridData.changeSortOrder('meta.update_timestamp', 'DESC');
-    this.getSystems();
+
+    this.getSystems(this.gridData.page);
   }
 
 }
