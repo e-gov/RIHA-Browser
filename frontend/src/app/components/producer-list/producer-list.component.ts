@@ -3,6 +3,7 @@ import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { GridData } from '../../models/grid-data';
 import { UserMatrix } from '../../models/user-matrix';
+import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { GeneralHelperService } from '../../services/general-helper.service';
@@ -50,32 +51,32 @@ export class ProducerListComponent implements OnInit {
   }
 
   getOwnSystems(page?): void {
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected){
+    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
       let params = this.generalHelperService.cloneObject(this.filters);
       delete params.ownerName;
       delete params.ownerCode;
-      if (params.dateCreatedFrom){
+      if (params.dateCreatedFrom) {
         params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
       }
-      if (params.dateCreatedTo){
+      if (params.dateCreatedTo) {
         params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
       }
-      if (params.dateUpdatedFrom){
+      if (params.dateUpdatedFrom) {
         params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
       }
-      if (params.dateUpdatedTo){
+      if (params.dateUpdatedTo) {
         params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
       }
 
       let sortProperty = this.gridData.getSortProperty();
-      if (sortProperty){
+      if (sortProperty) {
         params.sort = sortProperty;
       }
       let sortOrder = this.gridData.getSortOrder();
-      if (sortOrder){
+      if (sortOrder) {
         params.dir = sortOrder;
       }
-      if (page && page != 0){
+      if (page && page != 0) {
         params.page = page + 1;
       }
 
@@ -83,10 +84,17 @@ export class ProducerListComponent implements OnInit {
       this.location.replaceState('/Kirjelda', q);
       this.gridData.page = page || 0;
       this.systemsService.getOwnSystems(params, this.gridData).then(
-      res => {
-        this.gridData.updateData(res.json());
-        this.loaded = true;
-      })
+        res => {
+          this.gridData.updateData(res.json());
+          if (this.gridData.getPageNumber() > this.gridData.totalPages) {
+            this.getOwnSystems();
+          } else {
+            this.loaded = true;
+          }
+        }, err => {
+          this.loaded = true;
+          this.toastrService.error('Serveri viga!');
+        });
     }
   }
 
@@ -142,6 +150,7 @@ export class ProducerListComponent implements OnInit {
               private environmentService: EnvironmentService,
               private route: ActivatedRoute,
               private location: Location,
+              private toastrService: ToastrService,
               public  generalHelperService: GeneralHelperService,
               private modalService: ModalHelperService) {
     this.userMatrix = this.environmentService.getUserMatrix();
