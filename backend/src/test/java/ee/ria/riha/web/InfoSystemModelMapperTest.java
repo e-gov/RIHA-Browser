@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 /**
@@ -40,7 +41,7 @@ public class InfoSystemModelMapperTest {
 
         InfoSystemModel model = infoSystemModelMapper.map(infoSystemWithContacts);
 
-        assertThat(model.getDetails(), containsString(CONTACTS_KEY));
+        assertThat(model.getJson().path(CONTACTS_KEY).isMissingNode(), is(false));
     }
 
     @Test
@@ -49,7 +50,7 @@ public class InfoSystemModelMapperTest {
 
         InfoSystemModel model = infoSystemModelMapper.map(infoSystemWithContacts);
 
-        assertThat(model.getDetails(), not(containsString(CONTACTS_KEY)));
+        assertThat(model.getJson().path(CONTACTS_KEY).isMissingNode(), is(true));
     }
 
 }

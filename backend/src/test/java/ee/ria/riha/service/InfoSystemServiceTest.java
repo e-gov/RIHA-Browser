@@ -68,7 +68,7 @@ public class InfoSystemServiceTest {
 
     @Test(expected = ValidationException.class)
     public void creatingInfoSystemMustFailIfSuggestedShortNameIsAlreadyInUse() {
-        InfoSystem createdInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem createdInfoSystem = existingInfoSystem.copy();
 
         // When at least one info system with updated short name is found, test should fail
         foundInfoSystems.add(createdInfoSystem);
@@ -78,7 +78,7 @@ public class InfoSystemServiceTest {
 
     @Test
     public void creatingInfoSystemMustSucceedIfSuggestedShortNameIsNotInUseYet() {
-        InfoSystem createdInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem createdInfoSystem = existingInfoSystem.copy();
         infoSystemService.create(createdInfoSystem);
 
         verify(infoSystemRepository).find(any(FilterRequest.class));
@@ -87,7 +87,7 @@ public class InfoSystemServiceTest {
 
     @Test
     public void updatingInfoSystemMustSucceedIfUpdatedShortNameIsNotInUseYet() {
-        InfoSystem updatedInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem updatedInfoSystem = existingInfoSystem.copy();
         updatedInfoSystem.setShortName("new-short-name");
 
         infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
@@ -98,7 +98,7 @@ public class InfoSystemServiceTest {
 
     @Test
     public void updatingInfoSystemMustSucceedIfShortNameStaysUnchanged() {
-        InfoSystem updatedInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem updatedInfoSystem = existingInfoSystem.copy();
 
         infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
 
@@ -108,7 +108,7 @@ public class InfoSystemServiceTest {
 
     @Test(expected = ValidationException.class)
     public void updatingInfoSystemMustFailIfUpdatedShortNameIsAlreadyInUse() {
-        InfoSystem updatedInfoSystem = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem updatedInfoSystem = existingInfoSystem.copy();
         updatedInfoSystem.setShortName("new-short-name");
 
         // When at least one info system with updated short name is found, test should fail
@@ -129,7 +129,7 @@ public class InfoSystemServiceTest {
 
     @Test
     public void setsNewUpdateTimestampDuringInfoSystemUpdate() {
-        InfoSystem model = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem model = existingInfoSystem.copy();
 
         InfoSystem infoSystem = infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, model);
 
@@ -138,7 +138,7 @@ public class InfoSystemServiceTest {
 
     @Test
     public void doesNotChangeCreationTimestampDuringUpdate() {
-        InfoSystem model = new InfoSystem(existingInfoSystem.getJsonObject());
+        InfoSystem model = existingInfoSystem.copy();
 
         InfoSystem infoSystem = infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, model);
 
