@@ -1,180 +1,143 @@
 package ee.ria.riha.domain.model;
 
-import org.json.JSONObject;
-import org.json.JSONPointer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
-import static org.json.JSONPointer.builder;
-import static org.springframework.util.StringUtils.hasText;
-
 /**
- * Holds Information System data as a {@link JSONObject} and provides accessors for JSON manipulation.
+ * Holds Information System data and provides accessors for JSON manipulation.
  *
  * @author Valentin Suhnjov
  */
 public class InfoSystem {
 
-    private static final String ID_KEY = "main_resource_id";
     private static final String UUID_KEY = "uuid";
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "name";
     private static final String OWNER_CODE_KEY = "code";
     private static final String SHORT_NAME_KEY = "short_name";
     private static final String FULL_NAME_KEY = "name";
+    private static final String CONTACTS_KEY = "contacts";
+    private static final String CONTACTS_EMAIL_KEY = "email";
     private static final String META_KEY = "meta";
     private static final String META_CREATION_TIMESTAMP_KEY = "creation_timestamp";
     private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
 
-    private JSONObject jsonObject = new JSONObject();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private Integer id;
-    private UUID uuid;
-    private String ownerName;
-    private String ownerCode;
-    private String shortName;
-    private String fullName;
-    private String creationTimestamp;
-    private String updateTimestamp;
+    private JsonNode jsonContent = JsonNodeFactory.instance.objectNode();
+
+    private Long id;
 
     public InfoSystem() {
-        this("{}");
     }
 
-    public InfoSystem(JSONObject jsonObject) {
-        Assert.notNull(jsonObject);
-        this.jsonObject = jsonObject;
-
-        this.id = ((Integer) getPath(ID_KEY).queryFrom(jsonObject));
-
-        String uuidString = ((String) getPath(UUID_KEY).queryFrom(jsonObject));
-        this.uuid = hasText(uuidString) ? UUID.fromString(uuidString) : null;
-
-        this.shortName = ((String) getPath(SHORT_NAME_KEY).queryFrom(jsonObject));
-        this.fullName = ((String) getPath(FULL_NAME_KEY).queryFrom(jsonObject));
-
-        JSONObject owner = getOrCreateOwner();
-        this.ownerName = owner.optString(OWNER_NAME_KEY, null);
-        this.ownerCode = owner.optString(OWNER_CODE_KEY, null);
-
-        JSONObject meta = getOrCreateMeta();
-        this.creationTimestamp = meta.optString(META_CREATION_TIMESTAMP_KEY, null);
-        this.updateTimestamp = meta.optString(META_UPDATE_TIMESTAMP_KEY, null);
+    public InfoSystem(JsonNode jsonContent) {
+        Assert.notNull(jsonContent);
+        this.jsonContent = jsonContent;
     }
 
-    public InfoSystem(String json) {
-        this(new JSONObject(json));
-    }
-
-    private JSONPointer getPath(String... parts) {
-        JSONPointer.Builder builder = builder();
-        for (String part : parts) {
-            builder.append(part);
+    public InfoSystem(String jsonContent) {
+        try {
+            this.jsonContent = objectMapper.readTree(jsonContent);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not parse InfoSystem JSON", e);
         }
-
-        return builder.build();
     }
 
     public String asJson() {
-        return jsonObject.toString();
+        try {
+            return objectMapper.writeValueAsString(jsonContent);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Could not construct InfoSystem JSON representation", e);
+        }
     }
 
-    public JSONObject getJsonObject() {
-        return jsonObject;
+    public JsonNode getJsonContent() {
+        return jsonContent;
     }
 
-    public Integer getId() {
+    public InfoSystem copy() {
+        InfoSystem copy = new InfoSystem(this.jsonContent.deepCopy());
+        copy.setId(this.getId());
+
+        return copy;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-        jsonObject.putOpt(ID_KEY, id);
     }
 
     public UUID getUuid() {
-        return uuid;
+        String uuidStr = jsonContent.path(UUID_KEY).asText(null);
+        return StringUtils.hasText(uuidStr) ? UUID.fromString(uuidStr) : null;
     }
 
     public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-        jsonObject.putOpt(UUID_KEY, uuid != null ? uuid.toString() : null);
-    }
-
-    private JSONObject getOrCreateOwner() {
-        JSONObject owner = this.jsonObject.optJSONObject(OWNER_KEY);
-
-        if (owner == null) {
-            owner = new JSONObject();
-            this.jsonObject.put(OWNER_KEY, owner);
-        }
-
-        return owner;
+        ((ObjectNode) jsonContent).put(UUID_KEY, uuid != null ? uuid.toString() : null);
     }
 
     public String getOwnerName() {
-        return ownerName;
+        return jsonContent.path(OWNER_KEY).path(OWNER_NAME_KEY).asText(null);
     }
 
     public void setOwnerName(String name) {
-        this.ownerName = name;
-        getOrCreateOwner().putOpt(OWNER_NAME_KEY, name);
+        ((ObjectNode) jsonContent).with(OWNER_KEY).put(OWNER_NAME_KEY, name);
     }
 
     public String getOwnerCode() {
-        return ownerCode;
+        return jsonContent.path(OWNER_KEY).path(OWNER_CODE_KEY).asText(null);
     }
 
     public void setOwnerCode(String code) {
-        this.ownerCode = code;
-        getOrCreateOwner().putOpt(OWNER_CODE_KEY, code);
+        ((ObjectNode) jsonContent).with(OWNER_KEY).put(OWNER_CODE_KEY, code);
     }
 
     public String getShortName() {
-        return shortName;
+        return jsonContent.path(SHORT_NAME_KEY).asText(null);
     }
 
     public void setShortName(String shortName) {
-        this.shortName = shortName;
-        jsonObject.putOpt(SHORT_NAME_KEY, shortName);
+        ((ObjectNode) jsonContent).put(SHORT_NAME_KEY, shortName);
     }
 
     public String getFullName() {
-        return fullName;
+        return jsonContent.path(FULL_NAME_KEY).asText(null);
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
-        jsonObject.putOpt(FULL_NAME_KEY, fullName);
-    }
-
-    private JSONObject getOrCreateMeta() {
-        JSONObject meta = this.jsonObject.optJSONObject(META_KEY);
-
-        if (meta == null) {
-            meta = new JSONObject();
-            jsonObject.put(META_KEY, meta);
-        }
-
-        return meta;
+        ((ObjectNode) jsonContent).put(FULL_NAME_KEY, fullName);
     }
 
     public String getCreationTimestamp() {
-        return this.creationTimestamp;
+        return jsonContent.path(META_KEY).get(META_CREATION_TIMESTAMP_KEY).asText(null);
     }
 
     public void setCreationTimestamp(String creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
-        getOrCreateMeta().putOpt(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
+        ((ObjectNode) jsonContent).with(META_KEY).put(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
     }
 
     public String getUpdateTimestamp() {
-        return updateTimestamp;
+        return jsonContent.path(META_KEY).path(META_UPDATE_TIMESTAMP_KEY).asText(null);
     }
 
     public void setUpdateTimestamp(String updateTimestamp) {
-        this.updateTimestamp = updateTimestamp;
-        getOrCreateMeta().putOpt(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
+        ((ObjectNode) jsonContent).with(META_KEY).put(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
+    }
+
+    public List<String> getContactEmails() {
+        return jsonContent.withArray(CONTACTS_KEY).findValuesAsText(CONTACTS_EMAIL_KEY);
     }
 }

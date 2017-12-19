@@ -1,14 +1,12 @@
 package ee.ria.riha.web;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.web.model.InfoSystemModel;
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static ee.ria.riha.service.SecurityContextUtil.isUserAuthenticated;
 
@@ -20,7 +18,7 @@ import static ee.ria.riha.service.SecurityContextUtil.isUserAuthenticated;
 @Component
 public class InfoSystemModelMapper implements ModelMapper<InfoSystem, InfoSystemModel> {
 
-    private static final Predicate<String> EVICTED_NAMES_PREDICATE = name -> name.equalsIgnoreCase("contacts");
+    private static final List<String> EVICTED_FIRST_LEVEL_PROPERTIES = Collections.singletonList("contacts");
 
     /**
      * Maps {@link InfoSystem} to {@link InfoSystemModel} performing additional transformations that depend on user
@@ -35,7 +33,7 @@ public class InfoSystemModelMapper implements ModelMapper<InfoSystem, InfoSystem
 
         InfoSystemModel model = new InfoSystemModel();
         model.setId(filteredInfoSystem.getId());
-        model.setJson(filteredInfoSystem.getJsonObject().toString());
+        model.setJson(filteredInfoSystem.getJsonContent());
 
         return model;
     }
@@ -45,13 +43,10 @@ public class InfoSystemModelMapper implements ModelMapper<InfoSystem, InfoSystem
             return infoSystem;
         }
 
-        JSONObject originalJsonObject = infoSystem.getJsonObject();
-        List<String> filteredNames = Arrays.stream(JSONObject.getNames(originalJsonObject))
-                .filter(EVICTED_NAMES_PREDICATE.negate())
-                .collect(Collectors.toList());
+        InfoSystem infoSystemCopy = infoSystem.copy();
+        ((ObjectNode) infoSystemCopy.getJsonContent()).remove(EVICTED_FIRST_LEVEL_PROPERTIES);
 
-        JSONObject shallowJsonObjectCopy = new JSONObject(originalJsonObject, filteredNames.toArray(new String[0]));
-        return new InfoSystem(shallowJsonObjectCopy);
+        return infoSystemCopy;
     }
 
 }
