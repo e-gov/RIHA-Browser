@@ -67,7 +67,7 @@ public class InfoSystemService {
         model.setCreationTimestamp(creationTimestamp);
         model.setUpdateTimestamp(creationTimestamp);
 
-        infoSystemValidationService.validate(model.asJson());
+        infoSystemValidationService.validate(model.getJsonContent());
 
         return infoSystemRepository.add(model);
     }
@@ -128,7 +128,7 @@ public class InfoSystemService {
         model.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
         model.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
 
-        infoSystemValidationService.validate(model.asJson());
+        infoSystemValidationService.validate(model.getJsonContent());
 
         return infoSystemRepository.add(model);
     }

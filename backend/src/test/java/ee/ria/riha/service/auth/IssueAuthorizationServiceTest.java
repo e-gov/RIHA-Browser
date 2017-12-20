@@ -39,12 +39,12 @@ public class IssueAuthorizationServiceTest {
 
     private Issue issue = Issue.builder().id(ISSUE_ID).infoSystemUuid(INFO_SYSTEM_UUID).build();
 
-    private InfoSystem infoSystem = new InfoSystem("{\n" +
-                                                           "  \"uuid\": \"" + INFO_SYSTEM_UUID.toString() + "\"\n" +
-                                                           "}");
+    private InfoSystem infoSystem = new InfoSystem();
 
     @Before
     public void setUp() {
+        infoSystem.setUuid(INFO_SYSTEM_UUID);
+
         when(issueService.getIssueById(ISSUE_ID)).thenReturn(issue);
         when(infoSystemService.get(INFO_SYSTEM_UUID)).thenReturn(infoSystem);
     }
