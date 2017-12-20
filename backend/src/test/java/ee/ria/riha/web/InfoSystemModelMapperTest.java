@@ -4,13 +4,13 @@ import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.JaneAuthenticationTokenBuilder;
 import ee.ria.riha.web.model.InfoSystemModel;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Valentin Suhnjov
@@ -19,20 +19,17 @@ public class InfoSystemModelMapperTest {
 
     private static final String CONTACTS_KEY = "contacts";
 
-    private final InfoSystem infoSystemWithContacts = new InfoSystem(
-            "{\n" +
-                    "  \"some_property\": \"value\",\n" +
-                    "  \"contacts\": [\n" +
-                    "    {\n" +
-                    "      \"name\": \"John Doe\",\n" +
-                    "      \"email\": \"john@nowhere.com\"\n" +
-                    "    }\n" +
-                    "  ]\n" +
-                    "}");
+    private final InfoSystem infoSystemWithContacts = new InfoSystem();
+
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     private InfoSystemModelMapper infoSystemModelMapper = new InfoSystemModelMapper();
+
+    @Before
+    public void setUp() {
+        infoSystemWithContacts.addContact("John Doe", "john@example.com");
+    }
 
     @Test
     public void doesNotRemoveContactsIfUserIsAuthenticated() {
@@ -40,7 +37,7 @@ public class InfoSystemModelMapperTest {
 
         InfoSystemModel model = infoSystemModelMapper.map(infoSystemWithContacts);
 
-        assertThat(model.getDetails(), containsString(CONTACTS_KEY));
+        assertThat(model.getJson().path(CONTACTS_KEY).isMissingNode(), is(false));
     }
 
     @Test
@@ -49,7 +46,7 @@ public class InfoSystemModelMapperTest {
 
         InfoSystemModel model = infoSystemModelMapper.map(infoSystemWithContacts);
 
-        assertThat(model.getDetails(), not(containsString(CONTACTS_KEY)));
+        assertThat(model.getJson().path(CONTACTS_KEY).isMissingNode(), is(true));
     }
 
 }
