@@ -1,104 +1,119 @@
 package ee.ria.riha.domain.model;
 
-import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class InfoSystemTest {
 
-    @Test
-    public void allInfoSystemPropertiesAreNotRequired() {
-        InfoSystem infoSystem = new InfoSystem(new JSONObject("{}"));
+    private InfoSystem validInfoSystem = new InfoSystem();
 
-        assertNull(infoSystem.getId());
-        assertNull(infoSystem.getUuid());
-        assertNull(infoSystem.getOwnerCode());
-        assertNull(infoSystem.getOwnerName());
+    @Before
+    public void setUp() {
+        validInfoSystem.setId(123L);
+        validInfoSystem.setUuid(UUID.fromString("53524f32-b732-4ce6-99a8-448d931d870d"));
+        validInfoSystem.setFullName("Rebaste register");
+        validInfoSystem.setShortName("fox");
+        validInfoSystem.setOwnerCode("12345");
+        validInfoSystem.setOwnerName("Rebane");
+        validInfoSystem.setCreationTimestamp("2017-12-19T12:13:14.137+02:00");
+        validInfoSystem.setUpdateTimestamp("2017-12-19T15:16:17.137+02:00");
+        validInfoSystem.addContact("contact1", "contact1@example.com");
+        validInfoSystem.addContact("contact2", "contact2@example.com");
     }
 
     @Test
-    public void deserializeFromJson() {
-        //language=JSON
-        String json =
-                "{\n" +
-                        "  \"name\": \"Rebaste register\",\n" +
-                        "  \"shortname\": \"fox\",\n" +
-                        "  \"owner\": {\n" +
-                        "    \"code\": \"12345\",\n" +
-                        "    \"name\": \"Rebane\"\n" +
-                        "  },\n" +
-                        "  \"main_resource_id\": 357,\n" +
-                        "  \"documentation\": \"http://riha.eesti.ee\",\n" +
-                        "  \"meta\": {\n" +
-                        "    \"system_status\": {\n" +
-                        "      \"timestamp\": \"2016-12-13T17:10:20.785\"\n" +
-                        "    }\n" +
-                        "  },\n" +
-                        "  \"uri\": \"http://base.url/fox\",\n" +
-                        "  \"uuid\": \"53524f32-b732-4ce6-99a8-448d931d870d\"\n" +
-                        "}";
-
-        InfoSystem infoSystem = new InfoSystem(new JSONObject(json));
-
-        assertEquals((Integer) 357, infoSystem.getId());
-        assertEquals(UUID.fromString("53524f32-b732-4ce6-99a8-448d931d870d"), infoSystem.getUuid());
-        assertEquals("12345", infoSystem.getOwnerCode());
-        assertEquals("Rebane", infoSystem.getOwnerName());
+    public void retrievedUuid() {
+        assertThat(validInfoSystem.getUuid(), equalTo(UUID.fromString("53524f32-b732-4ce6-99a8-448d931d870d")));
     }
 
     @Test
-    public void setsProperties() {
-        //language=JSON
-        String expectedJson = "{\n" +
-                "  \"owner\":\n" +
-                "  {\n" +
-                "    \"code\": \"123\",\n" +
-                "    \"name\": \"Rebane\"\n" +
-                "  },\n" +
-                "  \"main_resource_id\": 357,\n" +
-                "  \"uuid\": \"53524f32-b732-4ce6-99a8-448d931d870d\"\n" +
-                "}";
-
-        InfoSystem infoSystem = new InfoSystem("{}");
-
-        infoSystem.setId(357);
-        infoSystem.setUuid(UUID.fromString("53524f32-b732-4ce6-99a8-448d931d870d"));
-        infoSystem.setOwnerCode("123");
-        infoSystem.setOwnerName("Rebane");
-
-        JSONAssert.assertEquals(new JSONObject(expectedJson), infoSystem.getJsonObject(), false);
+    public void returnsNullWhenUuidNotSpecified() {
+        assertThat(new InfoSystem().getUuid(), nullValue());
     }
 
     @Test
-    public void doesNotFailWhenOwnerIsNull() {
-        String json = "{\n" +
-                "  \"owner\": null\n" +
-                "}";
-        InfoSystem infoSystem = new InfoSystem(json);
-
-        assertThat(infoSystem.getOwnerCode(), is(nullValue()));
-        assertThat(infoSystem.getOwnerName(), is(nullValue()));
+    public void retrievesOwnerName() {
+        assertThat(validInfoSystem.getOwnerName(), equalTo("Rebane"));
     }
 
     @Test
-    public void doesNotFailWhenOwnerCodeOrNameIsNull() {
-        String json = "{\n" +
-                "  \"owner\": {\n" +
-                "    \"code\": null,\n" +
-                "    \"name\": null\n" +
-                "  }\n" +
-                "}";
-        InfoSystem infoSystem = new InfoSystem(json);
-
-        assertThat(infoSystem.getOwnerCode(), is(nullValue()));
-        assertThat(infoSystem.getOwnerName(), is(nullValue()));
+    public void returnsNullWhenOwnerNameNotSpecified() {
+        assertThat(new InfoSystem().getOwnerName(), nullValue());
     }
+
+    @Test
+    public void retrievesOwnerCode() {
+        assertThat(validInfoSystem.getOwnerCode(), equalTo("12345"));
+    }
+
+    @Test
+    public void returnsNullWhenOwnerCodeNotSpecified() {
+        assertThat(new InfoSystem().getOwnerCode(), nullValue());
+    }
+
+    @Test
+    public void retrievesFullName() {
+        assertThat(validInfoSystem.getFullName(), equalTo("Rebaste register"));
+    }
+
+    @Test
+    public void returnsNullWhenFullnameNotSpecified() {
+        assertThat(new InfoSystem().getFullName(), nullValue());
+    }
+
+    @Test
+    public void retrievesShortName() {
+        assertThat(validInfoSystem.getShortName(), equalTo("fox"));
+    }
+
+    @Test
+    public void returnsNullWhenShortNameNotSpecified() {
+        assertThat(new InfoSystem().getShortName(), nullValue());
+    }
+
+    @Test
+    public void retrievesCreationTimestamp() {
+        assertThat(validInfoSystem.getCreationTimestamp(), equalTo("2017-12-19T12:13:14.137+02:00"));
+    }
+
+    @Test
+    public void returnsNullWhenCreationTimeNotSpecified() {
+        assertThat(new InfoSystem().getCreationTimestamp(), nullValue());
+    }
+
+    @Test
+    public void retrievesUpdateTimestamp() {
+        assertThat(validInfoSystem.getUpdateTimestamp(), equalTo("2017-12-19T15:16:17.137+02:00"));
+    }
+
+    @Test
+    public void returnsNullWhenUpdateTimeNotSpecified() {
+        assertThat(new InfoSystem().getUpdateTimestamp(), nullValue());
+    }
+
+    @Test
+    public void retrievesContactEmails() {
+        assertThat(validInfoSystem.getContactsEmails(),
+                containsInAnyOrder("contact1@example.com", "contact2@example.com"));
+    }
+
+    @Test
+    public void returnsEmptyListWhenContactsNotSpecified() {
+        assertThat(new InfoSystem().getContactsEmails(), empty());
+    }
+
+    @Test
+    public void copiesPropertiesAndMakesJsonDeepCopy() {
+        InfoSystem copy = validInfoSystem.copy();
+
+        assertThat(copy.getId(), equalTo(validInfoSystem.getId()));
+        assertThat(copy.getJsonContent(), not(sameInstance(validInfoSystem.getJsonContent())));
+        assertThat(copy.getJsonContent(), equalTo(validInfoSystem.getJsonContent()));
+    }
+
 }

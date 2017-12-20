@@ -68,7 +68,7 @@ public class NotificationService {
             return;
         }
 
-        List<String> to = infoSystemService.getSystemContactsEmails(infoSystem);
+        List<String> to = infoSystem.getContactsEmails();
         if (to.isEmpty()) {
             log.info("New issue has been recently added, but info system '{}' has no contacts.",
                     infoSystem.getFullName());

@@ -1,5 +1,6 @@
 package ee.ria.riha.service.auth;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
@@ -43,11 +44,7 @@ public class InfoSystemAuthorizationServiceTest {
     @InjectMocks
     private InfoSystemAuthorizationService infoSystemAuthorization;
 
-    private InfoSystem infoSystem = new InfoSystem("{\n" +
-            "  \"owner\": {\n" +
-            "    \"code\": \"777\"\n" +
-            "  }\n" +
-            "}");
+    private InfoSystem infoSystem = new InfoSystem();
 
     @Before
     public void setUp() {
@@ -57,6 +54,8 @@ public class InfoSystemAuthorizationServiceTest {
                 ImmutableMultimap.of(
                         new RihaOrganization(ACME_ORG_CODE, "Acme org"),
                         new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")));
+
+        infoSystem.setOwnerCode("777");
 
         authenticationToken = new RihaOrganizationAwareAuthenticationToken(
                 principal, null, null);
@@ -83,17 +82,15 @@ public class InfoSystemAuthorizationServiceTest {
 
     @Test
     public void isOwnerReturnsFalseWhenInfoSystemOwnerCodeIsNotSet() {
-        infoSystem = new InfoSystem("{}");
+        infoSystem = new InfoSystem();
         assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
     }
 
     @Test
     public void isOwnerReturnsFalseWhenActiveOrganizationAndInfoSystemOwnerCodeAreNotEqual() {
-        infoSystem = new InfoSystem("{\n" +
-                "  \"owner\": {\n" +
-                "    \"code\": \"000\"\n" +
-                "  }\n" +
-                "}");
+        infoSystem = new InfoSystem();
+        infoSystem.setOwnerCode("000");
+
         assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
     }
 

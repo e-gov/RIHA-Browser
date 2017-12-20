@@ -24,14 +24,19 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         if (mainResource == null) {
             return null;
         }
-        return new InfoSystem(mainResource.getJson_context());
+        InfoSystem infoSystem = new InfoSystem(mainResource.getJson_content());
+        infoSystem.setId(mainResource.getMain_resource_id());
+        return infoSystem;
     };
 
     private static final Function<InfoSystem, MainResource> INFO_SYSTEM_TO_MAIN_RESOURCE = infoSystem -> {
         if (infoSystem == null) {
             return null;
         }
-        return new MainResource(infoSystem.getJsonObject().toString());
+        MainResource mainResource = new MainResource();
+        mainResource.setJson_content(infoSystem.getJsonContent());
+        mainResource.setMain_resource_id(infoSystem.getId());
+        return mainResource;
     };
 
     private final MainResourceRepository mainResourceRepository;
