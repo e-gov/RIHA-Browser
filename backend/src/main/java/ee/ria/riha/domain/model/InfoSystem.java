@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +34,8 @@ public class InfoSystem {
 
     private Long id;
     private JsonNode jsonContent;
+    private IssueType lastPositiveApprovalRequestType;
+    private Date lastPositiveApprovalRequestDate;
 
     /**
      * Creates {@link InfoSystem} instance with empty {@link JsonNode} as a source
@@ -59,6 +62,8 @@ public class InfoSystem {
     public InfoSystem copy() {
         InfoSystem copy = new InfoSystem(this.jsonContent.deepCopy());
         copy.setId(this.getId());
+        copy.setLastPositiveApprovalRequestDate(this.getLastPositiveApprovalRequestDate());
+        copy.setLastPositiveApprovalRequestType(this.getLastPositiveApprovalRequestType());
 
         return copy;
     }
@@ -206,6 +211,22 @@ public class InfoSystem {
      */
     public void setUpdateTimestamp(String updateTimestamp) {
         ((ObjectNode) jsonContent).with(META_KEY).put(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
+    }
+
+    public IssueType getLastPositiveApprovalRequestType() {
+        return lastPositiveApprovalRequestType;
+    }
+
+    public void setLastPositiveApprovalRequestType(IssueType lastPositiveApprovalRequestType) {
+        this.lastPositiveApprovalRequestType = lastPositiveApprovalRequestType;
+    }
+
+    public Date getLastPositiveApprovalRequestDate() {
+        return lastPositiveApprovalRequestDate;
+    }
+
+    public void setLastPositiveApprovalRequestDate(Date lastPositiveApprovalRequestDate) {
+        this.lastPositiveApprovalRequestDate = lastPositiveApprovalRequestDate;
     }
 
     /**

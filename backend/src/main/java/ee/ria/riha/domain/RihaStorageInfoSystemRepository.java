@@ -1,6 +1,7 @@
 package ee.ria.riha.domain;
 
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.domain.model.IssueType;
 import ee.ria.riha.service.ObjectNotFoundException;
 import ee.ria.riha.storage.domain.MainResourceRepository;
 import ee.ria.riha.storage.domain.model.MainResource;
@@ -26,6 +27,11 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         }
         InfoSystem infoSystem = new InfoSystem(mainResource.getJson_content());
         infoSystem.setId(mainResource.getMain_resource_id());
+        infoSystem.setLastPositiveApprovalRequestType(mainResource.getLast_positive_approval_request_type() != null
+                ? IssueType.valueOf(mainResource.getLast_positive_approval_request_type())
+                : null);
+        infoSystem.setLastPositiveApprovalRequestDate(mainResource.getLast_positive_approval_request_date());
+
         return infoSystem;
     };
 
@@ -36,6 +42,7 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         MainResource mainResource = new MainResource();
         mainResource.setJson_content(infoSystem.getJsonContent());
         mainResource.setMain_resource_id(infoSystem.getId());
+
         return mainResource;
     };
 
@@ -64,6 +71,15 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         }
 
         return infoSystems.get(0);
+    }
+
+    @Override
+    public List<InfoSystem> find(Filterable filterable) {
+        List<MainResource> mainResources = mainResourceRepository.find(filterable);
+
+        return mainResources.stream()
+                .map(MAIN_RESOURCE_TO_INFO_SYSTEM)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -98,14 +114,5 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
                 mainResourcePagedResponse.getContent().stream()
                         .map(MAIN_RESOURCE_TO_INFO_SYSTEM)
                         .collect(Collectors.toList()));
-    }
-
-    @Override
-    public List<InfoSystem> find(Filterable filterable) {
-        List<MainResource> mainResources = mainResourceRepository.find(filterable);
-
-        return mainResources.stream()
-                .map(MAIN_RESOURCE_TO_INFO_SYSTEM)
-                .collect(Collectors.toList());
     }
 }
