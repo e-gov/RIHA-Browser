@@ -79,10 +79,7 @@ public class IssueServiceTest {
     @InjectMocks
     private IssueService issueService;
 
-    private InfoSystem existingInfoSystem = new InfoSystem(
-            "{\n" +
-                    "  \"short_name\": \"" + EXISTING_INFO_SYSTEM_SHORT_NAME + "\"\n" +
-                    "}");
+    private InfoSystem existingInfoSystem = new InfoSystem();
 
     private Issue existingIssue = Issue.builder()
             .id(EXISTING_ISSUE_ID)
@@ -98,6 +95,8 @@ public class IssueServiceTest {
         // Reset authorization
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         setProducerRole();
+
+        existingInfoSystem.setShortName(EXISTING_INFO_SYSTEM_SHORT_NAME);
 
         when(infoSystemService.get(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
 

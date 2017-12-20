@@ -40,18 +40,7 @@ public class InfoSystemServiceTest {
     @InjectMocks
     private InfoSystemService infoSystemService;
 
-    private InfoSystem existingInfoSystem = new InfoSystem(
-            "{\n" +
-                    "  \"main_resource_id\": 2357,\n" +
-                    "  \"short_name\": \"" + EXISTING_INFO_SYSTEM_SHORT_NAME + "\",\n" +
-                    "  \"owner\": {\n" +
-                    "    \"code\": \"555000\"\n" +
-                    "  },\n" +
-                    "  \"meta\": {\n" +
-                    "    \"creation_timestamp\": \"2017-10-04T14:44:45.404+03:00\",\n" +
-                    "    \"update_timestamp\": \"2017-10-04T14:44:45.404+03:00\"\n" +
-                    "  }\n" +
-                    "}");
+    private InfoSystem existingInfoSystem = new InfoSystem();
     private List<InfoSystem> foundInfoSystems = Lists.newArrayList();
 
     @Before
@@ -59,6 +48,12 @@ public class InfoSystemServiceTest {
         RihaOrganizationAwareAuthenticationToken authenticationToken = JaneAuthenticationTokenBuilder.builder().build();
         authenticationToken.setActiveOrganization("555010203");
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        existingInfoSystem.setId(2357L);
+        existingInfoSystem.setShortName(EXISTING_INFO_SYSTEM_SHORT_NAME);
+        existingInfoSystem.setOwnerCode("555000");
+        existingInfoSystem.setCreationTimestamp("2017-10-04T14:44:45.404+03:00");
+        existingInfoSystem.setUpdateTimestamp("2017-10-04T14:44:45.404+03:00");
 
         when(infoSystemRepository.find(any(FilterRequest.class))).thenReturn(foundInfoSystems);
         when(infoSystemRepository.load(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
