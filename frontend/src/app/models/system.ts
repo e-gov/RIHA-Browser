@@ -2,7 +2,8 @@ import { G } from '../globals/globals';
 
 export class System {
   id: number = null;
-  lastPositiveApprovalRequest: any = null;
+  lastPositiveApprovalRequestType: any = null;
+  lastPositiveApprovalRequestDate: any = null;
   details: any = {};
 
   getOwnerCode(): any {
@@ -18,19 +19,11 @@ export class System {
   }
 
   getLastPositiveApprovalRequestType(){
-    if (this.lastPositiveApprovalRequest && this.lastPositiveApprovalRequest.type){
-      return this.lastPositiveApprovalRequest.type;
-    } else {
-      return null;
-    }
+      return this.lastPositiveApprovalRequestType;
   }
 
   getLastPositiveApprovalRequestDate(){
-    if (this.lastPositiveApprovalRequest && this.lastPositiveApprovalRequest.timestamp){
-      return this.lastPositiveApprovalRequest.timestamp;
-    } else {
-      return null;
-    }
+      return this.lastPositiveApprovalRequestDate;
   }
 
   setStatus(status): void {
@@ -92,7 +85,8 @@ export class System {
   constructor(system?){
     system = system || {};
     this.id = system.id || null;
-    this.lastPositiveApprovalRequest = system.lastPositiveApprovalRequest || null;
+    this.lastPositiveApprovalRequestType = system.lastPositiveApprovalRequestType || null;
+    this.lastPositiveApprovalRequestDate = system.lastPositiveApprovalRequestDate || null;
     this.details = system.details || {};
     if (this.details.meta != null){
       if (!this.details.meta.development_status){
