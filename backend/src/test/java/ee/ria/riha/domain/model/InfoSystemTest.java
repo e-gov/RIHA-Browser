@@ -3,6 +3,7 @@ package ee.ria.riha.domain.model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
@@ -24,6 +25,8 @@ public class InfoSystemTest {
         validInfoSystem.setUpdateTimestamp("2017-12-19T15:16:17.137+02:00");
         validInfoSystem.addContact("contact1", "contact1@example.com");
         validInfoSystem.addContact("contact2", "contact2@example.com");
+        validInfoSystem.setLastPositiveApprovalRequestType(IssueType.ESTABLISHMENT_REQUEST);
+        validInfoSystem.setLastPositiveApprovalRequestDate(new Date());
     }
 
     @Test
@@ -112,6 +115,10 @@ public class InfoSystemTest {
         InfoSystem copy = validInfoSystem.copy();
 
         assertThat(copy.getId(), equalTo(validInfoSystem.getId()));
+        assertThat(copy.getLastPositiveApprovalRequestDate(),
+                equalTo(validInfoSystem.getLastPositiveApprovalRequestDate()));
+        assertThat(copy.getLastPositiveApprovalRequestType(),
+                equalTo(validInfoSystem.getLastPositiveApprovalRequestType()));
         assertThat(copy.getJsonContent(), not(sameInstance(validInfoSystem.getJsonContent())));
         assertThat(copy.getJsonContent(), equalTo(validInfoSystem.getJsonContent()));
     }
