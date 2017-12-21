@@ -28,6 +28,7 @@ export class ProducerListComponent implements OnInit {
     systemStatus: string,
     xRoadStatus: string,
     developmentStatus: string,
+    lastPositiveApprovalRequestType: string,
     dateCreatedFrom: string,
     dateCreatedTo: string,
     dateUpdatedFrom: string,
@@ -86,7 +87,7 @@ export class ProducerListComponent implements OnInit {
       this.systemsService.getOwnSystems(params, this.gridData).then(
         res => {
           this.gridData.updateData(res.json());
-          if (this.gridData.getPageNumber() > this.gridData.totalPages) {
+          if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
             this.getOwnSystems();
           } else {
             this.loaded = true;
@@ -127,6 +128,7 @@ export class ProducerListComponent implements OnInit {
       systemStatus: '',
       xRoadStatus: '',
       developmentStatus: '',
+      lastPositiveApprovalRequestType: '',
       dateCreatedFrom: '',
       dateCreatedTo: '',
       dateUpdatedFrom: '',
@@ -167,6 +169,7 @@ export class ProducerListComponent implements OnInit {
         systemStatus: params['systemStatus'] || '',
         xRoadStatus: params['xRoadStatus'] || '',
         developmentStatus: params['developmentStatus'] || '',
+        lastPositiveApprovalRequestType: params['lastPositiveApprovalRequestType'] || '',
         dateCreatedFrom: this.systemsService.timestampToDateObj(params['dateCreatedFrom']),
         dateCreatedTo: this.systemsService.timestampToDateObj(params['dateCreatedTo']),
         dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),

@@ -39,8 +39,8 @@
           <select id="x-road-status-input" class="form-control"
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.xRoadStatus">
-            <option [value]="''" selected>määramata</option>
-            <option [value]="globals.x_road_status.JOINED" selected>liidestatud</option>
+            <option [value]="''">määramata</option>
+            <option [value]="globals.x_road_status.JOINED">liidestatud</option>
             <option [value]="globals.x_road_status.NOT_JOINED">ei liidestatud</option>
           </select>
         </div>
@@ -55,8 +55,8 @@
           <select id="development-status-input" class="form-control"
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.developmentStatus">
-            <option [value]="''" selected>määramata</option>
-            <option [value]="globals.development_status.IN_DEVELOPMENT" selected>aktiivses arenduses</option>
+            <option [value]="''">määramata</option>
+            <option [value]="globals.development_status.IN_DEVELOPMENT">aktiivses arenduses</option>
             <option [value]="globals.development_status.NOT_IN_DEVELOPMENT">ei ole arenduses</option>
           </select>
         </div>
@@ -69,6 +69,17 @@
         <div class="form-group">
           <label for="purpose-input">Eesmärk</label>
           <input class="form-control" (keyup.enter)="getOwnSystems()" [(ngModel)]="filters.purpose" type="text" id="purpose-input">
+        </div>
+        <div class="form-group">
+          <label for="approval-status">Kooskõlastamise staatus</label>
+          <select id="approval-status" class="form-control"
+                  (keyup.enter)="getOwnSystems()"
+                  [(ngModel)]="filters.lastPositiveApprovalRequestType">
+            <option [value]="''">määramata</option>
+            <option [value]="globals.issue_type.ESTABLISHMENT_REQUEST">asutamine kooskõlastatud</option>
+            <option [value]="globals.issue_type.TAKE_INTO_USE_REQUEST">kasutamine kooskõlastatud</option>
+            <option [value]="globals.issue_type.FINALIZATION_REQUEST">lõpetamine kooskõlastatud</option>
+          </select>
         </div>
         <!--<div class="form-group">
           <label for="date-created-input-from">Sisestamise kuupäev alates</label>
@@ -164,6 +175,13 @@
           </th>
           <th>
             <app-sort-button
+              [labelText]="'Kooskõlastamine'"
+              [sortProperty]="'last_positive_approval_request_type'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
               [labelText]="'Märksõnad'"
               [sortProperty]="'topics'"
               [gridData]="gridData"
@@ -182,6 +200,7 @@
             <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.short_name}}</a></td>
             <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.name}}</a></td>
             <td class="status">{{ generalHelperService.getSystemStatusText(system) }}</td>
+            <td class="approval-status">{{ generalHelperService.getApprovalStatusText(system) }}</td>
             <td class="topics"><button *ngFor="let topic of system.details.topics" (click)="searchSystemsByTopic(topic)" class="btn btn-primary btn-sm ml-1 mb-1">{{ topic }}</button></td>
             <td class="last-modified text-nowrap">{{ system.details.meta.update_timestamp | date:'y-MM-dd HH:mm:ss'}}</td>
           </tr>
