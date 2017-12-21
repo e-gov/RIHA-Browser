@@ -28,6 +28,28 @@ export class GeneralHelperService {
     return statusDescription;
   }
 
+  public getApprovalStatusText(system){
+    let statusDescription = 'määramata';
+    if (system.lastPositiveApprovalRequestType) {
+      let status = system.lastPositiveApprovalRequestType;
+      switch (status) {
+        case G.issue_type.TAKE_INTO_USE_REQUEST: {
+          statusDescription = 'kasutamine kooskõlastatud';
+          break;
+        }
+        case G.issue_type.ESTABLISHMENT_REQUEST: {
+          statusDescription = 'asutamine kooskõlastatud';
+          break;
+        }
+        case G.issue_type.FINALIZATION_REQUEST: {
+          statusDescription = 'lõpetamine kooskõlastatud';
+          break
+        }
+      }
+    }
+    return statusDescription;
+  }
+
   public generateQueryString(obj){
     let newObj = {};
     Object.keys(obj).forEach(function(key) {
