@@ -12,6 +12,6 @@ public class NewIssueToApproversEmailNotification extends SimpleHtmlEmailNotific
 
     private String infoSystemFullName;
     private String infoSystemShortName;
-    private String issueTitle;
+    private IssueDataModel issue;
     private String baseUrl;
 }

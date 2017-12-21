@@ -19,7 +19,12 @@ import java.util.Map;
 public class NewIssueToApproversNotificationHandler extends SimpleHtmlEmailNotificationHandler {
 
     private static final String TEMPLATE_NAME = "new-issue-notification-approvers-template.ftl";
-    private static final String SUBJECT_KEY = "notifications.newIssue.toApprovers.subject";
+    private static final String STANDARD_SUBJECT_KEY = "notifications.newIssue.toApprovers.subject";
+
+    private static final String ESTABLISHMENT_REQUEST_SUBJECT_KEY = "notifications.newApprovalRequestIssue.establishmentRequest.subject";
+    private static final String TAKE_INTO_USE_REQUEST_SUBJECT_KEY = "notifications.newApprovalRequestIssue.takeIntoUseRequest.subject";
+    private static final String MODIFICATION_REQUEST_SUBJECT_KEY = "notifications.newApprovalRequestIssue.modificationRequest.subject";
+    private static final String FINALIZATION_REQUEST_SUBJECT_KEY = "notifications.newApprovalRequestIssue.finalizationRequest.subject";
 
     private Configuration freeMarkerConfiguration;
     private MessageSource messageSource;
@@ -32,8 +37,30 @@ public class NewIssueToApproversNotificationHandler extends SimpleHtmlEmailNotif
     @Override
     protected String getSubject(EmailNotificationDataModel model) {
         NewIssueToApproversEmailNotification newIssueToApproversDataModel = (NewIssueToApproversEmailNotification) model;
-        return messageSource.getMessage(SUBJECT_KEY,
-                new String[]{newIssueToApproversDataModel.getInfoSystemShortName()}, Locale.getDefault());
+
+        String subjectKey = getSubjectKey(newIssueToApproversDataModel);
+        return messageSource.getMessage(subjectKey,
+                new String[]{newIssueToApproversDataModel.getInfoSystemShortName()},
+                Locale.getDefault());
+    }
+
+    private String getSubjectKey(NewIssueToApproversEmailNotification model) {
+        if (model.getIssue() == null || model.getIssue().getType() == null) {
+            return STANDARD_SUBJECT_KEY;
+        }
+
+        switch (model.getIssue().getType()) {
+            case "ESTABLISHMENT_REQUEST":
+                return ESTABLISHMENT_REQUEST_SUBJECT_KEY;
+            case "TAKE_INTO_USE_REQUEST":
+                return TAKE_INTO_USE_REQUEST_SUBJECT_KEY;
+            case "MODIFICATION_REQUEST":
+                return MODIFICATION_REQUEST_SUBJECT_KEY;
+            case "FINALIZATION_REQUEST":
+                return FINALIZATION_REQUEST_SUBJECT_KEY;
+            default:
+                return STANDARD_SUBJECT_KEY;
+        }
     }
 
     @Override
@@ -41,12 +68,12 @@ public class NewIssueToApproversNotificationHandler extends SimpleHtmlEmailNotif
         try {
             NewIssueToApproversEmailNotification newIssueToApproversDataModel = (NewIssueToApproversEmailNotification) dataModel;
             Template template = freeMarkerConfiguration.getTemplate(TEMPLATE_NAME);
-            Map<String, Object> model = new HashMap<>();
 
+            Map<String, Object> model = new HashMap<>();
             model.put("baseUrl", newIssueToApproversDataModel.getBaseUrl());
             model.put("name", newIssueToApproversDataModel.getInfoSystemFullName());
             model.put("shortName", newIssueToApproversDataModel.getInfoSystemShortName());
-            model.put("title", newIssueToApproversDataModel.getIssueTitle());
+            model.put("title", newIssueToApproversDataModel.getIssue().getTitle());
 
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {

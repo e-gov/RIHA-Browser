@@ -117,7 +117,7 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    public void sendNewIssueToApproversNotification(String issueTitle, InfoSystem infoSystem) {
+    public void sendNewIssueToApproversNotification(Issue issue, InfoSystem infoSystem) {
         if (!isNewIssueNotificationEnabled()) {
             log.info("New issue notifications sending is disabled.");
             return;
@@ -131,7 +131,12 @@ public class NotificationService {
         notificationModel.setBcc(approversEmails.toArray(new String[approversEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setIssueTitle(issueTitle);
+
+        notificationModel.setIssue(IssueDataModel.builder()
+                .title(issue.getTitle())
+                .type(issue.getType() != null ? issue.getType().name() : null)
+                .build());
+
         notificationModel.setBaseUrl(getBaseUrl());
 
         emailNotificationSenderService.sendNotification(notificationModel);
