@@ -64,7 +64,7 @@
       <app-producer-details-general [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-general>
     </div>
     <div id="tagasiside" class="separate-block">
-      <app-producer-details-issues [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-issues>
+      <app-producer-details-issues (onIssueResolve)="onIssueResolve($event)" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-issues>
     </div>
     <div id="andmed"
          *ngIf="isBlockVisible('dataObjects')"
