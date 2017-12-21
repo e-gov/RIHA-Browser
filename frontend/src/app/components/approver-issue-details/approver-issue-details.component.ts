@@ -17,6 +17,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   @Input() feedback: any;
   @Input() system: System;
+
   replies: any[] = [];
   activeUser: User;
   globals: any = G;
@@ -38,7 +39,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
-        this.modalService.closeActiveModal();
+        this.modalService.closeActiveModal({issueType: resolutionType});
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');

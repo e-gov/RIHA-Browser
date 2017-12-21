@@ -85,6 +85,12 @@ export class ProducerDetailsComponent implements OnInit {
     return ret;
   }
 
+  onIssueResolve(issueType){
+    if (issueType){
+      this.getSystem(this.system.details.short_name);
+    }
+  }
+
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
       this.system = new System(response.json());

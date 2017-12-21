@@ -10,20 +10,20 @@
       <div *ngIf="system.getStatus() || allowEdit">
         <span class="col-form-label advanced-label" *ngIf="system.getStatus() == globals.system_status.IN_USE">
           <span><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong><span *ngIf="system.isUsed() && system.details.meta.system_status.timestamp"> alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></span>,
-          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.TAKE_INTO_USE_REQUEST"><span class="text-success"><strong>kooskõlastatud</strong></span>{{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
-          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span>{{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.TAKE_INTO_USE_REQUEST"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
           <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.ESTABLISHMENT_REQUEST || !system.getLastPositiveApprovalRequestType()"><span class="text-danger"><strong>kooskõlastamata</strong></span></span>
         </span>
         <span class="col-form-label advanced-label" *ngIf="system.getStatus() == globals.system_status.ESTABLISHING">
           <i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong>,
-          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.ESTABLISHMENT_REQUEST"><span class="text-success"><strong>kooskõlastatud</strong></span>{{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
-          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.TAKE_INTO_USE_REQUEST"><span class="text-success"><strong>kasutamine kooskõlastatud</strong></span>{{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
-          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span>{{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.ESTABLISHMENT_REQUEST"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.TAKE_INTO_USE_REQUEST"><span class="text-success"><strong>kasutamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
           <span *ngIf="!system.getLastPositiveApprovalRequestType()"><span class="text-danger"><strong>kooskõlastamata</strong></span></span>
         </span>
         <span class="col-form-label advanced-label" *ngIf="system.getStatus() == globals.system_status.FINISHED">
           <i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong>,
-          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST; else finish_not_approved"><span class="text-success"><strong>kooskõlastatud</strong></span>{{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST; else finish_not_approved"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
           <ng-template #finish_not_approved><span class="text-danger"><strong>kooskõlastamata</strong></span></ng-template>
         </span>
         <span class="col-form-label advanced-label" *ngIf="!system.getStatus() && allowEdit">
