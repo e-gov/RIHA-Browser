@@ -16,5 +16,6 @@ public class IssueDataModel {
 
     private String title;
     private String status;
+    private String type;
 
 }

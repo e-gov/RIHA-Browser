@@ -115,7 +115,7 @@ public class IssueServiceTest {
         });
 
         doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
-        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(String.class),
+        doNothing().when(notificationService).sendNewIssueToApproversNotification(any(Issue.class),
                 any(InfoSystem.class));
     }
 
