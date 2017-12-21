@@ -128,6 +128,9 @@ export class SystemsService {
       if (filters.developmentStatus){
         filtersArr.push(`meta.development_status,jilike,${ filters.developmentStatus }`);
       }
+      if (filters.lastPositiveApprovalRequestType){
+        filtersArr.push(`last_positive_approval_request_type,ilike,${ filters.lastPositiveApprovalRequestType }`);
+      }
       if (filters.xRoadStatus){
         filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
       }
