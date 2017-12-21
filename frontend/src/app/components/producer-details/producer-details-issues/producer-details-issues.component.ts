@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { System } from '../../../models/system';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
@@ -16,6 +16,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Output() onIssueResolve = new  EventEmitter<string>();
 
   comments: any[] = [];
   issues: any[] = [];
@@ -52,6 +53,8 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       modalRef.componentInstance.system = this.system;
       modalRef.result.then(res => {
         this.refreshIssues();
+        let issueType = res && res.issueType ? res.issueType : null;
+        this.onIssueResolve.emit(issueType);
       },
       err => {
 
