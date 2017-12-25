@@ -20,19 +20,15 @@ export class ProducerDetailsComponent implements OnInit {
   private user: User;
   public loaded: boolean;
   public notFound: boolean;
+  public issueId: any;
 
-  adjustSection(attempt){
-    if (attempt < 5){
-      let hash = this.winRef.nativeWindow.location.hash;
-      if (hash){
-        let elId = decodeURI(hash.replace('#',''));
-        let el = $(hash)[0];
-        if (el){
-          this.winRef.nativeWindow.scrollTo(0,$(el).offset().top);
-        } else {
-          attempt++;
-          setTimeout(()=>{this.adjustSection(attempt)}, 1000);
-        }
+  adjustSection(hash?){
+    hash = hash || this.winRef.nativeWindow.location.hash;
+    if (hash){
+      let elId = decodeURI(hash.replace('#',''));
+      let el = $(hash)[0];
+      if (el){
+        this.winRef.nativeWindow.scrollTo(0,$(el).offset().top);
       }
     }
   }
@@ -91,11 +87,18 @@ export class ProducerDetailsComponent implements OnInit {
     }
   }
 
+  onIssueError(error){
+    if (error.status == '404'){
+      this.loaded = false;
+      this.notFound = true;
+    }
+  }
+
   getSystem(id){
     this.systemsService.getSystem(id).then(response => {
       this.system = new System(response.json());
       this.loaded = true;
-      this.adjustSection(0);
+      setTimeout(()=>{this.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);
     }, err => {
       let status = err.status;
       if (status == '404'){
@@ -122,6 +125,7 @@ export class ProducerDetailsComponent implements OnInit {
     this.route.params.subscribe( params => {
       this.loaded = false;
       this.notFound = false;
+      this.issueId = params['issue_id'] || null;
       this.getSystem(params['short_name']);
     });
   }
