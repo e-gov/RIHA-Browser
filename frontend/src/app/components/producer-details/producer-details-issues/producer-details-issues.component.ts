@@ -16,7 +16,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Input() issueId: any;
   @Output() onIssueResolve = new  EventEmitter<string>();
+  @Output() onIssueError = new  EventEmitter();
 
   comments: any[] = [];
   issues: any[] = [];
@@ -41,8 +43,8 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     }, err => {});
   }
 
-  openIssueDetailsModal(comment){
-    this.systemsService.getSystemIssueById(comment.id).then(res => {
+  openIssueDetailsModal(issueId){
+    this.systemsService.getSystemIssueById(issueId).then(res => {
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
         {
           size: "lg",
@@ -59,6 +61,8 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       err => {
 
       });
+    }, err => {
+      this.onIssueError.emit(err);
     });
     return false;
   }
@@ -89,6 +93,15 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   ngOnInit() {
     this.refreshIssues();
+    if (this.issueId){
+      if (!this.userMatrix.isLoggedIn){
+        //alert('please log in');
+      } else if (!this.canApprove()){
+        //alert('you cannot approve');
+      } else {
+        this.openIssueDetailsModal(this.issueId);
+      }
+    }
   }
 
 }
