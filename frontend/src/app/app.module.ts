@@ -85,6 +85,7 @@ const routes: Routes = [
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
   { path: 'Infosüsteemid/Vaata/:short_name', component: ProducerDetailsComponent },
+  { path: 'Infosüsteemid/Vaata/:short_name/Arutelu/:issue_id', component: ProducerDetailsComponent },
   { path: 'Systems/Vaata/:short_name', component: ProducerDetailsComponent },
   { path: 'Kirjelda/Vaata/:short_name', component: ProducerDetailsComponent },
   { path: 'Describe/View/:short_name', component: ProducerDetailsComponent },
