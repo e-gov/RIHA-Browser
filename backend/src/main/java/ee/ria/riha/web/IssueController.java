@@ -30,19 +30,20 @@ public class IssueController {
     private IssueSummaryModelMapper issueSummaryModelMapper;
 
     /**
-     * Retrieve paginated and filtered list of issues for given info system.
+     * Retrieve paginated and filtered list of issues for info system referenced by either UUID or short name.
      *
-     * @param shortName  a short name of info system
+     * @param reference  info system reference
      * @param pageable   paging definition
      * @param filterable filter definition
      * @return paginated list of info system issues
      */
-    @GetMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
+    @GetMapping(API_V1_PREFIX + "/systems/{reference}/issues")
     @ApiOperation("List all issues of information system")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<IssueSummaryModel>> listInfoSystemIssues(@PathVariable("shortName") String shortName,
-                                                                                 Pageable pageable, Filterable filterable) {
-        PagedResponse<Issue> issues = issueService.listInfoSystemIssues(shortName, pageable, filterable);
+    public ResponseEntity<PagedResponse<IssueSummaryModel>> listInfoSystemIssues(
+            @PathVariable("reference") String reference,
+            Pageable pageable, Filterable filterable) {
+        PagedResponse<Issue> issues = issueService.listInfoSystemIssues(reference, pageable, filterable);
 
         return ResponseEntity.ok(
                 new PagedResponse<>(new PageRequest(issues.getPage(), issues.getSize()),
@@ -67,18 +68,18 @@ public class IssueController {
     }
 
     /**
-     * Adds single issue to the info system.
+     * Adds single issue to the info system referenced by either UUID or short name.
      *
-     * @param shortName a short name of info system
+     * @param reference info system reference
      * @param model     issue model
      * @return created issue
      */
-    @PostMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
+    @PostMapping(API_V1_PREFIX + "/systems/{reference}/issues")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Create new issue for information system")
-    public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("shortName") String shortName,
+    public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("reference") String reference,
                                                        @RequestBody Issue model) {
-        return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, model));
+        return ResponseEntity.ok(issueService.createInfoSystemIssue(reference, model));
     }
 
     /**

@@ -50,19 +50,19 @@ public class InfoSystemController {
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
-    @GetMapping("/{shortName}")
+    @GetMapping("/{reference}")
     @ApiOperation("Get existing information system")
-    public ResponseEntity<InfoSystemModel> get(@PathVariable("shortName") String shortName) {
-        InfoSystem infoSystem = infoSystemService.get(shortName);
+    public ResponseEntity<InfoSystemModel> get(@PathVariable("reference") String reference) {
+        InfoSystem infoSystem = infoSystemService.get(reference);
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
-    @PutMapping("/{shortName}")
+    @PutMapping("/{reference}")
     @PreAuthorizeInfoSystemOwner
     @ApiOperation("Update existing information system")
-    public ResponseEntity<InfoSystemModel> update(@PathVariable("shortName") String shortName,
+    public ResponseEntity<InfoSystemModel> update(@PathVariable("reference") String reference,
                                                   @RequestBody InfoSystemModel model) {
-        InfoSystem infoSystem = infoSystemService.update(shortName, new InfoSystem(model.getJson()));
+        InfoSystem infoSystem = infoSystemService.update(reference, new InfoSystem(model.getJson()));
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
