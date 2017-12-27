@@ -21,6 +21,7 @@ public class InfoSystemTest {
         validInfoSystem.setShortName("fox");
         validInfoSystem.setOwnerCode("12345");
         validInfoSystem.setOwnerName("Rebane");
+        validInfoSystem.setPurpose("Testing");
         validInfoSystem.setCreationTimestamp("2017-12-19T12:13:14.137+02:00");
         validInfoSystem.setUpdateTimestamp("2017-12-19T15:16:17.137+02:00");
         validInfoSystem.addContact("contact1", "contact1@example.com");
@@ -77,6 +78,17 @@ public class InfoSystemTest {
     @Test
     public void returnsNullWhenShortNameNotSpecified() {
         assertThat(new InfoSystem().getShortName(), nullValue());
+    }
+
+    @Test
+    public void retrievesPurpose() {
+        assertThat(validInfoSystem.getPurpose(), equalTo("Testing"));
+    }
+
+    @Test
+
+    public void returnsNullWhenPurposeNotSpecified() {
+        assertThat(new InfoSystem().getPurpose(), nullValue());
     }
 
     @Test
