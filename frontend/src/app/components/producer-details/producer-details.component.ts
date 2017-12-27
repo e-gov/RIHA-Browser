@@ -7,6 +7,7 @@ import { User } from '../../models/user';
 import { WindowRefService } from '../../services/window-ref.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UserMatrix } from '../../models/user-matrix';
 
 declare var $: any;
 
@@ -21,6 +22,7 @@ export class ProducerDetailsComponent implements OnInit {
   public loaded: boolean;
   public notFound: boolean;
   public issueId: any;
+  public userMatrix: UserMatrix;
 
   adjustSection(hash?){
     hash = hash || this.winRef.nativeWindow.location.hash;
@@ -74,7 +76,7 @@ export class ProducerDetailsComponent implements OnInit {
         break;
       }
       case 'contacts': {
-        ret = (this.system.hasContacts() && this.user != null) || editable;
+        ret = (this.system.hasContacts() && this.environmentService.getActiveUser() != null) || editable;
         break;
       }
     }
@@ -91,6 +93,19 @@ export class ProducerDetailsComponent implements OnInit {
     if (error.status == '404'){
       this.loaded = false;
       this.notFound = true;
+    }
+  }
+
+  isLoginErrorVisible(){
+    return this.issueId && !this.userMatrix.isLoggedIn;
+  }
+
+  isCannotViewCommentsErrorVisible(){
+    if (this.loaded && this.userMatrix.isLoggedIn){
+      let user = this.environmentService.getActiveUser();
+      return this.issueId && this.userMatrix.isLoggedIn && !(user.canEdit(this.system.getOwnerCode()) || this.userMatrix.hasApproverRole);
+    } else {
+      return false;
     }
   }
 
@@ -118,7 +133,7 @@ export class ProducerDetailsComponent implements OnInit {
               private router: Router,
               private toastrService: ToastrService,
               private winRef: WindowRefService) {
-    this.user = this.environmentService.getActiveUser();
+    this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
