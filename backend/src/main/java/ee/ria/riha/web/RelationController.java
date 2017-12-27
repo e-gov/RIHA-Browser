@@ -49,10 +49,10 @@ public class RelationController {
         return RELATION_TO_RELATION_SUMMARY_MODEL.apply(relation);
     }
 
-    @GetMapping("/{shortName}/relations")
+    @GetMapping("/{reference}/relations")
     @ApiOperation("List all info system relations")
-    public ResponseEntity<List<RelationSummaryModel>> list(@PathVariable("shortName") String shortName) {
-        List<Relation> relations = relationService.listRelations(shortName);
+    public ResponseEntity<List<RelationSummaryModel>> list(@PathVariable("reference") String reference) {
+        List<Relation> relations = relationService.listRelations(reference);
         return ResponseEntity.ok(createModel(relations));
     }
 
@@ -62,20 +62,20 @@ public class RelationController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/{shortName}/relations")
+    @PostMapping("/{reference}/relations")
     @PreAuthorizeInfoSystemOwner
     @ApiOperation("Create new relation for information system")
-    public ResponseEntity<RelationSummaryModel> add(@PathVariable("shortName") String shortName,
+    public ResponseEntity<RelationSummaryModel> add(@PathVariable("reference") String reference,
                                                     @RequestBody RelationModel relationModel) {
-        Relation createdRelation = relationService.createRelation(shortName, relationModel);
+        Relation createdRelation = relationService.createRelation(reference, relationModel);
         return ResponseEntity.ok(createModel(createdRelation));
     }
 
-    @DeleteMapping("/{shortName}/relations/{relationId}")
+    @DeleteMapping("/{reference}/relations/{relationId}")
     @PreAuthorizeInfoSystemOwner
     @ApiOperation("Deletes single relation of information system")
-    public void delete(@PathVariable("shortName") String shortName, @PathVariable("relationId") Long relationId) {
-        relationService.delete(shortName, relationId);
+    public void delete(@PathVariable("reference") String reference, @PathVariable("relationId") Long relationId) {
+        relationService.delete(reference, relationId);
     }
 
     @Autowired

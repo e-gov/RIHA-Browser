@@ -8,8 +8,8 @@ import ee.ria.riha.storage.domain.model.MainResource;
 import ee.ria.riha.storage.util.*;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
 
     private static final String NOT_IMPLEMENTED = "Not implemented";
+
+    private static final Pattern UUID_PATTERN = Pattern.compile(
+            "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
     private static final Function<MainResource, InfoSystem> MAIN_RESOURCE_TO_INFO_SYSTEM = mainResource -> {
         if (mainResource == null) {
@@ -62,14 +65,33 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
     }
 
     @Override
-    public InfoSystem load(String shortName) {
-        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
-        List<InfoSystem> infoSystems = find(filter);
+    public InfoSystem load(String reference) {
+        if (isUuid(reference)) {
+            return loadByUuid(reference);
+        } else {
+            return loadByShortName(reference);
+        }
+    }
 
+    private boolean isUuid(String reference) {
+        return reference != null && UUID_PATTERN.matcher(reference).matches();
+    }
+
+    private InfoSystem loadByUuid(String uuid) {
+        List<InfoSystem> infoSystems = find(new FilterRequest("uuid,=," + uuid, null, null));
         if (infoSystems.isEmpty()) {
-            throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystemByShortName", shortName);
+            throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystem.byUuid", uuid);
         }
 
+        return infoSystems.get(0);
+    }
+
+    private InfoSystem loadByShortName(String shortName) {
+        List<InfoSystem> infoSystems = find(new FilterRequest("short_name,=," + shortName, null, null));
+        if (infoSystems.isEmpty()) {
+            throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystem.byShortName", shortName);
+        }
+        
         return infoSystems.get(0);
     }
 
@@ -83,24 +105,12 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
     }
 
     @Override
-    public InfoSystem load(UUID uuid) {
-        FilterRequest filter = new FilterRequest("uuid,=," + uuid.toString(), null, null);
-        List<InfoSystem> infoSystems = find(filter);
-
-        if (infoSystems.isEmpty()) {
-            throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystemByUuid", uuid.toString());
-        }
-
-        return infoSystems.get(0);
-    }
-
-    @Override
-    public void update(String shortName, InfoSystem infoSystem) {
+    public void update(String reference, InfoSystem infoSystem) {
         throw new RuntimeException(NOT_IMPLEMENTED);
     }
 
     @Override
-    public void remove(String shortName) {
+    public void remove(String reference) {
         throw new RuntimeException(NOT_IMPLEMENTED);
     }
 

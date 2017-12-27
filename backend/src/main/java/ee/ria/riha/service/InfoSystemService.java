@@ -93,24 +93,34 @@ public class InfoSystemService {
     }
 
     /**
-     * Retrieves {@link InfoSystem} by its short name
+     * Retrieves {@link InfoSystem} by its reference. Reference may be either info system UUID or short name.
+     *
+     * @param reference info system reference
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(String reference) {
+        return infoSystemRepository.load(reference);
+    }
+
+    /**
+     * Convenience method for retrieving {@link InfoSystem} by its UUID
      *
      * @param uuid info system uuid
      * @return retrieved {@link InfoSystem}
      */
     public InfoSystem get(UUID uuid) {
-        return infoSystemRepository.load(uuid);
+        return get(uuid.toString());
     }
 
     /**
      * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated from model.
      *
-     * @param shortName info system short name
+     * @param reference info system reference
      * @param model     updated {@link InfoSystem} model
      * @return new {@link InfoSystem}
      */
-    public InfoSystem update(String shortName, InfoSystem model) {
-        InfoSystem existingInfoSystem = get(shortName);
+    public InfoSystem update(String reference, InfoSystem model) {
+        InfoSystem existingInfoSystem = get(reference);
         log.info("User '{}' with active organization '{}'" +
                         " is updating info system with id {}, owner code '{}' and short name '{}'",
                 getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
@@ -119,7 +129,7 @@ public class InfoSystemService {
                 existingInfoSystem.getOwnerCode(),
                 existingInfoSystem.getShortName());
 
-        if (!shortName.equals(model.getShortName())) {
+        if (!existingInfoSystem.getShortName().equals(model.getShortName())) {
             validateInfoSystemShortName(model.getShortName());
         }
         model.setUuid(existingInfoSystem.getUuid());
@@ -131,16 +141,6 @@ public class InfoSystemService {
         infoSystemValidationService.validate(model.getJsonContent());
 
         return infoSystemRepository.add(model);
-    }
-
-    /**
-     * Retrieves {@link InfoSystem} by its short name
-     *
-     * @param shortName info system short name
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(String shortName) {
-        return infoSystemRepository.load(shortName);
     }
 
     @Autowired
