@@ -6,6 +6,7 @@ import { ApproverIssueDetailsComponent } from '../../approver-issue-details/appr
 import { SystemsService } from '../../../services/systems.service';
 import { EnvironmentService } from '../../../services/environment.service';
 import { UserMatrix } from '../../../models/user-matrix';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-producer-details-issues',
@@ -45,6 +46,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   openIssueDetailsModal(issueId){
     this.systemsService.getSystemIssueById(issueId).then(res => {
+      this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }/Arutelu/${ issueId }`);
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
         {
           size: "lg",
@@ -57,9 +59,10 @@ export class ProducerDetailsIssuesComponent implements OnInit {
         this.refreshIssues();
         let issueType = res && res.issueType ? res.issueType : null;
         this.onIssueResolve.emit(issueType);
+        this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       },
       err => {
-
+        this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       });
     }, err => {
       this.onIssueError.emit(err);
@@ -87,6 +90,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
+              private location: Location,
               private environmentService: EnvironmentService) {
     this.userMatrix = this.environmentService.getUserMatrix();
   }
