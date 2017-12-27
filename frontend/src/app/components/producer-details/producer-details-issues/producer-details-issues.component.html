@@ -22,7 +22,7 @@
               <tbody>
               <tr *ngFor="let issue of activeIssues">
                 <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
-                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue.id)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
                 <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
@@ -46,7 +46,7 @@
               <tbody>
               <tr *ngFor="let issue of closedIssues">
                 <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
-                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue.id)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
                 <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
@@ -73,7 +73,7 @@
                   <i *ngIf="issue.status == 'OPEN'" class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i>
                   <i *ngIf="issue.status == 'CLOSED'" class="fa fa-check-circle text-success" aria-hidden="true"></i>
                 </td>
-                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue.id)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
                 <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
