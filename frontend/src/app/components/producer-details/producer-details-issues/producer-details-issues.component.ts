@@ -6,6 +6,7 @@ import { ApproverIssueDetailsComponent } from '../../approver-issue-details/appr
 import { SystemsService } from '../../../services/systems.service';
 import { EnvironmentService } from '../../../services/environment.service';
 import { UserMatrix } from '../../../models/user-matrix';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-producer-details-issues',
@@ -16,7 +17,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Input() issueId: any;
   @Output() onIssueResolve = new  EventEmitter<string>();
+  @Output() onIssueError = new  EventEmitter();
 
   comments: any[] = [];
   issues: any[] = [];
@@ -41,8 +44,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     }, err => {});
   }
 
-  openIssueDetailsModal(comment){
-    this.systemsService.getSystemIssueById(comment.id).then(res => {
+  openIssueDetailsModal(issueId){
+    this.systemsService.getSystemIssueById(issueId).then(res => {
+      this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }/Arutelu/${ issueId }`);
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
         {
           size: "lg",
@@ -55,10 +59,13 @@ export class ProducerDetailsIssuesComponent implements OnInit {
         this.refreshIssues();
         let issueType = res && res.issueType ? res.issueType : null;
         this.onIssueResolve.emit(issueType);
+        this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       },
       err => {
-
+        this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       });
+    }, err => {
+      this.onIssueError.emit(err);
     });
     return false;
   }
@@ -83,12 +90,22 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
+              private location: Location,
               private environmentService: EnvironmentService) {
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
     this.refreshIssues();
+    if (this.issueId){
+      if (!this.userMatrix.isLoggedIn){
+        //alert('please log in');
+      } else if (!this.canApprove()){
+        //alert('you cannot approve');
+      } else {
+        this.openIssueDetailsModal(this.issueId);
+      }
+    }
   }
 
 }
