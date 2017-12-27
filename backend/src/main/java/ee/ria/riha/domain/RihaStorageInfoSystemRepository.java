@@ -91,7 +91,7 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
         if (infoSystems.isEmpty()) {
             throw new ObjectNotFoundException("error.storage.objectNotFound.infoSystem.byShortName", shortName);
         }
-        
+
         return infoSystems.get(0);
     }
 
