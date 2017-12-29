@@ -36,6 +36,9 @@ public class InfoSystemModelMapperTest {
         mappedInfoSystem.addContact("John Doe", "john@example.com");
         mappedInfoSystem.setLastPositiveApprovalRequestType(IssueType.TAKE_INTO_USE_REQUEST);
         mappedInfoSystem.setLastPositiveApprovalRequestDate(new Date());
+        mappedInfoSystem.setLastPositiveEstablishmentRequestDate(new Date());
+        mappedInfoSystem.setLastPositiveTakeIntoUseRequestDate(new Date());
+        mappedInfoSystem.setLastPositiveFinalizationRequestDate(new Date());
     }
 
     @Test
@@ -65,6 +68,12 @@ public class InfoSystemModelMapperTest {
                 equalTo(mappedInfoSystem.getLastPositiveApprovalRequestDate()));
         assertThat(map.getLastPositiveApprovalRequestType(),
                 equalTo(mappedInfoSystem.getLastPositiveApprovalRequestType()));
+        assertThat(map.getLastPositiveEstablishmentRequestDate(),
+                equalTo(mappedInfoSystem.getLastPositiveEstablishmentRequestDate()));
+        assertThat(map.getLastPositiveTakeIntoUseRequestDate(),
+                equalTo(mappedInfoSystem.getLastPositiveTakeIntoUseRequestDate()));
+        assertThat(map.getLastPositiveFinalizationRequestDate(),
+                equalTo(mappedInfoSystem.getLastPositiveFinalizationRequestDate()));
     }
 
 }
