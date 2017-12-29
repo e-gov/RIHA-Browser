@@ -36,6 +36,9 @@ public class InfoSystemModelMapper implements ModelMapper<InfoSystem, InfoSystem
         model.setJson(filteredInfoSystem.getJsonContent());
         model.setLastPositiveApprovalRequestType(filteredInfoSystem.getLastPositiveApprovalRequestType());
         model.setLastPositiveApprovalRequestDate(filteredInfoSystem.getLastPositiveApprovalRequestDate());
+        model.setLastPositiveEstablishmentRequestDate(filteredInfoSystem.getLastPositiveEstablishmentRequestDate());
+        model.setLastPositiveTakeIntoUseRequestDate(filteredInfoSystem.getLastPositiveTakeIntoUseRequestDate());
+        model.setLastPositiveFinalizationRequestDate(filteredInfoSystem.getLastPositiveFinalizationRequestDate());
 
         return model;
     }

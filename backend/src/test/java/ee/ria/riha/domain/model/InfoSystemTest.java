@@ -27,6 +27,9 @@ public class InfoSystemTest {
         validInfoSystem.addContact("contact2", "contact2@example.com");
         validInfoSystem.setLastPositiveApprovalRequestType(IssueType.ESTABLISHMENT_REQUEST);
         validInfoSystem.setLastPositiveApprovalRequestDate(new Date());
+        validInfoSystem.setLastPositiveEstablishmentRequestDate(new Date());
+        validInfoSystem.setLastPositiveTakeIntoUseRequestDate(new Date());
+        validInfoSystem.setLastPositiveFinalizationRequestDate(new Date());
     }
 
     @Test
@@ -119,6 +122,12 @@ public class InfoSystemTest {
                 equalTo(validInfoSystem.getLastPositiveApprovalRequestDate()));
         assertThat(copy.getLastPositiveApprovalRequestType(),
                 equalTo(validInfoSystem.getLastPositiveApprovalRequestType()));
+        assertThat(copy.getLastPositiveEstablishmentRequestDate(),
+                equalTo(validInfoSystem.getLastPositiveEstablishmentRequestDate()));
+        assertThat(copy.getLastPositiveTakeIntoUseRequestDate(),
+                equalTo(validInfoSystem.getLastPositiveTakeIntoUseRequestDate()));
+        assertThat(copy.getLastPositiveFinalizationRequestDate(),
+                equalTo(validInfoSystem.getLastPositiveFinalizationRequestDate()));
         assertThat(copy.getJsonContent(), not(sameInstance(validInfoSystem.getJsonContent())));
         assertThat(copy.getJsonContent(), equalTo(validInfoSystem.getJsonContent()));
     }

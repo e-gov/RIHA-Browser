@@ -31,6 +31,9 @@ public class RihaStorageInfoSystemRepository implements InfoSystemRepository {
                 ? IssueType.valueOf(mainResource.getLast_positive_approval_request_type())
                 : null);
         infoSystem.setLastPositiveApprovalRequestDate(mainResource.getLast_positive_approval_request_date());
+        infoSystem.setLastPositiveEstablishmentRequestDate(mainResource.getLast_positive_establishment_request_date());
+        infoSystem.setLastPositiveTakeIntoUseRequestDate(mainResource.getLast_positive_take_into_use_request_date());
+        infoSystem.setLastPositiveFinalizationRequestDate(mainResource.getLast_positive_finalization_request_date());
 
         return infoSystem;
     };
