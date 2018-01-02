@@ -6,7 +6,7 @@
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi õigusaktid:</label>
     <p *ngIf="!system.details.legislations || system.details.legislations.length == 0">
-      Õigusaktid puuduvad.
+      Õigusaktid puuduvad
     </p>
     <table class="details-list-table">
       <tr *ngFor="let legislation of system.details.legislations">
