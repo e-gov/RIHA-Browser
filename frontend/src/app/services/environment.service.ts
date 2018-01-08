@@ -13,6 +13,17 @@ export class EnvironmentService {
 
   public globalEnvironment: any;
 
+  private lastVisitedLocations = [null, null];
+
+  public addLastVisitedLocation(l){
+    this.lastVisitedLocations.unshift(l);
+    this.lastVisitedLocations.pop();
+  }
+
+  public getPrevVisitedLocation(){
+    return this.lastVisitedLocations[1];
+  }
+
   public setActiveUser(details?): void {
     this.globalEnvironment.setActiveUser(details);
   }
