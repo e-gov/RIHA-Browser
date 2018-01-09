@@ -192,7 +192,7 @@ export class ProducerListComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     var changes = this.differ.diff(this.environmentService.globalEnvironment);
-    if (changes && this.loaded){
+    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnSystems();
     }
