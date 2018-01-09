@@ -47,7 +47,7 @@ export class EnvironmentService {
       hasApproverRole = -1 != activeUser.getRoles().indexOf('ROLE_HINDAJA');
       hasDesciberRole = -1 != activeUser.getRoles().indexOf('ROLE_KIRJELDAJA');
       isOrganizationSelected = activeUser.getActiveOrganization() != null;
-      hasOrganizations = activeUser.getOrganizations().length > 0
+      hasOrganizations = activeUser.getOrganizations().length > 0;
       if (activeUser.activeOrganization){
         isRiaMember = activeUser.activeOrganization.code == 70006317;
       }

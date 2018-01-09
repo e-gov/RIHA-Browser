@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck, KeyValueDiffers } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { GridData } from '../../models/grid-data';
@@ -16,7 +16,7 @@ import { G } from '../../globals/globals';
   templateUrl: './producer-list.component.html',
   styleUrls: ['./producer-list.component.scss']
 })
-export class ProducerListComponent implements OnInit {
+export class ProducerListComponent implements OnInit, DoCheck {
 
   gridData: GridData  = new GridData();
   filters: {
@@ -36,6 +36,7 @@ export class ProducerListComponent implements OnInit {
   };
   userMatrix: UserMatrix;
   loaded: boolean = false;
+  differ: any;
 
   extendedSearch: boolean = true;
 
@@ -153,8 +154,10 @@ export class ProducerListComponent implements OnInit {
               private route: ActivatedRoute,
               private location: Location,
               private toastrService: ToastrService,
+              private differs: KeyValueDiffers,
               public  generalHelperService: GeneralHelperService,
               private modalService: ModalHelperService) {
+    this.differ = differs.find({}).create(null);
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -185,6 +188,14 @@ export class ProducerListComponent implements OnInit {
     }
 
     this.getOwnSystems(this.gridData.page);
+  }
+
+  ngDoCheck() {
+    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    if (changes && this.loaded){
+      this.userMatrix = this.environmentService.getUserMatrix();
+      this.getOwnSystems();
+    }
   }
 
 }
