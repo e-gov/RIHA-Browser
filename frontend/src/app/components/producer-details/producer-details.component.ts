@@ -97,10 +97,12 @@ export class ProducerDetailsComponent implements OnInit {
   }
 
   isLoginErrorVisible(){
+    this.userMatrix = this.environmentService.getUserMatrix();
     return this.issueId && !this.userMatrix.isLoggedIn;
   }
 
   isCannotViewCommentsErrorVisible(){
+    this.userMatrix = this.environmentService.getUserMatrix();
     if (this.loaded && this.userMatrix.isLoggedIn){
       let user = this.environmentService.getActiveUser();
       return this.issueId && this.userMatrix.isLoggedIn && !(user.canEdit(this.system.getOwnerCode()) || this.userMatrix.hasApproverRole);
