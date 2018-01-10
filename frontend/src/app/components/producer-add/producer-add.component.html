@@ -30,7 +30,7 @@
           <input #shortName="ngModel"
                  class="form-control"
                  name="short_name"
-                 pattern="[a-zA-ZÕõÄäÖöÜü0-9.-]*"
+                 pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
                  ngModel type="text"
                  id="short-name-input"
                  placeholder="nt. AARE" required>
