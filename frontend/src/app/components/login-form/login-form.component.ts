@@ -20,7 +20,12 @@ export class LoginFormComponent implements OnInit {
     this.environmentService.doLogin().then(res => {
       this.environmentService.loadEnvironmentData().then(res => {
         this.sessionHelper.refreshSessionTimer();
-        this.router.navigate(['/']);
+        let prevLocation = this.environmentService.getPrevVisitedLocation();
+        if (prevLocation){
+          this.router.navigate([decodeURIComponent(prevLocation)]);
+        } else {
+          this.router.navigate(['/']);
+        }
         let user = this.environmentService.getActiveUser();
         let organizations = user.getOrganizations();
         if (organizations.length > 1){

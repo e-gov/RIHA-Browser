@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck, KeyValueDiffers  } from '@angular/core';
 import { Router } from '@angular/router';
 import { SystemsService } from '../../services/systems.service';
 import { EnvironmentService} from "../../services/environment.service";
-import { Location } from '@angular/common';
-import { ToastrService } from "ngx-toastr";
 import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { UserMatrix } from '../../models/user-matrix';
@@ -13,11 +11,12 @@ import { UserMatrix } from '../../models/user-matrix';
   templateUrl: './producer-add.component.html',
   styleUrls: ['./producer-add.component.scss']
 })
-export class ProducerAddComponent implements OnInit {
+export class ProducerAddComponent implements OnInit, DoCheck {
 
   userMatrix: UserMatrix;
   alertConf: any = null;
   timeoutId: any = null;
+  differ: any;
 
   onSubmit(f) :void {
     this.alertConf = null;
@@ -47,13 +46,20 @@ export class ProducerAddComponent implements OnInit {
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private router: Router,
-              private location: Location,
-              private toastrService: ToastrService,
+              private differs: KeyValueDiffers,
               private modalService: ModalHelperService) {
+    this.differ = differs.find({}).create(null);
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
+  }
+
+  ngDoCheck() {
+    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    if (changes){
+      this.userMatrix = this.environmentService.getUserMatrix();
+    }
   }
 
 }
