@@ -31,7 +31,7 @@ export class BrowserListComponent implements OnInit {
     dateUpdatedFrom: string,
     dateUpdatedTo: string
   };
-  extendedSearch: boolean = true;
+  extendedSearch: boolean = false;
   loaded: boolean = false;
 
   globals: any = G;
