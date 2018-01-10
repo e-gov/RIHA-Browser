@@ -38,7 +38,7 @@ export class ProducerListComponent implements OnInit, DoCheck {
   loaded: boolean = false;
   differ: any;
 
-  extendedSearch: boolean = true;
+  extendedSearch: boolean = false;
 
   globals: any = G;
 

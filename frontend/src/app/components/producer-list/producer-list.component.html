@@ -12,7 +12,7 @@
   <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
 <section *ngIf="userMatrix.isLoggedIn && userMatrix.isOrganizationSelected" class="col card p-3">
-  <!--<div class="row">
+  <div class="row">
     <div class="col-12">
       <div class="form-group row">
         <input class="form-control col"
@@ -26,7 +26,7 @@
   </div>
   <div class="form-group">
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
-  </div>-->
+  </div>
   <div *ngIf="extendedSearch" id="extended-search-panel">
     <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
