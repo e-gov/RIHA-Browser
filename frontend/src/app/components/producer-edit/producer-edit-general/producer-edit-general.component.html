@@ -28,7 +28,7 @@
                class="form-control h2"
                [(ngModel)]="system.details.short_name"
                name="short_name"
-               pattern="[a-zA-ZÕõÄäÖöÜü0-9.-]*"
+               pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
                type="text"
                (keydown.enter)="$event.preventDefault()"
                id="short-name-input" required>
