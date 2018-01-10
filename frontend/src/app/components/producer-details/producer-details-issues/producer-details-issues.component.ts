@@ -85,6 +85,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   canApprove(){
+    this.userMatrix = this.environmentService.getUserMatrix();
     return this.allowEdit || this.userMatrix.hasApproverRole;
   }
 
