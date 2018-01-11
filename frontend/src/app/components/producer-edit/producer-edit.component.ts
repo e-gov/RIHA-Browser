@@ -15,8 +15,8 @@ export class ProducerEditComponent implements OnInit {
   public loaded: boolean;
   public notFound: boolean;
 
-  getSystem(id){
-    this.systemsService.getSystem(id).then(response => {
+  getSystem(reference){
+    this.systemsService.getSystem(reference).then(response => {
       let s = new System(response.json());
       this.system = new System(this.systemsService.prepareSystemForDisplay(s));
       this.loaded = true;
@@ -45,7 +45,7 @@ export class ProducerEditComponent implements OnInit {
     this.notFound = false;
     this.system = new System();
     this.route.params.subscribe( params => {
-      this.getSystem(params['short_name']);
+      this.getSystem(params['reference']);
     });
   }
 
