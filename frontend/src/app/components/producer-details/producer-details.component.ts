@@ -91,8 +91,8 @@ export class ProducerDetailsComponent implements OnInit {
     }
   }
 
-  getSystem(id){
-    this.systemsService.getSystem(id).then(response => {
+  getSystem(reference){
+    this.systemsService.getSystem(reference).then(response => {
       this.system = new System(response.json());
       this.loaded = true;
       this.adjustSection(0);
@@ -122,7 +122,7 @@ export class ProducerDetailsComponent implements OnInit {
     this.route.params.subscribe( params => {
       this.loaded = false;
       this.notFound = false;
-      this.getSystem(params['short_name']);
+      this.getSystem(params['reference']);
     });
   }
 
