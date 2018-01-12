@@ -47,6 +47,15 @@
             <a class="nav-link" href="https://abi.riha.ee/">Abikeskus</a>
           </li>
         </ul>
+        <form class="form-inline search-bar">
+          <label for="search" class="hidden-xs-up">Otsing</label>
+          <input id="search"
+                 #keywordInput
+                 class="form-control"
+                 (keyup.enter)="searchInfosystems(keywordInput)"
+                 type="text"
+                 placeholder="Otsi">
+        </form>
       </nav>
       <button class="menu-toggle" type="button" (click)="openNavigationMenu()">
         <span></span>

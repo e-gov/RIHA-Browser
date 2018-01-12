@@ -33,6 +33,10 @@ export class AppComponent {
 
     let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
 
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+    };
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (googleAnalyticsId){
