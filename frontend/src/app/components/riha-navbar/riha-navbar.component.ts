@@ -49,6 +49,15 @@ export class RihaNavbarComponent implements OnInit {
     return user.getFullNameWithActiveOrganization();
   }
 
+  searchInfosystems(input) {
+    this.router.navigate(['/Infosüsteemid'], {
+      queryParams: {
+        searchText: input.value
+      }
+    });
+    input.value = '';
+  }
+
   constructor(private environmentService: EnvironmentService,
               private modalService: ModalHelperService,
               private sessionHelperService: SessionHelperService,
