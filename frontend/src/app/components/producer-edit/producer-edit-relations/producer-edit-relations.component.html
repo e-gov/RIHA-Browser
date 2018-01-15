@@ -24,6 +24,8 @@
                 name="type" required>
           <option [value]="globals.relation_type.SUB_SYSTEM" selected>alaminfosüsteem</option>
           <option [value]="globals.relation_type.SUPER_SYSTEM">üleminfosüsteem</option>
+          <option [value]="globals.relation_type.USED_SYSTEM">kasutatav standardlahendus</option>
+          <option [value]="globals.relation_type.USER_SYSTEM">standardlahenduse kasutaja</option>
         </select>
       </div>
       <div class="form-group row">
@@ -41,6 +43,8 @@
               <a href="/Infosüsteemid/Vaata/{{ relation.infoSystemShortName }}" target="_blank" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
               <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alaminfosüsteem</span>
               <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">üleminfosüsteem</span>
+              <span *ngIf="relation.type === globals.relation_type.USED_SYSTEM" class="text-gray-dark small">kasutatav standardlahendus</span>
+              <span *ngIf="relation.type === globals.relation_type.USER_SYSTEM" class="text-gray-dark small">standardlahenduse kasutaja</span>
             </td>
             <td>
               <button (click)="deleteRelation(relation.id)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>

@@ -14,7 +14,9 @@ export const G = Object.freeze({
   },
   relation_type: {
     SUB_SYSTEM: 'SUB_SYSTEM',
-    SUPER_SYSTEM: 'SUPER_SYSTEM'
+    SUPER_SYSTEM: 'SUPER_SYSTEM',
+    USED_SYSTEM: 'USED_SYSTEM',
+    USER_SYSTEM: 'USER_SYSTEM'
   },
   issue_type: {
     ESTABLISHMENT_REQUEST: 'ESTABLISHMENT_REQUEST',
