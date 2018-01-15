@@ -194,7 +194,7 @@
     "short_name": {
       "description": "Infosüsteemi lühinimi",
       "type": "string",
-      "pattern": "^[a-zA-ZõÕäÄöÖüÜ0-9.-]*$",
+      "pattern": "^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$",
       "minLength": 1
     },
     "topics": {
