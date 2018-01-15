@@ -21,14 +21,14 @@ public class InfoSystemAuthorizationService {
     private InfoSystemService infoSystemService;
 
     /**
-     * Checks if current user belongs to organization that is owner of the info system with specified short name.
-     * Returns true if and only if current user active organization code is same as info system owner.code.
+     * Checks if current user belongs to organization that is owner of the info system referenced by either UUID or
+     * short name. Returns true if and only if current user active organization code is same as info system owner.code.
      *
-     * @param shortName info system short name
+     * @param reference info system reference
      * @return true when current user active organization code is same as info system owner code, false otherwise
      */
-    public boolean isOwner(String shortName) {
-        return isOwner(infoSystemService.get(shortName));
+    public boolean isOwner(String reference) {
+        return isOwner(infoSystemService.get(reference));
     }
 
     /**

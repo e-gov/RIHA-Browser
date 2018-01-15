@@ -66,16 +66,16 @@ public class RelationService {
     private InfoSystemService infoSystemService;
 
     /**
-     * Lists {@link Relation}s for info system with given short name. List consists of two types of {@link Relation}s:
-     * <ul><li>In direct relation, info system with given short name is related <strong>to</strong> another info system.
-     * </li><li>In reverse relation, info system with given short name is related <strong>by</strong> another system.
-     * Such {@link Relation} is marked as reversed.</li></ul>
+     * Lists {@link Relation}s for info system referenced by either UUID or short name. List consists of two types of
+     * {@link Relation}s: <ul><li>In direct relation, info system with given reference is related <strong>to</strong>
+     * another info system. </li><li>In reverse relation, info system with given reference is related
+     * <strong>by</strong> another system. Such {@link Relation} is marked as reversed.</li></ul>
      *
-     * @param shortName info system short name
+     * @param reference info system reference
      * @return list of relations (related info systems)
      */
-    public List<Relation> listRelations(String shortName) {
-        InfoSystem infoSystem = infoSystemService.get(shortName);
+    public List<Relation> listRelations(String reference) {
+        InfoSystem infoSystem = infoSystemService.get(reference);
 
         List<MainResourceRelation> directRelations = getDirectRelations(infoSystem);
 
@@ -94,25 +94,26 @@ public class RelationService {
         return allRelations;
     }
 
-    private List<MainResourceRelation> getReverseRelations(InfoSystem infoSystem) {
-        return mainResourceRelationRepository.find(
-                new FilterRequest("related_infosystem_uuid,=," + infoSystem.getUuid(), null, null));
-    }
-
     private List<MainResourceRelation> getDirectRelations(InfoSystem infoSystem) {
         return mainResourceRelationRepository.find(
                 new FilterRequest("infosystem_uuid,=," + infoSystem.getUuid(), null, null));
     }
 
+    private List<MainResourceRelation> getReverseRelations(InfoSystem infoSystem) {
+        return mainResourceRelationRepository.find(
+                new FilterRequest("related_infosystem_uuid,=," + infoSystem.getUuid(), null, null));
+    }
+
     /**
-     * Creates {@link Relation} from info system with given short name to another info system with given type.
+     * Creates {@link Relation} from info system referenced by either UUID or short name to another info system with
+     * given type.
      *
-     * @param shortName    source info system short name
+     * @param reference    source info system reference
      * @param relatedModel related info system model
      * @return created {@link Relation}
      */
-    public Relation createRelation(String shortName, RelationModel relatedModel) {
-        Relation relation = createRelationFromModel(shortName, relatedModel);
+    public Relation createRelation(String reference, RelationModel relatedModel) {
+        Relation relation = createRelationFromModel(reference, relatedModel);
 
         Relation normalizedRelation = normalizeRelation(relation);
 
@@ -130,8 +131,8 @@ public class RelationService {
         return createdRelation;
     }
 
-    private Relation createRelationFromModel(String shortName, RelationModel model) {
-        InfoSystem infoSystem = infoSystemService.get(shortName);
+    private Relation createRelationFromModel(String reference, RelationModel model) {
+        InfoSystem infoSystem = infoSystemService.get(reference);
         InfoSystem relatedInfoSystem = infoSystemService.get(model.getInfoSystemShortName());
 
         Relation relation = new Relation();
@@ -157,13 +158,13 @@ public class RelationService {
     }
 
     /**
-     * Deletes single {@link Relation} if info system with given short name is part of this relation.
+     * Deletes single {@link Relation} if info system referenced by either UUID or short name is part of this relation.
      *
-     * @param shortName  info system short name that is part of relation
+     * @param reference  info system reference
      * @param relationId id of a relation
      */
-    public void delete(String shortName, Long relationId) {
-        InfoSystem infoSystem = infoSystemService.get(shortName);
+    public void delete(String reference, Long relationId) {
+        InfoSystem infoSystem = infoSystemService.get(reference);
 
         MainResourceRelation mainResourceRelation = mainResourceRelationRepository.get(relationId);
 

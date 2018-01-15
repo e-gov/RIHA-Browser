@@ -125,13 +125,13 @@ public class IssueService {
     /**
      * List concrete info system issues.
      *
-     * @param shortName  info system short name
+     * @param reference  info system reference
      * @param pageable   paging definition
      * @param filterable filter definition
      * @return paginated list of issues
      */
-    public PagedResponse<Issue> listInfoSystemIssues(String shortName, Pageable pageable, Filterable filterable) {
-        InfoSystem infoSystem = infoSystemService.get(shortName);
+    public PagedResponse<Issue> listInfoSystemIssues(String reference, Pageable pageable, Filterable filterable) {
+        InfoSystem infoSystem = infoSystemService.get(reference);
 
         Filterable filter = new FilterRequest(filterable.getFilter(), filterable.getSort(), filterable.getFields())
                 .addFilter(getIssueTypeFilter())
@@ -173,16 +173,16 @@ public class IssueService {
     }
 
     /**
-     * Creates issue for info system with a given short name
+     * Creates issue for info system referenced by either UUID or short name
      *
-     * @param shortName info system short name
+     * @param reference info system reference
      * @param model     issue model
      * @return create issue
      */
-    public Issue createInfoSystemIssue(String shortName, Issue model) {
+    public Issue createInfoSystemIssue(String reference, Issue model) {
         validateCreatedIssueType(model);
 
-        InfoSystem infoSystem = infoSystemService.get(shortName);
+        InfoSystem infoSystem = infoSystemService.get(reference);
 
         Issue issue = prepareIssue(model);
         issue.setInfoSystemUuid(infoSystem.getUuid());
