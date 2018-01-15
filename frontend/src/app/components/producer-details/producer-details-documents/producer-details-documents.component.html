@@ -6,7 +6,7 @@
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi tehniline dokumentatsioon:</label>
     <p *ngIf="!system.details.documents || system.details.documents.length == 0">
-      Dokumentatsioon puudub.
+      Dokumentatsioon puudub
     </p>
     <table class="details-list-table">
       <tr *ngFor="let doc of system.details.documents">

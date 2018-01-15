@@ -3,6 +3,7 @@
     Dokumentatsioon
   </div>
   <div class="my-1">
+    <app-tooltip [text]='"Laadi üles infosüsteemi dokumentatsioon: arhitektuuri dokument, eelanalüüs, liideste kirjeldus ja muud sarnast"'></app-tooltip>
     <form #addForm="ngForm">
       <div class="form-group">
         <label class="btn btn-default input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
@@ -28,7 +29,7 @@
 
       </div>
       <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
-        <label for="name" class="text-muted separated-text">URLi sisu:</label>
+        <label for="name" class="text-muted separated-text">Pealkiri:</label>
         <input id="name" class="form-control col-12"
                #name="ngModel"
                [disabled]="uploading"
