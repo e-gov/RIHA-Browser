@@ -25,6 +25,7 @@ public class InfoSystem {
     private static final String OWNER_CODE_KEY = "code";
     private static final String SHORT_NAME_KEY = "short_name";
     private static final String FULL_NAME_KEY = "name";
+    private static final String PURPOSE = "purpose";
     private static final String CONTACTS_KEY = "contacts";
     private static final String CONTACTS_NAME_KEY = "name";
     private static final String CONTACTS_EMAIL_KEY = "email";
@@ -181,6 +182,24 @@ public class InfoSystem {
      */
     public void setFullName(String fullName) {
         ((ObjectNode) jsonContent).put(FULL_NAME_KEY, fullName);
+    }
+
+    /**
+     * Retrieves info system purpose from JSON. Returns null when property is not set.
+     *
+     * @return info system purpose or null if not specified
+     */
+    public String getPurpose() {
+        return jsonContent.path(PURPOSE).asText(null);
+    }
+
+    /**
+     * Sets info system purpose JSON property
+     *
+     * @param purpose info system purpose
+     */
+    public void setPurpose(String purpose) {
+        ((ObjectNode) jsonContent).put(PURPOSE, purpose);
     }
 
     /**
