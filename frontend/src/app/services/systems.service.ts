@@ -185,8 +185,8 @@ export class SystemsService {
     });
   }
 
-  public getSystem(short_name) {
-    return this.http.get(`/api/v1/systems/${ short_name }`).toPromise();
+  public getSystem(reference) {
+    return this.http.get(`/api/v1/systems/${ reference }`).toPromise();
   }
 
   public addSystem(value) {
@@ -210,16 +210,16 @@ export class SystemsService {
     return this.http.post(`/api/v1/files`, formData, options).toPromise();
   }
 
-  public updateSystem(updatedData, shortName?) {
-    return this.http.put(`/api/v1/systems/${ shortName || updatedData.details.short_name }`, updatedData).toPromise();
+  public updateSystem(updatedData, reference?) {
+    return this.http.put(`/api/v1/systems/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
-  public getSystemIssues(shortName) {
-    return this.http.get(`/api/v1/systems/${ shortName }/issues?size=1000&sort=-creation_date`).toPromise();
+  public getSystemIssues(reference) {
+    return this.http.get(`/api/v1/systems/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
   }
 
-  public addSystemIssue(shortName, issue) {
-    return this.http.post(`/api/v1/systems/${ shortName }/issues`, issue).toPromise();
+  public addSystemIssue(reference, issue) {
+    return this.http.post(`/api/v1/systems/${ reference }/issues`, issue).toPromise();
   }
 
   public getSystemIssueById(issueId) {
@@ -234,16 +234,16 @@ export class SystemsService {
     return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
   }
 
-  public getSystemRelations(shortName) {
-    return this.http.get(`/api/v1/systems/${ shortName }/relations`).toPromise();
+  public getSystemRelations(reference) {
+    return this.http.get(`/api/v1/systems/${ reference }/relations`).toPromise();
   }
 
-  public addSystemRelation(shortName, relation) {
-    return this.http.post(`/api/v1/systems/${ shortName }/relations`, relation).toPromise();
+  public addSystemRelation(reference, relation) {
+    return this.http.post(`/api/v1/systems/${ reference }/relations`, relation).toPromise();
   }
 
-  public deleteSystemRelation(shortName, relationId) {
-    return this.http.delete(`/api/v1/systems/${ shortName }/relations/${ relationId }`).toPromise();
+  public deleteSystemRelation(reference, relationId) {
+    return this.http.delete(`/api/v1/systems/${ reference }/relations/${ relationId }`).toPromise();
   }
 
   public closeSystemIssue(issueId, reply) {

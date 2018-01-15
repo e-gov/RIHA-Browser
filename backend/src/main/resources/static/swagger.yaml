@@ -325,7 +325,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InfoSystemModel"
-  /api/v1/systems/{shortName}:
+  /api/v1/systems/{reference}:
     get:
       tags:
       - "Information systems"
@@ -333,7 +333,7 @@ paths:
       description: ""
       operationId: "get"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -349,7 +349,7 @@ paths:
       description: ""
       operationId: "update"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -363,7 +363,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InfoSystemModel"
-  /api/v1/systems/{shortName}/issues:
+  /api/v1/systems/{reference}/issues:
     get:
       tags:
       - "Issues"
@@ -371,7 +371,7 @@ paths:
       description: ""
       operationId: "listInfoSystemIssues"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -412,7 +412,7 @@ paths:
       description: ""
       operationId: "createInfoSystemIssue"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -426,7 +426,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Issue"
-  /api/v1/systems/{shortName}/relations:
+  /api/v1/systems/{reference}/relations:
     get:
       tags:
       - "Information system relations"
@@ -434,7 +434,7 @@ paths:
       description: ""
       operationId: "list"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -452,7 +452,7 @@ paths:
       description: ""
       operationId: "add"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -466,7 +466,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/RelationSummaryModel"
-  /api/v1/systems/{shortName}/relations/{relationId}:
+  /api/v1/systems/{reference}/relations/{relationId}:
     delete:
       tags:
       - "Information system relations"
@@ -474,7 +474,7 @@ paths:
       description: ""
       operationId: "delete"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"

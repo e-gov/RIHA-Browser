@@ -14,7 +14,7 @@ import { G } from '../../../globals/globals';
 export class ProducerEditGeneralComponent implements OnInit {
 
   @Input() system: System;
-  shortName: string;
+  reference: string;
   alertConf: any = null;
   globals: any = G;
   timeoutId: any = null;
@@ -23,7 +23,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   onSubmit(f) :void {
     this.alertConf = null;
     if (f.valid) {
-      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system), this.shortName).then(response => {
+      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system), this.reference).then(response => {
         this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
       }, err => {
         this.system = this.systemsService.prepareSystemForDisplay(this.system);
@@ -83,12 +83,12 @@ export class ProducerEditGeneralComponent implements OnInit {
   goBackToDetails(f){
     if (f.form.dirty || this.isChanged){
       if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.router.navigate(['/Kirjelda/Vaata', this.shortName]);
+        this.router.navigate(['/Kirjelda/Vaata', this.reference]);
       } else {
         return false;
       }
     } else {
-      this.router.navigate(['/Kirjelda/Vaata', this.shortName]);
+      this.router.navigate(['/Kirjelda/Vaata', this.reference]);
     }
   }
 
@@ -101,7 +101,7 @@ export class ProducerEditGeneralComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe( params => {
-      this.shortName = params['short_name'];
+      this.reference = params['reference'];
     });
   }
 

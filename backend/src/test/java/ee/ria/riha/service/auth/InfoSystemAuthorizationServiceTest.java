@@ -1,6 +1,5 @@
 package ee.ria.riha.service.auth;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
