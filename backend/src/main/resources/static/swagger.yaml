@@ -521,9 +521,28 @@ definitions:
     properties:
       id:
         type: "integer"
-        format: "int32"
-      details:
+        format: "int64"
+      lastPositiveApprovalRequestType:
         type: "string"
+        enum:
+        - "ESTABLISHMENT_REQUEST"
+        - "TAKE_INTO_USE_REQUEST"
+        - "MODIFICATION_REQUEST"
+        - "FINALIZATION_REQUEST"
+      lastPositiveApprovalRequestDate:
+        type: "string"
+        format: "date-time"
+      lastPositiveEstablishmentRequestDate:
+        type: "string"
+        format: "date-time"
+      lastPositiveTakeIntoUseRequestDate:
+        type: "string"
+        format: "date-time"
+      lastPositiveFinalizationRequestDate:
+        type: "string"
+        format: "date-time"
+      details:
+        type: "object"
   Issue:
     type: "object"
     properties:
@@ -758,6 +777,8 @@ definitions:
         enum:
         - "SUB_SYSTEM"
         - "SUPER_SYSTEM"
+        - "USED_SYSTEM"
+        - "USER_SYSTEM"
   RelationSummaryModel:
     type: "object"
     properties:
@@ -776,6 +797,8 @@ definitions:
         enum:
         - "SUB_SYSTEM"
         - "SUPER_SYSTEM"
+        - "USED_SYSTEM"
+        - "USER_SYSTEM"
   RihaIssueSummary:
     type: "object"
     properties:
