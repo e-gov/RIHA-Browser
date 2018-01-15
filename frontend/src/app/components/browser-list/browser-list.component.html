@@ -33,8 +33,24 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="owner-name-input">Omaniku nimi</label>
-          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.ownerName" type="text" id="owner-name-input">
+          <label for="date-created-input-from">Sisestamise kuupäev alates</label>
+          <div class="input-group datepicker">
+            <input id="date-created-input-from" class="form-control" placeholder="yyyy-mm-dd"
+                   [(ngModel)]="filters.dateCreatedFrom" ngbDatepicker #dateCreatedFrom="ngbDatepicker">
+            <span class="input-group-btn">
+                <button (click)="dateCreatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="date-updated-input-from">Viimati muudetud alates</label>
+          <div class="input-group datepicker">
+            <input id="date-updated-input-from" class="form-control" placeholder="yyyy-mm-dd"
+                   [(ngModel)]="filters.dateUpdatedFrom" ngbDatepicker #dateUpdatedFrom="ngbDatepicker">
+            <span class="input-group-btn">
+                <button (click)="dateUpdatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+            </span>
+          </div>
         </div>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
@@ -53,8 +69,24 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="owner-code-input">Omaniku registrikood</label>
-          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.ownerCode" type="text" id="owner-code-input">
+          <label for="date-created-input-to">Sisestamise kuupäev kuni</label>
+          <div class="input-group datepicker">
+            <input id="date-created-input-to" class="form-control" placeholder="yyyy-mm-dd"
+                   [(ngModel)]="filters.dateCreatedTo" ngbDatepicker #dateCreatedTo="ngbDatepicker">
+            <span class="input-group-btn">
+                <button (click)="dateCreatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="date-updated-input-to">Viimati muudetud kuni</label>
+          <div class="input-group datepicker">
+            <input id="date-updated-input-to" class="form-control" placeholder="yyyy-mm-dd"
+                   [(ngModel)]="filters.dateUpdatedTo" ngbDatepicker #dateUpdatedTo="ngbDatepicker">
+            <span class="input-group-btn">
+                <button (click)="dateUpdatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+            </span>
+          </div>
         </div>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
@@ -67,6 +99,10 @@
           <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.purpose" type="text" id="purpose-input">
         </div>
         <div class="form-group">
+          <label for="owner-name-input">Omaniku nimi</label>
+          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.ownerName" type="text" id="owner-name-input">
+        </div>
+        <div class="form-group">
           <label for="approval-status">Kooskõlastamise staatus</label>
           <select id="approval-status" class="form-control"
                   (keyup.enter)="getOwnSystems()"
@@ -77,26 +113,6 @@
             <option [value]="globals.issue_type.FINALIZATION_REQUEST">lõpetamine kooskõlastatud</option>
           </select>
         </div>
-        <!--<div class="form-group">
-          <label for="date-created-input-from">Sisestamise kuupäev alates</label>
-          <div class="input-group datepicker">
-            <input id="date-created-input-from" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateCreatedFrom" ngbDatepicker #dateCreatedFrom="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateCreatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>-->
-        <!--<div class="form-group">
-          <label for="date-created-input-to">Sisestamise kuupäev kuni</label>
-          <div class="input-group datepicker">
-            <input id="date-created-input-to" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateCreatedTo" ngbDatepicker #dateCreatedTo="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateCreatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>-->
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
@@ -114,26 +130,10 @@
           <label for="stored-data-input">Põhiandmed</label>
           <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.storedData" type="text" id="stored-data-input">
         </div>
-        <!--<div class="form-group">
-          <label for="date-updated-input-from">Viimati muudetud alates</label>
-          <div class="input-group datepicker">
-            <input id="date-updated-input-from" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateUpdatedFrom" ngbDatepicker #dateUpdatedFrom="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateUpdatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>-->
-        <!--<div class="form-group">
-          <label for="date-updated-input-to">Viimati muudetud kuni</label>
-          <div class="input-group datepicker">
-            <input id="date-updated-input-to" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateUpdatedTo" ngbDatepicker #dateUpdatedTo="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateUpdatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>-->
+        <div class="form-group">
+          <label for="owner-code-input">Omaniku registrikood</label>
+          <input class="form-control" (keyup.enter)="getSystems()" [(ngModel)]="filters.ownerCode" type="text" id="owner-code-input">
+        </div>
       </div>
     </div>
     <div class="actions-bar mt-2 mb-1">
