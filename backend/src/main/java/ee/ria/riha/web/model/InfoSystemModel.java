@@ -28,5 +28,8 @@ public class InfoSystemModel {
 
     private IssueType lastPositiveApprovalRequestType;
     private Date lastPositiveApprovalRequestDate;
+    private Date lastPositiveEstablishmentRequestDate;
+    private Date lastPositiveTakeIntoUseRequestDate;
+    private Date lastPositiveFinalizationRequestDate;
 
 }

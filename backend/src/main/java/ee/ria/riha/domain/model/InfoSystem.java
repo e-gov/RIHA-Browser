@@ -36,6 +36,9 @@ public class InfoSystem {
     private JsonNode jsonContent;
     private IssueType lastPositiveApprovalRequestType;
     private Date lastPositiveApprovalRequestDate;
+    private Date lastPositiveEstablishmentRequestDate;
+    private Date lastPositiveTakeIntoUseRequestDate;
+    private Date lastPositiveFinalizationRequestDate;
 
     /**
      * Creates {@link InfoSystem} instance with empty {@link JsonNode} as a source
@@ -64,6 +67,9 @@ public class InfoSystem {
         copy.setId(this.getId());
         copy.setLastPositiveApprovalRequestDate(this.getLastPositiveApprovalRequestDate());
         copy.setLastPositiveApprovalRequestType(this.getLastPositiveApprovalRequestType());
+        copy.setLastPositiveEstablishmentRequestDate(this.getLastPositiveEstablishmentRequestDate());
+        copy.setLastPositiveTakeIntoUseRequestDate(this.getLastPositiveTakeIntoUseRequestDate());
+        copy.setLastPositiveFinalizationRequestDate(this.getLastPositiveFinalizationRequestDate());
 
         return copy;
     }
@@ -227,6 +233,30 @@ public class InfoSystem {
 
     public void setLastPositiveApprovalRequestDate(Date lastPositiveApprovalRequestDate) {
         this.lastPositiveApprovalRequestDate = lastPositiveApprovalRequestDate;
+    }
+
+    public Date getLastPositiveEstablishmentRequestDate() {
+        return lastPositiveEstablishmentRequestDate;
+    }
+
+    public void setLastPositiveEstablishmentRequestDate(Date lastPositiveEstablishmentRequestDate) {
+        this.lastPositiveEstablishmentRequestDate = lastPositiveEstablishmentRequestDate;
+    }
+
+    public Date getLastPositiveTakeIntoUseRequestDate() {
+        return lastPositiveTakeIntoUseRequestDate;
+    }
+
+    public void setLastPositiveTakeIntoUseRequestDate(Date lastPositiveTakeIntoUseRequestDate) {
+        this.lastPositiveTakeIntoUseRequestDate = lastPositiveTakeIntoUseRequestDate;
+    }
+
+    public Date getLastPositiveFinalizationRequestDate() {
+        return lastPositiveFinalizationRequestDate;
+    }
+
+    public void setLastPositiveFinalizationRequestDate(Date lastPositiveFinalizationRequestDate) {
+        this.lastPositiveFinalizationRequestDate = lastPositiveFinalizationRequestDate;
     }
 
     /**
