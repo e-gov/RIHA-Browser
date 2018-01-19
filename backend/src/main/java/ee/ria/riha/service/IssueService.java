@@ -6,6 +6,7 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -315,6 +316,10 @@ public class IssueService {
         if (model.getResolutionType() == null) {
             throw new ValidationException("validation.issue.update.noResolutionForFeedbackIssue");
         }
+
+        if (model.getResolutionType() != IssueResolutionType.POSITIVE && model.getResolutionType() != IssueResolutionType.NEGATIVE) {
+            throw new ValidationException("validation.issue.update.unacceptableResolutionTypeForFeedbackIssue");
+        }
     }
 
     private void closeIssue(Issue issue, IssueStatusUpdateModel model) {
@@ -353,7 +358,7 @@ public class IssueService {
     /**
      * Retrieves set of personal codes including issue author and every commenter.
      *
-     * @param issueId - id of an issue
+     * @param issueId id of an issue
      * @return set of personal codes
      */
     public Set<String> getParticipantsPersonalCodes(Long issueId) {
@@ -367,4 +372,53 @@ public class IssueService {
         return issueCommentsAuthorsPersonalCodes;
     }
 
+    /**
+     * Creates comment and event that describe issue approval decision.
+     *
+     * @param issueId id of an issue
+     * @param model   decision model
+     */
+    public void makeApprovalDecision(Long issueId, IssueApprovalDecisionModel model) {
+        makeApprovalDecision(getIssueById(issueId), model);
+    }
+
+    /**
+     * Creates comment and event that describe issue approval decision.
+     *
+     * @param issue an issue for which decision is made
+     * @param model decision model
+     */
+    public void makeApprovalDecision(Issue issue, IssueApprovalDecisionModel model) {
+        validateIssueNotClosed(issue);
+        validateApprovalDecision(issue, model);
+
+        if (hasText(model.getComment())) {
+            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), IssueCommentModel.builder()
+                    .comment(model.getComment())
+                    .build());
+        }
+
+        createDecisionEvent(issue.getId(), model.getDecisionType());
+    }
+
+    private void validateApprovalDecision(Issue issue, IssueApprovalDecisionModel model) {
+        if (!isFeedbackRequestIssue(issue)) {
+            throw new ValidationException("validation.issueApprovalDecision.create.notAFeedbackIssue");
+        }
+
+        if (model.getDecisionType() == null) {
+            throw new ValidationException("validation.issueApprovalDecision.create.noDecisionTypeSpecified");
+        }
+
+        if (!SecurityContextUtil.hasRole(APPROVER)) {
+            throw new ValidationException("validation.issueApprovalDecision.create.noRightToAddDecision");
+        }
+    }
+
+    private void createDecisionEvent(Long issueId, IssueResolutionType decisionType) {
+        IssueEvent decisionEvent = prepareIssueEvent(IssueEventType.DECISION);
+        decisionEvent.setResolutionType(decisionType);
+
+        issueEventService.createEvent(issueId, decisionEvent);
+    }
 }
