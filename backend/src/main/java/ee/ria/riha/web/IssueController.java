@@ -6,6 +6,7 @@ import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,7 +106,7 @@ public class IssueController {
     @PutMapping(API_V1_PREFIX + "/issues/{issueId}")
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Update issue")
-    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody Issue model) {
+    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody IssueStatusUpdateModel model) {
         return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model));
     }
 
