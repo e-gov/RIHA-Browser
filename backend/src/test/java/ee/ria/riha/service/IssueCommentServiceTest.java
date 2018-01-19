@@ -51,8 +51,8 @@ public class IssueCommentServiceTest {
     @Before
     public void setUp() {
         // Reset authentication
-        authenticationToken.setActiveOrganization("555010203");
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
         doNothing().when(notificationService).sendNewIssueCommentNotification(any(Long.class));
