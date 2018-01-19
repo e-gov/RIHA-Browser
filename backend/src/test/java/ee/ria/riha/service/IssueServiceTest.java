@@ -335,4 +335,18 @@ public class IssueServiceTest {
                 .status(IssueStatus.CLOSED)
                 .build());
     }
+
+    @Test(expected = ValidationException.class)
+    public void doesNotAllowToResolveIssueWithDismissedResolutionType() {
+        setRiaApproverRole();
+
+        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+
+        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
+                .status(IssueStatus.CLOSED)
+                .resolutionType(IssueResolutionType.DISMISSED)
+                .build());
+    }
+
+
 }

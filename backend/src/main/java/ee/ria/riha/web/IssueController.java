@@ -6,12 +6,14 @@ import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -108,6 +110,18 @@ public class IssueController {
     @ApiOperation("Update issue")
     public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody IssueStatusUpdateModel model) {
         return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model));
+    }
+
+    /**
+     * Make decision about approval request/
+     * @param issueId id of an approval request issue
+     * @param model approval decision model
+     */
+    @PostMapping(API_V1_PREFIX + "/issues/{issueId}/decisions")
+    @PreAuthorize("hasRole('ROLE_HINDAJA')")
+    @ApiOperation("Leave decision")
+    public void makeApprovalDecision(@PathVariable("issueId") Long issueId, @RequestBody IssueApprovalDecisionModel model) {
+        issueService.makeApprovalDecision(issueId, model);
     }
 
 }
