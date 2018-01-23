@@ -4,6 +4,7 @@ import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
+import ee.ria.riha.web.model.IssueCommentModel;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,9 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Valentin Suhnjov
@@ -51,8 +50,8 @@ public class IssueCommentServiceTest {
     @Before
     public void setUp() {
         // Reset authentication
-        authenticationToken.setActiveOrganization("555010203");
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
         doNothing().when(notificationService).sendNewIssueCommentNotification(any(Long.class));
@@ -60,7 +59,9 @@ public class IssueCommentServiceTest {
 
     @Test
     public void populatesAuthorAndOrganizationFromUserDetailsDuringCommentCreation() {
-        issueCommentService.createIssueComment(EXISTING_ISSUE_ID, "");
+        issueCommentService.createIssueComment(EXISTING_ISSUE_ID, IssueCommentModel.builder()
+                .comment("")
+                .build());
 
         ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
         verify(commentRepository).add(commentArgumentCaptor.capture());
@@ -76,6 +77,9 @@ public class IssueCommentServiceTest {
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringCommentCreation() {
         authenticationToken.setActiveOrganization(null);
 
-        issueCommentService.createIssueComment(EXISTING_ISSUE_ID, "comment");
+        issueCommentService.createIssueComment(EXISTING_ISSUE_ID, IssueCommentModel.builder()
+                .comment("comment")
+                .build());
     }
+
 }

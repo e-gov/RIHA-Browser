@@ -21,6 +21,8 @@ export class ApproverIssueDetailsComponent implements OnInit {
   replies: any[] = [];
   activeUser: User;
   globals: any = G;
+  decisionType: string = 'null';
+  commentText: string = '';
 
   refreshReplies(){
     this.systemService.getSystemIssueTimeline(this.feedback.id).then(
@@ -29,13 +31,14 @@ export class ApproverIssueDetailsComponent implements OnInit {
       });
   }
 
-  markResolved(f, resolutionType?){
-    //comment can be empty
-    let reply = this.generalHelperService.cloneObject(f.value);
-    if (resolutionType){
-      reply.resolutionType = resolutionType;
-    }
-    this.systemService.closeSystemIssue(this.feedback.id, reply).then(
+  resetValues(f){
+    f.resetForm();
+    this.decisionType = 'null';
+    this.commentText = '';
+  }
+
+  markResolved(resolutionType?){
+    this.systemService.closeSystemIssue(this.feedback.id, resolutionType).then(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
@@ -47,20 +50,42 @@ export class ApproverIssueDetailsComponent implements OnInit {
     )
   }
 
-  markResolvedWithVerdict(f, resolutionType){
-    this.markResolved(f, resolutionType);
+  markResolvedWithVerdict(resolutionType){
+    this.markResolved(resolutionType);
   }
 
-  postReply(f){
-    if (f.valid){
-      this.systemService.postSystemIssueComment(this.feedback.id, f.value).then(
+  postComment(f){
+    if (f.valid && this.commentText){
+      this.systemService.postSystemIssueComment(this.feedback.id, {
+        comment: this.commentText
+      }).then(
         res => {
-          f.reset();
+          this.resetValues(f);
           this.refreshReplies();
           this.toastrService.success('Kommentaar edukalt lisatud.');
         },
         err => {
+          this.resetValues(f);
           this.toastrService.error('Kommentaari lisamine ebaõnnestus. Palun proovi uuesti.');
+        }
+      )
+    }
+  }
+
+  postDecision(f){
+    if (f.valid){
+      this.systemService.postSystemIssueDecision(this.feedback.id, {
+        comment: this.commentText,
+        decisionType: this.decisionType
+      }).then(
+        res => {
+          this.resetValues(f);
+          this.refreshReplies();
+          this.toastrService.success('Otsus edukalt lisatud.');
+        },
+        err => {
+          this.resetValues(f);
+          this.toastrService.error('Otsuse lisamine ebaõnnestus. Palun proovi uuesti.');
         }
       )
     }
@@ -68,6 +93,10 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   getOrganizationWithUser(o){
     return `${o.organizationName} (${o.authorName})`;
+  }
+
+  canPostDecision(){
+    return this.feedback.type && this.environmentService.getUserMatrix().hasApproverRole;
   }
 
   canResolveGeneral(){

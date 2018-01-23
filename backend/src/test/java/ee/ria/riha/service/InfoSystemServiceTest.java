@@ -46,7 +46,7 @@ public class InfoSystemServiceTest {
     @Before
     public void setUp() {
         RihaOrganizationAwareAuthenticationToken authenticationToken = JaneAuthenticationTokenBuilder.builder().build();
-        authenticationToken.setActiveOrganization("555010203");
+        authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         existingInfoSystem.setId(2357L);

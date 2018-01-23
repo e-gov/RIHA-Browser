@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
-import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static ee.ria.riha.service.auth.RoleType.AUTHENTICATED_USER;
+import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 
 /**
  * Builder for Jane Doe authentication token. <p> Jane is a user with first name <strong>Jane</strong> and last name
@@ -25,17 +25,25 @@ import static ee.ria.riha.service.auth.RoleType.AUTHENTICATED_USER;
  */
 public class JaneAuthenticationTokenBuilder {
 
-    private String userFirstName = "Jane";
-    private String userLastName = "Doe";
+    public static final String FIRST_NAME = "Jane";
+    public static final String LAST_NAME = "Doe";
+    public static final String USERNAME = "jane.doe";
+    public static final String PASSWORD = "strong";
+    public static final String PERSONAL_CODE = "EE40102031234";
+    public static final String ORGANIZATION_CODE = "555010203";
+    public static final String ORGANIZATION_NAME = "Acme org";
 
-    private String username = "jane.doe";
-    private String password = "strong";
+    private String userFirstName = FIRST_NAME;
+    private String userLastName = LAST_NAME;
+
+    private String username = USERNAME;
+    private String password = PASSWORD;
     private List<GrantedAuthority> baseAuthorities = AuthorityUtils.createAuthorityList(AUTHENTICATED_USER.getRole());
 
-    private String personalCode = "EE40102031234";
+    private String personalCode = PERSONAL_CODE;
 
     private ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
-            new RihaOrganization("555010203", "Acme org"),
+            new RihaOrganization(ORGANIZATION_CODE, ORGANIZATION_NAME),
             new SimpleGrantedAuthority(PRODUCER.getRole()));
 
     public static JaneAuthenticationTokenBuilder builder() {
