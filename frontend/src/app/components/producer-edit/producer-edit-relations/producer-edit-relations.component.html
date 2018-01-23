@@ -1,7 +1,8 @@
+<div class="fixed-header">
+  Seosed süsteemidega
+  <button (click)="closeModal()" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+</div>
 <section class="col card p-3 main-content">
-  <div class="panel-action-heading">
-    Seosed süsteemidega
-  </div>
   <div class="my-1">
     <form #addForm="ngForm">
       <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
@@ -51,11 +52,6 @@
             </td>
           </tr>
         </table>
-      </div>
-      <div class="actions-bar">
-        <div class="buttons pull-right">
-          <button (click)="closeModal()" class="btn btn-default pull-right">Sulge</button>
-        </div>
       </div>
     </form>
   </div>

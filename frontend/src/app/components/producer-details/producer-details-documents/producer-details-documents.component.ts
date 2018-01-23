@@ -23,6 +23,7 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
       this.onSystemChanged.emit(system);
       const modalRef = this.modalService.open(ProducerEditDocumentsComponent,{
         backdrop: 'static',
+        windowClass: 'fixed-header-modal',
         keyboard: false
       });
       modalRef.componentInstance.system = system;
