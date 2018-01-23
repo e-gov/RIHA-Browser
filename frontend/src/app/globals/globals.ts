@@ -26,6 +26,7 @@ export const G = Object.freeze({
   },
   issue_resolution_type:{
     POSITIVE: 'POSITIVE',
-    NEGATIVE: 'NEGATIVE'
+    NEGATIVE: 'NEGATIVE',
+    DISMISSED: 'DISMISSED'
   }
 });
