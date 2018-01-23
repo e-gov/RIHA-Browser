@@ -7,6 +7,8 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
+import ee.ria.riha.web.model.IssueCommentModel;
+import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,9 +30,9 @@ import static ee.ria.riha.domain.model.IssueType.ESTABLISHMENT_REQUEST;
 import static ee.ria.riha.service.auth.RoleType.APPROVER;
 import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -180,10 +182,6 @@ public class IssueServiceTest {
         authenticationToken.setActiveOrganization(EVS_REG_CODE);
     }
 
-    private void setRiaApproverRole() {
-        authenticationToken.setActiveOrganization(RIA_REG_CODE);
-    }
-
     @Test
     public void setsIssueTypeWhenKirjeldajaCreatesIssue() {
         Issue issue = issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
@@ -201,7 +199,7 @@ public class IssueServiceTest {
 
     @Test
     public void updatesIssueStatusWhenIssueIsClosed() {
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .build());
 
@@ -214,7 +212,7 @@ public class IssueServiceTest {
 
     @Test
     public void createsClosingEventWhenIssueIsClosed() {
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .build());
 
@@ -222,6 +220,7 @@ public class IssueServiceTest {
         verify(issueEventService).createEvent(eq(EXISTING_ISSUE_ID), issueEventArgumentCaptor.capture());
 
         IssueEvent issueEvent = issueEventArgumentCaptor.getValue();
+        assertThat(issueEvent.getType(), is(equalTo(IssueEventType.CLOSED)));
         assertThat(issueEvent.getAuthorName(), is(equalTo("Jane Doe")));
         assertThat(issueEvent.getAuthorPersonalCode(), is(equalTo("EE40102031234")));
         assertThat(issueEvent.getOrganizationName(), is(equalTo("Acme org")));
@@ -230,23 +229,23 @@ public class IssueServiceTest {
 
     @Test
     public void createsClosingIssueCommentWhenIssueIsClosed() {
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .comment("closing comment")
                 .build());
 
-        ArgumentCaptor<String> issueCommentArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<IssueCommentModel> issueCommentArgumentCaptor = ArgumentCaptor.forClass(IssueCommentModel.class);
         verify(issueCommentService).createIssueCommentWithoutNotification(eq(EXISTING_ISSUE_ID),
                 issueCommentArgumentCaptor.capture());
 
-        assertThat(issueCommentArgumentCaptor.getValue(), is(equalTo("closing comment")));
+        assertThat(issueCommentArgumentCaptor.getValue().getComment(), is(equalTo("closing comment")));
     }
 
     @Test(expected = ValidationException.class)
     public void throwsExceptionWhenUpdatingClosedIssue() {
         existingIssueEntity.setStatus(IssueStatus.CLOSED.name());
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .build());
     }
@@ -255,7 +254,7 @@ public class IssueServiceTest {
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueUpdate() {
         authenticationToken.setActiveOrganization(null);
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .build());
     }
@@ -266,7 +265,7 @@ public class IssueServiceTest {
 
         existingIssue.setType(null);
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, Issue.builder()
+        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .resolutionType(IssueResolutionType.POSITIVE)
                 .build());
@@ -285,7 +284,7 @@ public class IssueServiceTest {
 
         existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, Issue.builder()
+        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .resolutionType(IssueResolutionType.POSITIVE)
                 .build());
@@ -298,13 +297,17 @@ public class IssueServiceTest {
         assertThat(comment.getResolution_type(), is(equalTo(IssueResolutionType.POSITIVE.name())));
     }
 
+    private void setRiaApproverRole() {
+        authenticationToken.setActiveOrganization(RIA_REG_CODE);
+    }
+
     @Test(expected = ValidationException.class)
     public void doesNotAllowNonRiaUsersToCloseFeedbackIssues() {
         setNonRiaApproverRole();
 
         existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, Issue.builder()
+        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .resolutionType(IssueResolutionType.POSITIVE)
                 .build());
@@ -316,7 +319,7 @@ public class IssueServiceTest {
 
         existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, Issue.builder()
+        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .resolutionType(IssueResolutionType.POSITIVE)
                 .build());
@@ -328,8 +331,22 @@ public class IssueServiceTest {
 
         existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, Issue.builder()
+        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
                 .build());
     }
+
+    @Test(expected = ValidationException.class)
+    public void doesNotAllowToResolveIssueWithDismissedResolutionType() {
+        setRiaApproverRole();
+
+        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+
+        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
+                .status(IssueStatus.CLOSED)
+                .resolutionType(IssueResolutionType.DISMISSED)
+                .build());
+    }
+
+
 }

@@ -1,6 +1,10 @@
-<section class="col card p-3 main-content">
+<div class="fixed-header">
+  Hindajate tagasiside
+  <button (click)="closeModal(commentForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+</div>
+<section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
-    <div class="m-4 h2">
+    <div class="mx-4 mb-4 mt-1 h2">
       <span class="text-gray-dark">{{ feedback.title }}</span>
       <app-tooltip
         [placement]="'bottom'"
@@ -42,6 +46,15 @@
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == globals.issue_resolution_type.POSITIVE" class="card-text ml-4">
         <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-success font-weight-bold">kooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
       </div>
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == globals.issue_resolution_type.POSITIVE" class="card-text ml-4">
+        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> kooskõlastas {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      </div>
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == globals.issue_resolution_type.NEGATIVE" class="card-text ml-4">
+        <i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> ei kooskõlastanud {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      </div>
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == globals.issue_resolution_type.DISMISSED" class="card-text ml-4">
+        <i class="fa fa-eye-slash text-muted" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> jättis läbi vaatamata {{ reply.dateCreated | date:'y-MM-dd HH:mm:ss'}}
+      </div>
     </div>
     <form class="col-12" #commentForm="ngForm" class="m-4">
       <div *ngIf="feedback.status == 'OPEN'" class="card card-text">
@@ -49,19 +62,37 @@
           {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
         </div>
         <div class="card-content p-2">
-            <div class="form-group" [ngClass]="{'has-danger': comment.invalid  && (comment.dirty || comment.touched || comment.submitted)}">
-                <textarea #comment="ngModel" ngModel name="comment" class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar" required></textarea>
+            <div class="form-group">
+                <textarea class="form-control counter-element" rows="10" placeholder="Kirjuta siia enda kommentaar"
+                          #textInput
+                          [(ngModel)]="commentText"
+                          name="commentText"></textarea>
+            </div>
+            <div class="row pull-right">
+              <div *ngIf="canPostDecision()">
+                <select class="form-control"
+                        [(ngModel)]="decisionType"
+                        name="decisionType">
+                  <option [value]="'null'" selected>Vali otsus...</option>
+                  <option [value]="globals.issue_resolution_type.POSITIVE">Kookõlastan</option>
+                  <option [value]="globals.issue_resolution_type.NEGATIVE">Ei kooskõlasta</option>
+                  <option [value]="globals.issue_resolution_type.DISMISSED">Jätan läbivaatamata</option>
+                </select>
+              </div>
+              <div class="mx-2" *ngIf="feedback.status == 'OPEN'" >
+                <button *ngIf="decisionType == 'null'" (click)="postComment(commentForm)" class="btn btn-primary pull-right">Lisa kommentaar</button>
+                <button *ngIf="decisionType != 'null'" (click)="postDecision(commentForm)" class="btn btn-primary pull-right">{{
+                  textInput.value ? 'Lisa otsus ja kommentaar' : 'Lisa otsus' }}</button>
+              </div>
             </div>
         </div>
       </div>
     </form>
-    <div class="actions-bar">
+    <div *ngIf="canResolveGeneral() || canResolveWithVerdict()" class="actions-bar">
       <div class="buttons pull-right">
-        <button (click)="closeModal(commentForm)" class="btn btn-default pull-right">Sulge</button>
-        <button (click)="markResolved(commentForm)" *ngIf="canResolveGeneral()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
-        <button (click)="markResolvedWithVerdict(commentForm, globals.issue_resolution_type.NEGATIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
-        <button (click)="markResolvedWithVerdict(commentForm, globals.issue_resolution_type.POSITIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
-        <button (click)="postReply(commentForm)" *ngIf="feedback.status == 'OPEN'" class="btn btn-primary pull-right">Lisa kommentaar</button>
+        <button (click)="markResolved()" *ngIf="canResolveGeneral()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
+        <button (click)="markResolvedWithVerdict(globals.issue_resolution_type.NEGATIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
+        <button (click)="markResolvedWithVerdict(globals.issue_resolution_type.POSITIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
       </div>
     </div>
   </div>

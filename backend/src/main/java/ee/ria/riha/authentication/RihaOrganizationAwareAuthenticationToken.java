@@ -71,9 +71,10 @@ public class RihaOrganizationAwareAuthenticationToken extends PreAuthenticatedAu
     }
 
     /**
-     * Either sets or clears active organization. Active organization must be one of the users organizationRoles.
+     * Either sets or clears active organization. Active organization must be one of the users organizationRoles or null
+     * to clear active organization
      *
-     * @param organizationCode - new active organization
+     * @param organizationCode new active organization code or null
      */
     public void setActiveOrganization(String organizationCode) {
         if (log.isDebugEnabled()) {
@@ -87,7 +88,8 @@ public class RihaOrganizationAwareAuthenticationToken extends PreAuthenticatedAu
             this.activeOrganization = null;
         } else {
             if (!organizationsByCode.containsKey(organizationCode)) {
-                throw new IllegalBrowserStateException("User is not part of organization with code: " + organizationCode);
+                throw new IllegalBrowserStateException(
+                        "User is not part of organization with code: " + organizationCode);
             }
             this.activeOrganization = organizationsByCode.get(organizationCode);
             if (log.isDebugEnabled()) {

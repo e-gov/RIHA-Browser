@@ -150,7 +150,7 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/Issue"
+          $ref: "#/definitions/IssueStatusUpdateModel"
       responses:
         200:
           description: "successful operation"
@@ -215,7 +215,7 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/IssueComment"
+          $ref: "#/definitions/IssueCommentModel"
       responses:
         200:
           description: "successful operation"
@@ -244,6 +244,27 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/IssueComment"
+  /api/v1/issues/{issueId}/decisions:
+    post:
+      tags:
+      - "Issues"
+      summary: "Leave decision"
+      description: ""
+      operationId: "makeApprovalDecision"
+      parameters:
+      - name: "issueId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/IssueApprovalDecisionModel"
+      responses:
+        default:
+          description: "successful operation"
   /api/v1/issues/{issueId}/timeline:
     get:
       tags:
@@ -584,12 +605,24 @@ definitions:
         enum:
         - "POSITIVE"
         - "NEGATIVE"
+        - "DISMISSED"
       entityType:
         type: "string"
         enum:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueApprovalDecisionModel:
+    type: "object"
+    properties:
+      comment:
+        type: "string"
+      decisionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
   IssueComment:
     type: "object"
     properties:
@@ -618,6 +651,11 @@ definitions:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueCommentModel:
+    type: "object"
+    properties:
+      comment:
+        type: "string"
   IssueEntity:
     type: "object"
     properties:
@@ -627,6 +665,22 @@ definitions:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueStatusUpdateModel:
+    type: "object"
+    properties:
+      comment:
+        type: "string"
+      status:
+        type: "string"
+        enum:
+        - "OPEN"
+        - "CLOSED"
+      resolutionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
   IssueSummaryModel:
     type: "object"
     properties:
@@ -662,6 +716,7 @@ definitions:
         enum:
         - "POSITIVE"
         - "NEGATIVE"
+        - "DISMISSED"
   OrganizationModel:
     type: "object"
     properties:
