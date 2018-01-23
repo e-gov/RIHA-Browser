@@ -227,11 +227,15 @@ export class SystemsService {
   }
 
   public getSystemIssueTimeline(issueId) {
-    return this.http.get(`/api/v1/issues/${ issueId }/timeline`).toPromise();
+    return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
   }
 
   public postSystemIssueComment(issueId, reply) {
     return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
+  }
+
+  public postSystemIssueDecision(issueId, decision) {
+    return this.http.post(`/api/v1/issues/${ issueId }/decisions`, decision).toPromise();
   }
 
   public getSystemRelations(reference) {
@@ -246,11 +250,10 @@ export class SystemsService {
     return this.http.delete(`/api/v1/systems/${ reference }/relations/${ relationId }`).toPromise();
   }
 
-  public closeSystemIssue(issueId, reply) {
+  public closeSystemIssue(issueId, resolutionType) {
     return this.http.put(`/api/v1/issues/${ issueId }`, {
-      comment: reply.comment,
       status: 'CLOSED',
-      resolutionType: reply.resolutionType || null
+      resolutionType: resolutionType || null
     }).toPromise();
   }
 
