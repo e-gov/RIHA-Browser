@@ -50,6 +50,14 @@
           Õigusaktid
         </a>
         <a pageScroll
+           *ngIf="isBlockVisible('security')"
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': isMenuActive('turvalisus')}"
+           href="#turvalisus"
+           class="list-group-item justify-content-between">
+          Turvalisus
+        </a>
+        <a pageScroll
            *ngIf="isBlockVisible('contacts')"
            [pageScrollAdjustHash]="true"
            [ngClass]="{'active': isMenuActive('kontaktid')}"
@@ -93,6 +101,11 @@
          *ngIf="isBlockVisible('legislations')"
          class="separate-block">
       <app-producer-details-legislations (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
+    </div>
+    <div id="turvalisus"
+         *ngIf="isBlockVisible('security')"
+         class="separate-block">
+      <app-producer-details-security (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-security>
     </div>
     <div id="kontaktid"
          *ngIf="isBlockVisible('contacts')"

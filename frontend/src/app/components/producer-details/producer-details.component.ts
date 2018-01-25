@@ -79,6 +79,10 @@ export class ProducerDetailsComponent implements OnInit {
         ret = (this.system.hasContacts() && this.environmentService.getActiveUser() != null) || editable;
         break;
       }
+      case 'security': {
+        ret = this.environmentService.getActiveUser() != null || editable;
+        break;
+      }
     }
     return ret;
   }
