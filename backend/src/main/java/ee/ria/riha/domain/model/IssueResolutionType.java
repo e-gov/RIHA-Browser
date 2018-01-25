@@ -15,6 +15,11 @@ public enum IssueResolutionType {
     /**
      * Indicates that issue resolution was negative
      */
-    NEGATIVE
+    NEGATIVE,
+
+    /**
+     * Indicates that resolution will not be given
+     */
+    DISMISSED
 
 }
