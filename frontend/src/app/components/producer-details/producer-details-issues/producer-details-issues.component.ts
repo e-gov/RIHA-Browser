@@ -51,6 +51,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
         {
           size: "lg",
           backdrop: "static",
+          windowClass: "fixed-header-modal",
           keyboard: false
         });
       modalRef.componentInstance.feedback = res.json();

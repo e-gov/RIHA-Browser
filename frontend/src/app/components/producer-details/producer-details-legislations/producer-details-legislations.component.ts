@@ -22,6 +22,7 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
       this.onSystemChanged.emit(system);
       const modalRef = this.modalService.open(ProducerEditLegislationsComponent, {
           backdrop: 'static',
+        windowClass: 'fixed-header-modal',
           keyboard: false
         });
       modalRef.componentInstance.system = system;

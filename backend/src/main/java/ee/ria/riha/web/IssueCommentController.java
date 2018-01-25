@@ -7,6 +7,7 @@ import ee.ria.riha.storage.util.ApiPageableAndFilterableParams;
 import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
+import ee.ria.riha.web.model.IssueCommentModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,8 @@ public class IssueCommentController {
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Create new issue comment")
     public ResponseEntity<IssueComment> createIssueComment(@PathVariable("issueId") Long issueId,
-                                                           @RequestBody IssueComment model) {
-        return ResponseEntity.ok(issueEventService.createIssueComment(issueId, model.getComment()));
+                                                           @RequestBody IssueCommentModel model) {
+        return ResponseEntity.ok(issueEventService.createIssueComment(issueId, model));
     }
 
 }
