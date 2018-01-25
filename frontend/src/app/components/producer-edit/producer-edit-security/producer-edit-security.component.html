@@ -1,0 +1,56 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Turvalisus
+  </div>
+  <div class="my-1">
+    <form #addForm="ngForm">
+      <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
+        <label for="name" class="text-muted separated-text">Nimi:</label>
+        <input id="name" class="form-control col-12"
+               #name="ngModel"
+               [(ngModel)]="data.name"
+               placeholder="kontakti nimi või kontakti tüüp (kasutajatugi)"
+               (keyup.enter)="addContact(addForm)"
+               name="name" required>
+
+      </div>
+      <div class="form-group" [ngClass]="{'has-danger': email.invalid && (email.dirty || email.touched)}">
+        <label for="email" class="text-muted separated-text">E-mail:</label>
+        <input id="email" class="form-control col-12"
+               #email="ngModel"
+               [(ngModel)]="data.email"
+               type="email"
+               (keyup.enter)="addContact(addForm)"
+               name="email" email required>
+
+      </div>
+      <div class="form-group row">
+        <div class="col-12">
+          <button class="btn btn-default pull-right" (click)="addContact(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        </div>
+      </div>
+      <div class="dataTables_wrapper">
+        <table class="details-list-table">
+          <tr *ngFor="let contact of contacts; let i = index">
+            <td>
+              <i class="fa fa-circle text-primary"></i>
+            </td>
+            <td>
+              <span class="font-weight-bold">{{ contact.name }}</span><br />
+              <a class="text-gray-dark small" href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+            </td>
+            <td>
+              <button (click)="deleteContact(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="closeModal(addForm)" class="btn btn-default pull-right">Tühista</button>
+          <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
