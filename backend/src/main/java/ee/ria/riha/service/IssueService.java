@@ -6,9 +6,11 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueApprovalDecisionModel;
+import ee.ria.riha.web.model.IssueCommentModel;
+import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,7 @@ import static ee.ria.riha.service.auth.RoleType.APPROVER;
 import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.util.StringUtils.hasText;
 
 /**
  * Info system issue service
@@ -255,7 +258,7 @@ public class IssueService {
      * @param model   model of an issue
      * @return updated issue
      */
-    public Issue updateIssueStatus(Long issueId, Issue model) {
+    public Issue updateIssueStatus(Long issueId, IssueStatusUpdateModel model) {
         return updateIssueStatus(getIssueById(issueId), model);
     }
 
@@ -266,14 +269,17 @@ public class IssueService {
      * @param model model of an issue
      * @return updated issue
      */
-    public Issue updateIssueStatus(Issue issue, Issue model) {
+    public Issue updateIssueStatus(Issue issue, IssueStatusUpdateModel model) {
+        validateIssueNotClosed(issue);
         validateUpdatedIssueStatus(issue, model);
         validateUpdatedFeedbackRequestIssueResolution(issue, model);
 
         String comment = model.getComment();
-        boolean commented = StringUtils.hasText(comment);
+        boolean commented = hasText(comment);
         if (commented) {
-            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), comment);
+            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), IssueCommentModel.builder()
+                    .comment(comment)
+                    .build());
         }
 
         if (model.getStatus() == CLOSED) {
@@ -286,17 +292,19 @@ public class IssueService {
         return updatedIssue;
     }
 
-    private void validateUpdatedIssueStatus(Issue issue, Issue model) {
+    private void validateIssueNotClosed(Issue issue) {
         if (issue.getStatus() == CLOSED) {
             throw new ValidationException("validation.issue.update.alreadyClosed");
         }
+    }
 
+    private void validateUpdatedIssueStatus(Issue issue, IssueStatusUpdateModel model) {
         if (issue.getStatus() == model.getStatus()) {
             throw new ValidationException("validation.issue.update.statusDidNotChange");
         }
     }
 
-    private void validateUpdatedFeedbackRequestIssueResolution(Issue issue, Issue model) {
+    private void validateUpdatedFeedbackRequestIssueResolution(Issue issue, IssueStatusUpdateModel model) {
         if (!isFeedbackRequestIssue(issue)) {
             return;
         }
@@ -308,10 +316,16 @@ public class IssueService {
         if (model.getResolutionType() == null) {
             throw new ValidationException("validation.issue.update.noResolutionForFeedbackIssue");
         }
+
+        if (model.getResolutionType() != IssueResolutionType.POSITIVE && model.getResolutionType() != IssueResolutionType.NEGATIVE) {
+            throw new ValidationException("validation.issue.update.unacceptableResolutionTypeForFeedbackIssue");
+        }
     }
 
-    private void closeIssue(Issue issue, Issue model) {
-        IssueResolutionType resolutionType = isFeedbackRequestIssue(issue) ? model.getResolutionType() : null;
+    private void closeIssue(Issue issue, IssueStatusUpdateModel model) {
+        IssueResolutionType resolutionType = isFeedbackRequestIssue(issue)
+                ? model.getResolutionType()
+                : null;
         createCloseEvent(issue.getId(), resolutionType);
 
         issue.setStatus(CLOSED);
@@ -321,7 +335,6 @@ public class IssueService {
 
     private void createCloseEvent(Long issueId, IssueResolutionType resolutionType) {
         IssueEvent closeEvent = prepareIssueEvent(IssueEventType.CLOSED);
-        closeEvent.setType(IssueEventType.CLOSED);
         closeEvent.setResolutionType(resolutionType);
 
         issueEventService.createEvent(issueId, closeEvent);
@@ -345,7 +358,7 @@ public class IssueService {
     /**
      * Retrieves set of personal codes including issue author and every commenter.
      *
-     * @param issueId - id of an issue
+     * @param issueId id of an issue
      * @return set of personal codes
      */
     public Set<String> getParticipantsPersonalCodes(Long issueId) {
@@ -359,4 +372,53 @@ public class IssueService {
         return issueCommentsAuthorsPersonalCodes;
     }
 
+    /**
+     * Creates comment and event that describe issue approval decision.
+     *
+     * @param issueId id of an issue
+     * @param model   decision model
+     */
+    public void makeApprovalDecision(Long issueId, IssueApprovalDecisionModel model) {
+        makeApprovalDecision(getIssueById(issueId), model);
+    }
+
+    /**
+     * Creates comment and event that describe issue approval decision.
+     *
+     * @param issue an issue for which decision is made
+     * @param model decision model
+     */
+    public void makeApprovalDecision(Issue issue, IssueApprovalDecisionModel model) {
+        validateIssueNotClosed(issue);
+        validateApprovalDecision(issue, model);
+
+        if (hasText(model.getComment())) {
+            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), IssueCommentModel.builder()
+                    .comment(model.getComment())
+                    .build());
+        }
+
+        createDecisionEvent(issue.getId(), model.getDecisionType());
+    }
+
+    private void validateApprovalDecision(Issue issue, IssueApprovalDecisionModel model) {
+        if (!isFeedbackRequestIssue(issue)) {
+            throw new ValidationException("validation.issueApprovalDecision.create.notAFeedbackIssue");
+        }
+
+        if (model.getDecisionType() == null) {
+            throw new ValidationException("validation.issueApprovalDecision.create.noDecisionTypeSpecified");
+        }
+
+        if (!SecurityContextUtil.hasRole(APPROVER)) {
+            throw new ValidationException("validation.issueApprovalDecision.create.noRightToAddDecision");
+        }
+    }
+
+    private void createDecisionEvent(Long issueId, IssueResolutionType decisionType) {
+        IssueEvent decisionEvent = prepareIssueEvent(IssueEventType.DECISION);
+        decisionEvent.setResolutionType(decisionType);
+
+        issueEventService.createEvent(issueId, decisionEvent);
+    }
 }
