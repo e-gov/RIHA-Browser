@@ -24,9 +24,22 @@ export const G = Object.freeze({
     MODIFICATION_REQUEST: 'MODIFICATION_REQUEST',
     FINALIZATION_REQUEST: 'FINALIZATION_REQUEST'
   },
-  issue_resolution_type:{
+  issue_resolution_type: {
     POSITIVE: 'POSITIVE',
     NEGATIVE: 'NEGATIVE',
     DISMISSED: 'DISMISSED'
+  },
+  audit_resolution_type: {
+    PASSED_WITHOUT_REMARKS: 'PASSED_WITHOUT_REMARKS',
+    PASSED_WITH_REMARKS: 'PASSED_WITH_REMARKS',
+    DID_NOT_PASS: 'DID_NOT_PASS'
+  },
+  security_standard: {
+   iske: 'ISKE'
+  },
+  security_level: {
+    high: 'H',
+    medium: 'M',
+    low: 'L'
   }
 });
