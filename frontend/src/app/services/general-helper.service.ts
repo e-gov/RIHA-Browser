@@ -1,10 +1,44 @@
 import { Injectable } from '@angular/core';
 import { G } from '../globals/globals';
+import { isNullOrUndefined } from 'util';
 
 declare var $: any;
 
 @Injectable()
 export class GeneralHelperService {
+
+  public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
+    if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
+      let year = dateObj.year.toString();
+      let month = dateObj.month.toString();
+      let day = dateObj.day.toString();
+
+      if (month.length === 1) month = '0' + month;
+      if (day.length === 1) day = '0' + day;
+      if (simple === true){
+        return `${ year }-${ month }-${ day }`;
+      } else {
+        return `${ year }-${ month }-${ day }T00:00:00Z`;
+      }
+    } else {
+      return dateObj;
+    }
+  }
+
+  public timestampToDateObj(timestamp: string): any {
+    if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
+      let year = parseInt(timestamp.substr(0, 4), 10);
+      let month = parseInt(timestamp.substr(5, 2), 10);
+      let day = parseInt(timestamp.substr(8, 2), 10);
+      return {
+        year: year,
+        month: month,
+        day: day
+      };
+    } else {
+      return timestamp;
+    }
+  }
 
   public getSystemStatusText(system){
     let statusDescription = 'määramata';
