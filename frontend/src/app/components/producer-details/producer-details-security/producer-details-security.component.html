@@ -4,37 +4,27 @@
     <button *ngIf="allowEdit" (click)="openSecurityEdit()" class="btn btn-primary btn-sm pull-right"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Muuda</button>
   </div>
   <div class="form-group separate-blocks">
-    <div *ngIf="(system.details.data_files && system.details.stored_data.length > 0) || allowEdit" class="separate-block">
-      <label class="text-muted separated-text">Infosüsteemi kogutavad põhiandmed:</label>
-      <p *ngIf="(!system.details.stored_data || system.details.stored_data.length == 0) && allowEdit">
-        Objektid puuduvad
+      <label class="text-muted separated-text">Rakendatav infoturbe standard:</label>
+      <p *ngIf="!system.getSecurityStandard()">
+        Turvainfo puudub
       </p>
-      <table *ngIf="system.details.data_files && system.details.stored_data.length > 0" class="details-list-table">
-        <tr *ngFor="let object of system.details.stored_data">
-          <td>
-            <i class="fa fa-circle text-primary"></i>
-          </td>
-          <td>
-            {{ object }}
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div *ngIf="(system.details.data_files && system.details.data_files.length > 0) || allowEdit" class="separate-block">
-      <label class="text-muted separated-text">Detailne andmekoosseis:</label>
-      <p *ngIf="(!system.details.data_files || system.details.data_files.length == 0) && allowEdit">
-        Failid puuduvad
+      <p *ngIf="system.getSecurityStandard()">
+        <strong>{{ system.getSecurityStandard() }}</strong>
       </p>
-      <table *ngIf="system.details.data_files && system.details.data_files.length > 0" class="details-list-table">
-        <tr *ngFor="let file of system.details.data_files">
-          <td>
-            <i class="fa fa-file-o text-primary"></i>
-          </td>
-          <td>
-            <a href="{{ generalHelperService.getFileUrl(file.url) }}" target="_blank">{{ file.name }}</a>
-          </td>
-        </tr>
-      </table>
-    </div>
+  </div>
+  <div *ngIf="system.getSecurityStandard() == globals.security_standard.iske" class="form-group">
+    <label class="text-muted separated-text">ISKE turbetase:</label>
+    <p>
+      <strong *ngIf="system.getSecurityLevel() == globals.security_level.high">Kõrge</strong>
+      <strong *ngIf="system.getSecurityLevel() == globals.security_level.medium">Keskmine</strong>
+      <strong *ngIf="system.getSecurityLevel() == globals.security_level.low">Madal</strong>
+      <strong>({{ system.getSecurityClass() }})</strong>
+    </p>
+  </div>
+  <div *ngIf="system.getLastAuditDate() && system.getLastAuditResolution()" class="form-group">
+    <strong>Auditeeritud viimati {{ system.getLastAuditDate() | date:'y-MM-dd'}}</strong>
+    <strong *ngIf="system.getLastAuditResolution() == globals.audit_resolution_type.PASSED_WITHOUT_REMARKS">(<span class="text-success">Auditeeritud märkusteta ja soovitusteta</span>)</strong>
+    <strong *ngIf="system.getLastAuditResolution() == globals.audit_resolution_type.PASSED_WITH_REMARKS">(<span class="text-primary">Auditeeritud märkuste või soovitustega</span>)</strong>
+    <strong *ngIf="system.getLastAuditResolution() == globals.audit_resolution_type.DID_NOT_PASS">(<span class="text-danger">Ei läbinud auditit</span>)</strong>
   </div>
 </section>
