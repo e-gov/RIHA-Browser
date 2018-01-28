@@ -5,6 +5,7 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProducerEditSecurityComponent } from '../../producer-edit/producer-edit-security/producer-edit-security.component';
+import { G } from '../../../globals/globals';
 
 @Component({
   selector: 'app-producer-details-security',
@@ -17,12 +18,15 @@ export class ProducerDetailsSecurityComponent implements OnInit {
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
 
+  globals: any = G;
+
   openSecurityEdit(content) {
     this.systemsService.getSystem(this.system.details.short_name).then( res => {
       let system = new System(res.json());
       this.onSystemChanged.emit(system);
       const modalRef = this.modalService.open(ProducerEditSecurityComponent ,{
         backdrop: 'static',
+        windowClass: 'fixed-header-modal',
         keyboard: false
       });
       modalRef.componentInstance.system = this.system;
