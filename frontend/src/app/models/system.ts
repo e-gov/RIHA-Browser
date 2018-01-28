@@ -18,6 +18,26 @@ export class System {
     return this.details.meta.system_status.status;
   }
 
+  getSecurityStandard() {
+    return this.details.security.standard ? this.details.security.standard : null;
+  }
+
+  getSecurityLevel() {
+    return this.details.security.level ? this.details.security.level : null;
+  }
+
+  getSecurityClass() {
+    return this.details.security.class ? this.details.security.class : null;
+  }
+
+  getLastAuditDate(){
+    return this.details.security.audit_date ? this.details.security.audit_date : null;
+  }
+
+  getLastAuditResolution(){
+    return this.details.security.audit_resolution ? this.details.security.audit_resolution : null;
+  }
+
   getLastPositiveApprovalRequestType(){
       return this.lastPositiveApprovalRequestType;
   }
@@ -82,6 +102,10 @@ export class System {
     return this.details.contacts && this.details.contacts.length > 0;
   }
 
+  hasSecurityInfo(): boolean{
+    return this.details.security.standard != null;
+  }
+
   constructor(system?){
     system = system || {};
     this.id = system.id || null;
@@ -127,5 +151,6 @@ export class System {
     this.details.homepage = this.details.homepage || null;
     this.details.purpose = this.details.purpose || null;
     this.details.short_name = this.details.short_name || null;
+    this.details.security = this.details.security || {};
   }
 }
