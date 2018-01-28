@@ -1464,3 +1464,11 @@ hr {
     width: 25%;
   }
 }
+ngb-datepicker {
+  &.dropdown-menu {
+    z-index: 1050;
+  }
+}
+.switch-container {
+  line-height: 1.786;
+}
