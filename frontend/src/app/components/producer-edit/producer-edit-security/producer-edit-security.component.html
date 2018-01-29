@@ -39,22 +39,22 @@
             </div>
             <div class="row mx-0">
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.k" [value]="'0'" name="securityClass_k">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'0'" name="securityClass_k">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">0</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.k" [value]="'1'" name="securityClass_k">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'1'" name="securityClass_k">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">1</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.k" [value]="'2'" name="securityClass_k">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'2'" name="securityClass_k">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">2</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.k" [value]="'3'" name="securityClass_k">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'3'" name="securityClass_k">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">3</span>
               </label>
@@ -66,22 +66,22 @@
             </div>
             <div class="row mx-0">
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.t" [value]="'0'" name="securityClass_t">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'0'" name="securityClass_t">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">0</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.t" [value]="'1'" name="securityClass_t">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'1'" name="securityClass_t">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">1</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.t" [value]="'2'" name="securityClass_t">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'2'" name="securityClass_t">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">2</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.t" [value]="'3'" name="securityClass_t">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'3'" name="securityClass_t">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">3</span>
               </label>
@@ -93,22 +93,22 @@
             </div>
             <div class="row mx-0">
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.s" [value]="'0'" name="securityClass_s">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'0'" name="securityClass_s">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">0</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.s" [value]="'1'" name="securityClass_s">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'1'" name="securityClass_s">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">1</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.s" [value]="'2'" name="securityClass_s">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'2'" name="securityClass_s">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">2</span>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [(ngModel)]="securityClass.s" [value]="'3'" name="securityClass_s">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'3'" name="securityClass_s">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">3</span>
               </label>
@@ -122,8 +122,9 @@
             </div>
           </div>
         </div>
-        <div class="form-group" *ngIf="!isIske">
+        <div class="form-group" [ngClass]="{'has-danger': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched)}" *ngIf="!isIske">
           <input class="form-control ml-1"
+                 #otherSecurityStandard="ngModel"
                  [(ngModel)]="security.standard"
                  name="standard"
                  [required]="!isIske"
@@ -145,12 +146,13 @@
           <div class="form-group mt-2">
             <label class="text-muted">Viimase auditi kuupäev: *</label>
             <div class="row">
-              <div class="input-group datepicker col-4">
+              <div class="input-group datepicker col-4" [ngClass]="{'has-danger': auditTimestampInput.invalid  && (auditTimestampInput.dirty || auditTimestampInput.touched)}">
                 <input id="audit_timestamp" class="form-control" placeholder="yyyy-mm-dd"
                        name="auditTimestamp"
                        [(ngModel)]="security.latest_audit_date"
                        [required]="isAuditApplied"
                        [container]="'body'"
+                       #auditTimestampInput="ngModel"
                        ngbDatepicker
                        #auditTimestamp="ngbDatepicker">
                 <span class="input-group-btn">
