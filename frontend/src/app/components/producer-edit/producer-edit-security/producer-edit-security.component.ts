@@ -84,8 +84,8 @@ export class ProducerEditSecurityComponent implements OnInit {
         class: null,
         level: null,
         standard: null,
-        audit_resolution: null,
-        audit_date: null
+        latest_audit_resolution: null,
+        latest_audit_date: null
       }
     } else {
       if (security.latest_audit_date){
