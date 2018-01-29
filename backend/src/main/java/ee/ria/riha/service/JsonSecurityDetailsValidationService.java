@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -149,26 +148,19 @@ public class JsonSecurityDetailsValidationService {
     }
 
     private boolean isValidLatestAuditResolutionStatus(String latestAuditResolution) {
-        return Arrays.stream(LatestAuditResolutionType.values())
-                .map(LatestAuditResolutionType::getStatus)
-                .anyMatch(status -> status.equals(latestAuditResolution));
+        try {
+            LatestAuditResolutionType.valueOf(latestAuditResolution);
+            return true;
+        } catch(IllegalArgumentException e) {
+            return false;
+        }
     }
 
     private enum LatestAuditResolutionType {
 
-        UNCONDITIONALLY_POSITIVE("Auditeeritud märkusteta ja soovitusteta"),
-        CONDITIONALLY_POSITIVE("Auditeeritud märkuste või soovitustega"),
-        NEGATIVE("Ei läbinud auditit");
-
-        private String status;
-
-        LatestAuditResolutionType(String status) {
-            this.status = status;
-        }
-
-        public String getStatus() {
-            return this.status;
-        }
+        PASSED_WITHOUT_REMARKS,
+        PASSED_WITH_REMARKS,
+        DID_NOT_PASS
     }
 
     @Autowired
