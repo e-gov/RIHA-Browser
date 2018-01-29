@@ -106,6 +106,10 @@ export class System {
     return this.details.security.standard != null;
   }
 
+  hasAuditInfo(): boolean{
+    return this.details.security.audit_resolution != null;
+  }
+
   constructor(system?){
     system = system || {};
     this.id = system.id || null;

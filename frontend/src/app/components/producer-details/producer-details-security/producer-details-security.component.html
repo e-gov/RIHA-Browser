@@ -21,10 +21,13 @@
       <strong>({{ system.getSecurityClass() }})</strong>
     </p>
   </div>
-  <div *ngIf="system.getLastAuditDate() && system.getLastAuditResolution()" class="form-group">
+  <div *ngIf="isAuditVisible() && system.hasAuditInfo()" class="form-group">
     <strong>Auditeeritud viimati {{ system.getLastAuditDate() | date:'y-MM-dd'}}</strong>
     <strong *ngIf="system.getLastAuditResolution() == globals.audit_resolution_type.PASSED_WITHOUT_REMARKS">(<span class="text-success">Auditeeritud märkusteta ja soovitusteta</span>)</strong>
     <strong *ngIf="system.getLastAuditResolution() == globals.audit_resolution_type.PASSED_WITH_REMARKS">(<span class="text-primary">Auditeeritud märkuste või soovitustega</span>)</strong>
     <strong *ngIf="system.getLastAuditResolution() == globals.audit_resolution_type.DID_NOT_PASS">(<span class="text-danger">Ei läbinud auditit</span>)</strong>
+  </div>
+  <div *ngIf="allowEdit && !system.hasAuditInfo()" class="form-group">
+    Auditeerimise info puudub
   </div>
 </section>
