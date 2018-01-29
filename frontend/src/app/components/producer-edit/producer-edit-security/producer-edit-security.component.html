@@ -148,7 +148,7 @@
               <div class="input-group datepicker col-4">
                 <input id="audit_timestamp" class="form-control" placeholder="yyyy-mm-dd"
                        name="auditTimestamp"
-                       [(ngModel)]="security.audit_date"
+                       [(ngModel)]="security.latest_audit_date"
                        [required]="isAuditApplied"
                        [container]="'body'"
                        ngbDatepicker
@@ -166,7 +166,7 @@
                 <input class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
-                       [(ngModel)]="security.audit_resolution"
+                       [(ngModel)]="security.latest_audit_resolution"
                        [value]="globals.audit_resolution_type.PASSED_WITHOUT_REMARKS"
                        name="auditResolution">
                 <span class="custom-control-indicator"></span>
@@ -176,7 +176,7 @@
                 <input class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
-                       [(ngModel)]="security.audit_resolution"
+                       [(ngModel)]="security.latest_audit_resolution"
                        [value]="globals.audit_resolution_type.PASSED_WITH_REMARKS"
                        name="auditResolution">
                 <span class="custom-control-indicator"></span>
@@ -186,7 +186,7 @@
                 <input class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
-                       [(ngModel)]="security.audit_resolution"
+                       [(ngModel)]="security.latest_audit_resolution"
                        [value]="globals.audit_resolution_type.DID_NOT_PASS"
                        name="auditResolution">
                 <span class="custom-control-indicator"></span>

@@ -30,12 +30,12 @@ export class System {
     return this.details.security.class ? this.details.security.class : null;
   }
 
-  getLastAuditDate(){
-    return this.details.security.audit_date ? this.details.security.audit_date : null;
+  getLatestAuditDate(){
+    return this.details.security.latest_audit_date ? this.details.security.latest_audit_date : null;
   }
 
-  getLastAuditResolution(){
-    return this.details.security.audit_resolution ? this.details.security.audit_resolution : null;
+  getLatestAuditResolution(){
+    return this.details.security.latest_audit_resolution ? this.details.security.latest_audit_resolution : null;
   }
 
   getLastPositiveApprovalRequestType(){
@@ -107,7 +107,7 @@ export class System {
   }
 
   hasAuditInfo(): boolean{
-    return this.details.security.audit_resolution != null;
+    return this.details.security.latest_audit_resolution != null;
   }
 
   constructor(system?){
@@ -155,6 +155,12 @@ export class System {
     this.details.homepage = this.details.homepage || null;
     this.details.purpose = this.details.purpose || null;
     this.details.short_name = this.details.short_name || null;
-    this.details.security = this.details.security || {};
+    this.details.security = this.details.security || {
+      class: null,
+      level: null,
+      standard: null,
+      latest_audit_date: null,
+      latest_audit_resolution: null
+    };
   }
 }
