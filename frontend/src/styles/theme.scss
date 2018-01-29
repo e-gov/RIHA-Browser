@@ -1041,6 +1041,10 @@ h6,
 }
 p {
     margin-bottom: 20px;
+    &.user-multiline-text {
+      margin-bottom: 0;
+      white-space: pre-line;
+    }
     a:not(.btn) {
         border-bottom: 1px solid $primary;
         display: inline-block;
