@@ -8,6 +8,7 @@ import { WindowRefService } from '../../services/window-ref.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserMatrix } from '../../models/user-matrix';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 declare var $: any;
 
@@ -114,12 +115,14 @@ export class ProducerDetailsComponent implements OnInit {
   getSystem(reference){
     this.systemsService.getSystem(reference).then(response => {
       this.system = new System(response.json());
+      this.generalHelperService.setRihaPageTitle(this.system.details.name);
       this.loaded = true;
       setTimeout(()=>{this.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);
     }, err => {
       let status = err.status;
       if (status == '404'){
         this.notFound = true;
+        this.generalHelperService.setRihaPageTitle('Lehekülge ei leitud');
       } else if (status == '500'){
         this.toastrService.error('Serveri viga');
         this.router.navigate(['/']);
@@ -131,6 +134,7 @@ export class ProducerDetailsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
+              private generalHelperService: GeneralHelperService,
               private route: ActivatedRoute,
               private router: Router,
               private toastrService: ToastrService,
@@ -145,6 +149,7 @@ export class ProducerDetailsComponent implements OnInit {
       this.issueId = params['issue_id'] || null;
       this.getSystem(params['reference']);
     });
+    this.generalHelperService.setRihaPageTitle();
   }
 
   @HostListener("window:scroll", [])

@@ -6,6 +6,7 @@ import { ModalHelperService } from '../../services/modal-helper.service';
 import { Router } from '@angular/router';
 import { Environment } from '../../models/environment';
 import { SessionHelperService } from '../../services/session-helper.service';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-login-form',
@@ -56,9 +57,11 @@ export class LoginFormComponent implements OnInit {
   constructor(private environmentService: EnvironmentService,
               private modalService: ModalHelperService,
               private sessionHelper: SessionHelperService,
+              private generalHelperService: GeneralHelperService,
               private router: Router) { }
 
   ngOnInit() {
+    this.generalHelperService.setRihaPageTitle('Portaali sisenemine');
   }
 
 }

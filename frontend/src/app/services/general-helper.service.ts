@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { G } from '../globals/globals';
+import { Title } from '@angular/platform-browser';
 
 declare var $: any;
 
@@ -68,6 +69,14 @@ export class GeneralHelperService {
     }
   }
 
+  public setRihaPageTitle(titleTxt?){
+    if (titleTxt) {
+      this.title.setTitle(`${ titleTxt } - Riigi infosüsteemi haldussüsteem RIHA`);
+    } else {
+      this.title.setTitle(`Riigi infosüsteemi haldussüsteem RIHA`);
+    }
+  }
+
   public truncateString(str, length){
     return str.length > length ? str.substring(0, length - 3) + '...' : str;
   }
@@ -76,6 +85,6 @@ export class GeneralHelperService {
     return $.extend(true, {}, obj);
   }
 
-  constructor() { }
+  constructor(private title: Title) { }
 
 }

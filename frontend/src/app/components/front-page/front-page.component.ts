@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-front-page',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FrontPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    this.generalHelperService.setRihaPageTitle('Avaleht');
   }
 
 }
