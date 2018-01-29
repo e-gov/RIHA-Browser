@@ -232,7 +232,8 @@
         },
         "latest_audit_resolution": {
           "description": "Viimase audiitorkontrolli otsus. Kohustuslik kui on määratud viimase audiitorkontrolli toimumise aeg.",
-          "type": ["string", "null"]
+          "type": ["string", "null"],
+          "enum": ["PASSED_WITHOUT_REMARKS", "PASSED_WITH_REMARKS", "DID_NOT_PASS"]
         }
       },
       "required": [

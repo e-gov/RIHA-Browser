@@ -57,7 +57,7 @@ public class JsonSecurityDetailsValidationServiceTest {
                 "    \"class\": \"K1T2S1\",\n" +
                 "    \"level\": \"M\",\n" +
                 "    \"latest_audit_date\": \"2017-11-13T17:15:55.002+02:00\",\n" +
-                "    \"latest_audit_resolution\": \"Auditeeritud märkuste või soovitustega\"\n" +
+                "    \"latest_audit_resolution\": \"PASSED_WITH_REMARKS\"\n" +
                 "  }\n" +
                 "}";
         List<ProcessingMessage> validationErrorMessages = jsonSecurityDetailsValidationService.validate(fromString(json));
@@ -73,7 +73,7 @@ public class JsonSecurityDetailsValidationServiceTest {
                 "    \"class\": null,\n" +
                 "    \"level\": null,\n" +
                 "    \"latest_audit_date\": null,\n" +
-                "    \"latest_audit_resolution\": \"Auditeeritud märkuste või soovitustega\"\n" +
+                "    \"latest_audit_resolution\": \"PASSED_WITH_REMARKS\"\n" +
                 "  }\n" +
                 "}";
         List<ProcessingMessage> validationErrorMessages = jsonSecurityDetailsValidationService.validate(fromString(json));
@@ -162,7 +162,7 @@ public class JsonSecurityDetailsValidationServiceTest {
                 "  \"security\": " +
                 "  {\n" +
                 "    \"latest_audit_date\": null,\n" +
-                "    \"latest_audit_resolution\": \"Auditeeritud märkuste või soovitustega\"\n" +
+                "    \"latest_audit_resolution\": \"PASSED_WITH_REMARKS\"\n" +
                 "  }\n" +
                 "}";
         ProcessingMessage latestAuditResolutionValidationErrorMessage =
