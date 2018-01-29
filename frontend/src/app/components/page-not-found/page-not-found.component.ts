@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-page-not-found',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
-  constructor() { }
+  constructor(private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
+    this.generalHelperService.setRihaPageTitle('Lehekülge ei leitud');
   }
 
 }
