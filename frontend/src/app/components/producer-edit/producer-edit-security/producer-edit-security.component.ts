@@ -72,6 +72,11 @@ export class ProducerEditSecurityComponent implements OnInit {
     this.security.standard = null;
   }
 
+  resetAuditInfo(){
+    this.security.audit_date = null;
+    this.security.audit_resolution = null;
+  }
+
   private prepareSecurityInfoForSending(security){
     security = this.generalHelperService.cloneObject(security);
     if (this.hasSecurity == false){

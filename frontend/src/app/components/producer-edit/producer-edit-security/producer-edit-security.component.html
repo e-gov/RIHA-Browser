@@ -136,6 +136,7 @@
                      name="auditAppliedSwitch"
                      defaultBgColor="#7a838a"
                      defaultBoColor="#023cc1"
+                     (change)="resetAuditInfo()"
                      [(ngModel)]="isAuditApplied"></ui-switch>
           <div [ngClass]="{'text-muted': !isAuditApplied}" class="ml-2">On auditeeritud</div>
         </div>
@@ -148,6 +149,7 @@
                 <input id="audit_timestamp" class="form-control" placeholder="yyyy-mm-dd"
                        name="auditTimestamp"
                        [(ngModel)]="security.audit_date"
+                       [required]="isAuditApplied"
                        [container]="'body'"
                        ngbDatepicker
                        #auditTimestamp="ngbDatepicker">
@@ -161,17 +163,32 @@
             <label class="text-muted mb-0">Audiitori hinnang: *</label>
             <div class="custom-controls-stacked ml-2">
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="security.audit_resolution" [value]="globals.audit_resolution_type.PASSED_WITHOUT_REMARKS" name="audit">
+                <input class="custom-control-input"
+                       [required]="isAuditApplied"
+                       type="radio"
+                       [(ngModel)]="security.audit_resolution"
+                       [value]="globals.audit_resolution_type.PASSED_WITHOUT_REMARKS"
+                       name="auditResolution">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">Auditeeritud märkusteta ja soovitusteta</span>
               </label>
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="security.audit_resolution" [value]="globals.audit_resolution_type.PASSED_WITH_REMARKS" name="audit">
+                <input class="custom-control-input"
+                       [required]="isAuditApplied"
+                       type="radio"
+                       [(ngModel)]="security.audit_resolution"
+                       [value]="globals.audit_resolution_type.PASSED_WITH_REMARKS"
+                       name="auditResolution">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">Auditeeritud märkuste ja soovitustega</span>
               </label>
               <label class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" [(ngModel)]="security.audit_resolution" [value]="globals.audit_resolution_type.DID_NOT_PASS" name="audit">
+                <input class="custom-control-input"
+                       [required]="isAuditApplied"
+                       type="radio"
+                       [(ngModel)]="security.audit_resolution"
+                       [value]="globals.audit_resolution_type.DID_NOT_PASS"
+                       name="auditResolution">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">Ei läbinud auditit</span>
               </label>
