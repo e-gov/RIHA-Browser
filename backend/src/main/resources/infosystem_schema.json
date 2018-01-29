@@ -212,7 +212,7 @@
       "properties": {
         "standard": {
           "description": "Infosüsteemi etalonturve. Näiteks \"ISKE\", \"ISO 27001\", \"ISO 27002\" või muu.",
-          "type": "string",
+          "type": ["string", "null"],
           "minLength": 1
         },
         "class": {
@@ -233,7 +233,7 @@
         "latest_audit_resolution": {
           "description": "Viimase audiitorkontrolli otsus. Kohustuslik kui on määratud viimase audiitorkontrolli toimumise aeg.",
           "type": ["string", "null"],
-          "enum": ["PASSED_WITHOUT_REMARKS", "PASSED_WITH_REMARKS", "DID_NOT_PASS"]
+          "enum": ["PASSED_WITHOUT_REMARKS", "PASSED_WITH_REMARKS", "DID_NOT_PASS", null]
         }
       },
       "required": [
