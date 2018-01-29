@@ -2,24 +2,36 @@ package ee.ria.riha.web;
 
 import com.github.fge.jackson.JsonLoader;
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.service.JsonSecurityDetailsValidationService;
 import ee.ria.riha.service.JsonValidationException;
 import ee.ria.riha.service.JsonValidationService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.UUID;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class InfoSystemJsonSchemaTest {
 
     private UUID uuid = UUID.fromString("5d68f510-86f0-4e05-9502-c761bbebe6be");
     private JsonValidationService jsonValidationService;
     private InfoSystem infoSystem = new InfoSystem();
 
+    @Mock
+    private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService = new JsonSecurityDetailsValidationService();
+
     @Before
     public void setUp() throws IOException {
         this.jsonValidationService = new JsonValidationService(
                 JsonLoader.fromResource("/infosystem_schema.json"));
+        jsonValidationService.setJsonSecurityDetailsValidationService(jsonSecurityDetailsValidationService);
 
         infoSystem.setUuid(uuid);
         infoSystem.setFullName("Test info system");
@@ -27,6 +39,8 @@ public class InfoSystemJsonSchemaTest {
         infoSystem.setOwnerName("owner");
         infoSystem.setOwnerCode("1234");
         infoSystem.setPurpose("testing");
+
+        when(jsonSecurityDetailsValidationService.isNecessaryToValidateSecurityDetails(any())).thenReturn(false);
     }
 
     @Test
