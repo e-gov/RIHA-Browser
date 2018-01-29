@@ -73,8 +73,8 @@ export class ProducerEditSecurityComponent implements OnInit {
   }
 
   resetAuditInfo(){
-    this.security.audit_date = null;
-    this.security.audit_resolution = null;
+    this.security.latest_audit_date = null;
+    this.security.latest_audit_resolution = null;
   }
 
   private prepareSecurityInfoForSending(security){
@@ -88,8 +88,8 @@ export class ProducerEditSecurityComponent implements OnInit {
         audit_date: null
       }
     } else {
-      if (security.audit_date){
-        security.audit_date = this.generalHelperService.dateObjToTimestamp(security.audit_date);
+      if (security.latest_audit_date){
+        security.latest_audit_date = this.generalHelperService.dateObjToTimestamp(security.latest_audit_date);
       }
       if (this.isIske){
         security.standard = this.globals.security_standard.iske;
@@ -102,8 +102,8 @@ export class ProducerEditSecurityComponent implements OnInit {
         security.level = null;
       }
       if (this.isAuditApplied == false){
-        security.audit_resolution = null;
-        security.audit_date = null;
+        security.latest_audit_resolution = null;
+        security.latest_audit_date = null;
       }
     }
     return security;
@@ -120,13 +120,13 @@ export class ProducerEditSecurityComponent implements OnInit {
       standard: null,
       class: null,
       level: null,
-      audit_date: null,
-      audit_resolution: null
+      latest_audit_date: null,
+      latest_audit_resolution: null
     };
 
     this.hasSecurity = this.security.standard != null;
     this.isIske = this.security.standard == 'ISKE';
-    this.isAuditApplied = this.security.audit_date || this.security.audit_resolution;
+    this.isAuditApplied = this.security.latest_audit_date || this.security.latest_audit_resolution;
 
     if (this.security.class && this.security.class.length == 6){
       this.securityClass = {
@@ -142,7 +142,7 @@ export class ProducerEditSecurityComponent implements OnInit {
       }
     }
 
-    this.security.audit_date = this.generalHelperService.timestampToDateObj(this.security.audit_date);
+    this.security.latest_audit_date = this.generalHelperService.timestampToDateObj(this.security.latest_audit_date);
   };
 
 }
