@@ -80,7 +80,7 @@ export class ProducerDetailsComponent implements OnInit {
         break;
       }
       case 'security': {
-        ret = (this.system.hasSecurityInfo() && this.environmentService.getActiveUser() != null) || editable;
+        ret = this.system.hasSecurityInfo() || editable;
         break;
       }
     }
