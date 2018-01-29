@@ -207,6 +207,43 @@
     "uuid": {
       "type": "string",
       "description": "Infosüsteemi unikaalne ID"
+    },
+    "security": {
+      "properties": {
+        "standard": {
+          "description": "Infosüsteemi etalonturve. Näiteks \"ISKE\", \"ISO 27001\", \"ISO 27002\" või muu.",
+          "type": "string",
+          "minLength": 1
+        },
+        "class": {
+          "description": "Infosüsteemi turvaklass. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\"",
+          "type": ["string", "null"],
+          "pattern": "^K[0-3]{1}T[0-3]{1}S[0-3]{1}$"
+        },
+        "level": {
+          "description": "Infosüsteemi turbeaste. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\"",
+          "type": ["string", "null"],
+          "pattern": "^[HML]{1}$"
+        },
+        "latest_audit_date": {
+          "description": "Viimase audiitorkontrolli toimumise aeg",
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "latest_audit_resolution": {
+          "description": "Viimase audiitorkontrolli otsus. Kohustuslik kui on määratud viimase audiitorkontrolli toimumise aeg.",
+          "type": ["string", "null"]
+        }
+      },
+      "required": [
+        "standard",
+        "class",
+        "level",
+        "latest_audit_date",
+        "latest_audit_resolution"
+      ],
+      "type": "object",
+      "description": "Infosüsteemi turvainfo"
     }
   },
   "required": [
