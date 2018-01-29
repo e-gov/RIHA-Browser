@@ -32,7 +32,7 @@
             {{ object }}
           </td>
           <td>
-            <button (click)="deleteStoredDataObject(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+            <button (click)="deleteStoredDataObject(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
           </td>
         </tr>
       </table>
@@ -88,7 +88,7 @@
               <a href="{{ generalHelperService.getFileUrl(file.url) }}" target="_blank">{{ file.name }}</a>
             </td>
             <td>
-              <button (click)="deleteDataFile(i)" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+              <button (click)="deleteDataFile(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>
         </table>
