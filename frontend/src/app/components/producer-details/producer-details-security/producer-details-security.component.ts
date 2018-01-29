@@ -6,6 +6,8 @@ import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProducerEditSecurityComponent } from '../../producer-edit/producer-edit-security/producer-edit-security.component';
 import { G } from '../../../globals/globals';
+import { EnvironmentService } from '../../../services/environment.service';
+import {Environment} from "../../../models/environment";
 
 @Component({
   selector: 'app-producer-details-security',
@@ -19,6 +21,10 @@ export class ProducerDetailsSecurityComponent implements OnInit {
   @Output() onSystemChanged = new EventEmitter<System>();
 
   globals: any = G;
+
+  isAuditVisible(){
+    return this.environmentService.getUserMatrix().hasApproverRole || this.allowEdit;
+  }
 
   openSecurityEdit(content) {
     this.systemsService.getSystem(this.system.details.short_name).then( res => {
@@ -43,6 +49,7 @@ export class ProducerDetailsSecurityComponent implements OnInit {
   }
 
   constructor(private modalService: ModalHelperService,
+              private environmentService: EnvironmentService,
               public generalHelperService: GeneralHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService) {
