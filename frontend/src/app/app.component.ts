@@ -33,8 +33,12 @@ export class AppComponent {
 
     let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
 
-    this.router.routeReuseStrategy.shouldReuseRoute = function(){
-      return false;
+    this.router.routeReuseStrategy.shouldReuseRoute = function(future, curr){
+      if (router.url.split('/')[2] == 'Vaata' && (future.fragment || future.url.length > 0)){
+        return true
+      } else {
+        return false;
+      }
     };
 
     this.router.events.subscribe(event => {

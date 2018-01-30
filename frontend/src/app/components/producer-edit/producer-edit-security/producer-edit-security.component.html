@@ -1,0 +1,208 @@
+<div class="fixed-header">
+  Turvalisus
+  <button (click)="closeModal(securityForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+</div>
+<section class="col card p-3 main-content">
+  <div class="my-1">
+    <form #securityForm="ngForm">
+      <div class="my-2 mx-0 row switch-container">
+        <div [ngClass]="{'text-muted': hasSecurity}" class="mr-2">Ei rakendatakse turvameetmeid</div>
+        <ui-switch size="small"
+                   color="#023cc1"
+                   name="securitySwitch"
+                   defaultBgColor="#7a838a"
+                   defaultBoColor="#023cc1"
+                   [(ngModel)]="hasSecurity"></ui-switch>
+        <div [ngClass]="{'text-muted': !hasSecurity}" class="ml-2">Rakendatakse turvameetmeid</div>
+      </div>
+      <div class="form-group" *ngIf="hasSecurity">
+        <label class="text-muted mb-0">Rakendatud turvastandardid: *</label>
+        <small class="label-small-text text-muted">vali, millist turvameetmete süsteemi või standardeid infosüsteemi haldamisel kasutatakse</small>
+        <div class="custom-controls-stacked ml-2">
+          <label class="custom-control custom-radio">
+            <input class="custom-control-input" type="radio" (change)="resetStandard()" [(ngModel)]="isIske" [value]="true" name="type">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">ISKE</span>
+          </label>
+          <label class="custom-control custom-radio">
+            <input class="custom-control-input" type="radio" (change)="resetStandard()" [(ngModel)]="isIske" [value]="false" name="type">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">muu</span>
+          </label>
+        </div>
+        <div class="form-group" *ngIf="isIske">
+          <label class="text-muted mb-0">ISKE turvaosakond: *</label>
+          <small class="label-small-text text-muted">Lisa käideldavuse(K), tervikluse(T) ja konfidentsiaalsuse(S) väärtused (0-3)</small>
+          <div class="m-2">
+            <div class="row mx-0 my-1">
+              Käideldavus
+            </div>
+            <div class="row mx-0">
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'0'" name="securityClass_k">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">0</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'1'" name="securityClass_k">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">1</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'2'" name="securityClass_k">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">2</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'3'" name="securityClass_k">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">3</span>
+              </label>
+            </div>
+          </div>
+          <div class="m-2">
+            <div class="row mx-0 my-1">
+              Terviklus
+            </div>
+            <div class="row mx-0">
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'0'" name="securityClass_t">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">0</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'1'" name="securityClass_t">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">1</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'2'" name="securityClass_t">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">2</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'3'" name="securityClass_t">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">3</span>
+              </label>
+            </div>
+          </div>
+          <div class="m-2">
+            <div class="row mx-0 my-1">
+              Konfidentsiaalsus
+            </div>
+            <div class="row mx-0">
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'0'" name="securityClass_s">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">0</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'1'" name="securityClass_s">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">1</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'2'" name="securityClass_s">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">2</span>
+              </label>
+              <label class="custom-control custom-radio col-1">
+                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'3'" name="securityClass_s">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">3</span>
+              </label>
+            </div>
+            <div *ngIf="securityClass.s != null && securityClass.t != null && securityClass.k !=null" class="my-2">
+              Turbeaste
+              <strong *ngIf="getSecurityLevel() == 'H'">kõrge</strong>
+              <strong *ngIf="getSecurityLevel() == 'M'">keskmine</strong>
+              <strong *ngIf="getSecurityLevel() == 'L'">madal</strong>
+              ({{ getSecurityClass() }})
+            </div>
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{'has-danger': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched)}" *ngIf="!isIske">
+          <input class="form-control ml-1"
+                 #otherSecurityStandard="ngModel"
+                 [(ngModel)]="security.standard"
+                 name="standard"
+                 [required]="!isIske"
+                 placeholder="nt. ISO/IEC 27001">
+        </div>
+        <div class="mt-2 mx-0 row switch-container">
+          <div [ngClass]="{'text-muted': isAuditApplied}" class="mr-2">Ei ole auditeeritud</div>
+          <ui-switch size="small"
+                     color="#023cc1"
+                     name="auditAppliedSwitch"
+                     defaultBgColor="#7a838a"
+                     defaultBoColor="#023cc1"
+                     (change)="resetAuditInfo()"
+                     [(ngModel)]="isAuditApplied"></ui-switch>
+          <div [ngClass]="{'text-muted': !isAuditApplied}" class="ml-2">On auditeeritud</div>
+        </div>
+        <small class="label-small-text text-muted">auditeerimise info ei ole avalik, see on nähtav vaid infosüsteemi omanikule ja RIHA hindajatele</small>
+        <div *ngIf="isAuditApplied">
+          <div class="form-group mt-2">
+            <label class="text-muted">Viimase auditi kuupäev: *</label>
+            <div class="row">
+              <div class="input-group datepicker col-4" [ngClass]="{'has-danger': auditTimestampInput.invalid  && (auditTimestampInput.dirty || auditTimestampInput.touched)}">
+                <input id="audit_timestamp" class="form-control" placeholder="yyyy-mm-dd"
+                       name="auditTimestamp"
+                       [(ngModel)]="security.latest_audit_date"
+                       [required]="isAuditApplied"
+                       [container]="'body'"
+                       #auditTimestampInput="ngModel"
+                       ngbDatepicker
+                       #auditTimestamp="ngbDatepicker">
+                <span class="input-group-btn">
+                  <button (click)="auditTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-2">
+            <label class="text-muted mb-0">Audiitori hinnang: *</label>
+            <div class="custom-controls-stacked ml-2">
+              <label class="custom-control custom-radio">
+                <input class="custom-control-input"
+                       [required]="isAuditApplied"
+                       type="radio"
+                       [(ngModel)]="security.latest_audit_resolution"
+                       [value]="globals.audit_resolution_type.PASSED_WITHOUT_REMARKS"
+                       name="auditResolution">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Auditeeritud märkusteta ja soovitusteta</span>
+              </label>
+              <label class="custom-control custom-radio">
+                <input class="custom-control-input"
+                       [required]="isAuditApplied"
+                       type="radio"
+                       [(ngModel)]="security.latest_audit_resolution"
+                       [value]="globals.audit_resolution_type.PASSED_WITH_REMARKS"
+                       name="auditResolution">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Auditeeritud märkuste ja soovitustega</span>
+              </label>
+              <label class="custom-control custom-radio">
+                <input class="custom-control-input"
+                       [required]="isAuditApplied"
+                       type="radio"
+                       [(ngModel)]="security.latest_audit_resolution"
+                       [value]="globals.audit_resolution_type.DID_NOT_PASS"
+                       name="auditResolution">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Ei läbinud auditit</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actions-bar">
+        <div class="buttons pull-right">
+          <button (click)="saveSystem(securityForm)" class="btn btn-success pull-right">Salvesta</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

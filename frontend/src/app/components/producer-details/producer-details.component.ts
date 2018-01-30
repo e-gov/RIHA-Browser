@@ -80,6 +80,10 @@ export class ProducerDetailsComponent implements OnInit {
         ret = (this.system.hasContacts() && this.environmentService.getActiveUser() != null) || editable;
         break;
       }
+      case 'security': {
+        ret = this.system.hasSecurityInfo() || editable;
+        break;
+      }
     }
     return ret;
   }
