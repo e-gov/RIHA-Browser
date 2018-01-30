@@ -66,6 +66,8 @@ import { ProducerEditRelationsComponent } from './components/producer-edit/produ
 import { GridTotalFoundComponent } from './components/grid-view/grid-total-found/grid-total-found.component';
 import { GridCurrentlyShowingComponent } from './components/grid-view/grid-currently-showing/grid-currently-showing.component';
 import { SortButtonComponent } from './components/grid-view/sort-button/sort-button.component';
+import { ProducerDetailsSecurityComponent } from './components/producer-details/producer-details-security/producer-details-security.component';
+import { ProducerEditSecurityComponent } from './components/producer-edit/producer-edit-security/producer-edit-security.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -141,7 +143,9 @@ const routes: Routes = [
     ProducerEditRelationsComponent,
     GridTotalFoundComponent,
     GridCurrentlyShowingComponent,
-    SortButtonComponent
+    SortButtonComponent,
+    ProducerDetailsSecurityComponent,
+    ProducerEditSecurityComponent
   ],
   imports: [
     BrowserModule,
@@ -175,10 +179,18 @@ const routes: Routes = [
     ProducerEditContactsComponent,
     InfoModalComponent,
     WarningModalComponent,
-    ProducerEditRelationsComponent
+    ProducerEditRelationsComponent,
+    ProducerEditSecurityComponent
   ],
   bootstrap: [AppComponent],
-  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, SessionHelperService, ModalHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
+  providers: [
+    SystemsService,
+    WindowRefService,
+    EnvironmentService,
+    GeneralHelperService,
+    SessionHelperService,
+    ModalHelperService,
+    { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}
