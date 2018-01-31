@@ -7,7 +7,7 @@
     <div *ngIf="(system.details.data_files && system.details.stored_data.length > 0) || allowEdit" class="separate-block">
       <label class="text-muted separated-text">Infosüsteemi kogutavad põhiandmed:</label>
       <p *ngIf="(!system.details.stored_data || system.details.stored_data.length == 0) && allowEdit">
-        Objektid puuduvad.
+        Objektid puuduvad
       </p>
       <table *ngIf="system.details.data_files && system.details.stored_data.length > 0" class="details-list-table">
         <tr *ngFor="let object of system.details.stored_data">
@@ -23,7 +23,7 @@
     <div *ngIf="(system.details.data_files && system.details.data_files.length > 0) || allowEdit" class="separate-block">
       <label class="text-muted separated-text">Detailne andmekoosseis:</label>
       <p *ngIf="(!system.details.data_files || system.details.data_files.length == 0) && allowEdit">
-        Objektid puuduvad.
+        Failid puuduvad
       </p>
       <table *ngIf="system.details.data_files && system.details.data_files.length > 0" class="details-list-table">
         <tr *ngFor="let file of system.details.data_files">

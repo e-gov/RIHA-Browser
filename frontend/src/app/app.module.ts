@@ -63,6 +63,9 @@ import { WarningModalComponent } from './components/session-timeout/warning-moda
 import { InfoModalComponent } from './components/session-timeout/info-modal/info-modal.component';
 import { ProducerDetailsRelationsComponent } from './components/producer-details/producer-details-relations/producer-details-relations.component';
 import { ProducerEditRelationsComponent } from './components/producer-edit/producer-edit-relations/producer-edit-relations.component';
+import { GridTotalFoundComponent } from './components/grid-view/grid-total-found/grid-total-found.component';
+import { GridCurrentlyShowingComponent } from './components/grid-view/grid-currently-showing/grid-currently-showing.component';
+import { SortButtonComponent } from './components/grid-view/sort-button/sort-button.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -81,12 +84,13 @@ const routes: Routes = [
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
-  { path: 'Infosüsteemid/Vaata/:short_name', component: ProducerDetailsComponent },
-  { path: 'Systems/Vaata/:short_name', component: ProducerDetailsComponent },
-  { path: 'Kirjelda/Vaata/:short_name', component: ProducerDetailsComponent },
-  { path: 'Describe/View/:short_name', component: ProducerDetailsComponent },
-  { path: 'Kirjelda/Muuda/:short_name', component: ProducerEditComponent },
-  { path: 'Describe/Edit/:short_name', component: ProducerEditComponent },
+  { path: 'Infosüsteemid/Vaata/:reference', component: ProducerDetailsComponent },
+  { path: 'Infosüsteemid/Vaata/:reference/Arutelu/:issue_id', component: ProducerDetailsComponent },
+  { path: 'Systems/Vaata/:reference', component: ProducerDetailsComponent },
+  { path: 'Kirjelda/Vaata/:reference', component: ProducerDetailsComponent },
+  { path: 'Describe/View/:reference', component: ProducerDetailsComponent },
+  { path: 'Kirjelda/Muuda/:reference', component: ProducerEditComponent },
+  { path: 'Describe/Edit/:reference', component: ProducerEditComponent },
   { path: 'Kirjelda/Uus', component: ProducerAddComponent },
   { path: 'Describe/New', component: ProducerAddComponent },
   { path: 'Hinda', component: ApproverListComponent },
@@ -134,7 +138,10 @@ const routes: Routes = [
     WarningModalComponent,
     InfoModalComponent,
     ProducerDetailsRelationsComponent,
-    ProducerEditRelationsComponent
+    ProducerEditRelationsComponent,
+    GridTotalFoundComponent,
+    GridCurrentlyShowingComponent,
+    SortButtonComponent
   ],
   imports: [
     BrowserModule,

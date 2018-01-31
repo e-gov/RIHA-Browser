@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { System } from '../../../models/system';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
@@ -6,6 +6,7 @@ import { ApproverIssueDetailsComponent } from '../../approver-issue-details/appr
 import { SystemsService } from '../../../services/systems.service';
 import { EnvironmentService } from '../../../services/environment.service';
 import { UserMatrix } from '../../../models/user-matrix';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-producer-details-issues',
@@ -16,8 +17,12 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Input() issueId: any;
+  @Output() onIssueResolve = new  EventEmitter<string>();
+  @Output() onIssueError = new  EventEmitter();
 
   comments: any[] = [];
+  issues: any[] = [];
   activeIssues: any[] = [];
   closedIssues: any[] = [];
   newAdded: boolean = false;
@@ -39,22 +44,29 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     }, err => {});
   }
 
-  openIssueDetailsModal(comment){
-    this.systemsService.getSystemIssueById(comment.id).then(res => {
+  openIssueDetailsModal(issueId){
+    this.systemsService.getSystemIssueById(issueId).then(res => {
+      this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }/Arutelu/${ issueId }`);
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
         {
           size: "lg",
           backdrop: "static",
+          windowClass: "fixed-header-modal",
           keyboard: false
         });
       modalRef.componentInstance.feedback = res.json();
       modalRef.componentInstance.system = this.system;
       modalRef.result.then(res => {
         this.refreshIssues();
+        let issueType = res && res.issueType ? res.issueType : null;
+        this.onIssueResolve.emit(issueType);
+        this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       },
       err => {
-
+        this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       });
+    }, err => {
+      this.onIssueError.emit(err);
     });
     return false;
   }
@@ -62,32 +74,40 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   refreshIssues(){
     this.systemsService.getSystemIssues(this.system.details.short_name).then(
       res => {
+        this.issues = [];
         this.activeIssues = [];
         this.closedIssues = [];
 
-        res.json().content.map(c => {
-          if (c.status === 'OPEN'){
-            this.activeIssues.push(c);
-          } else if (c.status === 'CLOSED'){
-            this.closedIssues.push(c);
-          }
-        });
+        this.issues = res.json().content;
+        this.activeIssues = this.issues.filter(i => i.status == 'OPEN');
+        this.closedIssues = this.issues.filter(i => i.status == 'CLOSED');
       }
     )
   }
 
   canApprove(){
+    this.userMatrix = this.environmentService.getUserMatrix();
     return this.allowEdit || this.userMatrix.hasApproverRole;
   }
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
+              private location: Location,
               private environmentService: EnvironmentService) {
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
     this.refreshIssues();
+    if (this.issueId){
+      if (!this.userMatrix.isLoggedIn){
+        //alert('please log in');
+      } else if (!this.canApprove()){
+        //alert('you cannot approve');
+      } else {
+        this.openIssueDetailsModal(this.issueId);
+      }
+    }
   }
 
 }

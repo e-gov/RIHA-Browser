@@ -11,7 +11,7 @@ export class SystemsService {
 
   private systemsUrl = '/api/v1/systems';
 
-  private dateObjToTimestamp(dateObj: any): any {
+  public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
       let year = dateObj.year.toString();
       let month = dateObj.month.toString();
@@ -19,13 +19,17 @@ export class SystemsService {
 
       if (month.length === 1) month = '0' + month;
       if (day.length === 1) day = '0' + day;
-      return `${ year }-${ month }-${ day }T00:00:00Z`;
+      if (simple === true){
+        return `${ year }-${ month }-${ day }`;
+      } else {
+        return `${ year }-${ month }-${ day }T00:00:00Z`;
+      }
     } else {
       return dateObj;
     }
   }
 
-  private timestampToDateObj(timestamp: string): any {
+  public timestampToDateObj(timestamp: string): any {
     if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
       let year = parseInt(timestamp.substr(0, 4), 10);
       let month = parseInt(timestamp.substr(5, 2), 10);
@@ -69,7 +73,7 @@ export class SystemsService {
   public getAlertText(errObj): string{
     let ret = null;
     let code = errObj.code;
-    if (code === 'validation.system.shortName.alreadyTaken'){
+    if (code === 'validation.system.shortNameAlreadyTaken'){
       ret = 'Lühinimi on juba kasutusel';
     } else {
       ret = errObj.message;
@@ -94,6 +98,9 @@ export class SystemsService {
     let filtersArr: string[] = [];
 
     if (!isNullOrUndefined(filters)){
+      if (filters.searchText){
+        filtersArr.push(`search_content,ilike,%${ filters.searchText }%`);
+      }
       if (filters.name){
         filtersArr.push(`name,ilike,%${ filters.name }%`);
       }
@@ -106,8 +113,38 @@ export class SystemsService {
       if (filters.ownerName){
         filtersArr.push(`owner.name,jilike,%${ filters.ownerName }%`);
       }
+      if (filters.purpose){
+        filtersArr.push(`purpose,jilike,%${ filters.purpose }%`);
+      }
       if (filters.topic){
         filtersArr.push(`topics,jarr,%${ filters.topic }%`);
+      }
+      if (filters.storedData){
+        filtersArr.push(`stored_data,jarr,%${ filters.storedData }%`);
+      }
+      if (filters.systemStatus){
+        filtersArr.push(`meta.system_status.status,jilike,${ filters.systemStatus }`);
+      }
+      if (filters.developmentStatus){
+        filtersArr.push(`meta.development_status,jilike,${ filters.developmentStatus }`);
+      }
+      if (filters.lastPositiveApprovalRequestType){
+        filtersArr.push(`last_positive_approval_request_type,ilike,${ filters.lastPositiveApprovalRequestType }`);
+      }
+      if (filters.xRoadStatus){
+        filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
+      }
+      if (filters.dateCreatedFrom){
+        filtersArr.push(`j_creation_timestamp,>,${ filters.dateCreatedFrom }`);
+      }
+      if (filters.dateCreatedTo){
+        filtersArr.push(`j_creation_timestamp,<,${ filters.dateCreatedTo }T23:59:59`);
+      }
+      if (filters.dateUpdatedFrom){
+        filtersArr.push(`j_update_timestamp,>,${ filters.dateUpdatedFrom }`);
+      }
+      if (filters.dateUpdatedTo){
+        filtersArr.push(`j_update_timestamp,<,${ filters.dateUpdatedTo }T23:59:59`);
       }
       if (filtersArr.length > 0){
         params.set('filter', filtersArr.join());
@@ -148,8 +185,8 @@ export class SystemsService {
     });
   }
 
-  public getSystem(short_name) {
-    return this.http.get(`/api/v1/systems/${ short_name }`).toPromise();
+  public getSystem(reference) {
+    return this.http.get(`/api/v1/systems/${ reference }`).toPromise();
   }
 
   public addSystem(value) {
@@ -173,16 +210,16 @@ export class SystemsService {
     return this.http.post(`/api/v1/files`, formData, options).toPromise();
   }
 
-  public updateSystem(updatedData, shortName?) {
-    return this.http.put(`/api/v1/systems/${ shortName || updatedData.details.short_name }`, updatedData).toPromise();
+  public updateSystem(updatedData, reference?) {
+    return this.http.put(`/api/v1/systems/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
-  public getSystemIssues(shortName) {
-    return this.http.get(`/api/v1/systems/${ shortName }/issues?size=1000`).toPromise();
+  public getSystemIssues(reference) {
+    return this.http.get(`/api/v1/systems/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
   }
 
-  public addSystemIssue(shortName, issue) {
-    return this.http.post(`/api/v1/systems/${ shortName }/issues`, issue).toPromise();
+  public addSystemIssue(reference, issue) {
+    return this.http.post(`/api/v1/systems/${ reference }/issues`, issue).toPromise();
   }
 
   public getSystemIssueById(issueId) {
@@ -190,29 +227,33 @@ export class SystemsService {
   }
 
   public getSystemIssueTimeline(issueId) {
-    return this.http.get(`/api/v1/issues/${ issueId }/timeline`).toPromise();
+    return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
   }
 
   public postSystemIssueComment(issueId, reply) {
     return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
   }
 
-  public getSystemRelations(shortName) {
-    return this.http.get(`/api/v1/systems/${ shortName }/relations`).toPromise();
+  public postSystemIssueDecision(issueId, decision) {
+    return this.http.post(`/api/v1/issues/${ issueId }/decisions`, decision).toPromise();
   }
 
-  public addSystemRelation(shortName, relation) {
-    return this.http.post(`/api/v1/systems/${ shortName }/relations`, relation).toPromise();
+  public getSystemRelations(reference) {
+    return this.http.get(`/api/v1/systems/${ reference }/relations`).toPromise();
   }
 
-  public deleteSystemRelation(shortName, relationId) {
-    return this.http.delete(`/api/v1/systems/${ shortName }/relations/${ relationId }`).toPromise();
+  public addSystemRelation(reference, relation) {
+    return this.http.post(`/api/v1/systems/${ reference }/relations`, relation).toPromise();
   }
 
-  public closeSystemIssue(issueId, reply) {
+  public deleteSystemRelation(reference, relationId) {
+    return this.http.delete(`/api/v1/systems/${ reference }/relations/${ relationId }`).toPromise();
+  }
+
+  public closeSystemIssue(issueId, resolutionType) {
     return this.http.put(`/api/v1/issues/${ issueId }`, {
-      comment: reply.comment,
-      status: 'CLOSED'
+      status: 'CLOSED',
+      resolutionType: resolutionType || null
     }).toPromise();
   }
 

@@ -28,7 +28,7 @@
                class="form-control h2"
                [(ngModel)]="system.details.short_name"
                name="short_name"
-               pattern="[a-zA-ZÕõÄäÖöÜü0-9.-]*"
+               pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
                type="text"
                (keydown.enter)="$event.preventDefault()"
                id="short-name-input" required>
@@ -54,14 +54,14 @@
             </div>
           </div>
           <div class="col-sm-8 form-links">
-            <a href="#" (click)="changeSystemStatus(globals.system_status.IN_USE)">kasutusel</a>
             <a href="#" (click)="changeSystemStatus(globals.system_status.ESTABLISHING)">asutamisel</a>
+            <a href="#" (click)="changeSystemStatus(globals.system_status.IN_USE)">kasutusel</a>
             <a href="#" (click)="changeSystemStatus(globals.system_status.FINISHED)">lõpetatud</a>
           </div>
         </div>
         <div class="mb-4">
           <label *ngIf="system.getDevelopmentStatus() == globals.development_status.IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
-          <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
+          <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-primary">ei ole arenduses</strong></label>
           <label *ngIf="!system.getDevelopmentStatus()" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
           <div class="col-sm-4 form-links">
             <span>Kas infosüsteemi arendatakse aktiivselt?</span>

@@ -16,6 +16,22 @@ export class GridData {
     return this.page + 1;
   }
 
+  getSortProperty(): string {
+    let ret = null;
+    if (this.sort){
+      ret = this.sort.charAt(0) == '-' ? this.sort.substring(1) : this.sort;
+    }
+    return ret;
+  }
+
+  getSortOrder(): string {
+    let ret = null;
+    if (this.sort){
+      ret = this.sort.charAt(0) == '-' ? 'DESC' : 'ASC';
+    }
+    return ret;
+  }
+
   updateData(data: any): void {
     if (!isNullOrUndefined(data.totalElements)) this.totalElements = data.totalElements;
     if (!isNullOrUndefined(data.content)) this.content = data.content;
@@ -40,6 +56,13 @@ export class GridData {
       }
     } else {
       this.sort = prop;
+    }
+  }
+
+  setPageFromUrl(page: string): void{
+    if (page){
+      let pageNumber = Number(page);
+      this.page = !isNaN(pageNumber) ? pageNumber - 1 : 0;
     }
   }
 

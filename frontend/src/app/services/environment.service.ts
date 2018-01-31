@@ -13,6 +13,17 @@ export class EnvironmentService {
 
   public globalEnvironment: any;
 
+  private lastVisitedLocations = [null, null];
+
+  public addLastVisitedLocation(l){
+    this.lastVisitedLocations.unshift(l);
+    this.lastVisitedLocations.pop();
+  }
+
+  public getPrevVisitedLocation(){
+    return this.lastVisitedLocations[1];
+  }
+
   public setActiveUser(details?): void {
     this.globalEnvironment.setActiveUser(details);
   }
@@ -31,11 +42,15 @@ export class EnvironmentService {
     let hasApproverRole = false;
     let isOrganizationSelected = false;
     let hasOrganizations = false;
+    let isRiaMember = false;
     if (activeUser){
       hasApproverRole = -1 != activeUser.getRoles().indexOf('ROLE_HINDAJA');
       hasDesciberRole = -1 != activeUser.getRoles().indexOf('ROLE_KIRJELDAJA');
       isOrganizationSelected = activeUser.getActiveOrganization() != null;
-      hasOrganizations = activeUser.getOrganizations().length > 0
+      hasOrganizations = activeUser.getOrganizations().length > 0;
+      if (activeUser.activeOrganization){
+        isRiaMember = activeUser.activeOrganization.code == 70006317;
+      }
     }
 
     return new UserMatrix({
@@ -43,6 +58,7 @@ export class EnvironmentService {
       hasApproverRole: hasApproverRole,
       hasDescriberRole: hasDesciberRole,
       isOrganizationSelected: isOrganizationSelected,
+      isRiaMember: isRiaMember,
       hasOrganizations: hasOrganizations
     });
   }

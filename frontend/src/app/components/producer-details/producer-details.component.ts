@@ -5,6 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
 import { User } from '../../models/user';
 import { WindowRefService } from '../../services/window-ref.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { UserMatrix } from '../../models/user-matrix';
 
 declare var $: any;
 
@@ -16,20 +19,18 @@ declare var $: any;
 export class ProducerDetailsComponent implements OnInit {
   private system: System = new System();
   private user: User;
-  private loaded: boolean;
+  public loaded: boolean;
+  public notFound: boolean;
+  public issueId: any;
+  public userMatrix: UserMatrix;
 
-  adjustSection(attempt){
-    if (attempt < 5){
-      let hash = this.winRef.nativeWindow.location.hash;
-      if (hash){
-        let elId = decodeURI(hash.replace('#',''));
-        let el = $(hash)[0];
-        if (el){
-          this.winRef.nativeWindow.scrollTo(0,$(el).offset().top);
-        } else {
-          attempt++;
-          setTimeout(()=>{this.adjustSection(attempt)}, 1000);
-        }
+  adjustSection(hash?){
+    hash = hash || this.winRef.nativeWindow.location.hash;
+    if (hash){
+      let elId = decodeURI(hash.replace('#',''));
+      let el = $(hash)[0];
+      if (el){
+        this.winRef.nativeWindow.scrollTo(0,$(el).offset().top);
       }
     }
   }
@@ -75,32 +76,74 @@ export class ProducerDetailsComponent implements OnInit {
         break;
       }
       case 'contacts': {
-        ret = (this.system.hasContacts() && this.user != null) || editable;
+        ret = (this.system.hasContacts() && this.environmentService.getActiveUser() != null) || editable;
         break;
       }
     }
     return ret;
   }
 
-  getSystem(id){
-    this.systemsService.getSystem(id).then(response => {
+  onIssueResolve(issueType){
+    if (issueType){
+      this.getSystem(this.system.details.short_name);
+    }
+  }
+
+  onIssueError(error){
+    if (error.status == '404'){
+      this.loaded = false;
+      this.notFound = true;
+    }
+  }
+
+  isLoginErrorVisible(){
+    this.userMatrix = this.environmentService.getUserMatrix();
+    return this.issueId && !this.userMatrix.isLoggedIn;
+  }
+
+  isCannotViewCommentsErrorVisible(){
+    this.userMatrix = this.environmentService.getUserMatrix();
+    if (this.loaded && this.userMatrix.isLoggedIn){
+      let user = this.environmentService.getActiveUser();
+      return this.issueId && this.userMatrix.isLoggedIn && !(user.canEdit(this.system.getOwnerCode()) || this.userMatrix.hasApproverRole);
+    } else {
+      return false;
+    }
+  }
+
+  getSystem(reference){
+    this.systemsService.getSystem(reference).then(response => {
       this.system = new System(response.json());
       this.loaded = true;
-      this.adjustSection(0);
-    })
+      setTimeout(()=>{this.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);
+    }, err => {
+      let status = err.status;
+      if (status == '404'){
+        this.notFound = true;
+      } else if (status == '500'){
+        this.toastrService.error('Serveri viga');
+        this.router.navigate(['/']);
+      } else {
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private route: ActivatedRoute,
+              private router: Router,
+              private toastrService: ToastrService,
               private winRef: WindowRefService) {
-    this.user = this.environmentService.getActiveUser();
+    this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
     this.route.params.subscribe( params => {
       this.loaded = false;
-      this.getSystem(params['short_name']);
+      this.notFound = false;
+      this.issueId = params['issue_id'] || null;
+      this.getSystem(params['reference']);
     });
   }
 

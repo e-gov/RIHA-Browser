@@ -7,6 +7,7 @@ import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueCommentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,8 +61,8 @@ public class IssueCommentService {
         return comment;
     };
 
-    @Autowired
     private CommentRepository commentRepository;
+
     private NotificationService notificationService;
 
     /**
@@ -95,13 +96,28 @@ public class IssueCommentService {
     }
 
     /**
-     * Creates comment associated with an issue
+     * Creates comment associated with an issue. Sends notification about created issue comment.
      *
      * @param issueId an id of an issue
-     * @param comment comment
+     * @param model   model of an issue comment
      * @return created comment
      */
-    public IssueComment createIssueComment(Long issueId, String comment) {
+    public IssueComment createIssueComment(Long issueId, IssueCommentModel model) {
+        IssueComment createdIssueComment = createIssueCommentWithoutNotification(issueId, model);
+
+        notificationService.sendNewIssueCommentNotification(issueId);
+
+        return createdIssueComment;
+    }
+
+    /**
+     * Creates comment associated with an issue but does not send notification
+     *
+     * @param issueId an id of an issue
+     * @param model   issue comment model
+     * @return created comment
+     */
+    public IssueComment createIssueCommentWithoutNotification(Long issueId, IssueCommentModel model) {
         RihaUserDetails rihaUserDetails = getRihaUserDetails()
                 .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
         RihaOrganization organization = getActiveOrganization()
@@ -109,7 +125,7 @@ public class IssueCommentService {
 
         IssueComment issueComment = IssueComment.builder()
                 .issueId(issueId)
-                .comment(comment)
+                .comment(model.getComment())
                 .authorName(rihaUserDetails.getFullName())
                 .authorPersonalCode(rihaUserDetails.getPersonalCode())
                 .organizationName(organization.getName())
@@ -120,8 +136,6 @@ public class IssueCommentService {
         if (createdIssueCommentIds.isEmpty()) {
             throw new IllegalBrowserStateException("Issue comment was not created");
         }
-
-        notificationService.sendNewIssueCommentNotification(issueId);
 
         return COMMENT_TO_ISSUE_COMMENT.apply(commentRepository.get(createdIssueCommentIds.get(0)));
     }
@@ -160,5 +174,10 @@ public class IssueCommentService {
     @Autowired
     public void setNotificationService(NotificationService notificationService) {
         this.notificationService = notificationService;
+    }
+
+    @Autowired
+    public void setCommentRepository(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
     }
 }

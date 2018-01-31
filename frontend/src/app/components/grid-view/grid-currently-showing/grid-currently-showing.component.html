@@ -1,0 +1,6 @@
+<div *ngIf="gridData.totalElements > 0" class="my-2">
+  Näitan {{ gridData.page * gridData.size + 1 }} - {{ gridData.page + 1 < gridData.totalPages ? (gridData.page + 1) * gridData.size : gridData.totalElements }} | Kokku {{ gridData.totalElements }}
+</div>
+<div *ngIf="gridData.totalElements == 0" class="my-2">
+  Näitan 0 | Kokku 0
+</div>

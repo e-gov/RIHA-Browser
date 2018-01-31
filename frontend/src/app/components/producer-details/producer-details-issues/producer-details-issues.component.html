@@ -22,8 +22,9 @@
               <tbody>
               <tr *ngFor="let issue of activeIssues">
                 <td class="icon-column"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i></td>
-                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue.id)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
+                <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
               </tbody>
             </table>
@@ -45,8 +46,36 @@
               <tbody>
               <tr *ngFor="let issue of closedIssues">
                 <td class="icon-column"><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
-                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue)">{{ issue.title }}</a></td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue.id)">{{ issue.title }}</a></td>
                 <td *ngIf="!canApprove()">{{ issue.title }}</td>
+                <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+      <ng-template ngbTabTitle>Kõik</ng-template>
+      <ng-template ngbTabContent>
+        <app-alert *ngIf="issues.length == 0" [conf]="{
+          type: 'info',
+          heading: 'Ühtegi arutelu ei leidu',
+          text: 'Arutelusid algatada ja kommenteerida saavad vaid infosüsteemi kontaktid ning RIHA hindajad'
+        }"></app-alert>
+        <div class="my-1" *ngIf="issues.length > 0">
+          <div class="table-responsive">
+            <table class="table table-striped dataTable" cellspacing="0" width="100%">
+              <tbody>
+              <tr *ngFor="let issue of issues">
+                <td class="icon-column">
+                  <i *ngIf="issue.status == 'OPEN'" class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i>
+                  <i *ngIf="issue.status == 'CLOSED'" class="fa fa-check-circle text-success" aria-hidden="true"></i>
+                </td>
+                <td *ngIf="canApprove()"><a href="#" (click)="openIssueDetailsModal(issue.id)">{{ issue.title }}</a></td>
+                <td *ngIf="!canApprove()">{{ issue.title }}</td>
+                <td><span class="pull-right">{{ issue.dateCreated | date:'dd.MM.y' }}</span></td>
               </tr>
               </tbody>
             </table>

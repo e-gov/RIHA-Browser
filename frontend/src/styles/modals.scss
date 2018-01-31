@@ -76,3 +76,30 @@ $MODALS
 .modal-backdrop {
   z-index:1050;
 }
+.fixed-header-modal {
+  overflow: hidden;
+  .fixed-header {
+    height: 60px;
+    background-color: $grey;
+    font-size: 1rem;
+    line-height: 30px;
+    padding: 15px 20px;
+    font-weight: bold;
+    .close-modal-btn {
+      background-color: transparent;
+      padding: 3px 8px;
+      &:hover {
+        background-color: buttonface;
+      }
+    }
+  }
+  .scrollable-modal-content {
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+  }
+  section {
+    &.card {
+      box-shadow: none;
+    }
+  }
+}

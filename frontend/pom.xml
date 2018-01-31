@@ -10,7 +10,7 @@
   <parent>
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.1.1</version>
+    <version>7.2-SNAPSHOT</version>
   </parent>
 
 	<properties>
@@ -79,6 +79,16 @@
 							<arguments>run build</arguments>
 						</configuration>
 					</execution>
+          <execution>
+            <id>build-production</id>
+            <phase>none</phase>
+            <goals>
+                <goal>yarn</goal>
+            </goals>
+            <configuration>
+                <arguments>run build-production</arguments>
+            </configuration>
+          </execution>
 					<execution>
 						<id>lint</id>
 						<phase>none</phase>
