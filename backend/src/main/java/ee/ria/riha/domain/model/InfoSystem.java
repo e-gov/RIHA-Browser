@@ -1,180 +1,307 @@
 package ee.ria.riha.domain.model;
 
-import org.json.JSONObject;
-import org.json.JSONPointer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
-import static org.json.JSONPointer.builder;
-import static org.springframework.util.StringUtils.hasText;
-
 /**
- * Holds Information System data as a {@link JSONObject} and provides accessors for JSON manipulation.
+ * Holds Information System data and provides accessors for JSON manipulation.
  *
  * @author Valentin Suhnjov
  */
 public class InfoSystem {
 
-    private static final String ID_KEY = "main_resource_id";
     private static final String UUID_KEY = "uuid";
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "name";
     private static final String OWNER_CODE_KEY = "code";
     private static final String SHORT_NAME_KEY = "short_name";
     private static final String FULL_NAME_KEY = "name";
+    private static final String PURPOSE = "purpose";
+    private static final String CONTACTS_KEY = "contacts";
+    private static final String CONTACTS_NAME_KEY = "name";
+    private static final String CONTACTS_EMAIL_KEY = "email";
     private static final String META_KEY = "meta";
     private static final String META_CREATION_TIMESTAMP_KEY = "creation_timestamp";
     private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
 
-    private JSONObject jsonObject = new JSONObject();
+    private Long id;
+    private JsonNode jsonContent;
+    private IssueType lastPositiveApprovalRequestType;
+    private Date lastPositiveApprovalRequestDate;
+    private Date lastPositiveEstablishmentRequestDate;
+    private Date lastPositiveTakeIntoUseRequestDate;
+    private Date lastPositiveFinalizationRequestDate;
 
-    private Integer id;
-    private UUID uuid;
-    private String ownerName;
-    private String ownerCode;
-    private String shortName;
-    private String fullName;
-    private String creationTimestamp;
-    private String updateTimestamp;
-
+    /**
+     * Creates {@link InfoSystem} instance with empty {@link JsonNode} as a source
+     */
     public InfoSystem() {
-        this("{}");
+        this(JsonNodeFactory.instance.objectNode());
     }
 
-    public InfoSystem(JSONObject jsonObject) {
-        Assert.notNull(jsonObject);
-        this.jsonObject = jsonObject;
-
-        this.id = ((Integer) getPath(ID_KEY).queryFrom(jsonObject));
-
-        String uuidString = ((String) getPath(UUID_KEY).queryFrom(jsonObject));
-        this.uuid = hasText(uuidString) ? UUID.fromString(uuidString) : null;
-
-        this.shortName = ((String) getPath(SHORT_NAME_KEY).queryFrom(jsonObject));
-        this.fullName = ((String) getPath(FULL_NAME_KEY).queryFrom(jsonObject));
-
-        JSONObject owner = getOrCreateOwner();
-        this.ownerName = owner.optString(OWNER_NAME_KEY, null);
-        this.ownerCode = owner.optString(OWNER_CODE_KEY, null);
-
-        JSONObject meta = getOrCreateMeta();
-        this.creationTimestamp = meta.optString(META_CREATION_TIMESTAMP_KEY, null);
-        this.updateTimestamp = meta.optString(META_UPDATE_TIMESTAMP_KEY, null);
+    /**
+     * Creates {@link InfoSystem} instance with provided {@link JsonNode} as a source
+     *
+     * @param jsonContent source {@link JsonNode}
+     */
+    public InfoSystem(JsonNode jsonContent) {
+        Assert.notNull(jsonContent);
+        this.jsonContent = jsonContent;
     }
 
-    public InfoSystem(String json) {
-        this(new JSONObject(json));
+    /**
+     * Makes copy of info system properties and deep copy of source {@link JsonNode}
+     *
+     * @return copy of info system
+     */
+    public InfoSystem copy() {
+        InfoSystem copy = new InfoSystem(this.jsonContent.deepCopy());
+        copy.setId(this.getId());
+        copy.setLastPositiveApprovalRequestDate(this.getLastPositiveApprovalRequestDate());
+        copy.setLastPositiveApprovalRequestType(this.getLastPositiveApprovalRequestType());
+        copy.setLastPositiveEstablishmentRequestDate(this.getLastPositiveEstablishmentRequestDate());
+        copy.setLastPositiveTakeIntoUseRequestDate(this.getLastPositiveTakeIntoUseRequestDate());
+        copy.setLastPositiveFinalizationRequestDate(this.getLastPositiveFinalizationRequestDate());
+
+        return copy;
     }
 
-    private JSONPointer getPath(String... parts) {
-        JSONPointer.Builder builder = builder();
-        for (String part : parts) {
-            builder.append(part);
-        }
-
-        return builder.build();
-    }
-
-    public String asJson() {
-        return jsonObject.toString();
-    }
-
-    public JSONObject getJsonObject() {
-        return jsonObject;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-        jsonObject.putOpt(ID_KEY, id);
     }
 
+    public JsonNode getJsonContent() {
+        return jsonContent;
+    }
+
+    /**
+     * Retrieves and parses uuid property from JSON. Returns null when property is not set or is empty.
+     *
+     * @return parsed UUID from JSON or null if not exists
+     * @throws IllegalArgumentException in case of incorrect UUID representation
+     */
     public UUID getUuid() {
-        return uuid;
+        String uuidStr = jsonContent.path(UUID_KEY).asText(null);
+
+        if (!StringUtils.hasText(uuidStr)) {
+            return null;
+        }
+
+        return UUID.fromString(uuidStr);
     }
 
+    /**
+     * Sets info system uuid JSON property
+     *
+     * @param uuid info system UUID
+     */
     public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-        jsonObject.putOpt(UUID_KEY, uuid != null ? uuid.toString() : null);
+        ((ObjectNode) jsonContent).put(UUID_KEY, uuid != null ? uuid.toString() : null);
     }
 
-    private JSONObject getOrCreateOwner() {
-        JSONObject owner = this.jsonObject.optJSONObject(OWNER_KEY);
-
-        if (owner == null) {
-            owner = new JSONObject();
-            this.jsonObject.put(OWNER_KEY, owner);
-        }
-
-        return owner;
-    }
-
+    /**
+     * Retrieves info system owner name from JSON. Returns null when property is not set.
+     *
+     * @return owner name or null if not specified
+     */
     public String getOwnerName() {
-        return ownerName;
+        return jsonContent.path(OWNER_KEY).path(OWNER_NAME_KEY).asText(null);
     }
 
+    /**
+     * Sets info system owner name JSON property
+     *
+     * @param name info system owner name
+     */
     public void setOwnerName(String name) {
-        this.ownerName = name;
-        getOrCreateOwner().putOpt(OWNER_NAME_KEY, name);
+        ((ObjectNode) jsonContent).with(OWNER_KEY).put(OWNER_NAME_KEY, name);
     }
 
+    /**
+     * Retrieves info system owner code from JSON. Returns null when property is not set.
+     *
+     * @return owner code or null if not specified
+     */
     public String getOwnerCode() {
-        return ownerCode;
+        return jsonContent.path(OWNER_KEY).path(OWNER_CODE_KEY).asText(null);
     }
 
+    /**
+     * Sets info system owner code JSON property
+     *
+     * @param code info system owner code
+     */
     public void setOwnerCode(String code) {
-        this.ownerCode = code;
-        getOrCreateOwner().putOpt(OWNER_CODE_KEY, code);
+        ((ObjectNode) jsonContent).with(OWNER_KEY).put(OWNER_CODE_KEY, code);
     }
 
+    /**
+     * Retrieves info system short name from JSON. Returns null when property is not set.
+     *
+     * @return info system short name or null if not specified
+     */
     public String getShortName() {
-        return shortName;
+        return jsonContent.path(SHORT_NAME_KEY).asText(null);
     }
 
+    /**
+     * Sets info system short name JSON property
+     *
+     * @param shortName info system short name
+     */
     public void setShortName(String shortName) {
-        this.shortName = shortName;
-        jsonObject.putOpt(SHORT_NAME_KEY, shortName);
+        ((ObjectNode) jsonContent).put(SHORT_NAME_KEY, shortName);
     }
 
+    /**
+     * Retrieves info system full name from JSON. Returns null when property is not set.
+     *
+     * @return info system full name or null if not specified
+     */
     public String getFullName() {
-        return fullName;
+        return jsonContent.path(FULL_NAME_KEY).asText(null);
     }
 
+    /**
+     * Sets info system full name JSON property
+     *
+     * @param fullName info system full name
+     */
     public void setFullName(String fullName) {
-        this.fullName = fullName;
-        jsonObject.putOpt(FULL_NAME_KEY, fullName);
+        ((ObjectNode) jsonContent).put(FULL_NAME_KEY, fullName);
     }
 
-    private JSONObject getOrCreateMeta() {
-        JSONObject meta = this.jsonObject.optJSONObject(META_KEY);
+    /**
+     * Retrieves info system purpose from JSON. Returns null when property is not set.
+     *
+     * @return info system purpose or null if not specified
+     */
+    public String getPurpose() {
+        return jsonContent.path(PURPOSE).asText(null);
+    }
 
-        if (meta == null) {
-            meta = new JSONObject();
-            jsonObject.put(META_KEY, meta);
+    /**
+     * Sets info system purpose JSON property
+     *
+     * @param purpose info system purpose
+     */
+    public void setPurpose(String purpose) {
+        ((ObjectNode) jsonContent).put(PURPOSE, purpose);
+    }
+
+    /**
+     * Retrieves info system creation timestamp from JSON. Returns null when property is not set.
+     *
+     * @return info system creation timestamp or null if not specified
+     */
+    public String getCreationTimestamp() {
+        return jsonContent.path(META_KEY).path(META_CREATION_TIMESTAMP_KEY).asText(null);
+    }
+
+    /**
+     * Sets info system creation timestamp JSON property
+     *
+     * @param creationTimestamp creation timestamp
+     */
+    public void setCreationTimestamp(String creationTimestamp) {
+        ((ObjectNode) jsonContent).with(META_KEY).put(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
+    }
+
+    /**
+     * Retrieves info system update timestamp from JSON. Returns null when property is not set.
+     *
+     * @return info system update timestamp or null if not specified
+     */
+    public String getUpdateTimestamp() {
+        return jsonContent.path(META_KEY).path(META_UPDATE_TIMESTAMP_KEY).asText(null);
+    }
+
+    /**
+     * Sets info system owner name JSON property
+     *
+     * @param updateTimestamp update timestamp
+     */
+    public void setUpdateTimestamp(String updateTimestamp) {
+        ((ObjectNode) jsonContent).with(META_KEY).put(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
+    }
+
+    public IssueType getLastPositiveApprovalRequestType() {
+        return lastPositiveApprovalRequestType;
+    }
+
+    public void setLastPositiveApprovalRequestType(IssueType lastPositiveApprovalRequestType) {
+        this.lastPositiveApprovalRequestType = lastPositiveApprovalRequestType;
+    }
+
+    public Date getLastPositiveApprovalRequestDate() {
+        return lastPositiveApprovalRequestDate;
+    }
+
+    public void setLastPositiveApprovalRequestDate(Date lastPositiveApprovalRequestDate) {
+        this.lastPositiveApprovalRequestDate = lastPositiveApprovalRequestDate;
+    }
+
+    public Date getLastPositiveEstablishmentRequestDate() {
+        return lastPositiveEstablishmentRequestDate;
+    }
+
+    public void setLastPositiveEstablishmentRequestDate(Date lastPositiveEstablishmentRequestDate) {
+        this.lastPositiveEstablishmentRequestDate = lastPositiveEstablishmentRequestDate;
+    }
+
+    public Date getLastPositiveTakeIntoUseRequestDate() {
+        return lastPositiveTakeIntoUseRequestDate;
+    }
+
+    public void setLastPositiveTakeIntoUseRequestDate(Date lastPositiveTakeIntoUseRequestDate) {
+        this.lastPositiveTakeIntoUseRequestDate = lastPositiveTakeIntoUseRequestDate;
+    }
+
+    public Date getLastPositiveFinalizationRequestDate() {
+        return lastPositiveFinalizationRequestDate;
+    }
+
+    public void setLastPositiveFinalizationRequestDate(Date lastPositiveFinalizationRequestDate) {
+        this.lastPositiveFinalizationRequestDate = lastPositiveFinalizationRequestDate;
+    }
+
+    /**
+     * Utility method for adding contacts. Will create contacts {@link ArrayNode} if is does not exists.
+     *
+     * @param name  name of a contact
+     * @param email contact email
+     */
+    public void addContact(String name, String email) {
+        ((ArrayNode) jsonContent.withArray(CONTACTS_KEY)).addObject()
+                .put(CONTACTS_NAME_KEY, name)
+                .put(CONTACTS_EMAIL_KEY, email);
+    }
+
+    /**
+     * Utility method for retrieving emails of all contacts. Does not modify source JsonNode.
+     *
+     * @return list of contact emails or empty list
+     */
+    public List<String> getContactsEmails() {
+        JsonNode contactsNode = jsonContent.get(CONTACTS_KEY);
+        if (contactsNode == null || !contactsNode.isArray()) {
+            return new ArrayList<>();
         }
 
-        return meta;
+        return contactsNode.findValuesAsText(CONTACTS_EMAIL_KEY);
     }
 
-    public String getCreationTimestamp() {
-        return this.creationTimestamp;
-    }
-
-    public void setCreationTimestamp(String creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
-        getOrCreateMeta().putOpt(META_CREATION_TIMESTAMP_KEY, creationTimestamp);
-    }
-
-    public String getUpdateTimestamp() {
-        return updateTimestamp;
-    }
-
-    public void setUpdateTimestamp(String updateTimestamp) {
-        this.updateTimestamp = updateTimestamp;
-        getOrCreateMeta().putOpt(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
-    }
 }

@@ -1,15 +1,19 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.Issue;
+import ee.ria.riha.domain.model.RihaIssueSummary;
 import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.IssueApprovalDecisionModel;
+import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -29,19 +33,20 @@ public class IssueController {
     private IssueSummaryModelMapper issueSummaryModelMapper;
 
     /**
-     * Retrieve paginated and filtered list of issues for given info system.
+     * Retrieve paginated and filtered list of issues for info system referenced by either UUID or short name.
      *
-     * @param shortName  a short name of info system
+     * @param reference  info system reference
      * @param pageable   paging definition
      * @param filterable filter definition
      * @return paginated list of info system issues
      */
-    @GetMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
+    @GetMapping(API_V1_PREFIX + "/systems/{reference}/issues")
     @ApiOperation("List all issues of information system")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<IssueSummaryModel>> listInfoSystemIssues(@PathVariable("shortName") String shortName,
-                                                                                 Pageable pageable, Filterable filterable) {
-        PagedResponse<Issue> issues = issueService.listInfoSystemIssues(shortName, pageable, filterable);
+    public ResponseEntity<PagedResponse<IssueSummaryModel>> listInfoSystemIssues(
+            @PathVariable("reference") String reference,
+            Pageable pageable, Filterable filterable) {
+        PagedResponse<Issue> issues = issueService.listInfoSystemIssues(reference, pageable, filterable);
 
         return ResponseEntity.ok(
                 new PagedResponse<>(new PageRequest(issues.getPage(), issues.getSize()),
@@ -52,18 +57,32 @@ public class IssueController {
     }
 
     /**
-     * Adds single issue to the info system.
+     * Retrieve paginated and filtered list of all RIHA issues.
      *
-     * @param shortName a short name of info system
+     * @param pageable   paging definition
+     * @param filterable filter definition
+     * @return paginated and filtered list of all RIHA issues
+     */
+    @GetMapping(API_V1_PREFIX + "/issues")
+    @ApiOperation("List all RIHA issues")
+    @ApiPageableAndFilterableParams
+    public ResponseEntity<PagedResponse<RihaIssueSummary>> listIssues(Pageable pageable, Filterable filterable) {
+        return ResponseEntity.ok(issueService.listIssues(pageable, filterable));
+    }
+
+    /**
+     * Adds single issue to the info system referenced by either UUID or short name.
+     *
+     * @param reference info system reference
      * @param model     issue model
      * @return created issue
      */
-    @PostMapping(API_V1_PREFIX + "/systems/{shortName}/issues")
+    @PostMapping(API_V1_PREFIX + "/systems/{reference}/issues")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Create new issue for information system")
-    public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("shortName") String shortName,
+    public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("reference") String reference,
                                                        @RequestBody Issue model) {
-        return ResponseEntity.ok(issueService.createInfoSystemIssue(shortName, model));
+        return ResponseEntity.ok(issueService.createInfoSystemIssue(reference, model));
     }
 
     /**
@@ -89,8 +108,20 @@ public class IssueController {
     @PutMapping(API_V1_PREFIX + "/issues/{issueId}")
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Update issue")
-    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody Issue model) {
-        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model.getStatus(), model.getComment()));
+    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody IssueStatusUpdateModel model) {
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model));
+    }
+
+    /**
+     * Make decision about approval request/
+     * @param issueId id of an approval request issue
+     * @param model approval decision model
+     */
+    @PostMapping(API_V1_PREFIX + "/issues/{issueId}/decisions")
+    @PreAuthorize("hasRole('ROLE_HINDAJA')")
+    @ApiOperation("Leave decision")
+    public void makeApprovalDecision(@PathVariable("issueId") Long issueId, @RequestBody IssueApprovalDecisionModel model) {
+        issueService.makeApprovalDecision(issueId, model);
     }
 
 }

@@ -70,7 +70,9 @@ public class ApplicationProperties {
         private final CreatedInfoSystemsOverview createdInfoSystemsOverview = new CreatedInfoSystemsOverview();
         private final NewIssue newIssue = new NewIssue();
         private final NewIssueComment newIssueComment = new NewIssueComment();
+        private final IssueStatusUpdate issueStatusUpdate = new IssueStatusUpdate();
         private String from;
+        private String recipientPattern;
     }
 
     @Getter
@@ -117,6 +119,12 @@ public class ApplicationProperties {
     public static class HotjarProperties {
         private String hjid;
         private String hjsv;
+    }
+
+    @Getter
+    @Setter
+    public static class IssueStatusUpdate {
+        private boolean enabled;
     }
 
 

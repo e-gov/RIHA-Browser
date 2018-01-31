@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./card-deck.component.scss']
 })
 export class CardDeckComponent implements OnInit {
-  private cards = [];
+  public cards = [];
 
   constructor() {
     this.cards = [
@@ -62,7 +62,7 @@ export class CardDeckComponent implements OnInit {
         "iconType": "times",
         "title": "X-teega liitumine",
         "content": [
-          "Teistest infosüsteemidest andmete saamiskes või sinna sisestamiseks tuleb kasutada X-teed. See tagab koosvõimelise andmevahetuse kõikide riigiasutustega.",
+          "Teistest infosüsteemidest andmete saamiseks või sinna sisestamiseks tuleb kasutada X-teed. See tagab koosvõimelise andmevahetuse kõikide riigiasutustega.",
           [
             "X-teega liitumine:",
             "avab sulle päringud teistesse infosüsteemidesse",

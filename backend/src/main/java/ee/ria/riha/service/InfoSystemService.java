@@ -10,13 +10,11 @@ import ee.ria.riha.storage.util.Filterable;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,24 +53,23 @@ public class InfoSystemService {
     public InfoSystem create(InfoSystem model) {
         RihaOrganization organization = getActiveOrganization()
                 .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
-        InfoSystem infoSystem = new InfoSystem(model.getJsonObject());
-        validateInfoSystemShortName(infoSystem.getShortName());
+        validateInfoSystemShortName(model.getShortName());
 
         log.info("User '{}' with active organization '{}' is creating new info system with short name '{}'",
                 getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
                 organization,
-                infoSystem.getShortName());
+                model.getShortName());
 
-        infoSystem.setUuid(UUID.randomUUID());
-        infoSystem.setOwnerCode(organization.getCode());
-        infoSystem.setOwnerName(organization.getName());
+        model.setUuid(UUID.randomUUID());
+        model.setOwnerCode(organization.getCode());
+        model.setOwnerName(organization.getName());
         String creationTimestamp = isoDateTimeFormatter.format(ZonedDateTime.now());
-        infoSystem.setCreationTimestamp(creationTimestamp);
-        infoSystem.setUpdateTimestamp(creationTimestamp);
+        model.setCreationTimestamp(creationTimestamp);
+        model.setUpdateTimestamp(creationTimestamp);
 
-        infoSystemValidationService.validate(infoSystem.asJson());
+        infoSystemValidationService.validate(model.getJsonContent());
 
-        return infoSystemRepository.add(infoSystem);
+        return infoSystemRepository.add(model);
     }
 
     private void validateInfoSystemShortName(String shortName) {
@@ -82,16 +79,6 @@ public class InfoSystemService {
         if (!infoSystems.isEmpty()) {
             throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
         }
-    }
-
-    /**
-     * Retrieves {@link InfoSystem} by its short name
-     *
-     * @param uuid info system uuid
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(UUID uuid) {
-        return infoSystemRepository.load(uuid);
     }
 
     /**
@@ -106,14 +93,34 @@ public class InfoSystemService {
     }
 
     /**
+     * Retrieves {@link InfoSystem} by its reference. Reference may be either info system UUID or short name.
+     *
+     * @param reference info system reference
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(String reference) {
+        return infoSystemRepository.load(reference);
+    }
+
+    /**
+     * Convenience method for retrieving {@link InfoSystem} by its UUID
+     *
+     * @param uuid info system uuid
+     * @return retrieved {@link InfoSystem}
+     */
+    public InfoSystem get(UUID uuid) {
+        return get(uuid.toString());
+    }
+
+    /**
      * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated from model.
      *
-     * @param shortName info system short name
+     * @param reference info system reference
      * @param model     updated {@link InfoSystem} model
      * @return new {@link InfoSystem}
      */
-    public InfoSystem update(String shortName, InfoSystem model) {
-        InfoSystem existingInfoSystem = get(shortName);
+    public InfoSystem update(String reference, InfoSystem model) {
+        InfoSystem existingInfoSystem = get(reference);
         log.info("User '{}' with active organization '{}'" +
                         " is updating info system with id {}, owner code '{}' and short name '{}'",
                 getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
@@ -122,48 +129,18 @@ public class InfoSystemService {
                 existingInfoSystem.getOwnerCode(),
                 existingInfoSystem.getShortName());
 
-        InfoSystem updatedInfoSystem = new InfoSystem(model.getJsonObject());
-        if (!shortName.equals(updatedInfoSystem.getShortName())) {
-            validateInfoSystemShortName(updatedInfoSystem.getShortName());
+        if (!existingInfoSystem.getShortName().equals(model.getShortName())) {
+            validateInfoSystemShortName(model.getShortName());
         }
-        updatedInfoSystem.setUuid(existingInfoSystem.getUuid());
-        updatedInfoSystem.setOwnerCode(existingInfoSystem.getOwnerCode());
-        updatedInfoSystem.setOwnerName(existingInfoSystem.getOwnerName());
-        updatedInfoSystem.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
-        updatedInfoSystem.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
+        model.setUuid(existingInfoSystem.getUuid());
+        model.setOwnerCode(existingInfoSystem.getOwnerCode());
+        model.setOwnerName(existingInfoSystem.getOwnerName());
+        model.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
+        model.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
 
-        infoSystemValidationService.validate(updatedInfoSystem.asJson());
+        infoSystemValidationService.validate(model.getJsonContent());
 
-        return infoSystemRepository.add(updatedInfoSystem);
-    }
-
-    /**
-     * Extracts info system contacts from JSON.
-     *
-     * @param infoSystem - info system object
-     * @return list of info system contacts
-     */
-    public List<String> getSystemContactsEmails(InfoSystem infoSystem) {
-        JSONArray jsonContactsArray = infoSystem.getJsonObject().optJSONArray("contacts");
-        List<String> contacts = new ArrayList<>();
-        if (jsonContactsArray == null || jsonContactsArray.length() == 0) {
-            return contacts;
-        }
-
-        for (int i = 0; i < jsonContactsArray.length(); i++) {
-            contacts.add(jsonContactsArray.optJSONObject(i).optString("email"));
-        }
-        return contacts;
-    }
-
-    /**
-     * Retrieves {@link InfoSystem} by its short name
-     *
-     * @param shortName info system short name
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(String shortName) {
-        return infoSystemRepository.load(shortName);
+        return infoSystemRepository.add(model);
     }
 
     @Autowired

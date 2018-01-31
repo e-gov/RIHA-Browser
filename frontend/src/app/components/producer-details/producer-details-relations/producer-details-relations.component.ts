@@ -36,6 +36,7 @@ export class ProducerDetailsRelationsComponent implements OnInit {
     const modalRef = this.modalService.open(ProducerEditRelationsComponent, {
       size: "lg",
       backdrop: "static",
+      windowClass: "fixed-header-modal",
       keyboard: false
     });
     modalRef.componentInstance.system = this.system;

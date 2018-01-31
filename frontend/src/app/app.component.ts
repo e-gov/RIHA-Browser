@@ -32,15 +32,21 @@ export class AppComponent {
     PageScrollConfig.defaultDuration = 400;
 
     let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
-    if (googleAnalyticsId){
-      // USED FOR GOOGLE ANALYTICS
-      this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
+
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+    };
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (googleAnalyticsId){
+          // USED FOR GOOGLE ANALYTICS
           ga('set', 'page', event.urlAfterRedirects);
           ga('send', 'pageview');
         }
-      });
-    }
+        this.environmentService.addLastVisitedLocation(event.urlAfterRedirects);
+      }
+    });
 
     sessionHelper.refreshSessionTimer();
     this.httpInterceptor.request().addInterceptor((data, method) => {

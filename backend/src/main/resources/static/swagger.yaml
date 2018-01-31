@@ -78,6 +78,44 @@ paths:
       responses:
         default:
           description: "successful operation"
+  /api/v1/issues:
+    get:
+      tags:
+      - "Issues"
+      summary: "List all RIHA issues"
+      description: ""
+      operationId: "listIssues"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "page number"
+        required: false
+        type: "integer"
+      - name: "size"
+        in: "query"
+        description: "page size"
+        required: false
+        type: "integer"
+      - name: "filter"
+        in: "query"
+        description: "filter options"
+        required: false
+        type: "string"
+      - name: "sort"
+        in: "query"
+        description: "sorting options"
+        required: false
+        type: "string"
+      - name: "fields"
+        in: "query"
+        description: "field list"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PagedResponseRihaIssueSummary"
   /api/v1/issues/{issueId}:
     get:
       tags:
@@ -112,7 +150,7 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/Issue"
+          $ref: "#/definitions/IssueStatusUpdateModel"
       responses:
         200:
           description: "successful operation"
@@ -177,7 +215,7 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/IssueComment"
+          $ref: "#/definitions/IssueCommentModel"
       responses:
         200:
           description: "successful operation"
@@ -206,6 +244,27 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/IssueComment"
+  /api/v1/issues/{issueId}/decisions:
+    post:
+      tags:
+      - "Issues"
+      summary: "Leave decision"
+      description: ""
+      operationId: "makeApprovalDecision"
+      parameters:
+      - name: "issueId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/IssueApprovalDecisionModel"
+      responses:
+        default:
+          description: "successful operation"
   /api/v1/issues/{issueId}/timeline:
     get:
       tags:
@@ -287,7 +346,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InfoSystemModel"
-  /api/v1/systems/{shortName}:
+  /api/v1/systems/{reference}:
     get:
       tags:
       - "Information systems"
@@ -295,7 +354,7 @@ paths:
       description: ""
       operationId: "get"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -311,7 +370,7 @@ paths:
       description: ""
       operationId: "update"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -325,7 +384,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InfoSystemModel"
-  /api/v1/systems/{shortName}/issues:
+  /api/v1/systems/{reference}/issues:
     get:
       tags:
       - "Issues"
@@ -333,7 +392,7 @@ paths:
       description: ""
       operationId: "listInfoSystemIssues"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -374,7 +433,7 @@ paths:
       description: ""
       operationId: "createInfoSystemIssue"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -388,7 +447,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Issue"
-  /api/v1/systems/{shortName}/relations:
+  /api/v1/systems/{reference}/relations:
     get:
       tags:
       - "Information system relations"
@@ -396,7 +455,7 @@ paths:
       description: ""
       operationId: "list"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -414,7 +473,7 @@ paths:
       description: ""
       operationId: "add"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -428,7 +487,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/RelationSummaryModel"
-  /api/v1/systems/{shortName}/relations/{relationId}:
+  /api/v1/systems/{reference}/relations/{relationId}:
     delete:
       tags:
       - "Information system relations"
@@ -436,7 +495,7 @@ paths:
       description: ""
       operationId: "delete"
       parameters:
-      - name: "shortName"
+      - name: "reference"
         in: "path"
         required: true
         type: "string"
@@ -483,9 +542,28 @@ definitions:
     properties:
       id:
         type: "integer"
-        format: "int32"
-      details:
+        format: "int64"
+      lastPositiveApprovalRequestType:
         type: "string"
+        enum:
+        - "ESTABLISHMENT_REQUEST"
+        - "TAKE_INTO_USE_REQUEST"
+        - "MODIFICATION_REQUEST"
+        - "FINALIZATION_REQUEST"
+      lastPositiveApprovalRequestDate:
+        type: "string"
+        format: "date-time"
+      lastPositiveEstablishmentRequestDate:
+        type: "string"
+        format: "date-time"
+      lastPositiveTakeIntoUseRequestDate:
+        type: "string"
+        format: "date-time"
+      lastPositiveFinalizationRequestDate:
+        type: "string"
+        format: "date-time"
+      details:
+        type: "object"
   Issue:
     type: "object"
     properties:
@@ -522,12 +600,29 @@ definitions:
         - "TAKE_INTO_USE_REQUEST"
         - "MODIFICATION_REQUEST"
         - "FINALIZATION_REQUEST"
+      resolutionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
       entityType:
         type: "string"
         enum:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueApprovalDecisionModel:
+    type: "object"
+    properties:
+      comment:
+        type: "string"
+      decisionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
   IssueComment:
     type: "object"
     properties:
@@ -556,6 +651,11 @@ definitions:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueCommentModel:
+    type: "object"
+    properties:
+      comment:
+        type: "string"
   IssueEntity:
     type: "object"
     properties:
@@ -565,6 +665,22 @@ definitions:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueStatusUpdateModel:
+    type: "object"
+    properties:
+      comment:
+        type: "string"
+      status:
+        type: "string"
+        enum:
+        - "OPEN"
+        - "CLOSED"
+      resolutionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
   IssueSummaryModel:
     type: "object"
     properties:
@@ -595,6 +711,12 @@ definitions:
         - "TAKE_INTO_USE_REQUEST"
         - "MODIFICATION_REQUEST"
         - "FINALIZATION_REQUEST"
+      resolutionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
   OrganizationModel:
     type: "object"
     properties:
@@ -678,6 +800,25 @@ definitions:
       totalPages:
         type: "integer"
         format: "int32"
+  PagedResponseRihaIssueSummary:
+    type: "object"
+    properties:
+      totalElements:
+        type: "integer"
+        format: "int64"
+      content:
+        type: "array"
+        items:
+          $ref: "#/definitions/RihaIssueSummary"
+      size:
+        type: "integer"
+        format: "int32"
+      page:
+        type: "integer"
+        format: "int32"
+      totalPages:
+        type: "integer"
+        format: "int32"
   RelationModel:
     type: "object"
     properties:
@@ -691,6 +832,8 @@ definitions:
         enum:
         - "SUB_SYSTEM"
         - "SUPER_SYSTEM"
+        - "USED_SYSTEM"
+        - "USER_SYSTEM"
   RelationSummaryModel:
     type: "object"
     properties:
@@ -709,6 +852,30 @@ definitions:
         enum:
         - "SUB_SYSTEM"
         - "SUPER_SYSTEM"
+        - "USED_SYSTEM"
+        - "USER_SYSTEM"
+  RihaIssueSummary:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      infoSystemShortName:
+        type: "string"
+      dateCreated:
+        type: "string"
+        format: "date-time"
+      title:
+        type: "string"
+      organizationName:
+        type: "string"
+      organizationCode:
+        type: "string"
+      status:
+        type: "string"
+        enum:
+        - "OPEN"
+        - "CLOSED"
   UserDetailsModel:
     type: "object"
     properties:

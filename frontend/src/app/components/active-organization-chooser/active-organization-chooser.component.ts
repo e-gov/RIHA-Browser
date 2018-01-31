@@ -16,7 +16,6 @@ export class ActiveOrganizationChooserComponent implements OnInit {
   selectOrganization(organizationCode): void {
     this.environmentService.setActiveOrganization(organizationCode).then(res => {
       this.environmentService.globalEnvironment = new Environment(res.json());
-      this.router.navigate(['/']);
       this.modalService.closeActiveModal();
     });
   }

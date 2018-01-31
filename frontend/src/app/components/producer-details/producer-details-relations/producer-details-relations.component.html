@@ -17,6 +17,8 @@
           <a href="#" (click)="openSystemDetails(relation.infoSystemShortName)" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
           <span *ngIf="relation.type === globals.relation_type.SUB_SYSTEM" class="text-gray-dark small">alaminfosüsteem</span>
           <span *ngIf="relation.type === globals.relation_type.SUPER_SYSTEM" class="text-gray-dark small">üleminfosüsteem</span>
+          <span *ngIf="relation.type === globals.relation_type.USED_SYSTEM" class="text-gray-dark small">kasutatav standardlahendus</span>
+          <span *ngIf="relation.type === globals.relation_type.USER_SYSTEM" class="text-gray-dark small">standardlahenduse kasutaja</span>
         </td>
       </tr>
     </table>

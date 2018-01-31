@@ -2,11 +2,9 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.service.notifications.EmailNotificationSenderService;
-import ee.ria.riha.service.notifications.model.NewInfoSystemsEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueCommentEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueToApproversEmailNotification;
-import ee.ria.riha.service.notifications.model.NewIssueToSystemContactsEmailNotification;
+import ee.ria.riha.domain.model.Issue;
+import ee.ria.riha.service.notification.EmailNotificationSenderService;
+import ee.ria.riha.service.notification.model.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,12 @@ public class NotificationService {
             return;
         }
 
-        Set<String> participantsPersonalCodes = issueService.getParticipantsPersonalCodes(issueId);
-        Set<String> emails = userService.getEmailsByPersonalCodes(participantsPersonalCodes);
+        Set<String> emails = getIssueParticipantsEmails(issueId);
 
         if (emails.isEmpty()) {
-            log.info("New issue comment has been recently added for issue with id {}, but none of issue participants have emails.", issueId);
+            log.info(
+                    "New issue comment has been recently added for issue with id {}, but none of issue participants have emails.",
+                    issueId);
             return;
         }
 
@@ -49,12 +48,18 @@ public class NotificationService {
 
         NewIssueCommentEmailNotification notificationModel = new NewIssueCommentEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(emails.toArray(new String[emails.size()]));
+        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
+        notificationModel.setBcc(emails.toArray(new String[emails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
 
         emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    private Set<String> getIssueParticipantsEmails(Long issueId) {
+        Set<String> participantsPersonalCodes = issueService.getParticipantsPersonalCodes(issueId);
+        return userService.getEmailsByPersonalCodes(participantsPersonalCodes);
     }
 
     public void sendNewIssueToSystemContactsNotification(InfoSystem infoSystem) {
@@ -63,15 +68,17 @@ public class NotificationService {
             return;
         }
 
-        List<String> to = infoSystemService.getSystemContactsEmails(infoSystem);
+        List<String> to = infoSystem.getContactsEmails();
         if (to.isEmpty()) {
-            log.info("New issue has been recently added, but info system '{}' has no contacts.", infoSystem.getFullName());
+            log.info("New issue has been recently added, but info system '{}' has no contacts.",
+                    infoSystem.getFullName());
             return;
         }
 
         NewIssueToSystemContactsEmailNotification notificationModel = new NewIssueToSystemContactsEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(to.toArray(new String[to.size()]));
+        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
+        notificationModel.setBcc(to.toArray(new String[to.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
@@ -79,7 +86,38 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    public void sendNewIssueToApproversNotification(String issueTitle, InfoSystem infoSystem) {
+    public void sendIssueStatusUpdateNotification(Issue issue, boolean commented) {
+        if (!isIssueStatusUpdateNotificationEnabled()) {
+            log.info("Issue status update notifications sending is disabled");
+            return;
+        }
+
+        IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
+
+        Set<String> participantsEmails = getIssueParticipantsEmails(issue.getId());
+        InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
+
+        notificationModel.setFrom(getDefaultNotificationSender());
+        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
+        notificationModel.setBcc(participantsEmails.toArray(new String[0]));
+
+        notificationModel.setIssue(IssueDataModel.builder()
+                .title(issue.getTitle())
+                .status(issue.getStatus().name())
+                .build());
+
+        notificationModel.setInfoSystem(InfoSystemDataModel.builder()
+                .fullName(infoSystem.getFullName())
+                .shortName(infoSystem.getShortName())
+                .build());
+
+        notificationModel.setCommented(commented);
+        notificationModel.setBaseUrl(getBaseUrl());
+
+        emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    public void sendNewIssueToApproversNotification(Issue issue, InfoSystem infoSystem) {
         if (!isNewIssueNotificationEnabled()) {
             log.info("New issue notifications sending is disabled.");
             return;
@@ -89,13 +127,24 @@ public class NotificationService {
 
         NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(approversEmails.toArray(new String[approversEmails.size()]));
+        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
+        notificationModel.setBcc(approversEmails.toArray(new String[approversEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setIssueTitle(issueTitle);
+
+        notificationModel.setIssue(IssueDataModel.builder()
+                .title(issue.getTitle())
+                .type(issue.getType() != null ? issue.getType().name() : null)
+                .build());
+
         notificationModel.setBaseUrl(getBaseUrl());
 
         emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    private String[] getDefaultNotificationRecipient(String infoSystemShortName) {
+        String defaultNotificationRecipientPattern = applicationProperties.getNotification().getRecipientPattern();
+        return new String[]{String.format(defaultNotificationRecipientPattern, infoSystemShortName)};
     }
 
     private String getDefaultNotificationSender() {
@@ -116,6 +165,10 @@ public class NotificationService {
 
     private boolean isNewIssueCommentNotificationEnabled() {
         return applicationProperties.getNotification().getNewIssueComment().isEnabled();
+    }
+
+    private boolean isIssueStatusUpdateNotificationEnabled() {
+        return applicationProperties.getNotification().getIssueStatusUpdate().isEnabled();
     }
 
     @Autowired

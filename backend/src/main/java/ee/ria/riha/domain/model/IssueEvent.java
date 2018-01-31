@@ -28,6 +28,7 @@ public class IssueEvent implements IssueEntity {
     private String authorPersonalCode;
     private String organizationName;
     private String organizationCode;
+    private IssueResolutionType resolutionType;
 
     @Override
     public IssueEntityType getEntityType() {

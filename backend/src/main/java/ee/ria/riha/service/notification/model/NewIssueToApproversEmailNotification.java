@@ -1,4 +1,4 @@
-package ee.ria.riha.service.notifications.model;
+package ee.ria.riha.service.notification.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,6 @@ public class NewIssueToApproversEmailNotification extends SimpleHtmlEmailNotific
 
     private String infoSystemFullName;
     private String infoSystemShortName;
-    private String issueTitle;
+    private IssueDataModel issue;
     private String baseUrl;
 }

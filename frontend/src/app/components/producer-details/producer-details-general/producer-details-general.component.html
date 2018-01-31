@@ -8,14 +8,31 @@
     <h2>{{ system.details.short_name }}</h2>
     <div *ngIf="system.getStatus() || system.getDevelopmentStatus() || allowEdit">
       <div *ngIf="system.getStatus() || allowEdit">
-          <label *ngIf="system.getStatus() == globals.system_status.IN_USE" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed() && system.details.meta.system_status.timestamp">alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></label>
-          <label *ngIf="system.getStatus() == globals.system_status.ESTABLISHING" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></label>
-          <label *ngIf="system.getStatus() == globals.system_status.FINISHED" class="col-form-label advanced-label"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></label>
-          <label *ngIf="!system.getStatus() && allowEdit" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></label>
+        <span class="col-form-label advanced-label" *ngIf="system.getStatus() == globals.system_status.IN_USE">
+          <span><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong><span *ngIf="system.isUsed() && system.details.meta.system_status.timestamp"> alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></span>,
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.TAKE_INTO_USE_REQUEST"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.ESTABLISHMENT_REQUEST || !system.getLastPositiveApprovalRequestType()"><span class="text-danger"><strong>kooskõlastamata</strong></span></span>
+        </span>
+        <span class="col-form-label advanced-label" *ngIf="system.getStatus() == globals.system_status.ESTABLISHING">
+          <i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong>,
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.ESTABLISHMENT_REQUEST"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.TAKE_INTO_USE_REQUEST"><span class="text-success"><strong>kasutamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="!system.getLastPositiveApprovalRequestType()"><span class="text-danger"><strong>kooskõlastamata</strong></span></span>
+        </span>
+        <span class="col-form-label advanced-label" *ngIf="system.getStatus() == globals.system_status.FINISHED">
+          <i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong>,
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == globals.issue_type.FINALIZATION_REQUEST; else finish_not_approved"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <ng-template #finish_not_approved><span class="text-danger"><strong>kooskõlastamata</strong></span></ng-template>
+        </span>
+        <span class="col-form-label advanced-label" *ngIf="!system.getStatus() && allowEdit">
+          <i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong>
+        </span>
       </div>
       <div *ngIf="system.getDevelopmentStatus() || allowEdit">
         <label *ngIf="system.getDevelopmentStatus() == globals.development_status.IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
-        <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-danger">ei ole arenduses</strong></label>
+        <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-primary">ei ole arenduses</strong></label>
         <label *ngIf="!system.getDevelopmentStatus() && allowEdit" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
       </div>
       <hr class="short" align="left">
@@ -27,7 +44,7 @@
     <div *ngIf="system.getTopics().length > 0" class="pb-2">
       <label class="text-muted">Infosüsteemi märksõnad:</label>
       <div class="row">
-        <button *ngFor="let topic of system.getTopics()" (click)="listSystemsWithTopic(topic)" class="btn btn-primary btn-sm ml-1">{{ topic }}</button>
+        <button *ngFor="let topic of system.getTopics()" (click)="listSystemsWithTopic(topic)" class="btn btn-primary btn-sm ml-1 mb-1">{{ topic }}</button>
       </div>
     </div>
     <div *ngIf="system.getTopics().length == 0 && allowEdit" class="pb-2">
@@ -45,7 +62,7 @@
       <hr class="short" align="left">
       <div *ngIf="system.details.homepage || allowEdit">
         <label class="col-form-label advanced-label" *ngIf="system.details.homepage">
-          <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}">{{ system.details.homepage }}</a>
+          <i class="fa fa-external-link" aria-hidden="true"></i>Avalik kasutajaliides: <a href="{{ system.details.homepage }}" target="_blank" a>{{ system.details.homepage }}</a>
         </label>
         <label class="col-form-label advanced-label" *ngIf="!system.details.homepage && allowEdit">
           <i class="fa fa-question-circle-o" aria-hidden="true"></i>Avalik kasutajaliides on <strong>määramata</strong>

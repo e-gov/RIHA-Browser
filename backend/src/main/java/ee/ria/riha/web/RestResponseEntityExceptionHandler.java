@@ -2,53 +2,136 @@ package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import ee.ria.riha.service.BrowserException;
+import ee.ria.riha.service.CodedBrowserException;
 import ee.ria.riha.service.JsonValidationException;
-import ee.ria.riha.service.ValidationException;
-import ee.ria.riha.web.model.ValidationErrorModel;
+import ee.ria.riha.service.ObjectNotFoundException;
+import ee.ria.riha.storage.client.StorageClientException;
+import ee.ria.riha.storage.client.StorageError;
+import ee.ria.riha.storage.client.StorageErrorCode;
+import ee.ria.riha.web.model.CodedBrowserExceptionModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
 import java.util.Locale;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.hasText;
 
 /**
  * @author Valentin Suhnjov
  */
 @ControllerAdvice
+@Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
     private MessageSource messageSource;
 
     @ExceptionHandler(JsonValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<List<JsonNode>> handleJsonValidationException(JsonValidationException e) {
+    public ResponseEntity<List<JsonNode>> handleJsonValidation(JsonValidationException e) {
+        if (log.isTraceEnabled()) {
+            log.trace("Handling JSON validation exception", e);
+        }
+
         return ResponseEntity
                 .badRequest()
                 .body(e.getMessages().stream()
-                              .map(ProcessingMessage::asJson)
-                              .collect(toList()));
+                        .map(ProcessingMessage::asJson)
+                        .collect(toList()));
     }
 
-    @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ValidationErrorModel> handleValidationException(ValidationException e) {
-        ValidationErrorModel model = new ValidationErrorModel();
+    @ExceptionHandler(StorageClientException.class)
+    public ResponseEntity<CodedBrowserExceptionModel> handleStorageClient(StorageClientException e) {
+        if (log.isTraceEnabled()) {
+            log.trace("Handling storage exception", e);
+        }
 
-        model.setCode(e.getCode());
-        model.setArgs(e.getArgs());
-        model.setMessage(messageSource.getMessage(e.getCode(), e.getArgs(), Locale.getDefault()));
+        StorageError storageError = e.getStorageError();
+        if (storageError == null) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createBrowserExceptionModel(e, "error.storage.unknown"));
+        }
+
+        if (storageError.getErrcode() == StorageErrorCode.INPUT_NO_OBJECT_FOUND_WITH_GIVEN_ID) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(createBrowserExceptionModel(e, "error.storage.objectNotFound",
+                            new Object[]{storageError.getErrtrace()}));
+        }
 
         return ResponseEntity
-                .badRequest()
-                .body(model);
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(createBrowserExceptionModel(e, "error.storage.unhandled",
+                        new Object[]{storageError.getErrcode(), storageError.getErrmsg(), storageError.getErrtrace()}));
     }
+
+    private CodedBrowserExceptionModel createBrowserExceptionModel(Throwable exception, String code) {
+        return createBrowserExceptionModel(exception, code, null);
+    }
+
+    private CodedBrowserExceptionModel createBrowserExceptionModel(Throwable exception, String code, Object[] args) {
+        CodedBrowserExceptionModel model = new CodedBrowserExceptionModel();
+        model.setException(exception.getClass());
+        model.setCode(code);
+        model.setArgs(args);
+
+        if (hasText(code)) {
+            model.setMessage(messageSource.getMessage(code, args, code, Locale.getDefault()));
+        } else {
+            model.setMessage(exception.getMessage());
+        }
+
+        return model;
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<CodedBrowserExceptionModel> handleObjectNotFound(ObjectNotFoundException e) {
+        if (log.isTraceEnabled()) {
+            log.trace("Handling object not found exception", e);
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(createBrowserExceptionModel(e));
+    }
+
+    private CodedBrowserExceptionModel createBrowserExceptionModel(CodedBrowserException exception) {
+        return createBrowserExceptionModel(exception, exception.getCode(), exception.getArgs());
+    }
+
+    @ExceptionHandler(BrowserException.class)
+    public ResponseEntity<CodedBrowserExceptionModel> handleBrowser(BrowserException e) {
+        if (log.isTraceEnabled()) {
+            log.trace("Handling browser exception", e);
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(createBrowserExceptionModel(e));
+    }
+
+    private CodedBrowserExceptionModel createBrowserExceptionModel(Throwable exception) {
+        return createBrowserExceptionModel(exception, null, null);
+    }
+
+    @ExceptionHandler(CodedBrowserException.class)
+    public ResponseEntity<CodedBrowserExceptionModel> handleCodedBrowser(CodedBrowserException e) {
+        if (log.isTraceEnabled()) {
+            log.trace("Handling coded browser exception", e);
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(createBrowserExceptionModel(e));
+    }
+
 }

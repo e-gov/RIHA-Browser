@@ -1,5 +1,13 @@
-<app-page-header></app-page-header>
-<section id="page" class="row no-gutters" *ngIf="loaded">
+<app-page-header *ngIf="!notFound"></app-page-header>
+<div *ngIf="isLoginErrorVisible()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun logige sisse</h3>
+  <p class="mb-0">Arutelude nägemiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
+</div>
+<div *ngIf="isCannotViewCommentsErrorVisible()" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Hindamine ei ole lubatud</h3>
+  <p class="mb-0">Arutelu kommentaare saavad vaadata ainult infosüsteemi omanik ja RIHA hindajad</p>
+</div>
+<section id="page" class="row no-gutters" *ngIf="loaded && !isLoginErrorVisible() && !isCannotViewCommentsErrorVisible()">
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
@@ -64,7 +72,12 @@
       <app-producer-details-general [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-general>
     </div>
     <div id="tagasiside" class="separate-block">
-      <app-producer-details-issues [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-issues>
+      <app-producer-details-issues
+        (onIssueResolve)="onIssueResolve($event)"
+        (onIssueError)="onIssueError($event)"
+        [system]="system"
+        [issueId]="issueId"
+        [allowEdit]="isEditingAllowed()"></app-producer-details-issues>
     </div>
     <div id="andmed"
          *ngIf="isBlockVisible('dataObjects')"
@@ -92,3 +105,4 @@
     </div>
   </article>
 </section>
+<app-page-not-found *ngIf="notFound"></app-page-not-found>

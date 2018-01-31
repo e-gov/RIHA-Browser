@@ -1,5 +1,6 @@
 package ee.ria.riha.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
@@ -25,11 +26,6 @@ public class JsonValidationServiceTest {
                 JsonLoader.fromResource("/test_infosystem_schema.json"));
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
-    public void throwsOnEmptyJson() {
-        infoSystemValidationService.validate("");
-    }
-
     @Test
     public void successfullyValidatesCorrectJson() {
         //language=JSON
@@ -38,9 +34,17 @@ public class JsonValidationServiceTest {
                 "  \"uuid\": \"00000000-0000-0000-0000-000000000000\"\n" +
                 "}";
 
-        ProcessingReport report = infoSystemValidationService.validate(json, false);
+        ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(true));
+    }
+
+    private JsonNode fromString(String json) {
+        try {
+            return JsonLoader.fromString(json);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Test
@@ -49,22 +53,22 @@ public class JsonValidationServiceTest {
         String json = "{\n" +
                 "  \"name\": \"some name\"\n" +
                 "}";
-        ProcessingReport report = infoSystemValidationService.validate(json, false);
+        ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(false));
         for (ProcessingMessage message : report) {
             JSONAssert.assertEquals("{\n" +
-                                            "  \"keyword\": \"required\",\n" +
-                                            "  \"required\": [\n" +
-                                            "    \"name\",\n" +
-                                            "    \"uuid\"\n" +
-                                            "  ],\n" +
-                                            "  \"missing\": [\n" +
-                                            "    \"uuid\"\n" +
-                                            "  ]\n" +
-                                            "}",
-                                    message.asJson().toString(),
-                                    false);
+                            "  \"keyword\": \"required\",\n" +
+                            "  \"required\": [\n" +
+                            "    \"name\",\n" +
+                            "    \"uuid\"\n" +
+                            "  ],\n" +
+                            "  \"missing\": [\n" +
+                            "    \"uuid\"\n" +
+                            "  ]\n" +
+                            "}",
+                    message.asJson().toString(),
+                    false);
         }
     }
 
@@ -78,16 +82,16 @@ public class JsonValidationServiceTest {
                 "    \"timestamp\": \"not-a-timestamp\"\n" +
                 "  }\n" +
                 "}";
-        ProcessingReport report = infoSystemValidationService.validate(json, false);
+        ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(false));
         for (ProcessingMessage message : report) {
             JSONAssert.assertEquals("{\n" +
-                                            "  \"keyword\": \"format\",\n" +
-                                            "  \"value\": \"not-a-timestamp\"\n" +
-                                            "}",
-                                    message.asJson().toString(),
-                                    false);
+                            "  \"keyword\": \"format\",\n" +
+                            "  \"value\": \"not-a-timestamp\"\n" +
+                            "}",
+                    message.asJson().toString(),
+                    false);
         }
     }
 
@@ -100,14 +104,14 @@ public class JsonValidationServiceTest {
                 "  \"short_name\": \"underscores_are_not_valid\"\n" +
                 "}";
 
-        ProcessingReport report = infoSystemValidationService.validate(json, false);
+        ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(false));
         for (ProcessingMessage message : report) {
             JSONAssert.assertEquals("{\n" +
-                                            "  \"keyword\": \"pattern\",\n" +
-                                            "  \"string\": \"underscores_are_not_valid\"\n" +
-                                            "}", message.asJson().toString(), false);
+                    "  \"keyword\": \"pattern\",\n" +
+                    "  \"string\": \"underscores_are_not_valid\"\n" +
+                    "}", message.asJson().toString(), false);
         }
     }
 
@@ -120,7 +124,7 @@ public class JsonValidationServiceTest {
                 "  \"short_name\": \"all-these.VALUES-allowed-õÕäÄöÖüÜ-0123456789\"\n" +
                 "}";
 
-        ProcessingReport report = infoSystemValidationService.validate(json, false);
+        ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(true));
     }

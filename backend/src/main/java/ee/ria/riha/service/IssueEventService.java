@@ -3,6 +3,7 @@ package ee.ria.riha.service;
 import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.domain.model.IssueEvent;
 import ee.ria.riha.domain.model.IssueEventType;
+import ee.ria.riha.domain.model.IssueResolutionType;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class IssueEventService {
         return IssueEvent.builder()
                 .id(comment.getComment_id())
                 .type(comment.getSub_type() != null ? IssueEventType.valueOf(comment.getSub_type()) : null)
+                .resolutionType(comment.getResolution_type() != null
+                        ? IssueResolutionType.valueOf(comment.getResolution_type())
+                        : null)
                 .dateCreated(comment.getCreation_date())
                 .issueId(comment.getComment_parent_id())
                 .authorName(comment.getAuthor_name())
@@ -51,6 +55,10 @@ public class IssueEventService {
         comment.setOrganization_name(issueEvent.getOrganizationName());
         comment.setOrganization_code(issueEvent.getOrganizationCode());
 
+        if (issueEvent.getResolutionType() != null) {
+            comment.setResolution_type(issueEvent.getResolutionType().name());
+        }
+
         return comment;
     };
 
@@ -71,6 +79,22 @@ public class IssueEventService {
             throw new IllegalBrowserStateException("Issue event was not created");
         }
 
-        return COMMENT_TO_ISSUE_EVENT.apply(commentRepository.get(createdIssueEventIds.get(0)));
+        return get(createdIssueEventIds.get(0));
+    }
+
+    /**
+     * Retrieves single issue event by its id.
+     *
+     * @param id issue id event
+     * @return IssueEvent
+     */
+    public IssueEvent get(Long id) {
+        Comment comment = commentRepository.get(id);
+
+        if (IssueEntityType.valueOf(comment.getType()) != IssueEntityType.ISSUE_EVENT) {
+            throw new IllegalBrowserStateException("Not an issue event");
+        }
+
+        return COMMENT_TO_ISSUE_EVENT.apply(comment);
     }
 }
