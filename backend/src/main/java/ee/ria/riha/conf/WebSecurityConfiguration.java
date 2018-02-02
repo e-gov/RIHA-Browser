@@ -52,7 +52,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 contextSource);
 
         LdapUserDetailsService userDetailsService = new LdapUserDetailsService(userSearch);
-        userDetailsService.setUserDetailsMapper(new RihaLdapUserDetailsContextMapper(contextSource));
+        userDetailsService.setUserDetailsMapper(new RihaLdapUserDetailsContextMapper(contextSource,
+                new RihaLdapUserDetailsContextMapperHelper()));
 
         return userDetailsService;
     }
