@@ -32,18 +32,17 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
     public static final String ROLE_PREFIX = "ROLE_";
 
     private static final String UID_ATTRIBUTE = "uid";
+    private static final String COMMON_NAME_ATTRIBUTE = "cn";
+    private static final String DISPLAY_NAME_ATTRIBUTE = "displayname";
     private static final String MEMBER_OF_ATTRIBUTE = "memberof";
     private static final String DEFAULT_RIHA_USER_ROLE = ROLE_PREFIX + "RIHA_USER";
 
     private LdapTemplate ldapTemplate;
-    private RihaLdapUserDetailsContextMapperHelper rihaLdapUserDetailsContextMapperHelper;
+    private OrganizationRoleMappingExtractor organizationRoleMappingExtractor = new OrganizationRoleMappingExtractor();
 
-    public RihaLdapUserDetailsContextMapper(LdapContextSource ldapContextSource, RihaLdapUserDetailsContextMapperHelper
-            rihaLdapUserDetailsContextMapperHelper) {
+    public RihaLdapUserDetailsContextMapper(LdapContextSource ldapContextSource) {
         Assert.notNull(ldapContextSource, "LDAP context source must not be null");
-        Assert.notNull(rihaLdapUserDetailsContextMapperHelper, "RIHA LDAP user details context mapper helper must not be null");
         ldapTemplate = new LdapTemplate(ldapContextSource);
-        this.rihaLdapUserDetailsContextMapperHelper = rihaLdapUserDetailsContextMapperHelper;
     }
 
     @Override
@@ -67,9 +66,10 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
             for (String groupDn : groupDns) {
                 DirContextOperations groupCtx = lookupGroup(groupDn);
                 if (groupCtx != null) {
-                    OrganizationRoleMapping organizationRoleMapping =
-                            rihaLdapUserDetailsContextMapperHelper.getOrganizationRoleMapping(groupCtx);
+                    String commonName = groupCtx.getStringAttribute(COMMON_NAME_ATTRIBUTE);
+                    String displayName = groupCtx.getStringAttribute(DISPLAY_NAME_ATTRIBUTE);
 
+                    OrganizationRoleMapping organizationRoleMapping = organizationRoleMappingExtractor.extract(commonName, displayName);
                     if (organizationRoleMapping != null) {
                         RihaOrganization rihaOrganization = new RihaOrganization(organizationRoleMapping.getCode(),
                                 organizationRoleMapping.getName());
