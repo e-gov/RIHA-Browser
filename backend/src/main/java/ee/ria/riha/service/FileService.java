@@ -1,5 +1,7 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.domain.InfoSystemRepository;
+import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.storage.domain.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +28,41 @@ public class FileService {
     @Autowired
     private FileRepository fileRepository;
 
-    public UUID upload(InputStream inputStream, String fileName, String contentType) {
+    @Autowired
+    private InfoSystemRepository infoSystemRepository;
+
+    /**
+     * Uploads file associated with info system
+     *
+     * @param inputStream         file input stream
+     * @param infoSystemReference info system UUID
+     * @param fileName            name of the file
+     * @param contentType         MIME type of the file
+     * @return UUID of created file resource
+     */
+    public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) {
         log.info("Uploading file '{}' to storage", fileName);
 
-        UUID fileUuid = fileRepository.upload(inputStream, fileName, contentType);
+        InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
+
+        UUID fileUuid = fileRepository.upload(inputStream, infoSystem.getUuid(), fileName, contentType);
         log.info("File uploaded with uuid: {}", fileUuid);
 
         return fileUuid;
     }
 
-    public ResponseEntity download(UUID fileUuid) throws IOException {
-        ResponseEntity fileResource = fileRepository.download(fileUuid);
+    /**
+     * Downloads single file associated with info system
+     *
+     * @param infoSystemReference info system UUID
+     * @param fileUuid            file resource UUID
+     * @return response entity with data stream
+     * @throws IOException in case of file repository errors
+     */
+    public ResponseEntity download(String infoSystemReference, UUID fileUuid) throws IOException {
+        InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
+
+        ResponseEntity fileResource = fileRepository.download(fileUuid, infoSystem.getUuid());
 
         String attachmentContentDisposition = ATTACHMENT_CONTENT_DISPOSITION_TYPE
                 + CONTENT_DISPOSITION_TOKEN_DELIMITER
