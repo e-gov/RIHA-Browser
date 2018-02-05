@@ -153,6 +153,14 @@ public class IssueService {
         return "type,=," + IssueEntityType.ISSUE.name();
     }
 
+    private String getIssueSubTypeFilter(IssueType issueType) {
+        return "sub_type,=," + issueType.name();
+    }
+
+    private String getIssueStatusOpenFilter() {
+        return "status,=," + IssueStatus.OPEN.name();
+    }
+
     private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
         return "infosystem_uuid,=," + infoSystemUuid.toString();
     }
@@ -184,6 +192,7 @@ public class IssueService {
      */
     public Issue createInfoSystemIssue(String reference, Issue model) {
         validateCreatedIssueType(model);
+        validateFeedbackRequestIssueCreation(model, reference);
 
         InfoSystem infoSystem = infoSystemService.get(reference);
 
@@ -210,6 +219,26 @@ public class IssueService {
 
         if (isFeedbackRequestIssue(model) && !SecurityContextUtil.hasRole(PRODUCER)) {
             throw new ValidationException("validation.issue.create.typeNotAllowed", model.getType());
+        }
+    }
+
+    private void validateFeedbackRequestIssueCreation(Issue model, String reference) {
+        if (!isFeedbackRequestIssue(model)) {
+            return;
+        }
+
+        InfoSystem infoSystem = infoSystemService.get(reference);
+
+        FilterRequest request = new FilterRequest();
+        request.addFilter(getIssueTypeFilter());
+        request.addFilter(getInfoSystemUuidEqFilter(infoSystem.getUuid()));
+        request.addFilter(getIssueStatusOpenFilter());
+        request.addFilter(getIssueSubTypeFilter(model.getType()));
+
+        List<Comment> foundOpenSameTypeFeedbackRequestIssues = commentRepository.find(request);
+
+        if (!foundOpenSameTypeFeedbackRequestIssues.isEmpty()) {
+            throw new ValidationException("validation.issue.create.feedbackIssueAlreadyExists");
         }
     }
 
