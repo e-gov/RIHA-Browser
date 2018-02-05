@@ -84,6 +84,10 @@ export class ProducerEditDocumentsComponent implements OnInit {
     }
   }
 
+  isUploaded(doc){
+    return doc.url.substr(0,7) == 'file://';
+  }
+
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
