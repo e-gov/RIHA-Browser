@@ -72,8 +72,8 @@ export class ProducerEditDocumentsComponent implements OnInit {
     }
   }
 
-  closeModal(f){
-    if (this.isChanged || f.form.dirty){
+  closeModal(addForm, editForm){
+    if (this.isChanged || addForm.form.dirty || editForm.form.dirty){
       if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
         this.modalService.dismissActiveModal();
       } else {
