@@ -18,6 +18,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   docFile: any = null;
   uploading: boolean = false;
+  showAddLinkFields: boolean = false;
   data: any = {url: '', name: ''};
   blocks = [];
 
@@ -28,6 +29,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
       this.data = {url: '', name: ''};
       addForm.reset();
       this.isChanged = true;
+      this.showAddLinkFields = false;
     }
   }
 
