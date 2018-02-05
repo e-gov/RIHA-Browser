@@ -1433,6 +1433,24 @@ mark {
         }
     }
 }
+.expandable-blocks {
+  .expandable-block {
+    .expandable-block-header {
+      font-size: 14px;
+      line-height: 30px;
+      padding: 10px 10px;
+      .btn {
+        padding: 3px 4px;
+      }
+      &.highlighted {
+        background-color: $grey;
+      }
+    }
+    .expandable-block-body {
+      padding-top: 10px;
+    }
+  }
+}
 .popover {
     color: $white;
     .popover-title {
@@ -1448,7 +1466,6 @@ mark {
 }
 .panel-action-heading {
   margin: -20px -20px 20px -20px;
-  padding: 10px 20px;
   background-color: $grey;
   font-size: 1rem;
   line-height: 30px;

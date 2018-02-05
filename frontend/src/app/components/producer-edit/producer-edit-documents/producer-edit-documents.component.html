@@ -47,24 +47,42 @@
                   (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
         </div>
       </div>
-      <div class="dataTables_wrapper">
-        <table class="details-list-table">
-          <tr *ngFor="let doc of documents; let i = index">
-            <td>
-              <i class="fa fa-external-link text-primary"></i>
-            </td>
-            <td>
-              <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ doc.name }}</a>
-            </td>
-            <td>
-              <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-            </td>
-          </tr>
-        </table>
+    </form>
+    <form #editForm="ngForm">
+      <div class="expandable-blocks">
+        <div class="expandable-block" *ngFor="let doc of documents; let i = index">
+          <div class="expandable-block-header" [ngClass]="{'highlighted': blocks[i]}">
+            <i class="fa fa-external-link text-primary"></i>
+            <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ doc.name }}</a>
+            <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
+            <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right mr-1" [ngClass]="{'btn-primary': !blocks[i], 'btn-warning': blocks[i] }"><i class="fa fa-fw fa-pencil"></i></button>
+          </div>
+          <div *ngIf="blocks[i]" class="expandable-block-body">
+            <div class="form-group" [ngClass]="{'has-danger': urlEdit.invalid}">
+              <label for="{{'url' + i}}" class="text-muted separated-text">URL:</label>
+              <input id="{{'url' + i}}" class="form-control col-12"
+                     [(ngModel)]="documents[i].url"
+                     #urlEdit="ngModel"
+                     type="url"
+                     placeholder="http://www.example.com"
+                     name="{{'url' + i}}" url required>
+
+            </div>
+            <div class="form-group" [ngClass]="{'has-danger': nameEdit.invalid}">
+              <label for="{{'name' + i}}" class="text-muted separated-text">Pealkiri:</label>
+              <input id="{{'name' + i}}" class="form-control col-12"
+                     [(ngModel)]="documents[i].name"
+                     #nameEdit="ngModel"
+                     placeholder="Lähtekood"
+                     name="{{'name' + i}}" required>
+
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="actions-bar">
+      <div class="actions-bar mt-2">
         <div class="buttons pull-right">
-          <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+          <button (click)="saveSystem(editForm)" class="btn btn-success pull-right">Salvesta</button>
         </div>
       </div>
     </form>
