@@ -19,6 +19,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
   docFile: any = null;
   uploading: boolean = false;
   data: any = {url: '', name: ''};
+  blocks = [];
 
   addTechDoc(addForm): void {
     if (addForm.valid){
@@ -53,18 +54,20 @@ export class ProducerEditDocumentsComponent implements OnInit {
     this.isChanged = true;
   }
 
-  saveSystem(){
-    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-      let s = new System(res.json());
-      s.details.documents = this.documents;
-      this.systemsService.updateSystem(s).then(response => {
-        this.modalService.closeActiveModal({system: new System(response.json())});
+  saveSystem(editForm){
+    if (editForm.valid){
+      this.systemsService.getSystem(this.system.details.short_name).then(res =>{
+        let s = new System(res.json());
+        s.details.documents = this.documents;
+        this.systemsService.updateSystem(s).then(response => {
+          this.modalService.closeActiveModal({system: new System(response.json())});
+        }, err => {
+          this.toastrService.error('Serveri viga.');
+        });
       }, err => {
         this.toastrService.error('Serveri viga.');
       });
-    }, err => {
-      this.toastrService.error('Serveri viga.');
-    });
+    }
   }
 
   closeModal(f){
