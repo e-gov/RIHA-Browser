@@ -21,10 +21,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ee.ria.riha.domain.model.IssueType.ESTABLISHMENT_REQUEST;
 import static ee.ria.riha.service.auth.RoleType.APPROVER;
@@ -49,6 +46,7 @@ public class IssueServiceTest {
     private static final String ACME_REG_CODE = "555010203";
     private static final String EVS_REG_CODE = "70001234";
     private static final String RIA_REG_CODE = "70006317";
+    private static final UUID EXISTING_INFO_SYSTEM_UUID = UUID.fromString("01234567-0123-0123-0123-0123456789ab");
 
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
@@ -99,6 +97,7 @@ public class IssueServiceTest {
         setProducerRole();
 
         existingInfoSystem.setShortName(EXISTING_INFO_SYSTEM_SHORT_NAME);
+        existingInfoSystem.setUuid(EXISTING_INFO_SYSTEM_UUID);
 
         when(infoSystemService.get(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
 
@@ -348,5 +347,14 @@ public class IssueServiceTest {
                 .build());
     }
 
+    @Test(expected = ValidationException.class)
+    public void doesNotAllowToCreateFeedbackIssueWhenThereIsOpenIssueOfTheSameType() {
+        when(commentRepository.find(any())).thenReturn(Collections.singletonList(existingIssueEntity));
 
+        Issue issue = issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                .title("title")
+                .comment("comment")
+                .type(ESTABLISHMENT_REQUEST)
+                .build());
+    }
 }
