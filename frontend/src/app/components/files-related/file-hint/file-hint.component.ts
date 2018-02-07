@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { G } from '../../../globals/globals';
 
 @Component({
   selector: 'app-file-hint',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FileHintComponent implements OnInit {
 
-  constructor() { }
+  @Input() file: any;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
