@@ -9,6 +9,33 @@ import { G } from '../../../globals/globals';
 export class FileHintComponent implements OnInit {
 
   @Input() file: any;
+  globals: any = G;
+
+  getOrganizationName(){
+    if (this.file.accessRestriction && this.file.accessRestriction.organization){
+      return this.file.accessRestriction.organization.name;
+    } else {
+      return '-';
+    }
+  }
+
+  private getRestrictionReason(){
+    if (this.file.accessRestriction && this.file.accessRestriction.reasonCode){
+      let code = this.file.accessRestriction.reasonCode;
+      let reason = this.globals.access_restriction_reasons.filter( r => r.code == this.file.accessRestriction.reasonCode)[0];
+      return reason;
+    } else {
+      return null;
+    }
+  }
+
+  getReasonLegislation(){
+    return this.getRestrictionReason().legislation;
+  }
+
+  getReasonDescription(){
+    return this.getRestrictionReason().description;
+  }
 
   constructor() {
   }
