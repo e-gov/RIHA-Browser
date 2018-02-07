@@ -91,6 +91,45 @@
                        name="{{'name' + i}}" required>
 
               </div>
+              <div class="my-2 mx-0 row switch-container">
+                <div [ngClass]="{'text-muted': documents[i].accessRestriction}" class="mr-2">Juurdepääsupiiranguta</div>
+                <ui-switch size="small"
+                           color="#023cc1"
+                           (change)="clearAccessRestriction($event, i)"
+                           defaultBgColor="#7a838a"
+                           defaultBoColor="#023cc1"
+                           [checked]="documents[i].accessRestriction != null"></ui-switch>
+                <div [ngClass]="{'text-muted': !documents[i].accessRestriction}" class="ml-2">Juurdepääsupiiranguga</div>
+              </div>
+              <div *ngIf="documents[i].accessRestriction">
+                <div class="form-group mt-2" [ngClass]="{'has-danger': restrictionReason.invalid && (restrictionReason.dirty || restrictionReason.touched)}">
+                  <label for="type" class="text-muted separated-text">Alus:</label>
+                  <select id="type" class="form-control col-12"
+                          #restrictionReason="ngModel"
+                          [(ngModel)]="documents[i].accessRestriction.reason"
+                          name="type" required>
+                    <option [value]="''" disabled selected>Vali piirangu alus...</option>
+                    <option *ngFor="let reason of globals.access_restriction_reasons" [value]="reason.code" selected>{{ reason.legislation }} - {{ reason.description }}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="text-muted">Juurepääs piiratud kuni:</label>
+                  <div class="row">
+                    <div class="input-group datepicker col-4" [ngClass]="{'has-danger': restrictionEndTimestampInput.invalid  && (restrictionEndTimestampInput.dirty || restrictionEndTimestampInput.touched)}">
+                      <input id="{{ 'access_restriction_end_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
+                             name="{{ 'restrictionEnd' + i }}"
+                             [(ngModel)]="documents[i].accessRestriction.end_date"
+                             [required]="documents[i].accessRestriction"
+                             #restrictionEndTimestampInput="ngModel"
+                             ngbDatepicker
+                             #restrictionEndTimestamp="ngbDatepicker">
+                      <span class="input-group-btn">
+                        <button (click)="restrictionEndTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

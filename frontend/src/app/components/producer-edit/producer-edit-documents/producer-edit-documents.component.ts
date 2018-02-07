@@ -1,9 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
+import { G } from '../../../globals/globals';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
@@ -15,6 +18,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
   @Input() system: System;
   documents: any[] = [];
   isChanged: boolean = false;
+  globals: any = G;
 
   docFile: any = null;
   uploading: boolean = false;
@@ -86,6 +90,17 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   isUploaded(doc){
     return doc.url.substr(0,7) == 'file://';
+  }
+
+  clearAccessRestriction(e, i){
+    if (e){
+      this.documents[i].accessRestriction = {
+        date: null,
+        reason: ''
+      }
+    } else {
+      this.documents[i].accessRestriction = null;
+    }
   }
 
   constructor(private modalService: ModalHelperService,
