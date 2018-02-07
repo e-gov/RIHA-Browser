@@ -11,7 +11,7 @@
     <table class="details-list-table">
       <tr *ngFor="let doc of system.details.documents">
         <td>
-          <i class="fa fa-external-link text-primary"></i>
+          <app-file-icon [file]="doc"></app-file-icon>
         </td>
         <td>
           <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>

@@ -68,6 +68,8 @@ import { GridCurrentlyShowingComponent } from './components/grid-view/grid-curre
 import { SortButtonComponent } from './components/grid-view/sort-button/sort-button.component';
 import { ProducerDetailsSecurityComponent } from './components/producer-details/producer-details-security/producer-details-security.component';
 import { ProducerEditSecurityComponent } from './components/producer-edit/producer-edit-security/producer-edit-security.component';
+import { FileIconComponent } from './components/files-related/file-icon/file-icon.component';
+import { FileHintComponent } from './components/files-related/file-hint/file-hint.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -145,7 +147,9 @@ const routes: Routes = [
     GridCurrentlyShowingComponent,
     SortButtonComponent,
     ProducerDetailsSecurityComponent,
-    ProducerEditSecurityComponent
+    ProducerEditSecurityComponent,
+    FileIconComponent,
+    FileHintComponent
   ],
   imports: [
     BrowserModule,
