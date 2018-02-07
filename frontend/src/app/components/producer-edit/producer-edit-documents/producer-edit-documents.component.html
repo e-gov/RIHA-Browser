@@ -112,20 +112,39 @@
                     <option *ngFor="let reason of globals.access_restriction_reasons" [value]="reason.code" selected>{{ reason.legislation }} - {{ reason.description }}</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label class="text-muted">Juurepääs piiratud kuni:</label>
-                  <div class="row">
-                    <div class="input-group datepicker col-4" [ngClass]="{'has-danger': restrictionEndTimestampInput.invalid  && (restrictionEndTimestampInput.dirty || restrictionEndTimestampInput.touched)}">
-                      <input id="{{ 'access_restriction_end_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
-                             name="{{ 'restrictionEnd' + i }}"
-                             [(ngModel)]="documents[i].accessRestriction.end_date"
-                             [required]="documents[i].accessRestriction"
-                             #restrictionEndTimestampInput="ngModel"
-                             ngbDatepicker
-                             #restrictionEndTimestamp="ngbDatepicker">
-                      <span class="input-group-btn">
-                        <button (click)="restrictionEndTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-                      </span>
+                <div class="row">
+                  <div class="form-group col-6">
+                    <label class="text-muted">Juurepääs piiratud alates:</label>
+                    <div class="row">
+                      <div class="input-group datepicker col-8" [ngClass]="{'has-danger': restrictionStartTimestampInput.invalid  && (restrictionStartTimestampInput.dirty || restrictionStartTimestampInput.touched)}">
+                        <input id="{{ 'access_restriction_start_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
+                               name="{{ 'restrictionStart' + i }}"
+                               [(ngModel)]="documents[i].accessRestriction.startDate"
+                               [required]="documents[i].accessRestriction"
+                               #restrictionStartTimestampInput="ngModel"
+                               ngbDatepicker
+                               #restrictionStartTimestamp="ngbDatepicker">
+                        <span class="input-group-btn">
+                          <button (click)="restrictionStartTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-6">
+                    <label class="text-muted">Juurepääs piiratud kuni:</label>
+                    <div class="row">
+                      <div class="input-group datepicker col-8" [ngClass]="{'has-danger': restrictionEndTimestampInput.invalid  && (restrictionEndTimestampInput.dirty || restrictionEndTimestampInput.touched)}">
+                        <input id="{{ 'access_restriction_end_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
+                               name="{{ 'restrictionEnd' + i }}"
+                               [(ngModel)]="documents[i].accessRestriction.endDate"
+                               [required]="documents[i].accessRestriction"
+                               #restrictionEndTimestampInput="ngModel"
+                               ngbDatepicker
+                               #restrictionEndTimestamp="ngbDatepicker">
+                        <span class="input-group-btn">
+                          <button (click)="restrictionEndTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -134,7 +153,7 @@
           </div>
         </div>
       </div>
-      <div class="actions-bar mt-2">
+      <div class="actions-bar mt-3">
         <div class="buttons pull-right">
           <button (click)="saveSystem(editForm)" class="btn btn-success pull-right">Salvesta</button>
         </div>
