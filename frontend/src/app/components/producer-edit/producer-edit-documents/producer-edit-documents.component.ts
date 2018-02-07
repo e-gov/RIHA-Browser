@@ -96,7 +96,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
       this.documents[i].accessRestriction = {
         startDate: null,
         endDate: null,
-        reason: '',
+        reasonCode: '',
         organization: this.system.details.owner
       }
     } else {

@@ -107,7 +107,7 @@
                   <label for="type" class="text-muted separated-text">Alus:</label>
                   <select id="type" class="form-control col-12"
                           #restrictionReason="ngModel"
-                          [(ngModel)]="documents[i].accessRestriction.reason"
+                          [(ngModel)]="documents[i].accessRestriction.reasonCode"
                           name="type" required>
                     <option [value]="''" disabled selected>Vali piirangu alus...</option>
                     <option *ngFor="let reason of globals.access_restriction_reasons" [value]="reason.code" selected>{{ reason.legislation }} - {{ reason.description }}</option>
