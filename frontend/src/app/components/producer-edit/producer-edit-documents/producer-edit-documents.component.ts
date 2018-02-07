@@ -5,8 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 import { G } from '../../../globals/globals';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { EnvironmentService } from '../../../services/environment.service';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
@@ -95,8 +94,10 @@ export class ProducerEditDocumentsComponent implements OnInit {
   clearAccessRestriction(e, i){
     if (e){
       this.documents[i].accessRestriction = {
-        date: null,
-        reason: ''
+        startDate: null,
+        endDate: null,
+        reason: '',
+        organization: this.system.details.owner
       }
     } else {
       this.documents[i].accessRestriction = null;
@@ -106,6 +107,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
+              private environmentService: EnvironmentService,
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
