@@ -56,6 +56,7 @@
           <div class="expandable-block-header" [ngClass]="{'highlighted': blocks[i]}">
             <app-file-icon [file]="doc"></app-file-icon>
             <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ doc.name }}</a>
+            <app-file-hint [file]="doc"></app-file-hint>
             <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
             <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right mr-1" [ngClass]="{'btn-primary': !blocks[i], 'btn-warning': blocks[i] }"><i class="fa fa-fw fa-pencil"></i></button>
           </div>

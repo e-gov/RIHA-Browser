@@ -15,6 +15,7 @@
         </td>
         <td>
           <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
+          <app-file-hint [file]="doc"></app-file-hint>
         </td>
       </tr>
     </table>
