@@ -1490,6 +1490,11 @@ ngb-datepicker {
     z-index: 1050;
   }
 }
+ngb-typeahead-window {
+  &.dropdown-menu {
+    z-index: 1050;
+  }
+}
 .switch-container {
   line-height: 1.786;
 }
