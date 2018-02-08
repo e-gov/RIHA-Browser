@@ -124,6 +124,7 @@
                                [required]="documents[i].accessRestriction"
                                #restrictionStartTimestampInput="ngModel"
                                ngbDatepicker
+                               [placement]="'top'"
                                #restrictionStartTimestamp="ngbDatepicker">
                         <span class="input-group-btn">
                           <button (click)="restrictionStartTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
@@ -142,6 +143,7 @@
                                [required]="documents[i].accessRestriction"
                                #restrictionEndTimestampInput="ngModel"
                                ngbDatepicker
+                               [placement]="'top'"
                                #restrictionEndTimestamp="ngbDatepicker">
                         <span class="input-group-btn">
                           <button (click)="restrictionEndTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
