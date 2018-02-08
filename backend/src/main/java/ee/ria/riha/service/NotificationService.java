@@ -3,6 +3,7 @@ package ee.ria.riha.service;
 import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Issue;
+import ee.ria.riha.domain.model.IssueComment;
 import ee.ria.riha.service.notification.EmailNotificationSenderService;
 import ee.ria.riha.service.notification.model.*;
 import lombok.Getter;
@@ -13,6 +14,8 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Set;
+
+import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 
 @Service
 @Getter
@@ -29,12 +32,13 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    public void sendNewIssueCommentNotification(Long issueId) {
+    public void sendNewIssueCommentNotification(IssueComment issueComment) {
         if (!isNewIssueCommentNotificationEnabled()) {
             log.info("New issue comment notifications sending is disabled.");
             return;
         }
 
+        Long issueId = issueComment.getIssueId();
         Set<String> emails = getIssueParticipantsEmails(issueId);
 
         if (emails.isEmpty()) {
@@ -45,6 +49,7 @@ public class NotificationService {
         }
 
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
+        Issue issue = issueService.getIssueById(issueId);
 
         NewIssueCommentEmailNotification notificationModel = new NewIssueCommentEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
@@ -53,6 +58,12 @@ public class NotificationService {
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
+        notificationModel.setIssueId(issueId);
+        notificationModel.setIssueTitle(issue.getTitle());
+        notificationModel.setComment(issueComment.getComment());
+        notificationModel.setAuthorName(getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"))
+                .getName());
 
         emailNotificationSenderService.sendNotification(notificationModel);
     }

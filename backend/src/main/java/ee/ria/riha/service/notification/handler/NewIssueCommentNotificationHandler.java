@@ -46,6 +46,10 @@ public class NewIssueCommentNotificationHandler extends SimpleHtmlEmailNotificat
             model.put("baseUrl", newIssueCommentDataModel.getBaseUrl());
             model.put("name", newIssueCommentDataModel.getInfoSystemFullName());
             model.put("shortName", newIssueCommentDataModel.getInfoSystemShortName());
+            model.put("issueId", newIssueCommentDataModel.getIssueId());
+            model.put("issueTitle", newIssueCommentDataModel.getIssueTitle());
+            model.put("author", newIssueCommentDataModel.getAuthorName());
+            model.put("comment", newIssueCommentDataModel.getComment());
 
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {
