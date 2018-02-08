@@ -1,6 +1,7 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.domain.model.IssueComment;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
@@ -54,7 +55,7 @@ public class IssueCommentServiceTest {
         authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
-        doNothing().when(notificationService).sendNewIssueCommentNotification(any(Long.class));
+        doNothing().when(notificationService).sendNewIssueCommentNotification(any(IssueComment.class));
     }
 
     @Test

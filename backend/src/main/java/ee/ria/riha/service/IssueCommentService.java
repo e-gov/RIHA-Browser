@@ -105,7 +105,7 @@ public class IssueCommentService {
     public IssueComment createIssueComment(Long issueId, IssueCommentModel model) {
         IssueComment createdIssueComment = createIssueCommentWithoutNotification(issueId, model);
 
-        notificationService.sendNewIssueCommentNotification(issueId);
+        notificationService.sendNewIssueCommentNotification(createdIssueComment);
 
         return createdIssueComment;
     }
