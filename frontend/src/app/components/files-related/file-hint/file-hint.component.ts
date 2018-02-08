@@ -19,6 +19,22 @@ export class FileHintComponent implements OnInit {
     }
   }
 
+  getRestrictionEndDate(){
+    if (this.file.accessRestriction && this.file.accessRestriction.endDate){
+      return this.file.accessRestriction.endDate;
+    } else {
+      return '-';
+    }
+  }
+
+  getRestrictionStartDate(){
+    if (this.file.accessRestriction && this.file.accessRestriction.startDate){
+      return this.file.accessRestriction.startDate;
+    } else {
+      return '-';
+    }
+  }
+
   private getRestrictionReason(){
     if (this.file.accessRestriction && this.file.accessRestriction.reasonCode){
       let code = this.file.accessRestriction.reasonCode;
