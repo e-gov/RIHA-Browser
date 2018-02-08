@@ -5,6 +5,7 @@ import { System } from '../../../models/system';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
+import { EnvironmentService } from '../../../services/environment.service';
 
 @Component({
   selector: 'app-producer-details-tech-docs',
@@ -16,6 +17,14 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
   @Input() system: System;
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
+
+  canDownload(doc){
+    if (!doc.accessRestriction){
+      return true;
+    } else {
+      return this.allowEdit || this.environmentService.getUserMatrix().hasApproverRole;
+    }
+  }
 
   openTechDocsEdit(content) {
     this.systemsService.getSystem(this.system.details.short_name).then( res => {
@@ -42,6 +51,7 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
 
   constructor(private modalService: ModalHelperService,
               public generalHelperService: GeneralHelperService,
+              private environmentService: EnvironmentService,
               private systemsService: SystemsService,
               private toastrService: ToastrService) { }
 
