@@ -117,9 +117,18 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   clearAccessRestriction(e, i){
     if (e){
+      let d = new Date();
       this.documents[i].accessRestriction = {
-        startDate: null,
-        endDate: null,
+        startDate: {
+          day: d.getDate(),
+          month: d.getMonth(),
+          year: d.getFullYear()
+        },
+        endDate: {
+          day: d.getDate(),
+          month: d.getMonth(),
+          year: d.getFullYear() + 5
+        },
         reasonCode: '',
         organization: this.system.details.owner
       }
