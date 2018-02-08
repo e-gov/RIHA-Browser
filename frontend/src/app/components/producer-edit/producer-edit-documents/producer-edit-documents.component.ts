@@ -59,11 +59,35 @@ export class ProducerEditDocumentsComponent implements OnInit {
     this.isChanged = true;
   }
 
+  private prepareForSaving(docs){
+    if (docs){
+      for (let i = 0; i < docs.length; i++){
+        if (docs[i].accessRestriction){
+          docs[i].accessRestriction.startDate = this.generalHelperService.dateObjToTimestamp(docs[i].accessRestriction.startDate, true);
+          docs[i].accessRestriction.endDate = this.generalHelperService.dateObjToTimestamp(docs[i].accessRestriction.endDate, true);
+        }
+      }
+    }
+    return docs;
+  }
+
+  private prepareForDisplay(docs){
+    if (docs){
+      for (let i = 0; i < docs.length; i++){
+        if (docs[i].accessRestriction){
+          docs[i].accessRestriction.startDate = this.generalHelperService.timestampToDateObj(docs[i].accessRestriction.startDate);
+          docs[i].accessRestriction.endDate = this.generalHelperService.timestampToDateObj(docs[i].accessRestriction.endDate);
+        }
+      }
+    }
+    return docs;
+  }
+
   saveSystem(editForm){
     if (editForm.valid){
       this.systemsService.getSystem(this.system.details.short_name).then(res =>{
         let s = new System(res.json());
-        s.details.documents = this.documents;
+        s.details.documents = this.prepareForSaving(this.documents);
         this.systemsService.updateSystem(s).then(response => {
           this.modalService.closeActiveModal({system: new System(response.json())});
         }, err => {
@@ -112,7 +136,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   ngOnInit() {
     let system = this.generalHelperService.cloneObject(this.system);
-    this.documents = system.details.documents || [];
+    this.documents = this.prepareForDisplay(system.details.documents || []);
   }
 
 }
