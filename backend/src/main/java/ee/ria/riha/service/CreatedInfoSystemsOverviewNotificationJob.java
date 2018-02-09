@@ -30,7 +30,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
         return InfoSystemDataModel.builder()
                 .fullName(infoSystem.getFullName())
-                .shortName(infoSystem.getShortName())
+                .uuid(infoSystem.getUuid())
                 .build();
     };
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
