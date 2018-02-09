@@ -32,6 +32,11 @@ public class InfoSystem {
     private static final String META_KEY = "meta";
     private static final String META_CREATION_TIMESTAMP_KEY = "creation_timestamp";
     private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
+    private static final String DATA_FILES_KEY = "data_files";
+    private static final String DOCUMENTS_KEY = "documents";
+    private static final String DOCUMENT_METADATA_URL_KEY = "url";
+    private static final String DOCUMENT_METADATA_NAME_KEY = "name";
+    private static final String DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
 
     private Long id;
     private JsonNode jsonContent;
@@ -81,6 +86,46 @@ public class InfoSystem {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getLastPositiveApprovalRequestDate() {
+        return lastPositiveApprovalRequestDate;
+    }
+
+    public IssueType getLastPositiveApprovalRequestType() {
+        return lastPositiveApprovalRequestType;
+    }
+
+    public void setLastPositiveApprovalRequestType(IssueType lastPositiveApprovalRequestType) {
+        this.lastPositiveApprovalRequestType = lastPositiveApprovalRequestType;
+    }
+
+    public Date getLastPositiveEstablishmentRequestDate() {
+        return lastPositiveEstablishmentRequestDate;
+    }
+
+    public void setLastPositiveEstablishmentRequestDate(Date lastPositiveEstablishmentRequestDate) {
+        this.lastPositiveEstablishmentRequestDate = lastPositiveEstablishmentRequestDate;
+    }
+
+    public Date getLastPositiveTakeIntoUseRequestDate() {
+        return lastPositiveTakeIntoUseRequestDate;
+    }
+
+    public void setLastPositiveTakeIntoUseRequestDate(Date lastPositiveTakeIntoUseRequestDate) {
+        this.lastPositiveTakeIntoUseRequestDate = lastPositiveTakeIntoUseRequestDate;
+    }
+
+    public Date getLastPositiveFinalizationRequestDate() {
+        return lastPositiveFinalizationRequestDate;
+    }
+
+    public void setLastPositiveFinalizationRequestDate(Date lastPositiveFinalizationRequestDate) {
+        this.lastPositiveFinalizationRequestDate = lastPositiveFinalizationRequestDate;
+    }
+
+    public void setLastPositiveApprovalRequestDate(Date lastPositiveApprovalRequestDate) {
+        this.lastPositiveApprovalRequestDate = lastPositiveApprovalRequestDate;
     }
 
     public JsonNode getJsonContent() {
@@ -238,44 +283,44 @@ public class InfoSystem {
         ((ObjectNode) jsonContent).with(META_KEY).put(META_UPDATE_TIMESTAMP_KEY, updateTimestamp);
     }
 
-    public IssueType getLastPositiveApprovalRequestType() {
-        return lastPositiveApprovalRequestType;
+    /**
+     * Utility method for retrieving of document metadata. Does not modify source JsonNode.
+     *
+     * @return list of document metadata or empty in case documents node does not exists, not an array or empty
+     */
+    public List<InfoSystemDocumentMetadata> getDocumentMetadata() {
+        JsonNode documentsNode = jsonContent.path(DOCUMENTS_KEY);
+        if (!documentsNode.isArray()) {
+            return new ArrayList<>();
+        }
+
+        return extractDocumentMetadata(documentsNode);
     }
 
-    public void setLastPositiveApprovalRequestType(IssueType lastPositiveApprovalRequestType) {
-        this.lastPositiveApprovalRequestType = lastPositiveApprovalRequestType;
+    private ArrayList<InfoSystemDocumentMetadata> extractDocumentMetadata(JsonNode documentsNode) {
+        ArrayList<InfoSystemDocumentMetadata> documents = new ArrayList<>();
+        for (JsonNode documentNode : documentsNode) {
+            documents.add(InfoSystemDocumentMetadata.builder()
+                    .name(documentNode.path(DOCUMENT_METADATA_NAME_KEY).asText(null))
+                    .url(documentNode.path(DOCUMENT_METADATA_URL_KEY).asText(null))
+                    .accessRestricted(documentNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY))
+                    .build());
+        }
+        return documents;
     }
 
-    public Date getLastPositiveApprovalRequestDate() {
-        return lastPositiveApprovalRequestDate;
-    }
+    /**
+     * Utility method for retrieving of data file metadata. Does not modify source JsonNode.
+     *
+     * @return list of data file metadata or empty list in case data file node does not exists, not an array or empty
+     */
+    public List<InfoSystemDocumentMetadata> getDataFileMetadata() {
+        JsonNode dataFilesNode = jsonContent.path(DATA_FILES_KEY);
+        if (!dataFilesNode.isArray()) {
+            return new ArrayList<>();
+        }
 
-    public void setLastPositiveApprovalRequestDate(Date lastPositiveApprovalRequestDate) {
-        this.lastPositiveApprovalRequestDate = lastPositiveApprovalRequestDate;
-    }
-
-    public Date getLastPositiveEstablishmentRequestDate() {
-        return lastPositiveEstablishmentRequestDate;
-    }
-
-    public void setLastPositiveEstablishmentRequestDate(Date lastPositiveEstablishmentRequestDate) {
-        this.lastPositiveEstablishmentRequestDate = lastPositiveEstablishmentRequestDate;
-    }
-
-    public Date getLastPositiveTakeIntoUseRequestDate() {
-        return lastPositiveTakeIntoUseRequestDate;
-    }
-
-    public void setLastPositiveTakeIntoUseRequestDate(Date lastPositiveTakeIntoUseRequestDate) {
-        this.lastPositiveTakeIntoUseRequestDate = lastPositiveTakeIntoUseRequestDate;
-    }
-
-    public Date getLastPositiveFinalizationRequestDate() {
-        return lastPositiveFinalizationRequestDate;
-    }
-
-    public void setLastPositiveFinalizationRequestDate(Date lastPositiveFinalizationRequestDate) {
-        this.lastPositiveFinalizationRequestDate = lastPositiveFinalizationRequestDate;
+        return extractDocumentMetadata(dataFilesNode);
     }
 
     /**
@@ -296,8 +341,8 @@ public class InfoSystem {
      * @return list of contact emails or empty list
      */
     public List<String> getContactsEmails() {
-        JsonNode contactsNode = jsonContent.get(CONTACTS_KEY);
-        if (contactsNode == null || !contactsNode.isArray()) {
+        JsonNode contactsNode = jsonContent.path(CONTACTS_KEY);
+        if (!contactsNode.isArray()) {
             return new ArrayList<>();
         }
 
