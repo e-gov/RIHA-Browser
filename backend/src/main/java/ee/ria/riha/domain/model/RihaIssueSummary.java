@@ -20,6 +20,7 @@ public class RihaIssueSummary {
     private String infoSystemShortName;
     private Date dateCreated;
     private String title;
+    private IssueType issueType;
     private String organizationName;
     private String organizationCode;
     private IssueStatus status;

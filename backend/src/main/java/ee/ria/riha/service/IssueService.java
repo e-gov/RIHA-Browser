@@ -98,6 +98,7 @@ public class IssueService {
                 .infoSystemShortName(comment.getInfosystem_short_name())
                 .dateCreated(comment.getCreation_date())
                 .title(comment.getTitle())
+                .issueType(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .organizationName(comment.getOrganization_name())
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
