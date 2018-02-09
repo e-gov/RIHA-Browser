@@ -69,6 +69,9 @@ import { SortButtonComponent } from './components/grid-view/sort-button/sort-but
 import { ProducerDetailsSecurityComponent } from './components/producer-details/producer-details-security/producer-details-security.component';
 import { ProducerEditSecurityComponent } from './components/producer-edit/producer-edit-security/producer-edit-security.component';
 
+//pipes
+import { DatemPipe } from './pipes/datem.pipe';
+
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -145,7 +148,8 @@ const routes: Routes = [
     GridCurrentlyShowingComponent,
     SortButtonComponent,
     ProducerDetailsSecurityComponent,
-    ProducerEditSecurityComponent
+    ProducerEditSecurityComponent,
+    DatemPipe
   ],
   imports: [
     BrowserModule,
