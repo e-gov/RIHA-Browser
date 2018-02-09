@@ -208,7 +208,7 @@
             <td class="status">{{ generalHelperService.getSystemStatusText(system) }}</td>
             <td class="approval-status">{{ generalHelperService.getApprovalStatusText(system) }}</td>
             <td class="topics"><button *ngFor="let topic of system.details.topics" (click)="searchSystemsByTopic(topic)" class="btn btn-primary btn-sm ml-1 mb-1">{{ topic }}</button></td>
-            <td class="last-modified text-nowrap">{{ system.details.meta.update_timestamp | date:'y-MM-dd HH:mm:ss'}}</td>
+            <td class="last-modified text-nowrap">{{ system.details.meta.update_timestamp | datem:'YYYY-MM-DD HH:mm:ss'}}</td>
           </tr>
         </tbody>
       </table>
