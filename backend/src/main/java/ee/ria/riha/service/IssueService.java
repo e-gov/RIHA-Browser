@@ -157,8 +157,8 @@ public class IssueService {
         return "sub_type,=," + issueType.name();
     }
 
-    private String getIssueStatusOpenFilter() {
-        return "status,=," + IssueStatus.OPEN.name();
+    private String getIssueStatusFilter(IssueStatus issueStatus) {
+        return "status,=," + issueStatus.name();
     }
 
     private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
@@ -191,10 +191,9 @@ public class IssueService {
      * @return create issue
      */
     public Issue createInfoSystemIssue(String reference, Issue model) {
-        validateCreatedIssueType(model);
-        validateFeedbackRequestIssueCreation(model, reference);
-
         InfoSystem infoSystem = infoSystemService.get(reference);
+        validateCreatedIssueType(model);
+        validateThereIsNoOpenFeedbackRequestIssueOfTheSameType(model, infoSystem.getUuid());
 
         Issue issue = prepareIssue(model);
         issue.setInfoSystemUuid(infoSystem.getUuid());
@@ -222,23 +221,21 @@ public class IssueService {
         }
     }
 
-    private void validateFeedbackRequestIssueCreation(Issue model, String reference) {
+    private void validateThereIsNoOpenFeedbackRequestIssueOfTheSameType(Issue model, UUID infoSystemUuid) {
         if (!isFeedbackRequestIssue(model)) {
             return;
         }
 
-        InfoSystem infoSystem = infoSystemService.get(reference);
-
         FilterRequest request = new FilterRequest();
         request.addFilter(getIssueTypeFilter());
-        request.addFilter(getInfoSystemUuidEqFilter(infoSystem.getUuid()));
-        request.addFilter(getIssueStatusOpenFilter());
+        request.addFilter(getInfoSystemUuidEqFilter(infoSystemUuid));
+        request.addFilter(getIssueStatusFilter(IssueStatus.OPEN));
         request.addFilter(getIssueSubTypeFilter(model.getType()));
 
-        List<Comment> foundOpenSameTypeFeedbackRequestIssues = commentRepository.find(request);
+        List<Comment> foundIssues = commentRepository.find(request);
 
-        if (!foundOpenSameTypeFeedbackRequestIssues.isEmpty()) {
-            throw new ValidationException("validation.issue.create.feedbackIssueAlreadyExists");
+        if (!foundIssues.isEmpty()) {
+            throw new ValidationException("validation.issue.create.thereIsOpenFeedbackIssueOfTheSameTypeAlready");
         }
     }
 
