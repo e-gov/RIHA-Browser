@@ -10,12 +10,13 @@ import java.util.regex.Pattern;
 public class OrganizationRoleMappingExtractor {
 
     private static final Pattern COMMON_NAME_VALIDATION_PATTERN = Pattern.compile("^(.+)-([a-zA-Z_]+)$");
+    private static final String ROLE_PREFIX = "ROLE_";
 
     public OrganizationRoleMapping extract(String commonName, String displayName) {
         OrganizationRoleMapping organizationRoleMapping = new OrganizationRoleMapping();
 
         if (commonName == null) {
-            log.debug("Could not find common name of organization '{}'", displayName);
+            log.debug("Could not extract data from common name of organization '{}' as common name was null", displayName);
             return null;
         }
 
@@ -26,8 +27,7 @@ public class OrganizationRoleMappingExtractor {
         }
 
         organizationRoleMapping.setCode(commonNameMatcher.group(1));
-        organizationRoleMapping.setAuthority(new SimpleGrantedAuthority(RihaLdapUserDetailsContextMapper.ROLE_PREFIX +
-                commonNameMatcher.group(2).toUpperCase()));
+        organizationRoleMapping.setAuthority(new SimpleGrantedAuthority(ROLE_PREFIX + commonNameMatcher.group(2).toUpperCase()));
         organizationRoleMapping.setName(displayName);
 
         return organizationRoleMapping;
