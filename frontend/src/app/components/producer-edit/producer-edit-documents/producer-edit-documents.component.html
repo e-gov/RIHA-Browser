@@ -1,6 +1,6 @@
 <div class="fixed-header">
   Dokumentatsioon
-  <button (click)="closeModal(addForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal(addForm, editForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
@@ -9,62 +9,157 @@
       <div class="form-group">
         <label class="btn btn-default input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
         <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event, addForm)">
+        <button class="btn btn-default ml-2"
+                [disabled]="uploading"
+                (click)="showAddLinkFields = !showAddLinkFields"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa veebiviide</button>
       </div>
       <div *ngIf="docFile != null" class="form-group">
         {{ docFile.name }}
         <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
       </div>
-      <div class="form-group">
-        või lisa viide
-      </div>
-      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
-        <label for="url" class="text-muted separated-text">URL:</label>
-        <input id="url" class="form-control col-12"
-               #url="ngModel"
-               [disabled]="uploading"
-               [(ngModel)]="data.url"
-               type="url"
-               placeholder="http://www.example.com"
-               (keyup.enter)="addTechDoc(addForm)"
-               name="url" url required>
+      <div *ngIf="showAddLinkFields">
+        <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+          <label for="url" class="text-muted separated-text">URL:</label>
+          <input id="url" class="form-control col-12"
+                 #url="ngModel"
+                 [disabled]="uploading"
+                 [(ngModel)]="data.url"
+                 type="url"
+                 placeholder="http://www.example.com"
+                 (keyup.enter)="addTechDoc(addForm)"
+                 name="url" url required>
 
-      </div>
-      <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
-        <label for="name" class="text-muted separated-text">Pealkiri:</label>
-        <input id="name" class="form-control col-12"
-               #name="ngModel"
-               [disabled]="uploading"
-               [(ngModel)]="data.name"
-               placeholder="Lähtekood"
-               (keyup.enter)="addTechDoc(addForm)"
-               name="name" required>
+        </div>
+        <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
+          <label for="name" class="text-muted separated-text">Pealkiri:</label>
+          <input id="name" class="form-control col-12"
+                 #name="ngModel"
+                 [disabled]="uploading"
+                 [(ngModel)]="data.name"
+                 placeholder="Lähtekood"
+                 (keyup.enter)="addTechDoc(addForm)"
+                 name="name" required>
 
-      </div>
-      <div class="form-group row">
-        <div class="col-12">
-          <button class="btn btn-default pull-right"
-                  [disabled]="uploading"
-                  (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+        </div>
+        <div class="form-group row">
+          <div class="col-12">
+            <button class="btn btn-default pull-right"
+                    [disabled]="uploading"
+                    (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          </div>
         </div>
       </div>
-      <div class="dataTables_wrapper">
-        <table class="details-list-table">
-          <tr *ngFor="let doc of documents; let i = index">
-            <td>
-              <i class="fa fa-external-link text-primary"></i>
-            </td>
-            <td>
-              <a href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ doc.name }}</a>
-            </td>
-            <td>
-              <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-            </td>
-          </tr>
-        </table>
+    </form>
+    <form #editForm="ngForm">
+      <div class="expandable-blocks">
+        <div class="expandable-block" *ngFor="let doc of documents; let i = index">
+          <div class="expandable-block-header" [ngClass]="{'highlighted': blocks[i]}">
+            <app-file-icon [file]="doc"></app-file-icon>
+            <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ doc.name }}</a>
+            <app-file-hint [file]="doc"></app-file-hint>
+            <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
+            <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right mr-1" [ngClass]="{'btn-primary': !blocks[i], 'btn-warning': blocks[i] }"><i class="fa fa-fw fa-pencil"></i></button>
+          </div>
+          <div *ngIf="blocks[i]" class="expandable-block-body">
+            <div *ngIf="!isUploaded(doc)">
+              <div class="form-group" [ngClass]="{'has-danger': urlEdit.invalid}">
+                <label for="{{'url' + i}}" class="text-muted separated-text">URL:</label>
+                <input id="{{'url' + i}}" class="form-control col-12"
+                       [(ngModel)]="documents[i].url"
+                       #urlEdit="ngModel"
+                       type="url"
+                       placeholder="http://www.example.com"
+                       name="{{'url' + i}}" url required>
+
+              </div>
+              <div class="form-group" [ngClass]="{'has-danger': nameEdit.invalid}">
+                <label for="{{'linkName' + i}}" class="text-muted separated-text">Pealkiri:</label>
+                <input id="{{'linkName' + i}}" class="form-control col-12"
+                       [(ngModel)]="documents[i].name"
+                       #nameEdit="ngModel"
+                       placeholder="Lähtekood"
+                       name="{{'name' + i}}" required>
+
+              </div>
+            </div>
+            <div *ngIf="isUploaded(doc)">
+              <div class="form-group" [ngClass]="{'has-danger': nameEdit.invalid}">
+                <label for="{{'fileName' + i}}" class="text-muted separated-text">Pealkiri:</label>
+                <input id="{{'fileName' + i}}" class="form-control col-12"
+                       [(ngModel)]="documents[i].name"
+                       #nameEdit="ngModel"
+                       placeholder="Lähtekood"
+                       name="{{'name' + i}}" required>
+
+              </div>
+              <div class="my-2 mx-0 row switch-container">
+                <div [ngClass]="{'text-muted': documents[i].accessRestriction}" class="mr-2">Juurdepääsupiiranguta</div>
+                <ui-switch size="small"
+                           color="#023cc1"
+                           (change)="clearAccessRestriction($event, i)"
+                           defaultBgColor="#7a838a"
+                           defaultBoColor="#023cc1"
+                           [checked]="documents[i].accessRestriction != null"></ui-switch>
+                <div [ngClass]="{'text-muted': !documents[i].accessRestriction}" class="ml-2">Juurdepääsupiiranguga</div>
+              </div>
+              <div *ngIf="documents[i].accessRestriction">
+                <div class="form-group mt-2" [ngClass]="{'has-danger': restrictionReason.invalid && (restrictionReason.dirty || restrictionReason.touched)}">
+                  <label for="type" class="text-muted separated-text">Alus:</label>
+                  <select id="type" class="form-control col-12"
+                          #restrictionReason="ngModel"
+                          [(ngModel)]="documents[i].accessRestriction.reasonCode"
+                          name="type" required>
+                    <option [value]="''" disabled selected>Vali piirangu alus...</option>
+                    <option *ngFor="let reason of globals.access_restriction_reasons" [value]="reason.code" selected>{{ reason.legislation }} - {{ reason.description }}</option>
+                  </select>
+                </div>
+                <div class="row">
+                  <div class="form-group col-6">
+                    <label class="text-muted">Juurepääs piiratud alates:</label>
+                    <div class="row">
+                      <div class="input-group datepicker col-8" [ngClass]="{'has-danger': restrictionStartTimestampInput.invalid  && (restrictionStartTimestampInput.dirty || restrictionStartTimestampInput.touched)}">
+                        <input id="{{ 'access_restriction_start_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
+                               [container]="'body'"                               name="{{ 'restrictionStart' + i }}"
+                               [(ngModel)]="documents[i].accessRestriction.startDate"
+                               [required]="documents[i].accessRestriction"
+                               #restrictionStartTimestampInput="ngModel"
+                               ngbDatepicker
+                               [placement]="'top'"
+                               #restrictionStartTimestamp="ngbDatepicker">
+                        <span class="input-group-btn">
+                          <button (click)="restrictionStartTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-6">
+                    <label class="text-muted">Juurepääs piiratud kuni:</label>
+                    <div class="row">
+                      <div class="input-group datepicker col-8" [ngClass]="{'has-danger': restrictionEndTimestampInput.invalid  && (restrictionEndTimestampInput.dirty || restrictionEndTimestampInput.touched)}">
+                        <input id="{{ 'access_restriction_end_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
+                               [container]="'body'"
+                               name="{{ 'restrictionEnd' + i }}"
+                               [(ngModel)]="documents[i].accessRestriction.endDate"
+                               [required]="documents[i].accessRestriction"
+                               #restrictionEndTimestampInput="ngModel"
+                               ngbDatepicker
+                               [placement]="'top'"
+                               #restrictionEndTimestamp="ngbDatepicker">
+                        <span class="input-group-btn">
+                          <button (click)="restrictionEndTimestamp.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="actions-bar">
+      <div class="actions-bar mt-3">
         <div class="buttons pull-right">
-          <button (click)="saveSystem()" class="btn btn-success pull-right">Salvesta</button>
+          <button (click)="saveSystem(editForm)" class="btn btn-success pull-right">Salvesta</button>
         </div>
       </div>
     </form>
