@@ -45,7 +45,7 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.dataFile = event.target.files[0];
     this.uploading = true;
 
-    this.systemsService.postDataFile(this.dataFile).then(res =>{
+    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).then(res =>{
       this.uploading = false;
       this.data_files.push({
         url: 'file://' + res.text(),

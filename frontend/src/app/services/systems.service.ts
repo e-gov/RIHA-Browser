@@ -196,18 +196,18 @@ export class SystemsService {
         name: value.name,
         purpose: value.purpose
       }
-    }
+    };
     return this.http.post(`/api/v1/systems`, system).toPromise();
   }
 
-  public postDataFile(file){
+  public postDataFile(file, reference){
     const formData = new FormData();
     formData.append('file', file);
 
     const headers = new Headers({});
     let options = new RequestOptions({ headers });
 
-    return this.http.post(`/api/v1/files`, formData, options).toPromise();
+    return this.http.post(`/api/v1/systems/${ reference }/files`, formData, options).toPromise();
   }
 
   public updateSystem(updatedData, reference?) {

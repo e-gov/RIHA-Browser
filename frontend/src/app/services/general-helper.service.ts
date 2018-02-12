@@ -95,9 +95,9 @@ export class GeneralHelperService {
     return $.param(newObj);
   }
 
-  public getFileUrl(url){
+  public getFileUrl(url, reference){
     if (url.substring(0,7) === 'file://'){
-      return '/api/v1/files/' + url.substring(7);
+      return `/api/v1/systems/${ reference }/files/${ url.substring(7) }`;
     } else {
       return url;
     }
