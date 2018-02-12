@@ -14,7 +14,7 @@
           <app-file-icon [file]="doc"></app-file-icon>
         </td>
         <td>
-          <a *ngIf="canDownload(doc)" href="{{ generalHelperService.getFileUrl(doc.url) }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
+          <a *ngIf="canDownload(doc)" href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
           <span *ngIf="!canDownload(doc)" class="text-muted">{{ doc.name }}</span>
           <app-file-hint [file]="doc"></app-file-hint>
         </td>
