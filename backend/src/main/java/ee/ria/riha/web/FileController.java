@@ -26,12 +26,12 @@ public class FileController {
     @PostMapping(API_V1_PREFIX + "/systems/{reference}/files")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Upload file")
-    public ResponseEntity upload(@PathVariable("reference") String infoSystemReference,
+    public ResponseEntity upload(@PathVariable("reference") String reference,
                                  @RequestParam("file") MultipartFile file) throws IOException {
         log.info("Receiving info system '{}' file '{}' [{}] with size {}b",
-                infoSystemReference, file.getOriginalFilename(), file.getContentType(), file.getSize());
+                reference, file.getOriginalFilename(), file.getContentType(), file.getSize());
 
-        UUID fileUuid = fileService.upload(file.getInputStream(), infoSystemReference, file.getOriginalFilename(),
+        UUID fileUuid = fileService.upload(file.getInputStream(), reference, file.getOriginalFilename(),
                 file.getContentType());
 
         return ResponseEntity.ok(fileUuid.toString());
@@ -39,10 +39,10 @@ public class FileController {
 
     @GetMapping(API_V1_PREFIX + "/systems/{reference}/files/{uuid}")
     @ApiOperation("Download file")
-    public ResponseEntity download(@PathVariable("reference") String infoSystemReference,
+    public ResponseEntity download(@PathVariable("reference") String reference,
                                    @PathVariable("uuid") UUID fileUuid) throws IOException {
-        log.info("Downloading info system '{}' file {}", infoSystemReference, fileUuid);
-        return fileService.download(infoSystemReference, fileUuid);
+        log.info("Downloading info system '{}' file {}", reference, fileUuid);
+        return fileService.download(reference, fileUuid);
     }
 
 }
