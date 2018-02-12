@@ -40,7 +40,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
     this.docFile = event.target.files[0];
     this.uploading = true;
 
-    this.systemsService.postDataFile(this.docFile).then(res =>{
+    this.systemsService.postDataFile(this.docFile, this.system.details.short_name).then(res =>{
       this.uploading = false;
       this.documents.push({
         url: 'file://' + res.text(),
