@@ -1,9 +1,14 @@
 package ee.ria.riha.domain.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
@@ -123,6 +128,74 @@ public class InfoSystemTest {
     @Test
     public void returnsEmptyListWhenContactsNotSpecified() {
         assertThat(new InfoSystem().getContactsEmails(), empty());
+    }
+
+    @Test
+    public void retrievesDocumentMetadata() {
+        InfoSystemDocumentMetadata documentMeta1 = InfoSystemDocumentMetadata.builder()
+                .name("document1")
+                .url("https://example.com/document1")
+                .accessRestricted(false)
+                .build();
+
+        InfoSystemDocumentMetadata documentMeta2 = InfoSystemDocumentMetadata.builder()
+                .name("document2")
+                .url("file://067e2e90-953a-464e-8e20-5460c6899393")
+                .accessRestricted(true)
+                .build();
+
+        ((ArrayNode) validInfoSystem.getJsonContent().withArray("documents"))
+                .add(createDocument(documentMeta1))
+                .add(createDocument(documentMeta2));
+
+        List<InfoSystemDocumentMetadata> documentMetadata = validInfoSystem.getDocumentMetadata();
+
+        assertThat(documentMetadata, containsInAnyOrder(documentMeta1, documentMeta2));
+    }
+
+    private JsonNode createDocument(InfoSystemDocumentMetadata documentMetadata) {
+        ObjectNode documentNode = JsonNodeFactory.instance.objectNode()
+                .put("name", documentMetadata.getName())
+                .put("url", documentMetadata.getUrl());
+
+        if (documentMetadata.isAccessRestricted()) {
+            documentNode.putObject("accessRestriction").put("reasonCode", 38);
+        }
+
+        return documentNode;
+    }
+
+    @Test
+    public void returnsEmptyMetadataListWhenDocumentsNotSpecified() {
+        assertThat(new InfoSystem().getDocumentMetadata(), is(empty()));
+    }
+
+    @Test
+    public void retrievesDataFilesMetadata() {
+        InfoSystemDocumentMetadata documentMeta1 = InfoSystemDocumentMetadata.builder()
+                .name("document1")
+                .url("https://example.com/document1")
+                .accessRestricted(false)
+                .build();
+
+        InfoSystemDocumentMetadata documentMeta2 = InfoSystemDocumentMetadata.builder()
+                .name("document2")
+                .url("file://067e2e90-953a-464e-8e20-5460c6899393")
+                .accessRestricted(true)
+                .build();
+
+        ((ArrayNode) validInfoSystem.getJsonContent().withArray("data_files"))
+                .add(createDocument(documentMeta1))
+                .add(createDocument(documentMeta2));
+
+        List<InfoSystemDocumentMetadata> documentMetadata = validInfoSystem.getDataFileMetadata();
+
+        assertThat(documentMetadata, containsInAnyOrder(documentMeta1, documentMeta2));
+    }
+
+    @Test
+    public void returnsEmptyMetadataListWhenDataFilesNotSpecified() {
+        assertThat(new InfoSystem().getDataFileMetadata(), is(empty()));
     }
 
     @Test
