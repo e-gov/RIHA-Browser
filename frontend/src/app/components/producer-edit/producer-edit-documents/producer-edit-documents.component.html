@@ -58,7 +58,7 @@
             <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ doc.name }}</a>
             <app-file-hint [file]="doc"></app-file-hint>
             <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
-            <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right mr-1" [ngClass]="{'btn-primary': !blocks[i], 'btn-warning': blocks[i] }"><i class="fa fa-fw fa-pencil"></i></button>
+            <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right mr-1 btn-primary"><i class="fa fa-fw" [ngClass]="{'fa-pencil': !blocks[i], 'fa-chevron-up': blocks[i] }"></i></button>
           </div>
           <div *ngIf="blocks[i]" class="expandable-block-body">
             <div *ngIf="!isUploaded(doc)">
