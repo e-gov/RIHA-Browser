@@ -2,7 +2,6 @@ package ee.ria.riha.authentication;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.LdapTemplate;
@@ -30,16 +29,14 @@ import static org.springframework.ldap.support.LdapUtils.newLdapName;
 @Slf4j
 public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
 
-    private static final String COMMON_NAME_TOKEN_SEPARATOR = "-";
-
     private static final String UID_ATTRIBUTE = "uid";
-    private static final String MEMBER_OF_ATTRIBUTE = "memberof";
     private static final String COMMON_NAME_ATTRIBUTE = "cn";
     private static final String DISPLAY_NAME_ATTRIBUTE = "displayname";
-    private static final String ROLE_PREFIX = "ROLE_";
-    private static final String DEFAULT_RIHA_USER_ROLE = ROLE_PREFIX + "RIHA_USER";
+    private static final String MEMBER_OF_ATTRIBUTE = "memberof";
+    private static final String DEFAULT_RIHA_USER_ROLE = "ROLE_RIHA_USER";
 
     private LdapTemplate ldapTemplate;
+    private OrganizationRoleMappingExtractor organizationRoleMappingExtractor = new OrganizationRoleMappingExtractor();
 
     public RihaLdapUserDetailsContextMapper(LdapContextSource ldapContextSource) {
         Assert.notNull(ldapContextSource, "LDAP context source must not be null");
@@ -67,8 +64,10 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
             for (String groupDn : groupDns) {
                 DirContextOperations groupCtx = lookupGroup(groupDn);
                 if (groupCtx != null) {
-                    OrganizationRoleMapping organizationRoleMapping = getOrganizationRoleMapping(groupCtx);
+                    String commonName = groupCtx.getStringAttribute(COMMON_NAME_ATTRIBUTE);
+                    String displayName = groupCtx.getStringAttribute(DISPLAY_NAME_ATTRIBUTE);
 
+                    OrganizationRoleMapping organizationRoleMapping = organizationRoleMappingExtractor.extract(commonName, displayName);
                     if (organizationRoleMapping != null) {
                         RihaOrganization rihaOrganization = new RihaOrganization(organizationRoleMapping.getCode(),
                                 organizationRoleMapping.getName());
@@ -92,28 +91,6 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
         }
     }
 
-    private OrganizationRoleMapping getOrganizationRoleMapping(DirContextOperations groupCtx) {
-        OrganizationRoleMapping organizationRoleMapping = new OrganizationRoleMapping();
-
-        String commonName = groupCtx.getStringAttribute(COMMON_NAME_ATTRIBUTE);
-        if (commonName == null) {
-            log.debug("Could not find common name of organization '{}'", groupCtx.getDn());
-            return null;
-        }
-
-        String[] cnTokens = commonName.split(COMMON_NAME_TOKEN_SEPARATOR);
-        if (cnTokens.length != 2) {
-            log.debug("Expecting two tokens in organization common name '{}' but found {}", commonName,
-                    cnTokens.length);
-        }
-
-        organizationRoleMapping.setCode(cnTokens[0]);
-        organizationRoleMapping.setAuthority(new SimpleGrantedAuthority(ROLE_PREFIX + cnTokens[1].toUpperCase()));
-        organizationRoleMapping.setName(groupCtx.getStringAttribute(DISPLAY_NAME_ATTRIBUTE));
-
-        return organizationRoleMapping;
-    }
-
     private LdapName normalizeGroupDn(String groupDnStr) {
         LdapName groupDn = newLdapName(groupDnStr);
 
@@ -131,12 +108,5 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
         } catch (NamingException e) {
             throw convertLdapException(e);
         }
-    }
-
-    @Data
-    private class OrganizationRoleMapping {
-        private String name;
-        private String code;
-        private GrantedAuthority authority;
     }
 }
