@@ -28,6 +28,7 @@ import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.StringUtils.hasText;
+import static ee.ria.riha.service.IssueEventService.COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL;
 
 /**
  * Info system issue service
@@ -102,6 +103,11 @@ public class IssueService {
                 .organizationName(comment.getOrganization_name())
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
+                .infoSystemFullName(comment.getInfosystem_full_name())
+                .resolutionType(comment.getResolution_type() != null ? IssueResolutionType.valueOf(comment.getResolution_type()) : null)
+                .events(comment.getEvents() == null ? null : comment.getEvents().stream()
+                        .map(COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL)
+                        .collect(toList()))
                 .build();
     };
 
