@@ -73,6 +73,7 @@ import { FileHintComponent } from './components/files-related/file-hint/file-hin
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
+import { LinkifyPipe } from './pipes/linkify.pipe';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -153,7 +154,8 @@ const routes: Routes = [
     ProducerEditSecurityComponent,
     DatemPipe,
     FileIconComponent,
-    FileHintComponent
+    FileHintComponent,
+    LinkifyPipe
   ],
   imports: [
     BrowserModule,

@@ -44,7 +44,8 @@
     "ng-http-interceptor": "3.1.2",
     "poor-mans-proxy": "1.0.0",
     "ngx-ui-switch": "1.3.9",
-    "enhanced-resolve": "3.3.0"
+    "enhanced-resolve": "3.3.0",
+    "linkifyjs": "2.1.5"
   },
   "devDependencies": {
     "@angular/cli": "1.0.4",
