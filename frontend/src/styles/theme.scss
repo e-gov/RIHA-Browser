@@ -1044,6 +1044,13 @@ p {
     &.user-multiline-text {
       margin-bottom: 0;
       white-space: pre-line;
+      .user-link {
+        text-decoration: underline;
+        border-width: 0px !important;
+        &:hover {
+          text-decoration: none;
+        }
+      }
     }
     a:not(.btn) {
         border-bottom: 1px solid $primary;
