@@ -6,6 +6,7 @@ import ee.ria.riha.domain.model.IssueEventType;
 import ee.ria.riha.domain.model.IssueResolutionType;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
+import ee.ria.riha.web.model.IssueEventSummaryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +61,20 @@ public class IssueEventService {
         }
 
         return comment;
+    };
+
+    public static final Function<Comment, IssueEventSummaryModel> COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL = comment -> {
+        if (comment == null) {
+            return null;
+        }
+
+        return IssueEventSummaryModel.builder()
+                .type(comment.getSub_type() != null ? IssueEventType.valueOf(comment.getSub_type()) : null)
+                .organizationName(comment.getOrganization_name())
+                .organizationCode(comment.getOrganization_code())
+                .resolutionType(comment.getResolution_type() != null ? IssueResolutionType.valueOf(comment.getResolution_type()) : null)
+                .dateCreated(comment.getCreation_date())
+                .build();
     };
 
     @Autowired
