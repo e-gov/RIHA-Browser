@@ -69,6 +69,7 @@ public class IssueEventService {
         }
 
         return IssueEventSummaryModel.builder()
+                .id(comment.getComment_id())
                 .type(comment.getSub_type() != null ? IssueEventType.valueOf(comment.getSub_type()) : null)
                 .organizationName(comment.getOrganization_name())
                 .organizationCode(comment.getOrganization_code())
