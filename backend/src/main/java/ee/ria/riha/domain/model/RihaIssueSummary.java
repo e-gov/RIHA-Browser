@@ -28,5 +28,5 @@ public class RihaIssueSummary {
     private IssueStatus status;
     private String infoSystemFullName;
     private IssueResolutionType resolutionType;
-    List<IssueEventSummaryModel> events;
+    private List<IssueEventSummaryModel> events;
 }

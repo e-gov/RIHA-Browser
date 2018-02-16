@@ -17,6 +17,7 @@ import java.util.Date;
 @Builder
 public class IssueEventSummaryModel {
 
+    private Long id;
     @NonNull
     private IssueEventType type;
     private String organizationName;
