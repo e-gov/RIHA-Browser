@@ -18,6 +18,7 @@ export class ApproverAddIssueComponent implements OnInit {
   activeUser: User;
   globals: any = G;
   isApprovalRequest: boolean;
+  openIssuesMatrix: any = null;
   approvalRequest: any = {
     title: null,
     comment: null,
@@ -103,6 +104,40 @@ export class ApproverAddIssueComponent implements OnInit {
   ngOnInit() {
     this.activeUser = this.environmentService.getActiveUser();
     this.isApprovalRequest = !this.activeUser.hasApproverRole();
+    if (this.activeUser.canEdit(this.system.getOwnerCode())){
+
+      this.systemsService.getSystemIssues(this.system.details.short_name).then(res =>{
+        this.openIssuesMatrix = {
+          establishment: false,
+          takingIntoUse: false,
+          modification: false,
+          finalization: false
+        };
+        let issues = res.json().content;
+        issues.forEach(v => {
+          if (v.status == 'OPEN' && v.type != null){
+            switch (v.type){
+              case this.globals.issue_type.FINALIZATION_REQUEST: {
+                this.openIssuesMatrix.finalization = true;
+                break;
+              }
+              case this.globals.issue_type.TAKE_INTO_USE_REQUEST: {
+                this.openIssuesMatrix.takingIntoUse = true;
+                break;
+              }
+              case this.globals.issue_type.MODIFICATION_REQUEST: {
+                this.openIssuesMatrix.modification = true;
+                break;
+              }
+              case this.globals.issue_type.ESTABLISHMENT_REQUEST: {
+                this.openIssuesMatrix.establishment = true;
+                break;
+              }
+            }
+          }
+        });
+      });
+    }
   }
 
 }
