@@ -78,7 +78,7 @@ export class RihaNavbarComponent implements OnInit {
     input.value = '';
   }
 
-  constructor(private environmentService: EnvironmentService,
+  constructor(public environmentService: EnvironmentService,
               private modalService: ModalHelperService,
               private sessionHelperService: SessionHelperService,
               private router: Router) {
