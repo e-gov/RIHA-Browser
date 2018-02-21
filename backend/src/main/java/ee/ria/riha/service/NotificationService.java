@@ -113,6 +113,7 @@ public class NotificationService {
         notificationModel.setBcc(participantsEmails.toArray(new String[0]));
 
         notificationModel.setIssue(IssueDataModel.builder()
+                .id(issue.getId())
                 .title(issue.getTitle())
                 .status(issue.getStatus().name())
                 .build());
