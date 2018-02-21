@@ -230,6 +230,18 @@ export class SystemsService {
     return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
   }
 
+  public getOpenApprovalRequests(sort){
+    let params: URLSearchParams = new URLSearchParams();
+
+    params.set('filter', 'status,=,OPEN,sub_type,isnotnull,null');
+    params.set('size', '1000');
+    params.set('sort', sort);
+
+    return this.http.get('/api/v1/issues', {
+      search: params
+    }).toPromise();
+  }
+
   public postSystemIssueComment(issueId, reply) {
     return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
   }
