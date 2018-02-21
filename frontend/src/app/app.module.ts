@@ -70,6 +70,8 @@ import { ProducerDetailsSecurityComponent } from './components/producer-details/
 import { ProducerEditSecurityComponent } from './components/producer-edit/producer-edit-security/producer-edit-security.component';
 import { FileIconComponent } from './components/files-related/file-icon/file-icon.component';
 import { FileHintComponent } from './components/files-related/file-hint/file-hint.component';
+import { ApproverDashboardComponent } from './components/approver-dashboard/approver-dashboard.component';
+import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -100,7 +102,7 @@ const routes: Routes = [
   { path: 'Describe/Edit/:reference', component: ProducerEditComponent },
   { path: 'Kirjelda/Uus', component: ProducerAddComponent },
   { path: 'Describe/New', component: ProducerAddComponent },
-  { path: 'Hinda', component: ApproverListComponent },
+  { path: 'Hinda', component: ApproverDashboardComponent },
   { path: 'Approve', component: ApproverListComponent },
   { path: 'Hinda/Detailid/:short_name', component: ApproverDetailsComponent },
   { path: 'Approve/Details/:short_name', component: ApproverDetailsComponent },
@@ -153,7 +155,9 @@ const routes: Routes = [
     ProducerEditSecurityComponent,
     DatemPipe,
     FileIconComponent,
-    FileHintComponent
+    FileHintComponent,
+    ApproverDashboardComponent,
+    SystemsForApprovalListComponent
   ],
   imports: [
     BrowserModule,

@@ -40,6 +40,9 @@
           <li class="nav-item" [ngClass]="{'active': isListOrSubView()}">
             <a class="nav-link" [routerLink]="'/Infosüsteemid'" [queryParams]="{_dc: getRand()}">RIHA kataloog</a>
           </li>
+          <li *ngIf="environmentService.getUserMatrix().hasApproverRole" class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="'/Hinda'">Hinda</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="https://varamu.riha.ee/">RIHA varamu</a>
           </li>
