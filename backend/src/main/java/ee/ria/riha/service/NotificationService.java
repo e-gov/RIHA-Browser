@@ -145,6 +145,7 @@ public class NotificationService {
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
 
         notificationModel.setIssue(IssueDataModel.builder()
+                .id(issue.getId())
                 .title(issue.getTitle())
                 .type(issue.getType() != null ? issue.getType().name() : null)
                 .build());

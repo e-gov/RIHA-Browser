@@ -73,7 +73,7 @@ public class NewIssueToApproversNotificationHandler extends SimpleHtmlEmailNotif
             model.put("baseUrl", newIssueToApproversDataModel.getBaseUrl());
             model.put("name", newIssueToApproversDataModel.getInfoSystemFullName());
             model.put("shortName", newIssueToApproversDataModel.getInfoSystemShortName());
-            model.put("title", newIssueToApproversDataModel.getIssue().getTitle());
+            model.put("issue", newIssueToApproversDataModel.getIssue());
 
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {
