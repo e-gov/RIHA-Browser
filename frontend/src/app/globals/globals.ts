@@ -18,6 +18,9 @@ export const G = Object.freeze({
     USED_SYSTEM: 'USED_SYSTEM',
     USER_SYSTEM: 'USER_SYSTEM'
   },
+  event_type: {
+    DECISION: 'DECISION'
+  },
   issue_type: {
     ESTABLISHMENT_REQUEST: 'ESTABLISHMENT_REQUEST',
     TAKE_INTO_USE_REQUEST: 'TAKE_INTO_USE_REQUEST',
