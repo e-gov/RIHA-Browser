@@ -29,7 +29,7 @@ export class GeneralHelperService {
   }
 
   public getApprovalStatusText(system){
-    let statusDescription = 'määramata';
+    let statusDescription = 'kooskõlastamata';
     if (system.lastPositiveApprovalRequestType) {
       let status = system.lastPositiveApprovalRequestType;
       switch (status) {
