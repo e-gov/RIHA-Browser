@@ -42,7 +42,12 @@
         <tr *ngFor="let ar of approvalReqestsForDisplay">
           <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', ar.infoSystemShortName]" fragment="tagasiside">{{ ar.infoSystemShortName }}</a></td>
           <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', ar.infoSystemShortName]" fragment="tagasiside">{{ ar.infoSystemFullName}}</a></td>
-          <td class="approval-status">{{ ar.issueType }}</td>
+          <td class="approval-status">
+            <span *ngIf="ar.issueType == globals.issue_type.FINALIZATION_REQUEST">lõpetamine</span>
+            <span *ngIf="ar.issueType == globals.issue_type.MODIFICATION_REQUEST">andmekoosseisu muutmine</span>
+            <span *ngIf="ar.issueType == globals.issue_type.TAKE_INTO_USE_REQUEST">kasutusele võtmine</span>
+            <span *ngIf="ar.issueType == globals.issue_type.ESTABLISHMENT_REQUEST">asutamine</span>
+          </td>
           <td class="approval-date">{{ ar.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}</td>
         </tr>
         </tbody>
