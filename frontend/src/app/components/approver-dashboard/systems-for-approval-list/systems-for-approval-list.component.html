@@ -48,7 +48,7 @@
             <span *ngIf="ar.issueType == globals.issue_type.TAKE_INTO_USE_REQUEST">kasutusele võtmine</span>
             <span *ngIf="ar.issueType == globals.issue_type.ESTABLISHMENT_REQUEST">asutamine</span>
           </td>
-          <td class="approval-date">{{ ar.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}</td>
+          <td class="approval-date" [ngClass]="{'text-danger': isOverdue(ar.dateCreated)}">{{ ar.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}</td>
         </tr>
         </tbody>
       </table>

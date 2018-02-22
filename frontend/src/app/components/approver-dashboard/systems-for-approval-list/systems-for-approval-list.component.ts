@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { GridData } from '../../../models/grid-data';
 import { EnvironmentService } from '../../../services/environment.service';
 import { G } from '../../../globals/globals';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-systems-for-approval-list',
@@ -19,6 +20,11 @@ export class SystemsForApprovalListComponent implements OnInit {
   public onSortChange(property): void{
     this.gridData.changeSortOrder(property);
     this.getOpenApprovalRequestsWithoutDecisions();
+  }
+
+  public isOverdue(date){
+    let momentDate = moment(date);
+    return moment().diff(momentDate, 'days') > 30;
   }
 
   private getOpenApprovalRequestsWithoutDecisions(){
