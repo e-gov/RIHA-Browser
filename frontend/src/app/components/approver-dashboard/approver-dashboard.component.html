@@ -1,0 +1,30 @@
+<app-page-header></app-page-header>
+<div *ngIf="!environmentService.getUserMatrix().isLoggedIn" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun logige sisse</h3>
+  <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele. Kui oled RIHA hindaja, siis <a [routerLink]="'/Login'">logi sisse</a>.</p>
+</div>
+<div *ngIf="environmentService.getUserMatrix().isLoggedIn && !environmentService.getUserMatrix().hasApproverRole" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Lehekülje vaatamiseks ei ole õiguseid</h3>
+  <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele.</p>
+</div>
+<section id="page" class="row no-gutters" *ngIf="environmentService.getUserMatrix().isLoggedIn && environmentService.getUserMatrix().hasApproverRole">
+  <aside class="col sidebar">
+    <nav id="sidemenu" class="sidenav">
+      <div class="list-group">
+        <a pageScroll
+           [pageScrollAdjustHash]="true"
+           [ngClass]="{'active': helper.isMenuActive('kooskolastamisel-infosusteemid', true)}"
+           href="#kooskolastamisel-infosusteemid"
+           class="list-group-item justify-content-between">
+          Kooskõlastamisel infosüsteemid
+        </a>
+      </div>
+    </nav>
+  </aside>
+  <article class="col separate-blocks">
+    <div id="kooskolastamisel-infosusteemid"
+         class="separate-block">
+      <app-systems-for-approval-list></app-systems-for-approval-list>
+    </div>
+  </article>
+</section>

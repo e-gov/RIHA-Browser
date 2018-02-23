@@ -13,14 +13,14 @@
       <div class="list-group">
         <a pageScroll
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('uldkirjeldus', true)}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('uldkirjeldus', true)}"
            href="#uldkirjeldus"
            class="list-group-item justify-content-between">
           Infosüsteemi üldkirjeldus
         </a>
         <a pageScroll
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('tagasiside')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('tagasiside')}"
            href="#tagasiside"
            class="list-group-item justify-content-between">
           Hindajate tagasiside
@@ -28,7 +28,7 @@
         <a pageScroll
            *ngIf="isBlockVisible('dataObjects')"
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('andmed')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('andmed')}"
            href="#andmed"
            class="list-group-item justify-content-between">
           Andmed
@@ -36,7 +36,7 @@
         <a pageScroll
            *ngIf="isBlockVisible('documents')"
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('dokumentatsioon')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('dokumentatsioon')}"
            href="#dokumentatsioon"
            class="list-group-item justify-content-between">
           Dokumentatsioon
@@ -44,7 +44,7 @@
         <a pageScroll
            *ngIf="isBlockVisible('legislations')"
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('oigusaktid')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('oigusaktid')}"
            href="#oigusaktid"
            class="list-group-item justify-content-between">
           Õigusaktid
@@ -52,7 +52,7 @@
         <a pageScroll
            *ngIf="isBlockVisible('security')"
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('turvalisus')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('turvalisus')}"
            href="#turvalisus"
            class="list-group-item justify-content-between">
           Turvalisus
@@ -60,14 +60,14 @@
         <a pageScroll
            *ngIf="isBlockVisible('contacts')"
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('kontaktid')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('kontaktid')}"
            href="#kontaktid"
            class="list-group-item justify-content-between">
           Kontaktid
         </a>
         <a pageScroll
            [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('seosed')}"
+           [ngClass]="{'active': generalHelperService.isMenuActive('seosed')}"
            href="#seosed"
            class="list-group-item justify-content-between">
           Seosed süsteemidega

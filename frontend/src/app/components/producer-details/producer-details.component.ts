@@ -36,21 +36,6 @@ export class ProducerDetailsComponent implements OnInit {
     }
   }
 
-  isMenuActive(blockId, first?){
-    let element = $(`#${blockId}`)[0];
-    if (element){
-      let yOffset = $(element).offset().top - $(document).scrollTop();
-      let height = element.offsetHeight;
-      if (first === true) {
-        return yOffset + height > 0;
-      } else {
-        return yOffset <= 0 && (yOffset + height > 0)
-      }
-    } else {
-      return false
-    }
-  }
-
   isEditingAllowed(){
     let editable = false;
     let user = this.environmentService.getActiveUser();
@@ -138,7 +123,7 @@ export class ProducerDetailsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
-              private generalHelperService: GeneralHelperService,
+              public generalHelperService: GeneralHelperService,
               private route: ActivatedRoute,
               private router: Router,
               private toastrService: ToastrService,
