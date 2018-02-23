@@ -34,7 +34,7 @@ export class AppComponent {
     let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
 
     this.router.routeReuseStrategy.shouldReuseRoute = function(future, curr){
-      if (router.url.split('/')[2] == 'Vaata' && (future.fragment || future.url.length > 0)){
+      if ((router.url.split('/')[2] == 'Vaata' || router.url.split('/')[1] == 'Hinda') && (future.fragment || future.url.length > 0)){
         return true
       } else {
         return false;
