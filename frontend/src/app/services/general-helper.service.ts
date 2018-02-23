@@ -41,6 +41,21 @@ export class GeneralHelperService {
     }
   }
 
+  public isMenuActive(blockId, first?){
+    let element = $(`#${blockId}`)[0];
+    if (element){
+      let yOffset = $(element).offset().top - $(document).scrollTop();
+      let height = element.offsetHeight;
+      if (first === true) {
+        return yOffset + height > 0;
+      } else {
+        return yOffset <= 0 && (yOffset + height > 0)
+      }
+    } else {
+      return false
+    }
+  }
+
   public getSystemStatusText(system){
     let statusDescription = 'määramata';
     if (system.details.meta && system.details.meta.system_status) {
