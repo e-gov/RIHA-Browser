@@ -11,64 +11,48 @@
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': generalHelperService.isMenuActive('uldkirjeldus', true)}"
-           href="#uldkirjeldus"
+        <a [ngClass]="{'active': generalHelperService.isMenuActive('uldkirjeldus', true)}"
+           (click)="generalHelperService.scrollTo('#uldkirjeldus')"
            class="list-group-item justify-content-between">
           Infosüsteemi üldkirjeldus
         </a>
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': generalHelperService.isMenuActive('tagasiside')}"
-           href="#tagasiside"
+        <a [ngClass]="{'active': generalHelperService.isMenuActive('tagasiside')}"
+           (click)="generalHelperService.scrollTo('#tagasiside')"
            class="list-group-item justify-content-between">
           Hindajate tagasiside
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('dataObjects')"
-           [pageScrollAdjustHash]="true"
+        <a *ngIf="isBlockVisible('dataObjects')"
            [ngClass]="{'active': generalHelperService.isMenuActive('andmed')}"
-           href="#andmed"
+           (click)="generalHelperService.scrollTo('#andmed')"
            class="list-group-item justify-content-between">
           Andmed
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('documents')"
-           [pageScrollAdjustHash]="true"
+        <a *ngIf="isBlockVisible('documents')"
            [ngClass]="{'active': generalHelperService.isMenuActive('dokumentatsioon')}"
-           href="#dokumentatsioon"
+           (click)="generalHelperService.scrollTo('#dokumentatsioon')"
            class="list-group-item justify-content-between">
           Dokumentatsioon
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('legislations')"
-           [pageScrollAdjustHash]="true"
+        <a *ngIf="isBlockVisible('legislations')"
            [ngClass]="{'active': generalHelperService.isMenuActive('oigusaktid')}"
-           href="#oigusaktid"
+           (click)="generalHelperService.scrollTo('#oigusaktid')"
            class="list-group-item justify-content-between">
           Õigusaktid
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('security')"
-           [pageScrollAdjustHash]="true"
+        <a *ngIf="isBlockVisible('security')"
            [ngClass]="{'active': generalHelperService.isMenuActive('turvalisus')}"
-           href="#turvalisus"
+           (click)="generalHelperService.scrollTo('#turvalisus')"
            class="list-group-item justify-content-between">
           Turvalisus
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('contacts')"
-           [pageScrollAdjustHash]="true"
+        <a *ngIf="isBlockVisible('contacts')"
            [ngClass]="{'active': generalHelperService.isMenuActive('kontaktid')}"
-           href="#kontaktid"
+           (click)="generalHelperService.scrollTo('#kontaktid')"
            class="list-group-item justify-content-between">
           Kontaktid
         </a>
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': generalHelperService.isMenuActive('seosed')}"
-           href="#seosed"
+        <a [ngClass]="{'active': generalHelperService.isMenuActive('seosed')}"
+           (click)="generalHelperService.scrollTo('#seosed')"
            class="list-group-item justify-content-between">
           Seosed süsteemidega
         </a>

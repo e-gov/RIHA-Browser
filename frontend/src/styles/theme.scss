@@ -799,6 +799,9 @@ $CONTENTS
     box-shadow: 0px 0px 10px 0px rgba($black, 0.1);
     position: sticky;
     top: 10px;
+    a {
+      cursor: pointer;
+    }
     .list-group {
         &.collapse {
             display: none;

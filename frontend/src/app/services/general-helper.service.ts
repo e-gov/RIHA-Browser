@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { G } from '../globals/globals';
 import { isNullOrUndefined } from 'util';
 import { Title } from '@angular/platform-browser';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { WindowRefService } from '../services/window-ref.service';
+
 
 declare var $: any;
 
@@ -134,6 +138,29 @@ export class GeneralHelperService {
     return $.extend(true, {}, obj);
   }
 
-  constructor(private title: Title) { }
+  public scrollTo(el){
+    $('html, body').animate({
+      scrollTop: $(el).offset().top
+    }, 500);
+    this.location.replaceState(this.router.url.split('#')[0] + el)
+  }
+
+  public adjustSection(hash?){
+    hash = hash || this.winRef.nativeWindow.location.hash;
+    if (hash){
+      let elId = decodeURI(hash.replace('#',''));
+      let el = $(hash)[0];
+      if (el){
+        $('html, body').animate({
+          scrollTop: $(el).offset().top
+        }, 500);
+      }
+    }
+  }
+
+  constructor(private title: Title,
+              private winRef: WindowRefService,
+              private location: Location,
+              private router: Router) { }
 
 }

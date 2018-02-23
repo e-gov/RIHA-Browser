@@ -3,6 +3,7 @@ import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { GridData } from '../../../models/grid-data';
 import { EnvironmentService } from '../../../services/environment.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 import { G } from '../../../globals/globals';
 import * as moment from 'moment';
 
@@ -51,6 +52,7 @@ export class SystemsForApprovalListComponent implements OnInit {
           }
         }
       });
+      this.helper.adjustSection();
     }, err => {
       this.loaded = true;
       this.toastrService.error('Serveri viga!');
@@ -58,6 +60,7 @@ export class SystemsForApprovalListComponent implements OnInit {
   }
 
   constructor(private systemsService: SystemsService,
+              private helper: GeneralHelperService,
               private environmentService: EnvironmentService,
               private toastrService: ToastrService) { }
 
