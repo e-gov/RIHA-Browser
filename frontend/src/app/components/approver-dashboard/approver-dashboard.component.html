@@ -11,10 +11,8 @@
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': helper.isMenuActive('kooskolastamisel-infosusteemid', true)}"
-           href="#kooskolastamisel-infosusteemid"
+        <a [ngClass]="{'active': helper.isMenuActive('kooskolastamisel-infosusteemid', true)}"
+           (click)="generalHelperService.scrollTo('#kooskolastamisel-infosusteemid')"
            class="list-group-item justify-content-between">
           Kooskõlastamisel infosüsteemid
         </a>

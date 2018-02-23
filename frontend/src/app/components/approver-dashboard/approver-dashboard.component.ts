@@ -10,6 +10,7 @@ import { EnvironmentService } from '../../services/environment.service';
 export class ApproverDashboardComponent implements OnInit {
 
   constructor(public helper: GeneralHelperService,
+              public generalHelperService: GeneralHelperService,
               public environmentService: EnvironmentService) { }
 
   ngOnInit() {

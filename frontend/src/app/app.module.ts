@@ -10,7 +10,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CustomFormsModule } from 'ng2-validation';
 import { HttpInterceptorModule } from 'ng-http-interceptor';
 import { UiSwitchModule } from 'ngx-ui-switch/src';
@@ -166,7 +165,6 @@ const routes: Routes = [
     TagInputModule,
     BrowserAnimationsModule,
     CustomFormsModule,
-    Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
     HttpInterceptorModule,
     UiSwitchModule ,
