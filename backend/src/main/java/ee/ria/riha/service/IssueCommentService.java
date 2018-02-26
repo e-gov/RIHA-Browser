@@ -7,6 +7,7 @@ import ee.ria.riha.domain.model.IssueEntityType;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.DashboardIssueComment;
 import ee.ria.riha.web.model.IssueCommentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,21 @@ public class IssueCommentService {
         comment.setOrganization_code(issueComment.getOrganizationCode());
 
         return comment;
+    };
+
+    public static final Function<Comment, DashboardIssueComment> COMMENT_TO_DASHBOARD_ISSUE_COMMENT = comment -> {
+        if (comment == null) {
+            return null;
+        }
+
+        return DashboardIssueComment.builder()
+                .id(comment.getComment_id())
+                .dateCreated(comment.getCreation_date())
+                .authorName(comment.getAuthor_name())
+                .authorPersonalCode(comment.getAuthor_personal_code())
+                .organizationName(comment.getOrganization_name())
+                .organizationCode(comment.getOrganization_code())
+                .build();
     };
 
     private CommentRepository commentRepository;

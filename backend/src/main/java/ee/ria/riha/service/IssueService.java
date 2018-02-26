@@ -6,6 +6,7 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.DashboardIssue;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
@@ -28,6 +29,7 @@ import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.StringUtils.hasText;
+import static ee.ria.riha.service.IssueCommentService.COMMENT_TO_DASHBOARD_ISSUE_COMMENT;
 
 /**
  * Info system issue service
@@ -102,6 +104,20 @@ public class IssueService {
                 .organizationName(comment.getOrganization_name())
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
+                .build();
+    };
+
+    private static final Function<Comment, DashboardIssue> COMMENT_TO_DASHBOARD_ISSUE = comment -> {
+        if (comment == null) {
+            return null;
+        }
+
+        return DashboardIssue.builder()
+                .id(comment.getComment_id())
+                .title(comment.getTitle())
+                .infoSystemFullName(comment.getInfosystem_full_name())
+                .infoSystemShortName(comment.getInfosystem_short_name())
+                .lastComment(COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment.getLast_comment()))
                 .build();
     };
 
@@ -181,6 +197,16 @@ public class IssueService {
                 response.getTotalElements(),
                 response.getContent().stream()
                         .map(COMMENT_TO_RIHA_ISSUE_SUMMARY)
+                        .collect(toList()));
+    }
+
+    public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
+        PagedResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
+
+        return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_DASHBOARD_ISSUE)
                         .collect(toList()));
     }
 
