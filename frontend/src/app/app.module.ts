@@ -76,6 +76,7 @@ import { DiscussionsListComponent } from './components/approver-dashboard/active
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
+import { LinkifyPipe } from './pipes/linkify.pipe';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -160,7 +161,8 @@ const routes: Routes = [
     ApproverDashboardComponent,
     SystemsForApprovalListComponent,
     ActiveDiscussionsComponent,
-    DiscussionsListComponent
+    DiscussionsListComponent,
+    LinkifyPipe
   ],
   imports: [
     BrowserModule,
