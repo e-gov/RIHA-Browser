@@ -25,7 +25,7 @@
         <strong>{{ getOrganizationWithUser(feedback) }}</strong> - {{ feedback.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
       <div class="card-content p-2">
-        <p class="user-multiline-text">{{ feedback.comment }}</p>
+        <p class="user-multiline-text" [innerHTML]="feedback.comment | linkify"></p>
       </div>
     </div>
     <div *ngFor="let reply of replies" class="m-4">
@@ -34,7 +34,7 @@
           <strong>{{ getOrganizationWithUser(reply) }}</strong> - {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
         </div>
         <div class="card-content p-2">
-          <p class="user-multiline-text">{{ reply.comment }}</p>
+          <p class="user-multiline-text" [innerHTML]="reply.comment | linkify"></p>
         </div>
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && !reply.resolutionType" class="card-text ml-4">
