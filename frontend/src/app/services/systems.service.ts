@@ -230,7 +230,25 @@ export class SystemsService {
     return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
   }
 
-  public getOpenApprovalRequests(sort){
+  public getActiveDiscussions(sort, relation?) {
+    let params: URLSearchParams = new URLSearchParams();
+    params.append('size', '1000');
+    params.append('filter', 'status:OPEN');
+    params.append('filter', 'sub_type');
+
+    let urlToUse = '/api/v1/dashboard/issues';
+    if (relation == 'person'){
+      urlToUse += '/my';
+    } else if (relation == 'organization'){
+      urlToUse += '/org';
+    }
+
+    return this.http.get(urlToUse, {
+      search: params
+    }).toPromise();
+  }
+
+  public getOpenApprovalRequests(sort) {
     let params: URLSearchParams = new URLSearchParams();
 
     params.set('filter', 'status,=,OPEN,sub_type,isnotnull,null');
