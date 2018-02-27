@@ -17,12 +17,23 @@
           Kooskõlastamisel infosüsteemid
         </a>
       </div>
+      <div class="list-group">
+        <a [ngClass]="{'active': helper.isMenuActive('aktiivsed-arutelud')}"
+           (click)="generalHelperService.scrollTo('#aktiivsed-arutelud')"
+           class="list-group-item justify-content-between">
+          Aktiivsed arutelud
+        </a>
+      </div>
     </nav>
   </aside>
   <article class="col separate-blocks">
     <div id="kooskolastamisel-infosusteemid"
          class="separate-block">
       <app-systems-for-approval-list></app-systems-for-approval-list>
+    </div>
+    <div id="aktiivsed-arutelud"
+         class="separate-block">
+      <app-active-discussions></app-active-discussions>
     </div>
   </article>
 </section>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { GeneralHelperService } from '../../services/general-helper.service';
 import { EnvironmentService } from '../../services/environment.service';
 
@@ -14,6 +14,12 @@ export class ApproverDashboardComponent implements OnInit {
               public environmentService: EnvironmentService) { }
 
   ngOnInit() {
+    this.generalHelperService.setRihaPageTitle('Hinda');
+  }
+
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+
   }
 
 }
