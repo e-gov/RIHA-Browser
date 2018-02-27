@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck, KeyValueDiffers } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { GridData } from '../../../models/grid-data';
@@ -6,6 +6,7 @@ import { EnvironmentService } from '../../../services/environment.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 import { G } from '../../../globals/globals';
 import * as moment from 'moment';
+import { UserMatrix } from '../../../models/user-matrix';
 
 @Component({
   selector: 'app-systems-for-approval-list',
@@ -17,6 +18,8 @@ export class SystemsForApprovalListComponent implements OnInit {
   public gridData: GridData = new GridData();
   public approvalReqestsForDisplay = [];
   private globals: any = G;
+  private differ: any;
+  private userMatrix: UserMatrix;
 
   public onSortChange(property): void{
     this.gridData.changeSortOrder(property);
@@ -62,11 +65,21 @@ export class SystemsForApprovalListComponent implements OnInit {
   constructor(private systemsService: SystemsService,
               private helper: GeneralHelperService,
               private environmentService: EnvironmentService,
-              private toastrService: ToastrService) { }
+              private differs: KeyValueDiffers,
+              private toastrService: ToastrService) {
+    this.differ = differs.find({}).create(null);
+  }
 
   ngOnInit() {
     this.gridData.changeSortOrder('creation_date', 'ASC');
     this.getOpenApprovalRequestsWithoutDecisions();
   }
 
+  ngDoCheck() {
+    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    if (changes && (this.loaded || !this.environmentService.getUserMatrix().isOrganizationSelected)){
+      this.loaded = false;
+      this.getOpenApprovalRequestsWithoutDecisions();
+    }
+  }
 }
