@@ -230,7 +230,23 @@ export class SystemsService {
     return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
   }
 
-  public getOpenApprovalRequests(sort){
+  public getActiveDiscussions(sort, relation?) {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('size', '1000');
+    params.set('sort', sort);
+
+    if (relation == 'person'){
+    
+    } else if (relation == 'organization'){
+      
+    }
+
+    return this.http.get('/api/v1/issues', {
+      search: params
+    }).toPromise();
+  }
+
+  public getOpenApprovalRequests(sort) {
     let params: URLSearchParams = new URLSearchParams();
 
     params.set('filter', 'status,=,OPEN,sub_type,isnotnull,null');

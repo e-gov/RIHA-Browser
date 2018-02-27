@@ -71,6 +71,8 @@ import { FileIconComponent } from './components/files-related/file-icon/file-ico
 import { FileHintComponent } from './components/files-related/file-hint/file-hint.component';
 import { ApproverDashboardComponent } from './components/approver-dashboard/approver-dashboard.component';
 import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
+import { ActiveDiscussionsComponent } from './components/approver-dashboard/active-discussions/active-discussions.component';
+import { DiscussionsListComponent } from './components/approver-dashboard/active-discussions/discussions-list/discussions-list.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -156,7 +158,9 @@ const routes: Routes = [
     FileIconComponent,
     FileHintComponent,
     ApproverDashboardComponent,
-    SystemsForApprovalListComponent
+    SystemsForApprovalListComponent,
+    ActiveDiscussionsComponent,
+    DiscussionsListComponent
   ],
   imports: [
     BrowserModule,
