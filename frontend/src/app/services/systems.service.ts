@@ -232,16 +232,18 @@ export class SystemsService {
 
   public getActiveDiscussions(sort, relation?) {
     let params: URLSearchParams = new URLSearchParams();
-    params.set('size', '1000');
-    params.set('sort', sort);
+    params.append('size', '1000');
+    params.append('filter', 'status:OPEN');
+    params.append('filter', 'sub_type');
 
+    let urlToUse = '/api/v1/dashboard/issues';
     if (relation == 'person'){
-    
+      urlToUse += '/my';
     } else if (relation == 'organization'){
-      
+      urlToUse += '/org';
     }
 
-    return this.http.get('/api/v1/issues', {
+    return this.http.get(urlToUse, {
       search: params
     }).toPromise();
   }
