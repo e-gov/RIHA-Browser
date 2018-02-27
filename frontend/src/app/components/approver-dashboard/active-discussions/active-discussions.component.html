@@ -1,0 +1,21 @@
+<section class="col card p-3 main-content">
+  <div class="panel-action-heading">
+    Aktiivsed arutelud
+  </div>
+  <div class="my-1 card-content col-lg-12">
+    <ngb-tabset>
+      <ngb-tab>
+        <ng-template ngbTabTitle>Minuga seotud arutelud</ng-template>
+        <ng-template ngbTabContent>
+          <app-discussions-list [relation]="'person'"></app-discussions-list>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab>
+        <ng-template ngbTabTitle>Minu asutusega seotud arutelud</ng-template>
+        <ng-template ngbTabContent>
+          <app-discussions-list [relation]="'organization'"></app-discussions-list>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+</section>
