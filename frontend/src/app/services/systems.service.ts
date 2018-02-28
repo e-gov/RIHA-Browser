@@ -123,16 +123,32 @@ export class SystemsService {
         filtersArr.push(`stored_data,jarr,%${ filters.storedData }%`);
       }
       if (filters.systemStatus){
-        filtersArr.push(`meta.system_status.status,jilike,${ filters.systemStatus }`);
+        if (filters.systemStatus == 'null'){
+          filtersArr.push('meta.system_status.status,isnull,null');
+        } else {
+          filtersArr.push(`meta.system_status.status,jilike,${ filters.systemStatus }`);
+        }
       }
       if (filters.developmentStatus){
-        filtersArr.push(`meta.development_status,jilike,${ filters.developmentStatus }`);
+        if (filters.developmentStatus == 'null'){
+          filtersArr.push('meta.development_status,isnull,null');
+        } else {
+          filtersArr.push(`meta.development_status,jilike,${ filters.developmentStatus }`);
+        }
       }
       if (filters.lastPositiveApprovalRequestType){
-        filtersArr.push(`last_positive_approval_request_type,ilike,${ filters.lastPositiveApprovalRequestType }`);
+        if (filters.lastPositiveApprovalRequestType == 'null'){
+          filtersArr.push('last_positive_approval_request_type,isnull,null');
+        } else {
+          filtersArr.push(`last_positive_approval_request_type,ilike,${ filters.lastPositiveApprovalRequestType }`);
+        }
       }
       if (filters.xRoadStatus){
-        filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
+        if (filters.xRoadStatus == 'null'){
+          filtersArr.push('meta.x_road_status.status,isnull,null');
+        } else {
+          filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
+        }
       }
       if (filters.dateCreatedFrom){
         filtersArr.push(`j_creation_timestamp,>,${ filters.dateCreatedFrom }`);
