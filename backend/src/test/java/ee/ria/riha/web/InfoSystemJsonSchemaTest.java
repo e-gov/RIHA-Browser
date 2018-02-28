@@ -1,5 +1,8 @@
 package ee.ria.riha.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.github.fge.jackson.JsonLoader;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.JsonSecurityDetailsValidationService;
@@ -109,4 +112,52 @@ public class InfoSystemJsonSchemaTest {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
+    @Test
+    public void successfullyValidatesJsonWhenDocumentTypeIsNull() {
+        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                .add(createDocument("document", "document_url", null));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test
+    public void successfullyValidatesJsonWhenDocumentTypeValueBelongsToEnumValues() {
+        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                .add(createDocument("document", "document_url", "DOC_TYPE_CLASSIFICATOR"));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test(expected = JsonValidationException.class)
+    public void failsWhenDocumentTypeValueIsNotNullAndDoesNotBelongToEnumValues() {
+        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                .add(createDocument("document", "document_url", "INVALID_TYPE"));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test
+    public void successfullyValidatesJsonWhenLegislationTypeIsNull() {
+        ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
+                .add(createDocument("legislation", "legislation_url", null));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test
+    public void successfullyValidatesJsonWhenLegislationTypeValueBelongsToEnumValues() {
+        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                .add(createDocument("legislation", "legislation_url", "DOC_TYPE_CLASSIFICATOR"));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test(expected = JsonValidationException.class)
+    public void failsWhenLegislationTypeValueIsNotNullAndDoesNotBelongToEnumValues() {
+        ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
+                .add(createDocument("legislation", "legislation_url", "INVALID_TYPE"));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    private JsonNode createDocument(String name, String url, String type) {
+        return JsonNodeFactory.instance.objectNode()
+                .put("name", name)
+                .put("url", url)
+                .put("type", type);
+    }
 }
