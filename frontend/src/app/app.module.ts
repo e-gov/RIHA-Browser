@@ -73,6 +73,7 @@ import { ApproverDashboardComponent } from './components/approver-dashboard/appr
 import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
 import { ActiveDiscussionsComponent } from './components/approver-dashboard/active-discussions/active-discussions.component';
 import { DiscussionsListComponent } from './components/approver-dashboard/active-discussions/discussions-list/discussions-list.component';
+import { BrowserFilesListComponent } from './components/browser-list/browser-files-list/browser-files-list.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -92,6 +93,7 @@ const routes: Routes = [
   { path: 'Home', component: FrontPageComponent },
   { path: 'Login', component: LoginFormComponent },
   { path: 'Infosüsteemid', component: BrowserListComponent },
+  { path: 'Andmeobjektid', component: BrowserFilesListComponent },
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
@@ -162,7 +164,8 @@ const routes: Routes = [
     SystemsForApprovalListComponent,
     ActiveDiscussionsComponent,
     DiscussionsListComponent,
-    LinkifyPipe
+    LinkifyPipe,
+    BrowserFilesListComponent
   ],
   imports: [
     BrowserModule,
