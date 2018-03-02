@@ -34,8 +34,8 @@ public class InfoSystem {
     private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
     private static final String DATA_FILES_KEY = "data_files";
     private static final String DOCUMENTS_KEY = "documents";
-    private static final String DOCUMENT_METADATA_URL_KEY = "url";
-    private static final String DOCUMENT_METADATA_NAME_KEY = "name";
+    private static final String FILE_METADATA_URL_KEY = "url";
+    private static final String FILE_METADATA_NAME_KEY = "name";
     private static final String DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
 
     private Long id;
@@ -288,23 +288,28 @@ public class InfoSystem {
      *
      * @return list of document metadata or empty in case documents node does not exists, not an array or empty
      */
-    public List<InfoSystemDocumentMetadata> getDocumentMetadata() {
+    public List<InfoSystemFileMetadata> getDocumentMetadata() {
         JsonNode documentsNode = jsonContent.path(DOCUMENTS_KEY);
         if (!documentsNode.isArray()) {
             return new ArrayList<>();
         }
 
-        return extractDocumentMetadata(documentsNode);
+        return extractFileMetadata(documentsNode, true);
     }
 
-    private ArrayList<InfoSystemDocumentMetadata> extractDocumentMetadata(JsonNode documentsNode) {
-        ArrayList<InfoSystemDocumentMetadata> documents = new ArrayList<>();
+    private ArrayList<InfoSystemFileMetadata> extractFileMetadata(JsonNode documentsNode, boolean accessRestrictionNeedsToBeSet) {
+        ArrayList<InfoSystemFileMetadata> documents = new ArrayList<>();
         for (JsonNode documentNode : documentsNode) {
-            documents.add(InfoSystemDocumentMetadata.builder()
-                    .name(documentNode.path(DOCUMENT_METADATA_NAME_KEY).asText(null))
-                    .url(documentNode.path(DOCUMENT_METADATA_URL_KEY).asText(null))
-                    .accessRestricted(documentNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY))
-                    .build());
+            InfoSystemFileMetadata metadata = new InfoSystemDocumentMetadata();
+
+            metadata.setName(documentNode.path(FILE_METADATA_NAME_KEY).asText(null));
+            metadata.setUrl(documentNode.path(FILE_METADATA_URL_KEY).asText(null));
+
+            if (accessRestrictionNeedsToBeSet) {
+                ((InfoSystemDocumentMetadata) metadata).setAccessRestricted(documentNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
+            }
+
+            documents.add(metadata);
         }
         return documents;
     }
@@ -314,13 +319,13 @@ public class InfoSystem {
      *
      * @return list of data file metadata or empty list in case data file node does not exists, not an array or empty
      */
-    public List<InfoSystemDocumentMetadata> getDataFileMetadata() {
+    public List<InfoSystemFileMetadata> getDataFileMetadata() {
         JsonNode dataFilesNode = jsonContent.path(DATA_FILES_KEY);
         if (!dataFilesNode.isArray()) {
             return new ArrayList<>();
         }
 
-        return extractDocumentMetadata(dataFilesNode);
+        return extractFileMetadata(dataFilesNode, false);
     }
 
     /**
