@@ -1,0 +1,36 @@
+<div>
+  <app-alert *ngIf="hasErrors" [conf]="{
+    type: 'danger',
+    heading: 'Valideerimise viga',
+    text: 'Infosüsteemi kirjelduse valideerimisel tuvastati puuduseid, mille tõttu ei pruugi infosüsteemi kooskõlastamine võimalik olla.'
+  }"></app-alert>
+  <label>Automaatkontroll:</label>
+  <app-check-result-row [text]="'Süsteemi staatus'"
+                        [successText]="'Süsteemi staatus on sisestatud'"
+                        [failText]="'Süsteemi staatus ei ole sisestatud'"
+                        [systemCheckStatus]="systemCheckMatrix.systemStatus"></app-check-result-row>
+  <app-check-result-row [text]="'Arenduse staatus'"
+                        [successText]="'Arenduse staatus on sisestatud'"
+                        [failText]="'Arenduse staatus ei ole sisestatud'"
+                        [systemCheckStatus]="systemCheckMatrix.developmentStatus"></app-check-result-row>
+  <app-check-result-row [text]="'Infosüsteemi kogutavad põhiandmed'"
+                        [successText]="'Infosüsteemi kogutavad põhiandmed on lisatud'"
+                        [failText]="'Infosüsteemi kogutavad põhiandmed on lisamata'"
+                        [systemCheckStatus]="systemCheckMatrix.storedDataStatus"></app-check-result-row>
+  <app-check-result-row [text]="'Detailne andmekoosseis'"
+                        [successText]="'Detailne andmekoosseisu fail on lisatud'"
+                        [failText]="'Detailne andmekoosseisu fail on lisamata'"
+                        [systemCheckStatus]="systemCheckMatrix.dataFilesStatus"></app-check-result-row>
+  <app-check-result-row [text]="'Õigusaktid'"
+                        [successText]="'Õigusaktid on lisatud'"
+                        [failText]="'Õigusaktid on lisamata'"
+                        [systemCheckStatus]="systemCheckMatrix.legislationsStatus"></app-check-result-row>
+  <app-check-result-row [text]="'Dokumentatsioon'"
+                        [successText]="'Dokumentatsioon on lisatud'"
+                        [failText]="'Dokumentatsioon on lisamata'"
+                        [systemCheckStatus]="systemCheckMatrix.documentsStatus"></app-check-result-row>
+  <app-check-result-row [text]="'Kontaktid'"
+                        [successText]="'Kontaktid on lisatud'"
+                        [failText]="'Kontaktid on lisamata'"
+                        [systemCheckStatus]="systemCheckMatrix.contactsStatus"></app-check-result-row>
+</div>
