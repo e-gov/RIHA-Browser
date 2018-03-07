@@ -45,6 +45,13 @@ export const G = Object.freeze({
     medium: 'M',
     low: 'L'
   },
+  system_check_status: {
+    CANCELLED: 'CANCELLED',
+    PENDING: 'PENDING',
+    IN_PROGRESS: 'IN_PROGRESS',
+    FAILED: 'FAILED',
+    PASSED: 'PASSED'
+  },
   access_restriction_reasons: [{
     code: 18,
     legislation: 'AvTS § 35 lg 1 p 9',

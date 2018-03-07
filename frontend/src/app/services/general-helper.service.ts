@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { WindowRefService } from '../services/window-ref.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 declare var $: any;
@@ -158,9 +159,14 @@ export class GeneralHelperService {
     }
   }
 
+  public showError(txt?){
+    this.toastrService.error(txt ? txt : 'Serveri viga')
+  }
+
   constructor(private title: Title,
               private winRef: WindowRefService,
               private location: Location,
+              private toastrService: ToastrService,
               private router: Router) { }
 
 }
