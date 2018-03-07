@@ -60,7 +60,7 @@ export class ApproverSystemCheckComponent implements OnInit {
   }
 
   private checkSystemStatus(){
-    if (this.system.details.meta && this.system.details.meta.system_status){
+    if (this.system.details.meta && this.system.details.meta.system_status && this.system.details.meta.system_status.status){
       this.systemCheckMatrix.systemStatus = this.globals.system_check_status.PASSED;
     } else {
       this.systemCheckMatrix.systemStatus = this.globals.system_check_status.FAILED;
