@@ -1,5 +1,6 @@
 package ee.ria.riha.conf;
 
+import ee.ria.riha.storage.util.CompositeFilterArgumentResolver;
 import ee.ria.riha.storage.util.FilterableArgumentResolver;
 import ee.ria.riha.storage.util.PageableArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         super.addArgumentResolvers(argumentResolvers);
         argumentResolvers.add(new PageableArgumentResolver());
         argumentResolvers.add(new FilterableArgumentResolver());
+        argumentResolvers.add(new CompositeFilterArgumentResolver());
     }
 
     @Override
