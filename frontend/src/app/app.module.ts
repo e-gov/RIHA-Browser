@@ -31,8 +31,6 @@ import { ModalHelperService } from './services/modal-helper.service';
 //components
 import { CardDeckComponent } from './components/card-deck/card-deck.component';
 import { ProducerListComponent } from './components/producer-list/producer-list.component';
-import { ApproverListComponent } from './components/approver-list/approver-list.component';
-import { ApproverDetailsComponent } from './components/approver-details/approver-details.component';
 import { BrowserListComponent } from './components/browser-list/browser-list.component';
 import { FrontPageComponent } from './components/front-page/front-page.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
@@ -73,6 +71,8 @@ import { ApproverDashboardComponent } from './components/approver-dashboard/appr
 import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
 import { ActiveDiscussionsComponent } from './components/approver-dashboard/active-discussions/active-discussions.component';
 import { DiscussionsListComponent } from './components/approver-dashboard/active-discussions/discussions-list/discussions-list.component';
+import { ApproverSystemCheckComponent } from './components/approver-system-check/approver-system-check.component';
+import { CheckResultRowComponent } from './components/approver-system-check/check-result-row/check-result-row.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -105,11 +105,6 @@ const routes: Routes = [
   { path: 'Kirjelda/Uus', component: ProducerAddComponent },
   { path: 'Describe/New', component: ProducerAddComponent },
   { path: 'Hinda', component: ApproverDashboardComponent },
-  { path: 'Approve', component: ApproverListComponent },
-  { path: 'Hinda/Detailid/:short_name', component: ApproverDetailsComponent },
-  { path: 'Approve/Details/:short_name', component: ApproverDetailsComponent },
-  { path: 'Hinda/Detailid', component: ApproverDetailsComponent },
-  { path: 'Approve/Details', component: ApproverDetailsComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -120,8 +115,6 @@ const routes: Routes = [
     CardDeckComponent,
     ProducerListComponent,
     ProducerDetailsComponent,
-    ApproverListComponent,
-    ApproverDetailsComponent,
     BrowserListComponent,
     FrontPageComponent,
     PageHeaderComponent,
@@ -162,7 +155,9 @@ const routes: Routes = [
     SystemsForApprovalListComponent,
     ActiveDiscussionsComponent,
     DiscussionsListComponent,
-    LinkifyPipe
+    LinkifyPipe,
+    ApproverSystemCheckComponent,
+    CheckResultRowComponent
   ],
   imports: [
     BrowserModule,

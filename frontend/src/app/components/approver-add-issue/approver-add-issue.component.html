@@ -40,6 +40,7 @@
             </form>
             <form #approvalRequestForm="ngForm">
               <div *ngIf="isApprovalRequest && openIssuesMatrix">
+                <app-approver-system-check [system]="system"></app-approver-system-check>
                 <div class="form-group">
                   <label class="text-muted mb-0">Soovin saada tagasisidet: *</label>
                   <small class="label-small-text text-muted">vali, millist kooskõlastust on andmekogule vaja</small>
