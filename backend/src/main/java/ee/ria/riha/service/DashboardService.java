@@ -1,5 +1,6 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.domain.model.IssueStatus;
 import ee.ria.riha.storage.util.CompositeFilterRequest;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
@@ -17,6 +18,7 @@ public class DashboardService {
     private static final String PROPERTY_AUTHOR_PERSONAL_CODE = "author_personal_code";
     private static final String PROPERTY_ORGANIZATION_CODE = "organization_code";
     private static final String ACTION_AUTHOR_OR_ORGANIZATION_CODE = "author-or-organization-code";
+    private static final String ACTION_ORGANIZATION_INFOSYSTEMS_RELATED_ISSUES = "organization-infosystems-issues";
 
     private IssueService issueService;
 
@@ -25,6 +27,15 @@ public class DashboardService {
 
         filter.addFilterParameter(ACTION_AUTHOR_OR_ORGANIZATION_CODE);
         filter.addFilterParameter(preparePropertyFilterParameter(requestType));
+
+        return issueService.listDashboardIssues(pageable, filter);
+    }
+    public PagedResponse<DashboardIssue> listOrganizationIssues(CompositeFilterRequest filter, Pageable pageable,
+                                                                String organizationCode) {
+
+        filter.addFilterParameter(ACTION_ORGANIZATION_INFOSYSTEMS_RELATED_ISSUES);
+        filter.addFilterParameter(prepareOrganizationCodeFilterParameter(organizationCode));
+        filter.addFilterParameter(prepareIssueStatusFilterParameter(IssueStatus.OPEN));
 
         return issueService.listDashboardIssues(pageable, filter);
     }
@@ -39,6 +50,14 @@ public class DashboardService {
                     .getCode());
             default: return null;
         }
+    }
+
+    private String prepareIssueStatusFilterParameter(IssueStatus issueStatus) {
+        return "status:" + issueStatus;
+    }
+
+    private String prepareOrganizationCodeFilterParameter(String organizationCode) {
+        return "organization_code:" + organizationCode;
     }
 
     @Autowired

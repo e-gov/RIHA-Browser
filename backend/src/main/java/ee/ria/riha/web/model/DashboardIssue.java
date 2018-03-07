@@ -1,5 +1,6 @@
 package ee.ria.riha.web.model;
 
+import ee.ria.riha.domain.model.IssueType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 public class DashboardIssue {
 
     private Long id;
+    private IssueType type;
     private String title;
     private String infoSystemFullName;
     private String infoSystemShortName;

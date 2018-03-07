@@ -120,10 +120,12 @@ public class IssueService {
 
         return DashboardIssue.builder()
                 .id(comment.getComment_id())
+                .type(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .title(comment.getTitle())
                 .infoSystemFullName(comment.getInfosystem_full_name())
                 .infoSystemShortName(comment.getInfosystem_short_name())
-                .lastComment(COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment.getLast_comment()))
+                .lastComment(comment.getLast_comment_id() != null ?
+                        COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment) : null)
                 .build();
     };
 
