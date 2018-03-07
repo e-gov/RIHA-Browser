@@ -71,6 +71,8 @@ import { ApproverDashboardComponent } from './components/approver-dashboard/appr
 import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
 import { ActiveDiscussionsComponent } from './components/approver-dashboard/active-discussions/active-discussions.component';
 import { DiscussionsListComponent } from './components/approver-dashboard/active-discussions/discussions-list/discussions-list.component';
+import { ApproverSystemCheckComponent } from './components/approver-system-check/approver-system-check.component';
+import { CheckResultRowComponent } from './components/approver-system-check/check-result-row/check-result-row.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -153,7 +155,9 @@ const routes: Routes = [
     SystemsForApprovalListComponent,
     ActiveDiscussionsComponent,
     DiscussionsListComponent,
-    LinkifyPipe
+    LinkifyPipe,
+    ApproverSystemCheckComponent,
+    CheckResultRowComponent
   ],
   imports: [
     BrowserModule,
