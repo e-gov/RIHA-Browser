@@ -1,0 +1,54 @@
+<app-page-header [text]="'Minu arutelud'"></app-page-header>
+<div *ngIf="!userMatrix.isLoggedIn" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun logige sisse</h3>
+  <p class="mb-0">Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
+</div>
+<div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun valige asutus</h3>
+  <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
+</div>
+<div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole || !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
+  <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
+</div>
+<section *ngIf="userMatrix.isLoggedIn && userMatrix.isOrganizationSelected" class="col card p-3">
+  <div class="form-group">
+    <a [routerLink]="'/Kirjelda'" class="pull-left">Minu infosüsteemid</a>
+    <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left active-inner-router-link ml-3">Minu arutelud</a>
+  </div>
+  <div *ngIf="loaded" class="table-responsive">
+    <div class="mb-2 mt-3">
+      Leitud {{ gridData.content.length }}
+    </div>
+    <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+      <thead class="thead-default">
+      <th>
+        <span class="btn-sm btn text-nowrap">Infosüsteemi nimi</span>
+      </th>
+      <th>
+        <span class="btn-sm btn text-nowrap">Lühinimi</span>
+      </th>
+      <th>
+        <span class="btn-sm btn text-nowrap">Pealkiri</span>
+      </th>
+      <th>
+        <span class="btn-sm btn text-nowrap">Viimane kommentaar  <i class="fa fa-sort-desc" aria-hidden="true"></i></span>
+      </th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let ad of gridData.content">
+        <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName]" fragment="tagasiside">{{ ad.infoSystemFullName}}</a></td>
+        <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName]" fragment="tagasiside">{{ ad.infoSystemShortName }}</a></td>
+        <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName, 'Arutelu', ad.id]">{{ ad.title }}</a></td>
+        <td>
+          <div *ngIf="ad.lastComment">{{ ad.lastComment.organizationName }} ({{ ad.lastComment.authorName }})<br /> <i>{{ ad.lastComment.dateCreated | datem:'YYYY-MM-DD HH:mm:ss' }}</i></div>
+          <span *ngIf="!ad.lastComment">-</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="!loaded" class="my-1 text-center">
+    <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+  </div>
+</section>
