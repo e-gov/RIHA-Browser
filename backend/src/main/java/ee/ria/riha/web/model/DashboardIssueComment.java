@@ -18,7 +18,6 @@ public class DashboardIssueComment {
     private Long id;
     private Date dateCreated;
     private String authorName;
-    private String authorPersonalCode;
     private String organizationName;
     private String organizationCode;
 }
