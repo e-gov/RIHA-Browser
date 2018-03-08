@@ -264,6 +264,18 @@ export class SystemsService {
     }).toPromise();
   }
 
+  public getActiveIssuesForOrganization(organizationCode) {
+    let params: URLSearchParams = new URLSearchParams();
+    params.append('size', '1000');
+    params.append('filter', 'status:OPEN');
+    params.append('sort', '-creation_date');
+
+
+    return this.http.get(`/api/v1/organizations/${ organizationCode }/systems/issues`, {
+      search: params
+    }).toPromise();
+  }
+
   public getOpenApprovalRequests(sort) {
     let params: URLSearchParams = new URLSearchParams();
 
