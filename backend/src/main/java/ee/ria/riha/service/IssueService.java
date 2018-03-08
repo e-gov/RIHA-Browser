@@ -106,9 +106,12 @@ public class IssueService {
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
                 .infoSystemFullName(comment.getInfosystem_full_name())
-                .resolutionType(comment.getResolution_type() != null ? IssueResolutionType.valueOf(
-                        comment.getResolution_type()) : null)
-                .events(comment.getEvents() == null ? null : comment.getEvents().stream()
+                .resolutionType(comment.getResolution_type() != null
+                        ? IssueResolutionType.valueOf(comment.getResolution_type())
+                        : null)
+                .events(comment.getEvents() == null
+                        ? null
+                        : comment.getEvents().stream()
                         .map(COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL)
                         .collect(toList()))
                 .build();
@@ -121,12 +124,14 @@ public class IssueService {
 
         return DashboardIssue.builder()
                 .id(comment.getComment_id())
+                .dateCreated(comment.getCreation_date())
                 .type(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .title(comment.getTitle())
                 .infoSystemFullName(comment.getInfosystem_full_name())
                 .infoSystemShortName(comment.getInfosystem_short_name())
-                .lastComment(comment.getLast_comment_id() != null ?
-                        COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment) : null)
+                .lastComment(comment.getLast_comment_id() != null
+                        ? COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment)
+                        : null)
                 .build();
     };
 
