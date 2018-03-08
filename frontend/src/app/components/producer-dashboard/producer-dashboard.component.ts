@@ -2,6 +2,8 @@ import { Component, OnInit, DoCheck, KeyValueDiffers } from '@angular/core';
 import { UserMatrix } from '../../models/user-matrix';
 import { EnvironmentService } from '../../services/environment.service';
 import { GridData } from '../../models/grid-data';
+import { SystemsService } from '../../services/systems.service';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-dashboard',
@@ -16,13 +18,20 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   public gridData: GridData = new GridData();
 
   private getOwnOpenIssues(){
-    this.loaded = true;
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-
+      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code).then(res =>{
+        this.gridData.updateData(res.json());
+        this.loaded = true;
+      }, err => {
+        this.helper.showError();
+        this.loaded = true;
+      });
     }
   }
 
   constructor(private differs: KeyValueDiffers,
+              private helper: GeneralHelperService,
+              private systemsService: SystemsService,
               private environmentService: EnvironmentService) {
     this.differ = differs.find({}).create(null);
     this.userMatrix = this.environmentService.getUserMatrix();
