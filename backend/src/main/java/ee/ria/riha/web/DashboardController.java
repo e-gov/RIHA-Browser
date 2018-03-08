@@ -5,7 +5,6 @@ import ee.ria.riha.storage.util.CompositeFilterRequest;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
 import ee.ria.riha.web.model.DashboardIssue;
-import ee.ria.riha.web.model.DashboardIssueRequestType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +19,14 @@ public class DashboardController {
 
     @GetMapping("/issues/my")
     public ResponseEntity<PagedResponse<DashboardIssue>> listUserRelatedIssues(Pageable pageable,
-           CompositeFilterRequest filterRequest) {
-
-        return ResponseEntity.ok(dashboardService.listIssues(DashboardIssueRequestType.USER_RELATED,
-                filterRequest, pageable));
+                                                                               CompositeFilterRequest filterRequest) {
+        return ResponseEntity.ok(dashboardService.listIssuesMentioningUser(filterRequest, pageable));
     }
 
     @GetMapping("/issues/org")
     public ResponseEntity<PagedResponse<DashboardIssue>> listUserActiveOrganizationRelatedIssues(Pageable pageable,
-           CompositeFilterRequest filterRequest) {
-
-        return ResponseEntity.ok(dashboardService.listIssues(DashboardIssueRequestType.USER_ACTIVE_ORGANIZATION_RELATED,
-                filterRequest, pageable));
+                                                                                                 CompositeFilterRequest filterRequest) {
+        return ResponseEntity.ok(dashboardService.listIssuesMentioningOrganization(filterRequest, pageable));
     }
 
     @GetMapping("/organizationIssues/{organizationCode}")
