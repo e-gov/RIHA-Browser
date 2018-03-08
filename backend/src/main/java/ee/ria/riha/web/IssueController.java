@@ -6,6 +6,7 @@ import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.DashboardIssue;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
@@ -71,6 +72,24 @@ public class IssueController {
     }
 
     /**
+     * Retrieve paginated and filtered list of RIHA issues that belong to specified organization info systems.
+     *
+     * @param organizationCode organization code
+     * @param filterRequest    result filter
+     * @param pageable         paging definition
+     * @return paginated and filtered list of all RIHA issues
+     */
+    @GetMapping(API_V1_PREFIX + "/organizations/{organizationCode}/systems/issues")
+    @ApiOperation("List issues that belong to specific organization")
+    @ApiPageableAndFilterableParams
+    public ResponseEntity<PagedResponse<DashboardIssue>> listOrganizationSystemsIssues(
+            @PathVariable("organizationCode") String organizationCode, Pageable pageable,
+            CompositeFilterRequest filterRequest) {
+        return ResponseEntity.ok(
+                issueService.listOrganizationInfosystemIssues(organizationCode, filterRequest, pageable));
+    }
+
+    /**
      * Adds single issue to the info system referenced by either UUID or short name.
      *
      * @param reference info system reference
@@ -108,19 +127,22 @@ public class IssueController {
     @PutMapping(API_V1_PREFIX + "/issues/{issueId}")
     @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Update issue")
-    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId, @RequestBody IssueStatusUpdateModel model) {
+    public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId,
+                                              @RequestBody IssueStatusUpdateModel model) {
         return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model));
     }
 
     /**
-     * Make decision about approval request/
+     * Make decision about approval request.
+     *
      * @param issueId id of an approval request issue
-     * @param model approval decision model
+     * @param model   approval decision model
      */
     @PostMapping(API_V1_PREFIX + "/issues/{issueId}/decisions")
     @PreAuthorize("hasRole('ROLE_HINDAJA')")
     @ApiOperation("Leave decision")
-    public void makeApprovalDecision(@PathVariable("issueId") Long issueId, @RequestBody IssueApprovalDecisionModel model) {
+    public void makeApprovalDecision(@PathVariable("issueId") Long issueId,
+                                     @RequestBody IssueApprovalDecisionModel model) {
         issueService.makeApprovalDecision(issueId, model);
     }
 

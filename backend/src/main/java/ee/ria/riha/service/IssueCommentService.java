@@ -68,12 +68,11 @@ public class IssueCommentService {
         }
 
         return DashboardIssueComment.builder()
-                .id(comment.getComment_id())
-                .dateCreated(comment.getCreation_date())
-                .authorName(comment.getAuthor_name())
-                .authorPersonalCode(comment.getAuthor_personal_code())
-                .organizationName(comment.getOrganization_name())
-                .organizationCode(comment.getOrganization_code())
+                .id(comment.getLast_comment_id())
+                .dateCreated(comment.getLast_comment_creation_date())
+                .authorName(comment.getLast_comment_author_name())
+                .organizationName(comment.getLast_comment_organization_name())
+                .organizationCode(comment.getLast_comment_organization_code())
                 .build();
     };
 

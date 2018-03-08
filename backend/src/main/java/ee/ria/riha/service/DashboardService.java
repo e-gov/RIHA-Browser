@@ -4,7 +4,6 @@ import ee.ria.riha.storage.util.CompositeFilterRequest;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
 import ee.ria.riha.web.model.DashboardIssue;
-import ee.ria.riha.web.model.DashboardIssueRequestType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,25 +19,27 @@ public class DashboardService {
 
     private IssueService issueService;
 
-    public PagedResponse<DashboardIssue> listIssues(DashboardIssueRequestType requestType,
-                                                    CompositeFilterRequest filter, Pageable pageable) {
+    public PagedResponse<DashboardIssue> listIssuesMentioningUser(CompositeFilterRequest filter, Pageable pageable) {
+        String personalCode = getRihaUserDetails()
+                .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"))
+                .getPersonalCode();
 
         filter.addFilterParameter(ACTION_AUTHOR_OR_ORGANIZATION_CODE);
-        filter.addFilterParameter(preparePropertyFilterParameter(requestType));
+        filter.addFilterParameter(PROPERTY_AUTHOR_PERSONAL_CODE + ":" + personalCode);
 
         return issueService.listDashboardIssues(pageable, filter);
     }
 
-    private String preparePropertyFilterParameter(DashboardIssueRequestType requestType) {
-        switch (requestType) {
-            case USER_RELATED: return String.format("%s:%s", PROPERTY_AUTHOR_PERSONAL_CODE, getRihaUserDetails()
-                    .orElseThrow(() -> new ValidationException("validation.dashboard.issue.getUserRelated.userIsNotAuthenticated"))
-                    .getPersonalCode());
-            case USER_ACTIVE_ORGANIZATION_RELATED: return String.format("%s:%s", PROPERTY_ORGANIZATION_CODE, getActiveOrganization()
-                    .orElseThrow(() -> new ValidationException("validation.dashboard.issue.getOrganizationRelated.activeOrganizationIsNotSet"))
-                    .getCode());
-            default: return null;
-        }
+    public PagedResponse<DashboardIssue> listIssuesMentioningOrganization(CompositeFilterRequest filter,
+                                                                          Pageable pageable) {
+        String organizationCode = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"))
+                .getCode();
+
+        filter.addFilterParameter(ACTION_AUTHOR_OR_ORGANIZATION_CODE);
+        filter.addFilterParameter(PROPERTY_ORGANIZATION_CODE + ":" + organizationCode);
+
+        return issueService.listDashboardIssues(pageable, filter);
     }
 
     @Autowired
