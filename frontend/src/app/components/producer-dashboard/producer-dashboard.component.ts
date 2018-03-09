@@ -17,9 +17,14 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   private differ: any;
   public gridData: GridData = new GridData();
 
+  public onSortChange(property): void{
+    this.gridData.changeSortOrder(property);
+    this.getOwnOpenIssues();
+  }
+
   private getOwnOpenIssues(){
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code).then(res =>{
+      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData.sort).then(res =>{
         this.gridData.updateData(res.json());
         this.loaded = true;
       }, err => {
@@ -38,6 +43,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    this.gridData.changeSortOrder('last_comment_creation_date', 'DESC');
     this.getOwnOpenIssues();
   }
 
