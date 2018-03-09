@@ -22,21 +22,45 @@
     </div>
     <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
       <thead class="thead-default">
+      <!--<th>
+        <app-sort-button
+          [labelText]="'Kuupäev'"
+          [sortProperty]="'creation_date'"
+          [gridData]="gridData"
+          (buttonClick)="onSortChange($event)"></app-sort-button>
+      </th>-->
       <th>
-        <span class="btn-sm btn text-nowrap">Infosüsteemi nimi</span>
+        <app-sort-button
+          [labelText]="'Infosüsteemi nimi'"
+          [sortProperty]="'infosystem_full_name'"
+          [gridData]="gridData"
+          (buttonClick)="onSortChange($event)"></app-sort-button>
       </th>
       <th>
-        <span class="btn-sm btn text-nowrap">Lühinimi</span>
+        <app-sort-button
+          [labelText]="'Lühinimi'"
+          [sortProperty]="'infosystem_short_name'"
+          [gridData]="gridData"
+          (buttonClick)="onSortChange($event)"></app-sort-button>
       </th>
       <th>
-        <span class="btn-sm btn text-nowrap">Pealkiri</span>
+        <app-sort-button
+          [labelText]="'Pealkiri'"
+          [sortProperty]="'title'"
+          [gridData]="gridData"
+          (buttonClick)="onSortChange($event)"></app-sort-button>
       </th>
       <th>
-        <span class="btn-sm btn text-nowrap">Viimane kommentaar</span>
+        <app-sort-button
+          [labelText]="'Viimane kommentaar'"
+          [sortProperty]="'last_comment_creation_date'"
+          [gridData]="gridData"
+          (buttonClick)="onSortChange($event)"></app-sort-button>
       </th>
       </thead>
       <tbody>
       <tr *ngFor="let ad of gridData.content">
+        <!--<td>{{ ad.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}</td>-->
         <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName]" fragment="tagasiside">{{ ad.infoSystemFullName}}</a></td>
         <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName]" fragment="tagasiside">{{ ad.infoSystemShortName }}</a></td>
         <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName, 'Arutelu', ad.id]">{{ ad.title }}</a></td>
