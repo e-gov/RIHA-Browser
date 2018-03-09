@@ -73,6 +73,7 @@ import { ActiveDiscussionsComponent } from './components/approver-dashboard/acti
 import { DiscussionsListComponent } from './components/approver-dashboard/active-discussions/discussions-list/discussions-list.component';
 import { ApproverSystemCheckComponent } from './components/approver-system-check/approver-system-check.component';
 import { CheckResultRowComponent } from './components/approver-system-check/check-result-row/check-result-row.component';
+import { ProducerDashboardComponent } from './components/producer-dashboard/producer-dashboard.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -92,6 +93,7 @@ const routes: Routes = [
   { path: 'Home', component: FrontPageComponent },
   { path: 'Login', component: LoginFormComponent },
   { path: 'Infosüsteemid', component: BrowserListComponent },
+  { path: 'MinuInfosüsteemid/Arutelud', component: ProducerDashboardComponent },
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
@@ -157,7 +159,8 @@ const routes: Routes = [
     DiscussionsListComponent,
     LinkifyPipe,
     ApproverSystemCheckComponent,
-    CheckResultRowComponent
+    CheckResultRowComponent,
+    ProducerDashboardComponent
   ],
   imports: [
     BrowserModule,
