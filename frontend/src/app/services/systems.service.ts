@@ -207,7 +207,10 @@ export class SystemsService {
 
     if (!isNullOrUndefined(filters)) {
       if (filters.searchText) {
-        filtersArr.push(`data:nimi:%${ filters.searchText }%`);
+        filtersArr.push(`data:Kommentaar:%${ filters.searchText }%`);
+      }
+      if (filtersArr.length > 0){
+        params.set('filter', filtersArr.join());
       }
     }
 
