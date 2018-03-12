@@ -201,6 +201,29 @@ export class SystemsService {
     });
   }
 
+  public getSystemsObjectFiles(filters?, gridData?){
+    let params: URLSearchParams = new URLSearchParams();
+    let filtersArr: string[] = [];
+
+    if (!isNullOrUndefined(filters)) {
+      if (filters.searchText) {
+        filtersArr.push(`data:nimi:%${ filters.searchText }%`);
+      }
+    }
+
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
+    }
+
+    return this.http.get('/api/v1/systems/files', {
+      search: params
+    }).toPromise();
+  }
+
   public getSystem(reference) {
     return this.http.get(`/api/v1/systems/${ reference }`).toPromise();
   }
