@@ -11,6 +11,7 @@ import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +82,7 @@ public class IssueController {
      */
     @GetMapping(API_V1_PREFIX + "/organizations/{organizationCode}/systems/issues")
     @ApiOperation("List issues that belong to specific organization")
-    @ApiPageableAndFilterableParams
+    @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<DashboardIssue>> listOrganizationSystemsIssues(
             @PathVariable("organizationCode") String organizationCode, Pageable pageable,
             CompositeFilterRequest filterRequest) {
