@@ -14,7 +14,8 @@
   </div>
   <div class="form-group">
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
-    <a [routerLink]="'/Andmeobjektid'" class="pull-left font-weight-bold">Otsi andmeobjektidest</a>
+    <a [routerLink]="'/Infosüsteemid'" class="pull-left active-inner-router-link">Otsi infosüsteemidest</a>
+    <a [routerLink]="'/Andmeobjektid'" class="pull-left ml-3">Otsi andmeobjektidest</a>
   </div>
   <div *ngIf="extendedSearch" id="extended-search-panel">
     <div class="row">
