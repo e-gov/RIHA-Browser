@@ -3,6 +3,7 @@ package ee.ria.riha.service;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
+import ee.ria.riha.domain.model.InfoSystemFileMetadata;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
 import ee.ria.riha.service.auth.RoleType;
 import ee.ria.riha.storage.domain.FileRepository;
@@ -102,12 +103,12 @@ public class FileService {
     }
 
     private void checkFileAccess(InfoSystem infoSystem, UUID fileUuid) {
-        List<InfoSystemDocumentMetadata> matchingFileMetaData = getMatchingDocumentMetadata(infoSystem, fileUuid);
-        if (matchingFileMetaData.isEmpty()) {
+        List<InfoSystemFileMetadata> matchingFileMetadata = getMatchingFileMetadata(infoSystem, fileUuid);
+        if (matchingFileMetadata.isEmpty()) {
             throw new IllegalBrowserStateException("File is not defined in info system description");
         }
 
-        if (metadataContainsAccessRestriction(matchingFileMetaData)
+        if (metadataContainsAccessRestriction(matchingFileMetadata)
                 && !(hasRole(RoleType.APPROVER)
                 || (hasRole(RoleType.PRODUCER) && infoSystemAuthorizationService.isOwner(infoSystem)))) {
             throw new IllegalBrowserStateException("File access is restricted");
@@ -143,14 +144,16 @@ public class FileService {
         return contentDispositionTokens.stream().collect(Collectors.joining(CONTENT_DISPOSITION_TOKEN_DELIMITER));
     }
 
-    private List<InfoSystemDocumentMetadata> getMatchingDocumentMetadata(InfoSystem infoSystem, UUID fileUuid) {
+    private List<InfoSystemFileMetadata> getMatchingFileMetadata(InfoSystem infoSystem, UUID fileUuid) {
         return Stream.concat(infoSystem.getDocumentMetadata().stream(), infoSystem.getDataFileMetadata().stream())
                 .filter(i -> i.getUrl().equalsIgnoreCase("file://" + fileUuid.toString()))
                 .collect(toList());
     }
 
-    private boolean metadataContainsAccessRestriction(List<InfoSystemDocumentMetadata> documentMetadata) {
-        return documentMetadata.stream()
+    private boolean metadataContainsAccessRestriction(List<InfoSystemFileMetadata> fileMetadata) {
+        return fileMetadata.stream()
+                .filter(metadata -> metadata instanceof InfoSystemDocumentMetadata)
+                .map(metadata -> (InfoSystemDocumentMetadata) metadata)
                 .anyMatch(InfoSystemDocumentMetadata::isAccessRestricted);
     }
 

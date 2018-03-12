@@ -132,17 +132,15 @@ public class InfoSystemTest {
 
     @Test
     public void retrievesDocumentMetadata() {
-        InfoSystemDocumentMetadata documentMeta1 = InfoSystemDocumentMetadata.builder()
-                .name("document1")
-                .url("https://example.com/document1")
-                .accessRestricted(false)
-                .build();
+        InfoSystemDocumentMetadata documentMeta1 = new InfoSystemDocumentMetadata();
+        documentMeta1.setName("document1");
+        documentMeta1.setUrl("https://example.com/document1");
+        documentMeta1.setAccessRestricted(false);
 
-        InfoSystemDocumentMetadata documentMeta2 = InfoSystemDocumentMetadata.builder()
-                .name("document2")
-                .url("file://067e2e90-953a-464e-8e20-5460c6899393")
-                .accessRestricted(true)
-                .build();
+        InfoSystemDocumentMetadata documentMeta2 = new InfoSystemDocumentMetadata();
+        documentMeta2.setName("document2");
+        documentMeta2.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
+        documentMeta2.setAccessRestricted(true);
 
         ((ArrayNode) validInfoSystem.getJsonContent().withArray("documents"))
                 .add(createDocument(documentMeta1))
@@ -153,13 +151,15 @@ public class InfoSystemTest {
         assertThat(documentMetadata, containsInAnyOrder(documentMeta1, documentMeta2));
     }
 
-    private JsonNode createDocument(InfoSystemDocumentMetadata documentMetadata) {
+    private JsonNode createDocument(InfoSystemFileMetadata fileMetadata) {
         ObjectNode documentNode = JsonNodeFactory.instance.objectNode()
-                .put("name", documentMetadata.getName())
-                .put("url", documentMetadata.getUrl());
+                .put("name", fileMetadata.getName())
+                .put("url", fileMetadata.getUrl());
 
-        if (documentMetadata.isAccessRestricted()) {
-            documentNode.putObject("accessRestriction").put("reasonCode", 38);
+        if (fileMetadata instanceof InfoSystemDocumentMetadata) {
+            if (((InfoSystemDocumentMetadata) fileMetadata).isAccessRestricted()) {
+                documentNode.putObject("accessRestriction").put("reasonCode", 38);
+            }
         }
 
         return documentNode;
@@ -172,23 +172,19 @@ public class InfoSystemTest {
 
     @Test
     public void retrievesDataFilesMetadata() {
-        InfoSystemDocumentMetadata documentMeta1 = InfoSystemDocumentMetadata.builder()
-                .name("document1")
-                .url("https://example.com/document1")
-                .accessRestricted(false)
-                .build();
+        InfoSystemFileMetadata documentMeta1 = new InfoSystemFileMetadata();
+        documentMeta1.setName("document1");
+        documentMeta1.setUrl("https://example.com/document1");
 
-        InfoSystemDocumentMetadata documentMeta2 = InfoSystemDocumentMetadata.builder()
-                .name("document2")
-                .url("file://067e2e90-953a-464e-8e20-5460c6899393")
-                .accessRestricted(true)
-                .build();
+        InfoSystemFileMetadata documentMeta2 = new InfoSystemFileMetadata();
+        documentMeta2.setName("document2");
+        documentMeta2.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
 
         ((ArrayNode) validInfoSystem.getJsonContent().withArray("data_files"))
                 .add(createDocument(documentMeta1))
                 .add(createDocument(documentMeta2));
 
-        List<InfoSystemDocumentMetadata> documentMetadata = validInfoSystem.getDataFileMetadata();
+        List<InfoSystemFileMetadata> documentMetadata = validInfoSystem.getDataFileMetadata();
 
         assertThat(documentMetadata, containsInAnyOrder(documentMeta1, documentMeta2));
     }

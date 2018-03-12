@@ -7,6 +7,7 @@ import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
+import ee.ria.riha.domain.model.InfoSystemFileMetadata;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
 import ee.ria.riha.storage.domain.FileRepository;
@@ -49,18 +50,10 @@ public class FileServiceTest {
     private InfoSystem infoSystem = new InfoSystem();
 
     private UUID documentUuid = UUID.fromString("d25b672a-0659-4970-9bb3-31743454528a");
-    private final InfoSystemDocumentMetadata documentMetadata = InfoSystemDocumentMetadata.builder()
-            .name("document")
-            .url("file://" + documentUuid.toString())
-            .accessRestricted(false)
-            .build();
+    private final InfoSystemDocumentMetadata documentMetadata = new InfoSystemDocumentMetadata();
 
     private UUID dataFileUuid = UUID.fromString("e98bd769-681d-45cf-9fa7-a9fdaab7ca7a");
-    private final InfoSystemDocumentMetadata dataFileMetadata = InfoSystemDocumentMetadata.builder()
-            .name("dataFile")
-            .url("file://" + dataFileUuid.toString())
-            .accessRestricted(false)
-            .build();
+    private final InfoSystemFileMetadata dataFileMetadata = new InfoSystemFileMetadata();
 
     private RihaOrganizationAwareAuthenticationToken authenticationToken = JaneAuthenticationTokenBuilder.builder().build();
 
@@ -73,6 +66,13 @@ public class FileServiceTest {
         infoSystem.setShortName("test-system");
         infoSystem.setOwnerCode(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
+        documentMetadata.setName("document");
+        documentMetadata.setUrl("file://" + documentUuid.toString());
+        documentMetadata.setAccessRestricted(false);
+
+        dataFileMetadata.setName("dataFile");
+        dataFileMetadata.setUrl("file://" + dataFileUuid.toString());
+
         setDocument(documentMetadata);
         setDataFile(dataFileMetadata);
 
@@ -80,7 +80,7 @@ public class FileServiceTest {
         when(fileRepository.download(any(), any())).thenReturn(ResponseEntity.ok().build());
     }
 
-    private void setDataFile(InfoSystemDocumentMetadata document) {
+    private void setDataFile(InfoSystemFileMetadata document) {
         setDocumentResource(document, "data_files");
 
     }
@@ -114,23 +114,25 @@ public class FileServiceTest {
         fileService.download(infoSystem, documentUuid);
     }
 
-    private void setDocument(InfoSystemDocumentMetadata document) {
+    private void setDocument(InfoSystemFileMetadata document) {
         setDocumentResource(document, "documents");
     }
 
-    private void setDocumentResource(InfoSystemDocumentMetadata document, String documents) {
+    private void setDocumentResource(InfoSystemFileMetadata document, String documents) {
         ((ArrayNode) infoSystem.getJsonContent().withArray(documents))
                 .removeAll()
                 .add(createDocument(document));
     }
 
-    private ObjectNode createDocument(InfoSystemDocumentMetadata documentMetadata) {
+    private ObjectNode createDocument(InfoSystemFileMetadata fileMetadata) {
         ObjectNode documentNode = JsonNodeFactory.instance.objectNode()
-                .put("name", documentMetadata.getName())
-                .put("url", documentMetadata.getUrl());
+                .put("name", fileMetadata.getName())
+                .put("url", fileMetadata.getUrl());
 
-        if (documentMetadata.isAccessRestricted()) {
-            documentNode.putObject("accessRestriction").put("reasonCode", 38);
+        if (fileMetadata instanceof InfoSystemDocumentMetadata) {
+            if (((InfoSystemDocumentMetadata) fileMetadata).isAccessRestricted()) {
+                documentNode.putObject("accessRestriction").put("reasonCode", 38);
+            }
         }
 
         return documentNode;

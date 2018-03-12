@@ -1,18 +1,13 @@
 package ee.ria.riha.domain.model;
 
-import lombok.Builder;
 import lombok.Data;
 
 /**
- * Represents
- * @author Valentin Suhnjov
+ * Represents info system document metadata.
  */
 @Data
-@Builder
-public class InfoSystemDocumentMetadata {
+public class InfoSystemDocumentMetadata extends InfoSystemFileMetadata {
 
-    private String name;
-    private String url;
     private boolean accessRestricted;
 
 }
