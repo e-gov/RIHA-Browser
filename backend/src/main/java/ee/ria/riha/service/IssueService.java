@@ -491,7 +491,7 @@ public class IssueService {
     }
 
     public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
-        PagedResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
+        PagedGridResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
                 response.getTotalElements(),
