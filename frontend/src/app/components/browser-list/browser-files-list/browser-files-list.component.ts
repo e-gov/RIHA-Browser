@@ -29,31 +29,33 @@ export class BrowserFilesListComponent implements OnInit {
   }
 
   public getDataObjectFiles(page?){
-    let params = this.helper.cloneObject(this.filters);
+    if (this.filters.searchText && this.filters.searchText.length > 1){
+      let params = this.helper.cloneObject(this.filters);
 
-    let sortProperty = this.gridData.getSortProperty();
-    if (sortProperty) {
-      params.sort = sortProperty;
-    }
-    let sortOrder = this.gridData.getSortOrder();
-    if (sortOrder) {
-      params.dir = sortOrder;
-    }
-    if (page && page != 0) {
-      params.page = page + 1;
-    }
-
-    let q = this.helper.generateQueryString(params);
-    this.location.replaceState('/Andmeobjektid', q);
-
-    this.systemsService.getSystemsObjectFiles(this.filters, this.gridData).then(res =>{
-      this.gridData.updateData(res.json());
-      if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
-        this.getDataObjectFiles();
+      let sortProperty = this.gridData.getSortProperty();
+      if (sortProperty) {
+        params.sort = sortProperty;
       }
-    }, err => {
-      this.helper.showError();
-    })
+      let sortOrder = this.gridData.getSortOrder();
+      if (sortOrder) {
+        params.dir = sortOrder;
+      }
+      if (page && page != 0) {
+        params.page = page + 1;
+      }
+
+      let q = this.helper.generateQueryString(params);
+      this.location.replaceState('/Andmeobjektid', q);
+
+      this.systemsService.getSystemsObjectFiles(this.filters, this.gridData).then(res =>{
+        this.gridData.updateData(res.json());
+        if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
+          this.getDataObjectFiles();
+        }
+      }, err => {
+        this.helper.showError();
+      })
+    }
   }
 
   constructor(public helper: GeneralHelperService,
