@@ -3,6 +3,7 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { Location } from '@angular/common';
 import { GridData } from '../../../models/grid-data';
 import { ActivatedRoute } from '@angular/router';
+import { SystemsService } from '../../../services/systems.service';
 
 @Component({
   selector: 'app-browser-files-list',
@@ -45,11 +46,19 @@ export class BrowserFilesListComponent implements OnInit {
     let q = this.helper.generateQueryString(params);
     this.location.replaceState('/Andmeobjektid', q);
 
-    this.loaded = true;
+    this.systemsService.getSystemsObjectFiles(this.filters, this.gridData).then(res =>{
+      this.gridData.updateData(res.json());
+      if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
+        this.getDataObjectFiles();
+      }
+    }, err => {
+      this.helper.showError();
+    })
   }
 
   constructor(public helper: GeneralHelperService,
               private route: ActivatedRoute,
+              private systemsService: SystemsService,
               private location: Location) { }
 
   ngOnInit() {
