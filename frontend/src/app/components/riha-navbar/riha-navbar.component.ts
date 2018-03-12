@@ -31,10 +31,11 @@ export class RihaNavbarComponent implements OnInit {
    */
   isListOrSubView(){
     let cat = encodeURI('/Infosüsteemid?');
+    let obj = encodeURI('/Andmeobjektid');
     let sub = encodeURI('/Infosüsteemid/Vaata');
     let full = encodeURI('/Infosüsteemid');
     if (this.router.url && typeof this.router.url === 'string'){
-      return (-1 != this.router.url.indexOf(cat) || -1 != this.router.url.indexOf(sub) || this.router.url === full);
+      return (-1 != this.router.url.indexOf(cat) || -1 != this.router.url.indexOf(obj) || -1 != this.router.url.indexOf(sub) || this.router.url === full);
     } else {
       return false;
     }
