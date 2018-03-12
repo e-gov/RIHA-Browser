@@ -48,7 +48,7 @@ export class BrowserFilesListComponent implements OnInit {
     this.loaded = true;
   }
 
-  constructor(private helper: GeneralHelperService,
+  constructor(public helper: GeneralHelperService,
               private route: ActivatedRoute,
               private location: Location) { }
 
