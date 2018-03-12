@@ -46,6 +46,11 @@
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
             "type": "string",
             "minLength": 1
+          },
+          "type": {
+            "description": "Dokumendi tüüp",
+            "type": ["string", "null"],
+            "enum": ["DOC_TYPE_CLASSIFICATOR", null]
           }
         },
         "required": [
@@ -182,6 +187,11 @@
           "name": {
             "description": "Õigusakti nimi",
             "type": ["string", "null"]
+          },
+          "type": {
+            "description": "Õigusakti tüüp",
+            "type": ["string", "null"],
+            "enum": ["DOC_TYPE_CLASSIFICATOR", null]
           }
         },
         "type": "object",
