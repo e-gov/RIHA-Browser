@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * Holds Information System data and provides accessors for JSON manipulation.
@@ -36,7 +37,22 @@ public class InfoSystem {
     private static final String DOCUMENTS_KEY = "documents";
     private static final String FILE_METADATA_URL_KEY = "url";
     private static final String FILE_METADATA_NAME_KEY = "name";
+
+    private static final Function<JsonNode, InfoSystemFileMetadata> DATA_FILE_METADATA_EXTRACTOR = jsonNode -> {
+        InfoSystemFileMetadata metadata = new InfoSystemFileMetadata();
+        metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
+        metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        return metadata;
+    };
+
     private static final String DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
+    private static final Function<JsonNode, InfoSystemDocumentMetadata> DOCUMENT_METADATA_EXTRACTOR = jsonNode -> {
+        InfoSystemDocumentMetadata metadata = new InfoSystemDocumentMetadata();
+        metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
+        metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setAccessRestricted(jsonNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
+        return metadata;
+    };
 
     private Long id;
     private JsonNode jsonContent;
@@ -288,29 +304,22 @@ public class InfoSystem {
      *
      * @return list of document metadata or empty in case documents node does not exists, not an array or empty
      */
-    public List<InfoSystemFileMetadata> getDocumentMetadata() {
+    public List<InfoSystemDocumentMetadata> getDocumentMetadata() {
         JsonNode documentsNode = jsonContent.path(DOCUMENTS_KEY);
         if (!documentsNode.isArray()) {
             return new ArrayList<>();
         }
 
-        return extractFileMetadata(documentsNode, true);
+        return extractFileMetadata(documentsNode, DOCUMENT_METADATA_EXTRACTOR);
     }
 
-    private ArrayList<InfoSystemFileMetadata> extractFileMetadata(JsonNode documentsNode, boolean accessRestrictionNeedsToBeSet) {
-        ArrayList<InfoSystemFileMetadata> documents = new ArrayList<>();
+    private <T extends InfoSystemFileMetadata> List<T> extractFileMetadata(JsonNode documentsNode,
+                                                                           Function<JsonNode, T> metadataExtractor) {
+        List<T> documents = new ArrayList<>();
         for (JsonNode documentNode : documentsNode) {
-            InfoSystemFileMetadata metadata = new InfoSystemDocumentMetadata();
-
-            metadata.setName(documentNode.path(FILE_METADATA_NAME_KEY).asText(null));
-            metadata.setUrl(documentNode.path(FILE_METADATA_URL_KEY).asText(null));
-
-            if (accessRestrictionNeedsToBeSet) {
-                ((InfoSystemDocumentMetadata) metadata).setAccessRestricted(documentNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
-            }
-
-            documents.add(metadata);
+            documents.add(metadataExtractor.apply(documentNode));
         }
+
         return documents;
     }
 
@@ -325,7 +334,7 @@ public class InfoSystem {
             return new ArrayList<>();
         }
 
-        return extractFileMetadata(dataFilesNode, false);
+        return extractFileMetadata(dataFilesNode, DATA_FILE_METADATA_EXTRACTOR);
     }
 
     /**
