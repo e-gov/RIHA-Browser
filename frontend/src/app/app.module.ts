@@ -74,6 +74,7 @@ import { DiscussionsListComponent } from './components/approver-dashboard/active
 import { ApproverSystemCheckComponent } from './components/approver-system-check/approver-system-check.component';
 import { CheckResultRowComponent } from './components/approver-system-check/check-result-row/check-result-row.component';
 import { ProducerDashboardComponent } from './components/producer-dashboard/producer-dashboard.component';
+import { BrowserFilesListComponent } from './components/browser-list/browser-files-list/browser-files-list.component';
 
 //pipes
 import { DatemPipe } from './pipes/datem.pipe';
@@ -94,6 +95,7 @@ const routes: Routes = [
   { path: 'Login', component: LoginFormComponent },
   { path: 'Infosüsteemid', component: BrowserListComponent },
   { path: 'MinuInfosüsteemid/Arutelud', component: ProducerDashboardComponent },
+  { path: 'Andmeobjektid', component: BrowserFilesListComponent },
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
@@ -160,7 +162,8 @@ const routes: Routes = [
     LinkifyPipe,
     ApproverSystemCheckComponent,
     CheckResultRowComponent,
-    ProducerDashboardComponent
+    ProducerDashboardComponent,
+    BrowserFilesListComponent
   ],
   imports: [
     BrowserModule,
