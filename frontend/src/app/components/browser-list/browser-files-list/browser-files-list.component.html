@@ -56,10 +56,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let r of gridData.content">
-          <td class="name">{{ r.infoSystemName }}</td>
-          <td class="name">{{ r.infoSystemShortName }}</td>
+          <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', r.infoSystemShortName]">{{ r.infoSystemName }}</a></td>
+          <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', r.infoSystemShortName]">{{ r.infoSystemShortName }}</a></td>
           <td class="name">{{ r.infoSystemOwnerName }}</td>
-          <td class="name">{{ r.fileResourceName }}</td>
+          <td class="name"><a href="{{ helper.getFileUrl('file://' + r.fileResourceUuid, r.infoSystemShortName) }}" target="_blank">{{ r.fileResourceName }}</a></td>
         </tr>
         </tbody>
       </table>
