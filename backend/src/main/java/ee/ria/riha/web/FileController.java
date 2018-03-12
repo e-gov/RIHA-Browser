@@ -3,6 +3,7 @@ package ee.ria.riha.web;
 import ee.ria.riha.domain.model.FileResource;
 import ee.ria.riha.service.FileService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
+import ee.ria.riha.storage.util.ApiPageableAndCompositeRequestParams;
 import ee.ria.riha.storage.util.CompositeFilterRequest;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
@@ -51,6 +52,7 @@ public class FileController {
 
     @GetMapping(API_V1_PREFIX + "/systems/files")
     @ApiOperation("List file resources")
+    @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<FileResource>> list(CompositeFilterRequest filter, Pageable pageable) {
         return ResponseEntity.ok(fileService.list(pageable, filter));
     }
