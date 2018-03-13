@@ -69,7 +69,7 @@ export class BrowserFilesListComponent implements OnInit {
         searchText: params['searchText']
       };
 
-      this.gridData.changeSortOrder(params['sort'] || 'fileResourceName', params['dir'] || 'ASC');
+      this.gridData.changeSortOrder(params['sort'] || 'file_resource_name', params['dir'] || 'ASC');
       this.gridData.setPageFromUrl(params['page']);
     });
     if (this.filters.searchText){
