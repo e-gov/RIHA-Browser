@@ -203,15 +203,10 @@ export class SystemsService {
 
   public getSystemsObjectFiles(filters?, gridData?){
     let params: URLSearchParams = new URLSearchParams();
-    let filtersArr: string[] = [];
 
     if (!isNullOrUndefined(filters)) {
-      if (filters.searchText) {
-        filtersArr.push(`data:Kommentaar:%${ filters.searchText }%`);
-      }
-      if (filtersArr.length > 0){
-        params.set('filter', filtersArr.join());
-      }
+      params.append('filter', `data:Kommentaar:%${ filters.searchText }%`);
+      params.append('filter', `data:Andmeobjekti nimi:%${ filters.searchText }%`);
     }
 
     if (!isNullOrUndefined(gridData.page)){
