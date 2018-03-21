@@ -39,7 +39,8 @@
           <select id="x-road-status-input" class="form-control"
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.xRoadStatus">
-            <option [value]="''">määramata</option>
+            <option [value]="''">kõik</option>
+            <option [value]="'null'">määramata</option>
             <option [value]="globals.x_road_status.JOINED">liidestatud</option>
             <option [value]="globals.x_road_status.NOT_JOINED">ei ole liidestatud</option>
           </select>
@@ -75,7 +76,8 @@
           <select id="development-status-input" class="form-control"
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.developmentStatus">
-            <option [value]="''">määramata</option>
+            <option [value]="''">kõik</option>
+            <option [value]="'null'">määramata</option>
             <option [value]="globals.development_status.IN_DEVELOPMENT">aktiivses arenduses</option>
             <option [value]="globals.development_status.NOT_IN_DEVELOPMENT">ei ole arenduses</option>
           </select>
@@ -115,7 +117,8 @@
           <select id="approval-status" class="form-control"
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.lastPositiveApprovalRequestType">
-            <option [value]="''">määramata</option>
+            <option [value]="''">kõik</option>
+            <option [value]="'null'">kooskõlastamata</option>
             <option [value]="globals.issue_type.ESTABLISHMENT_REQUEST">asutamine kooskõlastatud</option>
             <option [value]="globals.issue_type.TAKE_INTO_USE_REQUEST">kasutamine kooskõlastatud</option>
             <option [value]="globals.issue_type.FINALIZATION_REQUEST">lõpetamine kooskõlastatud</option>
@@ -128,7 +131,8 @@
           <select id="system-status-input" class="form-control"
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.systemStatus">
-            <option [value]="''" selected>määramata</option>
+            <option [value]="''">kõik</option>
+            <option [value]="'null'">määramata</option>
             <option [value]="globals.system_status.IN_USE">kasutusel</option>
             <option [value]="globals.system_status.ESTABLISHING">asutamisel</option>
             <option [value]="globals.system_status.FINISHED">lõpetatud</option>
