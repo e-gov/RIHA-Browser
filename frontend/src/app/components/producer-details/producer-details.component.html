@@ -11,56 +11,48 @@
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('uldkirjeldus', true)}"
-           href="#uldkirjeldus"
+        <a [ngClass]="{'active': generalHelperService.isMenuActive('uldkirjeldus', true)}"
+           (click)="generalHelperService.scrollTo('#uldkirjeldus')"
            class="list-group-item justify-content-between">
           Infosüsteemi üldkirjeldus
         </a>
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('tagasiside')}"
-           href="#tagasiside"
+        <a [ngClass]="{'active': generalHelperService.isMenuActive('tagasiside')}"
+           (click)="generalHelperService.scrollTo('#tagasiside')"
            class="list-group-item justify-content-between">
           Hindajate tagasiside
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('dataObjects')"
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('andmed')}"
-           href="#andmed"
+        <a *ngIf="isBlockVisible('dataObjects')"
+           [ngClass]="{'active': generalHelperService.isMenuActive('andmed')}"
+           (click)="generalHelperService.scrollTo('#andmed')"
            class="list-group-item justify-content-between">
           Andmed
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('documents')"
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('dokumentatsioon')}"
-           href="#dokumentatsioon"
+        <a *ngIf="isBlockVisible('documents')"
+           [ngClass]="{'active': generalHelperService.isMenuActive('dokumentatsioon')}"
+           (click)="generalHelperService.scrollTo('#dokumentatsioon')"
            class="list-group-item justify-content-between">
           Dokumentatsioon
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('legislations')"
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('oigusaktid')}"
-           href="#oigusaktid"
+        <a *ngIf="isBlockVisible('legislations')"
+           [ngClass]="{'active': generalHelperService.isMenuActive('oigusaktid')}"
+           (click)="generalHelperService.scrollTo('#oigusaktid')"
            class="list-group-item justify-content-between">
           Õigusaktid
         </a>
-        <a pageScroll
-           *ngIf="isBlockVisible('contacts')"
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('kontaktid')}"
-           href="#kontaktid"
+        <a *ngIf="isBlockVisible('security')"
+           [ngClass]="{'active': generalHelperService.isMenuActive('turvalisus')}"
+           (click)="generalHelperService.scrollTo('#turvalisus')"
+           class="list-group-item justify-content-between">
+          Turvalisus
+        </a>
+        <a *ngIf="isBlockVisible('contacts')"
+           [ngClass]="{'active': generalHelperService.isMenuActive('kontaktid')}"
+           (click)="generalHelperService.scrollTo('#kontaktid')"
            class="list-group-item justify-content-between">
           Kontaktid
         </a>
-        <a pageScroll
-           [pageScrollAdjustHash]="true"
-           [ngClass]="{'active': isMenuActive('seosed')}"
-           href="#seosed"
+        <a [ngClass]="{'active': generalHelperService.isMenuActive('seosed')}"
+           (click)="generalHelperService.scrollTo('#seosed')"
            class="list-group-item justify-content-between">
           Seosed süsteemidega
         </a>
@@ -93,6 +85,11 @@
          *ngIf="isBlockVisible('legislations')"
          class="separate-block">
       <app-producer-details-legislations (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
+    </div>
+    <div id="turvalisus"
+         *ngIf="isBlockVisible('security')"
+         class="separate-block">
+      <app-producer-details-security (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-security>
     </div>
     <div id="kontaktid"
          *ngIf="isBlockVisible('contacts')"

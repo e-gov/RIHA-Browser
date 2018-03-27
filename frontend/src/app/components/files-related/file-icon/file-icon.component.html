@@ -1,0 +1,3 @@
+<i *ngIf="!isUploaded()" class="fa fa-external-link text-primary"></i>
+<i *ngIf="isUploaded() && !file.accessRestriction" class="fa fa-file-o text-primary"></i>
+<i *ngIf="isUploaded() && file.accessRestriction" class="fa fa-lock text-primary"></i>

@@ -799,6 +799,9 @@ $CONTENTS
     box-shadow: 0px 0px 10px 0px rgba($black, 0.1);
     position: sticky;
     top: 10px;
+    a {
+      cursor: pointer;
+    }
     .list-group {
         &.collapse {
             display: none;
@@ -1041,6 +1044,17 @@ h6,
 }
 p {
     margin-bottom: 20px;
+    &.user-multiline-text {
+      margin-bottom: 0;
+      white-space: pre-line;
+      .user-link {
+        text-decoration: underline;
+        border-width: 0px !important;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
     a:not(.btn) {
         border-bottom: 1px solid $primary;
         display: inline-block;
@@ -1429,6 +1443,24 @@ mark {
         }
     }
 }
+.expandable-blocks {
+  .expandable-block {
+    .expandable-block-header {
+      font-size: 14px;
+      line-height: 30px;
+      padding: 10px 10px;
+      .btn {
+        padding: 3px 4px;
+      }
+      &.highlighted {
+        background-color: $grey;
+      }
+    }
+    .expandable-block-body {
+      padding-top: 10px;
+    }
+  }
+}
 .popover {
     color: $white;
     .popover-title {
@@ -1444,7 +1476,6 @@ mark {
 }
 .panel-action-heading {
   margin: -20px -20px 20px -20px;
-  padding: 10px 20px;
   background-color: $grey;
   font-size: 1rem;
   line-height: 30px;
@@ -1463,4 +1494,17 @@ hr {
   &.short {
     width: 25%;
   }
+}
+ngb-datepicker {
+  &.dropdown-menu {
+    z-index: 1050;
+  }
+}
+ngb-typeahead-window {
+  &.dropdown-menu {
+    z-index: 1050;
+  }
+}
+.switch-container {
+  line-height: 1.786;
 }

@@ -20,6 +20,26 @@ export class RihaNavbarComponent implements OnInit {
     return this.environmentService.getActiveUser() != null;
   }
 
+  getRand(){
+    return new Date().getSeconds();
+  }
+
+  /*
+   * TODO: replace with routerLinkActive
+   * in version 4.1.3 it seems to be broken when working with queryParams,
+   * even with applied [routerLinkActiveOptions]="{exact: false}
+   */
+  isListOrSubView(){
+    let cat = encodeURI('/Infosüsteemid?');
+    let sub = encodeURI('/Infosüsteemid/Vaata');
+    let full = encodeURI('/Infosüsteemid');
+    if (this.router.url && typeof this.router.url === 'string'){
+      return (-1 != this.router.url.indexOf(cat) || -1 != this.router.url.indexOf(sub) || this.router.url === full);
+    } else {
+      return false;
+    }
+  }
+
   logout(){
     this.environmentService.doLogout().then(res => {
       this.environmentService.loadEnvironmentData().then(env => {
@@ -58,7 +78,7 @@ export class RihaNavbarComponent implements OnInit {
     input.value = '';
   }
 
-  constructor(private environmentService: EnvironmentService,
+  constructor(public environmentService: EnvironmentService,
               private modalService: ModalHelperService,
               private sessionHelperService: SessionHelperService,
               private router: Router) {

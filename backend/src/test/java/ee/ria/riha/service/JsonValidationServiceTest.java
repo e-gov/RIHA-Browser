@@ -6,24 +6,35 @@ import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Valentin Suhnjov
  */
+@RunWith(MockitoJUnitRunner.class)
 public class JsonValidationServiceTest {
 
+    @Mock
+    private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService = new JsonSecurityDetailsValidationService();
     private JsonValidationService infoSystemValidationService;
 
     @Before
     public void setUp() throws IOException {
         this.infoSystemValidationService = new JsonValidationService(
                 JsonLoader.fromResource("/test_infosystem_schema.json"));
+        infoSystemValidationService.setJsonSecurityDetailsValidationService(jsonSecurityDetailsValidationService);
+
+        when(jsonSecurityDetailsValidationService.isNecessaryToValidateSecurityDetails(any())).thenReturn(false);
     }
 
     @Test

@@ -1,5 +1,10 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.domain.InfoSystemRepository;
+import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
+import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
+import ee.ria.riha.service.auth.RoleType;
 import ee.ria.riha.storage.domain.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static ee.ria.riha.service.SecurityContextUtil.hasRole;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -26,17 +35,58 @@ public class FileService {
     @Autowired
     private FileRepository fileRepository;
 
-    public UUID upload(InputStream inputStream, String fileName, String contentType) {
+    @Autowired
+    private InfoSystemRepository infoSystemRepository;
+
+    @Autowired
+    private InfoSystemAuthorizationService infoSystemAuthorizationService;
+
+    /**
+     * Uploads file associated with info system
+     *
+     * @param inputStream         file input stream
+     * @param infoSystemReference info system UUID
+     * @param fileName            name of the file
+     * @param contentType         MIME type of the file
+     * @return UUID of created file resource
+     */
+    public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) {
         log.info("Uploading file '{}' to storage", fileName);
 
-        UUID fileUuid = fileRepository.upload(inputStream, fileName, contentType);
+        InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
+
+        UUID fileUuid = fileRepository.upload(inputStream, infoSystem.getUuid(), fileName, contentType);
         log.info("File uploaded with uuid: {}", fileUuid);
 
         return fileUuid;
     }
 
-    public ResponseEntity download(UUID fileUuid) throws IOException {
-        ResponseEntity fileResource = fileRepository.download(fileUuid);
+    /**
+     * Downloads single file associated with info system. Checks if info system description contains file link. For
+     * users which are not owners or approvers, checks if file has access restrictions.
+     *
+     * @param infoSystemReference info system UUID
+     * @param fileUuid            file resource UUID
+     * @return response entity with data stream
+     * @throws IOException in case of file repository errors
+     */
+    public ResponseEntity download(String infoSystemReference, UUID fileUuid) throws IOException {
+        return download(infoSystemRepository.load(infoSystemReference), fileUuid);
+    }
+
+    /**
+     * Downloads single file associated with info system. Checks if info system description contains file link. For
+     * users which are not owners or approvers, checks if file has access restrictions.
+     *
+     * @param infoSystem info system
+     * @param fileUuid   file resource UUID
+     * @return response entity with data stream
+     * @throws IOException in case of file repository errors
+     */
+    public ResponseEntity download(InfoSystem infoSystem, UUID fileUuid) throws IOException {
+        checkFileAccess(infoSystem, fileUuid);
+
+        ResponseEntity fileResource = fileRepository.download(fileUuid, infoSystem.getUuid());
 
         String attachmentContentDisposition = ATTACHMENT_CONTENT_DISPOSITION_TYPE
                 + CONTENT_DISPOSITION_TOKEN_DELIMITER
@@ -49,6 +99,19 @@ public class FileService {
         return ResponseEntity.status(fileResource.getStatusCode())
                 .headers(headers)
                 .body(fileResource.getBody());
+    }
+
+    private void checkFileAccess(InfoSystem infoSystem, UUID fileUuid) {
+        List<InfoSystemDocumentMetadata> matchingFileMetaData = getMatchingDocumentMetadata(infoSystem, fileUuid);
+        if (matchingFileMetaData.isEmpty()) {
+            throw new IllegalBrowserStateException("File is not defined in info system description");
+        }
+
+        if (metadataContainsAccessRestriction(matchingFileMetaData)
+                && !(hasRole(RoleType.APPROVER)
+                || (hasRole(RoleType.PRODUCER) && infoSystemAuthorizationService.isOwner(infoSystem)))) {
+            throw new IllegalBrowserStateException("File access is restricted");
+        }
     }
 
     /**
@@ -78,6 +141,17 @@ public class FileService {
         }
 
         return contentDispositionTokens.stream().collect(Collectors.joining(CONTENT_DISPOSITION_TOKEN_DELIMITER));
+    }
+
+    private List<InfoSystemDocumentMetadata> getMatchingDocumentMetadata(InfoSystem infoSystem, UUID fileUuid) {
+        return Stream.concat(infoSystem.getDocumentMetadata().stream(), infoSystem.getDataFileMetadata().stream())
+                .filter(i -> i.getUrl().equalsIgnoreCase("file://" + fileUuid.toString()))
+                .collect(toList());
+    }
+
+    private boolean metadataContainsAccessRestriction(List<InfoSystemDocumentMetadata> documentMetadata) {
+        return documentMetadata.stream()
+                .anyMatch(InfoSystemDocumentMetadata::isAccessRestricted);
     }
 
 }

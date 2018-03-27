@@ -13,4 +13,8 @@ public class NewIssueCommentEmailNotification extends SimpleHtmlEmailNotificatio
     private String infoSystemFullName;
     private String infoSystemShortName;
     private String baseUrl;
+    private Long issueId;
+    private String issueTitle;
+    private String authorName;
+    private String comment;
 }

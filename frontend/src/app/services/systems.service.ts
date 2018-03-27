@@ -212,18 +212,18 @@ export class SystemsService {
         name: value.name,
         purpose: value.purpose
       }
-    }
+    };
     return this.http.post(`/api/v1/systems`, system).toPromise();
   }
 
-  public postDataFile(file){
+  public postDataFile(file, reference){
     const formData = new FormData();
     formData.append('file', file);
 
     const headers = new Headers({});
     let options = new RequestOptions({ headers });
 
-    return this.http.post(`/api/v1/files`, formData, options).toPromise();
+    return this.http.post(`/api/v1/systems/${ reference }/files`, formData, options).toPromise();
   }
 
   public updateSystem(updatedData, reference?) {
@@ -244,6 +244,36 @@ export class SystemsService {
 
   public getSystemIssueTimeline(issueId) {
     return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
+  }
+
+  public getActiveDiscussions(sort, relation?) {
+    let params: URLSearchParams = new URLSearchParams();
+    params.append('size', '1000');
+    params.append('filter', 'status:OPEN');
+    params.append('filter', 'sub_type');
+
+    let urlToUse = '/api/v1/dashboard/issues';
+    if (relation == 'person'){
+      urlToUse += '/my';
+    } else if (relation == 'organization'){
+      urlToUse += '/org';
+    }
+
+    return this.http.get(urlToUse, {
+      search: params
+    }).toPromise();
+  }
+
+  public getOpenApprovalRequests(sort) {
+    let params: URLSearchParams = new URLSearchParams();
+
+    params.set('filter', 'status,=,OPEN,sub_type,isnotnull,null');
+    params.set('size', '1000');
+    params.set('sort', sort);
+
+    return this.http.get('/api/v1/issues', {
+      search: params
+    }).toPromise();
   }
 
   public postSystemIssueComment(issueId, reply) {
