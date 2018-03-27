@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { PageScrollConfig } from 'ng2-page-scroll';
 import { Router, NavigationEnd } from '@angular/router';
 import { EnvironmentService } from './services/environment.service';
 import { HttpInterceptorService } from 'ng-http-interceptor';
@@ -29,11 +28,9 @@ export class AppComponent {
     // 'en' not supported yet
     translate.use('et');
 
-    PageScrollConfig.defaultDuration = 400;
-
     let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
 
-    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+    this.router.routeReuseStrategy.shouldReuseRoute = function(future, curr){
       return false;
     };
 

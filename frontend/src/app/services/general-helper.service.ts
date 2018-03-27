@@ -1,10 +1,64 @@
 import { Injectable } from '@angular/core';
 import { G } from '../globals/globals';
+import { isNullOrUndefined } from 'util';
+import { Title } from '@angular/platform-browser';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { WindowRefService } from '../services/window-ref.service';
+
 
 declare var $: any;
 
 @Injectable()
 export class GeneralHelperService {
+
+  public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
+    if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
+      let year = dateObj.year.toString();
+      let month = dateObj.month.toString();
+      let day = dateObj.day.toString();
+
+      if (month.length === 1) month = '0' + month;
+      if (day.length === 1) day = '0' + day;
+      if (simple === true){
+        return `${ year }-${ month }-${ day }`;
+      } else {
+        return `${ year }-${ month }-${ day }T00:00:00Z`;
+      }
+    } else {
+      return dateObj;
+    }
+  }
+
+  public timestampToDateObj(timestamp: string): any {
+    if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
+      let year = parseInt(timestamp.substr(0, 4), 10);
+      let month = parseInt(timestamp.substr(5, 2), 10);
+      let day = parseInt(timestamp.substr(8, 2), 10);
+      return {
+        year: year,
+        month: month,
+        day: day
+      };
+    } else {
+      return timestamp;
+    }
+  }
+
+  public isMenuActive(blockId, first?){
+    let element = $(`#${blockId}`)[0];
+    if (element){
+      let yOffset = $(element).offset().top - $(document).scrollTop();
+      let height = element.offsetHeight;
+      if (first === true) {
+        return yOffset + height > 0;
+      } else {
+        return yOffset <= 0 && (yOffset + height > 0)
+      }
+    } else {
+      return false
+    }
+  }
 
   public getSystemStatusText(system){
     let statusDescription = 'määramata';
@@ -60,11 +114,19 @@ export class GeneralHelperService {
     return $.param(newObj);
   }
 
-  public getFileUrl(url){
+  public getFileUrl(url, reference){
     if (url.substring(0,7) === 'file://'){
-      return '/api/v1/files/' + url.substring(7);
+      return `/api/v1/systems/${ reference }/files/${ url.substring(7) }`;
     } else {
       return url;
+    }
+  }
+
+  public setRihaPageTitle(titleTxt?){
+    if (titleTxt) {
+      this.title.setTitle(`${ titleTxt } - Riigi infosüsteemi haldussüsteem RIHA`);
+    } else {
+      this.title.setTitle(`Riigi infosüsteemi haldussüsteem RIHA`);
     }
   }
 
@@ -76,6 +138,29 @@ export class GeneralHelperService {
     return $.extend(true, {}, obj);
   }
 
-  constructor() { }
+  public scrollTo(el){
+    $('html, body').animate({
+      scrollTop: $(el).offset().top
+    }, 500);
+    this.location.replaceState(this.router.url.split('#')[0] + el)
+  }
+
+  public adjustSection(hash?){
+    hash = hash || this.winRef.nativeWindow.location.hash;
+    if (hash){
+      let elId = decodeURI(hash.replace('#',''));
+      let el = $(hash)[0];
+      if (el){
+        $('html, body').animate({
+          scrollTop: $(el).offset().top
+        }, 500);
+      }
+    }
+  }
+
+  constructor(private title: Title,
+              private winRef: WindowRefService,
+              private location: Location,
+              private router: Router) { }
 
 }

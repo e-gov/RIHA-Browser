@@ -21,7 +21,11 @@ export class EnvironmentService {
   }
 
   public getPrevVisitedLocation(){
-    return this.lastVisitedLocations[1];
+    if (this.lastVisitedLocations[1]){
+      return this.lastVisitedLocations[1].split('?')[0];
+    } else {
+      return null;
+    }
   }
 
   public setActiveUser(details?): void {

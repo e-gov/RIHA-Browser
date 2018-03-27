@@ -10,7 +10,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { TagInputModule } from 'ng2-tag-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CustomFormsModule } from 'ng2-validation';
 import { HttpInterceptorModule } from 'ng-http-interceptor';
 import { UiSwitchModule } from 'ngx-ui-switch/src';
@@ -66,6 +65,18 @@ import { ProducerEditRelationsComponent } from './components/producer-edit/produ
 import { GridTotalFoundComponent } from './components/grid-view/grid-total-found/grid-total-found.component';
 import { GridCurrentlyShowingComponent } from './components/grid-view/grid-currently-showing/grid-currently-showing.component';
 import { SortButtonComponent } from './components/grid-view/sort-button/sort-button.component';
+import { ProducerDetailsSecurityComponent } from './components/producer-details/producer-details-security/producer-details-security.component';
+import { ProducerEditSecurityComponent } from './components/producer-edit/producer-edit-security/producer-edit-security.component';
+import { FileIconComponent } from './components/files-related/file-icon/file-icon.component';
+import { FileHintComponent } from './components/files-related/file-hint/file-hint.component';
+import { ApproverDashboardComponent } from './components/approver-dashboard/approver-dashboard.component';
+import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
+import { ActiveDiscussionsComponent } from './components/approver-dashboard/active-discussions/active-discussions.component';
+import { DiscussionsListComponent } from './components/approver-dashboard/active-discussions/discussions-list/discussions-list.component';
+
+//pipes
+import { DatemPipe } from './pipes/datem.pipe';
+import { LinkifyPipe } from './pipes/linkify.pipe';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -93,7 +104,7 @@ const routes: Routes = [
   { path: 'Describe/Edit/:reference', component: ProducerEditComponent },
   { path: 'Kirjelda/Uus', component: ProducerAddComponent },
   { path: 'Describe/New', component: ProducerAddComponent },
-  { path: 'Hinda', component: ApproverListComponent },
+  { path: 'Hinda', component: ApproverDashboardComponent },
   { path: 'Approve', component: ApproverListComponent },
   { path: 'Hinda/Detailid/:short_name', component: ApproverDetailsComponent },
   { path: 'Approve/Details/:short_name', component: ApproverDetailsComponent },
@@ -141,7 +152,17 @@ const routes: Routes = [
     ProducerEditRelationsComponent,
     GridTotalFoundComponent,
     GridCurrentlyShowingComponent,
-    SortButtonComponent
+    SortButtonComponent,
+    ProducerDetailsSecurityComponent,
+    ProducerEditSecurityComponent,
+    DatemPipe,
+    FileIconComponent,
+    FileHintComponent,
+    ApproverDashboardComponent,
+    SystemsForApprovalListComponent,
+    ActiveDiscussionsComponent,
+    DiscussionsListComponent,
+    LinkifyPipe
   ],
   imports: [
     BrowserModule,
@@ -150,7 +171,6 @@ const routes: Routes = [
     TagInputModule,
     BrowserAnimationsModule,
     CustomFormsModule,
-    Ng2PageScrollModule.forRoot(),
     RouterModule.forRoot(routes),
     HttpInterceptorModule,
     UiSwitchModule ,
@@ -175,10 +195,18 @@ const routes: Routes = [
     ProducerEditContactsComponent,
     InfoModalComponent,
     WarningModalComponent,
-    ProducerEditRelationsComponent
+    ProducerEditRelationsComponent,
+    ProducerEditSecurityComponent
   ],
   bootstrap: [AppComponent],
-  providers: [SystemsService, WindowRefService, EnvironmentService, GeneralHelperService, SessionHelperService, ModalHelperService, { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
+  providers: [
+    SystemsService,
+    WindowRefService,
+    EnvironmentService,
+    GeneralHelperService,
+    SessionHelperService,
+    ModalHelperService,
+    { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
 })
 
 export class AppModule {}

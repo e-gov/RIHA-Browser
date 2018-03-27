@@ -5,6 +5,7 @@ import { EnvironmentService} from "../../services/environment.service";
 import { ModalHelperService } from '../../services/modal-helper.service';
 import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 import { UserMatrix } from '../../models/user-matrix';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-add',
@@ -46,6 +47,7 @@ export class ProducerAddComponent implements OnInit, DoCheck {
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private router: Router,
+              private generalHelperService: GeneralHelperService,
               private differs: KeyValueDiffers,
               private modalService: ModalHelperService) {
     this.differ = differs.find({}).create(null);
@@ -53,6 +55,7 @@ export class ProducerAddComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    this.generalHelperService.setRihaPageTitle('Sisesta infosüsteemi andmed');
   }
 
   ngDoCheck() {

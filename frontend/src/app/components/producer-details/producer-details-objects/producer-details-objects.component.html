@@ -31,7 +31,7 @@
             <i class="fa fa-file-o text-primary"></i>
           </td>
           <td>
-            <a href="{{ generalHelperService.getFileUrl(file.url) }}" target="_blank">{{ file.name }}</a>
+            <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}" target="_blank">{{ file.name }}</a>
           </td>
         </tr>
       </table>

@@ -6,6 +6,7 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.DashboardIssue;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
@@ -28,6 +29,8 @@ import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.StringUtils.hasText;
+import static ee.ria.riha.service.IssueEventService.COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL;
+import static ee.ria.riha.service.IssueCommentService.COMMENT_TO_DASHBOARD_ISSUE_COMMENT;
 
 /**
  * Info system issue service
@@ -98,9 +101,29 @@ public class IssueService {
                 .infoSystemShortName(comment.getInfosystem_short_name())
                 .dateCreated(comment.getCreation_date())
                 .title(comment.getTitle())
+                .issueType(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .organizationName(comment.getOrganization_name())
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
+                .infoSystemFullName(comment.getInfosystem_full_name())
+                .resolutionType(comment.getResolution_type() != null ? IssueResolutionType.valueOf(comment.getResolution_type()) : null)
+                .events(comment.getEvents() == null ? null : comment.getEvents().stream()
+                        .map(COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL)
+                        .collect(toList()))
+                .build();
+    };
+
+    private static final Function<Comment, DashboardIssue> COMMENT_TO_DASHBOARD_ISSUE = comment -> {
+        if (comment == null) {
+            return null;
+        }
+
+        return DashboardIssue.builder()
+                .id(comment.getComment_id())
+                .title(comment.getTitle())
+                .infoSystemFullName(comment.getInfosystem_full_name())
+                .infoSystemShortName(comment.getInfosystem_short_name())
+                .lastComment(COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment.getLast_comment()))
                 .build();
     };
 
@@ -153,6 +176,14 @@ public class IssueService {
         return "type,=," + IssueEntityType.ISSUE.name();
     }
 
+    private String getIssueSubTypeFilter(IssueType issueType) {
+        return "sub_type,=," + issueType.name();
+    }
+
+    private String getIssueStatusFilter(IssueStatus issueStatus) {
+        return "status,=," + issueStatus.name();
+    }
+
     private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
         return "infosystem_uuid,=," + infoSystemUuid.toString();
     }
@@ -175,6 +206,16 @@ public class IssueService {
                         .collect(toList()));
     }
 
+    public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
+        PagedResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
+
+        return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_DASHBOARD_ISSUE)
+                        .collect(toList()));
+    }
+
     /**
      * Creates issue for info system referenced by either UUID or short name
      *
@@ -183,9 +224,9 @@ public class IssueService {
      * @return create issue
      */
     public Issue createInfoSystemIssue(String reference, Issue model) {
-        validateCreatedIssueType(model);
-
         InfoSystem infoSystem = infoSystemService.get(reference);
+        validateCreatedIssueType(model);
+        validateThereIsNoOpenFeedbackRequestIssueOfTheSameType(model, infoSystem.getUuid());
 
         Issue issue = prepareIssue(model);
         issue.setInfoSystemUuid(infoSystem.getUuid());
@@ -198,7 +239,7 @@ public class IssueService {
         Issue createdIssue = getIssueById(createdIssueIds.get(0));
 
         notificationService.sendNewIssueToSystemContactsNotification(infoSystem);
-        notificationService.sendNewIssueToApproversNotification(model, infoSystem);
+        notificationService.sendNewIssueToApproversNotification(createdIssue, infoSystem);
 
         return createdIssue;
     }
@@ -210,6 +251,24 @@ public class IssueService {
 
         if (isFeedbackRequestIssue(model) && !SecurityContextUtil.hasRole(PRODUCER)) {
             throw new ValidationException("validation.issue.create.typeNotAllowed", model.getType());
+        }
+    }
+
+    private void validateThereIsNoOpenFeedbackRequestIssueOfTheSameType(Issue model, UUID infoSystemUuid) {
+        if (!isFeedbackRequestIssue(model)) {
+            return;
+        }
+
+        FilterRequest request = new FilterRequest();
+        request.addFilter(getIssueTypeFilter());
+        request.addFilter(getInfoSystemUuidEqFilter(infoSystemUuid));
+        request.addFilter(getIssueStatusFilter(IssueStatus.OPEN));
+        request.addFilter(getIssueSubTypeFilter(model.getType()));
+
+        List<Comment> foundIssues = commentRepository.find(request);
+
+        if (!foundIssues.isEmpty()) {
+            throw new ValidationException("validation.issue.create.thereIsOpenFeedbackIssueOfTheSameTypeAlready");
         }
     }
 

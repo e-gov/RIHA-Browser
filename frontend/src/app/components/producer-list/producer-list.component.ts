@@ -188,6 +188,8 @@ export class ProducerListComponent implements OnInit, DoCheck {
     }
 
     this.getOwnSystems(this.gridData.page);
+
+    this.generalHelperService.setRihaPageTitle('Minu infosüsteemid');
   }
 
   ngDoCheck() {

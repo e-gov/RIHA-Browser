@@ -4,10 +4,10 @@ import { EnvironmentService } from "../../services/environment.service";
 import { ActivatedRoute } from '@angular/router';
 import { System } from '../../models/system';
 import { User } from '../../models/user';
-import { WindowRefService } from '../../services/window-ref.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserMatrix } from '../../models/user-matrix';
+import { GeneralHelperService } from '../../services/general-helper.service';
 
 declare var $: any;
 
@@ -23,32 +23,6 @@ export class ProducerDetailsComponent implements OnInit {
   public notFound: boolean;
   public issueId: any;
   public userMatrix: UserMatrix;
-
-  adjustSection(hash?){
-    hash = hash || this.winRef.nativeWindow.location.hash;
-    if (hash){
-      let elId = decodeURI(hash.replace('#',''));
-      let el = $(hash)[0];
-      if (el){
-        this.winRef.nativeWindow.scrollTo(0,$(el).offset().top);
-      }
-    }
-  }
-
-  isMenuActive(blockId, first?){
-    let element = $(`#${blockId}`)[0];
-    if (element){
-      let yOffset = $(element).offset().top - $(document).scrollTop();
-      let height = element.offsetHeight;
-      if (first === true) {
-        return yOffset + height > 0;
-      } else {
-        return yOffset <= 0 && (yOffset + height > 0)
-      }
-    } else {
-      return false
-    }
-  }
 
   isEditingAllowed(){
     let editable = false;
@@ -77,6 +51,10 @@ export class ProducerDetailsComponent implements OnInit {
       }
       case 'contacts': {
         ret = (this.system.hasContacts() && this.environmentService.getActiveUser() != null) || editable;
+        break;
+      }
+      case 'security': {
+        ret = this.system.hasSecurityInfo() || editable;
         break;
       }
     }
@@ -114,12 +92,14 @@ export class ProducerDetailsComponent implements OnInit {
   getSystem(reference){
     this.systemsService.getSystem(reference).then(response => {
       this.system = new System(response.json());
+      this.generalHelperService.setRihaPageTitle(this.system.details.name);
       this.loaded = true;
-      setTimeout(()=>{this.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);
+      setTimeout(()=>{this.generalHelperService.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);
     }, err => {
       let status = err.status;
       if (status == '404'){
         this.notFound = true;
+        this.generalHelperService.setRihaPageTitle('Lehekülge ei leitud');
       } else if (status == '500'){
         this.toastrService.error('Serveri viga');
         this.router.navigate(['/']);
@@ -131,10 +111,10 @@ export class ProducerDetailsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private environmentService: EnvironmentService,
+              public generalHelperService: GeneralHelperService,
               private route: ActivatedRoute,
               private router: Router,
-              private toastrService: ToastrService,
-              private winRef: WindowRefService) {
+              private toastrService: ToastrService) {
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -145,6 +125,7 @@ export class ProducerDetailsComponent implements OnInit {
       this.issueId = params['issue_id'] || null;
       this.getSystem(params['reference']);
     });
+    this.generalHelperService.setRihaPageTitle();
   }
 
   @HostListener("window:scroll", [])

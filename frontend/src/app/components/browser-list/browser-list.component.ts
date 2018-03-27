@@ -173,8 +173,9 @@ export class BrowserListComponent implements OnInit {
       this.extendedSearch = true;
     }
 
-
     this.getSystems(this.gridData.page);
+
+    this.generalHelperService.setRihaPageTitle('Infosüsteemid');
   }
 
 }
