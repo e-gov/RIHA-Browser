@@ -6,7 +6,7 @@
   <div class="my-1">
     <form #securityForm="ngForm">
       <div class="my-2 mx-0 row switch-container">
-        <div [ngClass]="{'text-muted': hasSecurity}" class="mr-2">Ei rakendatakse turvameetmeid</div>
+        <div [ngClass]="{'text-muted': hasSecurity}" class="mr-2">Ei rakendata turvameetmeid</div>
         <ui-switch size="small"
                    color="#023cc1"
                    name="securitySwitch"
@@ -31,7 +31,7 @@
           </label>
         </div>
         <div class="form-group" *ngIf="isIske">
-          <label class="text-muted mb-0">ISKE turvaosakond: *</label>
+          <label class="text-muted mb-0">ISKE turvaosaklassid: *</label>
           <small class="label-small-text text-muted">Lisa käideldavuse(K), tervikluse(T) ja konfidentsiaalsuse(S) väärtused (0-3)</small>
           <div class="m-2">
             <div class="row mx-0 my-1">
