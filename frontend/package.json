@@ -38,7 +38,7 @@
     "rxjs": "5.5.2",
     "zone.js": "^0.8.4",
     "ngx-toastr": "5.3.0",
-    "moment": "2.18.1",
+    "moment": "2.21.0",
     "ng2-validation": "4.2.0",
     "ng-http-interceptor": "3.1.2",
     "poor-mans-proxy": "1.0.0",
