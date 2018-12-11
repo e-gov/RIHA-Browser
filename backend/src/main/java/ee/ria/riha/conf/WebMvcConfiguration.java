@@ -4,7 +4,7 @@ import ee.ria.riha.storage.util.CompositeFilterArgumentResolver;
 import ee.ria.riha.storage.util.FilterableArgumentResolver;
 import ee.ria.riha.storage.util.PageableArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorViewResolver;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
+public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private final String[] allowedOrigins;
 
@@ -34,7 +34,6 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        super.addArgumentResolvers(argumentResolvers);
         argumentResolvers.add(new PageableArgumentResolver());
         argumentResolvers.add(new FilterableArgumentResolver());
         argumentResolvers.add(new CompositeFilterArgumentResolver());
@@ -52,7 +51,6 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        super.addFormatters(registry);
         registry.addConverter(new UUIDConverter());
     }
 

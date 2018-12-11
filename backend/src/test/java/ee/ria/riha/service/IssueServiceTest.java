@@ -104,13 +104,14 @@ public class IssueServiceTest {
         createdIssues.put(EXISTING_ISSUE_ID, existingIssueEntity);
 
         when(commentRepository.get(any(Long.class))).thenAnswer((Answer<Comment>) invocation -> {
-                    Long commentId = invocation.getArgumentAt(0, Long.class);
+                    Long commentId = invocation.getArgument(0);
                     return createdIssues.get(commentId);
                 }
 
         );
         when(commentRepository.add(any(Comment.class))).thenAnswer((Answer<List<Long>>) invocation -> {
-            Comment createdComment = invocation.getArgumentAt(0, Comment.class);
+            Comment createdComment = invocation.getArgument(0);
+            createdComment.setComment_id(42L);
             createdIssues.put(createdComment.getComment_id(), createdComment);
             return Arrays.asList(createdComment.getComment_id());
         });
@@ -127,6 +128,7 @@ public class IssueServiceTest {
     @Test
     public void createsIssueWithTitleAndComment() {
         issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+
                 .title("critical issue")
                 .comment("clear problem description")
                 .build());
