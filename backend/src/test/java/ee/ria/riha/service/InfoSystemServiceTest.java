@@ -58,7 +58,7 @@ public class InfoSystemServiceTest {
         when(infoSystemRepository.find(any(FilterRequest.class))).thenReturn(foundInfoSystems);
         when(infoSystemRepository.load(EXISTING_INFO_SYSTEM_SHORT_NAME)).thenReturn(existingInfoSystem);
         when(infoSystemRepository.add(any(InfoSystem.class)))
-                .thenAnswer((Answer<InfoSystem>) invocation -> invocation.getArgumentAt(0, InfoSystem.class));
+                .thenAnswer((Answer<InfoSystem>) invocation -> invocation.getArgument(0));
     }
 
     @Test(expected = ValidationException.class)

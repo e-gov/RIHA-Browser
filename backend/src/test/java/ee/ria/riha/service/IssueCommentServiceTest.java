@@ -1,7 +1,6 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.domain.model.IssueComment;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
@@ -22,7 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Valentin Suhnjov
@@ -55,7 +55,6 @@ public class IssueCommentServiceTest {
         authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
-        doNothing().when(notificationService).sendNewIssueCommentNotification(any(IssueComment.class));
     }
 
     @Test

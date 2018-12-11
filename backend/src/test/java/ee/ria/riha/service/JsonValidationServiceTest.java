@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +60,7 @@ public class JsonValidationServiceTest {
     }
 
     @Test
-    public void catchesMissingValues() {
+    public void catchesMissingValues() throws JSONException {
         //language=JSON
         String json = "{\n" +
                 "  \"name\": \"some name\"\n" +
@@ -84,7 +85,7 @@ public class JsonValidationServiceTest {
     }
 
     @Test
-    public void catchesWronglyFormatValues() {
+    public void catchesWronglyFormatValues() throws JSONException {
         //language=JSON
         String json = "{\n" +
                 "  \"name\": \"asd\",\n" +
@@ -107,7 +108,7 @@ public class JsonValidationServiceTest {
     }
 
     @Test
-    public void catchesErrorsInRegexPatternValidatedFields() {
+    public void catchesErrorsInRegexPatternValidatedFields() throws JSONException {
         //language=JSON
         String json = "{\n" +
                 "  \"name\": \"regex validation test\",\n" +
