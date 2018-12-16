@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { G } from '../../../globals/globals';
+import {GeneralHelperService} from "../../../services/general-helper.service";
 
 @Component({
   selector: 'app-file-hint',
@@ -21,7 +22,11 @@ export class FileHintComponent implements OnInit {
 
   getRestrictionEndDate(){
     if (this.file.accessRestriction && this.file.accessRestriction.endDate){
-      return this.file.accessRestriction.endDate;
+      if (this.isDateObject(this.file.accessRestriction.endDate)) {
+        return this.generalHelperService.dateObjToTimestamp(this.file.accessRestriction.endDate, true);
+      } else {
+        return this.file.accessRestriction.endDate;
+      }
     } else {
       return '-';
     }
@@ -29,7 +34,11 @@ export class FileHintComponent implements OnInit {
 
   getRestrictionStartDate(){
     if (this.file.accessRestriction && this.file.accessRestriction.startDate){
-      return this.file.accessRestriction.startDate;
+      if (this.isDateObject(this.file.accessRestriction.startDate)) {
+        return this.generalHelperService.dateObjToTimestamp(this.file.accessRestriction.startDate, true);
+      } else {
+        return this.file.accessRestriction.startDate;
+      }
     } else {
       return '-';
     }
@@ -53,7 +62,11 @@ export class FileHintComponent implements OnInit {
     return this.getRestrictionReason().description;
   }
 
-  constructor() {
+  private isDateObject(date: any): boolean {
+    return date.day || date.month || date.year;
+  }
+
+  constructor(private generalHelperService: GeneralHelperService) {
   }
 
   ngOnInit() {
