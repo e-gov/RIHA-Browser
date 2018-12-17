@@ -7,4 +7,4 @@
     Teabevaldaja: {{ getOrganizationName() }}
   </div>
 </ng-template>
-<i *ngIf="file.accessRestriction" class="fa fa-info-circle text-muted ml-1" container="body" style="font-size: medium" [ngbTooltip]="tipContent" aria-hidden="true"></i>
+<i *ngIf="file.accessRestriction && file.accessRestriction.reasonCode" class="fa fa-info-circle text-muted ml-1" container="body" style="font-size: medium" [ngbTooltip]="tipContent" aria-hidden="true"></i>
