@@ -33,19 +33,6 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   private getActiveDiscussions(){
     this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).then( res => {
       this.gridData.updateData(res.json());
-      this.gridData.content.sort((issueX, issueY) => {
-        if (issueX.lastComment && !issueY.lastComment){
-          return -1;
-        } else if (!issueX.lastComment && issueY.lastComment){
-          return 1;
-        } else if (issueX.lastComment && issueY.lastComment){
-          let momentX = moment(issueX.lastComment.dateCreated);
-          let momentY = moment(issueY.lastComment.dateCreated);
-          return momentY.diff(momentX, 'seconds');
-        } else {
-          return issueY.id - issueX.id;
-        }
-      });
       this.loaded = true;
     }, err => {
       this.loaded = true;
@@ -62,7 +49,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    this.gridData.changeSortOrder('creation_date', 'ASC');
+    this.gridData.changeSortOrder('last_comment_creation_date', 'DESC');
     this.getActiveDiscussions();
   }
 
