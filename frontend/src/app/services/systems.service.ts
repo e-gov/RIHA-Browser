@@ -272,6 +272,7 @@ export class SystemsService {
     params.append('size', '1000');
     params.append('filter', 'status:OPEN');
     params.append('filter', 'sub_type');
+    params.append('sort', sort ? sort : '-last_comment_creation_date');
 
     let urlToUse = '/api/v1/dashboard/issues';
     if (relation == 'person'){
