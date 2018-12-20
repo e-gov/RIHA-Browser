@@ -58,7 +58,7 @@ public class UserController {
     private void setAuthorityDetails(UserDetailsModel model) {
 
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return;
         }
 
