@@ -33,7 +33,7 @@ public class RihaLdapUserDetailsContextMapper extends LdapUserDetailsMapper {
     private static final String COMMON_NAME_ATTRIBUTE = "cn";
     private static final String DISPLAY_NAME_ATTRIBUTE = "displayname";
     private static final String MEMBER_OF_ATTRIBUTE = "memberof";
-    private static final String DEFAULT_RIHA_USER_ROLE = "ROLE_RIHA_USER";
+    public static final String DEFAULT_RIHA_USER_ROLE = "ROLE_RIHA_USER";
 
     private LdapTemplate ldapTemplate;
     private OrganizationRoleMappingExtractor organizationRoleMappingExtractor = new OrganizationRoleMappingExtractor();

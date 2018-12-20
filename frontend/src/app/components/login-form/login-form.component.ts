@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
+import {Component, OnInit} from '@angular/core';
+import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 import 'rxjs/add/operator/toPromise';
-import { EnvironmentService } from '../../services/environment.service';
-import { ModalHelperService } from '../../services/modal-helper.service';
-import { Router } from '@angular/router';
-import { Environment } from '../../models/environment';
-import { SessionHelperService } from '../../services/session-helper.service';
-import { GeneralHelperService } from '../../services/general-helper.service';
+import {EnvironmentService} from '../../services/environment.service';
+import {ModalHelperService} from '../../services/modal-helper.service';
+import {Router} from '@angular/router';
+import {Environment} from '../../models/environment';
+import {SessionHelperService} from '../../services/session-helper.service';
+import {GeneralHelperService} from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-login-form',
@@ -58,7 +58,11 @@ export class LoginFormComponent implements OnInit {
               private modalService: ModalHelperService,
               private sessionHelper: SessionHelperService,
               private generalHelperService: GeneralHelperService,
-              private router: Router) { }
+              private router: Router) {
+
+    this.login();
+
+  }
 
   ngOnInit() {
     this.generalHelperService.setRihaPageTitle('Portaali sisenemine');

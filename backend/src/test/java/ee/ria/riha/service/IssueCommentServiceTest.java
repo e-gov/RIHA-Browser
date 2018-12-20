@@ -1,7 +1,6 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.domain.model.IssueComment;
+import ee.ria.riha.TestUtils;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
@@ -14,6 +13,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
@@ -22,7 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Valentin Suhnjov
@@ -36,8 +37,8 @@ public class IssueCommentServiceTest {
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
-    private RihaOrganizationAwareAuthenticationToken authenticationToken =
-            JaneAuthenticationTokenBuilder.builder().build();
+    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
+
 
     @Mock
     private CommentRepository commentRepository;
@@ -52,10 +53,9 @@ public class IssueCommentServiceTest {
     public void setUp() {
         // Reset authentication
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
-        doNothing().when(notificationService).sendNewIssueCommentNotification(any(IssueComment.class));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class IssueCommentServiceTest {
 
     @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringCommentCreation() {
-        authenticationToken.setActiveOrganization(null);
+        TestUtils.setActiveOrganisation(authenticationToken, null);
 
         issueCommentService.createIssueComment(EXISTING_ISSUE_ID, IssueCommentModel.builder()
                 .comment("comment")

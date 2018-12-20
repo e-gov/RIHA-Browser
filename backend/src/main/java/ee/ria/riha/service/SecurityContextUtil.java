@@ -1,7 +1,6 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.service.auth.RoleType;
 import org.springframework.security.core.Authentication;
@@ -40,15 +39,7 @@ public class SecurityContextUtil {
      * @return optional of {@link UserDetails}
      */
     public static Optional<UserDetails> getUserDetails() {
-        return getAuthentication()
-                .map(Authentication::getPrincipal)
-                .map(principal -> {
-                    if (principal instanceof UserDetails) {
-                        return (UserDetails) principal;
-                    }
-
-                    return null;
-                });
+        return getAuthentication().map(rihaUserDetails -> rihaUserDetails);
     }
 
     /**
@@ -56,8 +47,11 @@ public class SecurityContextUtil {
      *
      * @return optional of {@link Authentication}
      */
-    public static Optional<Authentication> getAuthentication() {
-        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+    public static Optional<RihaUserDetails> getAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication == null || !(authentication.getPrincipal() instanceof RihaUserDetails)
+                ? Optional.empty()
+                : Optional.ofNullable( (RihaUserDetails) authentication.getPrincipal());
     }
 
     /**
@@ -74,14 +68,12 @@ public class SecurityContextUtil {
 
     /**
      * Retrieves optional {@link RihaOrganization} from security context authentication. Active organization is not
-     * present when security context holds no authentication, or authentication is not of {@link
-     * RihaOrganizationAwareAuthenticationToken} type, or active organization is not set.
+     * present when security context holds no authentication or active organization is not set.
      *
      * @return optional of {@link RihaOrganization}
      */
     public static Optional<RihaOrganization> getActiveOrganization() {
-        return getRihaAuthentication()
-                .map(RihaOrganizationAwareAuthenticationToken::getActiveOrganization);
+        return getAuthentication().map(RihaUserDetails::getActiveOrganization);
     }
 
     /**
@@ -92,24 +84,6 @@ public class SecurityContextUtil {
      */
     public static boolean hasRole(RoleType role) {
         return hasRole(role.getRole());
-    }
-
-    /**
-     * Retrieves optional {@link RihaOrganizationAwareAuthenticationToken} from security context. Authentication is not
-     * present when security context holds no authentication or authentication is not an instance of {@link
-     * RihaOrganizationAwareAuthenticationToken}
-     *
-     * @return optional of {@link RihaOrganizationAwareAuthenticationToken}
-     */
-    public static Optional<RihaOrganizationAwareAuthenticationToken> getRihaAuthentication() {
-        return getAuthentication()
-                .map(authentication -> {
-                    if (authentication instanceof RihaOrganizationAwareAuthenticationToken) {
-                        return (RihaOrganizationAwareAuthenticationToken) authentication;
-                    }
-
-                    return null;
-                });
     }
 
     /**
@@ -124,7 +98,7 @@ public class SecurityContextUtil {
         }
 
         return getAuthentication()
-                .map(Authentication::getAuthorities)
+                .map(RihaUserDetails::getAuthorities)
                 .map(authorities -> authorities.contains(new SimpleGrantedAuthority(role)))
                 .orElse(false);
     }
