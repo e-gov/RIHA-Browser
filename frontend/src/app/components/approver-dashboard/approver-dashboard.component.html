@@ -1,7 +1,7 @@
 <app-page-header></app-page-header>
 <div *ngIf="!environmentService.getUserMatrix().isLoggedIn" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Palun logige sisse</h3>
-  <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele. Kui oled RIHA hindaja, siis <a [routerLink]="'/Login'">logi sisse</a>.</p>
+  <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele. Kui oled RIHA hindaja, siis <a href="/oauth2/authorization/tara">logi sisse</a>.</p>
 </div>
 <div *ngIf="environmentService.getUserMatrix().isLoggedIn && !environmentService.getUserMatrix().hasApproverRole" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Lehekülje vaatamiseks ei ole õiguseid</h3>

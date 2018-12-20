@@ -1,8 +1,6 @@
 package ee.ria.riha.service;
 
-import com.google.common.collect.ImmutableMultimap;
-import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.TestUtils;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.storage.domain.CommentRepository;
@@ -18,14 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.*;
 
 import static ee.ria.riha.domain.model.IssueType.ESTABLISHMENT_REQUEST;
-import static ee.ria.riha.service.auth.RoleType.APPROVER;
-import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -51,16 +47,8 @@ public class IssueServiceTest {
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
-    private RihaOrganizationAwareAuthenticationToken authenticationToken =
-            JaneAuthenticationTokenBuilder.builder()
-                    .setOrganizations(ImmutableMultimap.of(
-                            new RihaOrganization(ACME_REG_CODE, "Acme org"),
-                            new SimpleGrantedAuthority(PRODUCER.getRole()),
-                            new RihaOrganization(EVS_REG_CODE, "Eesti Väikeloomaarstide Selts"),
-                            new SimpleGrantedAuthority(APPROVER.getRole()),
-                            new RihaOrganization(RIA_REG_CODE, "RIA"),
-                            new SimpleGrantedAuthority(APPROVER.getRole())))
-                    .build();
+    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
+
     @Mock
     private InfoSystemService infoSystemService;
 
@@ -122,7 +110,7 @@ public class IssueServiceTest {
     }
 
     private void setProducerRole() {
-        authenticationToken.setActiveOrganization(ACME_REG_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, ACME_REG_CODE);
     }
 
     @Test
@@ -160,7 +148,7 @@ public class IssueServiceTest {
 
     @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueCreation() {
-        authenticationToken.setActiveOrganization(null);
+        TestUtils.setActiveOrganisation(authenticationToken, null);
 
         issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
                 .title("title")
@@ -180,7 +168,7 @@ public class IssueServiceTest {
     }
 
     private void setNonRiaApproverRole() {
-        authenticationToken.setActiveOrganization(EVS_REG_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, (EVS_REG_CODE));
     }
 
     @Test
@@ -253,7 +241,7 @@ public class IssueServiceTest {
 
     @Test(expected = IllegalBrowserStateException.class)
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueUpdate() {
-        authenticationToken.setActiveOrganization(null);
+        TestUtils.setActiveOrganisation(authenticationToken, null);
 
         issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
                 .status(IssueStatus.CLOSED)
@@ -299,7 +287,7 @@ public class IssueServiceTest {
     }
 
     private void setRiaApproverRole() {
-        authenticationToken.setActiveOrganization(RIA_REG_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, RIA_REG_CODE);
     }
 
     @Test(expected = ValidationException.class)

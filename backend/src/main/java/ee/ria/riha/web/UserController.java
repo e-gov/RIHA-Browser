@@ -1,17 +1,18 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.service.SecurityContextUtil;
 import ee.ria.riha.service.UserService;
 import ee.ria.riha.web.model.OrganizationModel;
 import ee.ria.riha.web.model.UserDetailsModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 @RestController
 @RequestMapping(API_V1_PREFIX + "/user")
 @Api("Users")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -54,28 +56,36 @@ public class UserController {
     }
 
     private void setAuthorityDetails(UserDetailsModel model) {
+
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+            return;
+        }
+
+        if (!(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof RihaUserDetails)) {
+            log.warn("principal is not of RihaUserDetail type, but instead {}", SecurityContextHolder.getContext().getAuthentication().getClass().getCanonicalName());
+            return;
+        }
+        RihaUserDetails rihaUserDetails = (RihaUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         // Roles are set regardless of authentication type
         SecurityContextUtil.getAuthentication()
-                .map(Authentication::getAuthorities)
+                .map(RihaUserDetails::getAuthorities)
                 .ifPresent(authorities ->
                         model.setRoles(authorities.stream()
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList())));
 
-        Optional<RihaOrganizationAwareAuthenticationToken> rihaAuthentication = SecurityContextUtil.getRihaAuthentication();
+        if (rihaUserDetails.getActiveOrganization() != null) {
+            model.setActiveOrganization(createOrganizationModel(rihaUserDetails.getActiveOrganization()));
+        }
 
-        // Create and set active organization model
-        rihaAuthentication.map(RihaOrganizationAwareAuthenticationToken::getActiveOrganization)
-                .ifPresent(rihaOrganization ->
-                        model.setActiveOrganization(createOrganizationModel(rihaOrganization)));
+        if (rihaUserDetails.getOrganizationAuthorities() != null) {
+            rihaUserDetails.getOrganizationAuthorities().keySet()
+                    .forEach(organization ->
+                            model.getOrganizations().add(createOrganizationModel(organization)));
+        }
 
-        // Create and set list of user organizations
-        rihaAuthentication.map(RihaOrganizationAwareAuthenticationToken::getOrganizationAuthorities)
-                .ifPresent(organizationAuthorities ->
-                        organizationAuthorities.keySet()
-                                .forEach(organization ->
-                                        model.getOrganizations().add(createOrganizationModel(organization)))
-                );
     }
 
     private OrganizationModel createOrganizationModel(RihaOrganization rihaOrganization) {
