@@ -3,7 +3,7 @@ package ee.ria.riha.service;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.TestUtils;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
@@ -20,6 +20,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
@@ -55,12 +56,12 @@ public class FileServiceTest {
     private UUID dataFileUuid = UUID.fromString("e98bd769-681d-45cf-9fa7-a9fdaab7ca7a");
     private final InfoSystemFileMetadata dataFileMetadata = new InfoSystemFileMetadata();
 
-    private RihaOrganizationAwareAuthenticationToken authenticationToken = JaneAuthenticationTokenBuilder.builder().build();
+    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
     @Before
     public void setUp() throws IOException {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         infoSystem.setUuid(infoSystemUuid);
         infoSystem.setShortName("test-system");
@@ -140,7 +141,7 @@ public class FileServiceTest {
 
     @Test(expected = IllegalBrowserStateException.class)
     public void doesNotAllowSimpleAuthorizedUsersToDownloadRestrictedFiles() throws IOException {
-        authenticationToken.setActiveOrganization(null);
+        TestUtils.setActiveOrganisation(authenticationToken, null);
 
         documentMetadata.setAccessRestricted(true);
         setDocument(documentMetadata);

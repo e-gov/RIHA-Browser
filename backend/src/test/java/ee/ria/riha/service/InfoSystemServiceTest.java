@@ -1,6 +1,6 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.TestUtils;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
@@ -45,9 +45,7 @@ public class InfoSystemServiceTest {
 
     @Before
     public void setUp() {
-        RihaOrganizationAwareAuthenticationToken authenticationToken = JaneAuthenticationTokenBuilder.builder().build();
-        authenticationToken.setActiveOrganization(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(TestUtils.getOAuth2LoginToken(null, JaneAuthenticationTokenBuilder.ORGANIZATION_CODE));
 
         existingInfoSystem.setId(2357L);
         existingInfoSystem.setShortName(EXISTING_INFO_SYSTEM_SHORT_NAME);

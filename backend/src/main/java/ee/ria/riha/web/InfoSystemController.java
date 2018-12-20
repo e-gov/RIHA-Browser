@@ -3,13 +3,13 @@ package ee.ria.riha.web;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
+import ee.ria.riha.service.auth.PrincipalHasRoleProducer;
 import ee.ria.riha.storage.util.*;
 import ee.ria.riha.web.model.InfoSystemModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -43,8 +43,8 @@ public class InfoSystemController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_KIRJELDAJA')")
     @ApiOperation("Create new information system")
+    @PrincipalHasRoleProducer
     public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));

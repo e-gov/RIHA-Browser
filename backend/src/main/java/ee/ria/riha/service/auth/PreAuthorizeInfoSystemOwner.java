@@ -14,6 +14,6 @@ import java.lang.annotation.RetentionPolicy;
  * @see InfoSystemAuthorizationService#isOwner(String)
  */
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasRole('ROLE_KIRJELDAJA') and @infoSystemAuthorizationService.isOwner(#reference)")
+@PreAuthorize("@principalRoleCheckerService.hasRole('ROLE_KIRJELDAJA') and @infoSystemAuthorizationService.isOwner(#reference)")
 public @interface PreAuthorizeInfoSystemOwner {
 }

@@ -1,8 +1,6 @@
 package ee.ria.riha.service;
 
-import com.google.common.collect.ImmutableMultimap;
-import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.TestUtils;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
@@ -16,11 +14,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import static ee.ria.riha.service.auth.RoleType.APPROVER;
-import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -57,20 +53,13 @@ public class IssueServiceApprovalDecisionTest {
             .type(IssueType.MODIFICATION_REQUEST)
             .build();
 
-    private RihaOrganizationAwareAuthenticationToken authenticationToken =
-            JaneAuthenticationTokenBuilder.builder()
-                    .setOrganizations(ImmutableMultimap.of(
-                            new RihaOrganization(ACME_REG_CODE, "Acme org"),
-                            new SimpleGrantedAuthority(PRODUCER.getRole()),
-                            new RihaOrganization(EVS_REG_CODE, "Eesti Väikeloomaarstide Selts"),
-                            new SimpleGrantedAuthority(APPROVER.getRole())))
-                    .build();
+    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
     @Before
     public void setUp() {
         // Reset authorization
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        authenticationToken.setActiveOrganization(null);
+        TestUtils.setActiveOrganisation(authenticationToken, null);
     }
 
 
@@ -103,7 +92,7 @@ public class IssueServiceApprovalDecisionTest {
     }
 
     private void setApproverRole() {
-        authenticationToken.setActiveOrganization(EVS_REG_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, EVS_REG_CODE);
     }
 
     @Test(expected = ValidationException.class)
@@ -116,7 +105,7 @@ public class IssueServiceApprovalDecisionTest {
     }
 
     private void setProducerRole() {
-        authenticationToken.setActiveOrganization(ACME_REG_CODE);
+        TestUtils.setActiveOrganisation(authenticationToken, ACME_REG_CODE);
     }
 
     @Test(expected = ValidationException.class)
@@ -129,7 +118,7 @@ public class IssueServiceApprovalDecisionTest {
     }
 
     private void setAuthenticatedUserRole() {
-        authenticationToken.setActiveOrganization(null);
+        TestUtils.setActiveOrganisation(authenticationToken, null);
     }
 
     @Test

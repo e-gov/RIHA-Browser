@@ -24,6 +24,7 @@ public class ApplicationProperties {
     private final NotificationProperties notification = new NotificationProperties();
     private final CorsProperties cors = new CorsProperties();
     private final TrackingProperties tracking = new TrackingProperties();
+    private final TaraProperties tara = new TaraProperties();
 
     @Setter
     private String baseUrl;
@@ -125,6 +126,20 @@ public class ApplicationProperties {
     @Setter
     public static class IssueStatusUpdate {
         private boolean enabled;
+    }
+
+    @Getter
+    @Setter
+    public static class TaraProperties {
+        private String registrationId;
+        private String clientId;
+        private String clientSecret;
+        private String scope;
+        private String registeredRedirectUri;
+        private String cancelAuthUri;
+        private String userAuthorizationUri;
+        private String accessTokenUri;
+        private String jwkKeySetUri;
     }
 
 
