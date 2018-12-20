@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Environment } from '../models/environment';
-import { User } from '../models/user';
-import { UserMatrix } from '../models/user-matrix';
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Environment} from '../models/environment';
+import {User} from '../models/user';
+import {UserMatrix} from '../models/user-matrix';
 
 declare let ga: Function;
 
@@ -10,6 +10,7 @@ declare let ga: Function;
 export class EnvironmentService {
 
   private environmentUrl = '/api/v1/environment';
+  private userInfoUrl = '/api/v1/user';
 
   public globalEnvironment: any;
 
@@ -122,7 +123,7 @@ export class EnvironmentService {
   }
 
   public doLogin(): Promise<any> {
-    return this.http.get('/login/esteid').toPromise();
+    return this.http.get(this.userInfoUrl).toPromise();
   }
 
   public setActiveOrganization(organizationCode): Promise<any> {

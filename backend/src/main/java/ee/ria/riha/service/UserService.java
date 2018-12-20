@@ -1,6 +1,6 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.LdapRepository;
 import ee.ria.riha.domain.model.LdapUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,15 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Assert.notNull(authentication, "authentication not found in security context");
 
-        if (!(authentication instanceof RihaOrganizationAwareAuthenticationToken)) {
+        if (!(authentication.getPrincipal() instanceof RihaUserDetails)) {
             throw new IllegalStateException("Organization change is not supported by current authentication");
         }
 
-        ((RihaOrganizationAwareAuthenticationToken) authentication).setActiveOrganization(organizationCode);
+        RihaUserDetails rihaUserDetails = (RihaUserDetails) authentication.getPrincipal();
+
+        if (rihaUserDetails.getOrganizationsByCode() != null) {
+            rihaUserDetails.setActiveOrganization(rihaUserDetails.getOrganizationsByCode().get(organizationCode));
+        }
     }
 
     /**

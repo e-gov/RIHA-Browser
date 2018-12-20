@@ -2,13 +2,13 @@ package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
+import com.google.common.collect.ImmutableMultimap;
+import ee.ria.riha.TestUtils;
+import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.IssueType;
 import ee.ria.riha.rules.CleanAuthentication;
-import ee.ria.riha.service.JaneAuthenticationTokenBuilder;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
-import ee.ria.riha.service.auth.RoleType;
 import ee.ria.riha.web.model.InfoSystemModel;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,13 +17,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Date;
 
+import static ee.ria.riha.service.JaneAuthenticationTokenBuilder.ORGANIZATION_CODE;
+import static ee.ria.riha.service.JaneAuthenticationTokenBuilder.ORGANIZATION_NAME;
+import static ee.ria.riha.service.auth.RoleType.APPROVER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -79,7 +82,7 @@ public class InfoSystemModelMapperTest {
 
     @Test
     public void doesNotRemoveContactsIfUserIsAuthenticated() {
-        SecurityContextHolder.getContext().setAuthentication(JaneAuthenticationTokenBuilder.builder().build());
+        SecurityContextHolder.getContext().setAuthentication(TestUtils.getOAuth2LoginToken(null, null));
 
         InfoSystemModel model = infoSystemModelMapper.map(mappedInfoSystem);
 
@@ -106,7 +109,7 @@ public class InfoSystemModelMapperTest {
 
     @Test
     public void doesNotMapLatestAuditDetailsIfUserIsNeitherOwnerNorApprover() {
-        SecurityContextHolder.getContext().setAuthentication(JaneAuthenticationTokenBuilder.builder().build());
+        SecurityContextHolder.getContext().setAuthentication(TestUtils.getOAuth2LoginToken(null, null));
 
         InfoSystemModel model = infoSystemModelMapper.map(mappedInfoSystem);
         assertThat(model.getJson().path(SECURITY_DETAILS_KEY).path(LATEST_AUDIT_DATE_KEY).isMissingNode(), is(true));
@@ -117,9 +120,7 @@ public class InfoSystemModelMapperTest {
     public void doesNotRemoveAuditDetailsIfUserIsInfoSystemOwner() {
         mappedInfoSystem.setOwnerCode(ACME_ORG_OWNER_CODE);
 
-        RihaOrganizationAwareAuthenticationToken janeAuthenticationToken = JaneAuthenticationTokenBuilder.builder().build();
-        janeAuthenticationToken.setActiveOrganization(ACME_ORG_OWNER_CODE);
-        SecurityContextHolder.getContext().setAuthentication(janeAuthenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(TestUtils.getOAuth2LoginToken(null, ACME_ORG_OWNER_CODE));
 
         InfoSystemModel model = infoSystemModelMapper.map(mappedInfoSystem);
         assertThat(model.getJson().path(SECURITY_DETAILS_KEY).path(LATEST_AUDIT_DATE_KEY).isMissingNode(), is(false));
@@ -128,9 +129,11 @@ public class InfoSystemModelMapperTest {
 
     @Test
     public void doesNotRemoveAuditDetailsIfUserHasApproverRole() {
-        JaneAuthenticationTokenBuilder janeAuthenticationTokenBuilder = JaneAuthenticationTokenBuilder.builder();
-        janeAuthenticationTokenBuilder.setBaseAuthorities(Collections.singletonList(new SimpleGrantedAuthority(RoleType.APPROVER.getRole())));
-        SecurityContextHolder.getContext().setAuthentication(janeAuthenticationTokenBuilder.build());
+        ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
+                new RihaOrganization(ORGANIZATION_CODE, ORGANIZATION_NAME),
+                new SimpleGrantedAuthority(APPROVER.getRole())
+        );
+        SecurityContextHolder.getContext().setAuthentication(TestUtils.getOAuth2LoginToken(organizations, ORGANIZATION_CODE));
 
         InfoSystemModel model = infoSystemModelMapper.map(mappedInfoSystem);
         assertThat(model.getJson().path(SECURITY_DETAILS_KEY).path(LATEST_AUDIT_DATE_KEY).isMissingNode(), is(false));
