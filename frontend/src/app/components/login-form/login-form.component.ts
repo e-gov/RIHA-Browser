@@ -21,22 +21,33 @@ export class LoginFormComponent implements OnInit {
     this.environmentService.doLogin().then(res => {
       this.environmentService.loadEnvironmentData().then(res => {
         this.sessionHelper.refreshSessionTimer();
-        let prevLocation = this.environmentService.getPrevVisitedLocation();
-        if (prevLocation){
-          this.router.navigate([decodeURIComponent(prevLocation)]);
-        } else {
-          this.router.navigate(['/']);
-        }
         let user = this.environmentService.getActiveUser();
+
+        if (user == null) {
+          return;
+        }
+
         let organizations = user.getOrganizations();
+
         if (organizations.length > 1){
           this.modalService.open(ActiveOrganizationChooserComponent);
+          this.redirectAfterLogin();
         } else if (organizations.length == 1){
           this.environmentService.setActiveOrganization(organizations[0].code).then(
             res => {
               this.environmentService.globalEnvironment = new Environment(res.json())
             }, err => {}
           );
+          this.redirectAfterLogin();
+        } else if (organizations.length == 0) {
+          this.alertConf = {
+            type: 'success',
+            heading: 'Sisse logimine',
+            text: 'Sisselogimine õnnestus, kuid sinuga pole seotud ühtegi asutust. Kui soovid infosüsteeme kirjeldada, siis aitab ',
+            href: 'https://abi.riha.ee',
+            hrefLinkText: 'Abikeskus'
+          };
+          setTimeout(()=> { this.alertConf = null; this.redirectAfterLogin();}, 5000)
         }
       });
     }, err => {
@@ -66,6 +77,15 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     this.generalHelperService.setRihaPageTitle('Portaali sisenemine');
+  }
+
+  private redirectAfterLogin() {
+    let prevLocation = this.environmentService.getPrevVisitedLocation();
+    if (prevLocation) {
+      this.router.navigate([decodeURIComponent(prevLocation)]);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
 }

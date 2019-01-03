@@ -1,4 +1,7 @@
 <div class="alert alert-{{ conf.type }}" role="alert">
   <h3 class="alert-heading">{{ conf.heading }}</h3>
-  <p class="mb-0">{{ conf.text }}</p>
+  <p class="mb-0">
+    {{ conf.text }}
+    <a *ngIf="conf.href" href="{{conf.href}}">{{conf.hrefLinkText}}</a>
+  </p>
 </div>
