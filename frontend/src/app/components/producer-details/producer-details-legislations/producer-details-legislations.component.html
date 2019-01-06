@@ -16,6 +16,9 @@
         <td>
           <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
         </td>
+        <td>
+          <app-file-create-update-date [file]="legislation"></app-file-create-update-date>
+        </td>
       </tr>
     </table>
   </div>
