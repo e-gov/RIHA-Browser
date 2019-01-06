@@ -67,6 +67,7 @@ import { ProducerDetailsSecurityComponent } from './components/producer-details/
 import { ProducerEditSecurityComponent } from './components/producer-edit/producer-edit-security/producer-edit-security.component';
 import { FileIconComponent } from './components/files-related/file-icon/file-icon.component';
 import { FileHintComponent } from './components/files-related/file-hint/file-hint.component';
+import { FileCreateUpdateDateComponent } from './components/files-related/file-create-update-date/file-create-update-date.component';
 import { ApproverDashboardComponent } from './components/approver-dashboard/approver-dashboard.component';
 import { SystemsForApprovalListComponent } from './components/approver-dashboard/systems-for-approval-list/systems-for-approval-list.component';
 import { ActiveDiscussionsComponent } from './components/approver-dashboard/active-discussions/active-discussions.component';
@@ -155,6 +156,7 @@ const routes: Routes = [
     DatemPipe,
     FileIconComponent,
     FileHintComponent,
+    FileCreateUpdateDateComponent,
     ApproverDashboardComponent,
     SystemsForApprovalListComponent,
     ActiveDiscussionsComponent,

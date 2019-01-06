@@ -1,0 +1,13 @@
+<span class="last-modified text-nowrap">
+  <ng-container *ngIf="file.update_timestamp; else created">
+    (uuendatud {{file.update_timestamp | datem:'YYYY-MM-DD HH:mm'}})
+  </ng-container>
+  <ng-template #created>
+    <ng-container *ngIf="isUploaded(); else link">
+      (üleslaetud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}})
+    </ng-container>
+  </ng-template>
+  <ng-template #link>
+    (lisatud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}})
+  </ng-template>
+</span>
