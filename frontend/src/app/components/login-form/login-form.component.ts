@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
+import {NoOrganizationModalComponent} from '../no-organization-modal/no-organization-modal.component';
 import 'rxjs/add/operator/toPromise';
 import {EnvironmentService} from '../../services/environment.service';
 import {ModalHelperService} from '../../services/modal-helper.service';
@@ -28,6 +29,11 @@ export class LoginFormComponent implements OnInit {
           this.router.navigate(['/']);
         }
         let user = this.environmentService.getActiveUser();
+
+        if (user == null) {
+          return;
+        }
+
         let organizations = user.getOrganizations();
         if (organizations.length > 1){
           this.modalService.open(ActiveOrganizationChooserComponent);
@@ -37,6 +43,8 @@ export class LoginFormComponent implements OnInit {
               this.environmentService.globalEnvironment = new Environment(res.json())
             }, err => {}
           );
+        } else if (organizations.length == 0) {
+          this.modalService.open(NoOrganizationModalComponent);
         }
       });
     }, err => {
