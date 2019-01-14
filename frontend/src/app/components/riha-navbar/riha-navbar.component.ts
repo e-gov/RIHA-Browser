@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { EnvironmentService } from '../../services/environment.service';
-import { User } from '../../models/user';
-import { ModalHelperService } from '../../services/modal-helper.service';
-import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
-import { Router } from '@angular/router';
-import { SessionHelperService } from '../../services/session-helper.service';
+import {Component, OnInit} from '@angular/core';
+import {EnvironmentService} from '../../services/environment.service';
+import {User} from '../../models/user';
+import {ModalHelperService} from '../../services/modal-helper.service';
+import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
+import {Router} from '@angular/router';
+import {SessionHelperService} from '../../services/session-helper.service';
+import {NoOrganizationModalComponent} from '../no-organization-modal/no-organization-modal.component';
 
 declare var $: any;
 
@@ -55,9 +56,19 @@ export class RihaNavbarComponent implements OnInit {
     return false;
   }
 
+  openNoOrganizationWarningModal() :boolean {
+    const modalRef = this.modalService.open(NoOrganizationModalComponent);
+    return false;
+  }
+
   isAllowedToChangeOrganization(): boolean {
     let user = this.environmentService.getActiveUser();
     return user.getOrganizations().length > 1 || (user.getOrganizations().length == 1 && user.getActiveOrganization() == null);
+  }
+
+  isNoOrganizationPresent(): boolean {
+    let user = this.environmentService.getActiveUser();
+    return user.getOrganizations().length == 0;
   }
 
   noOrganizationSelected(): boolean {
