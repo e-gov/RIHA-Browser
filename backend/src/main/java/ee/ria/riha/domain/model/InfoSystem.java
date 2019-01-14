@@ -41,6 +41,8 @@ public class InfoSystem {
         InfoSystemFileMetadata metadata = new InfoSystemFileMetadata();
         metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
         metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
+        metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
         return metadata;
     };
 
@@ -49,6 +51,8 @@ public class InfoSystem {
         InfoSystemDocumentMetadata metadata = new InfoSystemDocumentMetadata();
         metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
         metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
+        metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
         metadata.setAccessRestricted(jsonNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
         if (metadata.isAccessRestricted()) {
             metadata.setAccessRestrictionJson(jsonNode.path(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
@@ -419,7 +423,7 @@ public class InfoSystem {
                 }
             } else {
                 //new doc
-                currentFileMetadata.setCreationTimestamp(this.getCreationTimestamp());
+                currentFileMetadata.setCreationTimestamp(this.getUpdateTimestamp());
             }
 
             ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
