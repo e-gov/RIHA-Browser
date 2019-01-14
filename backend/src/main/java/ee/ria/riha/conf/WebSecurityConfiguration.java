@@ -11,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
@@ -87,7 +91,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+                http
                 .csrf().disable() // needed for JWT verification
                 .cors().disable()
 
@@ -95,48 +99,63 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .permitAll()
                 .and()
-                        .logout()
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-                .and()
-                        .oauth2Login()
-                                .loginPage(applicationProperties.getBaseUrl())
-                                .successHandler((request, response, authentication) -> {
-                                    log.info("Kasutaja {} ID koodiga {} logis sisse kasutades amr: {} ",
-                                            ((RihaUserDetails) authentication.getPrincipal()).getFullName(),
-                                            ((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
-                                            ((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
-                                    );
-                                    response.sendRedirect("/Login");
-                                })
-                                .redirectionEndpoint()
-                                .baseUri("/authenticate")
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                         .and()
-                                .userInfoEndpoint()
-                                .customUserType(RihaUserDetails.class, applicationProperties.getTara().getRegistrationId())
-                                .oidcUserService(userRequest -> {
-                                    try {
-                                        UserDetails userDetails = ldapUserDetailsService.loadUserByUsername(userRequest.getIdToken().getSubject());
-                                        RihaUserDetails rihaUserDetails = (RihaUserDetails) userDetails;
-                                        rihaUserDetails.setUserRequest(userRequest);
-                                        if (userRequest.getIdToken().getClaims().get("profile_attributes") instanceof Map) {
-                                            Map<String, String> profileAttributes = (Map<String, String>) userRequest.getIdToken().getClaims().get("profile_attributes");
-                                            rihaUserDetails.setFirstName(profileAttributes.get("given_name"));
-                                            rihaUserDetails.setLastName(profileAttributes.get("family_name"));
-                                        }
+                .oauth2Login()
+                .loginPage(applicationProperties.getBaseUrl())
+                .successHandler((request, response, authentication) -> {
+                    log.info("Kasutaja {} ID koodiga {} logis sisse kasutades amr: {} ",
+                            ((RihaUserDetails) authentication.getPrincipal()).getFullName(),
+                            ((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
+                            ((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
+                    );
+                    response.sendRedirect("/Login");
+                })
+                .redirectionEndpoint()
+                .baseUri("/authenticate")
+                .and()
+                .userInfoEndpoint()
+                .customUserType(RihaUserDetails.class, applicationProperties.getTara().getRegistrationId())
+                .oidcUserService(userRequest -> {
+                    RihaUserDetails rihaUserDetails;
+                    String personalCode = userRequest.getIdToken().getSubject();
+                    try {
+                        UserDetails userDetails = ldapUserDetailsService.loadUserByUsername(personalCode);
+                        rihaUserDetails = (RihaUserDetails) userDetails;
+                    } catch (UsernameNotFoundException e) {
+                        //this means that the LDAP does not contain record with such personal code
+                        rihaUserDetails = getDefaultRihaUserWithDefaultRole(personalCode);
+                    } catch (Exception e) {
+                        log.error("auth error", e);
+                        throw new OAuth2AuthenticationException(new OAuth2Error("401"), e);
+                    }
+                    rihaUserDetails.setUserRequest(userRequest);
+                    if (userRequest.getIdToken().getClaims().get("profile_attributes") instanceof Map) {
+                        Map<String, String> profileAttributes = (Map<String, String>) userRequest.getIdToken().getClaims().get("profile_attributes");
+                        rihaUserDetails.setFirstName(profileAttributes.get("given_name"));
+                        rihaUserDetails.setLastName(profileAttributes.get("family_name"));
+                    }
 
-                                        rihaUserDetails.setUserRequest(userRequest);
-                                        return rihaUserDetails;
-                                    } catch (Exception e) {
-                                        log.error("auth error", e);
-                                        throw new OAuth2AuthenticationException(new OAuth2Error("401"), e);
-                                    }
-                                })
-                        .and()
-                                .tokenEndpoint()
-                                .accessTokenResponseClient(accessTokenResponseClient)
+                    rihaUserDetails.setUserRequest(userRequest);
+                    return rihaUserDetails;
+                })
                 .and()
-                        .addObjectPostProcessor(new CustomPostProcessor());
+                .tokenEndpoint()
+                .accessTokenResponseClient(accessTokenResponseClient)
+                .and()
+                .addObjectPostProcessor(new CustomPostProcessor());
+    }
+
+    private RihaUserDetails getDefaultRihaUserWithDefaultRole(String personalCode) {
+        RihaUserDetails rihaUserDetails;
+        LdapUserDetailsImpl.Essence userDetailsEssence = new LdapUserDetailsImpl.Essence(new DirContextAdapter());
+        userDetailsEssence.setUsername(personalCode);
+        userDetailsEssence.addAuthority(new SimpleGrantedAuthority(RihaLdapUserDetailsContextMapper.DEFAULT_RIHA_USER_ROLE));
+
+        rihaUserDetails = new RihaUserDetails(userDetailsEssence.createUserDetails(), personalCode);
+        return rihaUserDetails;
     }
 
     @Bean
