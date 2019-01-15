@@ -29,7 +29,7 @@ public class InfoSystemDocumentMetadata extends InfoSystemFileMetadata {
         if (oldAccessRestriction == null && newAccessRestriction == null) {
             return false;
         } else if (newAccessRestriction != null && oldAccessRestriction != null) {
-            return newAccessRestriction.toString().equals(oldAccessRestriction.toString());
+            return !newAccessRestriction.toString().equals(oldAccessRestriction.toString());
         } else {
             return true;
         }
