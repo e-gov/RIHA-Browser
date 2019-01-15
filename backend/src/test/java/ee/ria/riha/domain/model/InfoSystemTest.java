@@ -154,7 +154,9 @@ public class InfoSystemTest {
     private JsonNode createDocument(InfoSystemFileMetadata fileMetadata) {
         ObjectNode documentNode = JsonNodeFactory.instance.objectNode()
                 .put("name", fileMetadata.getName())
-                .put("url", fileMetadata.getUrl());
+                .put("url", fileMetadata.getUrl())
+                .put("creation_timestamp", fileMetadata.getCreationTimestamp())
+                .put("update_timestamp", fileMetadata.getUpdateTimestamp());
 
         if (fileMetadata instanceof InfoSystemDocumentMetadata) {
             if (((InfoSystemDocumentMetadata) fileMetadata).isAccessRestricted()) {
@@ -213,4 +215,85 @@ public class InfoSystemTest {
         assertThat(copy.getJsonContent(), equalTo(validInfoSystem.getJsonContent()));
     }
 
+    @Test
+    public void setsUpdateTimestampToDocumentIfNameWasChanged() {
+        InfoSystem oldInfoSystemState = validInfoSystem.copy();
+        InfoSystem newInfoSystemState = validInfoSystem.copy();
+
+        newInfoSystemState.setUpdateTimestamp("2017-12-19T15:17:17.137+02:00");
+
+        InfoSystemDocumentMetadata documentMeta1 = new InfoSystemDocumentMetadata();
+        documentMeta1.setName("document1");
+        documentMeta1.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
+        documentMeta1.setCreationTimestamp(oldInfoSystemState.getCreationTimestamp());
+        documentMeta1.setUpdateTimestamp(oldInfoSystemState.getUpdateTimestamp());
+        documentMeta1.setAccessRestricted(false);
+
+        InfoSystemDocumentMetadata documentMeta2 = new InfoSystemDocumentMetadata();
+        documentMeta2.setName("document2");
+        documentMeta2.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
+        documentMeta2.setAccessRestricted(false);
+
+        ((ArrayNode) oldInfoSystemState.getJsonContent().withArray("documents")).add(createDocument(documentMeta1));
+        ((ArrayNode) newInfoSystemState.getJsonContent().withArray("documents")).add(createDocument(documentMeta2));
+
+        newInfoSystemState.setCreationAndUpdateTimestampToFilesMetadata(oldInfoSystemState);
+
+        InfoSystemDocumentMetadata documentMetadata = newInfoSystemState.getDocumentMetadata().get(0);
+
+        assertThat(documentMetadata.getCreationTimestamp(), equalTo(documentMeta1.getCreationTimestamp()));
+        assertThat(documentMetadata.getUpdateTimestamp(), equalTo(newInfoSystemState.getUpdateTimestamp()));
+    }
+
+    @Test
+    public void doesntChangeUpdateTimestampToDocumentIfNothingWasChanged() {
+        InfoSystem oldInfoSystemState = validInfoSystem.copy();
+        InfoSystem newInfoSystemState = validInfoSystem.copy();
+
+        newInfoSystemState.setUpdateTimestamp("2017-12-19T15:17:17.137+02:00");
+
+        InfoSystemDocumentMetadata documentMeta1 = new InfoSystemDocumentMetadata();
+        documentMeta1.setName("document1");
+        documentMeta1.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
+        documentMeta1.setCreationTimestamp(oldInfoSystemState.getCreationTimestamp());
+        documentMeta1.setUpdateTimestamp(oldInfoSystemState.getUpdateTimestamp());
+        documentMeta1.setAccessRestricted(false);
+
+        InfoSystemDocumentMetadata documentMeta2 = new InfoSystemDocumentMetadata();
+        documentMeta2.setName("document1");
+        documentMeta2.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
+        documentMeta2.setAccessRestricted(false);
+
+        ((ArrayNode) oldInfoSystemState.getJsonContent().withArray("documents")).add(createDocument(documentMeta1));
+        ((ArrayNode) newInfoSystemState.getJsonContent().withArray("documents")).add(createDocument(documentMeta2));
+
+        newInfoSystemState.setCreationAndUpdateTimestampToFilesMetadata(oldInfoSystemState);
+
+        InfoSystemDocumentMetadata documentMetadata = newInfoSystemState.getDocumentMetadata().get(0);
+
+        assertThat(documentMetadata.getCreationTimestamp(), equalTo(documentMeta1.getCreationTimestamp()));
+        assertThat(documentMetadata.getUpdateTimestamp(), equalTo(documentMeta1.getUpdateTimestamp()));
+    }
+
+
+    @Test
+    public void setsCreationTimestampToDocument() {
+        InfoSystem oldInfoSystemState = validInfoSystem.copy();
+        InfoSystem newInfoSystemState = validInfoSystem.copy();
+
+        newInfoSystemState.setUpdateTimestamp("2017-12-19T15:17:17.137+02:00");
+
+        InfoSystemDocumentMetadata documentMeta2 = new InfoSystemDocumentMetadata();
+        documentMeta2.setName("document2");
+        documentMeta2.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
+        documentMeta2.setAccessRestricted(false);
+
+        ((ArrayNode) newInfoSystemState.getJsonContent().withArray("documents")).add(createDocument(documentMeta2));
+
+        newInfoSystemState.setCreationAndUpdateTimestampToFilesMetadata(oldInfoSystemState);
+
+        InfoSystemDocumentMetadata documentMetadata = newInfoSystemState.getDocumentMetadata().get(0);
+
+        assertThat(documentMetadata.getCreationTimestamp(), equalTo(newInfoSystemState.getUpdateTimestamp()));
+    }
 }

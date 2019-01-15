@@ -138,6 +138,8 @@ public class InfoSystemService {
         model.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
         model.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
 
+        model.setCreationAndUpdateTimestampToFilesMetadata(existingInfoSystem);
+
         infoSystemValidationService.validate(model.getJsonContent());
 
         return infoSystemRepository.add(model);
