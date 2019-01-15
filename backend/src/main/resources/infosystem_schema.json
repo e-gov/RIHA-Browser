@@ -51,6 +51,16 @@
             "description": "Dokumendi tüüp",
             "type": ["string", "null"],
             "enum": ["DOC_TYPE_CLASSIFICATOR", null]
+          },
+          "creation_timestamp": {
+            "description": "Dokumendi loomise aeg",
+            "type": "string",
+            "format": "date-time"
+          },
+          "update_timestamp": {
+            "description": "Dokumendi viimase muutmise aeg",
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
