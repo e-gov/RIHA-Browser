@@ -13,8 +13,25 @@ public class InfoSystemDocumentMetadata extends InfoSystemFileMetadata {
 
     private JsonNode accessRestrictionJson;
 
-    public boolean wasChanged(InfoSystemDocumentMetadata prevVersion) {
-        return super.wasChanged(prevVersion)
-                || !this.accessRestrictionJson.toString().equals(prevVersion.getAccessRestrictionJson().toString());
+    @Override
+    public boolean wasChanged(InfoSystemFileMetadata prevVersion) {
+        if (prevVersion instanceof InfoSystemDocumentMetadata) {
+            return super.wasChanged(prevVersion)
+                    || accessRestrictionWasChanged(
+                    ((InfoSystemDocumentMetadata) prevVersion).getAccessRestrictionJson(),
+                    this.getAccessRestrictionJson());
+        } else {
+            return super.wasChanged(prevVersion);
+        }
+    }
+
+    private boolean accessRestrictionWasChanged(JsonNode oldAccessRestriction, JsonNode newAccessRestriction) {
+        if (oldAccessRestriction == null && newAccessRestriction == null) {
+            return false;
+        } else if (newAccessRestriction != null && oldAccessRestriction != null) {
+            return newAccessRestriction.toString().equals(oldAccessRestriction.toString());
+        } else {
+            return true;
+        }
     }
 }

@@ -3,8 +3,10 @@
     (uuendatud {{file.update_timestamp | datem:'YYYY-MM-DD HH:mm'}})
   </ng-container>
   <ng-template #created>
-    <ng-container *ngIf="isUploaded(); else link">
-      (üleslaetud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}})
+    <ng-container *ngIf="file.creation_timestamp">
+      <ng-container *ngIf="isUploaded(); else link">
+        (üles laaditud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}})
+      </ng-container>
     </ng-container>
   </ng-template>
   <ng-template #link>
