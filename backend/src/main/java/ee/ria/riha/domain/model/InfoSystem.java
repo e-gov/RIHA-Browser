@@ -399,18 +399,18 @@ public class InfoSystem {
      * Utility method for setting creation and update timestamp for given list of files or links states
      *
      * @param currentFilesMetadataList list of current files states
-     * @param prevFilesMetadataList list of previous files states
-     * @param jsonNodeName name of json node containing the list
+     * @param prevFilesMetadataList    list of previous files states
+     * @param jsonNodeName             name of json node containing the list
      */
     public void setCreationAndUpdateTimestampToFilesMetadata(List<? extends InfoSystemFileMetadata> currentFilesMetadataList,
-                                                           List<? extends InfoSystemFileMetadata> prevFilesMetadataList, String jsonNodeName) {
+                                                             List<? extends InfoSystemFileMetadata> prevFilesMetadataList, String jsonNodeName) {
         ArrayNode filesNode = ((ArrayNode) jsonContent.withArray(jsonNodeName));
         filesNode.removeAll();
 
         currentFilesMetadataList.forEach(currentFileMetadata -> {
             Optional<? extends InfoSystemFileMetadata> foundPrevFileMetadata = prevFilesMetadataList.stream().filter(prevFileMetadata ->
-                 prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
-                        || prevFileMetadata.getName().equals(currentFileMetadata.getName())
+                    prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
+                            || prevFileMetadata.getName().equals(currentFileMetadata.getName())
             ).findFirst();
 
             if (foundPrevFileMetadata.isPresent()) {
@@ -427,13 +427,19 @@ public class InfoSystem {
             }
 
             ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
-                    .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl())
-                    .put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp())
-                    .put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
+                    .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl());
 
-            if (currentFileMetadata instanceof InfoSystemDocumentMetadata) {
-                    docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
-                            ((InfoSystemDocumentMetadata)currentFileMetadata).getAccessRestrictionJson());
+            if (currentFileMetadata.getCreationTimestamp() != null) {
+                docNode.put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp());
+            }
+            if (currentFileMetadata.getUpdateTimestamp() != null) {
+                docNode.put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
+            }
+
+            if (currentFileMetadata instanceof InfoSystemDocumentMetadata &&
+                    ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson() != null) {
+                docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
+                        ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
             }
         });
 

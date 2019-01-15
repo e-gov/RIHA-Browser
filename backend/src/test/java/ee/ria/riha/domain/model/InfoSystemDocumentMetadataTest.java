@@ -36,6 +36,27 @@ public class InfoSystemDocumentMetadataTest {
     }
 
     @Test
+    public void detectsChangesIfAccessRestrictionWasAdded() {
+        InfoSystemDocumentMetadata prev = new InfoSystemDocumentMetadata();
+        prev.setName("document1");
+        prev.setUrl("https://example.com/document1");
+        prev.setAccessRestricted(false);
+
+        InfoSystemDocumentMetadata current = new InfoSystemDocumentMetadata();
+        current.setName("document1");
+        current.setUrl("https://example.com/document1");
+        current.setAccessRestricted(true);
+        ObjectNode accessRestrictionNode2 = JsonNodeFactory.instance.objectNode()
+                .put("startDate", "2024-12-18")
+                .put("endDate", "2018-12-18")
+                .put("reasonCode", "19");
+        accessRestrictionNode2.putObject("organization").put("code", "12345").put("name", "test");
+        current.setAccessRestrictionJson(accessRestrictionNode2);
+
+        assertThat(current.wasChanged(prev), equalTo(true));
+    }
+
+    @Test
     public void detectsChangesIfNameWasChanged() {
         InfoSystemDocumentMetadata prev = new InfoSystemDocumentMetadata();
         prev.setName("document1");
