@@ -14,6 +14,6 @@ import java.lang.annotation.RetentionPolicy;
  * @see IssueAuthorizationService#isIssueOwner(Long)
  */
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasRole('ROLE_HINDAJA') or (hasRole('ROLE_KIRJELDAJA') and @issueAuthorizationService.isIssueOwner(#issueId))")
+@PreAuthorize("@principalRoleCheckerService.hasRole('ROLE_HINDAJA')  or (@principalRoleCheckerService.hasRole('ROLE_KIRJELDAJA') and @issueAuthorizationService.isIssueOwner(#issueId))")
 public @interface PreAuthorizeIssueOwnerOrReviewer {
 }

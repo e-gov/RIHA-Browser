@@ -1,17 +1,18 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.service.DashboardService;
+import ee.ria.riha.storage.util.ApiPageableAndCompositeRequestParams;
 import ee.ria.riha.storage.util.CompositeFilterRequest;
 import ee.ria.riha.storage.util.Pageable;
 import ee.ria.riha.storage.util.PagedResponse;
 import ee.ria.riha.web.model.DashboardIssue;
-import ee.ria.riha.web.model.DashboardIssueRequestType;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 
@@ -19,46 +20,24 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 @RequestMapping(API_V1_PREFIX + "/dashboard")
 public class DashboardController {
 
-    private static final String FILTER_PARAMETER = "filter";
-    private static final String SORT_PARAMETER = "sort";
-
     private DashboardService dashboardService;
 
     @GetMapping("/issues/my")
+    @PreAuthorize("hasRole('ROLE_RIHA_USER')")
+    @ApiOperation("List issues related to current user")
+    @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<DashboardIssue>> listUserRelatedIssues(Pageable pageable,
-           @RequestParam MultiValueMap<String, String> requestParameters) {
-
-        return ResponseEntity.ok(dashboardService.listIssues(DashboardIssueRequestType.USER_RELATED,
-                createFilterRequest(requestParameters), pageable));
+                                                                               CompositeFilterRequest filterRequest) {
+        return ResponseEntity.ok(dashboardService.listIssuesMentioningUser(filterRequest, pageable));
     }
 
     @GetMapping("/issues/org")
+    @PreAuthorize("hasRole('ROLE_RIHA_USER')")
+    @ApiOperation("List issues related to current user organization")
+    @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<DashboardIssue>> listUserActiveOrganizationRelatedIssues(Pageable pageable,
-           @RequestParam MultiValueMap<String, String> requestParameters) {
-
-        return ResponseEntity.ok(dashboardService.listIssues(DashboardIssueRequestType.USER_ACTIVE_ORGANIZATION_RELATED,
-                createFilterRequest(requestParameters), pageable));
-    }
-
-    private CompositeFilterRequest createFilterRequest(MultiValueMap<String, String> requestParameters) {
-        CompositeFilterRequest filterRequest = new CompositeFilterRequest();
-
-        if (requestParameters == null || requestParameters.isEmpty()) {
-            return filterRequest;
-        }
-
-        List<String> filterParameters = requestParameters.get(FILTER_PARAMETER);
-        List<String> sortParameters = requestParameters.get(SORT_PARAMETER);
-
-        if (filterParameters != null && !filterParameters.isEmpty()) {
-            filterRequest.addFilterParameters(filterParameters);
-        }
-
-        if (sortParameters != null && !sortParameters.isEmpty()) {
-            filterRequest.addSortParameters(sortParameters);
-        }
-
-        return filterRequest;
+                                                                                                 CompositeFilterRequest filterRequest) {
+        return ResponseEntity.ok(dashboardService.listIssuesMentioningOrganization(filterRequest, pageable));
     }
 
     @Autowired

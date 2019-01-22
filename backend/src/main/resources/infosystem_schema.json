@@ -23,6 +23,16 @@
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
             "type": "string",
             "minLength": 1
+          },
+          "creation_timestamp": {
+            "description": "Dokumendi loomise aeg",
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "update_timestamp": {
+            "description": "Dokumendi viimase muutmise aeg",
+            "type": ["string", "null"],
+            "format": "date-time"
           }
         },
         "required": [
@@ -46,6 +56,21 @@
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
             "type": "string",
             "minLength": 1
+          },
+          "type": {
+            "description": "Dokumendi tüüp",
+            "type": ["string", "null"],
+            "enum": ["DOC_TYPE_CLASSIFICATOR", null]
+          },
+          "creation_timestamp": {
+            "description": "Dokumendi loomise aeg",
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "update_timestamp": {
+            "description": "Dokumendi viimase muutmise aeg",
+            "type": ["string", "null"],
+            "format": "date-time"
           }
         },
         "required": [
@@ -182,6 +207,11 @@
           "name": {
             "description": "Õigusakti nimi",
             "type": ["string", "null"]
+          },
+          "type": {
+            "description": "Õigusakti tüüp",
+            "type": ["string", "null"],
+            "enum": ["DOC_TYPE_CLASSIFICATOR", null]
           }
         },
         "type": "object",

@@ -2,12 +2,9 @@ package ee.ria.riha.service;
 
 import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
-import ee.ria.riha.authentication.RihaUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
@@ -42,23 +39,12 @@ public class JaneAuthenticationTokenBuilder {
 
     private String personalCode = PERSONAL_CODE;
 
-    private ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
+    public static ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
             new RihaOrganization(ORGANIZATION_CODE, ORGANIZATION_NAME),
             new SimpleGrantedAuthority(PRODUCER.getRole()));
 
     public static JaneAuthenticationTokenBuilder builder() {
         return new JaneAuthenticationTokenBuilder();
-    }
-
-    public RihaOrganizationAwareAuthenticationToken build() {
-        RihaUserDetails userDetails = new RihaUserDetails(
-                new User(username, password, baseAuthorities),
-                personalCode,
-                organizations);
-        userDetails.setFirstName(userFirstName);
-        userDetails.setLastName(userLastName);
-
-        return new RihaOrganizationAwareAuthenticationToken(userDetails, null, baseAuthorities);
     }
 
     public JaneAuthenticationTokenBuilder setUserFirstName(String userFirstName) {

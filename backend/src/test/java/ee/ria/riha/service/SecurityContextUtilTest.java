@@ -1,12 +1,14 @@
 package ee.ria.riha.service;
 
 import com.google.common.collect.ImmutableMultimap;
+import ee.ria.riha.TestUtils;
 import ee.ria.riha.authentication.RihaOrganization;
-import ee.ria.riha.authentication.RihaOrganizationAwareAuthenticationToken;
 import ee.ria.riha.rules.CleanAuthentication;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +27,13 @@ public class SecurityContextUtilTest {
     private static final String RIA_REG_CODE = "70006317";
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
-    private RihaOrganizationAwareAuthenticationToken rihaAuthenticationToken =
-            JaneAuthenticationTokenBuilder.builder()
-                    .setOrganizations(ImmutableMultimap.of(
+    ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
                             new RihaOrganization(ACME_REG_CODE, "Acme org"),
                             new SimpleGrantedAuthority(PRODUCER.getRole()),
                             new RihaOrganization(RIA_REG_CODE, "RIA"),
-                            new SimpleGrantedAuthority(APPROVER.getRole())))
-                    .build();
+                            new SimpleGrantedAuthority(APPROVER.getRole()));
+
+    private Authentication rihaAuthenticationToken = TestUtils.getOAuth2LoginToken(organizations, null);
 
     private AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken(
             "anonymous", "anonymous", AuthorityUtils.createAuthorityList("ANONYMOUS"));
@@ -96,8 +97,9 @@ public class SecurityContextUtilTest {
 
     @Test
     public void getActiveOrganizationReturnsOrganizationSet() {
-        rihaAuthenticationToken.setActiveOrganization(ACME_REG_CODE);
+
         SecurityContextHolder.getContext().setAuthentication(rihaAuthenticationToken);
+        TestUtils.setActiveOrganisation(rihaAuthenticationToken, ACME_REG_CODE);
 
         assertTrue(SecurityContextUtil.getActiveOrganization().isPresent());
     }
@@ -130,7 +132,8 @@ public class SecurityContextUtilTest {
 
     @Test
     public void isRiaApproverReturnsTrueWhenUserActiveOrganizationIsRiaAndUserHasApproverRole() {
-        rihaAuthenticationToken.setActiveOrganization(RIA_REG_CODE);
+
+        TestUtils.setActiveOrganisation(rihaAuthenticationToken, RIA_REG_CODE);
         SecurityContextHolder.getContext().setAuthentication(rihaAuthenticationToken);
 
         assertTrue(SecurityContextUtil.isRiaApprover());
@@ -138,12 +141,14 @@ public class SecurityContextUtilTest {
 
     @Test
     public void isRiaApproverReturnsFalseWhenUserActiveOrganizationIsRiaButUserDoesNotHaveApproverRole() {
-        rihaAuthenticationToken = JaneAuthenticationTokenBuilder.builder()
-                .setOrganizations(ImmutableMultimap.of(
-                        new RihaOrganization(RIA_REG_CODE, "RIA"),
-                        new SimpleGrantedAuthority(PRODUCER.getRole())))
-                .build();
-        rihaAuthenticationToken.setActiveOrganization(RIA_REG_CODE);
+
+
+        ImmutableMultimap<RihaOrganization, GrantedAuthority> ria = ImmutableMultimap.of(
+                new RihaOrganization(RIA_REG_CODE, "RIA"),
+                new SimpleGrantedAuthority(PRODUCER.getRole()));
+
+        rihaAuthenticationToken = TestUtils.getOAuth2LoginToken(ria, RIA_REG_CODE);
+
         SecurityContextHolder.getContext().setAuthentication(rihaAuthenticationToken);
 
         assertFalse(SecurityContextUtil.isRiaApprover());
@@ -151,12 +156,8 @@ public class SecurityContextUtilTest {
 
     @Test
     public void isRiaApproverReturnsFalseWhenUserActiveOrganizationIsNotRiaButUserHasApproverRole() {
-        rihaAuthenticationToken = JaneAuthenticationTokenBuilder.builder()
-                .setOrganizations(ImmutableMultimap.of(
-                        new RihaOrganization(ACME_REG_CODE, "Acme org"),
-                        new SimpleGrantedAuthority(APPROVER.getRole())))
-                .build();
-        rihaAuthenticationToken.setActiveOrganization(ACME_REG_CODE);
+
+        TestUtils.setActiveOrganisation(rihaAuthenticationToken, ACME_REG_CODE);
         SecurityContextHolder.getContext().setAuthentication(rihaAuthenticationToken);
 
         assertFalse(SecurityContextUtil.isRiaApprover());

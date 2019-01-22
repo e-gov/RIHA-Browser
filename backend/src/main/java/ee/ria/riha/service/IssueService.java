@@ -22,6 +22,8 @@ import java.util.function.Function;
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
 import static ee.ria.riha.domain.model.IssueStatus.OPEN;
 import static ee.ria.riha.domain.model.IssueType.*;
+import static ee.ria.riha.service.IssueCommentService.COMMENT_TO_DASHBOARD_ISSUE_COMMENT;
+import static ee.ria.riha.service.IssueEventService.COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL;
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 import static ee.ria.riha.service.auth.RoleType.APPROVER;
@@ -29,8 +31,6 @@ import static ee.ria.riha.service.auth.RoleType.PRODUCER;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.StringUtils.hasText;
-import static ee.ria.riha.service.IssueEventService.COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL;
-import static ee.ria.riha.service.IssueCommentService.COMMENT_TO_DASHBOARD_ISSUE_COMMENT;
 
 /**
  * Info system issue service
@@ -106,8 +106,12 @@ public class IssueService {
                 .organizationCode(comment.getOrganization_code())
                 .status(comment.getStatus() != null ? IssueStatus.valueOf(comment.getStatus()) : null)
                 .infoSystemFullName(comment.getInfosystem_full_name())
-                .resolutionType(comment.getResolution_type() != null ? IssueResolutionType.valueOf(comment.getResolution_type()) : null)
-                .events(comment.getEvents() == null ? null : comment.getEvents().stream()
+                .resolutionType(comment.getResolution_type() != null
+                        ? IssueResolutionType.valueOf(comment.getResolution_type())
+                        : null)
+                .events(comment.getEvents() == null
+                        ? null
+                        : comment.getEvents().stream()
                         .map(COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL)
                         .collect(toList()))
                 .build();
@@ -120,10 +124,14 @@ public class IssueService {
 
         return DashboardIssue.builder()
                 .id(comment.getComment_id())
+                .dateCreated(comment.getCreation_date())
+                .type(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .title(comment.getTitle())
                 .infoSystemFullName(comment.getInfosystem_full_name())
                 .infoSystemShortName(comment.getInfosystem_short_name())
-                .lastComment(COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment.getLast_comment()))
+                .lastComment(comment.getLast_comment_id() != null
+                        ? COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment)
+                        : null)
                 .build();
     };
 
@@ -176,14 +184,6 @@ public class IssueService {
         return "type,=," + IssueEntityType.ISSUE.name();
     }
 
-    private String getIssueSubTypeFilter(IssueType issueType) {
-        return "sub_type,=," + issueType.name();
-    }
-
-    private String getIssueStatusFilter(IssueStatus issueStatus) {
-        return "status,=," + issueStatus.name();
-    }
-
     private String getInfoSystemUuidEqFilter(UUID infoSystemUuid) {
         return "infosystem_uuid,=," + infoSystemUuid.toString();
     }
@@ -203,16 +203,6 @@ public class IssueService {
                 response.getTotalElements(),
                 response.getContent().stream()
                         .map(COMMENT_TO_RIHA_ISSUE_SUMMARY)
-                        .collect(toList()));
-    }
-
-    public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
-        PagedResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
-
-        return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
-                response.getTotalElements(),
-                response.getContent().stream()
-                        .map(COMMENT_TO_DASHBOARD_ISSUE)
                         .collect(toList()));
     }
 
@@ -308,6 +298,14 @@ public class IssueService {
 
     private boolean isFeedbackRequestIssue(Issue issue) {
         return FEEDBACK_REQUEST_ISSUE_TYPES.contains(issue.getType());
+    }
+
+    private String getIssueStatusFilter(IssueStatus issueStatus) {
+        return "status,=," + issueStatus.name();
+    }
+
+    private String getIssueSubTypeFilter(IssueType issueType) {
+        return "sub_type,=," + issueType.name();
     }
 
     /**
@@ -479,5 +477,26 @@ public class IssueService {
         decisionEvent.setResolutionType(decisionType);
 
         issueEventService.createEvent(issueId, decisionEvent);
+    }
+
+    public PagedResponse<DashboardIssue> listOrganizationInfosystemIssues(String organizationCode,
+                                                                          CompositeFilterRequest filter,
+                                                                          Pageable pageable) {
+        filter.addFilterParameter(getOrganizationInfoSystemIssuesCompositeFilter(organizationCode));
+        return listDashboardIssues(pageable, filter);
+    }
+
+    private String getOrganizationInfoSystemIssuesCompositeFilter(String organizationCode) {
+        return "organization-infosystems-issues:" + organizationCode;
+    }
+
+    public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
+        PagedGridResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
+
+        return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
+                response.getTotalElements(),
+                response.getContent().stream()
+                        .map(COMMENT_TO_DASHBOARD_ISSUE)
+                        .collect(toList()));
     }
 }
