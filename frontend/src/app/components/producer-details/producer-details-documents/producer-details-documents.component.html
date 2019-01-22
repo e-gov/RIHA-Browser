@@ -18,6 +18,9 @@
           <span *ngIf="!canDownload(doc)" class="text-muted">{{ doc.name }}</span>
           <app-file-hint [file]="doc"></app-file-hint>
         </td>
+        <td>
+          <app-file-create-update-date [file]="doc"></app-file-create-update-date>
+        </td>
       </tr>
     </table>
   </div>

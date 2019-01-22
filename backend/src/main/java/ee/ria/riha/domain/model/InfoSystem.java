@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Holds Information System data and provides accessors for JSON manipulation.
@@ -34,9 +32,33 @@ public class InfoSystem {
     private static final String META_UPDATE_TIMESTAMP_KEY = "update_timestamp";
     private static final String DATA_FILES_KEY = "data_files";
     private static final String DOCUMENTS_KEY = "documents";
-    private static final String DOCUMENT_METADATA_URL_KEY = "url";
-    private static final String DOCUMENT_METADATA_NAME_KEY = "name";
+    private static final String LEGISLATIONS_KEY = "legislations";
+    private static final String FILE_METADATA_URL_KEY = "url";
+    private static final String FILE_METADATA_NAME_KEY = "name";
+    private static final String FILE_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
+
+    private static final Function<JsonNode, InfoSystemFileMetadata> DATA_FILE_METADATA_EXTRACTOR = jsonNode -> {
+        InfoSystemFileMetadata metadata = new InfoSystemFileMetadata();
+        metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
+        metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
+        metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
+        return metadata;
+    };
+
     private static final String DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
+    private static final Function<JsonNode, InfoSystemDocumentMetadata> DOCUMENT_METADATA_EXTRACTOR = jsonNode -> {
+        InfoSystemDocumentMetadata metadata = new InfoSystemDocumentMetadata();
+        metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
+        metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
+        metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
+        metadata.setAccessRestricted(jsonNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
+        if (metadata.isAccessRestricted()) {
+            metadata.setAccessRestrictionJson(jsonNode.path(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
+        }
+        return metadata;
+    };
 
     private Long id;
     private JsonNode jsonContent;
@@ -294,18 +316,16 @@ public class InfoSystem {
             return new ArrayList<>();
         }
 
-        return extractDocumentMetadata(documentsNode);
+        return extractFileMetadata(documentsNode, DOCUMENT_METADATA_EXTRACTOR);
     }
 
-    private ArrayList<InfoSystemDocumentMetadata> extractDocumentMetadata(JsonNode documentsNode) {
-        ArrayList<InfoSystemDocumentMetadata> documents = new ArrayList<>();
+    private <T extends InfoSystemFileMetadata> List<T> extractFileMetadata(JsonNode documentsNode,
+                                                                           Function<JsonNode, T> metadataExtractor) {
+        List<T> documents = new ArrayList<>();
         for (JsonNode documentNode : documentsNode) {
-            documents.add(InfoSystemDocumentMetadata.builder()
-                    .name(documentNode.path(DOCUMENT_METADATA_NAME_KEY).asText(null))
-                    .url(documentNode.path(DOCUMENT_METADATA_URL_KEY).asText(null))
-                    .accessRestricted(documentNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY))
-                    .build());
+            documents.add(metadataExtractor.apply(documentNode));
         }
+
         return documents;
     }
 
@@ -314,13 +334,27 @@ public class InfoSystem {
      *
      * @return list of data file metadata or empty list in case data file node does not exists, not an array or empty
      */
-    public List<InfoSystemDocumentMetadata> getDataFileMetadata() {
+    public List<InfoSystemFileMetadata> getDataFileMetadata() {
         JsonNode dataFilesNode = jsonContent.path(DATA_FILES_KEY);
         if (!dataFilesNode.isArray()) {
             return new ArrayList<>();
         }
 
-        return extractDocumentMetadata(dataFilesNode);
+        return extractFileMetadata(dataFilesNode, DATA_FILE_METADATA_EXTRACTOR);
+    }
+
+    /**
+     * Utility method for retrieving of legislations metadata. Does not modify source JsonNode.
+     *
+     * @return list of legislations metadata or empty list in case data file node does not exists, not an array or empty
+     */
+    public List<InfoSystemFileMetadata> getLegislationsMetadata() {
+        JsonNode dataFilesNode = jsonContent.path(LEGISLATIONS_KEY);
+        if (!dataFilesNode.isArray()) {
+            return new ArrayList<>();
+        }
+
+        return extractFileMetadata(dataFilesNode, DATA_FILE_METADATA_EXTRACTOR);
     }
 
     /**
@@ -349,4 +383,66 @@ public class InfoSystem {
         return contactsNode.findValuesAsText(CONTACTS_EMAIL_KEY);
     }
 
+    /**
+     * Utility method for setting creation and update timestamp for files and links that were created or updated
+     * during infosystem update
+     *
+     * @param prevSystemMetadata previous infosystem state
+     */
+    public void setCreationAndUpdateTimestampToFilesMetadata(InfoSystem prevSystemMetadata) {
+        setCreationAndUpdateTimestampToFilesMetadata(this.getDocumentMetadata(), prevSystemMetadata.getDocumentMetadata(), DOCUMENTS_KEY);
+        setCreationAndUpdateTimestampToFilesMetadata(this.getDataFileMetadata(), prevSystemMetadata.getDataFileMetadata(), DATA_FILES_KEY);
+        setCreationAndUpdateTimestampToFilesMetadata(this.getLegislationsMetadata(), prevSystemMetadata.getLegislationsMetadata(), LEGISLATIONS_KEY);
+    }
+
+    /**
+     * Utility method for setting creation and update timestamp for given list of files or links states
+     *
+     * @param currentFilesMetadataList list of current files states
+     * @param prevFilesMetadataList    list of previous files states
+     * @param jsonNodeName             name of json node containing the list
+     */
+    public void setCreationAndUpdateTimestampToFilesMetadata(List<? extends InfoSystemFileMetadata> currentFilesMetadataList,
+                                                             List<? extends InfoSystemFileMetadata> prevFilesMetadataList, String jsonNodeName) {
+        ArrayNode filesNode = ((ArrayNode) jsonContent.withArray(jsonNodeName));
+        filesNode.removeAll();
+
+        currentFilesMetadataList.forEach(currentFileMetadata -> {
+            Optional<? extends InfoSystemFileMetadata> foundPrevFileMetadata = prevFilesMetadataList.stream().filter(prevFileMetadata ->
+                    prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
+                            || prevFileMetadata.getName().equals(currentFileMetadata.getName())
+            ).findFirst();
+
+            if (foundPrevFileMetadata.isPresent()) {
+                //found prev version of same doc
+                currentFileMetadata.setCreationTimestamp(foundPrevFileMetadata.get().getCreationTimestamp());
+                if (currentFileMetadata.wasChanged(foundPrevFileMetadata.get())) {
+                    currentFileMetadata.setUpdateTimestamp(this.getUpdateTimestamp());
+                } else {
+                    currentFileMetadata.setUpdateTimestamp(foundPrevFileMetadata.get().getUpdateTimestamp());
+                }
+            } else {
+                //new doc
+                currentFileMetadata.setCreationTimestamp(this.getUpdateTimestamp());
+            }
+
+            ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
+                    .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl());
+
+            if (currentFileMetadata.getCreationTimestamp() != null) {
+                docNode.put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp());
+            }
+            if (currentFileMetadata.getUpdateTimestamp() != null) {
+                docNode.put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
+            }
+
+            if (currentFileMetadata instanceof InfoSystemDocumentMetadata &&
+                    ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson() != null) {
+                docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
+                        ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
+            }
+        });
+
+
+    }
 }

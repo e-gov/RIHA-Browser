@@ -1,15 +1,17 @@
 package ee.ria.riha.authentication;
 
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.util.Assert;
 
-import java.util.Collection;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static org.springframework.util.StringUtils.hasText;
 
@@ -19,14 +21,19 @@ import static org.springframework.util.StringUtils.hasText;
  * @author Valentin Suhnjov
  */
 @Slf4j
-public class RihaUserDetails implements UserDetails {
+@Getter
+public class RihaUserDetails implements UserDetails, OidcUser {
 
     private UserDetails delegate;
+
+    private Map<String, RihaOrganization> organizationsByCode;
+    private RihaOrganization activeOrganization;
 
     private String personalCode;
     private String firstName;
     private String lastName;
     private Multimap<RihaOrganization, GrantedAuthority> organizationAuthorities;
+    private OidcUserRequest userRequest;
 
     public RihaUserDetails(UserDetails delegate, String personalCode) {
         this(delegate, personalCode, null);
@@ -39,29 +46,33 @@ public class RihaUserDetails implements UserDetails {
 
         this.delegate = delegate;
         this.personalCode = personalCode;
+
+        initOrganizationAuthorities(organizationAuthorities);
+    }
+
+    private void initOrganizationAuthorities(Multimap<RihaOrganization, GrantedAuthority> organizationAuthorities) {
         this.organizationAuthorities = organizationAuthorities != null
                 ? ImmutableListMultimap.copyOf(organizationAuthorities)
                 : ImmutableMultimap.of();
+
+
+        Map<String, RihaOrganization> orgRoles = new HashMap<>();
+        getOrganizationAuthorities().keys().forEach(o -> orgRoles.put(o.getCode(), o));
+        this.organizationsByCode = ImmutableMap.copyOf(orgRoles);
     }
 
-    public String getPersonalCode() {
-        return personalCode;
-    }
+    public String getTaraAmr() {
 
-    public String getFirstName() {
-        return firstName;
-    }
+        if (getUserRequest() == null
+                || getUserRequest().getIdToken() == null
+                || getUserRequest().getIdToken().getClaims() == null
+                || getUserRequest().getIdToken().getClaims().get("amr") == null) {
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+            return null;
+        }
 
-    public String getLastName() {
-        return lastName;
-    }
+        return getUserRequest().getIdToken().getClaims().get("amr").toString();
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getFullName() {
@@ -83,7 +94,30 @@ public class RihaUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return delegate.getAuthorities();
+        return getEffectiveAuthorities();
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        HashMap<String, Object> attributes = new HashMap<>();
+        attributes.put("personalCode", personalCode);
+        attributes.put("firstName", firstName);
+        attributes.put("lastName", lastName);
+        return attributes;
+    }
+
+    private Set<GrantedAuthority> getEffectiveAuthorities() {
+        Set<GrantedAuthority> combinedAuthorities = new HashSet<>();
+
+        if (delegate.getAuthorities() != null) {
+            combinedAuthorities.addAll(delegate.getAuthorities());
+        }
+
+        if (this.activeOrganization != null) {
+            combinedAuthorities.addAll(organizationAuthorities.get(this.activeOrganization));
+        }
+
+        return ImmutableSet.copyOf(combinedAuthorities);
     }
 
     @Override
@@ -115,5 +149,63 @@ public class RihaUserDetails implements UserDetails {
     public boolean isEnabled() {
         return delegate.isEnabled();
     }
+
+    @Override
+    public String getName() {
+        return getFullName();
+    }
+
+    @Override
+    public Map<String, Object> getClaims() {
+        if (userRequest == null || userRequest.getIdToken() == null) {
+            return null;
+        }
+        return userRequest.getIdToken().getClaims();
+    }
+
+    @Override
+    public OidcUserInfo getUserInfo() {
+
+        if (userRequest == null) {
+            return null;
+        }
+
+        return new OidcUserInfo(userRequest.getIdToken().getClaims());
+    }
+
+    @Override
+    public OidcIdToken getIdToken() {
+        return userRequest != null
+                ? userRequest.getIdToken()
+                : null;
+    }
+
+    public void setUserRequest(OidcUserRequest userRequest) {
+        this.userRequest = userRequest;
+    }
+
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setActiveOrganization(RihaOrganization activeOrganization) {
+        this.activeOrganization = activeOrganization;
+    }
+
+    public void setActiveOrganization(String organisationCode) {
+        if (organisationCode != null && this.getOrganizationsByCode() != null && getOrganizationsByCode().containsKey(organisationCode)) {
+            setActiveOrganization(getOrganizationsByCode().get(organisationCode));
+        } else if (organisationCode == null) {
+            this.setActiveOrganization((RihaOrganization) null);
+        }
+    }
+
+
+
 
 }

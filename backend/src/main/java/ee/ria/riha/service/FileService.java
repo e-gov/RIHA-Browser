@@ -1,11 +1,14 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.domain.InfoSystemRepository;
+import ee.ria.riha.domain.model.FileResource;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
+import ee.ria.riha.domain.model.InfoSystemFileMetadata;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
 import ee.ria.riha.service.auth.RoleType;
 import ee.ria.riha.storage.domain.FileRepository;
+import ee.ria.riha.storage.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +21,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,6 +35,22 @@ public class FileService {
     private static final String INLINE_CONTENT_DISPOSITION_TYPE = "inline";
     private static final String ATTACHMENT_CONTENT_DISPOSITION_TYPE = "attachment";
     private static final String CONTENT_DISPOSITION_TOKEN_DELIMITER = ";";
+    private static final Function<ee.ria.riha.storage.domain.model.FileResource, FileResource> STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL =
+            storageFileResource -> {
+                if (storageFileResource == null) {
+                    return null;
+                }
+
+                return FileResource.builder()
+                        .fileResourceUuid(storageFileResource.getFile_resource_uuid())
+                        .fileResourceName(storageFileResource.getFile_resource_name())
+                        .infoSystemUuid(storageFileResource.getInfosystem_uuid())
+                        .infoSystemName(storageFileResource.getInfosystem_name())
+                        .infoSystemOwnerCode(storageFileResource.getInfosystem_owner_code())
+                        .infoSystemOwnerName(storageFileResource.getInfosystem_owner_name())
+                        .infoSystemShortName(storageFileResource.getInfosystem_short_name())
+                        .build();
+            };
 
     @Autowired
     private FileRepository fileRepository;
@@ -102,12 +122,12 @@ public class FileService {
     }
 
     private void checkFileAccess(InfoSystem infoSystem, UUID fileUuid) {
-        List<InfoSystemDocumentMetadata> matchingFileMetaData = getMatchingDocumentMetadata(infoSystem, fileUuid);
-        if (matchingFileMetaData.isEmpty()) {
+        List<InfoSystemFileMetadata> matchingFileMetadata = getMatchingFileMetadata(infoSystem, fileUuid);
+        if (matchingFileMetadata.isEmpty()) {
             throw new IllegalBrowserStateException("File is not defined in info system description");
         }
 
-        if (metadataContainsAccessRestriction(matchingFileMetaData)
+        if (metadataContainsAccessRestriction(matchingFileMetadata)
                 && !(hasRole(RoleType.APPROVER)
                 || (hasRole(RoleType.PRODUCER) && infoSystemAuthorizationService.isOwner(infoSystem)))) {
             throw new IllegalBrowserStateException("File access is restricted");
@@ -143,15 +163,28 @@ public class FileService {
         return contentDispositionTokens.stream().collect(Collectors.joining(CONTENT_DISPOSITION_TOKEN_DELIMITER));
     }
 
-    private List<InfoSystemDocumentMetadata> getMatchingDocumentMetadata(InfoSystem infoSystem, UUID fileUuid) {
+    private List<InfoSystemFileMetadata> getMatchingFileMetadata(InfoSystem infoSystem, UUID fileUuid) {
         return Stream.concat(infoSystem.getDocumentMetadata().stream(), infoSystem.getDataFileMetadata().stream())
                 .filter(i -> i.getUrl().equalsIgnoreCase("file://" + fileUuid.toString()))
                 .collect(toList());
     }
 
-    private boolean metadataContainsAccessRestriction(List<InfoSystemDocumentMetadata> documentMetadata) {
-        return documentMetadata.stream()
+    private boolean metadataContainsAccessRestriction(List<InfoSystemFileMetadata> fileMetadata) {
+        return fileMetadata.stream()
+                .filter(metadata -> metadata instanceof InfoSystemDocumentMetadata)
+                .map(metadata -> (InfoSystemDocumentMetadata) metadata)
                 .anyMatch(InfoSystemDocumentMetadata::isAccessRestricted);
     }
 
+    public PagedResponse<FileResource> list(Pageable pageable, CompositeFilterRequest filterRequest) {
+        PagedGridResponse<ee.ria.riha.storage.domain.model.FileResource> fileResourcePagedResponse = fileRepository.list(
+                filterRequest, pageable);
+
+        return new PagedResponse<>(
+                new PageRequest(fileResourcePagedResponse.getPage(), fileResourcePagedResponse.getSize()),
+                fileResourcePagedResponse.getTotalElements(),
+                fileResourcePagedResponse.getContent().stream()
+                        .map(STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL)
+                        .collect(Collectors.toList()));
+    }
 }

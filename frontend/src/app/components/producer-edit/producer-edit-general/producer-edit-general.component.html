@@ -1,6 +1,6 @@
 <div *ngIf="!isLoggedIn()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Palun logige sisse</h3>
-  <p class="mb-0">Muutmise alustamiseks on vaja RIHAsse sisse logida. <a [routerLink]="'/Login'">Logi sisse.</a></p>
+  <p class="mb-0">Muutmise alustamiseks on vaja RIHAsse sisse logida. <a href="/oauth2/authorization/tara">Logi sisse.</a></p>
 </div>
 <div *ngIf="isLoggedIn() && !canDescribe()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>

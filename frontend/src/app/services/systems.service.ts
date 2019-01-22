@@ -201,6 +201,27 @@ export class SystemsService {
     });
   }
 
+  public getSystemsObjectFiles(filters?, gridData?){
+    let params: URLSearchParams = new URLSearchParams();
+
+    if (!isNullOrUndefined(filters)) {
+      params.append('filter', `data:Kommentaar:%${ filters.searchText }%`);
+      params.append('filter', `data:Andmeobjekti nimi:%${ filters.searchText }%`);
+    }
+
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
+    }
+
+    return this.http.get('/api/v1/systems/files', {
+      search: params
+    }).toPromise();
+  }
+
   public getSystem(reference) {
     return this.http.get(`/api/v1/systems/${ reference }`).toPromise();
   }
@@ -251,6 +272,7 @@ export class SystemsService {
     params.append('size', '1000');
     params.append('filter', 'status:OPEN');
     params.append('filter', 'sub_type');
+    params.append('sort', sort ? sort : '-last_comment_creation_date');
 
     let urlToUse = '/api/v1/dashboard/issues';
     if (relation == 'person'){
@@ -260,6 +282,18 @@ export class SystemsService {
     }
 
     return this.http.get(urlToUse, {
+      search: params
+    }).toPromise();
+  }
+
+  public getActiveIssuesForOrganization(organizationCode, sort?) {
+    let params: URLSearchParams = new URLSearchParams();
+    params.append('size', '1000');
+    params.append('filter', 'status:OPEN');
+    params.append('sort', sort ? sort : '-last_comment_creation_date');
+
+
+    return this.http.get(`/api/v1/organizations/${ organizationCode }/systems/issues`, {
       search: params
     }).toPromise();
   }

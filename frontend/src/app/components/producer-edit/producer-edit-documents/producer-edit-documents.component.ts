@@ -121,12 +121,12 @@ export class ProducerEditDocumentsComponent implements OnInit {
       this.documents[i].accessRestriction = {
         startDate: {
           day: d.getDate(),
-          month: d.getMonth(),
+          month: d.getMonth() + 1, //JS Date object counts month 0 to 11
           year: d.getFullYear()
         },
         endDate: {
           day: d.getDate(),
-          month: d.getMonth(),
+          month: d.getMonth() + 1, //JS Date object counts month 0 to 11
           year: d.getFullYear() + 5
         },
         reasonCode: '',

@@ -19,6 +19,68 @@ tags:
 schemes:
 - "http"
 paths:
+  /api/v1/dashboard/issues/my:
+    get:
+      summary: "List issues related to current user"
+      description: ""
+      operationId: "listUserRelatedIssues"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "page number"
+        required: false
+        type: "integer"
+      - name: "size"
+        in: "query"
+        description: "page size"
+        required: false
+        type: "integer"
+      - name: "filter"
+        in: "query"
+        description: "filter options"
+        required: false
+        type: "string"
+      - name: "sort"
+        in: "query"
+        description: "sorting options"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PagedResponseDashboardIssue"
+  /api/v1/dashboard/issues/org:
+    get:
+      summary: "List issues related to current user organization"
+      description: ""
+      operationId: "listUserActiveOrganizationRelatedIssues"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "page number"
+        required: false
+        type: "integer"
+      - name: "size"
+        in: "query"
+        description: "page size"
+        required: false
+        type: "integer"
+      - name: "filter"
+        in: "query"
+        description: "filter options"
+        required: false
+        type: "string"
+      - name: "sort"
+        in: "query"
+        description: "sorting options"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PagedResponseDashboardIssue"
   /api/v1/environment:
     get:
       tags:
@@ -262,6 +324,43 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/PagedResponseIssueEntity"
+  /api/v1/organizations/{organizationCode}/systems/issues:
+    get:
+      tags:
+      - "Issues"
+      summary: "List issues that belong to specific organization"
+      description: ""
+      operationId: "listOrganizationSystemsIssues"
+      parameters:
+      - name: "organizationCode"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "page number"
+        required: false
+        type: "integer"
+      - name: "size"
+        in: "query"
+        description: "page size"
+        required: false
+        type: "integer"
+      - name: "filter"
+        in: "query"
+        description: "filter options"
+        required: false
+        type: "string"
+      - name: "sort"
+        in: "query"
+        description: "sorting options"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PagedResponseDashboardIssue"
   /api/v1/systems:
     get:
       tags:
@@ -315,6 +414,39 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InfoSystemModel"
+  /api/v1/systems/files:
+    get:
+      tags:
+      - "File resources"
+      summary: "List file resources"
+      description: ""
+      operationId: "list"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "page number"
+        required: false
+        type: "integer"
+      - name: "size"
+        in: "query"
+        description: "page size"
+        required: false
+        type: "integer"
+      - name: "filter"
+        in: "query"
+        description: "filter options"
+        required: false
+        type: "string"
+      - name: "sort"
+        in: "query"
+        description: "sorting options"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PagedResponseFileResource"
   /api/v1/systems/{reference}:
     get:
       tags:
@@ -545,6 +677,64 @@ paths:
         default:
           description: "successful operation"
 definitions:
+  DashboardIssue:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      dateCreated:
+        type: "string"
+        format: "date-time"
+      type:
+        type: "string"
+        enum:
+        - "ESTABLISHMENT_REQUEST"
+        - "TAKE_INTO_USE_REQUEST"
+        - "MODIFICATION_REQUEST"
+        - "FINALIZATION_REQUEST"
+      title:
+        type: "string"
+      infoSystemFullName:
+        type: "string"
+      infoSystemShortName:
+        type: "string"
+      lastComment:
+        $ref: "#/definitions/DashboardIssueComment"
+  DashboardIssueComment:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      dateCreated:
+        type: "string"
+        format: "date-time"
+      authorName:
+        type: "string"
+      organizationName:
+        type: "string"
+      organizationCode:
+        type: "string"
+  FileResource:
+    type: "object"
+    properties:
+      fileResourceUuid:
+        type: "string"
+        format: "uuid"
+      infoSystemShortName:
+        type: "string"
+      infoSystemOwnerCode:
+        type: "string"
+      infoSystemOwnerName:
+        type: "string"
+      infoSystemUuid:
+        type: "string"
+        format: "uuid"
+      fileResourceName:
+        type: "string"
+      infoSystemName:
+        type: "string"
   InfoSystemModel:
     type: "object"
     properties:
@@ -673,6 +863,30 @@ definitions:
         - "ISSUE"
         - "ISSUE_COMMENT"
         - "ISSUE_EVENT"
+  IssueEventSummaryModel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      type:
+        type: "string"
+        enum:
+        - "CLOSED"
+        - "DECISION"
+      organizationName:
+        type: "string"
+      organizationCode:
+        type: "string"
+      resolutionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
+      dateCreated:
+        type: "string"
+        format: "date-time"
   IssueStatusUpdateModel:
     type: "object"
     properties:
@@ -742,6 +956,44 @@ definitions:
         type: "array"
         items:
           type: "object"
+      size:
+        type: "integer"
+        format: "int32"
+      page:
+        type: "integer"
+        format: "int32"
+      totalPages:
+        type: "integer"
+        format: "int32"
+  PagedResponseDashboardIssue:
+    type: "object"
+    properties:
+      totalElements:
+        type: "integer"
+        format: "int64"
+      content:
+        type: "array"
+        items:
+          $ref: "#/definitions/DashboardIssue"
+      size:
+        type: "integer"
+        format: "int32"
+      page:
+        type: "integer"
+        format: "int32"
+      totalPages:
+        type: "integer"
+        format: "int32"
+  PagedResponseFileResource:
+    type: "object"
+    properties:
+      totalElements:
+        type: "integer"
+        format: "int64"
+      content:
+        type: "array"
+        items:
+          $ref: "#/definitions/FileResource"
       size:
         type: "integer"
         format: "int32"
@@ -875,6 +1127,13 @@ definitions:
         format: "date-time"
       title:
         type: "string"
+      issueType:
+        type: "string"
+        enum:
+        - "ESTABLISHMENT_REQUEST"
+        - "TAKE_INTO_USE_REQUEST"
+        - "MODIFICATION_REQUEST"
+        - "FINALIZATION_REQUEST"
       organizationName:
         type: "string"
       organizationCode:
@@ -884,6 +1143,18 @@ definitions:
         enum:
         - "OPEN"
         - "CLOSED"
+      infoSystemFullName:
+        type: "string"
+      resolutionType:
+        type: "string"
+        enum:
+        - "POSITIVE"
+        - "NEGATIVE"
+        - "DISMISSED"
+      events:
+        type: "array"
+        items:
+          $ref: "#/definitions/IssueEventSummaryModel"
   UserDetailsModel:
     type: "object"
     properties:
