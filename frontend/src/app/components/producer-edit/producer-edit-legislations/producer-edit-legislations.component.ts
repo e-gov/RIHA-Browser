@@ -4,6 +4,7 @@ import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
+import {G} from "../../../globals/globals";
 
 @Component({
   selector: 'app-producer-edit-legislations',
@@ -15,14 +16,16 @@ export class ProducerEditLegislationsComponent implements OnInit {
   @Input() system: System;
   legislations: any[] = [];
   isChanged: boolean = false;
+  globals: any = G;
 
-  data: any = {url: '', name: ''};
+  data: any = {url: '', name: '', type: ''};
 
   addLegislation(addForm): void {
     if (addForm.valid){
       this.legislations.push({url: this.data.url,
-                              name: this.data.name ? this.data.name.trim() : ''});
-      this.data = {url: '', name: ''};
+                              name: this.data.name ? this.data.name.trim() : '',
+                              type: this.data.type});
+      this.data = {url: '', name: '', type: ''};
       addForm.reset();
       this.isChanged = true;
     }
