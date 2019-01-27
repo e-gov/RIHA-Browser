@@ -6,6 +6,8 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { EnvironmentService } from '../../../services/environment.service';
+import {GridData} from "../../../models/grid-data";
+import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-details-tech-docs',
@@ -17,6 +19,13 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
   @Input() system: System;
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
+
+  gridData: GridData = new GridData();
+
+  onSortChange(property): void{
+    this.gridData.changeSortOrder(property);
+    this.getDocuments();
+  }
 
   canDownload(doc){
     if (!doc.accessRestriction){
@@ -40,6 +49,8 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
       modalRef.result.then( result => {
         if (result.system) {
           this.onSystemChanged.emit(result.system);
+          this.system = result.system;
+          this.getDocuments();
         }
       }, reason => {
 
@@ -56,6 +67,29 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
               private toastrService: ToastrService) { }
 
   ngOnInit() {
+    this.gridData.changeSortOrder('name');
+    this.getDocuments();
   }
 
+  getDocuments() {
+    let documents = this.system.details.documents;
+    if (documents && documents.constructor === Array && documents.length > 0) {
+      let sort = this.gridData.sort;
+      let sortOrder = 'asc';
+      if(sort[0] === "-") {
+        sortOrder = 'desc';
+        sort = sort.substr(1);
+      }
+
+      documents = documents.map(doc => {
+        if (!doc.update_timestamp) {
+          doc.update_timestamp = doc.creation_timestamp;
+        }
+        return doc;
+      });
+      documents = _.orderBy(documents, [sort, 'name'], [sortOrder, 'asc']);
+    }
+
+    this.gridData.updateData({content: documents});
+  }
 }
