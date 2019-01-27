@@ -13,10 +13,7 @@ import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
@@ -141,6 +138,12 @@ public class IssueService {
             MODIFICATION_REQUEST,
             FINALIZATION_REQUEST);
 
+    private static final List<String> TOPICS_THAT_CANNOT_OPEN_FEEDBACK_REQUEST = Arrays.asList(
+            "x-tee alamsüsteem",
+            "standardlahendus",
+            "asutusesiseseks kasutamiseks",
+            "dokumendihaldussüsteem");
+
     @Autowired
     private CommentRepository commentRepository;
 
@@ -155,6 +158,9 @@ public class IssueService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private RelationService relationService;
 
     /**
      * List concrete info system issues.
@@ -215,7 +221,9 @@ public class IssueService {
      */
     public Issue createInfoSystemIssue(String reference, Issue model) {
         InfoSystem infoSystem = infoSystemService.get(reference);
+
         validateCreatedIssueType(model);
+        validateFeedbackRequestCanBeOpened(infoSystem);
         validateThereIsNoOpenFeedbackRequestIssueOfTheSameType(model, infoSystem.getUuid());
 
         Issue issue = prepareIssue(model);
@@ -232,6 +240,24 @@ public class IssueService {
         notificationService.sendNewIssueToApproversNotification(createdIssue, infoSystem);
 
         return createdIssue;
+    }
+
+    private void validateFeedbackRequestCanBeOpened(InfoSystem infoSystem) {
+
+        if (infoSystem.getTopics().stream()
+                .filter(Objects::nonNull)
+                .anyMatch(topic -> TOPICS_THAT_CANNOT_OPEN_FEEDBACK_REQUEST.contains(topic.trim().toLowerCase()))) {
+            throw new ValidationException("validation.issue.create.feedbackNotNeeded");
+        }
+
+        List<Relation> relations = relationService.listRelations(infoSystem.getShortName());
+
+        if (relations.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(relation -> RelationType.USED_SYSTEM.equals(relation.getType()))) {
+            throw new ValidationException("validation.issue.create.feedbackNotNeeded");
+        }
+
     }
 
     private void validateCreatedIssueType(Issue model) {
