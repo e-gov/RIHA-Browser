@@ -87,6 +87,6 @@
   <div *ngIf="canApprove()" class="actions-bar">
     <button *ngIf="userMatrix.hasApproverRole && allowEdit" class="btn btn-primary" (click)="openAddIssueModal()">Loo uus arutelu</button>
     <button *ngIf="userMatrix.hasApproverRole && !allowEdit" class="btn btn-primary" (click)="openAddIssueModal()">Lisa hinnang</button>
-    <button *ngIf="!userMatrix.hasApproverRole && allowEdit" class="btn btn-primary" (click)="openAddIssueModal()">Küsi hinnangut</button>
+    <button *ngIf="this.canRequestFeedback()" class="btn btn-primary" (click)="openAddIssueModal()">Küsi hinnangut</button>
   </div>
 </section>
