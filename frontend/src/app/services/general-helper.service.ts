@@ -9,7 +9,6 @@ import {ToastrService} from 'ngx-toastr';
 import {System} from '../models/system';
 import _ from 'lodash';
 
-
 declare var $: any;
 
 @Injectable()
@@ -167,8 +166,6 @@ export class GeneralHelperService {
   }
 
   public containsSpecialTopics(system: System): boolean {
-    const topicsWithNoFeedbackRequests = ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"];
-
     let topics = system.getTopics();
 
     if (!topics) {
@@ -177,7 +174,7 @@ export class GeneralHelperService {
 
     const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
 
-    return _.intersection(topicsWithNoFeedbackRequests, lowerCasedTopics).length > 0;
+    return _.intersection(G.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
   }
 
   public showError(txt?){
