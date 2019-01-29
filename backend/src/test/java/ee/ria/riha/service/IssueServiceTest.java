@@ -64,6 +64,9 @@ public class IssueServiceTest {
     @Mock
     private NotificationService notificationService;
 
+    @Mock
+    private RelationService relationService;
+
     @InjectMocks
     private IssueService issueService;
 
@@ -107,6 +110,10 @@ public class IssueServiceTest {
         doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
         doNothing().when(notificationService).sendNewIssueToApproversNotification(any(Issue.class),
                 any(InfoSystem.class));
+
+        when(relationService.listRelations(any(String.class))).thenAnswer((Answer<List<Long>>) invocation -> {
+            return new ArrayList<>();
+        });
     }
 
     private void setProducerRole() {

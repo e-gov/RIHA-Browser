@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { System } from '../../../models/system';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
-import { ApproverIssueDetailsComponent } from '../../approver-issue-details/approver-issue-details.component';
-import { SystemsService } from '../../../services/systems.service';
-import { EnvironmentService } from '../../../services/environment.service';
-import { UserMatrix } from '../../../models/user-matrix';
-import { Location } from '@angular/common';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {System} from '../../../models/system';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {ApproverAddIssueComponent} from '../../approver-add-issue/approver-add-issue.component';
+import {ApproverIssueDetailsComponent} from '../../approver-issue-details/approver-issue-details.component';
+import {SystemsService} from '../../../services/systems.service';
+import {EnvironmentService} from '../../../services/environment.service';
+import {UserMatrix} from '../../../models/user-matrix';
+import {Location} from '@angular/common';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-details-issues',
@@ -27,6 +28,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   closedIssues: any[] = [];
   newAdded: boolean = false;
   userMatrix: UserMatrix;
+  hasStandardRelations: boolean = false;
 
   openAddIssueModal(){
     const modalRef = this.modalService.open(ApproverAddIssueComponent, {
@@ -97,8 +99,33 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
+  canRequestFeedback() {
+
+    const topicsWithNoFeedbackRequests = ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"];
+
+    let topics = this.system.getTopics();
+
+    if (!topics) {
+      topics = [];
+    }
+
+    const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
+
+    const foundForbiddenTopic = _.intersection(topicsWithNoFeedbackRequests, lowerCasedTopics).length > 0;
+
+    // console.log('hasApproverRole: ', this.userMatrix.hasApproverRole, ", allowEdit: ", this.allowEdit,
+    //   ", hasStandardRelations: ", this.hasStandardRelations, ", hasForbiddenTopics", foundForbiddenTopic);
+    return !this.userMatrix.hasApproverRole && this.allowEdit && !this.hasStandardRelations && !foundForbiddenTopic;
+  }
+
   ngOnInit() {
     this.refreshIssues();
+
+    this.systemsService.getSystemRelations(this.system.details.short_name).then(res => {
+      this.hasStandardRelations = res.json() != null
+        && typeof _.find(res.json(), relation => relation != null && "USED_SYSTEM" === relation.type) !== 'undefined';
+    });
+
     if (this.issueId){
       if (!this.userMatrix.isLoggedIn){
         //alert('please log in');

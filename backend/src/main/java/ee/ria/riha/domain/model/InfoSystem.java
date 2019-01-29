@@ -33,6 +33,7 @@ public class InfoSystem {
     private static final String DATA_FILES_KEY = "data_files";
     private static final String DOCUMENTS_KEY = "documents";
     private static final String LEGISLATIONS_KEY = "legislations";
+    private static final String TOPICS_KEY = "topics";
     private static final String FILE_METADATA_URL_KEY = "url";
     private static final String FILE_METADATA_NAME_KEY = "name";
     private static final String FILE_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
@@ -355,6 +356,23 @@ public class InfoSystem {
         }
 
         return extractFileMetadata(dataFilesNode, DATA_FILE_METADATA_EXTRACTOR);
+    }
+
+    public List<String> getTopics() {
+        JsonNode topicsNode = jsonContent.path(TOPICS_KEY);
+        if (!topicsNode.isArray()) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<String> result = new ArrayList<>();
+
+        for (JsonNode topicNode : topicsNode) {
+            if (topicNode != null) {
+                result.add(topicNode.toString());
+            }
+        }
+
+        return result;
     }
 
     /**
