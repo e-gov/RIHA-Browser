@@ -4,6 +4,8 @@ import { ProducerEditLegislationsComponent } from '../../producer-edit/producer-
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
+import {GridData} from "../../../models/grid-data";
+import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-details-legislations',
@@ -15,6 +17,13 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
   @Input() system: System;
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
+
+  gridData: GridData = new GridData();
+
+  onSortChange(property): void{
+    this.gridData.changeSortOrder(property);
+    this.getLegislations();
+  }
 
   openLegislationsEdit(content) {
     this.systemsService.getSystem(this.system.details.short_name).then( res => {
@@ -29,6 +38,8 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
       modalRef.result.then( result => {
         if (result.system) {
           this.onSystemChanged.emit(result.system);
+          this.system = result.system;
+          this.getLegislations();
         }
       }, reason => {
 
@@ -43,6 +54,24 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
               private toastrService: ToastrService) { }
 
   ngOnInit() {
+    this.gridData.changeSortOrder('name');
+    this.getLegislations();
+  }
+
+  getLegislations() {
+    let legislations = this.system.details.legislations;
+    if (legislations && legislations.constructor === Array && legislations.length > 0) {
+      let sort = this.gridData.sort;
+      let sortOrder = 'asc';
+      if(sort[0] === "-") {
+        sortOrder = 'desc';
+        sort = sort.substr(1);
+      }
+
+      legislations = _.orderBy(legislations, [sort, 'name'], [sortOrder, 'asc']);
+    }
+
+    this.gridData.updateData({content: legislations});
   }
 
 }
