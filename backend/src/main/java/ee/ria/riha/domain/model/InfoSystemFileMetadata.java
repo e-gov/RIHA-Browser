@@ -12,6 +12,7 @@ public class InfoSystemFileMetadata {
 
     private String name;
     private String url;
+    private String type;
     private String creationTimestamp;
     private String updateTimestamp;
 
