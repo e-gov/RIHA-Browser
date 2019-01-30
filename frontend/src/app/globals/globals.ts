@@ -76,5 +76,24 @@ export const G = Object.freeze({
     code: 40,
     legislation: 'AvTS § 35 lg 2 p 2',
     description: 'Dokumendi kavand ja selle juurde kuuluvad dokumendid'
-  }]
+  }],
+  document_types: ['Viide lõppkasutaja vaatele',
+    'Viide (ava)andmetele',
+    'Kasutaja dokumentatsioon',
+    'Arhitektuuridokument',
+    'Kasutatav klassifikaator',
+    'Lähtekood',
+    'ISKE turbeosaklasside määramise akt',
+    'ISKE auditi kokkuvõte',
+    'Andmekaitseline mõjuhinnang',
+    'Muu tehniline dokumentatsioon'
+  ],
+  legislation_types: [
+    'Infosüsteemi põhimääruse kavand/eelnõu',
+    'Infosüsteemi põhimääruse kavandi/eelnõu seletuskiri',
+    'Infosüsteemi põhimäärus',
+    'Infosüsteemi põhimääruse seletuskiri',
+    'Infosüsteemi reguleeriv muu õigusakt',
+    'Muu õiguslik seletuskiri'
+  ]
 });

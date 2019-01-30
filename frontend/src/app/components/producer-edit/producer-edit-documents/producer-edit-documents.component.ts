@@ -22,36 +22,46 @@ export class ProducerEditDocumentsComponent implements OnInit {
   docFile: any = null;
   uploading: boolean = false;
   showAddLinkFields: boolean = false;
-  data: any = {url: '', name: ''};
+  showAddFileFields: boolean = false;
+  data: any = {url: '', name: '', type:''};
   blocks = [];
 
   addTechDoc(addForm): void {
     if (addForm.valid){
       this.documents.push({url: this.data.url,
-                          name: this.data.name ? this.data.name.trim() : ''});
-      this.data = {url: '', name: ''};
+                          name: this.data.name ? this.data.name.trim() : '',
+                          type: this.data.type});
+      this.data = {url: '', name: '', type: ''};
       addForm.reset();
       this.isChanged = true;
       this.showAddLinkFields = false;
     }
   }
 
-  fileChange(event, form){
+  fileChange(event){
     this.docFile = event.target.files[0];
-    this.uploading = true;
+  }
 
-    this.systemsService.postDataFile(this.docFile, this.system.details.short_name).then(res =>{
-      this.uploading = false;
-      this.documents.push({
-        url: 'file://' + res.text(),
-        name: this.docFile.name
+  uploadFile(event, addForm){
+    if (addForm.valid && this.docFile) {
+      this.uploading = true;
+
+      this.systemsService.postDataFile(this.docFile, this.system.details.short_name).then(res => {
+        this.uploading = false;
+        this.documents.push({
+          url: 'file://' + res.text(),
+          name: this.docFile.name,
+          type: this.data.type
+        });
+        this.data = {url: '', name: '', type: ''};
+        this.docFile = null;
+        this.isChanged = true;
+        this.showAddFileFields = false;
+      }, err => {
+        this.uploading = false;
+        this.docFile = null;
       });
-      this.docFile = null;
-      this.isChanged = true;
-    }, err =>{
-      this.uploading = false;
-      this.docFile = null;
-    });
+    }
   }
 
   deleteTechDoc(i): void {
