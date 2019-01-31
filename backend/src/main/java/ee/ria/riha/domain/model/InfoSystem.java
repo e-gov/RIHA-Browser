@@ -36,12 +36,14 @@ public class InfoSystem {
     private static final String TOPICS_KEY = "topics";
     private static final String FILE_METADATA_URL_KEY = "url";
     private static final String FILE_METADATA_NAME_KEY = "name";
+    private static final String FILE_METADATA_TYPE_KEY = "type";
     private static final String FILE_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
 
     private static final Function<JsonNode, InfoSystemFileMetadata> DATA_FILE_METADATA_EXTRACTOR = jsonNode -> {
         InfoSystemFileMetadata metadata = new InfoSystemFileMetadata();
         metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
         metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setType(jsonNode.path(FILE_METADATA_TYPE_KEY).asText(null));
         metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
         metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
         return metadata;
@@ -52,6 +54,7 @@ public class InfoSystem {
         InfoSystemDocumentMetadata metadata = new InfoSystemDocumentMetadata();
         metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
         metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setType(jsonNode.path(FILE_METADATA_TYPE_KEY).asText(null));
         metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
         metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
         metadata.setAccessRestricted(jsonNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
@@ -456,6 +459,9 @@ public class InfoSystem {
             ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
                     .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl());
 
+            if (currentFileMetadata.getType() != null) {
+                docNode.put(FILE_METADATA_TYPE_KEY, currentFileMetadata.getType());
+            }
             if (currentFileMetadata.getCreationTimestamp() != null) {
                 docNode.put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp());
             }

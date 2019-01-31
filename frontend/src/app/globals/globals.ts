@@ -77,6 +77,25 @@ export const G = Object.freeze({
     legislation: 'AvTS § 35 lg 2 p 2',
     description: 'Dokumendi kavand ja selle juurde kuuluvad dokumendid'
   }],
+  topics_that_do_not_require_feedback_on_creation: ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"],
 
-  topics_that_do_not_require_feedback_on_creation: ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"]
+  document_types: ['Viide lõppkasutaja vaatele',
+    'Viide (ava)andmetele',
+    'Kasutaja dokumentatsioon',
+    'Arhitektuuridokument',
+    'Kasutatav klassifikaator',
+    'Lähtekood',
+    'ISKE turbeosaklasside määramise akt',
+    'ISKE auditi kokkuvõte',
+    'Andmekaitseline mõjuhinnang',
+    'Muu tehniline dokumentatsioon'
+  ],
+  legislation_types: [
+    'Infosüsteemi põhimääruse kavand/eelnõu',
+    'Infosüsteemi põhimääruse kavandi/eelnõu seletuskiri',
+    'Infosüsteemi põhimäärus',
+    'Infosüsteemi põhimääruse seletuskiri',
+    'Infosüsteemi reguleeriv muu õigusakt',
+    'Muu õiguslik seletuskiri'
+  ]
 });

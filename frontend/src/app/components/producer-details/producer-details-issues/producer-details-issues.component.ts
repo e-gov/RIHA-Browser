@@ -8,7 +8,7 @@ import {EnvironmentService} from '../../../services/environment.service';
 import {UserMatrix} from '../../../models/user-matrix';
 import {Location} from '@angular/common';
 import {GeneralHelperService} from '../../../services/general-helper.service';
-
+import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-details-issues',
@@ -29,6 +29,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   closedIssues: any[] = [];
   newAdded: boolean = false;
   userMatrix: UserMatrix;
+  hasStandardRelations: boolean = false;
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
@@ -104,8 +105,33 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     return !this.userMatrix.hasApproverRole && this.allowEdit && !this.system.hasUsedSystemTypeRelations && !this.generalHelperService.containsSpecialTopics(this.system);
   }
 
+  canRequestFeedback() {
+
+    const topicsWithNoFeedbackRequests = ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"];
+
+    let topics = this.system.getTopics();
+
+    if (!topics) {
+      topics = [];
+    }
+
+    const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
+
+    const foundForbiddenTopic = _.intersection(topicsWithNoFeedbackRequests, lowerCasedTopics).length > 0;
+
+    // console.log('hasApproverRole: ', this.userMatrix.hasApproverRole, ", allowEdit: ", this.allowEdit,
+    //   ", hasStandardRelations: ", this.hasStandardRelations, ", hasForbiddenTopics", foundForbiddenTopic);
+    return !this.userMatrix.hasApproverRole && this.allowEdit && !this.hasStandardRelations && !foundForbiddenTopic;
+  }
+
   ngOnInit() {
     this.refreshIssues();
+
+    this.systemsService.getSystemRelations(this.system.details.short_name).then(res => {
+      this.hasStandardRelations = res.json() != null
+        && typeof _.find(res.json(), relation => relation != null && "USED_SYSTEM" === relation.type) !== 'undefined';
+    });
+
     if (this.issueId){
       if (!this.userMatrix.isLoggedIn){
         //alert('please log in');
