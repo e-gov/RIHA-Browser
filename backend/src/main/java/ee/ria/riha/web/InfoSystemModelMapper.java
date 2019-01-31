@@ -49,6 +49,7 @@ public class InfoSystemModelMapper implements ModelMapper<InfoSystem, InfoSystem
         model.setLastPositiveEstablishmentRequestDate(filteredInfoSystem.getLastPositiveEstablishmentRequestDate());
         model.setLastPositiveTakeIntoUseRequestDate(filteredInfoSystem.getLastPositiveTakeIntoUseRequestDate());
         model.setLastPositiveFinalizationRequestDate(filteredInfoSystem.getLastPositiveFinalizationRequestDate());
+        model.setHasUsedSystemTypeRelations(infoSystem.isHasUsedSystemTypeRelations());
 
         return model;
     }

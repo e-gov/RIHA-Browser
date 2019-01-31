@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { System } from '../../../models/system';
-import { G } from '../../../globals/globals';
-import { Router } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {System} from '../../../models/system';
+import {G} from '../../../globals/globals';
+import {Router} from '@angular/router';
+import {GeneralHelperService} from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-details-general',
@@ -18,7 +19,7 @@ export class ProducerDetailsGeneralComponent implements OnInit {
     this.router.navigate(['/Infosüsteemid'], {queryParams: {topic: topic}});
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,  private helper: GeneralHelperService) { }
 
   ngOnInit() {
   }

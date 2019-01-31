@@ -71,6 +71,7 @@ public class InfoSystem {
     private Date lastPositiveEstablishmentRequestDate;
     private Date lastPositiveTakeIntoUseRequestDate;
     private Date lastPositiveFinalizationRequestDate;
+    private boolean hasUsedSystemTypeRelations;
 
     /**
      * Creates {@link InfoSystem} instance with empty {@link JsonNode} as a source
@@ -321,6 +322,14 @@ public class InfoSystem {
         }
 
         return extractFileMetadata(documentsNode, DOCUMENT_METADATA_EXTRACTOR);
+    }
+
+    public boolean isHasUsedSystemTypeRelations() {
+        return hasUsedSystemTypeRelations;
+    }
+
+    public void setHasUsedSystemTypeRelations(boolean hasUsedSystemTypeRelations) {
+        this.hasUsedSystemTypeRelations = hasUsedSystemTypeRelations;
     }
 
     private <T extends InfoSystemFileMetadata> List<T> extractFileMetadata(JsonNode documentsNode,
