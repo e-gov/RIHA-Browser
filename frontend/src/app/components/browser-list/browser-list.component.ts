@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { GridData } from '../../models/grid-data';
-import { GeneralHelperService } from '../../services/general-helper.service';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { G } from '../../globals/globals';
+import {Component, OnInit} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {GridData} from '../../models/grid-data';
+import {GeneralHelperService} from '../../services/general-helper.service';
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
+import {G} from '../../globals/globals';
+import {System} from '../../models/system';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-browser-list',
@@ -79,7 +81,8 @@ export class BrowserListComponent implements OnInit {
     this.gridData.page = page || 0;
     this.systemsService.getSystems(params, this.gridData).then(
       res => {
-        this.gridData.updateData(res.json());
+
+        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getSystems();
         } else {

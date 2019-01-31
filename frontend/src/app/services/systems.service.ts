@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Headers, RequestOptions  } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestOptions, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { isNullOrUndefined } from 'util';
-import { EnvironmentService } from './environment.service';
-import * as moment from 'moment';
+import {isNullOrUndefined} from 'util';
+import {EnvironmentService} from './environment.service';
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
@@ -89,7 +88,7 @@ export class SystemsService {
       filters.ownerCode = user.getActiveOrganization().code;
     }
 
-    return this.getSystems(filters, gridData, `/api/v1/systems`);
+    return this.getSystems(filters, gridData, this.systemsUrl);
   }
 
   public getSystems(filters?, gridData?, url?) {
@@ -217,13 +216,13 @@ export class SystemsService {
       params.set('sort', gridData.sort);
     }
 
-    return this.http.get('/api/v1/systems/files', {
+    return this.http.get(this.systemsUrl + '/files', {
       search: params
     }).toPromise();
   }
 
   public getSystem(reference) {
-    return this.http.get(`/api/v1/systems/${ reference }`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ reference }`).toPromise();
   }
 
   public addSystem(value) {
@@ -234,7 +233,7 @@ export class SystemsService {
         purpose: value.purpose
       }
     };
-    return this.http.post(`/api/v1/systems`, system).toPromise();
+    return this.http.post(this.systemsUrl, system).toPromise();
   }
 
   public postDataFile(file, reference){
@@ -244,19 +243,19 @@ export class SystemsService {
     const headers = new Headers({});
     let options = new RequestOptions({ headers });
 
-    return this.http.post(`/api/v1/systems/${ reference }/files`, formData, options).toPromise();
+    return this.http.post(this.systemsUrl + `/${ reference }/files`, formData, options).toPromise();
   }
 
   public updateSystem(updatedData, reference?) {
-    return this.http.put(`/api/v1/systems/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
+    return this.http.put(this.systemsUrl + `/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
   public getSystemIssues(reference) {
-    return this.http.get(`/api/v1/systems/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
   }
 
   public addSystemIssue(reference, issue) {
-    return this.http.post(`/api/v1/systems/${ reference }/issues`, issue).toPromise();
+    return this.http.post(this.systemsUrl + `/${ reference }/issues`, issue).toPromise();
   }
 
   public getSystemIssueById(issueId) {
@@ -319,15 +318,15 @@ export class SystemsService {
   }
 
   public getSystemRelations(reference) {
-    return this.http.get(`/api/v1/systems/${ reference }/relations`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ reference }/relations`).toPromise();
   }
 
   public addSystemRelation(reference, relation) {
-    return this.http.post(`/api/v1/systems/${ reference }/relations`, relation).toPromise();
+    return this.http.post(this.systemsUrl + `/${ reference }/relations`, relation).toPromise();
   }
 
   public deleteSystemRelation(reference, relationId) {
-    return this.http.delete(`/api/v1/systems/${ reference }/relations/${ relationId }`).toPromise();
+    return this.http.delete(this.systemsUrl + `/${ reference }/relations/${ relationId }`).toPromise();
   }
 
   public closeSystemIssue(issueId, resolutionType) {
