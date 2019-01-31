@@ -105,25 +105,6 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     return !this.userMatrix.hasApproverRole && this.allowEdit && !this.system.hasUsedSystemTypeRelations && !this.generalHelperService.containsSpecialTopics(this.system);
   }
 
-  canRequestFeedback() {
-
-    const topicsWithNoFeedbackRequests = ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"];
-
-    let topics = this.system.getTopics();
-
-    if (!topics) {
-      topics = [];
-    }
-
-    const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
-
-    const foundForbiddenTopic = _.intersection(topicsWithNoFeedbackRequests, lowerCasedTopics).length > 0;
-
-    // console.log('hasApproverRole: ', this.userMatrix.hasApproverRole, ", allowEdit: ", this.allowEdit,
-    //   ", hasStandardRelations: ", this.hasStandardRelations, ", hasForbiddenTopics", foundForbiddenTopic);
-    return !this.userMatrix.hasApproverRole && this.allowEdit && !this.hasStandardRelations && !foundForbiddenTopic;
-  }
-
   ngOnInit() {
     this.refreshIssues();
 
