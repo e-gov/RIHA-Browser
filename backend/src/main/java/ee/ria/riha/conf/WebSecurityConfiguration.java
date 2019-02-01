@@ -34,8 +34,11 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.web.util.UriUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -48,6 +51,9 @@ import java.util.Map;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    // parameter passed from frontend. Contains the URL from where the login button was clicked.
+    private static final String REDIRECT_URL_PARAMETER_MARKER = "fromUrl";
 
     @Autowired
     private LdapUserDetailsService ldapUserDetailsService;
@@ -91,7 +97,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-                http
+        http
                 .csrf().disable() // needed for JWT verification
                 .cors().disable()
 
@@ -102,7 +108,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-                        .and()
+                .and()
+                .addFilterBefore((request, response, chain) -> {
+
+                            if (request instanceof HttpServletRequest && ((HttpServletRequest) request).getRequestURI().contains("/oauth2/authorization/tara")) {
+                                String fromUrlParameter = request.getParameter(REDIRECT_URL_PARAMETER_MARKER);
+                                log.info("authenticate request detected, fromUrl param ({}) is saved to session ", fromUrlParameter);
+                                ((HttpServletRequest) request).getSession().setAttribute("fromUrl", fromUrlParameter);
+                            }
+
+                            chain.doFilter(request, response);
+
+                        },
+                        ChannelProcessingFilter.class)
                 .oauth2Login()
                 .loginPage(applicationProperties.getBaseUrl())
                 .successHandler((request, response, authentication) -> {
@@ -111,7 +129,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                             ((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
                             ((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
                     );
-                    response.sendRedirect("/Login");
+
+                    String fromUrl = (String) request.getSession(false).getAttribute("fromUrl");
+
+                    if (fromUrl != null) {
+                        // fromUrl param has the following format:
+                        // /url?param1=paramValue&param2=param2Value...
+                        // should transform question marks into param delimiters
+                        fromUrl = fromUrl.replaceAll("\\?", "&");
+
+                        response.sendRedirect("/Login?" + UriUtils.encodePath("fromUrl=" + fromUrl, "UTF-8"));
+                    } else {
+                        response.sendRedirect("/Login");
+                    }
                 })
                 .redirectionEndpoint()
                 .baseUri("/authenticate")

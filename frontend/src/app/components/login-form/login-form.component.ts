@@ -22,7 +22,7 @@ export class LoginFormComponent implements OnInit {
     this.environmentService.doLogin().then(res => {
       this.environmentService.loadEnvironmentData().then(res => {
         this.sessionHelper.refreshSessionTimer();
-        let prevLocation = this.environmentService.getPrevVisitedLocation();
+        let prevLocation = this.router.routerState.snapshot.root.queryParams.fromUrl;
         if (prevLocation){
           this.router.navigate([decodeURIComponent(prevLocation)]);
         } else {
@@ -70,6 +70,10 @@ export class LoginFormComponent implements OnInit {
 
     this.login();
 
+  }
+
+  getCurrentUrl() {
+    return this.router.url;
   }
 
   ngOnInit() {
