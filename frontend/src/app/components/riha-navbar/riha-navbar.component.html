@@ -4,7 +4,7 @@
 
     </div>
     <div class="right d-flex align-items-center">
-      <a href="/oauth2/authorization/tara" *ngIf="!isUserLoggedIn()" class="btn btn-primary btn-sm">
+      <a href="/oauth2/authorization/tara?fromUrl={{getCurrentUrl()}}" *ngIf="!isUserLoggedIn()" class="btn btn-primary btn-sm">
         <span>Logi Sisse</span>
         <span class="fa fa-user"></span>
       </a>
