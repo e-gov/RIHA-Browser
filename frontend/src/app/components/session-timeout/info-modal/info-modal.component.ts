@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ModalHelperService } from '../../../services/modal-helper.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {ModalHelperService} from '../../../services/modal-helper.service';
 
 @Component({
   selector: 'app-info-modal',
@@ -19,6 +19,10 @@ export class InfoModalComponent implements OnInit {
               private modalService: ModalHelperService) { }
 
   ngOnInit() {
+  }
+
+  getCurrentUrl() {
+    return this.router.url;
   }
 
 }
