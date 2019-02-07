@@ -32,9 +32,15 @@ export class GridData {
     return ret;
   }
 
-  updateData(data: any): void {
+  updateData(data: any, contentTransformer?: any): void {
     if (!isNullOrUndefined(data.totalElements)) this.totalElements = data.totalElements;
-    if (!isNullOrUndefined(data.content)) this.content = data.content;
+    if (!isNullOrUndefined(data.content)) {
+      if (contentTransformer) {
+        this.content = contentTransformer(data.content);
+      } else {
+        this.content = data.content;
+      }
+    }
     if (!isNullOrUndefined(data.size)) this.size = data.size;
     if (!isNullOrUndefined(data.totalPages)) this.totalPages = data.totalPages;
     if (!isNullOrUndefined(data.page)) this.page = data.page;
