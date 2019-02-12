@@ -141,6 +141,8 @@ public class InfoSystemTest {
         documentMeta2.setName("document2");
         documentMeta2.setUrl("file://067e2e90-953a-464e-8e20-5460c6899393");
         documentMeta2.setAccessRestricted(true);
+        documentMeta2.setAccessRestrictionJson(JsonNodeFactory.instance.objectNode()
+                .put("reasonCode", 38));
 
         ((ArrayNode) validInfoSystem.getJsonContent().withArray("documents"))
                 .add(createDocument(documentMeta1))
