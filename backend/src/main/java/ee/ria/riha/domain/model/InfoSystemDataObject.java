@@ -19,7 +19,7 @@ public class InfoSystemDataObject {
     private Boolean avFlag;
     private Boolean iaFlag;
     private Boolean paFlag;
-
+    private String personalData;
 
 
 }

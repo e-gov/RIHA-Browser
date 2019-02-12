@@ -19,6 +19,7 @@ public class InfoSystemDataObjectMapper implements ModelMapper<InfoSystemDataObj
                 value.getDiaFlag(),
                 value.getAvFlag(),
                 value.getIaFlag(),
-                value.getPaFlag());
+                value.getPaFlag(),
+                value.getPersonalData());
     }
 }
