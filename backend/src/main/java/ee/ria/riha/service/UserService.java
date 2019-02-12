@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,6 +53,7 @@ public class UserService {
         return ldapRepository.findLdapUsersByPersonalCodes(personalCodes).stream()
                 .map(LdapUser::getMail)
                 .filter(Objects::nonNull)
+                .filter(this::isValidEmailAddress)
                 .collect(Collectors.toSet());
     }
 
@@ -63,11 +66,21 @@ public class UserService {
         return ldapRepository.getAllApprovers().stream()
                 .map(LdapUser::getMail)
                 .filter(Objects::nonNull)
+                .filter(this::isValidEmailAddress)
                 .collect(Collectors.toSet());
     }
 
     @Autowired
     public void setLdapRepository(LdapRepository ldapRepository) {
         this.ldapRepository = ldapRepository;
+    }
+
+    private boolean isValidEmailAddress(String toValidate) {
+        try {
+            new InternetAddress(toValidate).validate();
+            return true;
+        } catch (AddressException ex) {
+            return false;
+        }
     }
 }
