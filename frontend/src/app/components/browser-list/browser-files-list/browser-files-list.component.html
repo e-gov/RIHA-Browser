@@ -16,8 +16,63 @@
     </div>
   </div>
   <div class="form-group">
+    <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
     <a [routerLink]="'/Infosüsteemid'" class="pull-left">Otsi infosüsteemidest</a>
     <a [routerLink]="'/Andmeobjektid'" class="pull-left active-inner-router-link ml-3">Otsi andmeobjektidest</a>
+  </div>
+
+  <div *ngIf="extendedSearch" id="extended-search-panel">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+
+        <div class="form-group">
+          <label for="name-input-andmeobjekti-nimi">Andmeobjekti nimetus</label>
+          <input class="form-control" [(ngModel)]="filters.dataObjectName" type="text" id="name-input-andmeobjekti-nimi">
+        </div>
+
+        <div class="form-group">
+          <label for="kommentaar-input">Kommentaar / selgitus</label>
+          <input class="form-control" [(ngModel)]="filters.comment" type="text" id="kommentaar-input">
+        </div>
+      </div>
+
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+        <div class="form-group">
+          <label for="name-input-vanemobjekt-nimi">Ülemobjekti niemetus</label>
+          <input class="form-control" [(ngModel)]="filters.parentObject" type="text" id="name-input-vanemobjekt-nimi">
+        </div>
+
+        <div class="form-group">
+          <label for="short-name-input">Infosüsteem</label>
+          <input class="form-control" [(ngModel)]="filters.searchName" type="text" id="short-name-input">
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+        <div class="form-group">
+          <label for="personal-data-input">Kas isikuandmed?</label>
+          <select id="personal-data-input" class="form-control"
+                  [(ngModel)]="filters.personalData">
+            <option [value]="'eriliigiline'">jah, eriliigiline</option>
+            <option [value]="'delikaatne'">jah, delikaatne</option>
+            <option [value]="'jah'">jah</option>
+            <option [value]="'ei'">ei</option>
+            <option [value]="'muu'">muu</option>
+            <option [value]="''">määramata</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+        <div class="form-group">
+          <label for="infosystem-input">Põhiinfosüsteem</label>
+          <input class="form-control" [(ngModel)]="filters.infosystem" type="text" id="infosystem-input">
+        </div>
+      </div>
+
+    </div>
+      
   </div>
   <div *ngIf="loaded" class="my-1">
     <div class="table-responsive">

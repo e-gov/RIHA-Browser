@@ -225,7 +225,24 @@ export class SystemsService {
     let params: URLSearchParams = new URLSearchParams();
 
     if (!isNullOrUndefined(filters)) {
-      params.append('filter', `Kommentaar,ilike,%${ filters.searchText }%`);
+
+      const possibleFilters = ['searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
+
+      let filterAtrributes = [];
+      possibleFilters.forEach((possibleFilter) => {
+
+      if (filters[possibleFilter]) {
+        filterAtrributes.push(`${possibleFilter},ilike,%${ filters[possibleFilter]}%`);
+        console.log('params', params);
+      }});
+
+      if (filterAtrributes.length > 0){
+        params.set('filter', filterAtrributes.join());
+      }
+
+      if (filterAtrributes.length == 0 && filters.searchText) {
+        params.append('filter', `comment,ilike,%${ filters.searchText}%`);
+      }
 
     }
 

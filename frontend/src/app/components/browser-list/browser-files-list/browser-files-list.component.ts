@@ -15,8 +15,20 @@ export class BrowserFilesListComponent implements OnInit {
   public gridData: GridData = new GridData();
   public loaded: boolean = true;
   public filters: any = {
-    searchText: null
+    searchText: null,
+    searchName: null,
+    infosystem: null,
+    dataObjectName: null,
+    comment: null,
+    parentObject: null,
+    personalData: ''
   };
+  extendedSearch: boolean = false;
+
+  toggleSearchPanel(){
+    this.extendedSearch = !this.extendedSearch;
+    return false;
+  }
 
   public onPageChange(newPage){
     this.gridData.page = newPage - 1;
@@ -29,7 +41,7 @@ export class BrowserFilesListComponent implements OnInit {
   }
 
   public getDataObjectFiles(page?){
-    if (this.filters.searchText && this.filters.searchText.length > 1){
+    // if (this.filters.searchText && this.filters.searchText.length > 1){
       let params = this.helper.cloneObject(this.filters);
 
       let sortProperty = this.gridData.getSortProperty();
@@ -55,7 +67,7 @@ export class BrowserFilesListComponent implements OnInit {
       }, err => {
         this.helper.showError();
       })
-    }
+    // }
   }
 
   constructor(public helper: GeneralHelperService,
@@ -66,7 +78,13 @@ export class BrowserFilesListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe( params => {
       this.filters = {
-        searchText: params['searchText']
+        searchText: params['searchText'],
+        searchName: params['searchName'],
+        infosystem: params['infosystem'],
+        andmeobjekti_nimi: params['andmeobjekti_nimi'],
+        comment: params['comment'],
+        vanemobjekt: params['vanemobjekt'],
+        personal_data: params['personal_data']
       };
 
       this.gridData.changeSortOrder(params['sort'] || 'file_resource_name', params['dir'] || 'ASC');
