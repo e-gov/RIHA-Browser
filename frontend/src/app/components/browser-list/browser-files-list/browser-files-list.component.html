@@ -29,6 +29,7 @@
         <tr>
           <th>
             <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
               [labelText]="'Andmeobjekti nimetus'"
               [sortProperty]="'andmeobjekti_nimi'"
               [gridData]="gridData"
@@ -36,20 +37,22 @@
           </th>
           <th>
             <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
               [labelText]="'Ülemobjekti nimetus'"
-              [sortProperty]="'parentObject'"
+              [sortProperty]="'vanemobjekt'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
-              [labelText]="'kas tegu (delikaatsete/eriliigiliste) isikuandmetega'"
-              [sortProperty]="'infosystem_name'"
+              [labelText]="'DIA/EIA?'"
+              [sortProperty]="'personal_data'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
               [labelText]="'Põhiinfosüsteemi nimetus'"
               [sortProperty]="'infosystem'"
               [gridData]="gridData"
@@ -57,22 +60,25 @@
           </th>
           <th>
             <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
               [labelText]="'Kommentaar / selgitus '"
-              [sortProperty]="'comment'"
+              [sortProperty]="'kommentaar'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
               [labelText]="'Infosüsteemi lühinimi'"
-              [sortProperty]="'shortName'"
+              [sortProperty]="'short_name'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
               [labelText]="'Laadi alla'"
-              [sortProperty]="'fileUuid'"
+              [sortProperty]="'file_uuid'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
@@ -82,11 +88,11 @@
         <tr *ngFor="let r of gridData.content">
           <td class="owner"> {{r.dataObjectName}}</td>
           <td class="owner"> {{r.parentObject}}</td>
-          <td class="owner"> {{r.avFlag}}</td>
+          <td class="owner"> {{r.personalData}}</td>
           <td class="owner"> {{r.infosystem}}</td>
           <td class="owner"> {{r.comment}}</td>
           <td class="owner"> {{r.shortName}}</td>
-          <td><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank">{{ r.fileUuid }}</a></td>
+          <td><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank"><i class="fa fa-download text-primary"></i></a></td>
         </tr>
         </tbody>
       </table>
