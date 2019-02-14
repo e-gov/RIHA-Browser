@@ -1,13 +1,25 @@
-<span class="last-modified text-nowrap">
-  <ng-container *ngIf="file.update_timestamp; else created">
-    (uuendatud {{file.update_timestamp | datem:'YYYY-MM-DD HH:mm'}})
-  </ng-container>
-  <ng-template #created>
-    <ng-container *ngIf="isUploaded(); else link">
-      (üleslaetud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}})
+<ng-template #tipContent>
+  <div class="custom-tooltip">
+    <ng-container *ngIf="file.creation_timestamp">
+      <ng-container *ngIf="isUploaded(); else link">
+        üles laaditud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}}
+      </ng-container>
     </ng-container>
-  </ng-template>
-  <ng-template #link>
-    (lisatud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}})
-  </ng-template>
-</span>
+  </div>
+</ng-template>
+<ng-template #link>
+  lisatud {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}}
+</ng-template>
+
+<ng-container *ngIf="file.update_timestamp; else created">
+  <span class="last-modified text-nowrap" [ngbTooltip]="tipContent">
+      {{file.update_timestamp | datem:'YYYY-MM-DD HH:mm'}}
+  </span>
+</ng-container>
+<ng-template #created>
+  <ng-container *ngIf="file.creation_timestamp">
+    <span class="last-modified text-nowrap">
+        {{file.creation_timestamp | datem:'YYYY-MM-DD HH:mm'}}
+    </span>
+  </ng-container>
+</ng-template>

@@ -12,12 +12,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -112,17 +112,25 @@ public class InfoSystemJsonSchemaTest {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
-    @Test
-    public void successfullyValidatesJsonWhenDocumentTypeIsNull() {
+    @Test(expected = JsonValidationException.class)
+    public void failsWhenDocumentTypeIsNull() {
         ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
                 .add(createDocument("document", "document_url", null));
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
     @Test
+    public void successfullyValidatesJsonWhenDocumentTypeValueIsMissing() {
+        //type may be missing for backward compatibility, but may not be null
+        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                .add(createDocument("document", "document_url"));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test
     public void successfullyValidatesJsonWhenDocumentTypeValueBelongsToEnumValues() {
         ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
-                .add(createDocument("document", "document_url", "DOC_TYPE_CLASSIFICATOR"));
+                .add(createDocument("document", "document_url", "Viide lõppkasutaja vaatele"));
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
@@ -133,17 +141,25 @@ public class InfoSystemJsonSchemaTest {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
-    @Test
-    public void successfullyValidatesJsonWhenLegislationTypeIsNull() {
+    @Test(expected = JsonValidationException.class)
+    public void failsWhenLegislationTypeIsNull() {
         ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
                 .add(createDocument("legislation", "legislation_url", null));
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
     @Test
+    public void successfullyValidatesJsonWhenLegislationTypeValueIsMissing() {
+        //type may be missing for backward compatibility, but may not be null
+        ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
+                .add(createDocument("legislation", "legislation_url"));
+        jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    @Test
     public void successfullyValidatesJsonWhenLegislationTypeValueBelongsToEnumValues() {
-        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
-                .add(createDocument("legislation", "legislation_url", "DOC_TYPE_CLASSIFICATOR"));
+        ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
+                .add(createDocument("legislation", "legislation_url", "Infosüsteemi põhimääruse kavand/eelnõu"));
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
@@ -152,6 +168,12 @@ public class InfoSystemJsonSchemaTest {
         ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
                 .add(createDocument("legislation", "legislation_url", "INVALID_TYPE"));
         jsonValidationService.validate(infoSystem.getJsonContent());
+    }
+
+    private JsonNode createDocument(String name, String url) {
+        return JsonNodeFactory.instance.objectNode()
+                .put("name", name)
+                .put("url", url);
     }
 
     private JsonNode createDocument(String name, String url, String type) {
