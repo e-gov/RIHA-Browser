@@ -216,13 +216,51 @@ export class SystemsService {
       params.set('sort', gridData.sort);
     }
 
-    return this.http.get(this.systemsUrl + '/files', {
+    return this.http.get( this.systemsUrl +  '/files', {
+      search: params
+    }).toPromise();
+  }
+
+  public getSystemsDataObjects(filters?, gridData?){
+    let params: URLSearchParams = new URLSearchParams();
+
+    if (!isNullOrUndefined(filters)) {
+
+      const possibleFilters = ['searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
+
+      let filterAtrributes = [];
+      possibleFilters.forEach((possibleFilter) => {
+
+      if (filters[possibleFilter]) {
+        filterAtrributes.push(`${possibleFilter},ilike,%${ filters[possibleFilter]}%`);
+        console.log('params', params);
+      }});
+
+      if (filterAtrributes.length > 0){
+        params.set('filter', filterAtrributes.join());
+      }
+
+      if (filterAtrributes.length == 0 && filters.searchText) {
+        params.append('filter', `comment,ilike,%${ filters.searchText}%`);
+      }
+
+    }
+
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
+    }
+
+    return this.http.get( this.systemsUrl +  '/data-objects', {
       search: params
     }).toPromise();
   }
 
   public getSystem(reference) {
-    return this.http.get(this.systemsUrl + `/${ reference }`).toPromise();
+    return this.http.get(this.systemsUrl +  `/${ reference }`).toPromise();
   }
 
   public addSystem(value) {
@@ -259,11 +297,11 @@ export class SystemsService {
   }
 
   public getSystemIssueById(issueId) {
-    return this.http.get(`/api/v1/issues/${ issueId }`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ issueId }`).toPromise();
   }
 
   public getSystemIssueTimeline(issueId) {
-    return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ issueId }/timeline?size=1000`).toPromise();
   }
 
   public getActiveDiscussions(sort, relation?) {
@@ -314,7 +352,7 @@ export class SystemsService {
   }
 
   public postSystemIssueDecision(issueId, decision) {
-    return this.http.post(`/api/v1/issues/${ issueId }/decisions`, decision).toPromise();
+    return this.http.post(this.systemsUrl + `/${ issueId }/decisions`, decision).toPromise();
   }
 
   public getSystemRelations(reference) {

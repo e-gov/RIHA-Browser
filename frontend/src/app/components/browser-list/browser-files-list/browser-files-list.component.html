@@ -16,8 +16,63 @@
     </div>
   </div>
   <div class="form-group">
+    <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
     <a [routerLink]="'/Infosüsteemid'" class="pull-left">Otsi infosüsteemidest</a>
     <a [routerLink]="'/Andmeobjektid'" class="pull-left active-inner-router-link ml-3">Otsi andmeobjektidest</a>
+  </div>
+
+  <div *ngIf="extendedSearch" id="extended-search-panel">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+
+        <div class="form-group">
+          <label for="name-input-andmeobjekti-nimi">Andmeobjekti nimetus</label>
+          <input class="form-control" [(ngModel)]="filters.dataObjectName" type="text" id="name-input-andmeobjekti-nimi">
+        </div>
+
+        <div class="form-group">
+          <label for="kommentaar-input">Kommentaar / selgitus</label>
+          <input class="form-control" [(ngModel)]="filters.comment" type="text" id="kommentaar-input">
+        </div>
+      </div>
+
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+        <div class="form-group">
+          <label for="name-input-vanemobjekt-nimi">Ülemobjekti nimetus</label>
+          <input class="form-control" [(ngModel)]="filters.parentObject" type="text" id="name-input-vanemobjekt-nimi">
+        </div>
+
+        <div class="form-group">
+          <label for="short-name-input">Infosüsteem</label>
+          <input class="form-control" [(ngModel)]="filters.searchName" type="text" id="short-name-input">
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+        <div class="form-group">
+          <label for="personal-data-input">Kas isikuandmed?</label>
+          <select id="personal-data-input" class="form-control"
+                  [(ngModel)]="filters.personalData">
+            <option [value]="'eriliigiline'">jah, eriliigiline</option>
+            <option [value]="'delikaatne'">jah, delikaatne</option>
+            <option [value]="'jah'">jah</option>
+            <option [value]="'ei'">ei</option>
+            <option [value]="'muu'">muu</option>
+            <option [value]="''">määramata</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+        <div class="form-group">
+          <label for="infosystem-input">Põhiinfosüsteem</label>
+          <input class="form-control" [(ngModel)]="filters.infosystem" type="text" id="infosystem-input">
+        </div>
+      </div>
+
+    </div>
+
   </div>
   <div *ngIf="loaded" class="my-1">
     <div class="table-responsive">
@@ -29,40 +84,64 @@
         <tr>
           <th>
             <app-sort-button
-              [labelText]="'Infosüsteemi nimi'"
-              [sortProperty]="'infosystem_name'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [labelText]="'Andmeobjekti nimetus'"
+              [sortProperty]="'andmeobjekti_nimi'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
-              [labelText]="'Infosüsteemi lühimi'"
-              [sortProperty]="'infosystem_short_name'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [labelText]="'Ülemobjekti nimetus'"
+              [sortProperty]="'vanemobjekt'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
-              [labelText]="'Omaniku nimi'"
-              [sortProperty]="'infosystem_owner_name'"
+              [labelText]="'Isikuandmed'"
+              [sortProperty]="'personal_data'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
             <app-sort-button
-              [labelText]="'Faili nimi'"
-              [sortProperty]="'file_resource_name'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [labelText]="'Põhiinfosüsteemi nimetus'"
+              [sortProperty]="'infosystem'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [labelText]="'Kommentaar / selgitus '"
+              [sortProperty]="'kommentaar'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [labelText]="'Infosüsteemi lühinimi'"
+              [sortProperty]="'short_name'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
           </th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let r of gridData.content">
-          <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', r.infoSystemShortName]">{{ r.infoSystemName }}</a></td>
-          <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', r.infoSystemShortName]">{{ r.infoSystemShortName }}</a></td>
-          <td class="name">{{ r.infoSystemOwnerName }}</td>
-          <td class="name"><a href="{{ helper.getFileUrl('file://' + r.fileResourceUuid, r.infoSystemShortName) }}" target="_blank">{{ r.fileResourceName }}</a></td>
+          <td class="owner-centered"> {{r.dataObjectName}}</td>
+          <td class="owner-centered"> {{r.parentObject}}</td>
+          <td class="owner-centered"> {{r.personalData}}</td>
+          <td class="owner-centered"> {{r.infosystem}}</td>
+          <td class="owner-centered"> {{r.comment}}</td>
+          <td class="owner-centered"><a [routerLink]="['/Infosüsteemid/Vaata', r.shortName]">{{ r.shortName}}</a></td>
+          <td class="owner-centered"><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank"><i class="fa fa-download text-primary"></i></a></td>
         </tr>
         </tbody>
       </table>

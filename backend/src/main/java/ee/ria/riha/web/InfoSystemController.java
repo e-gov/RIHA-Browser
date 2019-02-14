@@ -1,6 +1,7 @@
 package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.InfoSystem;
+import ee.ria.riha.service.InfoSystemDataObjectService;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.service.auth.PrincipalHasRoleProducer;
@@ -24,21 +25,39 @@ public class InfoSystemController {
     private InfoSystemService infoSystemService;
 
     @Autowired
+    private InfoSystemDataObjectService infoSystemDataObjectService;
+
+    @Autowired
     private InfoSystemModelMapper infoSystemModelMapper;
+
+    @Autowired
+    private InfoSystemDataObjectMapper infoSystemDataObjectMapper;
 
     @GetMapping
     @ApiOperation("List all existing information systems")
     @ApiPageableAndFilterableParams
     public ResponseEntity list(Pageable pageable, Filterable filterable) {
-        PagedResponse<InfoSystem> list = infoSystemService.list(pageable, filterable);
-        return ResponseEntity.ok(createPagedModel(list));
+        return ResponseEntity.ok(
+                createPagedModel(
+                        infoSystemService.list(pageable, filterable),
+                        infoSystemModelMapper));
     }
 
-    private PagedResponse<InfoSystemModel> createPagedModel(PagedResponse<InfoSystem> list) {
+    @GetMapping(path = "/data-objects")
+    @ApiOperation("List all existing information systems data objects")
+    @ApiPageableAndFilterableParams
+    public ResponseEntity listDataObjects(Pageable pageable, Filterable filterable) {
+        return ResponseEntity.ok(
+                createPagedModel(
+                        infoSystemDataObjectService.list(pageable, filterable),
+                        infoSystemDataObjectMapper));
+    }
+
+    private  <E,R> PagedResponse<R> createPagedModel(PagedResponse<E> list, ModelMapper<E,R> mapper) {
         return new PagedResponse<>(new PageRequest(list.getPage(), list.getSize()),
                                    list.getTotalElements(),
                                    list.getContent().stream()
-                                           .map(infoSystemModelMapper::map)
+                                           .map(mapper::map)
                                            .collect(toList()));
     }
 
