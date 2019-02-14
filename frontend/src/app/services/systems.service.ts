@@ -8,7 +8,9 @@ import {Observable} from "rxjs/Observable";
 @Injectable()
 export class SystemsService {
 
-  private systemsUrl = '/api/v1/systems';
+  private apiUrl = '/api/v1';
+  private systemsUrl = this.apiUrl + '/systems';
+  private issuesUrl =  this.apiUrl + '/issues';
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
@@ -297,11 +299,11 @@ export class SystemsService {
   }
 
   public getSystemIssueById(issueId) {
-    return this.http.get(this.systemsUrl + `/${ issueId }`).toPromise();
+    return this.http.get(this.issuesUrl + `/${ issueId }`).toPromise();
   }
 
   public getSystemIssueTimeline(issueId) {
-    return this.http.get(this.systemsUrl + `/${ issueId }/timeline?size=1000`).toPromise();
+    return this.http.get(this.issuesUrl + `/${ issueId }/timeline?size=1000`).toPromise();
   }
 
   public getActiveDiscussions(sort, relation?) {
@@ -342,17 +344,17 @@ export class SystemsService {
     params.set('size', '1000');
     params.set('sort', sort);
 
-    return this.http.get('/api/v1/issues', {
+    return this.http.get(this.issuesUrl, {
       search: params
     }).toPromise();
   }
 
   public postSystemIssueComment(issueId, reply) {
-    return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
+    return this.http.post(this.issuesUrl + `/${ issueId }/comments`, reply).toPromise();
   }
 
   public postSystemIssueDecision(issueId, decision) {
-    return this.http.post(this.systemsUrl + `/${ issueId }/decisions`, decision).toPromise();
+    return this.http.post(this.issuesUrl + `/${ issueId }/decisions`, decision).toPromise();
   }
 
   public getSystemRelations(reference) {
@@ -368,7 +370,7 @@ export class SystemsService {
   }
 
   public closeSystemIssue(issueId, resolutionType) {
-    return this.http.put(`/api/v1/issues/${ issueId }`, {
+    return this.http.put(this.issuesUrl + `/${ issueId }`, {
       status: 'CLOSED',
       resolutionType: resolutionType || null
     }).toPromise();
