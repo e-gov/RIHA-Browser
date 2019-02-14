@@ -1,12 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { System } from '../../../models/system';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { ApproverAddIssueComponent } from '../../approver-add-issue/approver-add-issue.component';
-import { ApproverIssueDetailsComponent } from '../../approver-issue-details/approver-issue-details.component';
-import { SystemsService } from '../../../services/systems.service';
-import { EnvironmentService } from '../../../services/environment.service';
-import { UserMatrix } from '../../../models/user-matrix';
-import { Location } from '@angular/common';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {System} from '../../../models/system';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {ApproverAddIssueComponent} from '../../approver-add-issue/approver-add-issue.component';
+import {ApproverIssueDetailsComponent} from '../../approver-issue-details/approver-issue-details.component';
+import {SystemsService} from '../../../services/systems.service';
+import {EnvironmentService} from '../../../services/environment.service';
+import {UserMatrix} from '../../../models/user-matrix';
+import {Location} from '@angular/common';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-details-issues',
@@ -27,6 +29,15 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   closedIssues: any[] = [];
   newAdded: boolean = false;
   userMatrix: UserMatrix;
+  hasStandardRelations: boolean = false;
+
+  constructor(private modalService: ModalHelperService,
+              private systemsService: SystemsService,
+              private location: Location,
+              private environmentService: EnvironmentService,
+              private generalHelperService: GeneralHelperService) {
+    this.userMatrix = this.environmentService.getUserMatrix();
+  }
 
   openAddIssueModal(){
     const modalRef = this.modalService.open(ApproverAddIssueComponent, {
@@ -90,15 +101,18 @@ export class ProducerDetailsIssuesComponent implements OnInit {
     return this.allowEdit || this.userMatrix.hasApproverRole;
   }
 
-  constructor(private modalService: ModalHelperService,
-              private systemsService: SystemsService,
-              private location: Location,
-              private environmentService: EnvironmentService) {
-    this.userMatrix = this.environmentService.getUserMatrix();
+  canRequestFeedback() {
+    return !this.userMatrix.hasApproverRole && this.allowEdit && !this.system.hasUsedSystemTypeRelations && !this.generalHelperService.containsSpecialTopics(this.system);
   }
 
   ngOnInit() {
     this.refreshIssues();
+
+    this.systemsService.getSystemRelations(this.system.details.short_name).then(res => {
+      this.hasStandardRelations = res.json() != null
+        && typeof _.find(res.json(), relation => relation != null && "USED_SYSTEM" === relation.type) !== 'undefined';
+    });
+
     if (this.issueId){
       if (!this.userMatrix.isLoggedIn){
         //alert('please log in');

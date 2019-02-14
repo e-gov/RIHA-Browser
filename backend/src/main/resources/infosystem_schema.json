@@ -23,6 +23,16 @@
             "description": "Dokumendi pealkiri. Näiteks - infosüsteemi teenuste liidestusjuhend",
             "type": "string",
             "minLength": 1
+          },
+          "creation_timestamp": {
+            "description": "Dokumendi loomise aeg",
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "update_timestamp": {
+            "description": "Dokumendi viimase muutmise aeg",
+            "type": ["string", "null"],
+            "format": "date-time"
           }
         },
         "required": [
@@ -50,16 +60,26 @@
           "type": {
             "description": "Dokumendi tüüp",
             "type": ["string", "null"],
-            "enum": ["DOC_TYPE_CLASSIFICATOR", null]
+            "enum": ["Viide lõppkasutaja vaatele",
+              "Viide (ava)andmetele",
+              "Kasutaja dokumentatsioon",
+              "Arhitektuuridokument",
+              "Kasutatav klassifikaator",
+              "Lähtekood",
+              "ISKE turbeosaklasside määramise akt",
+              "ISKE auditi kokkuvõte",
+              "Andmekaitseline mõjuhinnang",
+              "Muu tehniline dokumentatsioon"
+            ]
           },
           "creation_timestamp": {
             "description": "Dokumendi loomise aeg",
-            "type": "string",
+            "type": ["string", "null"],
             "format": "date-time"
           },
           "update_timestamp": {
             "description": "Dokumendi viimase muutmise aeg",
-            "type": "string",
+            "type": ["string", "null"],
             "format": "date-time"
           }
         },
@@ -201,7 +221,13 @@
           "type": {
             "description": "Õigusakti tüüp",
             "type": ["string", "null"],
-            "enum": ["DOC_TYPE_CLASSIFICATOR", null]
+            "enum": ["Infosüsteemi põhimääruse kavand/eelnõu",
+              "Infosüsteemi põhimääruse kavandi/eelnõu seletuskiri",
+              "Infosüsteemi põhimäärus",
+              "Infosüsteemi põhimääruse seletuskiri",
+              "Infosüsteemi reguleeriv muu õigusakt",
+              "Muu õiguslik seletuskiri"
+            ]
           }
         },
         "type": "object",

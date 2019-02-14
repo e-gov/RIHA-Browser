@@ -33,14 +33,17 @@ public class InfoSystem {
     private static final String DATA_FILES_KEY = "data_files";
     private static final String DOCUMENTS_KEY = "documents";
     private static final String LEGISLATIONS_KEY = "legislations";
+    private static final String TOPICS_KEY = "topics";
     private static final String FILE_METADATA_URL_KEY = "url";
     private static final String FILE_METADATA_NAME_KEY = "name";
+    private static final String FILE_METADATA_TYPE_KEY = "type";
     private static final String FILE_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
 
     private static final Function<JsonNode, InfoSystemFileMetadata> DATA_FILE_METADATA_EXTRACTOR = jsonNode -> {
         InfoSystemFileMetadata metadata = new InfoSystemFileMetadata();
         metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
         metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setType(jsonNode.path(FILE_METADATA_TYPE_KEY).asText(null));
         metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
         metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
         return metadata;
@@ -51,6 +54,7 @@ public class InfoSystem {
         InfoSystemDocumentMetadata metadata = new InfoSystemDocumentMetadata();
         metadata.setName(jsonNode.path(FILE_METADATA_NAME_KEY).asText(null));
         metadata.setUrl(jsonNode.path(FILE_METADATA_URL_KEY).asText(null));
+        metadata.setType(jsonNode.path(FILE_METADATA_TYPE_KEY).asText(null));
         metadata.setCreationTimestamp(jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null));
         metadata.setUpdateTimestamp(jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null));
         metadata.setAccessRestricted(jsonNode.hasNonNull(DOCUMENT_METADATA_ACCESS_RESTRICTION_KEY));
@@ -67,6 +71,7 @@ public class InfoSystem {
     private Date lastPositiveEstablishmentRequestDate;
     private Date lastPositiveTakeIntoUseRequestDate;
     private Date lastPositiveFinalizationRequestDate;
+    private boolean hasUsedSystemTypeRelations;
 
     /**
      * Creates {@link InfoSystem} instance with empty {@link JsonNode} as a source
@@ -319,6 +324,14 @@ public class InfoSystem {
         return extractFileMetadata(documentsNode, DOCUMENT_METADATA_EXTRACTOR);
     }
 
+    public boolean isHasUsedSystemTypeRelations() {
+        return hasUsedSystemTypeRelations;
+    }
+
+    public void setHasUsedSystemTypeRelations(boolean hasUsedSystemTypeRelations) {
+        this.hasUsedSystemTypeRelations = hasUsedSystemTypeRelations;
+    }
+
     private <T extends InfoSystemFileMetadata> List<T> extractFileMetadata(JsonNode documentsNode,
                                                                            Function<JsonNode, T> metadataExtractor) {
         List<T> documents = new ArrayList<>();
@@ -355,6 +368,23 @@ public class InfoSystem {
         }
 
         return extractFileMetadata(dataFilesNode, DATA_FILE_METADATA_EXTRACTOR);
+    }
+
+    public List<String> getTopics() {
+        JsonNode topicsNode = jsonContent.path(TOPICS_KEY);
+        if (!topicsNode.isArray()) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<String> result = new ArrayList<>();
+
+        for (JsonNode topicNode : topicsNode) {
+            if (topicNode != null) {
+                result.add(topicNode.toString());
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -399,18 +429,18 @@ public class InfoSystem {
      * Utility method for setting creation and update timestamp for given list of files or links states
      *
      * @param currentFilesMetadataList list of current files states
-     * @param prevFilesMetadataList list of previous files states
-     * @param jsonNodeName name of json node containing the list
+     * @param prevFilesMetadataList    list of previous files states
+     * @param jsonNodeName             name of json node containing the list
      */
     public void setCreationAndUpdateTimestampToFilesMetadata(List<? extends InfoSystemFileMetadata> currentFilesMetadataList,
-                                                           List<? extends InfoSystemFileMetadata> prevFilesMetadataList, String jsonNodeName) {
+                                                             List<? extends InfoSystemFileMetadata> prevFilesMetadataList, String jsonNodeName) {
         ArrayNode filesNode = ((ArrayNode) jsonContent.withArray(jsonNodeName));
         filesNode.removeAll();
 
         currentFilesMetadataList.forEach(currentFileMetadata -> {
             Optional<? extends InfoSystemFileMetadata> foundPrevFileMetadata = prevFilesMetadataList.stream().filter(prevFileMetadata ->
-                 prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
-                        || prevFileMetadata.getName().equals(currentFileMetadata.getName())
+                    prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
+                            || prevFileMetadata.getName().equals(currentFileMetadata.getName())
             ).findFirst();
 
             if (foundPrevFileMetadata.isPresent()) {
@@ -427,13 +457,22 @@ public class InfoSystem {
             }
 
             ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
-                    .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl())
-                    .put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp())
-                    .put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
+                    .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl());
 
-            if (currentFileMetadata instanceof InfoSystemDocumentMetadata) {
-                    docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
-                            ((InfoSystemDocumentMetadata)currentFileMetadata).getAccessRestrictionJson());
+            if (currentFileMetadata.getType() != null) {
+                docNode.put(FILE_METADATA_TYPE_KEY, currentFileMetadata.getType());
+            }
+            if (currentFileMetadata.getCreationTimestamp() != null) {
+                docNode.put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp());
+            }
+            if (currentFileMetadata.getUpdateTimestamp() != null) {
+                docNode.put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
+            }
+
+            if (currentFileMetadata instanceof InfoSystemDocumentMetadata &&
+                    ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson() != null) {
+                docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
+                        ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
             }
         });
 

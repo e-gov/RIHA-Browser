@@ -25,6 +25,10 @@ export class RihaNavbarComponent implements OnInit {
     return new Date().getSeconds();
   }
 
+  getCurrentUrl() {
+    return this.router.url;
+  }
+
   /*
    * TODO: replace with routerLinkActive
    * in version 4.1.3 it seems to be broken when working with queryParams,

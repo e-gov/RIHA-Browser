@@ -5,21 +5,54 @@
   </div>
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi õigusaktid:</label>
-    <p *ngIf="!system.details.legislations || system.details.legislations.length == 0">
+    <p *ngIf="!system.details.legislations || system.details.legislations.length == 0; else legislations">
       Õigusaktid puuduvad
     </p>
-    <table class="details-list-table">
-      <tr *ngFor="let legislation of system.details.legislations">
-        <td>
-          <i class="fa fa-external-link text-primary"></i>
-        </td>
-        <td>
-          <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
-        </td>
-        <td>
-          <app-file-create-update-date [file]="legislation"></app-file-create-update-date>
-        </td>
-      </tr>
-    </table>
+
+    <ng-template #legislations>
+      <div class="my-1">
+        <div class="table-responsive">
+          <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+            <thead class="thead-default">
+            <tr>
+              <th>
+                <app-sort-button
+                  [labelText]="'Nimetus'"
+                  [sortProperty]="'name'"
+                  [gridData]="gridData"
+                  (buttonClick)="onSortChange($event)"></app-sort-button>
+              </th>
+              <th>
+                <app-sort-button
+                  [labelText]="'Liik'"
+                  [sortProperty]="'type'"
+                  [gridData]="gridData"
+                  (buttonClick)="onSortChange($event)"></app-sort-button>
+              </th>
+              <th>
+                <app-sort-button
+                  [labelText]="'Lisamise kuupäev'"
+                  [sortProperty]="'creation_timestamp'"
+                  [gridData]="gridData"
+                  (buttonClick)="onSortChange($event)"></app-sort-button>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let legislation of gridData.content">
+              <td class="name">
+                <i class="fa fa-external-link text-primary"></i>
+                <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
+              </td>
+              <td class="type">{{legislation.type}}</td>
+              <td class="last-modified text-nowrap">
+                <app-file-create-update-date [file]="legislation"></app-file-create-update-date>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </section>

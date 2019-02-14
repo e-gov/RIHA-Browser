@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import { G } from '../globals/globals';
-import { isNullOrUndefined } from 'util';
-import { Title } from '@angular/platform-browser';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { WindowRefService } from '../services/window-ref.service';
-import { ToastrService } from 'ngx-toastr';
-
+import {Injectable} from '@angular/core';
+import {G} from '../globals/globals';
+import {isNullOrUndefined} from 'util';
+import {Title} from '@angular/platform-browser';
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
+import {WindowRefService} from '../services/window-ref.service';
+import {ToastrService} from 'ngx-toastr';
+import {System} from '../models/system';
+import _ from 'lodash';
 
 declare var $: any;
 
@@ -83,8 +84,13 @@ export class GeneralHelperService {
     return statusDescription;
   }
 
-  public getApprovalStatusText(system){
+  public getApprovalStatusText(system : System){
     let statusDescription = 'kooskõlastamata';
+
+    if (system.hasUsedSystemTypeRelations || this.containsSpecialTopics(system)) {
+      statusDescription = 'registreeritud';
+    }
+
     if (system.lastPositiveApprovalRequestType) {
       let status = system.lastPositiveApprovalRequestType;
       switch (status) {
@@ -157,6 +163,18 @@ export class GeneralHelperService {
         }, 500);
       }
     }
+  }
+
+  public containsSpecialTopics(system: System): boolean {
+    let topics = system.getTopics();
+
+    if (!topics) {
+      topics = [];
+    }
+
+    const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
+
+    return _.intersection(G.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
   }
 
   public showError(txt?){
