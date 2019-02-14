@@ -2,3 +2,7 @@
 .whitespace-wrap-normal {
   white-space: normal !important;
 }
+
+.owner-centered {
+  vertical-align: middle !important;
+}

@@ -100,7 +100,7 @@
           </th>
           <th>
             <app-sort-button
-              [labelText]="'DIA/EIA?'"
+              [labelText]="'Isikuandmed'"
               [sortProperty]="'personal_data'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
@@ -130,24 +130,18 @@
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
           <th>
-            <app-sort-button
-              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
-              [labelText]="'Laadi alla'"
-              [sortProperty]="'file_uuid'"
-              [gridData]="gridData"
-              (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let r of gridData.content">
-          <td class="owner"> {{r.dataObjectName}}</td>
-          <td class="owner"> {{r.parentObject}}</td>
-          <td class="owner"> {{r.personalData}}</td>
-          <td class="owner"> {{r.infosystem}}</td>
-          <td class="owner"> {{r.comment}}</td>
-          <td class="owner"> {{r.shortName}}</td>
-          <td><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank"><i class="fa fa-download text-primary"></i></a></td>
+          <td class="owner-centered"> {{r.dataObjectName}}</td>
+          <td class="owner-centered"> {{r.parentObject}}</td>
+          <td class="owner-centered"> {{r.personalData}}</td>
+          <td class="owner-centered"> {{r.infosystem}}</td>
+          <td class="owner-centered"> {{r.comment}}</td>
+          <td class="owner-centered"><a [routerLink]="['/Infosüsteemid/Vaata', r.shortName]">{{ r.shortName}}</a></td>
+          <td class="owner-centered"><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank"><i class="fa fa-download text-primary"></i></a></td>
         </tr>
         </tbody>
       </table>
