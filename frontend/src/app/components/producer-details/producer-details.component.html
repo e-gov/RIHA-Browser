@@ -1,7 +1,7 @@
 <app-page-header *ngIf="!notFound"></app-page-header>
 <div *ngIf="isLoginErrorVisible()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Palun logige sisse</h3>
-  <p class="mb-0">Arutelude nägemiseks on vaja RIHAsse sisse logida. <a href="/oauth2/authorization/tara">Logi sisse.</a></p>
+  <p class="mb-0">Arutelude nägemiseks on vaja RIHAsse sisse logida. <a href="/oauth2/authorization/tara?fromUrl={{getCurrentUrl()}}">Logi sisse.</a></p>
 </div>
 <div *ngIf="isCannotViewCommentsErrorVisible()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Hindamine ei ole lubatud</h3>

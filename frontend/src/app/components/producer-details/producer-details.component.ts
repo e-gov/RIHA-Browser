@@ -1,13 +1,12 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService } from "../../services/environment.service";
-import { ActivatedRoute } from '@angular/router';
-import { System } from '../../models/system';
-import { User } from '../../models/user';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { UserMatrix } from '../../models/user-matrix';
-import { GeneralHelperService } from '../../services/general-helper.service';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {EnvironmentService} from "../../services/environment.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {System} from '../../models/system';
+import {User} from '../../models/user';
+import {ToastrService} from 'ngx-toastr';
+import {UserMatrix} from '../../models/user-matrix';
+import {GeneralHelperService} from '../../services/general-helper.service';
 
 declare var $: any;
 
@@ -107,6 +106,10 @@ export class ProducerDetailsComponent implements OnInit {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  getCurrentUrl() {
+    return this.router.url;
   }
 
   constructor(private systemsService: SystemsService,
