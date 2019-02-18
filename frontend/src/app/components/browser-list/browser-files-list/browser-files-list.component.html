@@ -27,12 +27,12 @@
 
         <div class="form-group">
           <label for="name-input-andmeobjekti-nimi">Andmeobjekti nimetus</label>
-          <input class="form-control" [(ngModel)]="filters.dataObjectName" type="text" id="name-input-andmeobjekti-nimi">
+          <input class="form-control" [(ngModel)]="filters.dataObjectName" type="text" id="name-input-andmeobjekti-nimi" (keyup.enter)="getDataObjectFiles()">
         </div>
 
         <div class="form-group">
           <label for="kommentaar-input">Kommentaar / selgitus</label>
-          <input class="form-control" [(ngModel)]="filters.comment" type="text" id="kommentaar-input">
+          <input class="form-control" [(ngModel)]="filters.comment" type="text" id="kommentaar-input" (keyup.enter)="getDataObjectFiles()">
         </div>
       </div>
 
@@ -40,12 +40,12 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
           <label for="name-input-vanemobjekt-nimi">Ülemobjekti nimetus</label>
-          <input class="form-control" [(ngModel)]="filters.parentObject" type="text" id="name-input-vanemobjekt-nimi">
+          <input class="form-control" [(ngModel)]="filters.parentObject" type="text" id="name-input-vanemobjekt-nimi" (keyup.enter)="getDataObjectFiles()">
         </div>
 
         <div class="form-group">
           <label for="short-name-input">Infosüsteem</label>
-          <input class="form-control" [(ngModel)]="filters.searchName" type="text" id="short-name-input">
+          <input class="form-control" [(ngModel)]="filters.searchName" type="text" id="short-name-input" (keyup.enter)="getDataObjectFiles()">
         </div>
       </div>
 
@@ -53,13 +53,12 @@
         <div class="form-group">
           <label for="personal-data-input">Kas isikuandmed?</label>
           <select id="personal-data-input" class="form-control"
-                  [(ngModel)]="filters.personalData">
+                  [(ngModel)]="filters.personalData" (keyup.enter)="getDataObjectFiles()">
+            <option [value]="''" selected>kõik</option>
             <option [value]="'eriliigiline'">jah, eriliigiline</option>
             <option [value]="'delikaatne'">jah, delikaatne</option>
             <option [value]="'jah'">jah</option>
             <option [value]="'ei'">ei</option>
-            <option [value]="'muu'">muu</option>
-            <option [value]="''">määramata</option>
           </select>
         </div>
       </div>
@@ -67,7 +66,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
           <label for="infosystem-input">Põhiinfosüsteem</label>
-          <input class="form-control" [(ngModel)]="filters.infosystem" type="text" id="infosystem-input">
+          <input class="form-control" [(ngModel)]="filters.infosystem" type="text" id="infosystem-input" (keyup.enter)="getDataObjectFiles()">
         </div>
       </div>
 
@@ -81,55 +80,55 @@
       </div>
       <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
         <thead class="thead-default">
-        <tr>
-          <th>
+        <tr class="">
+          <th class="th-valign-middle">
             <app-sort-button
-              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal text-align-left'"
               [labelText]="'Andmeobjekti nimetus'"
-              [sortProperty]="'andmeobjekti_nimi'"
+              [sortProperty]="'dataObjectName'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
-          <th>
+          <th class="th-valign-middle">
             <app-sort-button
-              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal text-align-left'"
               [labelText]="'Ülemobjekti nimetus'"
-              [sortProperty]="'vanemobjekt'"
+              [sortProperty]="'parentObject'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
-          <th>
+          <th class="th-valign-middle">
             <app-sort-button
               [labelText]="'Isikuandmed'"
-              [sortProperty]="'personal_data'"
+              [sortProperty]="'personalData'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
-          <th>
+          <th class="th-valign-middle">
             <app-sort-button
-              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal text-align-left'"
               [labelText]="'Põhiinfosüsteemi nimetus'"
               [sortProperty]="'infosystem'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
-          <th>
+          <th class="th-valign-middle">
             <app-sort-button
-              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal text-align-left'"
               [labelText]="'Kommentaar / selgitus '"
-              [sortProperty]="'kommentaar'"
+              [sortProperty]="'comment'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
-          <th>
+          <th class="th-valign-middle">
             <app-sort-button
-              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal'"
+              [cssClass]="'btn btn-primary btn-sm whitespace-wrap-normal text-align-left'"
               [labelText]="'Infosüsteemi lühinimi'"
-              [sortProperty]="'short_name'"
+              [sortProperty]="'shortName'"
               [gridData]="gridData"
               (buttonClick)="onSortChange($event)"></app-sort-button>
           </th>
-          <th>
+          <th class="th-valign-middle">
           </th>
         </tr>
         </thead>
