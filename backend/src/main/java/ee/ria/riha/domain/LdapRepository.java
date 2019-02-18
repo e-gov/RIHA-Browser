@@ -71,6 +71,13 @@ public class LdapRepository {
         return ldapTemplate.find(query, LdapUser.class);
     }
 
+    public List<LdapUser> getApproversByOrganization(String organizationCode) {
+        String approverGroupName = APPROVER_GROUP_COMMON_NAME_PATTERN.replace("*", organizationCode);
+        LdapGroup group = findLdapGroup(new EqualsFilter(COMMON_NAME_ATTRIBUTE, approverGroupName));
+        String groupDn = LdapNameBuilder.newInstance(baseDn).add(group.getDn()).build().toString();
+        return findLdapUsers(new EqualsFilter(MEMBER_OF_ATTRIBUTE, groupDn));
+    }
+
     public List<LdapUser> getAllApprovers() {
         List<LdapGroup> approverGroups = findLdapGroups(
                 new LikeFilter(COMMON_NAME_ATTRIBUTE, APPROVER_GROUP_COMMON_NAME_PATTERN));
@@ -92,11 +99,17 @@ public class LdapRepository {
         return findLdapUsers(filter);
     }
 
+    private LdapGroup findLdapGroup(AbstractFilter filter) {
+        return ldapTemplate.findOne(getGroupQuery(filter), LdapGroup.class);
+    }
+
     private List<LdapGroup> findLdapGroups(AbstractFilter filter) {
-        LdapQuery query = LdapQueryBuilder.query()
+        return ldapTemplate.find(getGroupQuery(filter), LdapGroup.class);
+    }
+
+    private LdapQuery getGroupQuery(AbstractFilter filter) {
+        return LdapQueryBuilder.query()
                 .base(groupSearchBase)
                 .filter(filter);
-
-        return ldapTemplate.find(query, LdapGroup.class);
     }
 }
