@@ -6,3 +6,7 @@
 .owner-centered {
   vertical-align: middle !important;
 }
+
+.text-align-left {
+  text-align: left !important;
+}
