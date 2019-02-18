@@ -1,15 +1,17 @@
-import { Component, OnInit, DoCheck, KeyValueDiffers } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService } from '../../services/environment.service';
-import { GridData } from '../../models/grid-data';
-import { UserMatrix } from '../../models/user-matrix';
-import { ToastrService } from 'ngx-toastr';
-import { ModalHelperService } from '../../services/modal-helper.service';
-import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
-import { GeneralHelperService } from '../../services/general-helper.service';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
-import { G } from '../../globals/globals';
+import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {EnvironmentService} from '../../services/environment.service';
+import {GridData} from '../../models/grid-data';
+import {UserMatrix} from '../../models/user-matrix';
+import {ToastrService} from 'ngx-toastr';
+import {ModalHelperService} from '../../services/modal-helper.service';
+import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
+import {GeneralHelperService} from '../../services/general-helper.service';
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
+import {G} from '../../globals/globals';
+import {System} from '../../models/system';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-list',
@@ -87,7 +89,7 @@ export class ProducerListComponent implements OnInit, DoCheck {
       this.gridData.page = page || 0;
       this.systemsService.getOwnSystems(params, this.gridData).then(
         res => {
-          this.gridData.updateData(res.json());
+          this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
           if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
             this.getOwnSystems();
           } else {
