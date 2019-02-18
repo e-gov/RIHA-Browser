@@ -7,6 +7,7 @@ import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
 import ee.ria.riha.web.model.DashboardIssue;
+import ee.ria.riha.web.model.DashboardIssueComment;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
 import static ee.ria.riha.domain.model.IssueStatus.OPEN;
@@ -143,6 +145,8 @@ public class IssueService {
             "standardlahendus",
             "asutusesiseseks kasutamiseks",
             "dokumendihaldussüsteem");
+
+    private static final String LATEST_INTERACTION_SORT_PARAM = "latest_interaction";
 
     @Autowired
     private CommentRepository commentRepository;
@@ -517,12 +521,30 @@ public class IssueService {
     }
 
     public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
+        boolean latestInteractionSort = filter.getSortParameters().contains(LATEST_INTERACTION_SORT_PARAM);
+        if (latestInteractionSort) {
+            filter = new CompositeFilterRequest(filter.getFilterParameters(), null);
+        }
+
         PagedGridResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
+        Stream<DashboardIssue> issueStream = response.getContent().stream()
+                        .map(COMMENT_TO_DASHBOARD_ISSUE);
+
+        // Exceptional sorting logic to distinguish most recently created/commented issues
+        // Created within RIHAKB-742 due to insufficient time for broader implementation
+        // TODO move sorting logic to Storage backend when compatible
+        if (latestInteractionSort) {
+            issueStream.sorted(Comparator.comparing(this::latestInteraction).reversed());
+        }
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
                 response.getTotalElements(),
-                response.getContent().stream()
-                        .map(COMMENT_TO_DASHBOARD_ISSUE)
-                        .collect(toList()));
+                issueStream.collect(toList()));
+    }
+
+    private Date latestInteraction(DashboardIssue issue) {
+        Date dateCreated = issue.getDateCreated();
+        DashboardIssueComment lastComment = issue.getLastComment();
+        return lastComment == null || dateCreated.after(lastComment.getDateCreated()) ? dateCreated : lastComment.getDateCreated();
     }
 }
