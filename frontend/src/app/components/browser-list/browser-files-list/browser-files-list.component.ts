@@ -14,15 +14,17 @@ export class BrowserFilesListComponent implements OnInit {
 
   public gridData: GridData = new GridData();
   public loaded: boolean = true;
-  public filters: any = {
-    searchText: null,
-    searchName: null,
-    infosystem: null,
-    dataObjectName: null,
-    comment: null,
-    parentObject: null,
-    personalData: ''
+  filters: {
+    searchText: string,
+    searchName: string,
+    infosystem: string,
+    dataObjectName: string,
+    comment: string,
+    parentObject: string,
+    personalData: string
   };
+
+
   extendedSearch: boolean = false;
 
   toggleSearchPanel(){
@@ -81,10 +83,10 @@ export class BrowserFilesListComponent implements OnInit {
         searchText: params['searchText'],
         searchName: params['searchName'],
         infosystem: params['infosystem'],
-        andmeobjekti_nimi: params['andmeobjekti_nimi'],
+        dataObjectName: params['dataObjectName'],
         comment: params['comment'],
-        vanemobjekt: params['vanemobjekt'],
-        personal_data: params['personal_data']
+        parentObject: params['parentObject'],
+        personalData: params['personalData'] || ''
       };
 
       this.gridData.changeSortOrder(params['sort'] || 'file_resource_name', params['dir'] || 'ASC');
