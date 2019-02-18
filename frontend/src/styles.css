@@ -10,3 +10,7 @@
 .text-align-left {
   text-align: left !important;
 }
+
+.th-valign-middle {
+  vertical-align: middle;
+}
