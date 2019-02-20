@@ -39,17 +39,16 @@ public class NotificationService {
         }
 
         Long issueId = issueComment.getIssueId();
-        Set<String> emails = getIssueParticipantsEmails(issueId);
-
-        if (emails.isEmpty()) {
-            log.info(
-                    "New issue comment has been recently added for issue with id {}, but none of issue participants have emails.",
-                    issueId);
-            return;
-        }
-
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         Issue issue = issueService.getIssueById(issueId);
+
+        Set<String> emails = getIssueParticipantsEmails(issueId);
+        emails.addAll(infoSystem.getContactsEmails());
+        if (emails.isEmpty()) {
+            log.info("New issue comment has been recently added for issue with id {}, "
+                            + "but none of issue participants or info system contacts have emails.", issueId);
+            return;
+        }
 
         NewIssueCommentEmailNotification notificationModel = new NewIssueCommentEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
@@ -105,8 +104,9 @@ public class NotificationService {
 
         IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
 
-        Set<String> participantsEmails = getIssueParticipantsEmails(issue.getId());
         InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
+        Set<String> participantsEmails = getIssueParticipantsEmails(issue.getId());
+        participantsEmails.addAll(infoSystem.getContactsEmails());
 
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
@@ -135,7 +135,7 @@ public class NotificationService {
             return;
         }
 
-        Set<String> approversEmails = userService.getApproversEmails();
+        Set<String> approversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
 
         NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
