@@ -534,7 +534,7 @@ public class IssueService {
         // Created within RIHAKB-742 due to insufficient time for broader implementation
         // TODO move sorting logic to Storage backend when compatible
         if (latestInteractionSort) {
-            issueStream.sorted(Comparator.comparing(this::latestInteraction).reversed());
+            issueStream = issueStream.sorted(Comparator.comparing(this::latestInteraction).reversed());
         }
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
