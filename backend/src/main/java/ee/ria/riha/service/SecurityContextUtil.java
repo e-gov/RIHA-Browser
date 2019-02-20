@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public class SecurityContextUtil {
 
-    private static final String RIA_ORGANIZATION_CODE = "70006317";
+    static final String RIA_ORGANIZATION_CODE = "70006317";
 
     private SecurityContextUtil() {
     }

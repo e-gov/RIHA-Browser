@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,11 +51,7 @@ public class UserService {
      * @return - set of unique emails, excluding null values
      */
     public Set<String> getEmailsByPersonalCodes(Set<String> personalCodes) {
-        return ldapRepository.findLdapUsersByPersonalCodes(personalCodes).stream()
-                .map(LdapUser::getMail)
-                .filter(Objects::nonNull)
-                .filter(this::isValidEmailAddress)
-                .collect(Collectors.toSet());
+        return getApproversEmails(ldapRepository.findLdapUsersByPersonalCodes(personalCodes));
     }
 
     /**
@@ -63,7 +60,20 @@ public class UserService {
      * @return set of unique approvers emails, excluding null values
      */
     public Set<String> getApproversEmails() {
-        return ldapRepository.getAllApprovers().stream()
+        return getApproversEmails(ldapRepository.getAllApprovers());
+    }
+
+    /**
+     * Returns emails of all approvers of given organization.
+     *
+     * @return set of unique approvers emails, excluding null values
+     */
+    public Set<String> getApproversEmailsByOrganization(String organizationCode) {
+        return getApproversEmails(ldapRepository.getApproversByOrganization(organizationCode));
+    }
+
+    private Set<String> getApproversEmails(List<LdapUser> approvers) {
+        return approvers.stream()
                 .map(LdapUser::getMail)
                 .filter(Objects::nonNull)
                 .filter(this::isValidEmailAddress)
