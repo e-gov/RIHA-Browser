@@ -44,8 +44,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.helper.setRihaPageTitle('Minu arutelud');
-
-    this.gridData.changeSortOrder('last_comment_creation_date', 'DESC');
+    this.gridData.changeSortOrder('latest_interaction');
     this.getOwnOpenIssues();
   }
 
