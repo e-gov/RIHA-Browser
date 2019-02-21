@@ -1,18 +1,20 @@
 package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
-import lombok.extern.slf4j.Slf4j;
+import javax.mail.MessagingException;
+
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.util.Assert;
 
-import javax.mail.MessagingException;
+import ee.ria.riha.service.notification.model.SimpleHtmlEmailNotification;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotificationHandler {
+public abstract class SimpleHtmlEmailNotificationHandler<T extends SimpleHtmlEmailNotification> implements EmailNotificationHandler<T> {
 
     @Override
-    public MimeMessagePreparator createMessagePreparator(EmailNotificationDataModel model) {
+    public MimeMessagePreparator createMessagePreparator(T model) {
         return mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
@@ -34,7 +36,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @throws IllegalArgumentException     in case recipient addresses were not provided
      * @throws NotificationHandlerException in case of exception while setting recipient addresses
      */
-    protected void setTo(MimeMessageHelper helper, EmailNotificationDataModel model) {
+    protected void setTo(MimeMessageHelper helper, T model) {
         Assert.notEmpty(model.getTo(), "List of recipients must not be empty");
 
         try {
@@ -52,7 +54,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @throws IllegalArgumentException     in case sender address was not provided
      * @throws NotificationHandlerException in case of exception while setting sender address
      */
-    protected void setFrom(MimeMessageHelper helper, EmailNotificationDataModel model) {
+    protected void setFrom(MimeMessageHelper helper, T model) {
         Assert.notNull(model.getFrom(), "Sender address must be provided");
 
         try {
@@ -70,7 +72,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @param model  message data model
      * @throws NotificationHandlerException in case of exception while setting CC addresses
      */
-    protected void setCc(MimeMessageHelper helper, EmailNotificationDataModel model) {
+    protected void setCc(MimeMessageHelper helper, T model) {
         String[] cc = model.getCc();
         if (cc == null) {
             return;
@@ -91,7 +93,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @param model  message data model
      * @throws NotificationHandlerException in case of exception while setting BCC addresses
      */
-    protected void setBcc(MimeMessageHelper helper, EmailNotificationDataModel model) {
+    protected void setBcc(MimeMessageHelper helper, T model) {
         String[] bcc = model.getBcc();
         if (bcc == null) {
             return;
@@ -111,7 +113,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @param model  message data model
      * @throws NotificationHandlerException in case of exception while setting message subject
      */
-    protected void setSubject(MimeMessageHelper helper, EmailNotificationDataModel model) {
+    protected void setSubject(MimeMessageHelper helper, T model) {
         try {
             helper.setSubject(getSubject(model));
         } catch (MessagingException e) {
@@ -126,7 +128,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @param model  message data model
      * @throws NotificationHandlerException in case of exception while setting message text
      */
-    protected void setText(MimeMessageHelper helper, EmailNotificationDataModel model) {
+    protected void setText(MimeMessageHelper helper, T model) {
         try {
             helper.setText(getText(model), true);
         } catch (MessagingException e) {
@@ -140,7 +142,7 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @param model notification model
      * @return message subject
      */
-    protected abstract String getSubject(EmailNotificationDataModel model);
+    protected abstract String getSubject(T model);
 
     /**
      * Retrives message body text
@@ -148,6 +150,5 @@ public abstract class SimpleHtmlEmailNotificationHandler implements EmailNotific
      * @param model notification model
      * @return message body
      */
-    protected abstract String getText(EmailNotificationDataModel model);
-
+    protected abstract String getText(T model);
 }
