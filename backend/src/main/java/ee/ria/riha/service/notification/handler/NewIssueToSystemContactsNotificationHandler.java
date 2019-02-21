@@ -1,64 +1,42 @@
 package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
-import ee.ria.riha.service.notification.model.NewIssueToSystemContactsEmailNotification;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
+import ee.ria.riha.service.notification.model.NewIssueToSystemContactsEmailNotification;
+
 @Component
-public class NewIssueToSystemContactsNotificationHandler extends SimpleHtmlEmailNotificationHandler {
+public class NewIssueToSystemContactsNotificationHandler extends IssueNotificationHandler<NewIssueToSystemContactsEmailNotification> {
 
-    private static final String TEMPLATE_NAME = "new-issue-notification-system-contacts-template.ftl";
-    private static final String SUBJECT_KEY = "notifications.newIssue.toSystemContacts.subject";
+    @Override
+    protected String getTemplateName() {
+        return "new-issue-notification-system-contacts-template.ftl";
+    }
 
-    private Configuration freeMarkerConfiguration;
-    private MessageSource messageSource;
+    @Override
+    protected String getSubjectKey(NewIssueToSystemContactsEmailNotification notification) {
+        return "notifications.newIssue.toSystemContacts.subject";
+    }
+
+    @Override
+    protected Object[] getSubjectArgs(NewIssueToSystemContactsEmailNotification notification) {
+        return null;
+    }
 
     @Override
     public boolean supports(EmailNotificationDataModel model) {
-        return model.getClass() == NewIssueToSystemContactsEmailNotification.class;
+        return model.getClass() ==  NewIssueToSystemContactsEmailNotification.class;
     }
 
     @Override
-    protected String getSubject(EmailNotificationDataModel model) {
-        return messageSource.getMessage(SUBJECT_KEY, null, Locale.getDefault());
-    }
-
-    @Override
-    protected String getText(EmailNotificationDataModel dataModel) {
-        try {
-            NewIssueToSystemContactsEmailNotification newIssueToSystemContactsDataModel = (NewIssueToSystemContactsEmailNotification) dataModel;
-            Template template = freeMarkerConfiguration.getTemplate(TEMPLATE_NAME);
-            Map<String, Object> model = new HashMap<>();
-
-            model.put("baseUrl", newIssueToSystemContactsDataModel.getBaseUrl());
-            model.put("name", newIssueToSystemContactsDataModel.getInfoSystemFullName());
-            model.put("shortName", newIssueToSystemContactsDataModel.getInfoSystemShortName());
-
-            return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
-        } catch (IOException | TemplateException e) {
-            throw new NotificationHandlerException(
-                    "Error generating notification message text template " + TEMPLATE_NAME, e);
-        }
-    }
-
-    @Autowired
-    public void setFreeMarkerConfiguration(Configuration freeMarkerConfiguration) {
-        this.freeMarkerConfiguration = freeMarkerConfiguration;
-    }
-
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
+    protected Map<String, Object> createTemplateModel(NewIssueToSystemContactsEmailNotification notification) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("baseUrl", notification.getBaseUrl());
+        model.put("name", notification.getInfoSystemFullName());
+        model.put("shortName", notification.getInfoSystemShortName());
+        return model;
     }
 }

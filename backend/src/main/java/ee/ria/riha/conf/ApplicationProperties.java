@@ -71,6 +71,7 @@ public class ApplicationProperties {
         private final CreatedInfoSystemsOverview createdInfoSystemsOverview = new CreatedInfoSystemsOverview();
         private final NewIssue newIssue = new NewIssue();
         private final NewIssueComment newIssueComment = new NewIssueComment();
+        private final NewIssueDecision newIssueDecision = new NewIssueDecision();
         private final IssueStatusUpdate issueStatusUpdate = new IssueStatusUpdate();
         private String from;
         private String recipientPattern;
@@ -85,6 +86,12 @@ public class ApplicationProperties {
     @Getter
     @Setter
     public static class NewIssueComment {
+        private boolean enabled;
+    }
+
+    @Getter
+    @Setter
+    public static class NewIssueDecision {
         private boolean enabled;
     }
 
