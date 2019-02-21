@@ -479,12 +479,17 @@ public class IssueService {
         validateIssueNotClosed(issue);
         validateApprovalDecision(issue, model);
 
-        if (hasText(model.getComment())) {
-            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), IssueCommentModel.builder()
-                    .comment(model.getComment())
-                    .build());
-        }
+        IssueComment issueComment = issueCommentService.createIssueCommentWithoutNotification(issue.getId(),
+                IssueCommentModel.builder()
+                .comment(model.getComment())
+                .build());
 
+        IssueDecision issueDecision = IssueDecision.builder()
+                .decision(model.getDecisionType())
+                .issueComment(issueComment)
+                .build();
+
+        notificationService.sendNewIssueDecisionNotification(issueDecision);
         createDecisionEvent(issue.getId(), model.getDecisionType());
     }
 
