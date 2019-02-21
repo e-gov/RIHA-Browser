@@ -4,6 +4,7 @@ import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.domain.model.IssueComment;
+import ee.ria.riha.domain.model.IssueDecision;
 import ee.ria.riha.service.notification.EmailNotificationSenderService;
 import ee.ria.riha.service.notification.model.*;
 import lombok.Getter;
@@ -38,6 +39,22 @@ public class NotificationService {
             return;
         }
 
+        NewIssueCommentEmailNotification notificationModel = createIssueCommentNotification(issueComment, new NewIssueCommentEmailNotification());
+        emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    public void sendNewIssueDecisionNotification(IssueDecision issueDecision) {
+        if (!isNewIssueDecisionNotificationEnabled()) {
+            log.info("New issue decision notifications sending is disabled.");
+            return;
+        }
+
+        NewIssueDecisionEmailNotification notificationModel = createIssueCommentNotification(issueDecision.getIssueComment(), new NewIssueDecisionEmailNotification());
+        notificationModel.setDecision(issueDecision.getDecision());
+        emailNotificationSenderService.sendNotification(notificationModel);
+    }
+
+    private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(IssueComment issueComment, T notificationModel) {
         Long issueId = issueComment.getIssueId();
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         Issue issue = issueService.getIssueById(issueId);
@@ -47,10 +64,9 @@ public class NotificationService {
         if (emails.isEmpty()) {
             log.info("New issue comment has been recently added for issue with id {}, "
                             + "but none of issue participants or info system contacts have emails.", issueId);
-            return;
+            return null;
         }
 
-        NewIssueCommentEmailNotification notificationModel = new NewIssueCommentEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
         notificationModel.setBcc(emails.toArray(new String[emails.size()]));
@@ -61,10 +77,9 @@ public class NotificationService {
         notificationModel.setIssueTitle(issue.getTitle());
         notificationModel.setComment(issueComment.getComment());
         notificationModel.setAuthorName(getActiveOrganization()
-                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"))
-                .getName());
-
-        emailNotificationSenderService.sendNotification(notificationModel);
+                        .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"))
+                        .getName());
+        return notificationModel;
     }
 
     private Set<String> getIssueParticipantsEmails(Long issueId) {
@@ -178,6 +193,10 @@ public class NotificationService {
 
     private boolean isNewIssueCommentNotificationEnabled() {
         return applicationProperties.getNotification().getNewIssueComment().isEnabled();
+    }
+
+    private boolean isNewIssueDecisionNotificationEnabled() {
+        return applicationProperties.getNotification().getNewIssueDecision().isEnabled();
     }
 
     private boolean isIssueStatusUpdateNotificationEnabled() {
