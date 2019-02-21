@@ -13,7 +13,7 @@ import {SystemsService} from '../../../services/systems.service';
 export class BrowserFilesListComponent implements OnInit {
 
   public gridData: GridData = new GridData();
-  public loaded: boolean = true;
+  public loaded: boolean = false;
   filters: {
     searchText: string,
     searchName: string,
@@ -58,6 +58,8 @@ export class BrowserFilesListComponent implements OnInit {
         params.page = page + 1;
       }
 
+      this.gridData.page = page || 0;
+
       let q = this.helper.generateQueryString(params);
       this.location.replaceState('/Andmeobjektid', q);
 
@@ -66,7 +68,9 @@ export class BrowserFilesListComponent implements OnInit {
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getDataObjectFiles();
         }
+        this.loaded = true;
       }, err => {
+        this.loaded = true;
         this.helper.showError();
       })
     // }
@@ -92,10 +96,23 @@ export class BrowserFilesListComponent implements OnInit {
       this.gridData.changeSortOrder(params['sort'] || 'file_resource_name', params['dir'] || 'ASC');
       this.gridData.setPageFromUrl(params['page']);
     });
-    if (this.filters.searchText){
-      this.getDataObjectFiles();
+    if (this.route.queryParams['page']) {
+      this.gridData.setPageFromUrl(this.route.queryParams['page']);
+    }
+    if (this.filtersNotEmpty()){
+      this.getDataObjectFiles(this.gridData.page);
     }
     this.helper.setRihaPageTitle('Andmeobjektid');
+  }
+
+  private filtersNotEmpty() : boolean {
+
+    for (let key in this.filters) {
+      if (this.filters[key]){
+        return true;
+      }
+    }
+    return false;
   }
 
 }
