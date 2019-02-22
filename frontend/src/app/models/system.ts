@@ -112,6 +112,14 @@ export class System {
     return this.details.security.latest_audit_resolution != null;
   }
 
+  hasStandardRealisationTopic() : boolean {
+    if (!this.getTopics()) {
+      return false;
+    }
+
+    return this.getTopics().find(value => value == 'standardlahendus');
+  }
+
   constructor(system?){
     system = system || {};
     this.id = system.id || null;

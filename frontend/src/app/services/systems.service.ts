@@ -365,6 +365,10 @@ export class SystemsService {
     return this.http.post(this.systemsUrl + `/${ reference }/relations`, relation).toPromise();
   }
 
+  public createStandardRealisationSystem(reference, realisationModel) {
+    return this.http.post(this.systemsUrl + `/${ reference }/create-standard-realisation-system`, realisationModel).toPromise();
+  }
+
   public deleteSystemRelation(reference, relationId) {
     return this.http.delete(this.systemsUrl + `/${ reference }/relations/${ relationId }`).toPromise();
   }

@@ -291,6 +291,10 @@
       ],
       "type": "object",
       "description": "Infosüsteemi turvainfo"
+    },
+    "differences": {
+      "type": "string",
+      "description": "Infosüsteemi erisused (standardlahenduse puhul)"
     }
   },
   "required": [

@@ -1,10 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { System } from '../../../models/system';
-import { G } from '../../../globals/globals';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { ProducerEditRelationsComponent } from '../../producer-edit/producer-edit-relations/producer-edit-relations.component';
-import { Router } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {System} from '../../../models/system';
+import {G} from '../../../globals/globals';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {ProducerEditRelationsComponent} from '../../producer-edit/producer-edit-relations/producer-edit-relations.component';
+import {Router} from '@angular/router';
+import {ProducerEditStandardRealisationsComponent} from '../../producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component';
+import {EnvironmentService} from '../../../services/environment.service';
+import {UserMatrix} from '../../../models/user-matrix';
 
 @Component({
   selector: 'app-producer-details-relations',
@@ -17,6 +20,7 @@ export class ProducerDetailsRelationsComponent implements OnInit {
   @Input() allowEdit: boolean;
 
   globals: any = G;
+  userMatrix: UserMatrix;
   relations: any[] = [];
 
   openSystemDetails(shortName){
@@ -48,10 +52,21 @@ export class ProducerDetailsRelationsComponent implements OnInit {
     });
   };
 
+  openStandardUserInfosystemModal() {
+    const modalRef = this.modalService.open(ProducerEditStandardRealisationsComponent, {
+      size: "lg",
+      backdrop: "static",
+      windowClass: "fixed-header-modal",
+      keyboard: false
+    });
+    modalRef.componentInstance.system = this.system;
+  }
+
   constructor(private systemsService: SystemsService,
+              private environmentService: EnvironmentService,
               private router: Router,
               private modalService: ModalHelperService) {
-
+    this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {

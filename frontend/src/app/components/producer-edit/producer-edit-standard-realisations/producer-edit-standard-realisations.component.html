@@ -1,0 +1,32 @@
+<div class="fixed-header">
+  Kasutajaks registreerimiseks kirjeldage omapoolsed erisused infosüsteemi kasutamisel
+  <button (click)="closeModal()" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+</div>
+<section class="col card p-3 main-content scrollable-modal-content">
+  <div class="my-1">
+    <form #addForm="ngForm">
+      <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
+        <label for="shortName" class="text-muted separated-text">Lühinimi:</label>
+        <input id="shortName" class="form-control col-12" rows="5" cols="120"
+               #infoSystem="ngModel"
+               type="text"
+               [(ngModel)]="realisation.shortName"
+                  name="shortName"/>
+        <br/>
+        <label for="infoSystem" class="text-muted separated-text">Erisused:</label>
+        <textarea id="infoSystem" class="form-control col-12" rows="5" cols="120"
+               #infoSystem="ngModel"
+
+               [(ngModel)]="realisation.differences"
+                  name="infoSystem"></textarea>
+
+      </div>
+      <div class="form-group row">
+        <div class="col-12">
+          <button class="btn btn-success pull-right" (click)="createStandardRealisationSystem(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Salvesta</button>
+          <button class="btn btn-default pull-right" (click)="closeModal()">Tühista</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
