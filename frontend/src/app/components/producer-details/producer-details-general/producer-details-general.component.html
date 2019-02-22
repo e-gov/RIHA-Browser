@@ -46,6 +46,12 @@
       <label class="text-muted separated-text">Infosüsteemi eesmärk:</label>
       <p class="user-multiline-text" [innerHTML]="system.details.purpose | linkify"></p>
     </div>
+
+    <div class="mb-3" *ngIf="system.details.differences">
+      <label class="text-muted separated-text">Infosüsteemi erisused:</label>
+      <p class="user-multiline-text" [innerHTML]="system.details.differences | linkify"></p>
+    </div>
+
     <div *ngIf="system.getTopics().length > 0" class="pb-2">
       <label class="text-muted">Infosüsteemi märksõnad:</label>
       <div class="row">
