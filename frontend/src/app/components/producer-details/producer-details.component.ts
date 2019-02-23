@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, DoCheck, HostListener, OnInit} from '@angular/core';
 import {SystemsService} from '../../services/systems.service';
 import {EnvironmentService} from "../../services/environment.service";
 import {ActivatedRoute, Router} from '@angular/router';
@@ -15,13 +15,14 @@ declare var $: any;
   templateUrl: './producer-details.component.html',
   styleUrls: ['./producer-details.component.scss']
 })
-export class ProducerDetailsComponent implements OnInit {
+export class ProducerDetailsComponent implements OnInit, DoCheck {
   private system: System = new System();
   private user: User;
   public loaded: boolean;
   public notFound: boolean;
   public issueId: any;
   public userMatrix: UserMatrix;
+  private differ: any;
 
   isEditingAllowed(){
     let editable = false;
@@ -134,5 +135,12 @@ export class ProducerDetailsComponent implements OnInit {
   @HostListener("window:scroll", [])
   onWindowScroll() {
 
+  }
+
+  ngDoCheck() {
+    let changes = this.differ.diff(this.environmentService.globalEnvironment);
+    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
+      this.userMatrix = this.environmentService.getUserMatrix();
+    }
   }
 }

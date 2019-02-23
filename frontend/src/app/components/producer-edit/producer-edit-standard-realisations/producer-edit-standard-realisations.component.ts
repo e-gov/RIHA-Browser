@@ -2,8 +2,6 @@ import {Component, Input} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {G} from '../../../globals/globals';
 import {System} from '../../../models/system';
-import {ToastrService} from 'ngx-toastr';
-import {GeneralHelperService} from '../../../services/general-helper.service';
 import {ModalHelperService} from '../../../services/modal-helper.service';
 
 import 'rxjs/add/operator/map';
@@ -60,9 +58,7 @@ export class ProducerEditStandardRealisationsComponent {
 
   constructor(private systemsService: SystemsService,
               private router: Router,
-              private modalService: ModalHelperService,
-              private generalHelper: GeneralHelperService,
-              private toastrService: ToastrService) { }
+              private modalService: ModalHelperService) { }
 
 
 
