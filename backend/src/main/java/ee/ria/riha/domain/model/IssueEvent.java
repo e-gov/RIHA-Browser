@@ -21,6 +21,7 @@ public class IssueEvent implements IssueEntity {
 
     private Long id;
     private Long issueId;
+    private String comment;
     @NonNull
     private IssueEventType type;
     private Date dateCreated;
