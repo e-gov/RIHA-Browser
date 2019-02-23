@@ -1,29 +1,61 @@
 <div class="fixed-header">
-  Kasutajaks registreerimiseks kirjeldage omapoolsed erisused infosüsteemi kasutamisel
+  Registreeri standardlahenduse kasutajaks
   <button (click)="closeModal()" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
+    <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
+    <span>RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva eraõigusliku isiku infosüsteemid, mis asutatakse
+      ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises lepingus sätestatud ülesannete täitmiseks.</span>
     <form #addForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
-        <label for="shortName" class="text-muted separated-text">Lühinimi:</label>
-        <input id="shortName" class="form-control col-12" rows="5" cols="120"
-               #infoSystem="ngModel"
+        <div class="form-group" [ngClass]="{'has-danger':   name.invalid && (name.dirty || name.touched || addForm.submitted)}">
+        <label for="name" class="text-muted separated-text">Nimi: *</label>
+        <input id="name" class="form-control col-12"
+               required
+               ngModel
+               #name="ngModel"
+               placeholder="nt. Andmeomanike ametlik register"
                type="text"
-               [(ngModel)]="realisation.shortName"
-                  name="shortName"/>
-        <br/>
+               name="name"/>
+        </div>
+
+        <div class="form-group row"  [ngClass]="{'has-danger':  shortName.invalid && (shortName.dirty || shortName.touched || addForm.submitted)}">
+          <label for="shortName" class="text-muted separated-text">Lühinimi: *</label>
+          <input id="shortName" class="form-control col-12"
+                 pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
+                 type="text"
+                 required
+                 #shortName="ngModel"
+                 placeholder="nt. AARE"
+                 ngModel
+                 name="shortName"/>
+        </div>
+
+        <div class="form-group" [ngClass]="{'has-danger':  purpose.invalid && (purpose.dirty || purpose.touched || addForm.submitted)}">
+        <label for="goal" class="text-muted separated-text">Eesmärk: *</label>
+        <input id="goal" class="form-control col-12"
+               type="text"
+               required
+               #purpose="ngModel"
+               placeholder="kellele ja miks infosüsteem luuakse"
+               ngModel
+               name="purpose"/>
+        </div>
+      <div class="form-group" [ngClass]="{'has-danger':   differences.invalid && (differences.dirty || differences.touched || addForm.submitted)}">
+
         <label for="infoSystem" class="text-muted separated-text">Erisused:</label>
         <textarea id="infoSystem" class="form-control col-12" rows="5" cols="120"
-               #infoSystem="ngModel"
+            placeholder="Standardlahenduse kasutajaks registreerimiseks kirjeldage omapoolsed võimalikud erisused infosüsteemi kasutamisel: kasutusel moodulid, rakenduse versioon jmt."
+            #differences="ngModel"
+            ngModel
+            name="differences">
+        </textarea>
 
-               [(ngModel)]="realisation.differences"
-                  name="infoSystem"></textarea>
-
-      </div>
+        </div>
       <div class="form-group row">
         <div class="col-12">
-          <button class="btn btn-success pull-right" (click)="createStandardRealisationSystem(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Salvesta</button>
+          <button class="btn btn-success pull-right" (click)="createStandardRealisationSystem(addForm)">
+            <i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Salvesta</button>
           <button class="btn btn-default pull-right" (click)="closeModal()">Tühista</button>
         </div>
       </div>

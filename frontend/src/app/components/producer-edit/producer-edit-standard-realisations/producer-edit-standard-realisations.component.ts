@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {G} from '../../../globals/globals';
 import {System} from '../../../models/system';
@@ -9,30 +9,47 @@ import {ModalHelperService} from '../../../services/modal-helper.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-producer-edit-standard-realisations',
   templateUrl: './producer-edit-standard-realisations.component.html',
   styleUrls: ['./producer-edit-standard-realisations.component.scss']
 })
-export class ProducerEditStandardRealisationsComponent implements OnInit {
+export class ProducerEditStandardRealisationsComponent {
 
   @Input() system: System;
 
   globals: any = G;
-
-  realisation: {
-    shortName: string,
-    differences: string
-  };
-
+  alertConf: any = null;
+  timeoutId: any = null;
 
   createStandardRealisationSystem(addForm){
     if (addForm.valid){
       this.systemsService.createStandardRealisationSystem(
-        this.system.details.short_name, this.realisation).then(res => {
+        this.system.details.short_name, addForm.value).then(res => {
+        this.closeModal();
+        this.router.navigate(['/Infosüsteemid/Vaata', res.json().details.short_name]);
+
       }, err => {
-        this.toastrService.error('Serveri viga');
+
+        let errJson = null;
+        try {
+          errJson = err.json();
+        } catch (e) {
+          //ignored
+        }
+
+        this.alertConf = {
+          type: 'danger',
+          heading: 'Viga',
+          text: errJson? this.systemsService.getAlertText(errJson) : 'Üldine viga'
+        };
+        clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(()=>{
+          this.alertConf = null
+        }, 10000);
+
       });
     }
   };
@@ -42,15 +59,11 @@ export class ProducerEditStandardRealisationsComponent implements OnInit {
   };
 
   constructor(private systemsService: SystemsService,
+              private router: Router,
               private modalService: ModalHelperService,
               private generalHelper: GeneralHelperService,
               private toastrService: ToastrService) { }
 
-  ngOnInit() {
-    this.realisation = {
-      shortName: null,
-      differences: null
-    };
-  }
+
 
 }
