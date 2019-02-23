@@ -12,6 +12,7 @@ import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -413,21 +414,21 @@ public class IssueService {
         IssueResolutionType resolutionType = isFeedbackRequestIssue(issue)
                 ? model.getResolutionType()
                 : null;
-        createCloseEvent(issue.getId(), resolutionType);
+        createCloseEvent(issue.getId(), resolutionType, model.getComment());
 
         issue.setStatus(CLOSED);
         issue.setResolutionType(resolutionType);
         commentRepository.update(issue.getId(), ISSUE_TO_COMMENT.apply(issue));
     }
 
-    private void createCloseEvent(Long issueId, IssueResolutionType resolutionType) {
-        IssueEvent closeEvent = prepareIssueEvent(IssueEventType.CLOSED);
+    private void createCloseEvent(Long issueId, IssueResolutionType resolutionType, String comment) {
+        IssueEvent closeEvent = prepareIssueEvent(IssueEventType.CLOSED, comment);
         closeEvent.setResolutionType(resolutionType);
 
         issueEventService.createEvent(issueId, closeEvent);
     }
 
-    private IssueEvent prepareIssueEvent(IssueEventType eventType) {
+    private IssueEvent prepareIssueEvent(IssueEventType eventType, @Nullable String comment) {
         RihaUserDetails rihaUserDetails = getRihaUserDetails()
                 .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
         RihaOrganization organization = getActiveOrganization()
@@ -439,6 +440,7 @@ public class IssueService {
                 .authorPersonalCode(rihaUserDetails.getPersonalCode())
                 .organizationName(organization.getName())
                 .organizationCode(organization.getCode())
+                .comment(comment)
                 .build();
     }
 
@@ -479,18 +481,13 @@ public class IssueService {
         validateIssueNotClosed(issue);
         validateApprovalDecision(issue, model);
 
-        IssueComment issueComment = issueCommentService.createIssueCommentWithoutNotification(issue.getId(),
-                IssueCommentModel.builder()
-                .comment(model.getComment())
-                .build());
+        if (hasText(model.getComment())) {
+            issueCommentService.createIssueCommentWithoutNotification(issue.getId(), IssueCommentModel.builder()
+                    .comment(model.getComment())
+                    .build());
+        }
 
-        IssueDecision issueDecision = IssueDecision.builder()
-                .decision(model.getDecisionType())
-                .issueComment(issueComment)
-                .build();
-
-        notificationService.sendNewIssueDecisionNotification(issueDecision);
-        createDecisionEvent(issue.getId(), model.getDecisionType());
+        createDecisionEvent(issue.getId(), model.getDecisionType(), model.getComment());
     }
 
     private void validateApprovalDecision(Issue issue, IssueApprovalDecisionModel model) {
@@ -507,11 +504,12 @@ public class IssueService {
         }
     }
 
-    private void createDecisionEvent(Long issueId, IssueResolutionType decisionType) {
-        IssueEvent decisionEvent = prepareIssueEvent(IssueEventType.DECISION);
+    private void createDecisionEvent(Long issueId, IssueResolutionType decisionType, String comment) {
+        IssueEvent decisionEvent = prepareIssueEvent(IssueEventType.DECISION, comment);
         decisionEvent.setResolutionType(decisionType);
 
         issueEventService.createEvent(issueId, decisionEvent);
+        notificationService.sendNewIssueDecisionNotification(decisionEvent);
     }
 
     public PagedResponse<DashboardIssue> listOrganizationInfosystemIssues(String organizationCode,
