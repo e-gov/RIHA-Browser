@@ -129,6 +129,7 @@ public class IssueService {
                 .infoSystemFullName(comment.getInfosystem_full_name())
                 .infoSystemShortName(comment.getInfosystem_short_name())
                 .authorName(comment.getAuthor_name())
+                .organizationName(comment.getOrganization_name())
                 .lastComment(comment.getLast_comment_id() != null
                         ? COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment)
                         : null)

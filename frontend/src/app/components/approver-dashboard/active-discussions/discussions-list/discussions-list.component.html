@@ -31,7 +31,7 @@
       <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName, 'Arutelu', ad.id]">{{ ad.title }}</a></td>
       <td>
         <div *ngIf="ad.lastComment">{{ ad.lastComment.organizationName }} ({{ ad.lastComment.authorName }})<br /> <i>{{ ad.lastComment.dateCreated | datem:'YYYY-MM-DD HH:mm:ss' }}</i></div>
-        <div *ngIf="!ad.lastComment">{{ ad.infoSystemFullName }} ({{ ad.authorName }})<br /> <i>{{ ad.dateCreated | datem:'YYYY-MM-DD HH:mm:ss' }}</i></div>
+        <span *ngIf="!ad.lastComment">-</span>
       </td>
     </tr>
     </tbody>
