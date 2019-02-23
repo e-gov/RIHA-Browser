@@ -4,7 +4,7 @@ import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.domain.model.IssueComment;
-import ee.ria.riha.domain.model.IssueDecision;
+import ee.ria.riha.domain.model.IssueEvent;
 import ee.ria.riha.service.notification.EmailNotificationSenderService;
 import ee.ria.riha.service.notification.model.*;
 import lombok.Getter;
@@ -39,23 +39,28 @@ public class NotificationService {
             return;
         }
 
-        NewIssueCommentEmailNotification notificationModel = createIssueCommentNotification(issueComment, new NewIssueCommentEmailNotification());
+        NewIssueCommentEmailNotification notificationModel = createIssueCommentNotification(
+                        new NewIssueCommentEmailNotification(),
+                        issueComment.getIssueId(),
+                        issueComment.getComment());
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    public void sendNewIssueDecisionNotification(IssueDecision issueDecision) {
+    public void sendNewIssueDecisionNotification(IssueEvent decisionEvent) {
         if (!isNewIssueDecisionNotificationEnabled()) {
             log.info("New issue decision notifications sending is disabled.");
             return;
         }
 
-        NewIssueDecisionEmailNotification notificationModel = createIssueCommentNotification(issueDecision.getIssueComment(), new NewIssueDecisionEmailNotification());
-        notificationModel.setDecision(issueDecision.getDecision());
+        NewIssueDecisionEmailNotification notificationModel = createIssueCommentNotification(
+                        new NewIssueDecisionEmailNotification(),
+                        decisionEvent.getIssueId(),
+                        decisionEvent.getComment());
+        notificationModel.setDecision(decisionEvent.getResolutionType());
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(IssueComment issueComment, T notificationModel) {
-        Long issueId = issueComment.getIssueId();
+    private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(T notificationModel, Long issueId, String comment) {
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         Issue issue = issueService.getIssueById(issueId);
 
@@ -66,6 +71,9 @@ public class NotificationService {
                             + "but none of issue participants or info system contacts have emails.", issueId);
             return null;
         }
+        String organization = getActiveOrganization()
+                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"))
+                .getName();
 
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
@@ -75,10 +83,8 @@ public class NotificationService {
         notificationModel.setBaseUrl(getBaseUrl());
         notificationModel.setIssueId(issueId);
         notificationModel.setIssueTitle(issue.getTitle());
-        notificationModel.setComment(issueComment.getComment());
-        notificationModel.setAuthorName(getActiveOrganization()
-                        .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"))
-                        .getName());
+        notificationModel.setComment(comment);
+        notificationModel.setAuthorName(organization);
         return notificationModel;
     }
 

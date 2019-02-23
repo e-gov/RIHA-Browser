@@ -44,6 +44,9 @@ public class IssueServiceApprovalDecisionTest {
     @Mock
     private IssueCommentService issueCommentService;
 
+    @Mock
+    private NotificationService notificationService;
+
     @InjectMocks
     private IssueService issueService;
 
