@@ -1,4 +1,4 @@
-import {Component, DoCheck, HostListener, OnInit} from '@angular/core';
+import {Component, DoCheck, HostListener, KeyValueDiffers, OnInit} from '@angular/core';
 import {SystemsService} from '../../services/systems.service';
 import {EnvironmentService} from "../../services/environment.service";
 import {ActivatedRoute, Router} from '@angular/router';
@@ -113,12 +113,14 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
     return this.router.url;
   }
 
-  constructor(private systemsService: SystemsService,
+  constructor(private differs: KeyValueDiffers,
+              private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               public generalHelperService: GeneralHelperService,
               private route: ActivatedRoute,
               private router: Router,
               private toastrService: ToastrService) {
+    this.differ = differs.find({}).create(null);
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
