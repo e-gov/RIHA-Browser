@@ -423,6 +423,20 @@ public class InfoSystem {
         ((ObjectNode) jsonContent).remove(SECURITY_SECTION_KEY);
     }
 
+    public void removeTopic(String topicToRemove) {
+        JsonNode topicsNode = jsonContent.path(TOPICS_KEY);
+        if (topicsNode == null || !topicsNode.isArray()) {
+            return;
+        }
+
+        Iterator<JsonNode> iterator = topicsNode.iterator();
+        while (iterator.hasNext()) {
+            if (topicToRemove.equalsIgnoreCase(iterator.next().asText())) {
+                iterator.remove();
+            }
+        }
+    }
+
 
     /**
      * Utility method for retrieving emails of all contacts. Does not modify source JsonNode.

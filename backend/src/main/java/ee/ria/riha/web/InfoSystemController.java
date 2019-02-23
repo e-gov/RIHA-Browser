@@ -106,9 +106,13 @@ public class InfoSystemController {
         InfoSystem newlyCreatedInfoSystem = existingInfoSystem.copy();
         newlyCreatedInfoSystem.setShortName(standardRealisationCreationModel.getShortName());
         newlyCreatedInfoSystem.setDifferences(standardRealisationCreationModel.getDifferences());
+        newlyCreatedInfoSystem.setFullName(standardRealisationCreationModel.getName());
+        newlyCreatedInfoSystem.setPurpose(standardRealisationCreationModel.getPurpose());
 
         newlyCreatedInfoSystem.clearContacts();
         newlyCreatedInfoSystem.clearSecuritySection();
+
+        newlyCreatedInfoSystem.removeTopic("standardlahendus");
 
 
         newlyCreatedInfoSystem = infoSystemService.create(newlyCreatedInfoSystem);

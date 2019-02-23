@@ -7,8 +7,9 @@ import lombok.Setter;
 @Setter
 public class StandardRealisationCreationModel {
 
-
     private String shortName;
+    private String name;
     private String differences;
+    private String purpose;
 
 }
