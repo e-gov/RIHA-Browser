@@ -228,24 +228,18 @@ export class SystemsService {
 
     if (!isNullOrUndefined(filters)) {
 
-      const possibleFilters = ['searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
+      const possibleFilters = ['searchText', 'searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
 
       let filterAtrributes = [];
       possibleFilters.forEach((possibleFilter) => {
 
       if (filters[possibleFilter]) {
         filterAtrributes.push(`${possibleFilter},ilike,%${ filters[possibleFilter]}%`);
-        console.log('params', params);
       }});
 
       if (filterAtrributes.length > 0){
         params.set('filter', filterAtrributes.join());
       }
-
-      if (filterAtrributes.length == 0 && filters.searchText) {
-        params.append('filter', `comment,ilike,%${ filters.searchText}%`);
-      }
-
     }
 
     if (!isNullOrUndefined(gridData.page)){
