@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {System} from '../../../models/system';
 import {G} from '../../../globals/globals';
@@ -14,7 +14,7 @@ import {UserMatrix} from '../../../models/user-matrix';
   templateUrl: './producer-details-relations.component.html',
   styleUrls: ['./producer-details-relations.component.scss']
 })
-export class ProducerDetailsRelationsComponent implements OnInit {
+export class ProducerDetailsRelationsComponent implements OnInit, DoCheck   {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
@@ -22,6 +22,7 @@ export class ProducerDetailsRelationsComponent implements OnInit {
   globals: any = G;
   userMatrix: UserMatrix;
   relations: any[] = [];
+  private differ: any;
 
   openSystemDetails(shortName){
     this.router.navigate(['/Infosüsteemid/Vaata', shortName]);
@@ -62,10 +63,12 @@ export class ProducerDetailsRelationsComponent implements OnInit {
     modalRef.componentInstance.system = this.system;
   }
 
-  constructor(private systemsService: SystemsService,
+  constructor(private differs: KeyValueDiffers,
+              private systemsService: SystemsService,
               private environmentService: EnvironmentService,
               private router: Router,
               private modalService: ModalHelperService) {
+    this.differ = differs.find({}).create(null);
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -73,4 +76,11 @@ export class ProducerDetailsRelationsComponent implements OnInit {
     this.refreshRelations();
   }
 
+
+  ngDoCheck() {
+    let changes = this.differ.diff(this.environmentService.globalEnvironment);
+    if (changes && !this.userMatrix.isOrganizationSelected){
+      this.userMatrix = this.environmentService.getUserMatrix();
+    }
+  }
 }
