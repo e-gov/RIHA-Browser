@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -35,9 +36,11 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.util.UriUtils;
 
+import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -46,6 +49,7 @@ import java.util.Map;
  * @author Valentin Suhnjov
  */
 @Configuration
+@Profile("!dev")
 @EnableWebSecurity
 @EnableOAuth2Client
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -54,6 +58,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     // parameter passed from frontend. Contains the URL from where the login button was clicked.
     private static final String REDIRECT_URL_PARAMETER_MARKER = "fromUrl";
+
+    static final String TARA_AUTH_ENDPOINT = "/oauth2/authorization/tara";
 
     @Autowired
     private LdapUserDetailsService ldapUserDetailsService;
@@ -65,7 +71,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private JwtDecoder jwtDecoder;
 
     @Autowired
-    private ApplicationProperties applicationProperties;
+    protected ApplicationProperties applicationProperties;
 
     @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
@@ -109,40 +115,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                 .and()
-                .addFilterBefore((request, response, chain) -> {
-
-                            if (request instanceof HttpServletRequest && ((HttpServletRequest) request).getRequestURI().contains("/oauth2/authorization/tara")) {
-                                String fromUrlParameter = request.getParameter(REDIRECT_URL_PARAMETER_MARKER);
-                                log.info("authenticate request detected, fromUrl param ({}) is saved to session ", fromUrlParameter);
-                                ((HttpServletRequest) request).getSession().setAttribute("fromUrl", fromUrlParameter);
-                            }
-
-                            chain.doFilter(request, response);
-
-                        },
-                        ChannelProcessingFilter.class)
+                .addFilterBefore(createFromUrlSessionFilter(), ChannelProcessingFilter.class)
                 .oauth2Login()
                 .loginPage(applicationProperties.getBaseUrl())
-                .successHandler((request, response, authentication) -> {
-                    log.info("Kasutaja {} ID koodiga {} logis sisse kasutades amr: {} ",
-                            ((RihaUserDetails) authentication.getPrincipal()).getFullName(),
-                            ((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
-                            ((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
-                    );
-
-                    String fromUrl = (String) request.getSession(false).getAttribute("fromUrl");
-
-                    if (fromUrl != null) {
-                        // fromUrl param has the following format:
-                        // /url?param1=paramValue&param2=param2Value...
-                        // should transform question marks into param delimiters
-                        fromUrl = fromUrl.replaceAll("\\?", "&");
-
-                        response.sendRedirect("/Login?" + UriUtils.encodePath("fromUrl=" + fromUrl, "UTF-8"));
-                    } else {
-                        response.sendRedirect("/Login");
-                    }
-                })
+                .successHandler(successHandler())
                 .redirectionEndpoint()
                 .baseUri("/authenticate")
                 .and()
@@ -178,6 +154,40 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addObjectPostProcessor(new CustomPostProcessor());
     }
 
+    protected AuthenticationSuccessHandler successHandler() {
+        return (request, response, authentication) -> {
+			log.info("Kasutaja {} ID koodiga {} logis sisse kasutades amr: {} ",
+					((RihaUserDetails) authentication.getPrincipal()).getFullName(),
+					((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
+					((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
+			);
+
+			String fromUrl = (String) request.getSession(false).getAttribute("fromUrl");
+
+			if (fromUrl != null) {
+				// fromUrl param has the following format:
+				// /url?param1=paramValue&param2=param2Value...
+				// should transform question marks into param delimiters
+				fromUrl = fromUrl.replaceAll("\\?", "&");
+
+				response.sendRedirect("/Login?" + UriUtils.encodePath("fromUrl=" + fromUrl, "UTF-8"));
+			} else {
+				response.sendRedirect("/Login");
+			}
+		};
+    }
+
+    protected Filter createFromUrlSessionFilter() {
+        return (request, response, chain) -> {
+            if (request instanceof HttpServletRequest && ((HttpServletRequest) request).getRequestURI().contains(TARA_AUTH_ENDPOINT)) {
+                String fromUrlParameter = request.getParameter(REDIRECT_URL_PARAMETER_MARKER);
+                log.info("authenticate request detected, fromUrl param ({}) is saved to session ", fromUrlParameter);
+                ((HttpServletRequest) request).getSession().setAttribute("fromUrl", fromUrlParameter);
+            }
+            chain.doFilter(request, response);
+        };
+    }
+
     private RihaUserDetails getDefaultRihaUserWithDefaultRole(String personalCode) {
         RihaUserDetails rihaUserDetails;
         LdapUserDetailsImpl.Essence userDetailsEssence = new LdapUserDetailsImpl.Essence(new DirContextAdapter());
@@ -189,6 +199,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @Profile("!dev")
     ClientRegistrationRepository clientRegistrationRepository(ApplicationProperties applicationProperties) {
         ApplicationProperties.TaraProperties taraConfig = applicationProperties.getTara();
         return new InMemoryClientRegistrationRepository(

@@ -1,5 +1,7 @@
 package ee.ria.riha.conf;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -25,6 +27,7 @@ public class ApplicationProperties {
     private final CorsProperties cors = new CorsProperties();
     private final TrackingProperties tracking = new TrackingProperties();
     private final TaraProperties tara = new TaraProperties();
+    private final DeveloperUser developerUser = new DeveloperUser();
 
     @Setter
     private String baseUrl;
@@ -149,5 +152,20 @@ public class ApplicationProperties {
         private String jwkKeySetUri;
     }
 
+    @Getter
+    @Setter
+    public static class Organization {
+        private String name;
+        private String code;
+        private String[] roles;
+    }
+
+    @Getter
+    @Setter
+    public static class DeveloperUser {
+        private String name;
+        private String code;
+        private List<Organization> organizations;
+    }
 
 }
