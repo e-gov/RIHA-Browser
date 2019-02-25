@@ -4,7 +4,7 @@ import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
-import {G} from "../../../globals/globals";
+import { globals } from "../../../services/environment.service";
 
 @Component({
   selector: 'app-producer-edit-legislations',
@@ -16,7 +16,7 @@ export class ProducerEditLegislationsComponent implements OnInit {
   @Input() system: System;
   legislations: any[] = [];
   isChanged: boolean = false;
-  globals: any = G;
+  globals = globals;
 
   data: any = {url: '', name: '', type: ''};
 

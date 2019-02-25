@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService } from '../../services/environment.service';
+import { EnvironmentService, globals } from '../../services/environment.service';
 import { System } from '../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user';
 import { ModalHelperService } from '../../services/modal-helper.service';
-import { G } from '../../globals/globals';
 
 @Component({
   selector: 'app-approver-add-comment',
@@ -16,7 +15,7 @@ export class ApproverAddIssueComponent implements OnInit {
 
   @Input() system: System;
   activeUser: User;
-  globals: any = G;
+  globals = globals;
   isApprovalRequest: boolean;
   openIssuesMatrix: any = null;
   approvalRequest: any = {
@@ -60,19 +59,19 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onIssueTypeChange(issueType){
     switch (issueType){
-      case this.globals.issue_type.ESTABLISHMENT_REQUEST: {
+      case globals.issue_type.ESTABLISHMENT_REQUEST: {
         this.approvalRequest.title = 'Infosüsteemil puudub asutamise kooskõlastus';
         break;
       }
-      case this.globals.issue_type.FINALIZATION_REQUEST: {
+      case globals.issue_type.FINALIZATION_REQUEST: {
         this.approvalRequest.title = 'Infosüsteemil puudub lõpetamise kooskõlastus';
         break;
       }
-      case this.globals.issue_type.MODIFICATION_REQUEST: {
+      case globals.issue_type.MODIFICATION_REQUEST: {
         this.approvalRequest.title = 'Infosüsteemil puudub andmekoosseisu muutmise kooskõlastus';
         break;
       }
-      case this.globals.issue_type.TAKE_INTO_USE_REQUEST: {
+      case globals.issue_type.TAKE_INTO_USE_REQUEST: {
         this.approvalRequest.title = 'Infosüsteemil puudub kasutusele võtmise kooskõlastus';
         break;
       }
@@ -117,19 +116,19 @@ export class ApproverAddIssueComponent implements OnInit {
         issues.forEach(v => {
           if (v.status == 'OPEN' && v.type != null){
             switch (v.type){
-              case this.globals.issue_type.FINALIZATION_REQUEST: {
+              case globals.issue_type.FINALIZATION_REQUEST: {
                 this.openIssuesMatrix.finalization = true;
                 break;
               }
-              case this.globals.issue_type.TAKE_INTO_USE_REQUEST: {
+              case globals.issue_type.TAKE_INTO_USE_REQUEST: {
                 this.openIssuesMatrix.takingIntoUse = true;
                 break;
               }
-              case this.globals.issue_type.MODIFICATION_REQUEST: {
+              case globals.issue_type.MODIFICATION_REQUEST: {
                 this.openIssuesMatrix.modification = true;
                 break;
               }
-              case this.globals.issue_type.ESTABLISHMENT_REQUEST: {
+              case globals.issue_type.ESTABLISHMENT_REQUEST: {
                 this.openIssuesMatrix.establishment = true;
                 break;
               }
