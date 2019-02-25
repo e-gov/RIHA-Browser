@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { G } from '../../../globals/globals';
+import {globals} from "../../../services/environment.service";
 import {GeneralHelperService} from "../../../services/general-helper.service";
 
 @Component({
@@ -10,7 +10,7 @@ import {GeneralHelperService} from "../../../services/general-helper.service";
 export class FileHintComponent implements OnInit {
 
   @Input() file: any;
-  globals: any = G;
+  globals = globals;
 
   getOrganizationName(){
     if (this.file.accessRestriction && this.file.accessRestriction.organization){

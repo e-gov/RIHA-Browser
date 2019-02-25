@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {G} from '../globals/globals';
+import {globals} from "./environment.service";
 import {isNullOrUndefined} from 'util';
 import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
@@ -67,15 +67,15 @@ export class GeneralHelperService {
     if (system.details.meta && system.details.meta.system_status) {
       let status = system.details.meta.system_status.status;
       switch (status) {
-        case G.system_status.IN_USE: {
+        case globals.system_status.IN_USE: {
           statusDescription = 'kasutusel';
           break;
         }
-        case G.system_status.ESTABLISHING: {
+        case globals.system_status.ESTABLISHING: {
           statusDescription = 'asutamisel';
           break;
         }
-        case G.system_status.FINISHED: {
+        case globals.system_status.FINISHED: {
           statusDescription = 'lõpetatud';
           break
         }
@@ -94,15 +94,15 @@ export class GeneralHelperService {
     if (system.lastPositiveApprovalRequestType) {
       let status = system.lastPositiveApprovalRequestType;
       switch (status) {
-        case G.issue_type.TAKE_INTO_USE_REQUEST: {
+        case globals.issue_type.TAKE_INTO_USE_REQUEST: {
           statusDescription = 'kasutamine kooskõlastatud';
           break;
         }
-        case G.issue_type.ESTABLISHMENT_REQUEST: {
+        case globals.issue_type.ESTABLISHMENT_REQUEST: {
           statusDescription = 'asutamine kooskõlastatud';
           break;
         }
-        case G.issue_type.FINALIZATION_REQUEST: {
+        case globals.issue_type.FINALIZATION_REQUEST: {
           statusDescription = 'lõpetamine kooskõlastatud';
           break
         }
@@ -174,7 +174,7 @@ export class GeneralHelperService {
 
     const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
 
-    return _.intersection(G.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
+    return _.intersection(globals.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
   }
 
   public showError(txt?){

@@ -5,7 +5,7 @@ import {GeneralHelperService} from '../../services/general-helper.service';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
-import {G} from '../../globals/globals';
+import {globals} from "../../services/environment.service";
 import {System} from '../../models/system';
 import _ from 'lodash';
 
@@ -37,7 +37,7 @@ export class BrowserListComponent implements OnInit {
   extendedSearch: boolean = false;
   loaded: boolean = false;
 
-  globals: any = G;
+  globals = globals;
 
   onPageChange(newPage){
     this.gridData.page = newPage - 1;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
-import { G } from '../../../globals/globals';
+import { globals } from "../../../services/environment.service";
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralHelperService } from '../../../services/general-helper.service';
@@ -21,7 +21,7 @@ export class ProducerEditRelationsComponent implements OnInit {
   @Input() system: System;
   @Input() relations: any[];
 
-  globals: any = G;
+  globals = globals;
   relation: {
     infoSystem: any,
     type: string

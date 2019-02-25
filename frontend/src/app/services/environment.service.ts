@@ -5,6 +5,7 @@ import {User} from '../models/user';
 import {UserMatrix} from '../models/user-matrix';
 
 declare let ga: Function;
+export let globals: any;
 
 @Injectable()
 export class EnvironmentService {
@@ -15,6 +16,12 @@ export class EnvironmentService {
   public globalEnvironment: any;
 
   private lastVisitedLocations = [null, null];
+
+  private loadClassifiers(): void {
+    this.http.get(this.environmentUrl + "/classifiers").toPromise().then(response => {
+      globals = Object.freeze(response.json());
+    });
+  }
 
   public addLastVisitedLocation(l){
     this.lastVisitedLocations.unshift(l);
@@ -106,6 +113,7 @@ export class EnvironmentService {
     promise.then(response => {
       this.globalEnvironment = new Environment(response.json());
       this.runTrackingScripts(this.globalEnvironment);
+      this.loadClassifiers();
     });
     return promise;
   }

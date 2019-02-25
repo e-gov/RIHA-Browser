@@ -4,7 +4,7 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
-import { G } from '../../../globals/globals';
+import { globals } from "../../../services/environment.service";
 
 @Component({
   selector: 'app-producer-edit-security',
@@ -15,7 +15,7 @@ export class ProducerEditSecurityComponent implements OnInit {
 
   @Input() system: System;
   security: any;
-  globals: any = G;
+  globals = globals;
 
   hasSecurity: boolean = false;
   isAuditApplied: boolean = false;

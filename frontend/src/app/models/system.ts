@@ -1,4 +1,4 @@
-import {G} from '../globals/globals';
+import {globals} from "../services/environment.service";
 
 export class System {
   id: number = null;
@@ -53,14 +53,14 @@ export class System {
   }
 
   isUsed(): boolean{
-    return this.details.meta.system_status.status === G.system_status.IN_USE;
+    return this.details.meta.system_status.status === globals.system_status.IN_USE;
   }
 
   setInDevelopment(inDevelopment): void {
     if (inDevelopment === true){
-      this.details.meta.development_status = G.development_status.IN_DEVELOPMENT;
+      this.details.meta.development_status = globals.development_status.IN_DEVELOPMENT;
     } else if (inDevelopment === false){
-      this.details.meta.development_status = G.development_status.NOT_IN_DEVELOPMENT;
+      this.details.meta.development_status = globals.development_status.NOT_IN_DEVELOPMENT;
     }
   }
 
@@ -69,7 +69,7 @@ export class System {
   }
 
   isInDevelopment(): boolean{
-    return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
+    return this.details.meta.development_status === globals.development_status.IN_DEVELOPMENT;
   }
 
   getXRoadStatus() {

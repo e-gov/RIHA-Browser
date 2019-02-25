@@ -1,10 +1,9 @@
-import { Component, OnInit, DoCheck, KeyValueDiffers } from '@angular/core';
+import { Component, OnInit, KeyValueDiffers } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { GridData } from '../../../models/grid-data';
-import { EnvironmentService } from '../../../services/environment.service';
+import { EnvironmentService, globals } from '../../../services/environment.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
-import { G } from '../../../globals/globals';
 import * as moment from 'moment';
 import { UserMatrix } from '../../../models/user-matrix';
 
@@ -14,10 +13,10 @@ import { UserMatrix } from '../../../models/user-matrix';
   styleUrls: ['./systems-for-approval-list.component.scss']
 })
 export class SystemsForApprovalListComponent implements OnInit {
+  globals = globals;
   public loaded: boolean = false;
   public gridData: GridData = new GridData();
   public approvalReqestsForDisplay = [];
-  private globals: any = G;
   private differ: any;
   private userMatrix: UserMatrix;
 
