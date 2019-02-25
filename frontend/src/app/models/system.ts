@@ -112,6 +112,14 @@ export class System {
     return this.details.security.latest_audit_resolution != null;
   }
 
+  hasStandardRealisationTopic() : boolean {
+    if (!this.getTopics()) {
+      return false;
+    }
+
+    return this.getTopics().find(value => value == 'standardlahendus');
+  }
+
   constructor(system?){
     system = system || {};
     this.id = system.id || null;
@@ -158,6 +166,8 @@ export class System {
     this.details.contacts = this.details.contacts || [];
     this.details.homepage = this.details.homepage || null;
     this.details.purpose = this.details.purpose || null;
+    this.details.showDifferences = this.details.differences != null;
+    this.details.differences = this.details.differences || null;
     this.details.short_name = this.details.short_name || null;
     this.details.security = this.details.security || {
       class: null,
