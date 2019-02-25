@@ -77,6 +77,17 @@
         <label for="purpose-textarea" class="text-muted">Infosüsteemi eesmärk:</label>
         <textarea #purpose="ngModel" [(ngModel)]="system.details.purpose" name="purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
       </div>
+
+      <div class="mb-3" *ngIf="system.details.showDifferences" [ngClass]="{'has-danger': differences.invalid  && (differences.dirty || differences.touched || editForm.submitted)}">
+        <label for="differences-textarea" class="text-muted">Infosüsteemi erisused:</label>
+        <textarea #differences="ngModel"
+                  [(ngModel)]="system.details.differences"
+                  name="differences"
+                  class="form-control counter-element"
+                  id="differences-textarea"
+                  rows="5"
+                  placeholder="Standardlahenduse kasutajaks registreerimiseks kirjeldage omapoolsed võimalikud erisused infosüsteemi kasutamisel: kasutusel moodulid, rakenduse versioon jmt."></textarea>
+      </div>
       <div>
         <label class="text-muted">Infosüsteemi märksõnad:
           <app-tooltip [text]='"Valdkonnad ja märksõnad, mis infosüsteemi iseloomustavad. Näiteks \"majandus\", \"x-tee alamsüsteem\", \"standardlahendus\" jne. Uue märksõna lisamiseks kasuta reavahetust"'></app-tooltip>

@@ -38,6 +38,8 @@ public class InfoSystem {
     private static final String FILE_METADATA_NAME_KEY = "name";
     private static final String FILE_METADATA_TYPE_KEY = "type";
     private static final String FILE_METADATA_ACCESS_RESTRICTION_KEY = "accessRestriction";
+    private static final String FIELD_DIFFERENCES_KEY = "differences";
+    private static final String SECURITY_SECTION_KEY = "security";
 
     private static final Function<JsonNode, InfoSystemFileMetadata> DATA_FILE_METADATA_EXTRACTOR = jsonNode -> {
         InfoSystemFileMetadata metadata = new InfoSystemFileMetadata();
@@ -153,6 +155,14 @@ public class InfoSystem {
 
     public void setLastPositiveApprovalRequestDate(Date lastPositiveApprovalRequestDate) {
         this.lastPositiveApprovalRequestDate = lastPositiveApprovalRequestDate;
+    }
+
+    public void setDifferences(String differences) {
+        ((ObjectNode) jsonContent).put(FIELD_DIFFERENCES_KEY, differences);
+    }
+
+    public String getDifferences() {
+        return jsonContent.path(FIELD_DIFFERENCES_KEY).asText(null);
     }
 
     public JsonNode getJsonContent() {
@@ -398,6 +408,35 @@ public class InfoSystem {
                 .put(CONTACTS_NAME_KEY, name)
                 .put(CONTACTS_EMAIL_KEY, email);
     }
+
+    /**
+     * Utility method for deleting contacts. Will remove all content from existing CONTACTS_KEY path
+     */
+    public void clearContacts() {
+        ((ArrayNode) jsonContent.withArray(CONTACTS_KEY)).removeAll();
+    }
+
+    /**
+     *  Urility method for clearing security section of InfoSystem object.
+     */
+    public void clearSecuritySection() {
+        ((ObjectNode) jsonContent).remove(SECURITY_SECTION_KEY);
+    }
+
+    public void removeTopic(String topicToRemove) {
+        JsonNode topicsNode = jsonContent.path(TOPICS_KEY);
+        if (topicsNode == null || !topicsNode.isArray()) {
+            return;
+        }
+
+        Iterator<JsonNode> iterator = topicsNode.iterator();
+        while (iterator.hasNext()) {
+            if (topicToRemove.equalsIgnoreCase(iterator.next().asText())) {
+                iterator.remove();
+            }
+        }
+    }
+
 
     /**
      * Utility method for retrieving emails of all contacts. Does not modify source JsonNode.
