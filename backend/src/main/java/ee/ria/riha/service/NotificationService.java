@@ -39,12 +39,10 @@ public class NotificationService {
             return;
         }
 
-        Set<String> emails = getIssueParticipantsEmails(issueComment.getIssueId());
         NewIssueCommentEmailNotification notificationModel = createIssueCommentNotification(
                         new NewIssueCommentEmailNotification(),
                         issueComment.getIssueId(),
-                        issueComment.getComment(),
-                        emails);
+                        issueComment.getComment());
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
@@ -54,28 +52,26 @@ public class NotificationService {
             return;
         }
 
-        Set<String> issueParticipantsEmails = getIssueParticipantsEmails(decisionEvent.getIssueId());
-        Set<String> riaApproversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
-        issueParticipantsEmails.removeIf(email -> !riaApproversEmails.contains(email));
-
         NewIssueDecisionEmailNotification notificationModel = createIssueCommentNotification(
                         new NewIssueDecisionEmailNotification(),
                         decisionEvent.getIssueId(),
-                        decisionEvent.getComment(),
-                        issueParticipantsEmails);
+                        decisionEvent.getComment());
         notificationModel.setDecision(decisionEvent.getResolutionType());
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
     private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(T notificationModel,
                                                                                           Long issueId,
-                                                                                          String comment,
-                                                                                          Set<String> emails) {
+                                                                                          String comment) {
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         Issue issue = issueService.getIssueById(issueId);
 
-        emails.addAll(infoSystem.getContactsEmails());
-        if (emails.isEmpty()) {
+        Set<String> issueParticipantsEmails = getIssueParticipantsEmails(issueId);
+        Set<String> riaApproversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
+        issueParticipantsEmails.removeIf(email -> !riaApproversEmails.contains(email));
+
+        issueParticipantsEmails.addAll(infoSystem.getContactsEmails());
+        if (issueParticipantsEmails.isEmpty()) {
             log.info("New issue comment has been recently added for issue with id {}, "
                             + "but none of issue participants or info system contacts have emails.", issueId);
             return null;
@@ -86,7 +82,7 @@ public class NotificationService {
 
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(emails.toArray(new String[emails.size()]));
+        notificationModel.setBcc(issueParticipantsEmails.toArray(new String[issueParticipantsEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
