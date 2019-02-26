@@ -5,6 +5,7 @@ import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import {GridData} from "../../../models/grid-data";
+import { globals } from "../../../services/environment.service";
 import _ from 'lodash';
 
 @Component({
@@ -19,6 +20,7 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
   @Output() onSystemChanged = new EventEmitter<System>();
 
   gridData: GridData = new GridData();
+  globals = globals;
 
   onSortChange(property): void{
     this.gridData.changeSortOrder(property);
