@@ -60,13 +60,18 @@ public class NotificationService {
         emailNotificationSenderService.sendNotification(notificationModel);
     }
 
-    private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(T notificationModel, Long issueId, String comment) {
+    private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(T notificationModel,
+                                                                                          Long issueId,
+                                                                                          String comment) {
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         Issue issue = issueService.getIssueById(issueId);
 
-        Set<String> emails = getIssueParticipantsEmails(issueId);
-        emails.addAll(infoSystem.getContactsEmails());
-        if (emails.isEmpty()) {
+        Set<String> issueParticipantsEmails = getIssueParticipantsEmails(issueId);
+        Set<String> riaApproversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
+        issueParticipantsEmails.removeIf(email -> !riaApproversEmails.contains(email));
+
+        issueParticipantsEmails.addAll(infoSystem.getContactsEmails());
+        if (issueParticipantsEmails.isEmpty()) {
             log.info("New issue comment has been recently added for issue with id {}, "
                             + "but none of issue participants or info system contacts have emails.", issueId);
             return null;
@@ -77,7 +82,7 @@ public class NotificationService {
 
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(emails.toArray(new String[emails.size()]));
+        notificationModel.setBcc(issueParticipantsEmails.toArray(new String[issueParticipantsEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
