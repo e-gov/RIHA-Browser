@@ -48,7 +48,7 @@
                 <span *ngIf="!canDownload(doc)" class="text-muted">{{ doc.name }}</span>
                 <app-file-hint [file]="doc"></app-file-hint>
               </td>
-              <td class="type">{{doc.type}}</td>
+              <td class="type">{{globals.document_types[doc.type]}}</td>
               <td class="last-modified text-nowrap">
                 <app-file-create-update-date [file]="doc"></app-file-create-update-date>
               </td>

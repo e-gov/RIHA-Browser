@@ -121,6 +121,12 @@ export class GeneralHelperService {
     return $.param(newObj);
   }
 
+  public toArray(obj) {
+    return Object.keys(obj).map((key) => {
+      return {key: key, value: obj[key]}
+    });
+  }
+
   public getFileUrl(url, reference){
     if (url.substring(0,7) === 'file://'){
       return `/api/v1/systems/${ reference }/files/${ url.substring(7) }`;

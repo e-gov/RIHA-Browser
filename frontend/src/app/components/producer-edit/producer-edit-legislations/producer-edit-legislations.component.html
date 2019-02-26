@@ -33,7 +33,7 @@
                 [(ngModel)]="data.type"
                 name="type" required>
           <option [value]="''" disabled selected>Vali õigusakti liik...</option>
-          <option *ngFor="let type of globals.legislation_types" [value]="type" selected>{{ type }}</option>
+          <option *ngFor="let type of generalHelperService.toArray(globals.legislation_types)" [value]="type.key" selected>{{ type.value }}</option>
         </select>
       </div>
       <div class="form-group row">
