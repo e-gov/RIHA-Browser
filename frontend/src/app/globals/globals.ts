@@ -77,7 +77,7 @@ export const G = Object.freeze({
     legislation: 'AvTS § 35 lg 2 p 2',
     description: 'Dokumendi kavand ja selle juurde kuuluvad dokumendid'
   }],
-  topics_that_do_not_require_feedback_on_creation: ["x-tee alamsüsteem", "standardlahendus", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"],
+  topics_that_do_not_require_feedback_on_creation: ["x-tee alamsüsteem", "asutusesiseseks kasutamiseks", "dokumendihaldussüsteem"],
 
   document_types: ['Viide lõppkasutaja vaatele',
     'Viide (ava)andmetele',
