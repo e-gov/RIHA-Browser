@@ -77,6 +77,7 @@ import {DatemPipe} from './pipes/datem.pipe';
 import {LinkifyPipe} from './pipes/linkify.pipe';
 import {NoOrganizationModalComponent} from './components/no-organization-modal/no-organization-modal.component';
 import {ProducerEditStandardRealisationsComponent} from './components/producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component';
+import {LoginLinkComponent} from './components/login-link-component/login-link-component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -164,7 +165,8 @@ const routes: Routes = [
     CheckResultRowComponent,
     ProducerDashboardComponent,
     BrowserFilesListComponent,
-    ProducerEditStandardRealisationsComponent
+    ProducerEditStandardRealisationsComponent,
+    LoginLinkComponent
   ],
   imports: [
     BrowserModule,
@@ -200,7 +202,8 @@ const routes: Routes = [
     WarningModalComponent,
     ProducerEditRelationsComponent,
     ProducerEditSecurityComponent,
-    ProducerEditStandardRealisationsComponent
+    ProducerEditStandardRealisationsComponent,
+    LoginLinkComponent
   ],
   bootstrap: [AppComponent],
   providers: [
