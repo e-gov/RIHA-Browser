@@ -1,32 +1,13 @@
 .menu-toggle {
     display: none;
 }
-
-@media (min-width: 1200px) {
-    #content {
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 20px;
-        padding-right: 20px;
-        width: 100%;
-        max-width: 1600px;
-    }
-    .pagehead{
-        &:before{
-            left: -20px;
-            right: -20px;
-        }
-    }
-}
 @media only screen and (max-width: 1320px){
-    /*
     .pagehead{
         &:before{
             left: -40px;
             right: -40px;
         }
     }
-    */
 }
 @media only screen and (max-width: 1199px) {
     .menu-toggle {
