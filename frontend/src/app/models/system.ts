@@ -166,7 +166,7 @@ export class System {
     this.details.contacts = this.details.contacts || [];
     this.details.homepage = this.details.homepage || null;
     this.details.purpose = this.details.purpose || null;
-    this.details.showDifferences = this.details.differences != null;
+    this.details.showDifferences = this.details.differences || this.hasUsedSystemTypeRelations;
     this.details.differences = this.details.differences || null;
     this.details.short_name = this.details.short_name || null;
     this.details.security = this.details.security || {
