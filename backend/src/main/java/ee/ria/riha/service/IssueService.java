@@ -6,11 +6,7 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
-import ee.ria.riha.web.model.DashboardIssue;
-import ee.ria.riha.web.model.DashboardIssueComment;
-import ee.ria.riha.web.model.IssueApprovalDecisionModel;
-import ee.ria.riha.web.model.IssueCommentModel;
-import ee.ria.riha.web.model.IssueStatusUpdateModel;
+import ee.ria.riha.web.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -145,7 +141,6 @@ public class IssueService {
 
     private static final List<String> TOPICS_THAT_CANNOT_OPEN_FEEDBACK_REQUEST = Arrays.asList(
             "x-tee alamsüsteem",
-            "standardlahendus",
             "asutusesiseseks kasutamiseks",
             "dokumendihaldussüsteem");
 
@@ -256,15 +251,6 @@ public class IssueService {
                 .anyMatch(topic -> TOPICS_THAT_CANNOT_OPEN_FEEDBACK_REQUEST.contains(topic.trim().toLowerCase()))) {
             throw new ValidationException("validation.issue.create.feedbackNotNeeded");
         }
-
-        List<Relation> relations = relationService.listRelations(infoSystem.getShortName());
-
-        if (relations.stream()
-                .filter(Objects::nonNull)
-                .anyMatch(relation -> RelationType.USED_SYSTEM.equals(relation.getType()))) {
-            throw new ValidationException("validation.issue.create.feedbackNotNeeded");
-        }
-
     }
 
     private void validateCreatedIssueType(Issue model) {

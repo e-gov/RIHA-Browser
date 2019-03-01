@@ -165,7 +165,7 @@ export class GeneralHelperService {
     }
   }
 
-  public containsSpecialTopics(system: System): boolean {
+  public containsSpecialTopics(system: System, treatStandardLahendusAsSpecialTopic = true): boolean {
     let topics = system.getTopics();
 
     if (!topics) {
@@ -173,6 +173,9 @@ export class GeneralHelperService {
     }
 
     const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
+    if (!treatStandardLahendusAsSpecialTopic) {
+      _.remove(lowerCasedTopics, (topic) => "standardlahendus" == topic);
+    }
 
     return _.intersection(G.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
   }
