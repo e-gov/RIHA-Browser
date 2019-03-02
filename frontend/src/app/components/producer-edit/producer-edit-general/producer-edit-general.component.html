@@ -1,7 +1,4 @@
-<div *ngIf="!isLoggedIn()" class="alert alert-info" role="alert">
-  <h3 class="alert-heading">Palun logige sisse</h3>
-  <p class="mb-0">Muutmise alustamiseks on vaja RIHAsse sisse logida. <a href="/oauth2/authorization/tara">Logi sisse.</a></p>
-</div>
+<app-login-link *ngIf="!isLoggedIn()"  loginBoxText="Muutmise alustamiseks on vaja RIHAsse sisse logida. " ></app-login-link>
 <div *ngIf="isLoggedIn() && !canDescribe()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
   <p class="mb-0">Sul ei ole selle infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
