@@ -130,7 +130,7 @@ public class InfoSystemJsonSchemaTest {
     @Test
     public void successfullyValidatesJsonWhenDocumentTypeValueBelongsToEnumValues() {
         ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
-                .add(createDocument("document", "document_url", "Viide lõppkasutaja vaatele"));
+                .add(createDocument("document", "document_url", "DOC_TYPE_OPEN_DATA"));
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
@@ -159,7 +159,7 @@ public class InfoSystemJsonSchemaTest {
     @Test
     public void successfullyValidatesJsonWhenLegislationTypeValueBelongsToEnumValues() {
         ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
-                .add(createDocument("legislation", "legislation_url", "Infosüsteemi põhimääruse kavand/eelnõu"));
+                .add(createDocument("legislation", "legislation_url", "LEGAL_TYPE_DRAFT_STATUTE_NOTE"));
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
