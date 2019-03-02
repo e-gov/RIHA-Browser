@@ -92,7 +92,7 @@ export class ProducerEditSecurityComponent implements OnInit {
         security.latest_audit_date = this.generalHelperService.dateObjToTimestamp(security.latest_audit_date);
       }
       if (this.isIske){
-        security.standard = this.classifiers.security_standard.iske.code;
+        security.standard = this.classifiers.security_standard.ISKE.code;
       }
       if (this.isIske && this.securityClass.k != null && this.securityClass.s != null && this.securityClass.t != null){
         security.class = this.getSecurityClass();

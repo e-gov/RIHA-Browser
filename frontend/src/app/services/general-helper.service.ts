@@ -65,7 +65,21 @@ export class GeneralHelperService {
   public getSystemStatusText(system){
     let statusDescription = 'määramata';
     if (system.details.meta && system.details.meta.system_status) {
-      statusDescription = classifiers.system_status[system.details.meta.system_status.status].value;
+      let status = system.details.meta.system_status.status;
+      switch (status) {
+        case classifiers.system_status.IN_USE.code: {
+          statusDescription = 'kasutusel';
+          break;
+        }
+        case classifiers.system_status.ESTABLISHING.code: {
+          statusDescription = 'asutamisel';
+          break;
+        }
+        case classifiers.system_status.FINISHED.code: {
+          statusDescription = 'lõpetatud';
+          break
+        }
+      }
     }
     return statusDescription;
   }
@@ -110,6 +124,12 @@ export class GeneralHelperService {
   public toArray(obj) {
     return Object.keys(obj).map((key) => {
       return {code: obj[key].code, value: obj[key].value}
+    });
+  }
+
+  public toJsonArray(obj) {
+    return Object.keys(obj).map((key) => {
+      return {code: obj[key].code, value: JSON.parse(obj[key].value)}
     });
   }
 

@@ -46,9 +46,8 @@ export class FileHintComponent implements OnInit {
 
   private getRestrictionReason(){
     if (this.file.accessRestriction && this.file.accessRestriction.reasonCode){
-      let code = this.file.accessRestriction.reasonCode;
-      let reason = this.classifiers.access_restriction_reasons.filter( r => r.code == this.file.accessRestriction.reasonCode)[0];
-      return reason;
+      let reason = this.generalHelperService.toArray(this.classifiers.access_restriction_reasons).filter( r => r.code == this.file.accessRestriction.reasonCode)[0].value;
+      return JSON.parse(reason);
     } else {
       return null;
     }
