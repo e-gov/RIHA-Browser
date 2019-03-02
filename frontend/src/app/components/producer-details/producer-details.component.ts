@@ -109,10 +109,6 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
     });
   }
 
-  getCurrentUrl() {
-    return this.router.url;
-  }
-
   constructor(private differs: KeyValueDiffers,
               private systemsService: SystemsService,
               private environmentService: EnvironmentService,
