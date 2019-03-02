@@ -12,7 +12,7 @@
         <strong>{{ system.getSecurityStandard() }}</strong>
       </p>
   </div>
-  <div *ngIf="system.getSecurityStandard() == classifiers.security_standard.iske.code" class="form-group">
+  <div *ngIf="system.getSecurityStandard() == classifiers.security_standard.ISKE.code" class="form-group">
     <label class="text-muted separated-text">ISKE turbetase:</label>
     <p>
       <strong>{{classifiers.security_level[system.getSecurityLevel()].value}}</strong>

@@ -29,7 +29,7 @@ export class ProducerEditRelationsComponent implements OnInit {
 
 
   dropDownFormatter = (v)=> {
-    return `${v.details.short_name} - ${this.generalHelper.truncateString(v.details.name, 90)}`;
+    return `${v.details.short_name} - ${this.generalHelperService.truncateString(v.details.name, 90)}`;
   };
 
   inputFormatter = (v)=> v.details.short_name;
@@ -79,7 +79,7 @@ export class ProducerEditRelationsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private modalService: ModalHelperService,
-              private generalHelper: GeneralHelperService,
+              private generalHelperService: GeneralHelperService,
               private toastrService: ToastrService) { }
 
   ngOnInit() {

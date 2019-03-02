@@ -164,7 +164,7 @@
                           [(ngModel)]="documents[i].accessRestriction.reasonCode"
                           name="restrictionReason" required>
                     <option [value]="''" disabled selected>Vali piirangu alus...</option>
-                    <option *ngFor="let reason of generalHelperService.toArray(classifiers.access_restriction_reasons)" [value]="reason.value.code" selected>{{ reason.value.legislation }} - {{ reason.value.description }}</option>
+                    <option *ngFor="let reason of generalHelperService.toJsonArray(classifiers.access_restriction_reasons)" [value]="reason.code" selected>{{ reason.value.legislation }} - {{ reason.value.description }}</option>
                   </select>
                 </div>
                 <div class="row">
