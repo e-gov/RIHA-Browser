@@ -1,7 +1,7 @@
 import {Component, Input, KeyValueDiffers, OnInit} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {System} from '../../../models/system';
-import {globals} from "../../../services/environment.service";
+import {classifiers} from "../../../services/environment.service";
 import {ModalHelperService} from '../../../services/modal-helper.service';
 import {ProducerEditRelationsComponent} from '../../producer-edit/producer-edit-relations/producer-edit-relations.component';
 import {Router} from '@angular/router';
@@ -20,7 +20,7 @@ export class ProducerDetailsRelationsComponent implements OnInit    {
   @Input() allowEdit: boolean;
 
   @Input() userMatrix: UserMatrix;
-  globals = globals;
+  classifiers = classifiers;
   relations: any[] = [];
 
   openSystemDetails(shortName){

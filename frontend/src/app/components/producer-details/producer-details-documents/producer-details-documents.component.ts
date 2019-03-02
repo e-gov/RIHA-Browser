@@ -6,8 +6,8 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { EnvironmentService } from '../../../services/environment.service';
-import {GridData} from "../../../models/grid-data";
-import { globals } from '../../../services/environment.service';
+import { GridData } from "../../../models/grid-data";
+import { classifiers } from '../../../services/environment.service';
 import _ from 'lodash';
 
 @Component({
@@ -22,7 +22,7 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
   @Output() onSystemChanged = new EventEmitter<System>();
 
   gridData: GridData = new GridData();
-  globals = globals;
+  classifiers = classifiers;
 
   onSortChange(property): void{
     this.gridData.changeSortOrder(property);
@@ -87,6 +87,7 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
         if (!doc.update_timestamp) {
           doc.update_timestamp = doc.creation_timestamp;
         }
+        doc.typeForSorting = this.classifiers.document_types[doc.type].value;
         return doc;
       });
       documents = _.orderBy(documents, [sort, 'name'], [sortOrder, 'asc']);

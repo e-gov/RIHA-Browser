@@ -4,7 +4,7 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
-import { globals } from "../../../services/environment.service";
+import { classifiers } from "../../../services/environment.service";
 
 @Component({
   selector: 'app-producer-edit-security',
@@ -15,7 +15,7 @@ export class ProducerEditSecurityComponent implements OnInit {
 
   @Input() system: System;
   security: any;
-  globals = globals;
+  classifiers = classifiers;
 
   hasSecurity: boolean = false;
   isAuditApplied: boolean = false;
@@ -92,7 +92,7 @@ export class ProducerEditSecurityComponent implements OnInit {
         security.latest_audit_date = this.generalHelperService.dateObjToTimestamp(security.latest_audit_date);
       }
       if (this.isIske){
-        security.standard = this.globals.security_standard.iske;
+        security.standard = this.classifiers.security_standard.iske.code;
       }
       if (this.isIske && this.securityClass.k != null && this.securityClass.s != null && this.securityClass.t != null){
         security.class = this.getSecurityClass();

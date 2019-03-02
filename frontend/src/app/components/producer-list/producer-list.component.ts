@@ -1,6 +1,6 @@
 import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
 import {SystemsService} from '../../services/systems.service';
-import {EnvironmentService, globals} from '../../services/environment.service';
+import {EnvironmentService, classifiers} from '../../services/environment.service';
 import {GridData} from '../../models/grid-data';
 import {UserMatrix} from '../../models/user-matrix';
 import {ToastrService} from 'ngx-toastr';
@@ -41,7 +41,7 @@ export class ProducerListComponent implements OnInit, DoCheck {
 
   extendedSearch: boolean = false;
 
-  globals = globals;
+  classifiers = classifiers;
 
   onPageChange(newPage): void{
     this.gridData.page = newPage - 1;

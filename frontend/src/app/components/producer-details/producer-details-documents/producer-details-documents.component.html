@@ -25,7 +25,7 @@
               <th>
                 <app-sort-button
                   [labelText]="'Liik'"
-                  [sortProperty]="'type'"
+                  [sortProperty]="'typeForSorting'"
                   [gridData]="gridData"
                   (buttonClick)="onSortChange($event)"></app-sort-button>
               </th>
@@ -48,7 +48,7 @@
                 <span *ngIf="!canDownload(doc)" class="text-muted">{{ doc.name }}</span>
                 <app-file-hint [file]="doc"></app-file-hint>
               </td>
-              <td class="type">{{globals.document_types[doc.type]}}</td>
+              <td class="type">{{classifiers.document_types[doc.type].value}}</td>
               <td class="last-modified text-nowrap">
                 <app-file-create-update-date [file]="doc"></app-file-create-update-date>
               </td>

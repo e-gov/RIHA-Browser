@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
-import { globals } from "../../../services/environment.service";
+import { classifiers } from "../../../services/environment.service";
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralHelperService } from '../../../services/general-helper.service';
@@ -21,7 +21,7 @@ export class ProducerEditRelationsComponent implements OnInit {
   @Input() system: System;
   @Input() relations: any[];
 
-  globals = globals;
+  classifiers = classifiers;
   relation: {
     infoSystem: any,
     type: string
@@ -50,7 +50,7 @@ export class ProducerEditRelationsComponent implements OnInit {
                                                                                      type: this.relation.type}).then(res => {
         this.refreshRelations();
         addForm.reset();
-        addForm.controls.type.setValue(this.globals.relation_type.SUB_SYSTEM);
+        addForm.controls.type.setValue(this.classifiers.relation_type.SUB_SYSTEM.code);
       }, err => {
         this.toastrService.error('Serveri viga');
       });
@@ -85,7 +85,7 @@ export class ProducerEditRelationsComponent implements OnInit {
   ngOnInit() {
     this.relation = {
       infoSystem: null,
-      type: this.globals.relation_type.SUB_SYSTEM
+      type: this.classifiers.relation_type.SUB_SYSTEM.code
     };
   }
 
