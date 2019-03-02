@@ -5,7 +5,7 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProducerEditSecurityComponent } from '../../producer-edit/producer-edit-security/producer-edit-security.component';
-import { EnvironmentService, globals } from '../../../services/environment.service';
+import { EnvironmentService, classifiers } from '../../../services/environment.service';
 
 @Component({
   selector: 'app-producer-details-security',
@@ -18,7 +18,7 @@ export class ProducerDetailsSecurityComponent implements OnInit {
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
 
-  globals = globals;
+  classifiers = classifiers;
 
   isAuditVisible(){
     return this.environmentService.getUserMatrix().hasApproverRole || this.allowEdit;

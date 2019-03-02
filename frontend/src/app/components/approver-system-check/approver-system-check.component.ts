@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { System } from '../../models/system';
 import { SystemsService } from '../../services/systems.service';
-import { globals } from "../../services/environment.service";
+import { classifiers } from "../../services/environment.service";
 import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
@@ -23,8 +23,8 @@ export class ApproverSystemCheckComponent implements OnInit {
   private startSystemCheck(){
     this.hasErrors = false;
 
-    let statusPending = globals.system_check_status.PENDING;
-    let statusInProgress = globals.system_check_status.IN_PROGRESS;
+    let statusPending = classifiers.system_check_status.PENDING.code;
+    let statusInProgress = classifiers.system_check_status.IN_PROGRESS.code;
     this.systemCheckMatrix = {
       systemStatus: statusInProgress,
       developmentStatus: statusPending,
@@ -40,7 +40,7 @@ export class ApproverSystemCheckComponent implements OnInit {
       this.checkSystemStatus();
     }, err => {
       this.helper.showError();
-      let statusCancelled = globals.system_check_status.CANCELLED;
+      let statusCancelled = classifiers.system_check_status.CANCELLED.code;
       this.systemCheckMatrix = {
         systemStatus: statusCancelled,
         developmentStatus: statusCancelled,
@@ -55,11 +55,11 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkSystemStatus(){
     if (this.system.details.meta && this.system.details.meta.system_status && this.system.details.meta.system_status.status){
-      this.systemCheckMatrix.systemStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.systemStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.systemStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.systemStatus = classifiers.system_check_status.FAILED.code;
     }
-    this.systemCheckMatrix.developmentStatus = globals.system_check_status.IN_PROGRESS;
+    this.systemCheckMatrix.developmentStatus = classifiers.system_check_status.IN_PROGRESS.code;
     setTimeout(()=> {
       this.checkDevelopmentStatus();
     }, this.getCheckTimeout());
@@ -67,11 +67,11 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkDevelopmentStatus(){
     if (this.system.details.meta && this.system.details.meta.development_status){
-      this.systemCheckMatrix.developmentStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.developmentStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.developmentStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.developmentStatus = classifiers.system_check_status.FAILED.code;
     }
-    this.systemCheckMatrix.storedDataStatus = globals.system_check_status.IN_PROGRESS;
+    this.systemCheckMatrix.storedDataStatus = classifiers.system_check_status.IN_PROGRESS.code;
     setTimeout(()=> {
       this.checkStoredData();
     }, this.getCheckTimeout());
@@ -79,11 +79,11 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkStoredData(){
     if (this.system.details.stored_data && this.system.details.stored_data.length > 0){
-      this.systemCheckMatrix.storedDataStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.storedDataStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.storedDataStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.storedDataStatus = classifiers.system_check_status.FAILED.code;
     }
-    this.systemCheckMatrix.dataFilesStatus = globals.system_check_status.IN_PROGRESS;
+    this.systemCheckMatrix.dataFilesStatus = classifiers.system_check_status.IN_PROGRESS.code;
     setTimeout(()=> {
       this.checkDataFiles();
     }, this.getCheckTimeout());
@@ -91,11 +91,11 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkDataFiles(){
     if (this.system.details.data_files && this.system.details.data_files.length > 0){
-      this.systemCheckMatrix.dataFilesStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.dataFilesStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.dataFilesStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.dataFilesStatus = classifiers.system_check_status.FAILED.code;
     }
-    this.systemCheckMatrix.legislationsStatus = globals.system_check_status.IN_PROGRESS;
+    this.systemCheckMatrix.legislationsStatus = classifiers.system_check_status.IN_PROGRESS.code;
     setTimeout(()=> {
       this.checkLegislations();
     }, this.getCheckTimeout());
@@ -103,11 +103,11 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkLegislations(){
     if (this.system.details.legislations && this.system.details.legislations.length > 0){
-      this.systemCheckMatrix.legislationsStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.legislationsStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.legislationsStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.legislationsStatus = classifiers.system_check_status.FAILED.code;
     }
-    this.systemCheckMatrix.documentsStatus = globals.system_check_status.IN_PROGRESS;
+    this.systemCheckMatrix.documentsStatus = classifiers.system_check_status.IN_PROGRESS.code;
     setTimeout(()=> {
       this.checkDocuments();
     }, this.getCheckTimeout());
@@ -115,11 +115,11 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkDocuments(){
     if (this.system.details.documents && this.system.details.documents.length > 0){
-      this.systemCheckMatrix.documentsStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.documentsStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.documentsStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.documentsStatus = classifiers.system_check_status.FAILED.code;
     }
-    this.systemCheckMatrix.contactsStatus = globals.system_check_status.IN_PROGRESS;
+    this.systemCheckMatrix.contactsStatus = classifiers.system_check_status.IN_PROGRESS.code;
     setTimeout(()=> {
       this.checkContacts();
     }, this.getCheckTimeout());
@@ -127,16 +127,16 @@ export class ApproverSystemCheckComponent implements OnInit {
 
   private checkContacts(){
     if (this.system.details.contacts && this.system.details.contacts.length > 0){
-      this.systemCheckMatrix.contactsStatus = globals.system_check_status.PASSED;
+      this.systemCheckMatrix.contactsStatus = classifiers.system_check_status.PASSED.code;
     } else {
-      this.systemCheckMatrix.contactsStatus = globals.system_check_status.FAILED;
+      this.systemCheckMatrix.contactsStatus = classifiers.system_check_status.FAILED.code;
     }
     this.setErrorStatus();
   }
 
   private setErrorStatus(){
     for (let k in this.systemCheckMatrix) {
-      if (this.systemCheckMatrix[k] == globals.system_check_status.FAILED){
+      if (this.systemCheckMatrix[k] == classifiers.system_check_status.FAILED.code){
         this.hasErrors = true;
       }
     }

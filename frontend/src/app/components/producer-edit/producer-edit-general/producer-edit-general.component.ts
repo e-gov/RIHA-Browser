@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
-import { EnvironmentService, globals } from "../../../services/environment.service";
+import { EnvironmentService, classifiers } from "../../../services/environment.service";
 import { WindowRefService } from '../../../services/window-ref.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -15,7 +15,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   @Input() system: System;
   reference: string;
   alertConf: any = null;
-  globals = globals;
+  classifiers = classifiers;
   timeoutId: any = null;
   isChanged: boolean = false;
 
@@ -43,7 +43,7 @@ export class ProducerEditGeneralComponent implements OnInit {
 
   changeSystemStatus(status) {
     this.system.setStatus(status);
-    if (status != globals.system_status.IN_USE){
+    if (status != classifiers.system_status.IN_USE.code){
       this.system.details.meta.system_status.timestamp = null;
     }
     this.isChanged = true;
@@ -52,7 +52,7 @@ export class ProducerEditGeneralComponent implements OnInit {
 
   changeXRoadStatus(xRoadStatus) {
     this.system.setXRoadStatus(xRoadStatus);
-    if (xRoadStatus != globals.x_road_status.JOINED){
+    if (xRoadStatus != classifiers.x_road_status.JOINED.code){
       this.system.details.meta.x_road_status.timestamp = null;
     }
     this.isChanged = true;

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {globals} from "./environment.service";
+import {classifiers} from "./environment.service";
 import {isNullOrUndefined} from 'util';
 import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
@@ -65,21 +65,7 @@ export class GeneralHelperService {
   public getSystemStatusText(system){
     let statusDescription = 'määramata';
     if (system.details.meta && system.details.meta.system_status) {
-      let status = system.details.meta.system_status.status;
-      switch (status) {
-        case globals.system_status.IN_USE: {
-          statusDescription = 'kasutusel';
-          break;
-        }
-        case globals.system_status.ESTABLISHING: {
-          statusDescription = 'asutamisel';
-          break;
-        }
-        case globals.system_status.FINISHED: {
-          statusDescription = 'lõpetatud';
-          break
-        }
-      }
+      statusDescription = classifiers.system_status[system.details.meta.system_status.status].value;
     }
     return statusDescription;
   }
@@ -94,15 +80,15 @@ export class GeneralHelperService {
     if (system.lastPositiveApprovalRequestType) {
       let status = system.lastPositiveApprovalRequestType;
       switch (status) {
-        case globals.issue_type.TAKE_INTO_USE_REQUEST: {
+        case classifiers.issue_type.TAKE_INTO_USE_REQUEST.code: {
           statusDescription = 'kasutamine kooskõlastatud';
           break;
         }
-        case globals.issue_type.ESTABLISHMENT_REQUEST: {
+        case classifiers.issue_type.ESTABLISHMENT_REQUEST.code: {
           statusDescription = 'asutamine kooskõlastatud';
           break;
         }
-        case globals.issue_type.FINALIZATION_REQUEST: {
+        case classifiers.issue_type.FINALIZATION_REQUEST.code: {
           statusDescription = 'lõpetamine kooskõlastatud';
           break
         }
@@ -123,7 +109,13 @@ export class GeneralHelperService {
 
   public toArray(obj) {
     return Object.keys(obj).map((key) => {
-      return {key: key, value: obj[key]}
+      return {code: obj[key].code, value: obj[key].value}
+    });
+  }
+
+  public toArrayOfValues(obj) {
+    return Object.keys(obj).map((key) => {
+      return obj[key].value
     });
   }
 
@@ -180,7 +172,7 @@ export class GeneralHelperService {
 
     const lowerCasedTopics = _.map(topics, (topic) => topic ? topic.toLowerCase() : "");
 
-    return _.intersection(globals.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
+    return _.intersection(this.toArrayOfValues(classifiers.topics_that_do_not_require_feedback_on_creation), lowerCasedTopics).length > 0;
   }
 
   public showError(txt?){

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {System} from '../../../models/system';
-import {globals} from "../../../services/environment.service";
+import {classifiers} from "../../../services/environment.service";
 import {Router} from '@angular/router';
 import {GeneralHelperService} from '../../../services/general-helper.service';
 
@@ -13,7 +13,7 @@ export class ProducerDetailsGeneralComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
-  globals = globals;
+  classifiers = classifiers;
 
   listSystemsWithTopic(topic){
     this.router.navigate(['/Infosüsteemid'], {queryParams: {topic: topic}});

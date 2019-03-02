@@ -39,9 +39,9 @@
       <div>
         <div class="row ml-0 mb-3">
           <label for="active-since-date" class="col-form-label advanced-label">
-            <span *ngIf="system.getStatus() == globals.system_status.IN_USE"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
-            <span *ngIf="system.getStatus() == globals.system_status.ESTABLISHING"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
-            <span *ngIf="system.getStatus() == globals.system_status.FINISHED"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.ESTABLISHING.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
             <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
           </label>
           <div class="col-sm-4">
@@ -54,14 +54,14 @@
             </div>
           </div>
           <div class="col-sm-8 form-links">
-            <a href="#" (click)="changeSystemStatus(globals.system_status.ESTABLISHING)">asutamisel</a>
-            <a href="#" (click)="changeSystemStatus(globals.system_status.IN_USE)">kasutusel</a>
-            <a href="#" (click)="changeSystemStatus(globals.system_status.FINISHED)">lõpetatud</a>
+            <a href="#" (click)="changeSystemStatus(classifiers.system_status.ESTABLISHING.code)">{{classifiers.system_status.ESTABLISHING.value}}</a>
+            <a href="#" (click)="changeSystemStatus(classifiers.system_status.IN_USE.code)">{{classifiers.system_status.IN_USE.value}}</a>
+            <a href="#" (click)="changeSystemStatus(classifiers.system_status.FINISHED.code)">{{classifiers.system_status.FINISHED.value}}</a>
           </div>
         </div>
         <div class="mb-4">
-          <label *ngIf="system.getDevelopmentStatus() == globals.development_status.IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
-          <label *ngIf="system.getDevelopmentStatus() == globals.development_status.NOT_IN_DEVELOPMENT" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-primary">ei ole arenduses</strong></label>
+          <label *ngIf="system.getDevelopmentStatus() == classifiers.development_status.IN_DEVELOPMENT.code" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
+          <label *ngIf="system.getDevelopmentStatus() == classifiers.development_status.NOT_IN_DEVELOPMENT.code" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-primary">ei ole arenduses</strong></label>
           <label *ngIf="!system.getDevelopmentStatus()" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
           <div class="col-sm-4 form-links">
             <span>Kas infosüsteemi arendatakse aktiivselt?</span>
@@ -127,17 +127,17 @@
           </div>
         </div>
         <div class="row ml-0 mb-4">
-          <label *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" for="x_road_date" class="col-form-label advanced-label">
+          <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" for="x_road_date" class="col-form-label advanced-label">
             <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">on liidestatud</strong> X-teega
           </label>
-          <label *ngIf="system.getXRoadStatus() == globals.x_road_status.NOT_JOINED" for="x_road_date" class="col-form-label advanced-label">
+          <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.NOT_JOINED.code" for="x_road_date" class="col-form-label advanced-label">
             <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">ei ole liidestatud</strong> X-teega
           </label>
           <label *ngIf="!system.getXRoadStatus()" class="col-form-label advanced-label">
             <i class="fa fa-question-circle-o" aria-hidden="true"></i>X-teega liidestamine staatus on <strong>määramata</strong>
           </label>
           <div class="col-sm-4">
-            <div *ngIf="system.getXRoadStatus() == globals.x_road_status.JOINED" class="input-group datepicker">
+            <div *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" class="input-group datepicker">
               <input id="x_road_date" class="form-control" placeholder="yyyy-mm-dd"
                      name="x_road_date" [(ngModel)]="system.details.meta.x_road_status.timestamp" ngbDatepicker #xRoadDate="ngbDatepicker">
               <span class="input-group-btn">
@@ -147,8 +147,8 @@
           </div>
           <div class="col-sm-8 form-links">
             <span>Kas infosüsteem on liidestatud või liidestatakse X-teega?</span>
-            <a href="#" (click)="changeXRoadStatus(globals.x_road_status.JOINED)">Jah</a>
-            <a href="#" (click)="changeXRoadStatus(globals.x_road_status.NOT_JOINED)">Ei</a>
+            <a href="#" (click)="changeXRoadStatus(classifiers.x_road_status.JOINED.code)">Jah</a>
+            <a href="#" (click)="changeXRoadStatus(classifiers.x_road_status.NOT_JOINED.code)">Ei</a>
           </div>
         </div>
 

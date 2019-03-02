@@ -2,7 +2,7 @@ import { Component, OnInit, KeyValueDiffers } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { GridData } from '../../../models/grid-data';
-import { EnvironmentService, globals } from '../../../services/environment.service';
+import { EnvironmentService, classifiers } from '../../../services/environment.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 import * as moment from 'moment';
 import { UserMatrix } from '../../../models/user-matrix';
@@ -13,7 +13,7 @@ import { UserMatrix } from '../../../models/user-matrix';
   styleUrls: ['./systems-for-approval-list.component.scss']
 })
 export class SystemsForApprovalListComponent implements OnInit {
-  globals = globals;
+  classifiers = classifiers;
   public loaded: boolean = false;
   public gridData: GridData = new GridData();
   public approvalReqestsForDisplay = [];
@@ -44,7 +44,7 @@ export class SystemsForApprovalListComponent implements OnInit {
           for (let i = 0; i < eventsCount; i++){
             let event = ar.events[i];
             let activeOrganization = this.environmentService.getActiveUser().getActiveOrganization();
-            if (event.type == this.globals.event_type.DECISION && activeOrganization && activeOrganization.code == event.organizationCode){
+            if (event.type == this.classifiers.event_type.DECISION.code && activeOrganization && activeOrganization.code == event.organizationCode){
               hasDecision = true;
               break;
             }

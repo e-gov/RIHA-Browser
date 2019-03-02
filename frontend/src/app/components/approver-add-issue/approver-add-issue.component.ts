@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService, globals } from '../../services/environment.service';
+import { EnvironmentService, classifiers } from '../../services/environment.service';
 import { System } from '../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user';
@@ -15,7 +15,7 @@ export class ApproverAddIssueComponent implements OnInit {
 
   @Input() system: System;
   activeUser: User;
-  globals = globals;
+  classifiers = classifiers;
   isApprovalRequest: boolean;
   openIssuesMatrix: any = null;
   approvalRequest: any = {
@@ -59,19 +59,19 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onIssueTypeChange(issueType){
     switch (issueType){
-      case globals.issue_type.ESTABLISHMENT_REQUEST: {
+      case classifiers.issue_type.ESTABLISHMENT_REQUEST.code: {
         this.approvalRequest.title = 'Infosüsteemil puudub asutamise kooskõlastus';
         break;
       }
-      case globals.issue_type.FINALIZATION_REQUEST: {
+      case classifiers.issue_type.FINALIZATION_REQUEST.code: {
         this.approvalRequest.title = 'Infosüsteemil puudub lõpetamise kooskõlastus';
         break;
       }
-      case globals.issue_type.MODIFICATION_REQUEST: {
+      case classifiers.issue_type.MODIFICATION_REQUEST.code: {
         this.approvalRequest.title = 'Infosüsteemil puudub andmekoosseisu muutmise kooskõlastus';
         break;
       }
-      case globals.issue_type.TAKE_INTO_USE_REQUEST: {
+      case classifiers.issue_type.TAKE_INTO_USE_REQUEST.code: {
         this.approvalRequest.title = 'Infosüsteemil puudub kasutusele võtmise kooskõlastus';
         break;
       }
@@ -116,19 +116,19 @@ export class ApproverAddIssueComponent implements OnInit {
         issues.forEach(v => {
           if (v.status == 'OPEN' && v.type != null){
             switch (v.type){
-              case globals.issue_type.FINALIZATION_REQUEST: {
+              case classifiers.issue_type.FINALIZATION_REQUEST.code: {
                 this.openIssuesMatrix.finalization = true;
                 break;
               }
-              case globals.issue_type.TAKE_INTO_USE_REQUEST: {
+              case classifiers.issue_type.TAKE_INTO_USE_REQUEST.code: {
                 this.openIssuesMatrix.takingIntoUse = true;
                 break;
               }
-              case globals.issue_type.MODIFICATION_REQUEST: {
+              case classifiers.issue_type.MODIFICATION_REQUEST.code: {
                 this.openIssuesMatrix.modification = true;
                 break;
               }
-              case globals.issue_type.ESTABLISHMENT_REQUEST: {
+              case classifiers.issue_type.ESTABLISHMENT_REQUEST.code: {
                 this.openIssuesMatrix.establishment = true;
                 break;
               }
