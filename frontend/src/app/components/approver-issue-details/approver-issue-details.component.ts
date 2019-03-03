@@ -23,6 +23,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   globals: any = G;
   decisionType: string = 'null';
   commentText: string = '';
+  deadlinePassed: boolean;
 
   refreshReplies(){
     this.systemService.getSystemIssueTimeline(this.feedback.id).then(
@@ -148,6 +149,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.deadlinePassed = Date.now() > Date.parse(this.feedback.decisionDeadline);
     this.refreshReplies();
   }
 

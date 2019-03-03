@@ -3,6 +3,7 @@ package ee.ria.riha.service;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.model.*;
+import ee.ria.riha.service.util.DateUtils;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
@@ -36,6 +37,8 @@ import static org.springframework.util.StringUtils.hasText;
 @Service
 public class IssueService {
 
+    private static final int WORK_DAYS_UNTIL_DEADLINE = 20;
+
     public static final Function<Comment, Issue> COMMENT_TO_ISSUE = comment -> {
         if (comment == null) {
             return null;
@@ -55,6 +58,9 @@ public class IssueService {
                 .type(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .resolutionType(comment.getResolution_type() != null
                         ? IssueResolutionType.valueOf(comment.getResolution_type())
+                        : null)
+                .decisionDeadline(comment.getStatus() == null || IssueStatus.valueOf(comment.getStatus()) == IssueStatus.OPEN
+                        ? DateUtils.getDecisionDeadline(comment.getCreation_date(), WORK_DAYS_UNTIL_DEADLINE)
                         : null)
                 .build();
     };
@@ -110,6 +116,9 @@ public class IssueService {
                         : comment.getEvents().stream()
                         .map(COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL)
                         .collect(toList()))
+                .decisionDeadline(comment.getStatus() == null || IssueStatus.valueOf(comment.getStatus()) == IssueStatus.OPEN
+                        ? DateUtils.getDecisionDeadline(comment.getCreation_date(), WORK_DAYS_UNTIL_DEADLINE)
+                        : null)
                 .build();
     };
 

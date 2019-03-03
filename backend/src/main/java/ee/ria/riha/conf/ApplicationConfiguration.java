@@ -1,6 +1,10 @@
 package ee.ria.riha.conf;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.fge.jackson.JsonLoader;
+
+import ee.ria.riha.domain.model.NationalHolidays;
 import ee.ria.riha.service.JsonValidationService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.task.TaskExecutorBuilder;
@@ -12,7 +16,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * @author Valentin Suhnjov
@@ -37,5 +43,12 @@ public class ApplicationConfiguration {
     public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties) throws IOException {
         return new JsonValidationService(
                 JsonLoader.fromResource(applicationProperties.getValidation().getJsonSchemaUrl()));
+    }
+
+    @Bean
+    public NationalHolidays nationalHolidays() throws IOException, URISyntaxException {
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        File holidaysFile = new File(getClass().getClassLoader().getResource("national-holidays.json").toURI());
+        return mapper.readValue(holidaysFile, NationalHolidays.class);
     }
 }
