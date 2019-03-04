@@ -71,7 +71,11 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
       }
 
       legislations = legislations.map(legislation => {
-        legislation.typeForSorting = this.classifiers.legislation_types[legislation.type].value;
+        if (legislation.type && this.classifiers.legislation_types[legislation.type]) {
+          legislation.typeForSorting = this.classifiers.legislation_types[legislation.type].value;
+        }else {
+          legislation.typeForSorting = '';
+        }
         return legislation;
       });
 
