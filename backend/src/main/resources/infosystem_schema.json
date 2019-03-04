@@ -60,16 +60,16 @@
           "type": {
             "description": "Dokumendi tüüp",
             "type": ["string", "null"],
-            "enum": ["Viide lõppkasutaja vaatele",
-              "Viide (ava)andmetele",
-              "Kasutaja dokumentatsioon",
-              "Arhitektuuridokument",
-              "Kasutatav klassifikaator",
-              "Lähtekood",
-              "ISKE turbeosaklasside määramise akt",
-              "ISKE auditi kokkuvõte",
-              "Andmekaitseline mõjuhinnang",
-              "Muu tehniline dokumentatsioon"
+            "enum": ["DOC_TYPE_USER_VIEW",
+              "DOC_TYPE_OPEN_DATA",
+              "DOC_TYPE_USER_GUIDE",
+              "DOC_TYPE_ARCHITECTURE",
+              "DOC_TYPE_CLASSIFICATOR",
+              "DOC_TYPE_SOURCE_CODE",
+              "DOC_TYPE_ISKE_ACT",
+              "DOC_TYPE_ISKE_SUMMARY",
+              "DOC_TYPE_GDPR_IMPACT_ASSESSMENT",
+              "DOC_TYPE_OTHER"
             ]
           },
           "creation_timestamp": {
@@ -221,12 +221,12 @@
           "type": {
             "description": "Õigusakti tüüp",
             "type": ["string", "null"],
-            "enum": ["Infosüsteemi põhimääruse kavand/eelnõu",
-              "Infosüsteemi põhimääruse kavandi/eelnõu seletuskiri",
-              "Infosüsteemi põhimäärus",
-              "Infosüsteemi põhimääruse seletuskiri",
-              "Infosüsteemi reguleeriv muu õigusakt",
-              "Muu õiguslik seletuskiri"
+            "enum": ["LEGAL_TYPE_DRAFT_STATUTE",
+              "LEGAL_TYPE_DRAFT_STATUTE_NOTE",
+              "LEGAL_TYPE_STATUTE",
+              "LEGAL_TYPE_STATUTE_NOTE",
+              "LEGAL_TYPE_OTHER_REGULATION",
+              "LEGAL_TYPE_OTHER"
             ]
           }
         },
