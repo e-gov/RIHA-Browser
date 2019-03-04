@@ -16,7 +16,7 @@
         </td>
         <td>
           <a href="#" (click)="openSystemDetails(relation.infoSystemShortName)" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
-          <span class="text-gray-dark small">{{classifiers.relation_type[relation.type].value}}</span>
+          <span *ngIf="relation.type && classifiers.relation_type[relation.type]" class="text-gray-dark small">{{classifiers.relation_type[relation.type].value}}</span>
         </td>
       </tr>
     </table>

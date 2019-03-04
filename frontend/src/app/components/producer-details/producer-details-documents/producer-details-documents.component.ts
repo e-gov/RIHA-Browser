@@ -87,7 +87,11 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
         if (!doc.update_timestamp) {
           doc.update_timestamp = doc.creation_timestamp;
         }
-        doc.typeForSorting = this.classifiers.document_types[doc.type].value;
+        if (doc.type && this.classifiers.document_types[doc.type]) {
+          doc.typeForSorting = this.classifiers.document_types[doc.type].value;
+        } else {
+          doc.typeForSorting = '';
+        }
         return doc;
       });
       documents = _.orderBy(documents, [sort, 'name'], [sortOrder, 'asc']);
