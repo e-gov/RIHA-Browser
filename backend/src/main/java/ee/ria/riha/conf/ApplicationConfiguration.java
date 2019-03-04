@@ -46,9 +46,9 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public NationalHolidays nationalHolidays() throws IOException, URISyntaxException {
+    public NationalHolidays nationalHolidays(ApplicationProperties applicationProperties) throws IOException, URISyntaxException {
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        File holidaysFile = new File(getClass().getClassLoader().getResource("national-holidays.json").toURI());
+        File holidaysFile = new File(getClass().getClassLoader().getResource(applicationProperties.getNationalHolidaysFile()).toURI());
         return mapper.readValue(holidaysFile, NationalHolidays.class);
     }
 }

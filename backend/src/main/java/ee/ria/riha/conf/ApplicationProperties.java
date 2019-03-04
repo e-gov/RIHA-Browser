@@ -32,6 +32,9 @@ public class ApplicationProperties {
     @Setter
     private String baseUrl;
 
+    @Setter
+    private String nationalHolidaysFile;
+
     @Getter
     @Setter
     public static class StorageClientProperties {
