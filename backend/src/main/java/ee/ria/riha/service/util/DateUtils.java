@@ -19,6 +19,10 @@ public class DateUtils {
 			.collect(Collectors.toSet());
 
 	public static LocalDate getDecisionDeadline(Date from, int workDaysToAdd) {
+		if (from == null) {
+			return null;
+		}
+
 		LocalDate date = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		int dayCount = 0;
 		while (dayCount <= workDaysToAdd) {
