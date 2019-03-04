@@ -15,7 +15,7 @@
       <span *ngIf="feedback.status == 'OPEN'"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Aktiivne</span>
       <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span><br>
       <span *ngIf="feedback.type !=null" class="text-muted">Arutelu tüüp:</span>
-      <strong>{{classifiers.issue_type[feedback.type].value}}</strong>
+      <strong *ngIf="feedback.type && classifiers.issue_type[feedback.type]">{{classifiers.issue_type[feedback.type].value}}</strong>
       <span *ngIf="feedback.status == 'OPEN'"><br>Otsuse tähtpäev:
         <span [ngClass]="{'text-danger': deadlinePassed}">{{ feedback.decisionDeadline }}</span>
       </span>

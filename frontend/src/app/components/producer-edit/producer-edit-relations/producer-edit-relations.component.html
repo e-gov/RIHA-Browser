@@ -39,7 +39,7 @@
             </td>
             <td>
               <a href="/Infosüsteemid/Vaata/{{ relation.infoSystemShortName }}" target="_blank" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }})</a><br />
-              <span class="text-gray-dark small">{{classifiers.relation_type[relation.type].value}}</span>
+              <span *ngIf="relation.type && classifiers.relation_type[relation.type]" class="text-gray-dark small">{{classifiers.relation_type[relation.type].value}}</span>
             </td>
             <td>
               <button (click)="deleteRelation(relation.id)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
