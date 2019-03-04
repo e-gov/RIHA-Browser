@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -33,6 +34,7 @@ public class Issue implements IssueEntity {
     private IssueStatus status;
     private IssueType type;
     private IssueResolutionType resolutionType;
+    private LocalDate decisionDeadline;
 
     public Issue() {
     }
