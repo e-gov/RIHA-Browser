@@ -79,7 +79,7 @@ export class ProducerEditRelationsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private modalService: ModalHelperService,
-              private generalHelperService: GeneralHelperService,
+              public generalHelperService: GeneralHelperService,
               private toastrService: ToastrService) { }
 
   ngOnInit() {
