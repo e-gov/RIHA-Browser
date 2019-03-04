@@ -65,7 +65,7 @@ export class ProducerEditLegislationsComponent implements OnInit {
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
-              private generalHelperService: GeneralHelperService) { }
+              public generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
     let system = this.generalHelperService.cloneObject(this.system);
