@@ -27,7 +27,7 @@ export class SystemsForApprovalListComponent implements OnInit {
 
   public isOverdue(date){
     let momentDate = moment(date);
-    return moment().diff(momentDate, 'days') > 30;
+    return moment().diff(momentDate, 'days') > 0;
   }
 
   private getOpenApprovalRequestsWithoutDecisions(){
