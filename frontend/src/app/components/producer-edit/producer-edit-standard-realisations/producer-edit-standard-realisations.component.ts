@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
-import {G} from '../../../globals/globals';
 import {System} from '../../../models/system';
 import {ModalHelperService} from '../../../services/modal-helper.service';
 
@@ -18,7 +17,6 @@ export class ProducerEditStandardRealisationsComponent {
 
   @Input() system: System;
 
-  globals: any = G;
   alertConf: any = null;
   timeoutId: any = null;
 

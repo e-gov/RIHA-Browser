@@ -15,10 +15,7 @@
       <span *ngIf="feedback.status == 'OPEN'"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Aktiivne</span>
       <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span><br>
       <span *ngIf="feedback.type !=null" class="text-muted">Arutelu tüüp:</span>
-      <strong *ngIf="feedback.type == globals.issue_type.ESTABLISHMENT_REQUEST">Infosüsteemi asutamine</strong>
-      <strong *ngIf="feedback.type == globals.issue_type.TAKE_INTO_USE_REQUEST">Infosüsteemi kasutusele võtmine</strong>
-      <strong *ngIf="feedback.type == globals.issue_type.MODIFICATION_REQUEST">Andmekoosseisu muutmine</strong>
-      <strong *ngIf="feedback.type == globals.issue_type.FINALIZATION_REQUEST">Infosüsteemi lõpetamine</strong>
+      <strong>{{classifiers.issue_type[feedback.type].value}}</strong>
       <span *ngIf="feedback.status == 'OPEN'"><br>Otsuse tähtpäev:
         <span [ngClass]="{'text-danger': deadlinePassed}">{{ feedback.decisionDeadline }}</span>
       </span>
@@ -43,19 +40,19 @@
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && !reply.resolutionType" class="card-text ml-4">
         <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == globals.issue_resolution_type.NEGATIVE" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ml-4">
         <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-danger font-weight-bold">mittekooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == globals.issue_resolution_type.POSITIVE" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ml-4">
         <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-success font-weight-bold">kooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == globals.issue_resolution_type.POSITIVE" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ml-4">
         <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> kooskõlastas {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == globals.issue_resolution_type.NEGATIVE" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ml-4">
         <i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> ei kooskõlastanud {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == globals.issue_resolution_type.DISMISSED" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.DISMISSED.code" class="card-text ml-4">
         <i class="fa fa-eye-slash text-muted" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> jättis läbi vaatamata {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
     </div>
@@ -77,9 +74,7 @@
                         [(ngModel)]="decisionType"
                         name="decisionType">
                   <option [value]="'null'" selected>Vali otsus...</option>
-                  <option [value]="globals.issue_resolution_type.POSITIVE">Kooskõlastan</option>
-                  <option [value]="globals.issue_resolution_type.NEGATIVE">Ei kooskõlasta</option>
-                  <option [value]="globals.issue_resolution_type.DISMISSED">Jätan läbi vaatamata</option>
+                  <option *ngFor="let type of generalHelperService.toArray(classifiers.issue_resolution_type)" [value]="type.code" selected>{{ type.value }}</option>
                 </select>
               </div>
               <div class="mx-2" *ngIf="feedback.status == 'OPEN'" >
@@ -94,8 +89,8 @@
     <div *ngIf="canResolveGeneral() || canResolveWithVerdict()" class="actions-bar">
       <div class="buttons pull-right">
         <button (click)="markResolved()" *ngIf="canResolveGeneral()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
-        <button (click)="markResolvedWithVerdict(globals.issue_resolution_type.NEGATIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
-        <button (click)="markResolvedWithVerdict(globals.issue_resolution_type.POSITIVE)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
+        <button (click)="markResolvedWithVerdict(classifiers.issue_resolution_type.NEGATIVE.code)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
+        <button (click)="markResolvedWithVerdict(classifiers.issue_resolution_type.POSITIVE.code)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
       </div>
     </div>
   </div>

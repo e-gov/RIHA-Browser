@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {G} from '../globals/globals';
+import {classifiers} from "./environment.service";
 import {isNullOrUndefined} from 'util';
 import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
@@ -67,15 +67,15 @@ export class GeneralHelperService {
     if (system.details.meta && system.details.meta.system_status) {
       let status = system.details.meta.system_status.status;
       switch (status) {
-        case G.system_status.IN_USE: {
+        case classifiers.system_status.IN_USE.code: {
           statusDescription = 'kasutusel';
           break;
         }
-        case G.system_status.ESTABLISHING: {
+        case classifiers.system_status.ESTABLISHING.code: {
           statusDescription = 'asutamisel';
           break;
         }
-        case G.system_status.FINISHED: {
+        case classifiers.system_status.FINISHED.code: {
           statusDescription = 'lõpetatud';
           break
         }
@@ -94,15 +94,15 @@ export class GeneralHelperService {
     if (system.lastPositiveApprovalRequestType) {
       let status = system.lastPositiveApprovalRequestType;
       switch (status) {
-        case G.issue_type.TAKE_INTO_USE_REQUEST: {
+        case classifiers.issue_type.TAKE_INTO_USE_REQUEST.code: {
           statusDescription = 'kasutamine kooskõlastatud';
           break;
         }
-        case G.issue_type.ESTABLISHMENT_REQUEST: {
+        case classifiers.issue_type.ESTABLISHMENT_REQUEST.code: {
           statusDescription = 'asutamine kooskõlastatud';
           break;
         }
-        case G.issue_type.FINALIZATION_REQUEST: {
+        case classifiers.issue_type.FINALIZATION_REQUEST.code: {
           statusDescription = 'lõpetamine kooskõlastatud';
           break
         }
@@ -119,6 +119,24 @@ export class GeneralHelperService {
       }
     });
     return $.param(newObj);
+  }
+
+  public toArray(obj) {
+    return Object.keys(obj).map((key) => {
+      return {code: obj[key].code, value: obj[key].value}
+    });
+  }
+
+  public toJsonArray(obj) {
+    return Object.keys(obj).map((key) => {
+      return {code: obj[key].code, value: JSON.parse(obj[key].value)}
+    });
+  }
+
+  public toArrayOfValues(obj) {
+    return Object.keys(obj).map((key) => {
+      return obj[key].value
+    });
   }
 
   public getFileUrl(url, reference){
@@ -177,7 +195,7 @@ export class GeneralHelperService {
       _.remove(lowerCasedTopics, (topic) => "standardlahendus" == topic);
     }
 
-    return _.intersection(G.topics_that_do_not_require_feedback_on_creation, lowerCasedTopics).length > 0;
+    return _.intersection(this.toArrayOfValues(classifiers.topics_that_do_not_require_feedback_on_creation), lowerCasedTopics).length > 0;
   }
 
   public showError(txt?){

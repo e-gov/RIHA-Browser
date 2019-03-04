@@ -4,7 +4,7 @@ import { EnvironmentService } from '../../services/environment.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user';
 import { ModalHelperService } from "../../services/modal-helper.service";
-import { G } from '../../globals/globals';
+import { classifiers } from "../../services/environment.service";
 import { System } from '../../models/system';
 import { GeneralHelperService } from '../../services/general-helper.service';
 
@@ -20,7 +20,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
 
   replies: any[] = [];
   activeUser: User;
-  globals: any = G;
+  classifiers = classifiers;
   decisionType: string = 'null';
   commentText: string = '';
   deadlinePassed: boolean;
@@ -104,10 +104,10 @@ export class ApproverIssueDetailsComponent implements OnInit {
     let ret = false;
     if (this.feedback.status == 'OPEN'){
       let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
-      if (this.feedback.type != this.globals.issue_type.TAKE_INTO_USE_REQUEST
-        && this.feedback.type != this.globals.issue_type.MODIFICATION_REQUEST
-        && this.feedback.type != this.globals.issue_type.FINALIZATION_REQUEST
-        && this.feedback.type != this.globals.issue_type.ESTABLISHMENT_REQUEST){
+      if (this.feedback.type != classifiers.issue_type.TAKE_INTO_USE_REQUEST.code
+        && this.feedback.type != classifiers.issue_type.MODIFICATION_REQUEST.code
+        && this.feedback.type != classifiers.issue_type.FINALIZATION_REQUEST.code
+        && this.feedback.type != classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
         ret = bHasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
       }
     }
@@ -116,10 +116,10 @@ export class ApproverIssueDetailsComponent implements OnInit {
   canResolveWithVerdict(){
     let ret = false;
     if (this.feedback.status == 'OPEN'){
-      if (this.feedback.type == this.globals.issue_type.TAKE_INTO_USE_REQUEST
-        || this.feedback.type == this.globals.issue_type.MODIFICATION_REQUEST
-        || this.feedback.type == this.globals.issue_type.FINALIZATION_REQUEST
-        || this.feedback.type == this.globals.issue_type.ESTABLISHMENT_REQUEST){
+      if (this.feedback.type == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code
+        || this.feedback.type == classifiers.issue_type.MODIFICATION_REQUEST.code
+        || this.feedback.type == classifiers.issue_type.FINALIZATION_REQUEST.code
+        || this.feedback.type == classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
           let userMatrix = this.environmentService.getUserMatrix();
           ret = userMatrix.hasApproverRole && userMatrix.isRiaMember;
       }

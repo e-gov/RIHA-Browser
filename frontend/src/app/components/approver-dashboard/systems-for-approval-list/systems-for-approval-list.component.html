@@ -43,10 +43,10 @@
           <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', ar.infoSystemShortName]" fragment="tagasiside">{{ ar.infoSystemShortName }}</a></td>
           <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', ar.infoSystemShortName]" fragment="tagasiside">{{ ar.infoSystemFullName}}</a></td>
           <td class="approval-status">
-            <span *ngIf="ar.issueType == globals.issue_type.FINALIZATION_REQUEST">lõpetamine</span>
-            <span *ngIf="ar.issueType == globals.issue_type.MODIFICATION_REQUEST">andmekoosseisu muutmine</span>
-            <span *ngIf="ar.issueType == globals.issue_type.TAKE_INTO_USE_REQUEST">kasutusele võtmine</span>
-            <span *ngIf="ar.issueType == globals.issue_type.ESTABLISHMENT_REQUEST">asutamine</span>
+            <span *ngIf="ar.issueType == classifiers.issue_type.FINALIZATION_REQUEST.code">lõpetamine</span>
+            <span *ngIf="ar.issueType == classifiers.issue_type.MODIFICATION_REQUEST.code">andmekoosseisu muutmine</span>
+            <span *ngIf="ar.issueType == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutusele võtmine</span>
+            <span *ngIf="ar.issueType == classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine</span>
           </td>
           <td class="approval-date" [ngClass]="{'text-danger': isOverdue(ar.decisionDeadline)}">{{ ar.decisionDeadline }}</td>
         </tr>

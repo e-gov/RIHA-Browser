@@ -42,6 +42,12 @@ public class EnvironmentController {
         return ResponseEntity.ok(environment);
     }
 
+    @GetMapping("/classifiers")
+    @ApiOperation("Load classifiers")
+    public ResponseEntity classifiers() {
+        return ResponseEntity.ok(environmentService.getClassifiers());
+    }
+
     /**
      * @deprecated use user controller
      */
