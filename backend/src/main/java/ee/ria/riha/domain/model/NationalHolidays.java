@@ -15,6 +15,6 @@ public class NationalHolidays extends ArrayList<NationalHoliday> implements Init
 	}
 
 	public static NationalHolidays get() {
-		return instance;
+		return instance == null ? new NationalHolidays() : instance;
 	}
 }
