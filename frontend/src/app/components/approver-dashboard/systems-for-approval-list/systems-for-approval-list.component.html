@@ -32,7 +32,7 @@
         </th>
         <th>
           <app-sort-button
-            [labelText]="'Esitamise kuupäev'"
+            [labelText]="'Otsuse tähtpäev'"
             [sortProperty]="'creation_date'"
             [gridData]="gridData"
             (buttonClick)="onSortChange($event)"></app-sort-button>
@@ -48,7 +48,7 @@
             <span *ngIf="ar.issueType == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutusele võtmine</span>
             <span *ngIf="ar.issueType == classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine</span>
           </td>
-          <td class="approval-date" [ngClass]="{'text-danger': isOverdue(ar.dateCreated)}">{{ ar.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}</td>
+          <td class="approval-date" [ngClass]="{'text-danger': isOverdue(ar.decisionDeadline)}">{{ ar.decisionDeadline }}</td>
         </tr>
         </tbody>
       </table>
