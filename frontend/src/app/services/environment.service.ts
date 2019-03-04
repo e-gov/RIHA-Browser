@@ -17,12 +17,6 @@ export class EnvironmentService {
 
   private lastVisitedLocations = [null, null];
 
-  private loadClassifiers(): void {
-    this.http.get(this.environmentUrl + "/classifiers").toPromise().then(response => {
-      classifiers = Object.freeze(response.json());
-    });
-  }
-
   public addLastVisitedLocation(l){
     this.lastVisitedLocations.unshift(l);
     this.lastVisitedLocations.pop();
@@ -113,8 +107,16 @@ export class EnvironmentService {
     promise.then(response => {
       this.globalEnvironment = new Environment(response.json());
       this.runTrackingScripts(this.globalEnvironment);
-      this.loadClassifiers();
     });
+    return promise;
+  }
+
+  public loadClassifiers(): Promise<any> {
+    let promise = this.http.get(this.environmentUrl + "/classifiers").toPromise();
+    promise.then(response => {
+      classifiers = Object.freeze(response.json());
+    });
+
     return promise;
   }
 

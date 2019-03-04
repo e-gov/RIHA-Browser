@@ -87,6 +87,10 @@ export function onApplicationStart(environmentService: EnvironmentService){
   return () => environmentService.onAppStart();
 }
 
+export function loadClassifiers(environmentService: EnvironmentService){
+  return () => environmentService.loadClassifiers();
+}
+
 const routes: Routes = [
   { path: '', redirectTo: 'Avaleht', pathMatch: 'full' },
   { path: 'Avaleht', component: FrontPageComponent },
@@ -213,7 +217,9 @@ const routes: Routes = [
     GeneralHelperService,
     SessionHelperService,
     ModalHelperService,
-    { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true }]
+    { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true },
+    { provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true }
+    ]
 })
 
 export class AppModule {}
