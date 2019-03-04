@@ -49,9 +49,9 @@
                       <input class="custom-control-input" type="radio"
                              [disabled]="openIssuesMatrix.establishment"
                              [(ngModel)]="approvalRequest.type"
-                             [value]="globals.issue_type.ESTABLISHMENT_REQUEST"
+                             [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code"
                              name="type_est"
-                             (change)="onIssueTypeChange(globals.issue_type.ESTABLISHMENT_REQUEST)" required>
+                             (change)="onIssueTypeChange(classifiers.issue_type.ESTABLISHMENT_REQUEST.code)" required>
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">asutamiseks
                         <small *ngIf="openIssuesMatrix.establishment"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
@@ -60,10 +60,10 @@
                     <label class="custom-control custom-radio">
                       <input class="custom-control-input" type="radio"
                              [(ngModel)]="approvalRequest.type"
-                             [value]="globals.issue_type.TAKE_INTO_USE_REQUEST"
+                             [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"
                              name="type_use"
                              [disabled]="openIssuesMatrix.takingIntoUse"
-                             (change)="onIssueTypeChange(globals.issue_type.TAKE_INTO_USE_REQUEST)" required>
+                             (change)="onIssueTypeChange(classifiers.issue_type.TAKE_INTO_USE_REQUEST.code)" required>
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">kasutusele võtmiseks
                         <small *ngIf="openIssuesMatrix.takingIntoUse"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
@@ -72,10 +72,10 @@
                     <label class="custom-control custom-radio">
                       <input class="custom-control-input" type="radio"
                              [(ngModel)]="approvalRequest.type"
-                             [value]="globals.issue_type.MODIFICATION_REQUEST"
+                             [value]="classifiers.issue_type.MODIFICATION_REQUEST.code"
                              name="type_mod"
                              [disabled]="openIssuesMatrix.modification"
-                             (change)="onIssueTypeChange(globals.issue_type.MODIFICATION_REQUEST)" required>
+                             (change)="onIssueTypeChange(classifiers.issue_type.MODIFICATION_REQUEST.code)" required>
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">andmekoosseisu muutmiseks
                         <small *ngIf="openIssuesMatrix.modification"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
@@ -85,10 +85,10 @@
                       <input class="custom-control-input"
                              type="radio"
                              [(ngModel)]="approvalRequest.type"
-                             [value]="globals.issue_type.FINALIZATION_REQUEST"
+                             [value]="classifiers.issue_type.FINALIZATION_REQUEST.code"
                              name="type_fin"
                              [disabled]="openIssuesMatrix.finalization"
-                             (change)="onIssueTypeChange(globals.issue_type.FINALIZATION_REQUEST)" required>
+                             (change)="onIssueTypeChange(classifiers.issue_type.FINALIZATION_REQUEST.code)" required>
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">lõpetamiseks
                         <small *ngIf="openIssuesMatrix.finalization"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>

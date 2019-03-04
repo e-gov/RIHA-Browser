@@ -12,20 +12,16 @@
         <strong>{{ system.getSecurityStandard() }}</strong>
       </p>
   </div>
-  <div *ngIf="system.getSecurityStandard() == globals.security_standard.iske" class="form-group">
+  <div *ngIf="system.getSecurityStandard() == classifiers.security_standard.ISKE.code" class="form-group">
     <label class="text-muted separated-text">ISKE turbetase:</label>
     <p>
-      <strong *ngIf="system.getSecurityLevel() == globals.security_level.high">Kõrge</strong>
-      <strong *ngIf="system.getSecurityLevel() == globals.security_level.medium">Keskmine</strong>
-      <strong *ngIf="system.getSecurityLevel() == globals.security_level.low">Madal</strong>
+      <strong>{{classifiers.security_level[system.getSecurityLevel()].value}}</strong>
       <strong>({{ system.getSecurityClass() }})</strong>
     </p>
   </div>
   <div *ngIf="isAuditVisible() && system.hasAuditInfo()" class="form-group">
     <strong>Auditeeritud viimati {{ system.getLatestAuditDate() | date:'y-MM-dd'}}</strong>
-    <strong *ngIf="system.getLatestAuditResolution() == globals.audit_resolution_type.PASSED_WITHOUT_REMARKS">(<span class="text-success">Auditeeritud märkusteta ja soovitusteta</span>)</strong>
-    <strong *ngIf="system.getLatestAuditResolution() == globals.audit_resolution_type.PASSED_WITH_REMARKS">(<span class="text-primary">Auditeeritud märkuste või soovitustega</span>)</strong>
-    <strong *ngIf="system.getLatestAuditResolution() == globals.audit_resolution_type.DID_NOT_PASS">(<span class="text-danger">Ei läbinud auditit</span>)</strong>
+    <strong>(<span class="text-success">{{classifiers.audit_resolution_type[system.getLatestAuditResolution()].value}}</span>)</strong>
   </div>
   <div *ngIf="allowEdit && !system.hasAuditInfo()" class="form-group">
     Auditeerimise info puudub

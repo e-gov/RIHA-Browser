@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
-import { G } from '../../../globals/globals';
-import { EnvironmentService } from '../../../services/environment.service';
+import { classifiers } from '../../../services/environment.service';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
@@ -17,7 +16,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
   @Input() system: System;
   documents: any[] = [];
   isChanged: boolean = false;
-  globals: any = G;
+  classifiers = classifiers;
 
   docFile: any = null;
   uploading: boolean = false;
@@ -150,7 +149,6 @@ export class ProducerEditDocumentsComponent implements OnInit {
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
-              private environmentService: EnvironmentService,
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
