@@ -14,14 +14,14 @@
   </div>
   <div *ngIf="system.getSecurityStandard() == classifiers.security_standard.ISKE.code" class="form-group">
     <label class="text-muted separated-text">ISKE turbetase:</label>
-    <p>
+    <p *ngIf="system.getSecurityLevel() && classifiers.security_level[system.getSecurityLevel()]">
       <strong>{{classifiers.security_level[system.getSecurityLevel()].value}}</strong>
       <strong>({{ system.getSecurityClass() }})</strong>
     </p>
   </div>
   <div *ngIf="isAuditVisible() && system.hasAuditInfo()" class="form-group">
     <strong>Auditeeritud viimati {{ system.getLatestAuditDate() | date:'y-MM-dd'}}</strong>
-    <strong>(<span class="text-success">{{classifiers.audit_resolution_type[system.getLatestAuditResolution()].value}}</span>)</strong>
+    <strong>(<span *ngIf="system.getLatestAuditResolution() && classifiers.security_level[system.getLatestAuditResolution()]" class="text-success">{{classifiers.audit_resolution_type[system.getLatestAuditResolution()].value}}</span>)</strong>
   </div>
   <div *ngIf="allowEdit && !system.hasAuditInfo()" class="form-group">
     Auditeerimise info puudub
