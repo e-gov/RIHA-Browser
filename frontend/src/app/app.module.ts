@@ -78,6 +78,7 @@ import {LinkifyPipe} from './pipes/linkify.pipe';
 import {NoOrganizationModalComponent} from './components/no-organization-modal/no-organization-modal.component';
 import {ProducerEditStandardRealisationsComponent} from './components/producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component';
 import {LoginLinkComponent} from './components/login-link-component/login-link-component';
+import {ProducerSearchFilterComponent} from './components/producer-search-filter/producer-search-filter-component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -170,7 +171,8 @@ const routes: Routes = [
     ProducerDashboardComponent,
     BrowserFilesListComponent,
     ProducerEditStandardRealisationsComponent,
-    LoginLinkComponent
+    LoginLinkComponent,
+    ProducerSearchFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -207,7 +209,8 @@ const routes: Routes = [
     ProducerEditRelationsComponent,
     ProducerEditSecurityComponent,
     ProducerEditStandardRealisationsComponent,
-    LoginLinkComponent
+    LoginLinkComponent,
+    ProducerSearchFilterComponent
   ],
   bootstrap: [AppComponent],
   providers: [
