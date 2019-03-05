@@ -92,7 +92,7 @@
                   (keyup.enter)="getOwnSystems()"
                   [(ngModel)]="filters.lastPositiveApprovalRequestType">
             <option [value]="''">kõik</option>
-            <option [value]="classifiers.issue_type.AUTOMATICALLY_REGISTERED">registreeritud</option>
+            <option [value]="classifiers.issue_type.AUTOMATICALLY_REGISTERED.code">registreeritud</option>
             <option [value]="'null'">kooskõlastamata</option>
             <option [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine kooskõlastatud</option>
             <option [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutamine kooskõlastatud</option>
