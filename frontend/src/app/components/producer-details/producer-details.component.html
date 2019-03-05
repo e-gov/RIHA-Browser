@@ -99,7 +99,7 @@
     </div>
     <div id="seosed"
          class="separate-block">
-      <app-producer-details-relations [system]="system" [allowEdit]="isEditingAllowed()" [userMatrix]="userMatrix"></app-producer-details-relations>
+      <app-producer-details-relations [system]="system" [allowEdit]="isEditingAllowed()" [userMatrix]="userMatrix" (relationsRefreshEvent)="onRelationsRefresh($event)" ></app-producer-details-relations>
     </div>
   </article>
 </section>
