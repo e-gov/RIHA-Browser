@@ -1,12 +1,11 @@
-import {Component, Input, KeyValueDiffers, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {System} from '../../../models/system';
-import {classifiers} from "../../../services/environment.service";
+import {classifiers, EnvironmentService} from "../../../services/environment.service";
 import {ModalHelperService} from '../../../services/modal-helper.service';
 import {ProducerEditRelationsComponent} from '../../producer-edit/producer-edit-relations/producer-edit-relations.component';
 import {Router} from '@angular/router';
 import {ProducerEditStandardRealisationsComponent} from '../../producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component';
-import {EnvironmentService} from '../../../services/environment.service';
 import {UserMatrix} from '../../../models/user-matrix';
 
 @Component({
@@ -23,6 +22,9 @@ export class ProducerDetailsRelationsComponent implements OnInit    {
   classifiers = classifiers;
   relations: any[] = [];
 
+  @Output()
+  relationsRefreshEvent: EventEmitter<any> = new EventEmitter<any>();
+
   openSystemDetails(shortName){
     this.router.navigate(['/Infosüsteemid/Vaata', shortName]);
     return false;
@@ -32,6 +34,7 @@ export class ProducerDetailsRelationsComponent implements OnInit    {
     this.systemsService.getSystemRelations(this.system.details.short_name).then(
       res => {
         this.relations = res.json();
+        this.relationsRefreshEvent.next(this.relations);
       }
     )
   }
