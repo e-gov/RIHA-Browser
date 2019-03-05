@@ -78,6 +78,7 @@ import {LinkifyPipe} from './pipes/linkify.pipe';
 import {NoOrganizationModalComponent} from './components/no-organization-modal/no-organization-modal.component';
 import {ProducerEditStandardRealisationsComponent} from './components/producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component';
 import {LoginLinkComponent} from './components/login-link-component/login-link-component';
+import {ProducerOrganizationComponent} from './components/producer-organization/producer-organization.component';
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -112,6 +113,7 @@ const routes: Routes = [
   { path: 'Kirjelda/Uus', component: ProducerAddComponent },
   { path: 'Describe/New', component: ProducerAddComponent },
   { path: 'Hinda', component: ApproverDashboardComponent },
+  { path: 'Minu/Organisatsioon', component: ProducerOrganizationComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -170,7 +172,8 @@ const routes: Routes = [
     ProducerDashboardComponent,
     BrowserFilesListComponent,
     ProducerEditStandardRealisationsComponent,
-    LoginLinkComponent
+    LoginLinkComponent,
+    ProducerOrganizationComponent
   ],
   imports: [
     BrowserModule,
