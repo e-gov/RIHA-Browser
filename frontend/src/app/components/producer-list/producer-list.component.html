@@ -25,6 +25,7 @@
   <div class="form-group">
     <a [routerLink]="'/Kirjelda'" class="pull-left active-inner-router-link">Minu infosüsteemid</a>
     <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ml-3">Minu arutelud</a>
+    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left ml-3">Minu organisatsioon</a>
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
   </div>
   <app-producer-search-filter #filterPanel [extendedSearch]="extendedSearch" (performSearch)="searchSystems($event)"></app-producer-search-filter>

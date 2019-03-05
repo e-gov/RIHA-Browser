@@ -7,6 +7,7 @@ import {User} from '../../models/user';
 import {ToastrService} from 'ngx-toastr';
 import {UserMatrix} from '../../models/user-matrix';
 import {GeneralHelperService} from '../../services/general-helper.service';
+import _ from 'lodash';
 
 declare var $: any;
 
@@ -65,6 +66,14 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
     if (issueType){
       this.getSystem(this.system.details.short_name);
     }
+  }
+
+  onRelationsRefresh(relations) {
+    if (!relations) {
+      return;
+    }
+
+    this.system.hasUsedSystemTypeRelations = _.isUndefined(_.find(relations, {type: 'USED_SYSTEM'}));
   }
 
   onIssueError(error){
