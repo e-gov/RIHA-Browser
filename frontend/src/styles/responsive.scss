@@ -1,14 +1,22 @@
 .menu-toggle {
     display: none;
 }
-@media only screen and (max-width: 1320px){
-    .pagehead{
-        &:before{
-            left: -40px;
-            right: -40px;
+
+@media only screen and (min-width: 1400px) {
+    .container {
+        width: 1200px;
         }
+    .stats-block {
+        display: flex;
+        justify-content: space-around;
     }
 }
+@media only screen and (min-width: 1600px) {
+    .container {
+        width: 1400px;
+    }
+}
+
 @media only screen and (max-width: 1199px) {
     .menu-toggle {
         display: block;
