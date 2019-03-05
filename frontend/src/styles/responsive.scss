@@ -2,32 +2,39 @@
     display: none;
 }
 
-@media (min-width: 1200px) {
+@media only screen and (min-width: 992px) {
     #content {
         margin-left: auto;
         margin-right: auto;
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 26px;
+        padding-right: 26px;
         width: 100%;
-        max-width: 1400px;
+        max-width: 1280px;
     }
     .pagehead{
         &:before{
-            left: -20px;
-            right: -20px;
+            left: -26px;
+            right: -26px;
         }
     }
 }
-@media only screen and (max-width: 1320px){
-    /*
+@media only screen and (min-width: 1320px){
     .pagehead{
         &:before{
             left: -40px;
             right: -40px;
         }
     }
-    */
 }
+@media only screen and (min-width: 1450px) {
+    .pagehead{
+        &:before{
+            left: -100px;
+            right: -100px;
+}
+    }
+}
+
 @media only screen and (max-width: 1199px) {
     .menu-toggle {
         display: block;
