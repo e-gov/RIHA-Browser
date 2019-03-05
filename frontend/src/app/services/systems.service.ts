@@ -11,6 +11,7 @@ export class SystemsService {
   private apiUrl = '/api/v1';
   private systemsUrl = this.apiUrl + '/systems';
   private issuesUrl =  this.apiUrl + '/issues';
+  private myOrganizationUrl =  this.apiUrl + '/my/organization/users';
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
@@ -340,6 +341,23 @@ export class SystemsService {
 
     return this.http.get(this.issuesUrl, {
       search: params
+    }).toPromise();
+  }
+
+  public getOrganizationUsers(gridData) {
+    let params: URLSearchParams = new URLSearchParams();
+    let user = this.environmentService.getActiveUser();
+
+    params.append('organizationCode', user.getActiveOrganization().code);
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
+    }
+
+    return this.http.get(this.myOrganizationUrl, {
+      params: params
     }).toPromise();
   }
 
