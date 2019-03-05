@@ -60,16 +60,20 @@
             <td class="name">{{ user.lastName }}</td>
             <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
             <td>
-              <span *ngIf="user.producer">-</span>
-              <i *ngIf="!user.producer" class="fa fa-check"></i>
+              <span *ngIf="!user.producer">-</span>
+              <i *ngIf="user.producer" class="fa fa-check"></i>
             </td>
             <td>
-              <span *ngIf="user.approver">-</span>
-              <i *ngIf="!user.approver" class="fa fa-check"></i>
+              <span *ngIf="!user.approver">-</span>
+              <i *ngIf="user.approver" class="fa fa-check"></i>
             </td>
           </tr>
           </tbody>
         </table>
+        <div class="pull-left">
+          <br>
+          Kasutajate muutmiseks palun pöördu <a href="mailto:help@ria.ee">RIA kasutajatoe poole</a>.
+        </div>
         <div class="pull-right">
           <app-grid-currently-showing [gridData]="gridData"></app-grid-currently-showing>
           <ngb-pagination
@@ -84,7 +88,6 @@
       </div>
     </div>
     <span *ngIf="gridData.content.length == 0">Sinu organisatsioonil pole ühtegi kasutajat.<br></span>
-    <span>Kasutajate muutmiseks palun pöördu <a href="mailto:help@ria.ee">RIA kasutajatoe poole</a>.</span>
   </div>
   <div *ngIf="!loaded" class="my-1 text-center">
     <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>

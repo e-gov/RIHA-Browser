@@ -8,9 +8,11 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ee.ria.riha.authentication.RihaUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,8 +56,12 @@ public class OrganizationController {
 	@ApiOperation("List users of given organization")
 	@ApiPageableAndCompositeRequestParams
 	public ResponseEntity<PagedResponse<UserDetailsModel>> listOrganizationUsers(HttpServletRequest request, Pageable pageable, CompositeFilterRequest filterRequest) {
-		String organizationCode = request.getParameter("organizationCode");
-		List<UserDetailsModel> users = userService.getUsersByOrganization(organizationCode);
+		if (!(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof RihaUserDetails)) {
+			log.error("principal is not of RihaUserDetail type, but instead {}", SecurityContextHolder.getContext().getAuthentication().getClass().getCanonicalName());
+			return ResponseEntity.badRequest().build();
+		}
+		RihaUserDetails rihaUserDetails = (RihaUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<UserDetailsModel> users = userService.getUsersByOrganization(rihaUserDetails.getActiveOrganization().getCode());
 
 		int totalUsers = users.size();
 		sortUsers(filterRequest, users);
