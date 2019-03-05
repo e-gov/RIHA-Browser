@@ -346,9 +346,7 @@ export class SystemsService {
 
   public getOrganizationUsers(gridData) {
     let params: URLSearchParams = new URLSearchParams();
-    let user = this.environmentService.getActiveUser();
 
-    params.append('organizationCode', user.getActiveOrganization().code);
     if (!isNullOrUndefined(gridData.page)){
       params.set('page', gridData.page);
     }
