@@ -2,36 +2,18 @@
     display: none;
 }
 
-@media only screen and (min-width: 992px) {
-    #content {
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 26px;
-        padding-right: 26px;
-        width: 100%;
-        max-width: 1280px;
-    }
-    .pagehead{
-        &:before{
-            left: -26px;
-            right: -26px;
+@media only screen and (min-width: 1400px) {
+    .container {
+        width: 1200px;
         }
+    .stats-block {
+        display: flex;
+        justify-content: space-around;
     }
 }
-@media only screen and (min-width: 1320px){
-    .pagehead{
-        &:before{
-            left: -40px;
-            right: -40px;
-        }
-    }
-}
-@media only screen and (min-width: 1450px) {
-    .pagehead{
-        &:before{
-            left: -100px;
-            right: -100px;
-}
+@media only screen and (min-width: 1600px) {
+    .container {
+        width: 1400px;
     }
 }
 
