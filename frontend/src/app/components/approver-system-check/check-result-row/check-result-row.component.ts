@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { G } from '../../../globals/globals';
+import {Component, Input, OnInit} from '@angular/core';
+import {classifiers} from "../../../services/environment.service";
 
 @Component({
   selector: 'app-check-result-row',
@@ -13,7 +13,7 @@ export class CheckResultRowComponent implements OnInit {
   @Input() successText: string;
   @Input() failText: string;
 
-  public globals: any = G;
+  classifiers = classifiers;
 
   constructor() { }
 

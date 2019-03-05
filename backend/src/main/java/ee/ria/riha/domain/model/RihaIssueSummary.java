@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -29,4 +30,5 @@ public class RihaIssueSummary {
     private String infoSystemFullName;
     private IssueResolutionType resolutionType;
     private List<IssueEventSummaryModel> events;
+    private LocalDate decisionDeadline;
 }

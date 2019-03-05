@@ -5,6 +5,7 @@ import {User} from '../models/user';
 import {UserMatrix} from '../models/user-matrix';
 
 declare let ga: Function;
+export let classifiers: any;
 
 @Injectable()
 export class EnvironmentService {
@@ -107,6 +108,15 @@ export class EnvironmentService {
       this.globalEnvironment = new Environment(response.json());
       this.runTrackingScripts(this.globalEnvironment);
     });
+    return promise;
+  }
+
+  public loadClassifiers(): Promise<any> {
+    let promise = this.http.get(this.environmentUrl + "/classifiers").toPromise();
+    promise.then(response => {
+      classifiers = Object.freeze(response.json());
+    });
+
     return promise;
   }
 

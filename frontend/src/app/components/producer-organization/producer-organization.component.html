@@ -1,0 +1,95 @@
+<app-page-header [text]="'Minu organisatsioon'"></app-page-header>
+<app-login-link *ngIf="!userMatrix.isLoggedIn" loginBoxText="Kirjeldamise alustamiseks on vaja RIHAsse sisse logida."></app-login-link>
+<div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun valige asutus</h3>
+  <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
+</div>
+<section *ngIf="userMatrix.isLoggedIn && userMatrix.isOrganizationSelected" class="col card p-3">
+  <div class="form-group">
+    <a [routerLink]="'/Kirjelda'" class="pull-left">Minu infosüsteemid</a>
+    <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ml-3">Minu arutelud</a>
+    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left active-inner-router-link ml-3">Minu organisatsioon</a>
+  </div>
+  <div *ngIf="loaded" class="my-1">
+    <div *ngIf="gridData.content.length > 0">
+      <div class="mb-2 mt-3">
+        Leitud {{ gridData.content.length }}
+      </div>
+      <div class="table-responsive">
+        <table id="users-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+          <thead class="thead-default">
+          <th>
+            <app-sort-button
+              [labelText]="'EESNIMI'"
+              [sortProperty]="'firstName'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'PERENIMI'"
+              [sortProperty]="'lastName'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'E-POSTI AADRESS'"
+              [sortProperty]="'email'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'KIRJELDAJA'"
+              [sortProperty]="'producer'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          <th>
+            <app-sort-button
+              [labelText]="'HINDAJA'"
+              [sortProperty]="'approver'"
+              [gridData]="gridData"
+              (buttonClick)="onSortChange($event)"></app-sort-button>
+          </th>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of gridData.content">
+            <td class="name">{{ user.firstName }}</td>
+            <td class="name">{{ user.lastName }}</td>
+            <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+            <td>
+              <span *ngIf="!user.producer">-</span>
+              <i *ngIf="user.producer" class="fa fa-check"></i>
+            </td>
+            <td>
+              <span *ngIf="!user.approver">-</span>
+              <i *ngIf="user.approver" class="fa fa-check"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="pull-left">
+          <br>
+          Kasutajate muutmiseks palun pöördu <a href="mailto:help@ria.ee">RIA kasutajatoe poole</a>.
+        </div>
+        <div class="pull-right">
+          <app-grid-currently-showing [gridData]="gridData"></app-grid-currently-showing>
+          <ngb-pagination
+            class="pull-right"
+            (pageChange)="onPageChange($event)"
+            [pageSize]="gridData.size"
+            [maxSize]="5"
+            [collectionSize]="gridData.getSize()"
+            [page]="gridData.getPageNumber()">
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+    <span *ngIf="gridData.content.length == 0">Sinu organisatsioonil pole ühtegi kasutajat.<br></span>
+  </div>
+  <div *ngIf="!loaded" class="my-1 text-center">
+    <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+  </div>
+</section>

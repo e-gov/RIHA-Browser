@@ -31,8 +31,7 @@
                   [(ngModel)]="filters.xRoadStatus">
             <option [value]="''">kõik</option>
             <option [value]="'null'">määramata</option>
-            <option [value]="globals.x_road_status.JOINED" selected>liidestatud</option>
-            <option [value]="globals.x_road_status.NOT_JOINED">ei ole liidestatud</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.x_road_status)" [value]="type.code" selected>{{ type.value }}</option>
           </select>
         </div>
         <div class="form-group">
@@ -68,8 +67,7 @@
                   [(ngModel)]="filters.developmentStatus">
             <option [value]="''">kõik</option>
             <option [value]="'null'">määramata</option>
-            <option [value]="globals.development_status.IN_DEVELOPMENT" selected>aktiivses arenduses</option>
-            <option [value]="globals.development_status.NOT_IN_DEVELOPMENT">ei ole arenduses</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.development_status)" [value]="type.code" selected>{{ type.value }}</option>
           </select>
         </div>
         <div class="form-group">
@@ -113,9 +111,9 @@
                   [(ngModel)]="filters.lastPositiveApprovalRequestType">
             <option [value]="''">kõik</option>
             <option [value]="'null'">kooskõlastamata</option>
-            <option [value]="globals.issue_type.ESTABLISHMENT_REQUEST">asutamine kooskõlastatud</option>
-            <option [value]="globals.issue_type.TAKE_INTO_USE_REQUEST">kasutamine kooskõlastatud</option>
-            <option [value]="globals.issue_type.FINALIZATION_REQUEST">lõpetamine kooskõlastatud</option>
+            <option [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine kooskõlastatud</option>
+            <option [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutamine kooskõlastatud</option>
+            <option [value]="classifiers.issue_type.FINALIZATION_REQUEST.code">lõpetamine kooskõlastatud</option>
           </select>
         </div>
       </div>
@@ -127,9 +125,7 @@
                   [(ngModel)]="filters.systemStatus">
             <option [value]="''">kõik</option>
             <option [value]="'null'">määramata</option>
-            <option [value]="globals.system_status.IN_USE">kasutusel</option>
-            <option [value]="globals.system_status.ESTABLISHING">asutamisel</option>
-            <option [value]="globals.system_status.FINISHED">lõpetatud</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.system_status)" [value]="type.code" selected>{{ type.value }}</option>
           </select>
         </div>
         <div class="form-group">

@@ -5,6 +5,7 @@ import { System } from '../../../models/system';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import {GridData} from "../../../models/grid-data";
+import { classifiers } from "../../../services/environment.service";
 import _ from 'lodash';
 
 @Component({
@@ -19,6 +20,7 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
   @Output() onSystemChanged = new EventEmitter<System>();
 
   gridData: GridData = new GridData();
+  classifiers = classifiers;
 
   onSortChange(property): void{
     this.gridData.changeSortOrder(property);
@@ -67,6 +69,15 @@ export class ProducerDetailsLegislationsComponent implements OnInit {
         sortOrder = 'desc';
         sort = sort.substr(1);
       }
+
+      legislations = legislations.map(legislation => {
+        if (legislation.type && this.classifiers.legislation_types[legislation.type]) {
+          legislation.typeForSorting = this.classifiers.legislation_types[legislation.type].value;
+        }else {
+          legislation.typeForSorting = '';
+        }
+        return legislation;
+      });
 
       legislations = _.orderBy(legislations, [sort, 'name'], [sortOrder, 'asc']);
     }

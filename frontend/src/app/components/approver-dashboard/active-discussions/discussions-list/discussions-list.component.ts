@@ -4,8 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { GridData } from '../../../../models/grid-data';
 import { EnvironmentService } from '../../../../services/environment.service';
 import { GeneralHelperService } from '../../../../services/general-helper.service';
-import { G } from '../../../../globals/globals';
-import * as moment from 'moment';
+import { classifiers } from "../../../../services/environment.service";
 import { UserMatrix } from '../../../../models/user-matrix';
 
 @Component({
@@ -16,9 +15,9 @@ import { UserMatrix } from '../../../../models/user-matrix';
 export class DiscussionsListComponent implements OnInit, DoCheck {
 
   @Input() relation: string;
+  classifiers = classifiers;
   public loaded: boolean = false;
   public gridData: GridData = new GridData();
-  private globals: any = G;
   private differ: any;
   private userMatrix: UserMatrix;
 
