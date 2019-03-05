@@ -1,17 +1,17 @@
 <div class="mb-1">
-  <i *ngIf="systemCheckStatus == globals.system_check_status.PASSED" class="fa fa-fw fa-check-circle text-success"></i>
-  <i *ngIf="systemCheckStatus == globals.system_check_status.FAILED" class="fa fa-fw fa-exclamation-circle text-danger"></i>
-  <i *ngIf="systemCheckStatus == globals.system_check_status.PENDING" class="fa fa-fw fa-pause-circle text-muted"></i>
-  <i *ngIf="systemCheckStatus == globals.system_check_status.IN_PROGRESS" class="fa fa-fw fa-spinner fa-spin"></i>
-  <i *ngIf="systemCheckStatus == globals.system_check_status.CANCELLED" class="fa fa-fw fa-times"></i>
-  <span *ngIf="systemCheckStatus == globals.system_check_status.PENDING || systemCheckStatus == globals.system_check_status.IN_PROGRESS || systemCheckStatus == globals.system_check_status.CANCELLED"
-        [ngClass]="{'text-muted': systemCheckStatus == globals.system_check_status.PENDING}">
+  <i *ngIf="systemCheckStatus == classifiers.system_check_status.PASSED.code" class="fa fa-fw fa-check-circle text-success"></i>
+  <i *ngIf="systemCheckStatus == classifiers.system_check_status.FAILED.code" class="fa fa-fw fa-exclamation-circle text-danger"></i>
+  <i *ngIf="systemCheckStatus == classifiers.system_check_status.PENDING.code" class="fa fa-fw fa-pause-circle text-muted"></i>
+  <i *ngIf="systemCheckStatus == classifiers.system_check_status.IN_PROGRESS.code" class="fa fa-fw fa-spinner fa-spin"></i>
+  <i *ngIf="systemCheckStatus == classifiers.system_check_status.CANCELLED.code" class="fa fa-fw fa-times"></i>
+  <span *ngIf="systemCheckStatus == classifiers.system_check_status.PENDING.code || systemCheckStatus == classifiers.system_check_status.IN_PROGRESS.code || systemCheckStatus == classifiers.system_check_status.CANCELLED.code"
+        [ngClass]="{'text-muted': systemCheckStatus == classifiers.system_check_status.PENDING.code}">
     {{ text }}
   </span>
-  <span *ngIf="systemCheckStatus == globals.system_check_status.FAILED">
+  <span *ngIf="systemCheckStatus == classifiers.system_check_status.FAILED.code">
     {{ failText ? failText : text }}
   </span>
-  <span *ngIf="systemCheckStatus == globals.system_check_status.PASSED">
+  <span *ngIf="systemCheckStatus == classifiers.system_check_status.PASSED.code">
     {{ successText ? successText : text }}
   </span>
 </div>

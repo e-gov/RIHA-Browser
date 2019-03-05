@@ -25,7 +25,7 @@
               <th>
                 <app-sort-button
                   [labelText]="'Liik'"
-                  [sortProperty]="'type'"
+                  [sortProperty]="'typeForSorting'"
                   [gridData]="gridData"
                   (buttonClick)="onSortChange($event)"></app-sort-button>
               </th>
@@ -44,7 +44,7 @@
                 <i class="fa fa-external-link text-primary"></i>
                 <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
               </td>
-              <td class="type">{{legislation.type}}</td>
+              <td class="type"><span *ngIf="legislation.type && classifiers.legislation_types[legislation.type]">{{classifiers.legislation_types[legislation.type].value}}</span></td>
               <td class="last-modified text-nowrap">
                 <app-file-create-update-date [file]="legislation"></app-file-create-update-date>
               </td>

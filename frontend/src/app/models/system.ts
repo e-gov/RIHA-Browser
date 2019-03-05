@@ -1,4 +1,4 @@
-import {G} from '../globals/globals';
+import {classifiers} from "../services/environment.service";
 
 export class System {
   id: number = null;
@@ -53,14 +53,14 @@ export class System {
   }
 
   isUsed(): boolean{
-    return this.details.meta.system_status.status === G.system_status.IN_USE;
+    return this.details.meta.system_status.status === classifiers.system_status.IN_USE.code;
   }
 
   setInDevelopment(inDevelopment): void {
     if (inDevelopment === true){
-      this.details.meta.development_status = G.development_status.IN_DEVELOPMENT;
+      this.details.meta.development_status = classifiers.development_status.IN_DEVELOPMENT.code;
     } else if (inDevelopment === false){
-      this.details.meta.development_status = G.development_status.NOT_IN_DEVELOPMENT;
+      this.details.meta.development_status = classifiers.development_status.NOT_IN_DEVELOPMENT.code;
     }
   }
 
@@ -69,7 +69,7 @@ export class System {
   }
 
   isInDevelopment(): boolean{
-    return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
+    return this.details.meta.development_status === classifiers.development_status.IN_DEVELOPMENT.code;
   }
 
   getXRoadStatus() {
@@ -166,7 +166,7 @@ export class System {
     this.details.contacts = this.details.contacts || [];
     this.details.homepage = this.details.homepage || null;
     this.details.purpose = this.details.purpose || null;
-    this.details.showDifferences = this.details.differences != null;
+    this.details.showDifferences = this.details.differences || this.hasUsedSystemTypeRelations;
     this.details.differences = this.details.differences || null;
     this.details.short_name = this.details.short_name || null;
     this.details.security = this.details.security || {
