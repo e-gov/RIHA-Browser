@@ -23,6 +23,11 @@ public enum IssueType {
     /**
      * Request approval to finalize information system
      */
-    FINALIZATION_REQUEST
+    FINALIZATION_REQUEST,
 
+
+    /**
+     * syntetic issue type
+     */
+    AUTOMATICALLY_REGISTERED
 }
