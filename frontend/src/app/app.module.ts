@@ -78,7 +78,7 @@ import {LinkifyPipe} from './pipes/linkify.pipe';
 import {NoOrganizationModalComponent} from './components/no-organization-modal/no-organization-modal.component';
 import {ProducerEditStandardRealisationsComponent} from './components/producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component';
 import {LoginLinkComponent} from './components/login-link-component/login-link-component';
-import {ProducerSearchFilterComponent} from './components/producer-search-filter/producer-search-filter-component',
+import {ProducerSearchFilterComponent} from './components/producer-search-filter/producer-search-filter-component';
 import {ProducerOrganizationComponent} from './components/producer-organization/producer-organization.component';
 
 export function HttpLoaderFactory(http: Http) {
