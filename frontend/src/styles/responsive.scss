@@ -2,6 +2,14 @@
     display: none;
 }
 
+@media only screen and (min-width: 1200px) {
+    .pagehead{
+        &:before{
+            left: -40px;
+            right: -40px;
+        }
+    }
+}
 @media only screen and (min-width: 1400px) {
     .container {
         width: 1200px;
@@ -14,6 +22,9 @@
 @media only screen and (min-width: 1600px) {
     .container {
         width: 1400px;
+    }
+    .stats-block {
+        font-size: 18px;
     }
 }
 
@@ -259,8 +270,8 @@
 @media only screen and (max-width: 1020px){
     .pagehead{
         &:before{
-            left: -26px;
-            right: -26px;
+            left: -20px;
+            right: -20px;
         }
     }
 }
