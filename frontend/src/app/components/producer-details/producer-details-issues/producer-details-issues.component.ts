@@ -102,7 +102,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   canRequestFeedback() {
-    return !this.userMatrix.hasApproverRole && this.allowEdit && !this.system.hasUsedSystemTypeRelations && !this.generalHelperService.containsSpecialTopics(this.system, false);
+    return this.userMatrix.hasDescriberRole && this.allowEdit && !this.system.hasUsedSystemTypeRelations && !this.generalHelperService.containsSpecialTopics(this.system, false);
   }
 
   ngOnInit() {
