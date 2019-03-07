@@ -43,102 +43,60 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     this.getOwnSystems();
   }
 
-  searchSystems(filters): void {
-    console.log('saarch called', filters);
+  _loadSystems(filters, page?): void {
 
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      let params = filters;
-      params.searchText = this.searchText;
-      delete params.ownerName;
-      delete params.ownerCode;
-      if (params.dateCreatedFrom) {
-        params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
-      }
-      if (params.dateCreatedTo) {
-        params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
-      }
-      if (params.dateUpdatedFrom) {
-        params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
-      }
-      if (params.dateUpdatedTo) {
-        params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
-      }
-
-      let sortProperty = this.gridData.getSortProperty();
-      if (sortProperty) {
-        params.sort = sortProperty;
-      }
-      let sortOrder = this.gridData.getSortOrder();
-      if (sortOrder) {
-        params.dir = sortOrder;
-      }
-
-      let q = this.generalHelperService.generateQueryString(params);
-      this.location.replaceState('/Kirjelda', q);
-      this.gridData.page = 0;
-      this.systemsService.getOwnSystems(params, this.gridData).then(
-        res => {
-          this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
-          if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
-            this.getOwnSystems();
-          } else {
-            this.loaded = true;
-          }
-        }, err => {
-          this.loaded = true;
-          this.toastrService.error('Serveri viga!');
-        });
+    if (!(this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected)) {
+      return;
     }
+
+    let params = filters;
+    params.searchText = this.searchText;
+    delete params.ownerName;
+    delete params.ownerCode;
+    if (params.dateCreatedFrom) {
+      params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
+    }
+    if (params.dateCreatedTo) {
+      params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
+    }
+    if (params.dateUpdatedFrom) {
+      params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
+    }
+    if (params.dateUpdatedTo) {
+      params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
+    }
+    let sortProperty = this.gridData.getSortProperty();
+    if (sortProperty) {
+      params.sort = sortProperty;
+    }
+    let sortOrder = this.gridData.getSortOrder();
+    if (sortOrder) {
+      params.dir = sortOrder;
+    }
+    let q = this.generalHelperService.generateQueryString(params);
+    this.location.replaceState('/Kirjelda', q);
+    this.gridData.page = 0;
+    this.systemsService.getOwnSystems(params, this.gridData).then(
+      res => {
+        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+        if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
+          this.getOwnSystems();
+        } else {
+          this.loaded = true;
+        }
+      }, err => {
+        this.loaded = true;
+        this.toastrService.error('Serveri viga!');
+      });
+  }
+
+  searchSystems(filters): void {
+    this._loadSystems(filters);
   }
 
 
   getOwnSystems(page?): void {
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      let params = this.generalHelperService.cloneObject(this.filterPanel.getFilters());
-      params.searchText = this.searchText;
-      delete params.ownerName;
-      delete params.ownerCode;
-      if (params.dateCreatedFrom) {
-        params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
-      }
-      if (params.dateCreatedTo) {
-        params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
-      }
-      if (params.dateUpdatedFrom) {
-        params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
-      }
-      if (params.dateUpdatedTo) {
-        params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
-      }
-
-      let sortProperty = this.gridData.getSortProperty();
-      if (sortProperty) {
-        params.sort = sortProperty;
-      }
-      let sortOrder = this.gridData.getSortOrder();
-      if (sortOrder) {
-        params.dir = sortOrder;
-      }
-      if (page && page != 0) {
-        params.page = page + 1;
-      }
-
-      let q = this.generalHelperService.generateQueryString(params);
-      this.location.replaceState('/Kirjelda', q);
-      this.gridData.page = page || 0;
-      this.systemsService.getOwnSystems(params, this.gridData).then(
-        res => {
-          this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
-          if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
-            this.getOwnSystems();
-          } else {
-            this.loaded = true;
-          }
-        }, err => {
-          this.loaded = true;
-          this.toastrService.error('Serveri viga!');
-        });
-    }
+    this._loadSystems(this.filterPanel.getFilters(), page);
   }
 
   openOrganizationsModal() {
