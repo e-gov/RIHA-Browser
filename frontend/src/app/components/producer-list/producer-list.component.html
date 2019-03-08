@@ -16,7 +16,7 @@
         <input class="form-control col"
                placeholder="Otsi kataloogist"
                (keyup.enter)="getOwnSystems()"
-               [(ngModel)]="filters.searchText"
+               [(ngModel)]="searchText"
                type="text" id="search-text-input">
         <button type="button" class="btn btn-primary ml-3" (click)="getOwnSystems()"><i class="fa fa-search" aria-hidden="true"></i> Otsi</button>
       </div>
@@ -25,128 +25,10 @@
   <div class="form-group">
     <a [routerLink]="'/Kirjelda'" class="pull-left active-inner-router-link">Minu infosüsteemid</a>
     <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ml-3">Minu arutelud</a>
+    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left ml-3">Minu organisatsioon</a>
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
   </div>
-  <div *ngIf="extendedSearch" id="extended-search-panel">
-    <div class="row">
-      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-        <div class="form-group">
-          <label for="name-input">Nimi</label>
-          <input class="form-control" (keyup.enter)="getOwnSystems()" [(ngModel)]="filters.name" type="text" id="name-input">
-        </div>
-        <div class="form-group">
-          <label for="x-road-status-input">X-teega liidestumine</label>
-          <select id="x-road-status-input" class="form-control"
-                  (keyup.enter)="getOwnSystems()"
-                  [(ngModel)]="filters.xRoadStatus">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">määramata</option>
-            <option *ngFor="let type of generalHelperService.toArray(classifiers.x_road_status)" [value]="type.code" selected>{{ type.value }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="date-created-input-from">Sisestamise kuupäev alates</label>
-          <div class="input-group datepicker">
-            <input id="date-created-input-from" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateCreatedFrom" ngbDatepicker #dateCreatedFrom="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateCreatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="date-updated-input-from">Viimati muudetud alates</label>
-          <div class="input-group datepicker">
-            <input id="date-updated-input-from" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateUpdatedFrom" ngbDatepicker #dateUpdatedFrom="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateUpdatedFrom.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-        <div class="form-group">
-          <label for="name-input">Lühinimi</label>
-          <input class="form-control" (keyup.enter)="getOwnSystems()" [(ngModel)]="filters.shortName" type="text" id="short-name-input">
-        </div>
-        <div class="form-group">
-          <label for="development-status-input">Arendamise staatus</label>
-          <select id="development-status-input" class="form-control"
-                  (keyup.enter)="getOwnSystems()"
-                  [(ngModel)]="filters.developmentStatus">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">määramata</option>
-            <option *ngFor="let type of generalHelperService.toArray(classifiers.development_status)" [value]="type.code" selected>{{ type.value }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="date-created-input-to">Sisestamise kuupäev kuni</label>
-          <div class="input-group datepicker">
-            <input id="date-created-input-to" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateCreatedTo" ngbDatepicker #dateCreatedTo="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateCreatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="date-updated-input-to">Viimati muudetud kuni</label>
-          <div class="input-group datepicker">
-            <input id="date-updated-input-to" class="form-control" placeholder="yyyy-mm-dd"
-                   [(ngModel)]="filters.dateUpdatedTo" ngbDatepicker #dateUpdatedTo="ngbDatepicker">
-            <span class="input-group-btn">
-                <button (click)="dateUpdatedTo.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-        <div class="form-group">
-          <label for="topics-input">Märksõna</label>
-          <input class="form-control" (keyup.enter)="getOwnSystems()" [(ngModel)]="filters.topic" type="text" id="topics-input">
-        </div>
-        <div class="form-group">
-          <label for="purpose-input">Eesmärk</label>
-          <input class="form-control" (keyup.enter)="getOwnSystems()" [(ngModel)]="filters.purpose" type="text" id="purpose-input">
-        </div>
-        <div class="form-group">
-          <label for="approval-status">Kooskõlastamise staatus</label>
-          <select id="approval-status" class="form-control"
-                  (keyup.enter)="getOwnSystems()"
-                  [(ngModel)]="filters.lastPositiveApprovalRequestType">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">kooskõlastamata</option>
-            <option [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine kooskõlastatud</option>
-            <option [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutamine kooskõlastatud</option>
-            <option [value]="classifiers.issue_type.FINALIZATION_REQUEST.code">lõpetamine kooskõlastatud</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-        <div class="form-group">
-          <label for="system-status-input">Infosüsteemi staatus</label>
-          <select id="system-status-input" class="form-control"
-                  (keyup.enter)="getOwnSystems()"
-                  [(ngModel)]="filters.systemStatus">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">määramata</option>
-            <option *ngFor="let type of generalHelperService.toArray(classifiers.system_status)" [value]="type.code" selected>{{ type.value }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="stored-data-input">Põhiandmed</label>
-          <input class="form-control" (keyup.enter)="getOwnSystems()" [(ngModel)]="filters.storedData" type="text" id="stored-data-input">
-        </div>
-      </div>
-    </div>
-    <div class="actions-bar mt-2 mb-1">
-      <div class="buttons pull-right">
-        <button type="button" class="btn btn-default" (click)="clearFiltersAndRefresh()">Tühjenda</button>
-        <button type="button" class="btn btn-primary" (click)="getOwnSystems()"><i class="fa fa-search" aria-hidden="true"></i> Otsi</button>
-      </div>
-    </div>
-  </div>
+  <app-producer-search-filter #filterPanel [extendedSearch]="extendedSearch" (performSearch)="searchSystems($event)"></app-producer-search-filter>
   <div *ngIf="loaded" class="my-1">
     <div class="table-responsive">
       <app-grid-total-found [gridData]="gridData"></app-grid-total-found>

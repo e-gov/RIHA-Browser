@@ -12,6 +12,7 @@
           <span><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong><span *ngIf="system.isUsed() && system.details.meta.system_status.timestamp"> alates {{ system.details.meta.system_status.timestamp | date:'y-MM-dd' }}</span></span>,
           <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
           <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.FINALIZATION_REQUEST.code"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.AUTOMATICALLY_REGISTERED.code"><span><strong>registreeritud</strong></span></span>
           <span *ngIf="(system.getLastPositiveApprovalRequestType() == classifiers.issue_type.ESTABLISHMENT_REQUEST.code || !system.getLastPositiveApprovalRequestType() ) && (!system.hasUsedSystemTypeRelations && !helper.containsSpecialTopics(system))">
             <span class="text-danger"><strong>kooskõlastamata</strong></span></span>
         </span>
@@ -20,6 +21,7 @@
           <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.ESTABLISHMENT_REQUEST.code"><span class="text-success"><strong>kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
           <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"><span class="text-success"><strong>kasutamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
           <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.FINALIZATION_REQUEST.code"><span class="text-success"><strong>lõpetamine kooskõlastatud</strong></span> {{ system.getLastPositiveApprovalRequestDate() | date:'y-MM-dd'}}</span>
+          <span *ngIf="system.getLastPositiveApprovalRequestType() == classifiers.issue_type.AUTOMATICALLY_REGISTERED.code"><span><strong>registreeritud</strong></span></span>
           <span *ngIf="!system.getLastPositiveApprovalRequestType() && (!system.hasUsedSystemTypeRelations && !helper.containsSpecialTopics(system))"><span class="text-danger"><strong>kooskõlastamata</strong></span></span>
         </span>
         <span class="col-form-label advanced-label" *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code">

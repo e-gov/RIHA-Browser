@@ -6,7 +6,7 @@
     "bower": "bower install",
     "static": "static ../main/resources --port 8085",
     "ng": "ng",
-    "start": "ng serve --host riha-browser-ik.ci.kit",
+    "start": "ng serve ",
     "build": "ng build",
     "build-production": "ng build --prod",
     "test": "ng test --watch=false",

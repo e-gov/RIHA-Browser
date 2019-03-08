@@ -73,7 +73,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
       return;
     }
 
-    this.system.hasUsedSystemTypeRelations = _.isUndefined(_.find(relations, {type: 'USED_SYSTEM'}));
+    this.system.hasUsedSystemTypeRelations = !_.isUndefined(_.find(relations, {type: 'USED_SYSTEM'}));
   }
 
   onIssueError(error){
