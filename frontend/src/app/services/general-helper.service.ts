@@ -87,13 +87,13 @@ export class GeneralHelperService {
   public getApprovalStatusText(system : System){
     let statusDescription = 'kooskõlastamata';
 
-    if (system.hasUsedSystemTypeRelations || this.containsSpecialTopics(system)) {
-      statusDescription = 'registreeritud';
-    }
-
     if (system.lastPositiveApprovalRequestType) {
       let status = system.lastPositiveApprovalRequestType;
       switch (status) {
+        case classifiers.issue_type.AUTOMATICALLY_REGISTERED.code: {
+          statusDescription = 'registreeritud';
+          break;
+        }
         case classifiers.issue_type.TAKE_INTO_USE_REQUEST.code: {
           statusDescription = 'kasutamine kooskõlastatud';
           break;

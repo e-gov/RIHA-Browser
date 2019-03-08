@@ -1,6 +1,6 @@
-import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
+import {AfterViewInit, Component, DoCheck, KeyValueDiffers, OnInit, ViewChild} from '@angular/core';
 import {SystemsService} from '../../services/systems.service';
-import {EnvironmentService, classifiers} from '../../services/environment.service';
+import {EnvironmentService} from '../../services/environment.service';
 import {GridData} from '../../models/grid-data';
 import {UserMatrix} from '../../models/user-matrix';
 import {ToastrService} from 'ngx-toastr';
@@ -11,37 +11,27 @@ import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {System} from '../../models/system';
 import _ from 'lodash';
+import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
 
 @Component({
   selector: 'app-producer-list',
   templateUrl: './producer-list.component.html',
   styleUrls: ['./producer-list.component.scss']
 })
-export class ProducerListComponent implements OnInit, DoCheck {
+export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
   gridData: GridData  = new GridData();
-  filters: {
-    searchText: string,
-    purpose: string,
-    name: string,
-    shortName: string,
-    topic: string,
-    systemStatus: string,
-    xRoadStatus: string,
-    developmentStatus: string,
-    lastPositiveApprovalRequestType: string,
-    dateCreatedFrom: string,
-    dateCreatedTo: string,
-    dateUpdatedFrom: string,
-    dateUpdatedTo: string
-  };
+
   userMatrix: UserMatrix;
   loaded: boolean = false;
   differ: any;
 
+  searchText: string;
   extendedSearch: boolean = false;
 
-  classifiers = classifiers;
+
+  @ViewChild(ProducerSearchFilterComponent)
+  filterPanel: ProducerSearchFilterComponent;
 
   onPageChange(newPage): void{
     this.gridData.page = newPage - 1;
@@ -53,52 +43,60 @@ export class ProducerListComponent implements OnInit, DoCheck {
     this.getOwnSystems();
   }
 
-  getOwnSystems(page?): void {
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      let params = this.generalHelperService.cloneObject(this.filters);
-      delete params.ownerName;
-      delete params.ownerCode;
-      if (params.dateCreatedFrom) {
-        params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
-      }
-      if (params.dateCreatedTo) {
-        params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
-      }
-      if (params.dateUpdatedFrom) {
-        params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
-      }
-      if (params.dateUpdatedTo) {
-        params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
-      }
+  _loadSystems(filters, page?): void {
 
-      let sortProperty = this.gridData.getSortProperty();
-      if (sortProperty) {
-        params.sort = sortProperty;
-      }
-      let sortOrder = this.gridData.getSortOrder();
-      if (sortOrder) {
-        params.dir = sortOrder;
-      }
-      if (page && page != 0) {
-        params.page = page + 1;
-      }
-
-      let q = this.generalHelperService.generateQueryString(params);
-      this.location.replaceState('/Kirjelda', q);
-      this.gridData.page = page || 0;
-      this.systemsService.getOwnSystems(params, this.gridData).then(
-        res => {
-          this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
-          if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
-            this.getOwnSystems();
-          } else {
-            this.loaded = true;
-          }
-        }, err => {
-          this.loaded = true;
-          this.toastrService.error('Serveri viga!');
-        });
+    if (!(this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected)) {
+      return;
     }
+
+    let params = filters;
+    params.searchText = this.searchText;
+    delete params.ownerName;
+    delete params.ownerCode;
+    if (params.dateCreatedFrom) {
+      params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
+    }
+    if (params.dateCreatedTo) {
+      params.dateCreatedTo = this.systemsService.dateObjToTimestamp(params.dateCreatedTo, true);
+    }
+    if (params.dateUpdatedFrom) {
+      params.dateUpdatedFrom = this.systemsService.dateObjToTimestamp(params.dateUpdatedFrom, true);
+    }
+    if (params.dateUpdatedTo) {
+      params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
+    }
+    let sortProperty = this.gridData.getSortProperty();
+    if (sortProperty) {
+      params.sort = sortProperty;
+    }
+    let sortOrder = this.gridData.getSortOrder();
+    if (sortOrder) {
+      params.dir = sortOrder;
+    }
+    let q = this.generalHelperService.generateQueryString(params);
+    this.location.replaceState('/Kirjelda', q);
+    this.gridData.page = 0;
+    this.systemsService.getOwnSystems(params, this.gridData).then(
+      res => {
+        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+        if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
+          this.getOwnSystems();
+        } else {
+          this.loaded = true;
+        }
+      }, err => {
+        this.loaded = true;
+        this.toastrService.error('Serveri viga!');
+      });
+  }
+
+  searchSystems(filters): void {
+    this._loadSystems(filters);
+  }
+
+
+  getOwnSystems(page?): void {
+    this._loadSystems(this.filterPanel.getFilters(), page);
   }
 
   openOrganizationsModal() {
@@ -112,30 +110,11 @@ export class ProducerListComponent implements OnInit, DoCheck {
   }
 
   hasActiveFilters(): boolean{
-    for (let key in this.filters) {
-      if (key != 'searchText' && this.filters[key]){
-        return true;
-      }
-    }
-    return false;
+    return this.filterPanel.hasActiveFilters();
   }
 
   clearFilters(){
-    this.filters = {
-      searchText: '',
-      purpose: '',
-      name: '',
-      shortName: '',
-      topic: '',
-      systemStatus: '',
-      xRoadStatus: '',
-      developmentStatus: '',
-      lastPositiveApprovalRequestType: '',
-      dateCreatedFrom: '',
-      dateCreatedTo: '',
-      dateUpdatedFrom: '',
-      dateUpdatedTo: ''
-    };
+    this.filterPanel.clearFilters();
   }
 
   clearFiltersAndRefresh(){
@@ -145,7 +124,8 @@ export class ProducerListComponent implements OnInit, DoCheck {
 
   searchSystemsByTopic(topic){
     this.clearFilters();
-    this.filters.topic = topic;
+    this.filterPanel.setTopicFilter(topic);
+
     this.extendedSearch = true;
     this.getOwnSystems();
   }
@@ -164,33 +144,21 @@ export class ProducerListComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.route.queryParams.subscribe( params => {
-      this.filters = {
-        searchText: params['searchText'],
-        purpose: params['purpose'],
-        name: params['name'],
-        shortName: params['shortName'],
-        topic: params['topic'],
-        systemStatus: params['systemStatus'] || '',
-        xRoadStatus: params['xRoadStatus'] || '',
-        developmentStatus: params['developmentStatus'] || '',
-        lastPositiveApprovalRequestType: params['lastPositiveApprovalRequestType'] || '',
-        dateCreatedFrom: this.systemsService.timestampToDateObj(params['dateCreatedFrom']),
-        dateCreatedTo: this.systemsService.timestampToDateObj(params['dateCreatedTo']),
-        dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
-        dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo'])
-      };
 
       this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
       this.gridData.setPageFromUrl(params['page']);
     });
+
+    this.generalHelperService.setRihaPageTitle('Minu infosüsteemid');
+  }
+
+  ngAfterViewInit() {
 
     if (this.hasActiveFilters()){
       this.extendedSearch = true;
     }
 
     this.getOwnSystems(this.gridData.page);
-
-    this.generalHelperService.setRihaPageTitle('Minu infosüsteemid');
   }
 
   ngDoCheck() {
