@@ -122,7 +122,7 @@
 				</executions>
 				<configuration>
 					<nodeVersion>v6.10.1</nodeVersion>
-					<yarnVersion>v1.0.0</yarnVersion>
+					<yarnVersion>v1.2.1</yarnVersion>
 					<npmVersion>4.4.4</npmVersion>
 					<workingDirectory>.</workingDirectory>
 				</configuration>
