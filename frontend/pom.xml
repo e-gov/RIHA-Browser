@@ -28,7 +28,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.4</version>
+				<version>1.6</version>
 
 				<executions>
 					<execution>
@@ -122,7 +122,7 @@
 				</executions>
 				<configuration>
 					<nodeVersion>v6.10.1</nodeVersion>
-					<yarnVersion>v0.25.2</yarnVersion>
+					<yarnVersion>v1.0.0</yarnVersion>
 					<npmVersion>4.4.4</npmVersion>
 					<workingDirectory>.</workingDirectory>
 				</configuration>
