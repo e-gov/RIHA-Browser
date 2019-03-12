@@ -33,5 +33,6 @@ public class InfoSystemModel {
     private Date lastPositiveEstablishmentRequestDate;
     private Date lastPositiveTakeIntoUseRequestDate;
     private Date lastPositiveFinalizationRequestDate;
+    private boolean hasUsedSystemTypeRelations;
 
 }

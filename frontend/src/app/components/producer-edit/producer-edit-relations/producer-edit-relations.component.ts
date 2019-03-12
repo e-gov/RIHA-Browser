@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
-import { G } from '../../../globals/globals';
+import { classifiers } from "../../../services/environment.service";
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralHelperService } from '../../../services/general-helper.service';
@@ -21,7 +21,7 @@ export class ProducerEditRelationsComponent implements OnInit {
   @Input() system: System;
   @Input() relations: any[];
 
-  globals: any = G;
+  classifiers = classifiers;
   relation: {
     infoSystem: any,
     type: string
@@ -29,7 +29,7 @@ export class ProducerEditRelationsComponent implements OnInit {
 
 
   dropDownFormatter = (v)=> {
-    return `${v.details.short_name} - ${this.generalHelper.truncateString(v.details.name, 90)}`;
+    return `${v.details.short_name} - ${this.generalHelperService.truncateString(v.details.name, 90)}`;
   };
 
   inputFormatter = (v)=> v.details.short_name;
@@ -50,7 +50,7 @@ export class ProducerEditRelationsComponent implements OnInit {
                                                                                      type: this.relation.type}).then(res => {
         this.refreshRelations();
         addForm.reset();
-        addForm.controls.type.setValue(this.globals.relation_type.SUB_SYSTEM);
+        addForm.controls.type.setValue(this.classifiers.relation_type.SUB_SYSTEM.code);
       }, err => {
         this.toastrService.error('Serveri viga');
       });
@@ -79,13 +79,13 @@ export class ProducerEditRelationsComponent implements OnInit {
 
   constructor(private systemsService: SystemsService,
               private modalService: ModalHelperService,
-              private generalHelper: GeneralHelperService,
+              public generalHelperService: GeneralHelperService,
               private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.relation = {
       infoSystem: null,
-      type: this.globals.relation_type.SUB_SYSTEM
+      type: this.classifiers.relation_type.SUB_SYSTEM.code
     };
   }
 

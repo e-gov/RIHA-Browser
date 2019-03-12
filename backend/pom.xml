@@ -12,7 +12,7 @@
     <parent>
         <groupId>ee.ria.riha</groupId>
         <artifactId>browser</artifactId>
-        <version>7.4.1</version>
+        <version>7.5</version>
     </parent>
 
     <dependencies>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>ee.ria.riha</groupId>
             <artifactId>storage-client</artifactId>
-            <version>0.12.1</version>
+            <version>0.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -133,6 +133,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
             <resource>
                 <directory>../frontend/dist</directory>
@@ -203,5 +204,22 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

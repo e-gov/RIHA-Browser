@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { Location } from '@angular/common';
-import { GridData } from '../../../models/grid-data';
-import { ActivatedRoute } from '@angular/router';
-import { SystemsService } from '../../../services/systems.service';
+import {Component, OnInit} from '@angular/core';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {Location} from '@angular/common';
+import {GridData} from '../../../models/grid-data';
+import {ActivatedRoute} from '@angular/router';
+import {SystemsService} from '../../../services/systems.service';
 
 @Component({
   selector: 'app-browser-files-list',
@@ -13,10 +13,24 @@ import { SystemsService } from '../../../services/systems.service';
 export class BrowserFilesListComponent implements OnInit {
 
   public gridData: GridData = new GridData();
-  public loaded: boolean = true;
-  public filters: any = {
-    searchText: null
+  public loaded: boolean = false;
+  filters: {
+    searchText: string,
+    searchName: string,
+    infosystem: string,
+    dataObjectName: string,
+    comment: string,
+    parentObject: string,
+    personalData: string
   };
+
+
+  extendedSearch: boolean = false;
+
+  toggleSearchPanel(){
+    this.extendedSearch = !this.extendedSearch;
+    return false;
+  }
 
   public onPageChange(newPage){
     this.gridData.page = newPage - 1;
@@ -29,7 +43,7 @@ export class BrowserFilesListComponent implements OnInit {
   }
 
   public getDataObjectFiles(page?){
-    if (this.filters.searchText && this.filters.searchText.length > 1){
+    // if (this.filters.searchText && this.filters.searchText.length > 1){
       let params = this.helper.cloneObject(this.filters);
 
       let sortProperty = this.gridData.getSortProperty();
@@ -44,18 +58,22 @@ export class BrowserFilesListComponent implements OnInit {
         params.page = page + 1;
       }
 
+      this.gridData.page = page || 0;
+
       let q = this.helper.generateQueryString(params);
       this.location.replaceState('/Andmeobjektid', q);
 
-      this.systemsService.getSystemsObjectFiles(this.filters, this.gridData).then(res =>{
+      this.systemsService.getSystemsDataObjects(this.filters, this.gridData).then(res =>{
         this.gridData.updateData(res.json());
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getDataObjectFiles();
         }
+        this.loaded = true;
       }, err => {
+        this.loaded = true;
         this.helper.showError();
       })
-    }
+    // }
   }
 
   constructor(public helper: GeneralHelperService,
@@ -66,16 +84,35 @@ export class BrowserFilesListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe( params => {
       this.filters = {
-        searchText: params['searchText']
+        searchText: params['searchText'],
+        searchName: params['searchName'],
+        infosystem: params['infosystem'],
+        dataObjectName: params['dataObjectName'],
+        comment: params['comment'],
+        parentObject: params['parentObject'],
+        personalData: params['personalData'] || ''
       };
 
       this.gridData.changeSortOrder(params['sort'] || 'file_resource_name', params['dir'] || 'ASC');
       this.gridData.setPageFromUrl(params['page']);
     });
-    if (this.filters.searchText){
-      this.getDataObjectFiles();
+    if (this.route.queryParams['page']) {
+      this.gridData.setPageFromUrl(this.route.queryParams['page']);
+    }
+    if (this.filtersNotEmpty()){
+      this.getDataObjectFiles(this.gridData.page);
     }
     this.helper.setRihaPageTitle('Andmeobjektid');
+  }
+
+  private filtersNotEmpty() : boolean {
+
+    for (let key in this.filters) {
+      if (this.filters[key]){
+        return true;
+      }
+    }
+    return false;
   }
 
 }

@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SystemsService } from '../../../services/systems.service';
 import { System } from '../../../models/system';
 import { ToastrService } from 'ngx-toastr';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 import { GeneralHelperService } from '../../../services/general-helper.service';
-import { G } from '../../../globals/globals';
-import { EnvironmentService } from '../../../services/environment.service';
+import { classifiers } from '../../../services/environment.service';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
@@ -17,41 +16,51 @@ export class ProducerEditDocumentsComponent implements OnInit {
   @Input() system: System;
   documents: any[] = [];
   isChanged: boolean = false;
-  globals: any = G;
+  classifiers = classifiers;
 
   docFile: any = null;
   uploading: boolean = false;
   showAddLinkFields: boolean = false;
-  data: any = {url: '', name: ''};
+  showAddFileFields: boolean = false;
+  data: any = {url: '', name: '', type:''};
   blocks = [];
 
   addTechDoc(addForm): void {
     if (addForm.valid){
       this.documents.push({url: this.data.url,
-                          name: this.data.name ? this.data.name.trim() : ''});
-      this.data = {url: '', name: ''};
+                          name: this.data.name ? this.data.name.trim() : '',
+                          type: this.data.type});
+      this.data = {url: '', name: '', type: ''};
       addForm.reset();
       this.isChanged = true;
       this.showAddLinkFields = false;
     }
   }
 
-  fileChange(event, form){
+  fileChange(event){
     this.docFile = event.target.files[0];
-    this.uploading = true;
+  }
 
-    this.systemsService.postDataFile(this.docFile, this.system.details.short_name).then(res =>{
-      this.uploading = false;
-      this.documents.push({
-        url: 'file://' + res.text(),
-        name: this.docFile.name
+  uploadFile(event, addForm){
+    if (addForm.valid && this.docFile) {
+      this.uploading = true;
+
+      this.systemsService.postDataFile(this.docFile, this.system.details.short_name).then(res => {
+        this.uploading = false;
+        this.documents.push({
+          url: 'file://' + res.text(),
+          name: this.docFile.name,
+          type: this.data.type
+        });
+        this.data = {url: '', name: '', type: ''};
+        this.docFile = null;
+        this.isChanged = true;
+        this.showAddFileFields = false;
+      }, err => {
+        this.uploading = false;
+        this.docFile = null;
       });
-      this.docFile = null;
-      this.isChanged = true;
-    }, err =>{
-      this.uploading = false;
-      this.docFile = null;
-    });
+    }
   }
 
   deleteTechDoc(i): void {
@@ -140,8 +149,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
-              private environmentService: EnvironmentService,
-              private generalHelperService: GeneralHelperService) { }
+              public generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
     let system = this.generalHelperService.cloneObject(this.system);

@@ -1,5 +1,7 @@
 package ee.ria.riha.conf;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -25,9 +27,13 @@ public class ApplicationProperties {
     private final CorsProperties cors = new CorsProperties();
     private final TrackingProperties tracking = new TrackingProperties();
     private final TaraProperties tara = new TaraProperties();
+    private final DeveloperUser developerUser = new DeveloperUser();
 
     @Setter
     private String baseUrl;
+
+    @Setter
+    private String nationalHolidaysFile;
 
     @Getter
     @Setter
@@ -71,6 +77,7 @@ public class ApplicationProperties {
         private final CreatedInfoSystemsOverview createdInfoSystemsOverview = new CreatedInfoSystemsOverview();
         private final NewIssue newIssue = new NewIssue();
         private final NewIssueComment newIssueComment = new NewIssueComment();
+        private final NewIssueDecision newIssueDecision = new NewIssueDecision();
         private final IssueStatusUpdate issueStatusUpdate = new IssueStatusUpdate();
         private String from;
         private String recipientPattern;
@@ -85,6 +92,12 @@ public class ApplicationProperties {
     @Getter
     @Setter
     public static class NewIssueComment {
+        private boolean enabled;
+    }
+
+    @Getter
+    @Setter
+    public static class NewIssueDecision {
         private boolean enabled;
     }
 
@@ -142,5 +155,20 @@ public class ApplicationProperties {
         private String jwkKeySetUri;
     }
 
+    @Getter
+    @Setter
+    public static class Organization {
+        private String name;
+        private String code;
+        private String[] roles;
+    }
+
+    @Getter
+    @Setter
+    public static class DeveloperUser {
+        private String name;
+        private String code;
+        private List<Organization> organizations;
+    }
 
 }

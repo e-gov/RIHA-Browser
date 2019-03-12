@@ -1,6 +1,6 @@
 <button
   (click)="onButtonClick()"
-  class="btn btn-primary btn-sm">
+  class="{{cssClass}}">
     {{ labelText }}
     <i class="fa {{ getSortIcon() }}" aria-hidden="true"></i>
 </button>

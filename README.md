@@ -8,3 +8,10 @@ Software application that allows a human user to browse descriptions and approva
 ## Installation
 
 Installation manual is divided into two: [build process](https://github.com/e-gov/RIHA-Browser/blob/master/docs/build.md) and [deployment process](https://github.com/e-gov/RIHA-Browser/blob/master/docs/deploy.md)
+
+
+## Development profile configuration
+
+Development profile allows to run the application without external dependencies to LDAP or TARA.
+
+In order to user the development profile, the maven profile "dev" must be selected for packaging and necessary user attribute values must be provided under the application-dev.properties configuration file.

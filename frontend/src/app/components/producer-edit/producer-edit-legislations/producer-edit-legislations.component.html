@@ -26,6 +26,16 @@
                name="name">
 
       </div>
+      <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">
+        <label for="type" class="text-muted separated-text">Õigusakti liik:</label>
+        <select id="type" class="form-control col-12"
+                #type="ngModel"
+                [(ngModel)]="data.type"
+                name="type" required>
+          <option [value]="''" disabled selected>Vali õigusakti liik...</option>
+          <option *ngFor="let type of generalHelperService.toArray(classifiers.legislation_types)" [value]="type.code" selected>{{ type.value }}</option>
+        </select>
+      </div>
       <div class="form-group row">
         <div class="col-12">
           <button class="btn btn-default pull-right" (click)="addLegislation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>

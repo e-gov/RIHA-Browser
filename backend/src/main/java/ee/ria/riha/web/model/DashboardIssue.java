@@ -22,5 +22,7 @@ public class DashboardIssue {
     private String title;
     private String infoSystemFullName;
     private String infoSystemShortName;
+    private String authorName;
+    private String organizationName;
     private DashboardIssueComment lastComment;
 }

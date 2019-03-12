@@ -3,21 +3,18 @@ package ee.ria.riha.service;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.model.*;
+import ee.ria.riha.service.util.DateUtils;
 import ee.ria.riha.storage.domain.CommentRepository;
 import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.storage.util.*;
-import ee.ria.riha.web.model.DashboardIssue;
-import ee.ria.riha.web.model.IssueApprovalDecisionModel;
-import ee.ria.riha.web.model.IssueCommentModel;
-import ee.ria.riha.web.model.IssueStatusUpdateModel;
+import ee.ria.riha.web.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static ee.ria.riha.domain.model.IssueStatus.CLOSED;
 import static ee.ria.riha.domain.model.IssueStatus.OPEN;
@@ -40,6 +37,8 @@ import static org.springframework.util.StringUtils.hasText;
 @Service
 public class IssueService {
 
+    private static final int WORK_DAYS_UNTIL_DEADLINE = 20;
+
     public static final Function<Comment, Issue> COMMENT_TO_ISSUE = comment -> {
         if (comment == null) {
             return null;
@@ -59,6 +58,9 @@ public class IssueService {
                 .type(comment.getSub_type() != null ? IssueType.valueOf(comment.getSub_type()) : null)
                 .resolutionType(comment.getResolution_type() != null
                         ? IssueResolutionType.valueOf(comment.getResolution_type())
+                        : null)
+                .decisionDeadline(comment.getStatus() == null || IssueStatus.valueOf(comment.getStatus()) == IssueStatus.OPEN
+                        ? DateUtils.getDecisionDeadline(comment.getCreation_date(), WORK_DAYS_UNTIL_DEADLINE)
                         : null)
                 .build();
     };
@@ -114,6 +116,9 @@ public class IssueService {
                         : comment.getEvents().stream()
                         .map(COMMENT_TO_ISSUE_EVENT_SUMMARY_MODEL)
                         .collect(toList()))
+                .decisionDeadline(comment.getStatus() == null || IssueStatus.valueOf(comment.getStatus()) == IssueStatus.OPEN
+                        ? DateUtils.getDecisionDeadline(comment.getCreation_date(), WORK_DAYS_UNTIL_DEADLINE)
+                        : null)
                 .build();
     };
 
@@ -129,6 +134,8 @@ public class IssueService {
                 .title(comment.getTitle())
                 .infoSystemFullName(comment.getInfosystem_full_name())
                 .infoSystemShortName(comment.getInfosystem_short_name())
+                .authorName(comment.getAuthor_name())
+                .organizationName(comment.getOrganization_name())
                 .lastComment(comment.getLast_comment_id() != null
                         ? COMMENT_TO_DASHBOARD_ISSUE_COMMENT.apply(comment)
                         : null)
@@ -140,6 +147,13 @@ public class IssueService {
             TAKE_INTO_USE_REQUEST,
             MODIFICATION_REQUEST,
             FINALIZATION_REQUEST);
+
+    private static final List<String> TOPICS_THAT_CANNOT_OPEN_FEEDBACK_REQUEST = Arrays.asList(
+            "x-tee alamsüsteem",
+            "asutusesiseseks kasutamiseks",
+            "dokumendihaldussüsteem");
+
+    private static final String LATEST_INTERACTION_SORT_PARAM = "latest_interaction";
 
     @Autowired
     private CommentRepository commentRepository;
@@ -155,6 +169,9 @@ public class IssueService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private RelationService relationService;
 
     /**
      * List concrete info system issues.
@@ -215,7 +232,9 @@ public class IssueService {
      */
     public Issue createInfoSystemIssue(String reference, Issue model) {
         InfoSystem infoSystem = infoSystemService.get(reference);
+
         validateCreatedIssueType(model);
+        validateFeedbackRequestCanBeOpened(infoSystem);
         validateThereIsNoOpenFeedbackRequestIssueOfTheSameType(model, infoSystem.getUuid());
 
         Issue issue = prepareIssue(model);
@@ -232,6 +251,15 @@ public class IssueService {
         notificationService.sendNewIssueToApproversNotification(createdIssue, infoSystem);
 
         return createdIssue;
+    }
+
+    private void validateFeedbackRequestCanBeOpened(InfoSystem infoSystem) {
+
+        if (infoSystem.getTopics().stream()
+                .filter(Objects::nonNull)
+                .anyMatch(topic -> TOPICS_THAT_CANNOT_OPEN_FEEDBACK_REQUEST.contains(topic.trim().toLowerCase()))) {
+            throw new ValidationException("validation.issue.create.feedbackNotNeeded");
+        }
     }
 
     private void validateCreatedIssueType(Issue model) {
@@ -383,21 +411,21 @@ public class IssueService {
         IssueResolutionType resolutionType = isFeedbackRequestIssue(issue)
                 ? model.getResolutionType()
                 : null;
-        createCloseEvent(issue.getId(), resolutionType);
+        createCloseEvent(issue.getId(), resolutionType, model.getComment());
 
         issue.setStatus(CLOSED);
         issue.setResolutionType(resolutionType);
         commentRepository.update(issue.getId(), ISSUE_TO_COMMENT.apply(issue));
     }
 
-    private void createCloseEvent(Long issueId, IssueResolutionType resolutionType) {
-        IssueEvent closeEvent = prepareIssueEvent(IssueEventType.CLOSED);
+    private void createCloseEvent(Long issueId, IssueResolutionType resolutionType, String comment) {
+        IssueEvent closeEvent = prepareIssueEvent(IssueEventType.CLOSED, comment);
         closeEvent.setResolutionType(resolutionType);
 
         issueEventService.createEvent(issueId, closeEvent);
     }
 
-    private IssueEvent prepareIssueEvent(IssueEventType eventType) {
+    private IssueEvent prepareIssueEvent(IssueEventType eventType, @Nullable String comment) {
         RihaUserDetails rihaUserDetails = getRihaUserDetails()
                 .orElseThrow(() -> new IllegalBrowserStateException("User details not present in security context"));
         RihaOrganization organization = getActiveOrganization()
@@ -409,6 +437,7 @@ public class IssueService {
                 .authorPersonalCode(rihaUserDetails.getPersonalCode())
                 .organizationName(organization.getName())
                 .organizationCode(organization.getCode())
+                .comment(comment)
                 .build();
     }
 
@@ -455,7 +484,7 @@ public class IssueService {
                     .build());
         }
 
-        createDecisionEvent(issue.getId(), model.getDecisionType());
+        createDecisionEvent(issue.getId(), model.getDecisionType(), model.getComment());
     }
 
     private void validateApprovalDecision(Issue issue, IssueApprovalDecisionModel model) {
@@ -472,11 +501,12 @@ public class IssueService {
         }
     }
 
-    private void createDecisionEvent(Long issueId, IssueResolutionType decisionType) {
-        IssueEvent decisionEvent = prepareIssueEvent(IssueEventType.DECISION);
+    private void createDecisionEvent(Long issueId, IssueResolutionType decisionType, String comment) {
+        IssueEvent decisionEvent = prepareIssueEvent(IssueEventType.DECISION, comment);
         decisionEvent.setResolutionType(decisionType);
 
         issueEventService.createEvent(issueId, decisionEvent);
+        notificationService.sendNewIssueDecisionNotification(decisionEvent);
     }
 
     public PagedResponse<DashboardIssue> listOrganizationInfosystemIssues(String organizationCode,
@@ -491,12 +521,30 @@ public class IssueService {
     }
 
     public PagedResponse<DashboardIssue> listDashboardIssues(Pageable pageable, CompositeFilterRequest filter) {
+        boolean latestInteractionSort = filter.getSortParameters().contains(LATEST_INTERACTION_SORT_PARAM);
+        if (latestInteractionSort) {
+            filter = new CompositeFilterRequest(filter.getFilterParameters(), null);
+        }
+
         PagedGridResponse<Comment> response = commentRepository.listDashboardIssues(pageable, filter);
+        Stream<DashboardIssue> issueStream = response.getContent().stream()
+                        .map(COMMENT_TO_DASHBOARD_ISSUE);
+
+        // Exceptional sorting logic to distinguish most recently created/commented issues
+        // Created within RIHAKB-742 due to insufficient time for broader implementation
+        // TODO move sorting logic to Storage backend when compatible
+        if (latestInteractionSort) {
+            issueStream = issueStream.sorted(Comparator.comparing(this::latestInteraction).reversed());
+        }
 
         return new PagedResponse<>(new PageRequest(response.getPage(), response.getSize()),
                 response.getTotalElements(),
-                response.getContent().stream()
-                        .map(COMMENT_TO_DASHBOARD_ISSUE)
-                        .collect(toList()));
+                issueStream.collect(toList()));
+    }
+
+    private Date latestInteraction(DashboardIssue issue) {
+        Date dateCreated = issue.getDateCreated();
+        DashboardIssueComment lastComment = issue.getLastComment();
+        return lastComment == null || dateCreated.after(lastComment.getDateCreated()) ? dateCreated : lastComment.getDateCreated();
     }
 }

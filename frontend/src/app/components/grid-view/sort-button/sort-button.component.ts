@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { GridData } from '../../../models/grid-data';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {GridData} from '../../../models/grid-data';
 
 @Component({
   selector: 'app-sort-button',
@@ -9,6 +9,7 @@ import { GridData } from '../../../models/grid-data';
 export class SortButtonComponent implements OnInit {
 
   @Input() sortProperty: string;
+  @Input() cssClass: string;
   @Input() labelText: string;
   @Input() gridData: GridData;
   @Output() buttonClick = new EventEmitter<string>();
@@ -34,9 +35,16 @@ export class SortButtonComponent implements OnInit {
     this.buttonClick.emit(this.sortProperty);
   }
 
-  constructor() { }
+  constructor() {
+
+    if (!this.cssClass) {
+      this.cssClass = "btn btn-primary btn-sm";
+    }
+
+  }
 
   ngOnInit() {
+
   }
 
 }

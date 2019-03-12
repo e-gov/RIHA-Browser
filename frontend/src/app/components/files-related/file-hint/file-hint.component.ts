@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { G } from '../../../globals/globals';
+import {classifiers} from "../../../services/environment.service";
 import {GeneralHelperService} from "../../../services/general-helper.service";
 
 @Component({
@@ -10,7 +10,7 @@ import {GeneralHelperService} from "../../../services/general-helper.service";
 export class FileHintComponent implements OnInit {
 
   @Input() file: any;
-  globals: any = G;
+  classifiers = classifiers;
 
   getOrganizationName(){
     if (this.file.accessRestriction && this.file.accessRestriction.organization){
@@ -46,9 +46,8 @@ export class FileHintComponent implements OnInit {
 
   private getRestrictionReason(){
     if (this.file.accessRestriction && this.file.accessRestriction.reasonCode){
-      let code = this.file.accessRestriction.reasonCode;
-      let reason = this.globals.access_restriction_reasons.filter( r => r.code == this.file.accessRestriction.reasonCode)[0];
-      return reason;
+      let reason = this.generalHelperService.toArray(this.classifiers.access_restriction_reasons).filter( r => r.code == this.file.accessRestriction.reasonCode)[0].value;
+      return JSON.parse(reason);
     } else {
       return null;
     }
