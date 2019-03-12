@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Headers, RequestOptions  } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestOptions, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { isNullOrUndefined } from 'util';
-import { EnvironmentService } from './environment.service';
-import * as moment from 'moment';
+import {isNullOrUndefined} from 'util';
+import {EnvironmentService} from './environment.service';
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class SystemsService {
 
-  private systemsUrl = '/api/v1/systems';
+  private apiUrl = '/api/v1';
+  private systemsUrl = this.apiUrl + '/systems';
+  private issuesUrl =  this.apiUrl + '/issues';
+  private myOrganizationUrl =  this.apiUrl + '/my/organization/users';
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
@@ -89,7 +91,7 @@ export class SystemsService {
       filters.ownerCode = user.getActiveOrganization().code;
     }
 
-    return this.getSystems(filters, gridData, `/api/v1/systems`);
+    return this.getSystems(filters, gridData, this.systemsUrl);
   }
 
   public getSystems(filters?, gridData?, url?) {
@@ -217,13 +219,45 @@ export class SystemsService {
       params.set('sort', gridData.sort);
     }
 
-    return this.http.get('/api/v1/systems/files', {
+    return this.http.get( this.systemsUrl +  '/files', {
+      search: params
+    }).toPromise();
+  }
+
+  public getSystemsDataObjects(filters?, gridData?){
+    let params: URLSearchParams = new URLSearchParams();
+
+    if (!isNullOrUndefined(filters)) {
+
+      const possibleFilters = ['searchText', 'searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
+
+      let filterAtrributes = [];
+      possibleFilters.forEach((possibleFilter) => {
+
+      if (filters[possibleFilter]) {
+        filterAtrributes.push(`${possibleFilter},ilike,%${ filters[possibleFilter]}%`);
+      }});
+
+      if (filterAtrributes.length > 0){
+        params.set('filter', filterAtrributes.join());
+      }
+    }
+
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
+    }
+
+    return this.http.get( this.systemsUrl +  '/data-objects', {
       search: params
     }).toPromise();
   }
 
   public getSystem(reference) {
-    return this.http.get(`/api/v1/systems/${ reference }`).toPromise();
+    return this.http.get(this.systemsUrl +  `/${ reference }`).toPromise();
   }
 
   public addSystem(value) {
@@ -234,7 +268,7 @@ export class SystemsService {
         purpose: value.purpose
       }
     };
-    return this.http.post(`/api/v1/systems`, system).toPromise();
+    return this.http.post(this.systemsUrl, system).toPromise();
   }
 
   public postDataFile(file, reference){
@@ -244,27 +278,27 @@ export class SystemsService {
     const headers = new Headers({});
     let options = new RequestOptions({ headers });
 
-    return this.http.post(`/api/v1/systems/${ reference }/files`, formData, options).toPromise();
+    return this.http.post(this.systemsUrl + `/${ reference }/files`, formData, options).toPromise();
   }
 
   public updateSystem(updatedData, reference?) {
-    return this.http.put(`/api/v1/systems/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
+    return this.http.put(this.systemsUrl + `/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
   }
 
   public getSystemIssues(reference) {
-    return this.http.get(`/api/v1/systems/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
   }
 
   public addSystemIssue(reference, issue) {
-    return this.http.post(`/api/v1/systems/${ reference }/issues`, issue).toPromise();
+    return this.http.post(this.systemsUrl + `/${ reference }/issues`, issue).toPromise();
   }
 
   public getSystemIssueById(issueId) {
-    return this.http.get(`/api/v1/issues/${ issueId }`).toPromise();
+    return this.http.get(this.issuesUrl + `/${ issueId }`).toPromise();
   }
 
   public getSystemIssueTimeline(issueId) {
-    return this.http.get(`/api/v1/issues/${ issueId }/timeline?size=1000`).toPromise();
+    return this.http.get(this.issuesUrl + `/${ issueId }/timeline?size=1000`).toPromise();
   }
 
   public getActiveDiscussions(sort, relation?) {
@@ -305,33 +339,52 @@ export class SystemsService {
     params.set('size', '1000');
     params.set('sort', sort);
 
-    return this.http.get('/api/v1/issues', {
+    return this.http.get(this.issuesUrl, {
       search: params
     }).toPromise();
   }
 
+  public getOrganizationUsers(gridData) {
+    let params: URLSearchParams = new URLSearchParams();
+
+    if (!isNullOrUndefined(gridData.page)){
+      params.set('page', gridData.page);
+    }
+    if (!isNullOrUndefined(gridData.sort)){
+      params.set('sort', gridData.sort);
+    }
+
+    return this.http.get(this.myOrganizationUrl, {
+      params: params
+    }).toPromise();
+  }
+
   public postSystemIssueComment(issueId, reply) {
-    return this.http.post(`/api/v1/issues/${ issueId }/comments`, reply).toPromise();
+    return this.http.post(this.issuesUrl + `/${ issueId }/comments`, reply).toPromise();
   }
 
   public postSystemIssueDecision(issueId, decision) {
-    return this.http.post(`/api/v1/issues/${ issueId }/decisions`, decision).toPromise();
+    return this.http.post(this.issuesUrl + `/${ issueId }/decisions`, decision).toPromise();
   }
 
   public getSystemRelations(reference) {
-    return this.http.get(`/api/v1/systems/${ reference }/relations`).toPromise();
+    return this.http.get(this.systemsUrl + `/${ reference }/relations`).toPromise();
   }
 
   public addSystemRelation(reference, relation) {
-    return this.http.post(`/api/v1/systems/${ reference }/relations`, relation).toPromise();
+    return this.http.post(this.systemsUrl + `/${ reference }/relations`, relation).toPromise();
+  }
+
+  public createStandardRealisationSystem(reference, realisationModel) {
+    return this.http.post(this.systemsUrl + `/${ reference }/create-standard-realisation-system`, realisationModel).toPromise();
   }
 
   public deleteSystemRelation(reference, relationId) {
-    return this.http.delete(`/api/v1/systems/${ reference }/relations/${ relationId }`).toPromise();
+    return this.http.delete(this.systemsUrl + `/${ reference }/relations/${ relationId }`).toPromise();
   }
 
   public closeSystemIssue(issueId, resolutionType) {
-    return this.http.put(`/api/v1/issues/${ issueId }`, {
+    return this.http.put(this.issuesUrl + `/${ issueId }`, {
       status: 'CLOSED',
       resolutionType: resolutionType || null
     }).toPromise();

@@ -1,8 +1,6 @@
 <app-page-header [text]="'Minu arutelud'"></app-page-header>
-<div *ngIf="!userMatrix.isLoggedIn" class="alert alert-info" role="alert">
-  <h3 class="alert-heading">Palun logige sisse</h3>
-  <p class="mb-0">Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. <a href="/oauth2/authorization/tara">Logi sisse.</a></p>
-</div>
+<app-login-link *ngIf="!userMatrix.isLoggedIn"></app-login-link>
+
 <div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Palun valige asutus</h3>
   <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
@@ -15,6 +13,7 @@
   <div class="form-group">
     <a [routerLink]="'/Kirjelda'" class="pull-left">Minu infosüsteemid</a>
     <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left active-inner-router-link ml-3">Minu arutelud</a>
+    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left ml-3">Minu organisatsioon</a>
   </div>
   <div *ngIf="loaded" class="table-responsive">
     <div class="mb-2 mt-3">
@@ -66,7 +65,7 @@
         <td><a [routerLink]="['/Infosüsteemid/Vaata', ad.infoSystemShortName, 'Arutelu', ad.id]">{{ ad.title }}</a></td>
         <td>
           <div *ngIf="ad.lastComment">{{ ad.lastComment.organizationName }} ({{ ad.lastComment.authorName }})<br /> <i>{{ ad.lastComment.dateCreated | datem:'YYYY-MM-DD HH:mm:ss' }}</i></div>
-          <span *ngIf="!ad.lastComment">-</span>
+          <div *ngIf="!ad.lastComment">{{ ad.organizationName }} ({{ ad.authorName }})<br /> <i>{{ ad.dateCreated | datem:'YYYY-MM-DD HH:mm:ss' }}</i></div>
         </td>
       </tr>
       </tbody>

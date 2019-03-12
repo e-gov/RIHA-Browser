@@ -71,17 +71,30 @@ public class LdapRepository {
         return ldapTemplate.find(query, LdapUser.class);
     }
 
-    public List<LdapUser> getAllApprovers() {
-        List<LdapGroup> approverGroups = findLdapGroups(
-                new LikeFilter(COMMON_NAME_ATTRIBUTE, APPROVER_GROUP_COMMON_NAME_PATTERN));
+    public List<LdapUser> getApproversByOrganization(String organizationCode) {
+        String approverGroupName = APPROVER_GROUP_COMMON_NAME_PATTERN.replace("*", organizationCode);
+        LdapGroup group = findLdapGroup(new EqualsFilter(COMMON_NAME_ATTRIBUTE, approverGroupName));
+        String groupDn = LdapNameBuilder.newInstance(baseDn).add(group.getDn()).build().toString();
+        return findLdapUsers(new EqualsFilter(MEMBER_OF_ATTRIBUTE, groupDn));
+    }
 
-        if (approverGroups.isEmpty()) {
+    public List<LdapUser> getUsersByOrganization(String organizationCode) {
+        return getLdapUsersByGroups(organizationCode + ALL_NON_OPERATIONAL_ATTRIBUTES);
+    }
+
+    public List<LdapUser> getAllApprovers() {
+        return getLdapUsersByGroups(APPROVER_GROUP_COMMON_NAME_PATTERN);
+    }
+
+    private List<LdapUser> getLdapUsersByGroups(String groupNamePattern) {
+        List<LdapGroup> groups = findLdapGroups(new LikeFilter(COMMON_NAME_ATTRIBUTE, groupNamePattern));
+        if (groups.isEmpty()) {
             log.debug("Would not search for approvers since no approver groups found");
             return new ArrayList<>();
         }
 
         OrFilter filter = new OrFilter();
-        approverGroups.stream()
+        groups.stream()
                 .map(group -> LdapNameBuilder.newInstance(baseDn)
                         .add(group.getDn())
                         .build()
@@ -92,11 +105,17 @@ public class LdapRepository {
         return findLdapUsers(filter);
     }
 
+    private LdapGroup findLdapGroup(AbstractFilter filter) {
+        return ldapTemplate.findOne(getGroupQuery(filter), LdapGroup.class);
+    }
+
     private List<LdapGroup> findLdapGroups(AbstractFilter filter) {
-        LdapQuery query = LdapQueryBuilder.query()
+        return ldapTemplate.find(getGroupQuery(filter), LdapGroup.class);
+    }
+
+    private LdapQuery getGroupQuery(AbstractFilter filter) {
+        return LdapQueryBuilder.query()
                 .base(groupSearchBase)
                 .filter(filter);
-
-        return ldapTemplate.find(query, LdapGroup.class);
     }
 }

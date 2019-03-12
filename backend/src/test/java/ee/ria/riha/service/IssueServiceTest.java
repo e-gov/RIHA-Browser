@@ -64,6 +64,9 @@ public class IssueServiceTest {
     @Mock
     private NotificationService notificationService;
 
+    @Mock
+    private RelationService relationService;
+
     @InjectMocks
     private IssueService issueService;
 

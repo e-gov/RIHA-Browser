@@ -1,12 +1,13 @@
 package ee.ria.riha.service.notification.handler;
 
-import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+
+import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
 
 /**
  * Interface for classes that prepare email notification messages
  */
-public interface EmailNotificationHandler {
+public interface EmailNotificationHandler<T extends EmailNotificationDataModel> {
 
     /**
      * Checks if handler supports message creation from given notification data model
@@ -22,5 +23,5 @@ public interface EmailNotificationHandler {
      * @param model notification data
      * @return instance of {@link MimeMessagePreparator}
      */
-    MimeMessagePreparator createMessagePreparator(EmailNotificationDataModel model);
+    MimeMessagePreparator createMessagePreparator(T model);
 }

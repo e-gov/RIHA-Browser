@@ -1,41 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { GridData } from '../../models/grid-data';
-import { GeneralHelperService } from '../../services/general-helper.service';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { G } from '../../globals/globals';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {GridData} from '../../models/grid-data';
+import {GeneralHelperService} from '../../services/general-helper.service';
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
+import {classifiers} from "../../services/environment.service";
+import {System} from '../../models/system';
+import _ from 'lodash';
+import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
 
 @Component({
   selector: 'app-browser-list',
   templateUrl: './browser-list.component.html',
   styleUrls: ['./browser-list.component.scss']
 })
-export class BrowserListComponent implements OnInit {
+export class BrowserListComponent implements OnInit, AfterViewInit {
 
   gridData: GridData = new GridData();
-  filters: {
-    searchText: string,
-    ownerName: string,
-    ownerCode: string,
-    purpose: string,
-    name: string,
-    shortName: string,
-    topic: string,
-    systemStatus: string,
-    xRoadStatus: string,
-    developmentStatus: string,
-    lastPositiveApprovalRequestType: string,
-    dateCreatedFrom: string,
-    dateCreatedTo: string,
-    dateUpdatedFrom: string,
-    dateUpdatedTo: string
-  };
+
+  @ViewChild(ProducerSearchFilterComponent)
+  filterPanel: ProducerSearchFilterComponent;
+
+  searchText: string;
+
   extendedSearch: boolean = false;
   loaded: boolean = false;
 
-  globals: any = G;
+  classifiers = classifiers;
 
   onPageChange(newPage){
     this.gridData.page = newPage - 1;
@@ -47,8 +39,10 @@ export class BrowserListComponent implements OnInit {
     this.getSystems();
   }
 
-  getSystems(page?): void {
-    let params = this.generalHelperService.cloneObject(this.filters);
+  _loadSystems(filters, page?) {
+    let params = this.generalHelperService.cloneObject(filters);
+    params.searchText = this.searchText;
+
     if (params.dateCreatedFrom) {
       params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
     }
@@ -79,7 +73,8 @@ export class BrowserListComponent implements OnInit {
     this.gridData.page = page || 0;
     this.systemsService.getSystems(params, this.gridData).then(
       res => {
-        this.gridData.updateData(res.json());
+
+        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getSystems();
         } else {
@@ -92,38 +87,26 @@ export class BrowserListComponent implements OnInit {
       });
   }
 
+  searchSystems(filters): void {
+    this._loadSystems(filters, 0);
+  }
+
+  getSystems(page?): void {
+    this._loadSystems(this.filterPanel.getFilters(), page);
+  }
+
   toggleSearchPanel(){
     this.extendedSearch = !this.extendedSearch;
     return false;
   }
 
   hasActiveFilters(): boolean{
-    for (let key in this.filters) {
-      if (key != 'searchText' && this.filters[key]){
-        return true;
-      }
-    }
-    return false;
+    return this.filterPanel.hasActiveFilters();
   }
 
   clearFilters(){
-    this.filters = {
-      searchText: '',
-      ownerName: '',
-      ownerCode: '',
-      purpose: '',
-      name: '',
-      shortName: '',
-      topic: '',
-      systemStatus: '',
-      xRoadStatus: '',
-      developmentStatus: '',
-      lastPositiveApprovalRequestType: '',
-      dateCreatedFrom: '',
-      dateCreatedTo: '',
-      dateUpdatedFrom: '',
-      dateUpdatedTo: ''
-    };
+    this.filterPanel.clearFilters();
+
   }
 
   clearFiltersAndRefresh(){
@@ -133,7 +116,7 @@ export class BrowserListComponent implements OnInit {
 
   searchSystemsByTopic(topic){
     this.clearFilters();
-    this.filters.topic = topic;
+    this.filterPanel.setTopicFilter(topic);
     this.extendedSearch = true;
     this.getSystems();
   }
@@ -147,35 +130,22 @@ export class BrowserListComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe( params => {
-      this.filters = {
-        searchText: params['searchText'],
-        ownerName: params['ownerName'],
-        ownerCode: params['ownerCode'],
-        purpose: params['purpose'],
-        name: params['name'],
-        shortName: params['shortName'],
-        topic: params['topic'],
-        systemStatus: params['systemStatus'] || '',
-        xRoadStatus: params['xRoadStatus'] || '',
-        developmentStatus: params['developmentStatus'] || '',
-        lastPositiveApprovalRequestType: params['lastPositiveApprovalRequestType'] || '',
-        dateCreatedFrom: this.systemsService.timestampToDateObj(params['dateCreatedFrom']),
-        dateCreatedTo: this.systemsService.timestampToDateObj(params['dateCreatedTo']),
-        dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
-        dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo'])
-      };
-
+      this.searchText = params['searchText'];
       this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
       this.gridData.setPageFromUrl(params['page']);
     });
+
+    this.generalHelperService.setRihaPageTitle('Infosüsteemid');
+  }
+
+
+  ngAfterViewInit() {
 
     if (this.hasActiveFilters()){
       this.extendedSearch = true;
     }
 
     this.getSystems(this.gridData.page);
-
-    this.generalHelperService.setRihaPageTitle('Infosüsteemid');
   }
 
 }

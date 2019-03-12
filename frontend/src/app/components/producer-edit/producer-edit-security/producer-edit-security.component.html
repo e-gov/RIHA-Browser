@@ -169,30 +169,30 @@
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
-                       [value]="globals.audit_resolution_type.PASSED_WITHOUT_REMARKS"
+                       [value]="classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.code"
                        name="auditResolution">
                 <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">Auditeeritud märkusteta ja soovitusteta</span>
+                <span class="custom-control-description">{{classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.value}}</span>
               </label>
               <label class="custom-control custom-radio">
                 <input class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
-                       [value]="globals.audit_resolution_type.PASSED_WITH_REMARKS"
+                       [value]="classifiers.audit_resolution_type.PASSED_WITH_REMARKS.code"
                        name="auditResolution">
                 <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">Auditeeritud märkuste ja soovitustega</span>
+                <span class="custom-control-description">{{classifiers.audit_resolution_type.PASSED_WITH_REMARKS.value}}</span>
               </label>
               <label class="custom-control custom-radio">
                 <input class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
-                       [value]="globals.audit_resolution_type.DID_NOT_PASS"
+                       [value]="classifiers.audit_resolution_type.DID_NOT_PASS.code"
                        name="auditResolution">
                 <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">Ei läbinud auditit</span>
+                <span class="custom-control-description">{{classifiers.audit_resolution_type.DID_NOT_PASS.value}}</span>
               </label>
             </div>
           </div>

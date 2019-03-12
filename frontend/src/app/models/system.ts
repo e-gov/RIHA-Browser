@@ -1,9 +1,11 @@
-import { G } from '../globals/globals';
+import {classifiers} from "../services/environment.service";
 
 export class System {
   id: number = null;
   lastPositiveApprovalRequestType: any = null;
   lastPositiveApprovalRequestDate: any = null;
+  hasUsedSystemTypeRelations: boolean = false;
+
   details: any = {};
 
   getOwnerCode(): any {
@@ -51,14 +53,14 @@ export class System {
   }
 
   isUsed(): boolean{
-    return this.details.meta.system_status.status === G.system_status.IN_USE;
+    return this.details.meta.system_status.status === classifiers.system_status.IN_USE.code;
   }
 
   setInDevelopment(inDevelopment): void {
     if (inDevelopment === true){
-      this.details.meta.development_status = G.development_status.IN_DEVELOPMENT;
+      this.details.meta.development_status = classifiers.development_status.IN_DEVELOPMENT.code;
     } else if (inDevelopment === false){
-      this.details.meta.development_status = G.development_status.NOT_IN_DEVELOPMENT;
+      this.details.meta.development_status = classifiers.development_status.NOT_IN_DEVELOPMENT.code;
     }
   }
 
@@ -67,7 +69,7 @@ export class System {
   }
 
   isInDevelopment(): boolean{
-    return this.details.meta.development_status === G.development_status.IN_DEVELOPMENT;
+    return this.details.meta.development_status === classifiers.development_status.IN_DEVELOPMENT.code;
   }
 
   getXRoadStatus() {
@@ -110,11 +112,21 @@ export class System {
     return this.details.security.latest_audit_resolution != null;
   }
 
+  hasStandardRealisationTopic() : boolean {
+    if (!this.getTopics()) {
+      return false;
+    }
+
+    return this.getTopics().find(value => value == 'standardlahendus');
+  }
+
   constructor(system?){
     system = system || {};
     this.id = system.id || null;
     this.lastPositiveApprovalRequestType = system.lastPositiveApprovalRequestType || null;
     this.lastPositiveApprovalRequestDate = system.lastPositiveApprovalRequestDate || null;
+    this.hasUsedSystemTypeRelations = system.hasUsedSystemTypeRelations;
+
     this.details = system.details || {};
     if (this.details.meta != null){
       if (!this.details.meta.development_status){
@@ -154,6 +166,8 @@ export class System {
     this.details.contacts = this.details.contacts || [];
     this.details.homepage = this.details.homepage || null;
     this.details.purpose = this.details.purpose || null;
+    this.details.showDifferences = this.details.differences || this.hasUsedSystemTypeRelations;
+    this.details.differences = this.details.differences || null;
     this.details.short_name = this.details.short_name || null;
     this.details.security = this.details.security || {
       class: null,

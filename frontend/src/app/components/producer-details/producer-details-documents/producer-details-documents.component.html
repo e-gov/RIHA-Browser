@@ -5,23 +5,58 @@
   </div>
   <div class="form-group">
     <label class="text-muted separated-text">Infosüsteemi tehniline dokumentatsioon:</label>
-    <p *ngIf="!system.details.documents || system.details.documents.length == 0">
+    <p *ngIf="!system.details.documents || system.details.documents.length == 0; else documents">
       Dokumentatsioon puudub
     </p>
-    <table class="details-list-table">
-      <tr *ngFor="let doc of system.details.documents">
-        <td>
-          <app-file-icon [file]="doc"></app-file-icon>
-        </td>
-        <td>
-          <a *ngIf="canDownload(doc)" href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
-          <span *ngIf="!canDownload(doc)" class="text-muted">{{ doc.name }}</span>
-          <app-file-hint [file]="doc"></app-file-hint>
-        </td>
-        <td>
-          <app-file-create-update-date [file]="doc"></app-file-create-update-date>
-        </td>
-      </tr>
-    </table>
+
+    <ng-template #documents>
+      <div class="my-1">
+        <div class="table-responsive">
+          <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+            <thead class="thead-default">
+            <tr>
+              <th>
+                <app-sort-button
+                  [labelText]="'Nimetus'"
+                  [sortProperty]="'name'"
+                  [gridData]="gridData"
+                  (buttonClick)="onSortChange($event)"></app-sort-button>
+              </th>
+              <th>
+                <app-sort-button
+                  [labelText]="'Liik'"
+                  [sortProperty]="'typeForSorting'"
+                  [gridData]="gridData"
+                  (buttonClick)="onSortChange($event)"></app-sort-button>
+              </th>
+              <th>
+                <app-sort-button
+                  [labelText]="'Uuendamise kuupäev'"
+                  [sortProperty]="'update_timestamp'"
+                  [gridData]="gridData"
+                  (buttonClick)="onSortChange($event)"></app-sort-button>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let doc of gridData.content">
+              <td class="name">
+                <app-file-icon [file]="doc"></app-file-icon>
+                <a *ngIf="canDownload(doc)"
+                   href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{
+                  (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
+                <span *ngIf="!canDownload(doc)" class="text-muted">{{ doc.name }}</span>
+                <app-file-hint [file]="doc"></app-file-hint>
+              </td>
+              <td class="type"><span *ngIf="doc.type && classifiers.document_types[doc.type]">{{classifiers.document_types[doc.type].value}}</span></td>
+              <td class="last-modified text-nowrap">
+                <app-file-create-update-date [file]="doc"></app-file-create-update-date>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </section>

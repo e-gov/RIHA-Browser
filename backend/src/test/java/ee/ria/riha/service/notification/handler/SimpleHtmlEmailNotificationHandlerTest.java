@@ -111,12 +111,12 @@ public class SimpleHtmlEmailNotificationHandlerTest {
     private static class TestableSimpleHtmlEmailNotificationHandler extends SimpleHtmlEmailNotificationHandler {
 
         @Override
-        protected String getSubject(EmailNotificationDataModel model) {
+        protected String getSubject(SimpleHtmlEmailNotification model) {
             return "testable subject";
         }
 
         @Override
-        protected String getText(EmailNotificationDataModel model) {
+        protected String getText(SimpleHtmlEmailNotification model) {
             return "testable text";
         }
 
