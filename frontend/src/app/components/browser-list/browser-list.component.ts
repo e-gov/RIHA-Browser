@@ -130,7 +130,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe( params => {
-
+      this.searchText = params['searchText'];
       this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
       this.gridData.setPageFromUrl(params['page']);
     });
