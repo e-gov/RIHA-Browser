@@ -1,5 +1,8 @@
 package ee.ria.riha.service.util;
 
+import ee.ria.riha.domain.model.NationalHoliday;
+import ee.ria.riha.domain.model.NationalHolidays;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -7,9 +10,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import ee.ria.riha.domain.model.NationalHoliday;
-import ee.ria.riha.domain.model.NationalHolidays;
 
 public class DateUtils {
 
@@ -25,7 +25,7 @@ public class DateUtils {
 
 		LocalDate date = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		int dayCount = 0;
-		while (dayCount <= workDaysToAdd) {
+		while (dayCount < workDaysToAdd) {
 			date = date.plusDays(1);
 			if (isWorkDay(date)) {
 				dayCount++;
