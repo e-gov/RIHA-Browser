@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { System } from '../../../models/system';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { SystemsService } from '../../../services/systems.service';
-import { ToastrService } from 'ngx-toastr';
-import { ProducerEditSecurityComponent } from '../../producer-edit/producer-edit-security/producer-edit-security.component';
-import { EnvironmentService, classifiers } from '../../../services/environment.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {System} from '../../../models/system';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {SystemsService} from '../../../services/systems.service';
+import {ToastrService} from 'ngx-toastr';
+import {ProducerEditSecurityComponent} from '../../producer-edit/producer-edit-security/producer-edit-security.component';
+import {classifiers, EnvironmentService} from '../../../services/environment.service';
 
 @Component({
   selector: 'app-producer-details-security',
@@ -22,6 +22,19 @@ export class ProducerDetailsSecurityComponent implements OnInit {
 
   isAuditVisible(){
     return this.environmentService.getUserMatrix().hasApproverRole || this.allowEdit;
+  }
+
+  getLatestAuditionCssClass(auditionCode) {
+
+    if (auditionCode === 'PASSED_WITHOUT_REMARKS') {
+      return 'text-success';
+    } else if (auditionCode === 'PASSED_WITH_REMARKS') {
+      return 'text-primary';
+    } else if (auditionCode === 'DID_NOT_PASS') {
+      return 'text-danger';
+    } else {
+      return '';
+    }
   }
 
   openSecurityEdit(content) {
