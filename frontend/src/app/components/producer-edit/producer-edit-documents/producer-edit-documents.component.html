@@ -121,7 +121,7 @@
                         #linkTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'linkType' + i}}" required>
-                  <option [value]="''" disabled selected>Vali veebiviide liik...</option>
+                  <option [value]="''" disabled selected>Vali veebiviite liik...</option>
                   <option *ngFor="let type of generalHelperService.toArray(classifiers.document_types)" [value]="type.code" selected>{{ type.value }}</option>
                 </select>
               </div>
