@@ -37,7 +37,7 @@ import static org.springframework.util.StringUtils.hasText;
 @Service
 public class IssueService {
 
-    private static final int WORK_DAYS_UNTIL_DEADLINE = 20;
+    public static final int WORK_DAYS_UNTIL_DEADLINE = 20;
 
     public static final Function<Comment, Issue> COMMENT_TO_ISSUE = comment -> {
         if (comment == null) {

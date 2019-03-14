@@ -24,7 +24,9 @@ export class ProducerSearchFilterComponent implements OnInit {
     dateCreatedFrom: string,
     dateCreatedTo: string,
     dateUpdatedFrom: string,
-    dateUpdatedTo: string
+    dateUpdatedTo: string,
+    ownerName: string,
+    ownerCode: string
   };
 
   classifiers = classifiers;
@@ -42,7 +44,7 @@ export class ProducerSearchFilterComponent implements OnInit {
   performSearch = new EventEmitter();
 
 
-  getOwnSystems() {
+  search() {
     this.performSearch.next(this.filters);
   }
 
@@ -53,8 +55,7 @@ export class ProducerSearchFilterComponent implements OnInit {
 
   getFilters(): any {
     let params = this.generalHelperService.cloneObject(this.filters);
-    delete params.ownerName;
-    delete params.ownerCode;
+
     if (params.dateCreatedFrom) {
       params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
     }
@@ -94,7 +95,9 @@ export class ProducerSearchFilterComponent implements OnInit {
       dateCreatedFrom: '',
       dateCreatedTo: '',
       dateUpdatedFrom: '',
-      dateUpdatedTo: ''
+      dateUpdatedTo: '',
+      ownerName: '',
+      ownerCode: '',
     };
   }
 
@@ -124,7 +127,10 @@ export class ProducerSearchFilterComponent implements OnInit {
         dateCreatedFrom: this.systemsService.timestampToDateObj(params['dateCreatedFrom']),
         dateCreatedTo: this.systemsService.timestampToDateObj(params['dateCreatedTo']),
         dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
-        dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo'])
+        dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo']),
+        ownerName: params['ownerName'] || '',
+        ownerCode: params['ownerCode'] || ''
+
       };
     });
   }

@@ -21,7 +21,9 @@
   </div>
   <div *ngIf="isAuditVisible() && system.hasAuditInfo()" class="form-group">
     <strong>Auditeeritud viimati {{ system.getLatestAuditDate() | date:'y-MM-dd'}}</strong>
-    <strong>(<span *ngIf="system.getLatestAuditResolution() && classifiers.security_level[system.getLatestAuditResolution()]" class="text-success">{{classifiers.audit_resolution_type[system.getLatestAuditResolution()].value}}</span>)</strong>
+    <strong>
+      (<span *ngIf="system.getLatestAuditResolution() && classifiers.audit_resolution_type[system.getLatestAuditResolution()]"
+             class="{{getLatestAuditionCssClass(system.getLatestAuditResolution())}}">{{classifiers.audit_resolution_type[system.getLatestAuditResolution()].value}}</span>)</strong>
   </div>
   <div *ngIf="allowEdit && !system.hasAuditInfo()" class="form-group">
     Auditeerimise info puudub
