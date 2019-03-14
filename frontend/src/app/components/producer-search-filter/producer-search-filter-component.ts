@@ -42,7 +42,7 @@ export class ProducerSearchFilterComponent implements OnInit {
   performSearch = new EventEmitter();
 
 
-  getOwnSystems() {
+  search() {
     this.performSearch.next(this.filters);
   }
 
