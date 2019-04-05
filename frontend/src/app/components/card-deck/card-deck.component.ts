@@ -78,8 +78,7 @@ export class CardDeckComponent implements OnInit {
           }],
           "buttons": [{
             "label": "Alustan",
-            "hash": "https://x-tee.ee",
-            "type": "external"
+            "link": "/Kirjelda/Uus"
           }]
         }
       }
