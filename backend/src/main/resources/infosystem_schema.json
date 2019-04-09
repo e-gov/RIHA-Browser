@@ -69,7 +69,8 @@
               "DOC_TYPE_ISKE_ACT",
               "DOC_TYPE_ISKE_SUMMARY",
               "DOC_TYPE_GDPR_IMPACT_ASSESSMENT",
-              "DOC_TYPE_OTHER"
+              "DOC_TYPE_OTHER",
+              "DOC_TYPE_XROAD"       
             ]
           },
           "creation_timestamp": {
