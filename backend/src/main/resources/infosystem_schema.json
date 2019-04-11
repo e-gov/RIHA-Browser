@@ -59,18 +59,7 @@
           },
           "type": {
             "description": "Dokumendi tüüp",
-            "type": ["string", "null"],
-            "enum": ["DOC_TYPE_USER_VIEW",
-              "DOC_TYPE_OPEN_DATA",
-              "DOC_TYPE_USER_GUIDE",
-              "DOC_TYPE_ARCHITECTURE",
-              "DOC_TYPE_CLASSIFICATOR",
-              "DOC_TYPE_SOURCE_CODE",
-              "DOC_TYPE_ISKE_ACT",
-              "DOC_TYPE_ISKE_SUMMARY",
-              "DOC_TYPE_GDPR_IMPACT_ASSESSMENT",
-              "DOC_TYPE_OTHER",
-              "DOC_TYPE_XROAD"       
+            "type": ["string", "null"]      
             ]
           },
           "creation_timestamp": {
