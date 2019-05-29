@@ -417,7 +417,7 @@ public class InfoSystem {
     }
 
     /**
-     *  Urility method for clearing security section of InfoSystem object.
+     * Utility method for clearing security section of InfoSystem object.
      */
     public void clearSecuritySection() {
         ((ObjectNode) jsonContent).remove(SECURITY_SECTION_KEY);
@@ -514,7 +514,22 @@ public class InfoSystem {
                         ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
             }
         });
+    }
 
+    public void replaceFileUrl(String oldUrl, String newUrl) {
+        replaceFileUrl(oldUrl, newUrl, DOCUMENTS_KEY);
+        replaceFileUrl(oldUrl, newUrl, DATA_FILES_KEY);
+    }
 
+    private void replaceFileUrl(String oldUrl, String newUrl, String key) {
+        JsonNode filesNode = jsonContent.path(key);
+        if (filesNode.isArray()) {
+            for (JsonNode fileNode : filesNode) {
+                String url = fileNode.path(FILE_METADATA_URL_KEY).asText(null);
+                if (url.equals(oldUrl)) {
+                    ((ObjectNode) fileNode).put(FILE_METADATA_URL_KEY, newUrl);
+                }
+            }
+        }
     }
 }

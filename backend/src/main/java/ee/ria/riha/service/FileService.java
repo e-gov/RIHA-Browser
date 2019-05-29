@@ -32,6 +32,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class FileService {
 
+    private static final String FILE_URL_PREFIX = "file://";
     private static final String INLINE_CONTENT_DISPOSITION_TYPE = "inline";
     private static final String ATTACHMENT_CONTENT_DISPOSITION_TYPE = "attachment";
     private static final String CONTENT_DISPOSITION_TOKEN_DELIMITER = ";";
@@ -186,5 +187,19 @@ public class FileService {
                 fileResourcePagedResponse.getContent().stream()
                         .map(STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL)
                         .collect(Collectors.toList()));
+    }
+
+    public void updateFilesUuid(InfoSystem infoSystem, UUID existingInfoSystemUuid) {
+        Stream.concat(infoSystem.getDocumentMetadata().stream(), infoSystem.getDataFileMetadata().stream())
+                .forEach(file -> {
+                    if (file.getUrl().startsWith(FILE_URL_PREFIX)) {
+                        String uuid = file.getUrl().substring(7);
+                        String newUuid = fileRepository.createFileResourceFromExisting(
+                                UUID.fromString(uuid),
+                                existingInfoSystemUuid,
+                                infoSystem.getUuid());
+                        infoSystem.replaceFileUrl(file.getUrl(), FILE_URL_PREFIX + newUuid);
+                    }
+                });
     }
 }
