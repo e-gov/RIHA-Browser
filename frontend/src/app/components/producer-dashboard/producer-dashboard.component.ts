@@ -16,11 +16,11 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   public loaded: boolean = false;
   private differ: any;
   public gridData: GridData = new GridData();
-
-onPageChange(newPage): void{	
+  
+  onPageChange(newPage): void{	
     this.gridData.page = newPage - 1;	
     this.getOwnOpenIssues();	
-  }	
+  }
 
   public onSortChange(property): void{
     this.gridData.changeSortOrder(property);
