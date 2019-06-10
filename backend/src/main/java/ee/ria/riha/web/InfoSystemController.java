@@ -2,6 +2,7 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.RelationType;
+import ee.ria.riha.service.FileService;
 import ee.ria.riha.service.InfoSystemDataObjectService;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.RelationService;
@@ -39,6 +40,9 @@ public class InfoSystemController {
 
     @Autowired
     private RelationService relationService;
+
+    @Autowired
+    private FileService fileService;
 
     @GetMapping
     @ApiOperation("List all existing information systems")
@@ -124,6 +128,10 @@ public class InfoSystemController {
                         .type(RelationType.USED_SYSTEM)
                         .build()
         );
+
+        //for all existing files, should create new entry into file_resource table with new info system UUID
+        fileService.updateFilesUuid(newlyCreatedInfoSystem, existingInfoSystem.getUuid());
+        infoSystemService.update(newlyCreatedInfoSystem.getUuid().toString(), newlyCreatedInfoSystem);
 
         return ResponseEntity.ok(infoSystemModelMapper.map(newlyCreatedInfoSystem));
     }

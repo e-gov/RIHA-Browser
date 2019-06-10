@@ -10,7 +10,7 @@
   <parent>
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.5</version>
+    <version>7.5.1</version>
   </parent>
 
 	<properties>
