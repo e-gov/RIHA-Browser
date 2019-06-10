@@ -322,7 +322,7 @@ export class SystemsService {
 
   public getActiveIssuesForOrganization(organizationCode, sort?) {
     let params: URLSearchParams = new URLSearchParams();
-    params.append('size', '1000');
+    params.append('size', '20');
     params.append('filter', 'status:OPEN');
     params.append('sort', sort ? sort : '-last_comment_creation_date');
 

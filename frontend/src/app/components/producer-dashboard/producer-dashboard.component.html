@@ -70,6 +70,17 @@
       </tr>
       </tbody>
     </table>
+	<div class="pull-right">	
+          <app-grid-currently-showing [gridData]="gridData"></app-grid-currently-showing>	
+          <ngb-pagination	
+            class="pull-right"	
+            (pageChange)="onPageChange($event)"	
+            [pageSize]="gridData.size"	
+            [maxSize]="5"	
+            [collectionSize]="gridData.getSize()"	
+            [page]="gridData.getPageNumber()">	
+          </ngb-pagination>	
+        </div>
   </div>
   <div *ngIf="!loaded" class="my-1 text-center">
     <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
