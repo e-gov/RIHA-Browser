@@ -66,9 +66,9 @@ export class ProducerEditRelationsComponent implements OnInit {
   };
 
   refreshRelations(){
-    this.systemsService.getSystemRelations(this.system.details.short_name).then(
-      res => {
-        this.relations = res.json();
+    this.systemsService.getSystemRelations(this.system.details.short_name).subscribe(
+      relations => {
+        this.relations = relations;
       }
     )
   }

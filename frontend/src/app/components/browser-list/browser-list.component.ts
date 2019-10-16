@@ -71,10 +71,10 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
     let q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Infosüsteemid', q);
     this.gridData.page = page || 0;
-    this.systemsService.getSystems(params, this.gridData).then(
-      res => {
+    this.systemsService.getSystems(params, this.gridData).subscribe(
+      items => {
 
-        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+        this.gridData.updateData(items, (content) => _.map(content, (contentElement) => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getSystems();
         } else {
@@ -142,7 +142,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
 
     if (this.hasActiveFilters()){
-      this.extendedSearch = true;
+      // this.extendedSearch = true;
     }
 
     this.getSystems(this.gridData.page);

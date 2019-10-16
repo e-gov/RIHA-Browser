@@ -25,7 +25,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   private getOwnOpenIssues(){
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
       this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData.sort).then(res =>{
-        this.gridData.updateData(res.json());
+        this.gridData.updateData(res);
         this.loaded = true;
       }, err => {
         this.helper.showError();

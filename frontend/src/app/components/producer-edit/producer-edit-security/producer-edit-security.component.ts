@@ -42,11 +42,11 @@ export class ProducerEditSecurityComponent implements OnInit {
 
   saveSystem(f){
     if (f.valid){
-      this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-        let s = new System(res.json());
-        s.details.security = this.prepareSecurityInfoForSending(this.security);
-        this.systemsService.updateSystem(s).then(response => {
-          this.modalService.closeActiveModal({system: new System(response.json())});
+      this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
+        const system = new System(responseSystem);
+        system.details.security = this.prepareSecurityInfoForSending(this.security);
+        this.systemsService.updateSystem(system).subscribe(updatedSystem => {
+          this.modalService.closeActiveModal({system: new System(updatedSystem)});
         }, err => {
           this.toastrService.error('Serveri viga.');
         });

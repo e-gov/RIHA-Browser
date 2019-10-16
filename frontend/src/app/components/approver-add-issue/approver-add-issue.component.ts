@@ -35,8 +35,8 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onSubmitNewIssue(f) :void {
     if (f.valid){
-      this.systemsService.addSystemIssue(this.system.details.short_name, f.value).then(
-        res => {
+      this.systemsService.addSystemIssue(this.system.details.short_name, f.value).subscribe(
+        issue => {
           this.modalService.closeActiveModal();
         },
         err => {
@@ -47,8 +47,8 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onSubmitApprovalRequest(f) :void {
     if (f.valid) {
-      this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).then(
-        res => {
+      this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).subscribe(
+        issue => {
           this.modalService.closeActiveModal();
         },
         err => {
@@ -105,17 +105,17 @@ export class ApproverAddIssueComponent implements OnInit {
     this.isApprovalRequest = !this.activeUser.hasApproverRole();
     if (this.activeUser.canEdit(this.system.getOwnerCode())){
 
-      this.systemsService.getSystemIssues(this.system.details.short_name).then(res =>{
+      this.systemsService.getSystemIssues(this.system.details.short_name).subscribe(res =>{
         this.openIssuesMatrix = {
           establishment: false,
           takingIntoUse: false,
           modification: false,
           finalization: false
         };
-        let issues = res.json().content;
-        issues.forEach(v => {
-          if (v.status == 'OPEN' && v.type != null){
-            switch (v.type){
+
+        res.content.forEach(issue => {
+          if (issue.status == 'OPEN' && issue.type != null){
+            switch (issue.type){
               case classifiers.issue_type.FINALIZATION_REQUEST.code: {
                 this.openIssuesMatrix.finalization = true;
                 break;

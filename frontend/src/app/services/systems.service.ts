@@ -1,21 +1,25 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, RequestOptions, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {isNullOrUndefined} from 'util';
 import {EnvironmentService} from './environment.service';
-import {Observable} from "rxjs/Observable";
+import {Observable} from 'rxjs/Observable';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {System} from "../models/system";
+import {SystemIssue} from "../models/system-issue";
+import {SystemRelation} from "../models/system-relation";
+import {SystemIssueReply} from "../models/system-issue-reply";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class SystemsService {
 
-  private apiUrl = '/api/v1';
-  private systemsUrl = this.apiUrl + '/systems';
-  private issuesUrl =  this.apiUrl + '/issues';
-  private myOrganizationUrl =  this.apiUrl + '/my/organization/users';
+  private systemsUrl = environment.api.systemsUrl;
+  private issuesUrl =  environment.api.issuesUrl;
+  private myOrganizationUrl =  environment.api.myOrganizationUrl;
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
-      let year = dateObj.year.toString();
+      const year = dateObj.year.toString();
       let month = dateObj.month.toString();
       let day = dateObj.day.toString();
 
@@ -33,9 +37,9 @@ export class SystemsService {
 
   public timestampToDateObj(timestamp: string): any {
     if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
-      let year = parseInt(timestamp.substr(0, 4), 10);
-      let month = parseInt(timestamp.substr(5, 2), 10);
-      let day = parseInt(timestamp.substr(8, 2), 10);
+      const year = parseInt(timestamp.substr(0, 4), 10);
+      const month = parseInt(timestamp.substr(5, 2), 10);
+      const day = parseInt(timestamp.substr(8, 2), 10);
       return {
         year: year,
         month: month,
@@ -74,7 +78,7 @@ export class SystemsService {
 
   public getAlertText(errObj): string{
     let ret = null;
-    let code = errObj.code;
+    const code = errObj.code;
     if (code === 'validation.system.shortNameAlreadyTaken'){
       ret = 'Lühinimi on juba kasutusel';
     } else {
@@ -86,7 +90,7 @@ export class SystemsService {
   public getOwnSystems(filters?, gridData?){
     filters = filters || {};
 
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     if (user && user.getActiveOrganization()){
       filters.ownerCode = user.getActiveOrganization().code;
     }
@@ -94,10 +98,10 @@ export class SystemsService {
     return this.getSystems(filters, gridData, this.systemsUrl);
   }
 
-  public getSystems(filters?, gridData?, url?) {
+  public getSystems(filters?, gridData?, url?): Observable<any> {
 
-    let params: URLSearchParams = new URLSearchParams();
-    let filtersArr: string[] = [];
+    const params: HttpParams = new HttpParams();
+    const filtersArr: string[] = [];
 
     if (!isNullOrUndefined(filters)){
       if (filters.searchText){
@@ -177,16 +181,16 @@ export class SystemsService {
       params.set('sort', gridData.sort);
     }
 
-    let urlToUse = url || this.systemsUrl;
+    const urlToUse = url || this.systemsUrl;
 
     return this.http.get(urlToUse, {
-      search: params
-    }).toPromise();
+      params: params
+    });
   }
 
   public getSystemsForAutocomplete(text, ownShortName?, url?): Observable<any> {
-    let params: URLSearchParams = new URLSearchParams();
-    let filtersArr: string[] = [];
+    const params: HttpParams = new HttpParams();
+    const filtersArr: string[] = [];
 
     filtersArr.push(`name,ilike,%${ text }%`);
 
@@ -194,17 +198,17 @@ export class SystemsService {
 
     params.set('size', '10');
 
-    let urlToUse = url || this.systemsUrl;
+    const urlToUse = url || this.systemsUrl;
 
-    return this.http.get(urlToUse, {
-      search: params
+    return this.http.get<any>(urlToUse, {
+      params: params
     }).map(response => {
-      return <any>response.json().content;
+      return <any>response.content;
     });
   }
 
-  public getSystemsObjectFiles(filters?, gridData?){
-    let params: URLSearchParams = new URLSearchParams();
+  public getSystemsObjectFiles(filters?, gridData?): Observable<any> {
+    const params: HttpParams = new HttpParams();
 
     if (!isNullOrUndefined(filters)) {
       params.append('filter', `data:Kommentaar:%${ filters.searchText }%`);
@@ -220,18 +224,18 @@ export class SystemsService {
     }
 
     return this.http.get( this.systemsUrl +  '/files', {
-      search: params
-    }).toPromise();
+      params: params
+    });
   }
 
   public getSystemsDataObjects(filters?, gridData?){
-    let params: URLSearchParams = new URLSearchParams();
+    const params: HttpParams = new HttpParams();
 
     if (!isNullOrUndefined(filters)) {
 
       const possibleFilters = ['searchText', 'searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
 
-      let filterAtrributes = [];
+      const filterAtrributes = [];
       possibleFilters.forEach((possibleFilter) => {
 
       if (filters[possibleFilter]) {
@@ -252,57 +256,54 @@ export class SystemsService {
     }
 
     return this.http.get( this.systemsUrl +  '/data-objects', {
-      search: params
+      params: params
     }).toPromise();
   }
 
-  public getSystem(reference) {
-    return this.http.get(this.systemsUrl +  `/${ reference }`).toPromise();
+  public getSystem(reference): Observable<System> {
+    return this.http.get<System>(this.systemsUrl +  `/${ reference }`);
   }
 
   public addSystem(value) {
-    let system = {
+    const system = {
       details: {
         short_name: value.short_name,
         name: value.name,
         purpose: value.purpose
       }
     };
-    return this.http.post(this.systemsUrl, system).toPromise();
+    return this.http.post<System>(this.systemsUrl, system);
   }
 
-  public postDataFile(file, reference){
+  public postDataFile(file, reference): Observable<String> {
     const formData = new FormData();
     formData.append('file', file);
 
-    const headers = new Headers({});
-    let options = new RequestOptions({ headers });
-
-    return this.http.post(this.systemsUrl + `/${ reference }/files`, formData, options).toPromise();
+    return this.http.post<String>(this.systemsUrl + `/${ reference }/files`, formData);
   }
 
-  public updateSystem(updatedData, reference?) {
-    return this.http.put(this.systemsUrl + `/${ reference || updatedData.details.short_name }`, updatedData).toPromise();
+  public updateSystem(updatedData, reference?): Observable<System> {
+    return this.http.put<System>(this.systemsUrl + `/${ reference || updatedData.details.short_name }`, updatedData);
   }
 
-  public getSystemIssues(reference) {
-    return this.http.get(this.systemsUrl + `/${ reference }/issues?size=1000&sort=-creation_date`).toPromise();
+  public getSystemIssues(reference): Observable<any> {
+    return this.http.get(this.systemsUrl + `/${ reference }/issues?size=1000&sort=-creation_date`);
   }
 
-  public addSystemIssue(reference, issue) {
-    return this.http.post(this.systemsUrl + `/${ reference }/issues`, issue).toPromise();
+  public addSystemIssue(reference, issue): Observable<SystemIssue> {
+    return this.http.post<SystemIssue>(this.systemsUrl + `/${ reference }/issues`, issue);
   }
 
-  public getSystemIssueById(issueId) {
-    return this.http.get(this.issuesUrl + `/${ issueId }`).toPromise();
+  public getSystemIssueById(issueId): Observable<SystemIssue> {
+    return this.http.get<SystemIssue>(this.issuesUrl + `/${ issueId }`);
   }
 
-  public getSystemIssueTimeline(issueId) {
-    return this.http.get(this.issuesUrl + `/${ issueId }/timeline?size=1000`).toPromise();
+  public getSystemIssueTimeline(issueId): Observable<any> {
+    return this.http.get<any>(this.issuesUrl + `/${ issueId }/timeline?size=1000`);
   }
 
   public getActiveDiscussions(sort, relation?) {
-    let params: URLSearchParams = new URLSearchParams();
+    const params: HttpParams = new HttpParams();
     params.append('size', '1000');
     params.append('filter', 'status:OPEN');
     params.append('filter', 'sub_type');
@@ -316,36 +317,36 @@ export class SystemsService {
     }
 
     return this.http.get(urlToUse, {
-      search: params
+      params: params
     }).toPromise();
   }
 
   public getActiveIssuesForOrganization(organizationCode, sort?) {
-    let params: URLSearchParams = new URLSearchParams();
+    const params: HttpParams = new HttpParams();
     params.append('size', '1000');
     params.append('filter', 'status:OPEN');
     params.append('sort', sort ? sort : '-last_comment_creation_date');
 
 
     return this.http.get(`/api/v1/organizations/${ organizationCode }/systems/issues`, {
-      search: params
+      params: params
     }).toPromise();
   }
 
   public getOpenApprovalRequests(sort) {
-    let params: URLSearchParams = new URLSearchParams();
+    const params: HttpParams = new HttpParams();
 
     params.set('filter', 'status,=,OPEN,sub_type,isnotnull,null');
     params.set('size', '1000');
     params.set('sort', sort);
 
     return this.http.get(this.issuesUrl, {
-      search: params
+      params: params
     }).toPromise();
   }
 
   public getOrganizationUsers(gridData) {
-    let params: URLSearchParams = new URLSearchParams();
+    const params: HttpParams = new HttpParams();
 
     if (!isNullOrUndefined(gridData.page)){
       params.set('page', gridData.page);
@@ -367,16 +368,16 @@ export class SystemsService {
     return this.http.post(this.issuesUrl + `/${ issueId }/decisions`, decision).toPromise();
   }
 
-  public getSystemRelations(reference) {
-    return this.http.get(this.systemsUrl + `/${ reference }/relations`).toPromise();
+  public getSystemRelations(reference): Observable<SystemRelation[]> {
+    return this.http.get<SystemRelation[]>(this.systemsUrl + `/${ reference }/relations`);
   }
 
   public addSystemRelation(reference, relation) {
     return this.http.post(this.systemsUrl + `/${ reference }/relations`, relation).toPromise();
   }
 
-  public createStandardRealisationSystem(reference, realisationModel) {
-    return this.http.post(this.systemsUrl + `/${ reference }/create-standard-realisation-system`, realisationModel).toPromise();
+  public createStandardRealisationSystem(reference, realisationModel): Observable<System> {
+    return this.http.post<System>(this.systemsUrl + `/${ reference }/create-standard-realisation-system`, realisationModel);
   }
 
   public deleteSystemRelation(reference, relationId) {
@@ -390,7 +391,7 @@ export class SystemsService {
     }).toPromise();
   }
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private environmentService: EnvironmentService) { }
 
 }

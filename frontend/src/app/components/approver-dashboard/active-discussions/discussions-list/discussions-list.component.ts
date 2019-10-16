@@ -31,7 +31,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
 
   private getActiveDiscussions(){
     this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).then( res => {
-      this.gridData.updateData(res.json());
+      this.gridData.updateData(res);
       this.loaded = true;
     }, err => {
       this.loaded = true;

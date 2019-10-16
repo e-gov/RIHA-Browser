@@ -26,9 +26,9 @@ export class ApproverIssueDetailsComponent implements OnInit {
   deadlinePassed: boolean;
 
   refreshReplies(){
-    this.systemService.getSystemIssueTimeline(this.feedback.id).then(
-      res => {
-        this.replies = res.json().content;
+    this.systemService.getSystemIssueTimeline(this.feedback.id).subscribe(
+      replies => {
+        this.replies = replies.content;
       });
   }
 

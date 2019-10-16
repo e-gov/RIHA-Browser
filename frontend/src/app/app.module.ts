@@ -1,7 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {Http, HttpModule} from '@angular/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +11,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {CustomFormsModule} from 'ng2-validation';
 import {HttpInterceptorModule} from 'ng-http-interceptor';
 import {UiSwitchModule} from 'ngx-ui-switch/src';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -81,7 +81,7 @@ import {LoginLinkComponent} from './components/login-link-component/login-link-c
 import {ProducerSearchFilterComponent} from './components/producer-search-filter/producer-search-filter-component';
 import {ProducerOrganizationComponent} from './components/producer-organization/producer-organization.component';
 
-export function HttpLoaderFactory(http: Http) {
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -180,7 +180,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     TagInputModule,
     BrowserAnimationsModule,
     CustomFormsModule,
@@ -193,7 +193,7 @@ const routes: Routes = [
       loader: {
         provide: TranslateLoader,
         useFactory: (HttpLoaderFactory),
-        deps: [Http]
+        deps: [HttpClient]
       }
     }),
     NgbModule.forRoot()

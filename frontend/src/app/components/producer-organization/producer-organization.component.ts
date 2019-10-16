@@ -54,7 +54,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
       this.gridData.page = page || 0;
 
       this.systemsService.getOrganizationUsers(this.gridData).then(res => {
-          this.gridData.updateData(res.json());
+          this.gridData.updateData(res);
           if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
             this.getUsers();
           } else {

@@ -17,10 +17,10 @@ export class ProducerEditComponent implements OnInit {
   public notFound: boolean;
 
   getSystem(reference){
-    this.systemsService.getSystem(reference).then(response => {
-      let s = new System(response.json());
-      this.generalHelperService.setRihaPageTitle(s.details.name);
-      this.system = new System(this.systemsService.prepareSystemForDisplay(s));
+    this.systemsService.getSystem(reference).subscribe(responseSystem => {
+      const system = new System(responseSystem);
+      this.generalHelperService.setRihaPageTitle(system.details.name);
+      this.system = new System(this.systemsService.prepareSystemForDisplay(system));
       this.loaded = true;
     }, err => {
       let status = err.status;
