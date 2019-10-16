@@ -34,7 +34,7 @@ export class SystemsForApprovalListComponent implements OnInit {
     this.systemsService.getOpenApprovalRequests(this.gridData.sort).then( res => {
       this.approvalReqestsForDisplay = [];
       this.loaded = true;
-      this.gridData.updateData(res.json());
+      this.gridData.updateData(res);
       this.gridData.content.forEach(ar => {
         if (ar.events == null){
           this.approvalReqestsForDisplay.push(ar);

@@ -82,9 +82,9 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     let q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Kirjelda', q);
 
-    this.systemsService.getOwnSystems(params, this.gridData).then(
-      res => {
-        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+    this.systemsService.getOwnSystems(params, this.gridData).subscribe(
+      items => {
+        this.gridData.updateData(items, (content) => _.map(content, (contentElement) => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getOwnSystems();
         } else {

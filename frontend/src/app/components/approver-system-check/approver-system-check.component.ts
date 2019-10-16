@@ -35,8 +35,8 @@ export class ApproverSystemCheckComponent implements OnInit {
       contactsStatus: statusPending
     };
 
-    this.systemsService.getSystem(this.system.details.uuid).then(res => {
-      this.system = new System(res.json());
+    this.systemsService.getSystem(this.system.details.uuid).subscribe(responseSystem => {
+      this.system = new System(responseSystem);
       this.checkSystemStatus();
     }, err => {
       this.helper.showError();

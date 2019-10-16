@@ -98,8 +98,8 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   }
 
   getSystem(reference){
-    this.systemsService.getSystem(reference).then(response => {
-      this.system = new System(response.json());
+    this.systemsService.getSystem(reference).subscribe(responseSystem => {
+      this.system = new System(responseSystem);
       this.generalHelperService.setRihaPageTitle(this.system.details.name);
       this.loaded = true;
       setTimeout(()=>{this.generalHelperService.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);

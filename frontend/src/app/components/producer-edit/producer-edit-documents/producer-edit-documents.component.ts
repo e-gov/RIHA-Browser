@@ -45,10 +45,10 @@ export class ProducerEditDocumentsComponent implements OnInit {
     if (addForm.valid && this.docFile) {
       this.uploading = true;
 
-      this.systemsService.postDataFile(this.docFile, this.system.details.short_name).then(res => {
+      this.systemsService.postDataFile(this.docFile, this.system.details.short_name).subscribe(fileUrl => {
         this.uploading = false;
         this.documents.push({
-          url: 'file://' + res.text(),
+          url: 'file://' + fileUrl,
           name: this.docFile.name,
           type: this.data.type
         });
@@ -94,11 +94,11 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   saveSystem(editForm){
     if (editForm.valid){
-      this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-        let s = new System(res.json());
-        s.details.documents = this.prepareForSaving(this.documents);
-        this.systemsService.updateSystem(s).then(response => {
-          this.modalService.closeActiveModal({system: new System(response.json())});
+      this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
+        const system = new System(responseSystem);
+        system.details.documents = this.prepareForSaving(this.documents);
+        this.systemsService.updateSystem(system).subscribe(updatedSystem => {
+          this.modalService.closeActiveModal({system: new System(updatedSystem)});
         }, err => {
           this.toastrService.error('Serveri viga.');
         });
