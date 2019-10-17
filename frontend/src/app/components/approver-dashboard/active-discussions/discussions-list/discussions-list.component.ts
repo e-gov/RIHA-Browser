@@ -30,7 +30,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   }
 
   private getActiveDiscussions(){
-    this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).then( res => {
+    this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).subscribe( res => {
       this.gridData.updateData(res);
       this.loaded = true;
     }, err => {
@@ -44,7 +44,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
               private differs: KeyValueDiffers,
               private environmentService: EnvironmentService,
               private toastrService: ToastrService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
   }
 
   ngOnInit() {

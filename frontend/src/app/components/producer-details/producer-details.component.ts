@@ -124,7 +124,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
               private route: ActivatedRoute,
               private router: Router,
               private toastrService: ToastrService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 

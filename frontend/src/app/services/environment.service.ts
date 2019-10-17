@@ -5,7 +5,6 @@ import {User} from '../models/user';
 import {UserMatrix} from '../models/user-matrix';
 import {environment} from '../../environments/environment';
 import {Observable} from "rxjs";
-import {System} from "../models/system";
 
 declare const ga: Function;
 export let classifiers: any;
@@ -107,20 +106,15 @@ export class EnvironmentService {
   }
 
   public onAppStart(): Promise<any> {
-    const observable = this.loadEnvironmentData().toPromise();
-    observable.then(env => {
+    return this.loadEnvironmentData().toPromise().then(env => {
       this.runTrackingScripts(this.globalEnvironment);
     });
-    return observable;
   }
 
   public loadClassifiers(): Promise<any> {
-    const promise = this.http.get(this.classifiersUrl).toPromise();
-    promise.then(response => {
+    return this.http.get(this.classifiersUrl).toPromise().then(response => {
       classifiers = Object.freeze(response);
     });
-
-    return promise;
   }
 
   public loadEnvironmentData(): Observable<Environment> {

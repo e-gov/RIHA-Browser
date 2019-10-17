@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 import {NoOrganizationModalComponent} from '../no-organization-modal/no-organization-modal.component';
-import 'rxjs/add/operator/toPromise';
 import {EnvironmentService} from '../../services/environment.service';
 import {ModalHelperService} from '../../services/modal-helper.service';
 import {Router} from '@angular/router';

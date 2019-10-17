@@ -2,10 +2,6 @@ import {Component, Input} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {System} from '../../../models/system';
 import {ModalHelperService} from '../../../services/modal-helper.service';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import {Router} from '@angular/router';
 
 @Component({
