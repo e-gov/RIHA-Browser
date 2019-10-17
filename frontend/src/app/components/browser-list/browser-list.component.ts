@@ -9,6 +9,10 @@ import {classifiers} from "../../services/environment.service";
 import {System} from '../../models/system';
 import _ from 'lodash';
 import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
+import {of} from "rxjs";
+import {delay, tap} from "rxjs/operators";
+
+
 
 @Component({
   selector: 'app-browser-list',
@@ -19,7 +23,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
 
   gridData: GridData = new GridData();
 
-  @ViewChild(ProducerSearchFilterComponent)
+  @ViewChild(ProducerSearchFilterComponent, { static: false })
   filterPanel: ProducerSearchFilterComponent;
 
   searchText: string;
@@ -74,7 +78,8 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
     this.systemsService.getSystems(params, this.gridData).subscribe(
       items => {
 
-        this.gridData.updateData(items, (content) => _.map(content, (contentElement) => new System(contentElement)));
+        this.gridData.updateData(items, (content) => content.map((contentElement) => new System(contentElement)));
+
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getSystems();
         } else {
@@ -141,8 +146,13 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-    if (this.hasActiveFilters()){
-      // this.extendedSearch = true;
+    if (this.hasActiveFilters()) {
+      of(null).pipe(
+        delay(0),
+        tap(() => {
+          this.extendedSearch = true;
+        })
+      ).subscribe();
     }
 
     this.getSystems(this.gridData.page);

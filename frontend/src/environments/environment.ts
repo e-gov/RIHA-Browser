@@ -6,11 +6,11 @@
 export const environment = {
   production: false,
   api: {
-    environmentUrl: '/api/v1/environment',
-    userInfoUrl: '/api/v1/user',
-    classifiersUrl: '/api/v1/environment/classifiers',
-    systemsUrl: '/api/v1/systems',
-    issuesUrl: '/api/v1/issues',
-    myOrganizationUrl: '/my/organization/users'
+    environmentUrl: 'http://localhost:8082/api/v1/environment',
+    userInfoUrl: 'http://localhost:8082/api/v1/user',
+    classifiersUrl: 'http://localhost:8082/api/v1/environment/classifiers',
+    systemsUrl: 'http://localhost:8082/api/v1/systems',
+    issuesUrl: 'http://localhost:8082/api/v1/issues',
+    myOrganizationUrl: 'http://localhost:8082/api/v1/my/organization/users'
   }
 };

@@ -50,7 +50,7 @@ export class ProducerAddComponent implements OnInit, DoCheck {
               private generalHelperService: GeneralHelperService,
               private differs: KeyValueDiffers,
               private modalService: ModalHelperService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 

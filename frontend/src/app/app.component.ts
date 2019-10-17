@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { EnvironmentService } from './services/environment.service';
-import { HttpInterceptorService } from 'ng-http-interceptor';
 import { SessionHelperService } from './services/session-helper.service';
 
 declare let ga: Function;
@@ -17,8 +16,7 @@ export class AppComponent {
   constructor(private translate: TranslateService,
               private environmentService: EnvironmentService,
               private router: Router,
-              private sessionHelper: SessionHelperService,
-              private httpInterceptor: HttpInterceptorService) {
+              private sessionHelper: SessionHelperService) {
     translate.addLangs(['en', 'et']);
     let currentLang = translate.getBrowserLang() || 'et';
     if (translate.getLangs().indexOf(currentLang) === -1) {
@@ -46,10 +44,5 @@ export class AppComponent {
     });
 
     sessionHelper.refreshSessionTimer();
-    this.httpInterceptor.request().addInterceptor((data, method) => {
-      sessionHelper.refreshSessionTimer();
-      return data;
-    });
-
   }
 }

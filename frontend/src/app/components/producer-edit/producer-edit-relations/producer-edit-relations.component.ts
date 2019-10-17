@@ -6,10 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { GeneralHelperService } from '../../../services/general-helper.service';
 import { ModalHelperService } from '../../../services/modal-helper.service';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import {Observable} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-producer-edit-relations',
@@ -35,19 +33,21 @@ export class ProducerEditRelationsComponent implements OnInit {
   inputFormatter = (v)=> v.details.short_name;
 
 
-  search = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .switchMap(term => term.length < 2 ? []
-        : this.systemsService.getSystemsForAutocomplete(term, this.system.details.short_name));
+  search = (text$: Observable<string>) => {
+    return text$
+      .pipe(debounceTime(800),
+        distinctUntilChanged(),
+        map(term => term.length < 2 ? []
+        : this.systemsService.getSystemsForAutocomplete(term, this.system.details.short_name))
+    );
+  };
 
 
   addRelation(addForm){
     if (addForm.valid){
       let infoSystemShortName = typeof this.relation.infoSystem === 'string' ? this.relation.infoSystem : this.relation.infoSystem.details.short_name;
       this.systemsService.addSystemRelation(this.system.details.short_name, {infoSystemShortName: infoSystemShortName,
-                                                                                     type: this.relation.type}).then(res => {
+                                                                                     type: this.relation.type}).subscribe(res => {
         this.refreshRelations();
         addForm.reset();
         addForm.controls.type.setValue(this.classifiers.relation_type.SUB_SYSTEM.code);
@@ -58,7 +58,7 @@ export class ProducerEditRelationsComponent implements OnInit {
   };
 
   deleteRelation(id){
-    this.systemsService.deleteSystemRelation(this.system.details.short_name, id).then(res => {
+    this.systemsService.deleteSystemRelation(this.system.details.short_name, id).subscribe(res => {
       this.refreshRelations();
     }, err => {
       this.toastrService.error('Serveri viga');

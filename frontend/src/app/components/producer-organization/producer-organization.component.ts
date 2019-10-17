@@ -53,7 +53,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
       this.location.replaceState('/Minu/Organisatsioon', q);
       this.gridData.page = page || 0;
 
-      this.systemsService.getOrganizationUsers(this.gridData).then(res => {
+      this.systemsService.getOrganizationUsers(this.gridData).subscribe(res => {
           this.gridData.updateData(res);
           if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
             this.getUsers();
@@ -80,7 +80,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
               private route: ActivatedRoute,
               private location: Location,
               private differs: KeyValueDiffers) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
