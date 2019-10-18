@@ -15,6 +15,7 @@
 
 	<properties>
 		<yarn-args>${yarn.args}</yarn-args>
+    <sonar.sources>src</sonar.sources>
 	</properties>
 
 	<build>
