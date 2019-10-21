@@ -63,8 +63,8 @@ export class BrowserFilesListComponent implements OnInit {
       let q = this.helper.generateQueryString(params);
       this.location.replaceState('/Andmeobjektid', q);
 
-      this.systemsService.getSystemsDataObjects(this.filters, this.gridData).then(res =>{
-        this.gridData.updateData(res.json());
+      this.systemsService.getSystemsDataObjects(this.filters, this.gridData).subscribe(res =>{
+        this.gridData.updateData(res);
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getDataObjectFiles();
         }

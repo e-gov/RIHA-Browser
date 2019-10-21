@@ -31,10 +31,10 @@ export class SystemsForApprovalListComponent implements OnInit {
   }
 
   private getOpenApprovalRequestsWithoutDecisions(){
-    this.systemsService.getOpenApprovalRequests(this.gridData.sort).then( res => {
+    this.systemsService.getOpenApprovalRequests(this.gridData.sort).subscribe( res => {
       this.approvalReqestsForDisplay = [];
       this.loaded = true;
-      this.gridData.updateData(res.json());
+      this.gridData.updateData(res);
       this.gridData.content.forEach(ar => {
         if (ar.events == null){
           this.approvalReqestsForDisplay.push(ar);
@@ -66,7 +66,7 @@ export class SystemsForApprovalListComponent implements OnInit {
               private environmentService: EnvironmentService,
               private differs: KeyValueDiffers,
               private toastrService: ToastrService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
   }
 
   ngOnInit() {

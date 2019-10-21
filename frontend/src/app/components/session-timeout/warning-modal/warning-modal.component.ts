@@ -33,9 +33,9 @@ export class WarningModalComponent implements OnInit, OnDestroy {
   }
 
   forceLogout(){
-    this.environmentService.doLogout().then(
+    this.environmentService.doLogout().subscribe(
       res => {
-        this.environmentService.loadEnvironmentData().then(env => {
+        this.environmentService.loadEnvironmentData().subscribe(env => {
           this.modalService.open(InfoModalComponent);
           this.router.navigate(['/']);
         });
@@ -48,9 +48,9 @@ export class WarningModalComponent implements OnInit, OnDestroy {
   }
 
   doLogout(){
-    this.environmentService.doLogout().then(
+    this.environmentService.doLogout().subscribe(
       res => {
-        this.environmentService.loadEnvironmentData().then(env => {
+        this.environmentService.loadEnvironmentData().subscribe(env => {
           this.modalService.dismissAllModals();
           this.router.navigate(['/']);
         });
@@ -61,8 +61,8 @@ export class WarningModalComponent implements OnInit, OnDestroy {
   };
 
   refreshSession(){
-    this.environmentService.loadEnvironmentData().then(
-      res => {
+    this.environmentService.loadEnvironmentData().subscribe(
+      env => {
         this.modalService.closeActiveModal();
       }, err => {
         this.toastrService.error('Serveri viga.');

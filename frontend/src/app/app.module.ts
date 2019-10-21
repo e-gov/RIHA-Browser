@@ -1,17 +1,16 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {Http, HttpModule} from '@angular/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {RouterModule, Routes} from '@angular/router';
-import {TagInputModule} from 'ng2-tag-input';
+import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {CustomFormsModule} from 'ng2-validation';
-import {HttpInterceptorModule} from 'ng-http-interceptor';
-import {UiSwitchModule} from 'ngx-ui-switch/src';
+import {UiSwitchModule} from 'ngx-ui-switch';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -80,8 +79,9 @@ import {ProducerEditStandardRealisationsComponent} from './components/producer-e
 import {LoginLinkComponent} from './components/login-link-component/login-link-component';
 import {ProducerSearchFilterComponent} from './components/producer-search-filter/producer-search-filter-component';
 import {ProducerOrganizationComponent} from './components/producer-organization/producer-organization.component';
+import {httpInterceptorProviders} from "./http-interceptors";
 
-export function HttpLoaderFactory(http: Http) {
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -180,12 +180,11 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     TagInputModule,
     BrowserAnimationsModule,
     CustomFormsModule,
     RouterModule.forRoot(routes),
-    HttpInterceptorModule,
     UiSwitchModule ,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
@@ -193,10 +192,10 @@ const routes: Routes = [
       loader: {
         provide: TranslateLoader,
         useFactory: (HttpLoaderFactory),
-        deps: [Http]
+        deps: [HttpClient]
       }
     }),
-    NgbModule.forRoot()
+    NgbModule
   ],
   entryComponents: [
     ProducerEditObjectsComponent,
@@ -224,7 +223,8 @@ const routes: Routes = [
     SessionHelperService,
     ModalHelperService,
     { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true },
-    { provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true }
+    { provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true },
+    httpInterceptorProviders,
     ]
 })
 

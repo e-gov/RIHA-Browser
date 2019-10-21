@@ -38,8 +38,8 @@ export class ProducerDetailsSecurityComponent implements OnInit {
   }
 
   openSecurityEdit(content) {
-    this.systemsService.getSystem(this.system.details.short_name).then( res => {
-      let system = new System(res.json());
+    this.systemsService.getSystem(this.system.details.short_name).subscribe( responseSystem => {
+      const system = new System(responseSystem);
       this.onSystemChanged.emit(system);
       const modalRef = this.modalService.open(ProducerEditSecurityComponent ,{
         backdrop: 'static',
