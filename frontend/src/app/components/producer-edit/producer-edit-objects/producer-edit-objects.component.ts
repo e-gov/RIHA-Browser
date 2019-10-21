@@ -45,10 +45,10 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.dataFile = event.target.files[0];
     this.uploading = true;
 
-    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).then(res =>{
+    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).subscribe(fileUrl => {
       this.uploading = false;
       this.data_files.push({
-        url: 'file://' + res.text(),
+        url: 'file://' + fileUrl,
         name: this.dataFile.name
       });
       this.dataFile = null;
@@ -75,13 +75,13 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.isChanged = true;
   }
 
-  saveSystem(){
-    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-      let s = new System(res.json());
-      s.details.stored_data = this.stored_data;
-      s.details.data_files = this.data_files;
-      this.systemsService.updateSystem(s).then(response => {
-        this.modalService.closeActiveModal({system: new System(response.json())});
+  saveSystem() {
+    this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
+      const system = new System(responseSystem);
+      system.details.stored_data = this.stored_data;
+      system.details.data_files = this.data_files;
+      this.systemsService.updateSystem(system).subscribe(updatedSystem => {
+        this.modalService.closeActiveModal({system: new System(updatedSystem)});
       }, err => {
         this.toastrService.error('Serveri viga.');
       });

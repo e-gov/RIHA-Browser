@@ -22,14 +22,14 @@ export class ProducerAddComponent implements OnInit, DoCheck {
   onSubmit(f) :void {
     this.alertConf = null;
     if (f.valid){
-      this.systemsService.addSystem(f.value).then(
-        res => {
-          this.router.navigate(['/Kirjelda/Vaata', res.json().details.short_name]);
+      this.systemsService.addSystem(f.value).subscribe(
+        responseSystem => {
+          this.router.navigate(['/Kirjelda/Vaata', responseSystem.details.short_name]);
         }, err => {
           this.alertConf = {
             type: 'danger',
             heading: 'Viga',
-            text: this.systemsService.getAlertText(err.json())
+            text: this.systemsService.getAlertText(err)
           };
           clearTimeout(this.timeoutId);
           this.timeoutId = setTimeout(()=>{
@@ -50,7 +50,7 @@ export class ProducerAddComponent implements OnInit, DoCheck {
               private generalHelperService: GeneralHelperService,
               private differs: KeyValueDiffers,
               private modalService: ModalHelperService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 

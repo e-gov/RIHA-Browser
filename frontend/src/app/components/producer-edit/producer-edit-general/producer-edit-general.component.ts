@@ -22,8 +22,8 @@ export class ProducerEditGeneralComponent implements OnInit {
   onSubmit(f) :void {
     this.alertConf = null;
     if (f.valid) {
-      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system), this.reference).then(response => {
-        this.router.navigate(['/Kirjelda/Vaata/', response.json().details.short_name]);
+      this.systemsService.updateSystem(this.systemsService.prepareSystemForSending(this.system), this.reference).subscribe(responseSystem => {
+        this.router.navigate(['/Kirjelda/Vaata/', responseSystem.details.short_name]);
       }, err => {
         this.system = this.systemsService.prepareSystemForDisplay(this.system);
         //show error on server     this.winRef.nativeWindow.scrollTo(0,0);
@@ -31,7 +31,7 @@ export class ProducerEditGeneralComponent implements OnInit {
         this.alertConf = {
           type: 'danger',
           heading: 'Viga',
-          text: this.systemsService.getAlertText(err.json())
+          text: this.systemsService.getAlertText(err)
         };
         clearTimeout(this.timeoutId);
         this.timeoutId = setTimeout(()=>{

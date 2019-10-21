@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 import {NoOrganizationModalComponent} from '../no-organization-modal/no-organization-modal.component';
-import 'rxjs/add/operator/toPromise';
 import {EnvironmentService} from '../../services/environment.service';
 import {ModalHelperService} from '../../services/modal-helper.service';
 import {Router} from '@angular/router';
@@ -19,8 +18,8 @@ export class LoginFormComponent implements OnInit {
   alertConf: any = null;
 
   login(){
-    this.environmentService.doLogin().then(res => {
-      this.environmentService.loadEnvironmentData().then(res => {
+    this.environmentService.doLogin().subscribe(res => {
+      this.environmentService.loadEnvironmentData().subscribe(env => {
         this.sessionHelper.refreshSessionTimer();
         let prevLocation = this.router.routerState.snapshot.root.queryParams.fromUrl;
         if (prevLocation){
@@ -38,9 +37,9 @@ export class LoginFormComponent implements OnInit {
         if (organizations.length > 1){
           this.modalService.open(ActiveOrganizationChooserComponent);
         } else if (organizations.length == 1){
-          this.environmentService.setActiveOrganization(organizations[0].code).then(
-            res => {
-              this.environmentService.globalEnvironment = new Environment(res.json())
+          this.environmentService.setActiveOrganization(organizations[0].code).subscribe(
+            environment => {
+              this.environmentService.globalEnvironment = new Environment(environment);
             }, err => {}
           );
         } else if (organizations.length == 0) {

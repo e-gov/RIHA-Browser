@@ -12,6 +12,8 @@ import {Location} from '@angular/common';
 import {System} from '../../models/system';
 import _ from 'lodash';
 import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
+import {of} from "rxjs";
+import {delay, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-producer-list',
@@ -30,7 +32,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   extendedSearch: boolean = false;
 
 
-  @ViewChild(ProducerSearchFilterComponent)
+  @ViewChild(ProducerSearchFilterComponent, { static: false })
   filterPanel: ProducerSearchFilterComponent;
 
   onPageChange(newPage): void{
@@ -82,9 +84,9 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     let q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Kirjelda', q);
 
-    this.systemsService.getOwnSystems(params, this.gridData).then(
-      res => {
-        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+    this.systemsService.getOwnSystems(params, this.gridData).subscribe(
+      items => {
+        this.gridData.updateData(items, (content) => _.map(content, (contentElement) => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getOwnSystems();
         } else {
@@ -144,7 +146,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
               private differs: KeyValueDiffers,
               public  generalHelperService: GeneralHelperService,
               private modalService: ModalHelperService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -160,8 +162,13 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngAfterViewInit() {
 
-    if (this.hasActiveFilters()){
-      this.extendedSearch = true;
+    if (this.hasActiveFilters()) {
+      of(null).pipe(
+        delay(0),
+        tap(() => {
+          this.extendedSearch = true;
+        })
+      ).subscribe();
     }
 
     this.getOwnSystems(this.gridData.page);

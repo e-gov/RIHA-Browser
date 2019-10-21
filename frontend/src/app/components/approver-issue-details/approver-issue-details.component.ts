@@ -26,9 +26,9 @@ export class ApproverIssueDetailsComponent implements OnInit {
   deadlinePassed: boolean;
 
   refreshReplies(){
-    this.systemService.getSystemIssueTimeline(this.feedback.id).then(
-      res => {
-        this.replies = res.json().content;
+    this.systemService.getSystemIssueTimeline(this.feedback.id).subscribe(
+      replies => {
+        this.replies = replies.content;
       });
   }
 
@@ -39,7 +39,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   }
 
   markResolved(resolutionType?){
-    this.systemService.closeSystemIssue(this.feedback.id, resolutionType).then(
+    this.systemService.closeSystemIssue(this.feedback.id, resolutionType).subscribe(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
@@ -59,7 +59,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
     if (f.valid && this.commentText){
       this.systemService.postSystemIssueComment(this.feedback.id, {
         comment: this.commentText
-      }).then(
+      }).subscribe(
         res => {
           this.resetValues(f);
           this.refreshReplies();
@@ -78,7 +78,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       this.systemService.postSystemIssueDecision(this.feedback.id, {
         comment: this.commentText,
         decisionType: this.decisionType
-      }).then(
+      }).subscribe(
         res => {
           this.resetValues(f);
           this.refreshReplies();

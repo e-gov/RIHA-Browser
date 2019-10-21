@@ -47,8 +47,8 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   logout(){
-    this.environmentService.doLogout().then(res => {
-      this.environmentService.loadEnvironmentData().then(env => {
+    this.environmentService.doLogout().subscribe(res => {
+      this.environmentService.loadEnvironmentData().subscribe(env => {
         this.sessionHelperService.refreshSessionTimer();
         this.router.navigate(['/']);
       });
