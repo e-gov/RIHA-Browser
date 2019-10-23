@@ -1,5 +1,5 @@
 /* Datatables */
-@import "../../bower_components/datatables-responsive/css/responsive.dataTables.scss";
+//@import "../../bower_components/datatables-responsive/css/responsive.dataTables.scss";
 .dt-bootstrap4 {
     flex-direction: column;
     align-items: stretch;
@@ -39,7 +39,7 @@ table.dataTable {
                 font: normal normal normal 14px/1 FontAwesome;
                 font-size: 14px;
                 line-height: 20px;
-                
+
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
                 bottom: 0px!important;
@@ -121,7 +121,7 @@ table.dataTable {
         display: inline-block;
         font: normal normal normal 14px/1 FontAwesome;
         font-size: inherit;
-        
+
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background: transparent;
@@ -176,7 +176,7 @@ table.dataTable {
                     content: "\f0d7";
                     display: inline-block;
                     font: normal normal normal 14px/1 FontAwesome;
-                    
+
                     -webkit-font-smoothing: antialiased;
                     -moz-osx-font-smoothing: grayscale;
                     font-size: 14px;
@@ -242,7 +242,7 @@ table.dataTable {
                     display: inline-block;
                     font: normal normal normal 14px/1 FontAwesome;
                     font-size: 14px;
-                    
+
                     -webkit-font-smoothing: antialiased;
                     -moz-osx-font-smoothing: grayscale;
                     line-height: 28px;
@@ -474,7 +474,7 @@ table.dataTable {
         display: inline-block;
         font: normal normal normal 14px/1 FontAwesome;
         font-size: inherit;
-        
+
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         font-size: 14px;
@@ -566,7 +566,7 @@ table.dataTable {
                 display: inline-block;
                 font: normal normal normal 14px/1 FontAwesome;
                 font-size: inherit;
-                
+
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
                 display: block;

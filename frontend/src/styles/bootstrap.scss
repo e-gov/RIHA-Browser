@@ -36,9 +36,9 @@ $card-border-width: 0px !default;
 $card-border-radius: 0px !default;
 $card-spacer-x: 40px !default;
 /* Forms */
-$input-padding-x: 9px !default;
+$input-padding-x: 0.563rem !default;
 $input-padding-y: 8px !default;
-$input-line-height: 20px !default;
+$input-line-height: 1.25;
 $input-btn-border-width: 2px !default;
 $input-height: 40px !default;
 $input-color-placeholder: $frm-placeholder !default;
@@ -63,10 +63,10 @@ $popover-arrow-width: 10px !default;
 $popover-arrow-color: $popover-bg !default;
 $popover-arrow-outer-width: $popover-arrow-width !default;
 /* Custom control */
-$custom-control-gutter: 25px !default;
+$custom-control-gutter: 1.563rem !default;
 $custom-control-spacer-x: 11px !default;
 $custom-control-spacer-y: 10px !default;
-$custom-control-indicator-size: 16px !default;
+$custom-control-indicator-size: 1rem !default;
 $custom-control-indicator-margin-y: 20px !default;
 $custom-control-indicator-bg: $white !default;
 $custom-control-indicator-bg-size: 50% 50% !default;
@@ -99,4 +99,5 @@ $text-muted: $frm-placeholder !default;
 $font-family-sans-serif: "Roboto",
 sans-serif;
 /* Import bootstrap */
-@import "../../bower_components/bootstrap/scss/bootstrap.scss";
+//@import "../../bower_components/bootstrap/scss/bootstrap.scss";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
