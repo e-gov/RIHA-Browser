@@ -38,7 +38,7 @@ export class SortButtonComponent implements OnInit {
   constructor() {
 
     if (!this.cssClass) {
-      this.cssClass = "btn btn-primary btn-sm";
+      this.cssClass = "btn btn-primary btn-sm text-nowrap";
     }
 
   }
