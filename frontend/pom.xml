@@ -47,16 +47,6 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>install-bower</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>run bower</arguments>
-						</configuration>
-					</execution>
-					<execution>
 						<id>upgrade-frontend-packages</id>
 						<!--
                          You can create configuration, but advice to run the command from real console:
