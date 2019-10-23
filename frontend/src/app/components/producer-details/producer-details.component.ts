@@ -8,8 +8,6 @@ import {ToastrService} from 'ngx-toastr';
 import {UserMatrix} from '../../models/user-matrix';
 import {GeneralHelperService} from '../../services/general-helper.service';
 
-declare var $: any;
-
 @Component({
   selector: 'app-producer-details',
   templateUrl: './producer-details.component.html',

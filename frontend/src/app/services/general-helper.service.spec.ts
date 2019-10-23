@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { GeneralHelperServiceService } from './general-helper.service';
+import { GeneralHelperService } from './general-helper.service';
 
-describe('GeneralHelperServiceService', () => {
+describe('GeneralHelperService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GeneralHelperServiceService]
+      providers: [GeneralHelperService]
     });
   });
 
-  it('should be created', inject([GeneralHelperServiceService], (service: GeneralHelperServiceService) => {
+  it('should be created', inject([GeneralHelperService], (service: GeneralHelperService) => {
     expect(service).toBeTruthy();
   }));
 });
