@@ -26,7 +26,7 @@ export class SystemsForApprovalListComponent implements OnInit {
   }
 
   public isOverdue(date){
-    let momentDate = moment(date);
+    const momentDate = moment(date);
     return moment().diff(momentDate, 'days') > 0;
   }
 
@@ -40,10 +40,10 @@ export class SystemsForApprovalListComponent implements OnInit {
           this.approvalReqestsForDisplay.push(ar);
         } else if (ar.events){
           let hasDecision = false;
-          let eventsCount = ar.events.length;
+          const eventsCount = ar.events.length;
           for (let i = 0; i < eventsCount; i++){
-            let event = ar.events[i];
-            let activeOrganization = this.environmentService.getActiveUser().getActiveOrganization();
+            const event = ar.events[i];
+            const activeOrganization = this.environmentService.getActiveUser().getActiveOrganization();
             if (event.type == this.classifiers.event_type.DECISION.code && activeOrganization && activeOrganization.code == event.organizationCode){
               hasDecision = true;
               break;
@@ -75,7 +75,7 @@ export class SystemsForApprovalListComponent implements OnInit {
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.environmentService.getUserMatrix().isOrganizationSelected)){
       this.loaded = false;
       this.getOpenApprovalRequestsWithoutDecisions();

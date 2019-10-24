@@ -9,7 +9,7 @@ package ee.ria.riha.service;
 public class CodedBrowserException extends BrowserException {
 
     private final String code;
-    private final Object[] args;
+    private final transient Object[] args;
 
     public CodedBrowserException(String code) {
         super(code);

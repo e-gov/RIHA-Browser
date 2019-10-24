@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class JsonValidationException extends BrowserException {
 
-    private final ProcessingReport processingReport;
+    private final transient ProcessingReport processingReport;
 
-    public JsonValidationException(ProcessingReport processingReport) {
+    JsonValidationException(ProcessingReport processingReport) {
         this.processingReport = processingReport;
     }
 

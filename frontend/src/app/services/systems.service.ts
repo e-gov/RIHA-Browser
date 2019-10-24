@@ -303,7 +303,7 @@ export class SystemsService {
   }
 
   public getActiveDiscussions(sort, relation?): Observable<any> {
-    let params: HttpParams = new HttpParams();
+    const params: HttpParams = new HttpParams();
     params.append('size', '1000');
     params.append('filter', 'status:OPEN');
     params.append('filter', 'sub_type');
@@ -322,7 +322,7 @@ export class SystemsService {
   }
 
   public getActiveIssuesForOrganization(organizationCode, sort?): Observable<any> {
-    let params: HttpParams = new HttpParams();
+    const params: HttpParams = new HttpParams();
     params.append('size', '1000');
     params.append('filter', 'status:OPEN');
     params.append('sort', sort ? sort : '-last_comment_creation_date');

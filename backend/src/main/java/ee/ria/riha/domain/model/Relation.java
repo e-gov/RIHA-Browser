@@ -16,7 +16,6 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class Relation {
-
     private Long id;
     private Date creationDate;
     private Date modifiedDate;
@@ -32,9 +31,6 @@ public class Relation {
     private RelationType type;
 
     private boolean reversed;
-
-    public Relation() {
-    }
 
     public Relation reverse() {
         return Relation.builder()

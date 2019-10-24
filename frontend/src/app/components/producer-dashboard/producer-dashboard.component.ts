@@ -49,7 +49,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    let changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnOpenIssues();

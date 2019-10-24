@@ -1,6 +1,5 @@
 package ee.ria.riha.conf;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -15,12 +14,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @Profile("dev")
 public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
-
-	@Autowired
-	DeveloperAuthenticationManager authenticationManager;
-
 	@Bean
-	protected UsernamePasswordAuthenticationFilter authenticationFilter() {
+	protected UsernamePasswordAuthenticationFilter authenticationFilter(DeveloperAuthenticationManager authenticationManager) {
 		UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
 		authenticationFilter.setAuthenticationManager(authenticationManager);
 		authenticationFilter.setAuthenticationSuccessHandler(successHandler());

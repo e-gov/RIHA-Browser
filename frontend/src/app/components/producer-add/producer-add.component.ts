@@ -40,7 +40,6 @@ export class ProducerAddComponent implements OnInit, DoCheck {
   }
 
   openOrganizationsModal() {
-    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
     return false;
   }
 
@@ -59,8 +58,7 @@ export class ProducerAddComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
-    if (changes){
+    if (this.differ.diff(this.environmentService.globalEnvironment)){
       this.userMatrix = this.environmentService.getUserMatrix();
     }
   }

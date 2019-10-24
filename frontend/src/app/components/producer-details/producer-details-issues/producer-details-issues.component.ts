@@ -69,7 +69,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
       modalRef.componentInstance.system = this.system;
       modalRef.result.then(res => {
         this.refreshIssues();
-        let issueType = res && res.issueType ? res.issueType : null;
+        const issueType = res && res.issueType ? res.issueType : null;
         this.onIssueResolve.emit(issueType);
         this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       },
