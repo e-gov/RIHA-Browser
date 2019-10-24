@@ -113,7 +113,6 @@ var availableTags = [
     ];
 $('.autocomplete .form-control').each(function () {
     var container = $(this).closest('.autocomplete');
-    var formGroup = $(this).closest('.form-group');
     $(this).val('');
     $(this).autocomplete({
         source: availableTags,

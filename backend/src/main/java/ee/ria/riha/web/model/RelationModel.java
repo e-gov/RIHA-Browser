@@ -16,11 +16,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class RelationModel {
-
     private Long id;
     private String infoSystemShortName;
     private RelationType type;
-
-    public RelationModel() {
-    }
 }

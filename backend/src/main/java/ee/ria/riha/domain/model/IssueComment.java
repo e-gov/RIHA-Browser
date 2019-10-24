@@ -29,9 +29,6 @@ public class IssueComment implements IssueEntity {
     private String organizationName;
     private String organizationCode;
 
-    public IssueComment() {
-    }
-
     @Override
     public IssueEntityType getEntityType() {
         return ISSUE_COMMENT;

@@ -14,10 +14,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class IssueApprovalDecisionModel {
-
     private String comment;
     private IssueResolutionType decisionType;
-
-    public IssueApprovalDecisionModel() {
-    }
 }

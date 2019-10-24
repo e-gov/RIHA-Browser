@@ -115,7 +115,7 @@ export class ProducerEditSecurityComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit(){
-    let system = this.generalHelperService.cloneObject(this.system);
+    const system = this.generalHelperService.cloneObject(this.system);
     this.security = system.details.security || {
       standard: null,
       class: null,

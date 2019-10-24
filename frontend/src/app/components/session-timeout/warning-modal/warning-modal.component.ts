@@ -11,6 +11,7 @@ import { InfoModalComponent } from '../info-modal/info-modal.component';
   styleUrls: ['./warning-modal.component.scss']
 })
 export class WarningModalComponent implements OnInit, OnDestroy {
+  private static readonly ERROR_MESSAGE = 'Serveri viga.';
 
   @Input() timerStart;
   public minutesLeft: number;
@@ -22,7 +23,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
 
   startCountdown(){
     this.timerId = setTimeout(() =>{
-      let ml = this.getMilisecondsLeft();
+      const ml = this.getMilisecondsLeft();
       if (ml > 0) {
         this.minutesLeft = Math.floor((this.getMilisecondsLeft()/1000)/60);
         this.startCountdown();
@@ -42,7 +43,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
       }, err => {
         this.modalService.dismissAllModals();
         this.router.navigate(['/']);
-        this.toastrService.error('Serveri viga.');
+        this.toastrService.error(WarningModalComponent.ERROR_MESSAGE);
       }
     )
   }
@@ -55,7 +56,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         });
       }, err => {
-        this.toastrService.error('Serveri viga.');
+        this.toastrService.error(WarningModalComponent.ERROR_MESSAGE);
       }
     )
   };
@@ -65,7 +66,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
       env => {
         this.modalService.closeActiveModal();
       }, err => {
-        this.toastrService.error('Serveri viga.');
+        this.toastrService.error(WarningModalComponent.ERROR_MESSAGE);
       }
     )
   }

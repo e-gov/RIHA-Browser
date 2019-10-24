@@ -44,7 +44,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
   }
 
   _loadSystems(filters, page?) {
-    let params = this.generalHelperService.cloneObject(filters);
+    const params = this.generalHelperService.cloneObject(filters);
     params.searchText = this.searchText;
 
     if (params.dateCreatedFrom) {
@@ -60,11 +60,11 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
       params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
     }
 
-    let sortProperty = this.gridData.getSortProperty();
+    const sortProperty = this.gridData.getSortProperty();
     if (sortProperty) {
       params.sort = sortProperty;
     }
-    let sortOrder = this.gridData.getSortOrder();
+    const sortOrder = this.gridData.getSortOrder();
     if (sortOrder) {
       params.dir = sortOrder;
     }
@@ -72,7 +72,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
       params.page = page + 1;
     }
 
-    let q = this.generalHelperService.generateQueryString(params);
+    const q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Infosüsteemid', q);
     this.gridData.page = page || 0;
     this.systemsService.getSystems(params, this.gridData).subscribe(

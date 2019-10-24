@@ -66,7 +66,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   }
 
   canDescribe(){
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     let ret = false;
     if (user){
       ret = user.canEdit(this.system.getOwnerCode());

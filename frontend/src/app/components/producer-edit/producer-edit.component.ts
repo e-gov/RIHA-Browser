@@ -23,7 +23,7 @@ export class ProducerEditComponent implements OnInit {
       this.system = new System(this.systemsService.prepareSystemForDisplay(system));
       this.loaded = true;
     }, err => {
-      let status = err.status;
+      const status = err.status;
       if (status == '404'){
         this.notFound = true;
         this.generalHelperService.setRihaPageTitle('Lehekülge ei leitud');

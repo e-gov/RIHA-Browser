@@ -109,7 +109,7 @@ export class ProducerEditObjectsComponent implements OnInit {
   }
 
   ngOnInit() {
-    let system = this.generalHelperService.cloneObject(this.system);
+    const system = this.generalHelperService.cloneObject(this.system);
     this.stored_data = system.details.stored_data || [];
     this.data_files = system.details.data_files || [];
   }
