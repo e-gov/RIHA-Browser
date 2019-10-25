@@ -100,4 +100,23 @@ $font-family-sans-serif: "Roboto",
 sans-serif;
 /* Import bootstrap */
 //@import "../../bower_components/bootstrap/scss/bootstrap.scss";
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px
+) !default;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1200px,
+  xxxl: 1400px
+) !default;
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
