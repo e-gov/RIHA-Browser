@@ -15,7 +15,8 @@ export class SessionInterceptor implements HttpInterceptor {
   constructor(private sessionHelper: SessionHelperService) { }
 
   shouldSkip(req: HttpRequest<any>): boolean {
-    return req.url.search(/\/environment/) !== -1;
+    return req.url.search(/\/environment/) !== -1
+      || req.url.search(/\/assets/) !== -1;
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

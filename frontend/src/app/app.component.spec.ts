@@ -1,7 +1,7 @@
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
-import { HttpModule, Http } from '@angular/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {MissingTranslationHandler} from '@ngx-translate/core';
 import {DebugElement} from '@angular/core';
@@ -9,7 +9,7 @@ import {DebugElement} from '@angular/core';
 import { AppComponent} from './app.component';
 import missingTranslationHandler from './app.missingTranslation';
 
-export function HttpLoaderFactory(http: Http) {
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/base/src/assets/i18n/', '.json');
 }
 
@@ -26,12 +26,12 @@ describe('When initializing AppComponent', function () {
   let langChangeSubscription;
 
   beforeAll((done) => TestBed.configureTestingModule({
-      imports: [HttpModule, TranslateModule.forRoot({
+      imports: [HttpClientModule, TranslateModule.forRoot({
         missingTranslationHandler,
         loader: {
           provide: TranslateLoader,
           useFactory: HttpLoaderFactory,
-          deps: [Http]
+          deps: [HttpClient]
         }
       })],
       declarations: [

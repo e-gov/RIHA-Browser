@@ -23,23 +23,10 @@
             "styles": [
               "src/styles.css",
               "src/styles/app.scss",
-              "bower_components/font-awesome/css/font-awesome.css",
-              "bower_components/select2/dist/css/select2.css",
-              "bower_components/jquery-ui/themes/base/jquery-ui.css",
-              "bower_components/datatables/media/css/dataTables.bootstrap4.css",
-              "bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css"
+              "./node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": [
-              "bower_components/jquery/dist/jquery.js",
-              "bower_components/jquery-ui/jquery-ui.js",
-              "bower_components/tether/dist/js/tether.js",
-              "bower_components/bootstrap/dist/js/bootstrap.js",
-              "bower_components/chart.js/dist/Chart.bundle.js",
-              "bower_components/select2/dist/js/select2.js",
-              "bower_components/datatables/media/js/jquery.dataTables.js",
-              "bower_components/datatables-responsive/js/dataTables.responsive.js",
-              "bower_components/datatables/media/js/dataTables.bootstrap4.js",
-              "bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js",
+              "./node_modules/jquery/dist/jquery.min.js",
               "src/app.js"
             ]
           },

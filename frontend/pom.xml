@@ -47,16 +47,6 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>install-bower</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>run bower</arguments>
-						</configuration>
-					</execution>
-					<execution>
 						<id>upgrade-frontend-packages</id>
 						<!--
                          You can create configuration, but advice to run the command from real console:
@@ -123,7 +113,7 @@
 				</executions>
 				<configuration>
 					<nodeVersion>v10.16.3</nodeVersion>
-					<yarnVersion>v1.19.0</yarnVersion>
+					<yarnVersion>v1.19.1</yarnVersion>
 					<npmVersion>4.4.4</npmVersion>
 					<workingDirectory>.</workingDirectory>
 				</configuration>
