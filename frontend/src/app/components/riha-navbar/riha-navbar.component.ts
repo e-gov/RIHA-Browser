@@ -6,8 +6,7 @@ import {ActiveOrganizationChooserComponent} from '../active-organization-chooser
 import {Router} from '@angular/router';
 import {SessionHelperService} from '../../services/session-helper.service';
 import {NoOrganizationModalComponent} from '../no-organization-modal/no-organization-modal.component';
-
-declare var $: any;
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-riha-navbar',
