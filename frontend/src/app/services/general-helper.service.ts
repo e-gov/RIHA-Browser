@@ -8,8 +8,7 @@ import {WindowRefService} from '../services/window-ref.service';
 import {ToastrService} from 'ngx-toastr';
 import {System} from '../models/system';
 import _ from 'lodash';
-
-declare var $: any;
+import * as $ from 'jquery';
 
 @Injectable()
 export class GeneralHelperService {

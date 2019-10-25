@@ -170,7 +170,6 @@ export class SystemsService {
       }
 
       if (filtersArr.length > 0){
-        console.log('params set', filtersArr.join());
         params = params.set('filter', filtersArr.join());
       }
     }
@@ -303,11 +302,11 @@ export class SystemsService {
   }
 
   public getActiveDiscussions(sort, relation?): Observable<any> {
-    const params: HttpParams = new HttpParams();
-    params.append('size', '1000');
-    params.append('filter', 'status:OPEN');
-    params.append('filter', 'sub_type');
-    params.append('sort', sort ? sort : '-last_comment_creation_date');
+    let params: HttpParams = new HttpParams();
+    params = params.append('size', '1000');
+    params = params.append('filter', 'status:OPEN');
+    params = params.append('filter', 'sub_type');
+    params = params.append('sort', sort ? sort : '-last_comment_creation_date');
 
     let urlToUse = '/api/v1/dashboard/issues';
     if (relation == 'person'){
@@ -322,10 +321,10 @@ export class SystemsService {
   }
 
   public getActiveIssuesForOrganization(organizationCode, sort?): Observable<any> {
-    const params: HttpParams = new HttpParams();
-    params.append('size', '1000');
-    params.append('filter', 'status:OPEN');
-    params.append('sort', sort ? sort : '-last_comment_creation_date');
+    let params: HttpParams = new HttpParams();
+    params = params.append('size', '1000');
+    params = params.append('filter', 'status:OPEN');
+    params = params.append('sort', sort ? sort : '-last_comment_creation_date');
 
     return this.http.get(`/api/v1/organizations/${ organizationCode }/systems/issues`, {
       params: params
