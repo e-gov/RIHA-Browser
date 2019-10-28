@@ -2,7 +2,7 @@
     display: none;
 }
 
-@media only screen and (min-width: 1200px) {
+@include media-breakpoint-up(xxl) {
     .pagehead{
         &:before{
             left: -40px;
@@ -10,7 +10,7 @@
         }
     }
 }
-@media only screen and (min-width: 1400px) {
+@include media-breakpoint-up(xxl) {
     .container {
         width: 1200px;
         }
@@ -19,7 +19,7 @@
         justify-content: space-around;
     }
 }
-@media only screen and (min-width: 1600px) {
+@include media-breakpoint-up(xxxl) {
     .container {
         width: 1400px;
     }
@@ -28,7 +28,7 @@
     }
 }
 
-@media only screen and (max-width: 1199px) {
+@include media-breakpoint-down(xl) {
     .menu-toggle {
         display: block;
         position: relative;
