@@ -45,7 +45,7 @@ export class ProducerEditRelationsComponent implements OnInit {
 
   addRelation(addForm){
     if (addForm.valid){
-      let infoSystemShortName = typeof this.relation.infoSystem === 'string' ? this.relation.infoSystem : this.relation.infoSystem.details.short_name;
+      const infoSystemShortName = typeof this.relation.infoSystem === 'string' ? this.relation.infoSystem : this.relation.infoSystem.details.short_name;
       this.systemsService.addSystemRelation(this.system.details.short_name, {infoSystemShortName: infoSystemShortName,
                                                                                      type: this.relation.type}).subscribe(res => {
         this.refreshRelations();

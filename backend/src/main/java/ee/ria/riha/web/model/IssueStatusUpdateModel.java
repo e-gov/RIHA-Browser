@@ -15,11 +15,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class IssueStatusUpdateModel {
-
     private String comment;
     private IssueStatus status;
     private IssueResolutionType resolutionType;
-
-    public IssueStatusUpdateModel() {
-    }
 }

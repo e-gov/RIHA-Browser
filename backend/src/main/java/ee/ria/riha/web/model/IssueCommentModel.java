@@ -13,9 +13,5 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class IssueCommentModel {
-
     private String comment;
-
-    public IssueCommentModel() {
-    }
 }

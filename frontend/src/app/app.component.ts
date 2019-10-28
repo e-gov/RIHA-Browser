@@ -26,7 +26,7 @@ export class AppComponent {
     // 'en' not supported yet
     translate.use('et');
 
-    let googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
+    const googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
 
     this.router.routeReuseStrategy.shouldReuseRoute = function(future, curr){
       return false;

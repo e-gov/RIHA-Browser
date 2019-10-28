@@ -1,9 +1,6 @@
 package ee.ria.riha.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
@@ -14,9 +11,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Relation {
-
     private Long id;
     private Date creationDate;
     private Date modifiedDate;
@@ -32,9 +29,6 @@ public class Relation {
     private RelationType type;
 
     private boolean reversed;
-
-    public Relation() {
-    }
 
     public Relation reverse() {
         return Relation.builder()

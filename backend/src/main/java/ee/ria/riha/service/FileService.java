@@ -166,7 +166,7 @@ public class FileService {
 
     private List<InfoSystemFileMetadata> getMatchingFileMetadata(InfoSystem infoSystem, UUID fileUuid) {
         return Stream.concat(infoSystem.getDocumentMetadata().stream(), infoSystem.getDataFileMetadata().stream())
-                .filter(i -> i.getUrl().equalsIgnoreCase("file://" + fileUuid.toString()))
+                .filter(i -> i.getUrl().equalsIgnoreCase(FILE_URL_PREFIX + fileUuid.toString()))
                 .collect(toList());
     }
 

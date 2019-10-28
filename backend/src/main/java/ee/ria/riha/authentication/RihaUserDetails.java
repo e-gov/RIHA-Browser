@@ -26,14 +26,14 @@ public class RihaUserDetails implements UserDetails, OidcUser {
 
     private UserDetails delegate;
 
-    private Map<String, RihaOrganization> organizationsByCode;
+    private ImmutableMap<String, RihaOrganization> organizationsByCode;
     private RihaOrganization activeOrganization;
 
     private String personalCode;
     private String firstName;
     private String lastName;
-    private Multimap<RihaOrganization, GrantedAuthority> organizationAuthorities;
-    private OidcUserRequest userRequest;
+    private ImmutableMultimap<RihaOrganization, GrantedAuthority> organizationAuthorities;
+    private transient OidcUserRequest userRequest;
 
     public RihaUserDetails(UserDetails delegate, String personalCode) {
         this(delegate, personalCode, null);
