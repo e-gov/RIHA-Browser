@@ -54,7 +54,7 @@ export class ProducerSearchFilterComponent implements OnInit {
 
 
   getFilters(): any {
-    let params = this.generalHelperService.cloneObject(this.filters);
+    const params = this.generalHelperService.cloneObject(this.filters);
 
     if (params.dateCreatedFrom) {
       params.dateCreatedFrom = this.systemsService.dateObjToTimestamp(params.dateCreatedFrom, true);
@@ -74,7 +74,7 @@ export class ProducerSearchFilterComponent implements OnInit {
 
 
   hasActiveFilters(): boolean {
-    for (let key in this.filters) {
+    for (const key in this.filters) {
       if (key != 'searchText' && this.filters[key]) {
         return true;
       }

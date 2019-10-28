@@ -21,19 +21,19 @@ export class LoginFormComponent implements OnInit {
     this.environmentService.doLogin().subscribe(res => {
       this.environmentService.loadEnvironmentData().subscribe(env => {
         this.sessionHelper.refreshSessionTimer();
-        let prevLocation = this.router.routerState.snapshot.root.queryParams.fromUrl;
+        const prevLocation = this.router.routerState.snapshot.root.queryParams.fromUrl;
         if (prevLocation){
           this.router.navigate([decodeURIComponent(prevLocation)]);
         } else {
           this.router.navigate(['/']);
         }
-        let user = this.environmentService.getActiveUser();
+        const user = this.environmentService.getActiveUser();
 
         if (user == null) {
           return;
         }
 
-        let organizations = user.getOrganizations();
+        const organizations = user.getOrganizations();
         if (organizations.length > 1){
           this.modalService.open(ActiveOrganizationChooserComponent);
         } else if (organizations.length == 1){

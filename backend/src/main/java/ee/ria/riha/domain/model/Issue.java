@@ -36,9 +36,6 @@ public class Issue implements IssueEntity {
     private IssueResolutionType resolutionType;
     private LocalDate decisionDeadline;
 
-    public Issue() {
-    }
-
     @Override
     public IssueEntityType getEntityType() {
         return ISSUE;

@@ -65,7 +65,7 @@ export class ProducerEditContactsComponent implements OnInit {
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
-    let system = this.generalHelperService.cloneObject(this.system);
+    const system = this.generalHelperService.cloneObject(this.system);
     this.contacts = system.details.contacts || [];
   }
 }

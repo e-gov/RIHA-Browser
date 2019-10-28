@@ -15,7 +15,7 @@ export class GeneralHelperService {
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
     if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
-      let year = dateObj.year.toString();
+      const year = dateObj.year.toString();
       let month = dateObj.month.toString();
       let day = dateObj.day.toString();
 
@@ -33,9 +33,9 @@ export class GeneralHelperService {
 
   public timestampToDateObj(timestamp: string): any {
     if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
-      let year = parseInt(timestamp.substr(0, 4), 10);
-      let month = parseInt(timestamp.substr(5, 2), 10);
-      let day = parseInt(timestamp.substr(8, 2), 10);
+      const year = parseInt(timestamp.substr(0, 4), 10);
+      const month = parseInt(timestamp.substr(5, 2), 10);
+      const day = parseInt(timestamp.substr(8, 2), 10);
       return {
         year: year,
         month: month,
@@ -47,10 +47,10 @@ export class GeneralHelperService {
   }
 
   public isMenuActive(blockId, first?){
-    let element = $(`#${blockId}`)[0];
+    const element = $(`#${blockId}`)[0];
     if (element){
-      let yOffset = $(element).offset().top - $(document).scrollTop();
-      let height = element.offsetHeight;
+      const yOffset = $(element).offset().top - $(document).scrollTop();
+      const height = element.offsetHeight;
       if (first === true) {
         return yOffset + height > 0;
       } else {
@@ -64,7 +64,7 @@ export class GeneralHelperService {
   public getSystemStatusText(system){
     let statusDescription = 'määramata';
     if (system.details.meta && system.details.meta.system_status) {
-      let status = system.details.meta.system_status.status;
+      const status = system.details.meta.system_status.status;
       switch (status) {
         case classifiers.system_status.IN_USE.code: {
           statusDescription = 'kasutusel';
@@ -87,7 +87,7 @@ export class GeneralHelperService {
     let statusDescription = 'kooskõlastamata';
 
     if (system.lastPositiveApprovalRequestType) {
-      let status = system.lastPositiveApprovalRequestType;
+      const status = system.lastPositiveApprovalRequestType;
       switch (status) {
         case classifiers.issue_type.AUTOMATICALLY_REGISTERED.code: {
           statusDescription = 'registreeritud';
@@ -111,7 +111,7 @@ export class GeneralHelperService {
   }
 
   public generateQueryString(obj){
-    let newObj = {};
+    const newObj = {};
     Object.keys(obj).forEach(function(key) {
       if (obj[key]){
         newObj[key] = obj[key];
@@ -172,8 +172,7 @@ export class GeneralHelperService {
   public adjustSection(hash?){
     hash = hash || this.winRef.nativeWindow.location.hash;
     if (hash){
-      let elId = decodeURI(hash.replace('#',''));
-      let el = $(hash)[0];
+      const el = $(hash)[0];
       if (el){
         $('html, body').animate({
           scrollTop: $(el).offset().top
