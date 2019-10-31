@@ -274,11 +274,11 @@ export class SystemsService {
     return this.http.post<System>(this.systemsUrl, system);
   }
 
-  public postDataFile(file, reference): Observable<String> {
+  public postDataFile(file, reference): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<String>(this.systemsUrl + `/${ reference }/files`, formData);
+    return this.http.post(this.systemsUrl + `/${ reference }/files`, formData, { responseType: 'text' });
   }
 
   public updateSystem(updatedData, reference?): Observable<System> {
