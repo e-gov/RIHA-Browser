@@ -19,16 +19,14 @@
         <label class="text-muted mb-0">Rakendatud turvastandardid: *</label>
         <small class="label-small-text text-muted">vali, millist turvameetmete süsteemi või standardeid infosüsteemi haldamisel kasutatakse</small>
         <div class="custom-controls-stacked ml-2">
-          <label class="custom-control custom-radio">
-            <input class="custom-control-input" type="radio" (change)="resetStandard()" [(ngModel)]="isIske" [value]="true" name="type">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">ISKE</span>
-          </label>
-          <label class="custom-control custom-radio">
-            <input class="custom-control-input" type="radio" (change)="resetStandard()" [(ngModel)]="isIske" [value]="false" name="type">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">muu</span>
-          </label>
+          <div class="custom-control custom-radio">
+            <input class="custom-control-input" id="standart_iske" type="radio" (change)="resetStandard()" [(ngModel)]="isIske" [value]="true" name="type">
+            <label for="standart_iske" class="custom-control-label">ISKE</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input class="custom-control-input" id="standart_muu" type="radio" (change)="resetStandard()" [(ngModel)]="isIske" [value]="false" name="type">
+            <label for="standart_muu" class="custom-control-label">muu</label>
+          </div>
         </div>
         <div class="form-group" *ngIf="isIske">
           <label class="text-muted mb-0">ISKE turvaosaklassid: *</label>
@@ -38,26 +36,22 @@
               Käideldavus
             </div>
             <div class="row mx-0">
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'0'" name="securityClass_k">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">0</span>
-              </label>
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'1'" name="securityClass_k">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">1</span>
-              </label>
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'2'" name="securityClass_k">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">2</span>
-              </label>
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'3'" name="securityClass_k">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">3</span>
-              </label>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_k_0" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'0'" name="securityClass_k">
+                <label for="security_class_k_0" class="custom-control-label">0</label>
+              </div>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_k_1" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'1'" name="securityClass_k">
+                <label for="security_class_k_1" class="custom-control-label">1</label>
+              </div>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_k_2" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'2'" name="securityClass_k">
+                <label for="security_class_k_2" class="custom-control-label">2</label>
+              </div>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_k_3" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.k" [value]="'3'" name="securityClass_k">
+                <label for="security_class_k_3" class="custom-control-label">3</label>
+              </div>
             </div>
           </div>
           <div class="m-2">
@@ -66,24 +60,20 @@
             </div>
             <div class="row mx-0">
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'0'" name="securityClass_t">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">0</span>
+                <input id="security_class_t_0" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'0'" name="securityClass_t">
+                <label for="security_class_t_0" class="custom-control-label">0</label>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'1'" name="securityClass_t">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">1</span>
+                <input id="security_class_t_1" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'1'" name="securityClass_t">
+                <label for="security_class_t_1" class="custom-control-label">1</label>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'2'" name="securityClass_t">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">2</span>
+                <input id="security_class_t_2" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'2'" name="securityClass_t">
+                <label for="security_class_t_2" class="custom-control-label">2</label>
               </label>
               <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'3'" name="securityClass_t">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">3</span>
+                <input id="security_class_t_3" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.t" [value]="'3'" name="securityClass_t">
+                <label for="security_class_t_3" class="custom-control-label">3</label>
               </label>
             </div>
           </div>
@@ -92,26 +82,22 @@
               Konfidentsiaalsus
             </div>
             <div class="row mx-0">
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'0'" name="securityClass_s">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">0</span>
-              </label>
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'1'" name="securityClass_s">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">1</span>
-              </label>
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'2'" name="securityClass_s">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">2</span>
-              </label>
-              <label class="custom-control custom-radio col-1">
-                <input class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'3'" name="securityClass_s">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">3</span>
-              </label>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_s_0" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'0'" name="securityClass_s">
+                <label for="security_class_s_0" class="custom-control-label">0</label>
+              </div>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_s_1" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'1'" name="securityClass_s">
+                <label for="security_class_s_1" class="custom-control-label">1</label>
+              </div>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_s_2" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'2'" name="securityClass_s">
+                <label for="security_class_s_2" class="custom-control-label">2</label>
+              </div>
+              <div class="custom-control custom-radio col-1">
+                <input id="security_class_s_3" class="custom-control-input" type="radio" [required]="isIske" [(ngModel)]="securityClass.s" [value]="'3'" name="securityClass_s">
+                <label for="security_class_s_3" class="custom-control-label">3</label>
+              </div>
             </div>
             <div *ngIf="securityClass.s != null && securityClass.t != null && securityClass.k !=null" class="my-2">
               Turbeaste
@@ -164,36 +150,35 @@
           <div class="form-group mt-2">
             <label class="text-muted mb-0">Audiitori hinnang: *</label>
             <div class="custom-controls-stacked ml-2">
-              <label class="custom-control custom-radio">
-                <input class="custom-control-input"
+              <div class="custom-control custom-radio">
+                <input id="audit_resolution_type_no_rem"
+                       class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.code"
                        name="auditResolution">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">{{classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.value}}</span>
-              </label>
-              <label class="custom-control custom-radio">
-                <input class="custom-control-input"
+                <label for="audit_resolution_type_no_rem" class="custom-control-label">{{classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.value}}</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="audit_resolution_type_w_rem" class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.PASSED_WITH_REMARKS.code"
                        name="auditResolution">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">{{classifiers.audit_resolution_type.PASSED_WITH_REMARKS.value}}</span>
-              </label>
-              <label class="custom-control custom-radio">
-                <input class="custom-control-input"
+                <label for="audit_resolution_type_w_rem" class="custom-control-label">{{classifiers.audit_resolution_type.PASSED_WITH_REMARKS.value}}</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="audit_resolution_type_no_pass"
+                       class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.DID_NOT_PASS.code"
                        name="auditResolution">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">{{classifiers.audit_resolution_type.DID_NOT_PASS.value}}</span>
-              </label>
+                <label for="audit_resolution_type_no_pass" class="custom-control-label">{{classifiers.audit_resolution_type.DID_NOT_PASS.value}}</label>
+              </div>
             </div>
           </div>
         </div>
