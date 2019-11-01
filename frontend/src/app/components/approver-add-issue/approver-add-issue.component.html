@@ -4,136 +4,135 @@
       {{ isApprovalRequest ? 'Küsi hinnangut' : 'Anna hinnang'}}
     </span>
     <div class="col-12 my-3">
-        <div class="card card-text">
-          <div class="card-header font-weight-bold pl-2">
-            {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
+      <div class="card card-text">
+        <div class="card-header font-weight-bold pl-2">
+          {{ activeUser.getActiveOrganization().name }} ({{ activeUser.getFullName() }})
+        </div>
+        <div class="card-content p-2">
+          <div *ngIf="canSwitchViews()" class="my-2 mx-0 row">
+            <div [ngClass]="{'text-muted': isApprovalRequest}" class="mr-2">Anna hinnang</div>
+            <ui-switch size="small"
+                       color="#023cc1"
+                       defaultBgColor="#023cc1"
+                       defaultBoColor="#023cc1"
+                       [(ngModel)]="isApprovalRequest"></ui-switch>
+            <div [ngClass]="{'text-muted': !isApprovalRequest}" class="ml-2">Küsi hinnangut</div>
           </div>
-          <div class="card-content p-2">
-            <div *ngIf="canSwitchViews()" class="my-2 mx-0 row">
-              <div [ngClass]="{'text-muted': isApprovalRequest}" class="mr-2">Anna hinnang</div>
-              <ui-switch size="small"
-                         color="#023cc1"
-                         defaultBgColor="#023cc1"
-                         defaultBoColor="#023cc1"
-                         [(ngModel)]="isApprovalRequest"></ui-switch>
-              <div [ngClass]="{'text-muted': !isApprovalRequest}" class="ml-2">Küsi hinnangut</div>
-            </div>
-            <form #newIssueForm="ngForm">
-              <div *ngIf="!isApprovalRequest">
-                <div class="form-group" [ngClass]="{'has-danger': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted)}">
-                  <input id="issueTitle" class="form-control col-12"
-                         ngModel
-                         #issueTitle="ngModel"
-                         placeholder="lühikirjeldus hinnangust"
-                         name="title" required>
+          <form #newIssueForm="ngForm">
+            <div *ngIf="!isApprovalRequest">
+              <div class="form-group" [ngClass]="{'has-danger': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted)}">
+                <input id="issueTitle" class="form-control col-12"
+                       ngModel
+                       #issueTitle="ngModel"
+                       placeholder="lühikirjeldus hinnangust"
+                       name="title" required>
 
-                </div>
-                <div class="form-group" [ngClass]="{'has-danger': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted)}">
-                  <textarea id="issueText" class="form-control col-12"
-                         ngModel
-                         rows="6"
-                         #issueText="ngModel"
-                         placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
-                         name="comment" required></textarea>
-                </div>
               </div>
-            </form>
-            <form #approvalRequestForm="ngForm">
-              <div *ngIf="isApprovalRequest && openIssuesMatrix">
-                <app-approver-system-check [system]="system"></app-approver-system-check>
-                <div class="form-group">
-                  <label class="text-muted mb-0">Soovin saada tagasisidet: *</label>
-                  <small class="label-small-text text-muted">vali, millist kooskõlastust on andmekogule vaja</small>
-                  <div class="custom-controls-stacked ml-2">
-                    <label class="custom-control custom-radio">
-                      <input class="custom-control-input" type="radio"
-                             [disabled]="openIssuesMatrix.establishment"
-                             [(ngModel)]="approvalRequest.type"
-                             [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code"
-                             name="type_est"
-                             (change)="onIssueTypeChange(classifiers.issue_type.ESTABLISHMENT_REQUEST.code)" required>
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description">asutamiseks
-                        <small *ngIf="openIssuesMatrix.establishment"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
-                      </span>
+              <div class="form-group" [ngClass]="{'has-danger': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted)}">
+                  <textarea id="issueText" class="form-control col-12"
+                            ngModel
+                            rows="6"
+                            #issueText="ngModel"
+                            placeholder="kommentaar, et selgitada puudusi või täpsustada, mida kontrolliti"
+                            name="comment" required></textarea>
+              </div>
+            </div>
+          </form>
+          <form #approvalRequestForm="ngForm">
+            <div *ngIf="isApprovalRequest && openIssuesMatrix">
+              <app-approver-system-check [system]="system"></app-approver-system-check>
+              <div class="form-group">
+                <label class="text-muted mb-0">Soovin saada tagasisidet: *</label>
+                <small class="label-small-text text-muted">vali, millist kooskõlastust on andmekogule vaja</small>
+                <div class="custom-controls-stacked ml-2">
+                  <div class="custom-control custom-radio">
+                    <input id="issue_type_establishment_request"
+                           class="custom-control-input"
+                           type="radio"
+                           [disabled]="openIssuesMatrix.establishment"
+                           [(ngModel)]="approvalRequest.type"
+                           [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code"
+                           name="type_est"
+                           (change)="onIssueTypeChange(classifiers.issue_type.ESTABLISHMENT_REQUEST.code)" required>
+                    <label for="issue_type_establishment_request" class="custom-control-label">asutamiseks
+                      <small *ngIf="openIssuesMatrix.establishment"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
-                    <label class="custom-control custom-radio">
-                      <input class="custom-control-input" type="radio"
-                             [(ngModel)]="approvalRequest.type"
-                             [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"
-                             name="type_use"
-                             [disabled]="openIssuesMatrix.takingIntoUse"
-                             (change)="onIssueTypeChange(classifiers.issue_type.TAKE_INTO_USE_REQUEST.code)" required>
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description">kasutusele võtmiseks
-                        <small *ngIf="openIssuesMatrix.takingIntoUse"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
-                      </span>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input id="issue_type_take_into_use_request"
+                           class="custom-control-input" type="radio"
+                           [(ngModel)]="approvalRequest.type"
+                           [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"
+                           name="type_use"
+                           [disabled]="openIssuesMatrix.takingIntoUse"
+                           (change)="onIssueTypeChange(classifiers.issue_type.TAKE_INTO_USE_REQUEST.code)" required>
+                    <label for="issue_type_take_into_use_request" class="custom-control-label">kasutusele võtmiseks
+                      <small *ngIf="openIssuesMatrix.takingIntoUse"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
-                    <label class="custom-control custom-radio">
-                      <input class="custom-control-input" type="radio"
-                             [(ngModel)]="approvalRequest.type"
-                             [value]="classifiers.issue_type.MODIFICATION_REQUEST.code"
-                             name="type_mod"
-                             [disabled]="openIssuesMatrix.modification"
-                             (change)="onIssueTypeChange(classifiers.issue_type.MODIFICATION_REQUEST.code)" required>
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description">andmekoosseisu muutmiseks
-                        <small *ngIf="openIssuesMatrix.modification"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
-                      </span>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input id="issue_type_modification_request"
+                           class="custom-control-input" type="radio"
+                           [(ngModel)]="approvalRequest.type"
+                           [value]="classifiers.issue_type.MODIFICATION_REQUEST.code"
+                           name="type_mod"
+                           [disabled]="openIssuesMatrix.modification"
+                           (change)="onIssueTypeChange(classifiers.issue_type.MODIFICATION_REQUEST.code)" required>
+                    <label for="issue_type_modification_request" class="custom-control-label">andmekoosseisu muutmiseks
+                      <small *ngIf="openIssuesMatrix.modification"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
-                    <label class="custom-control custom-radio">
-                      <input class="custom-control-input"
-                             type="radio"
-                             [(ngModel)]="approvalRequest.type"
-                             [value]="classifiers.issue_type.FINALIZATION_REQUEST.code"
-                             name="type_fin"
-                             [disabled]="openIssuesMatrix.finalization"
-                             (change)="onIssueTypeChange(classifiers.issue_type.FINALIZATION_REQUEST.code)" required>
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description">lõpetamiseks
-                        <small *ngIf="openIssuesMatrix.finalization"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
-                      </span>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input id="issue_type_finalization_request" class="custom-control-input"
+                           type="radio"
+                           [(ngModel)]="approvalRequest.type"
+                           [value]="classifiers.issue_type.FINALIZATION_REQUEST.code"
+                           name="type_fin"
+                           [disabled]="openIssuesMatrix.finalization"
+                           (change)="onIssueTypeChange(classifiers.issue_type.FINALIZATION_REQUEST.code)" required>
+                    <label for="issue_type_finalization_request" class="custom-control-label">lõpetamiseks
+                      <small *ngIf="openIssuesMatrix.finalization"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="requestTitle" class="text-muted mb-0">Pealkiri: *</label>
-                  <small class="label-small-text text-muted">pealkiri on avalikult nähtav kõigile kasutajatele</small>
-                  <input id="requestTitle" class="form-control col-12"
-                         readonly
-                         [value]="approvalRequest.title"
-                         placeholder="Arutelu pealkiri"
-                         name="title">
+              </div>
+              <div class="form-group">
+                <label for="requestTitle" class="text-muted mb-0">Pealkiri: *</label>
+                <small class="label-small-text text-muted">pealkiri on avalikult nähtav kõigile kasutajatele</small>
+                <input id="requestTitle" class="form-control col-12"
+                       readonly
+                       [value]="approvalRequest.title"
+                       placeholder="Arutelu pealkiri"
+                       name="title">
 
-                </div>
-                <div class="form-group" [ngClass]="{'has-danger': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted)}">
-                  <label for="requestText" class="text-muted mb-0">Kommentaar: *</label>
-                  <small class="label-small-text text-muted">kommentaarid on nähtavad ainult infosüsteemi omanikule ja RIHA hindajale</small>
-                  <textarea id="requestText" class="form-control col-12"
-                            [(ngModel)]="approvalRequest.comment"
-                            rows="6"
-                            #requestText="ngModel"
-                            placeholder="Sisesta vajalikud täpsustused"
-                            name="comment" required></textarea>
-                </div>
               </div>
-              <div *ngIf="isApprovalRequest && !openIssuesMatrix" class="my-1 text-center">
-                <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+              <div class="form-group" [ngClass]="{'has-danger': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted)}">
+                <label for="requestText" class="text-muted mb-0">Kommentaar: *</label>
+                <small class="label-small-text text-muted">kommentaarid on nähtavad ainult infosüsteemi omanikule ja RIHA hindajale</small>
+                <textarea id="requestText" class="form-control col-12"
+                          [(ngModel)]="approvalRequest.comment"
+                          rows="6"
+                          #requestText="ngModel"
+                          placeholder="Sisesta vajalikud täpsustused"
+                          name="comment" required></textarea>
               </div>
-            </form>
-          </div>
+            </div>
+            <div *ngIf="isApprovalRequest && !openIssuesMatrix" class="my-1 text-center">
+              <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+            </div>
+          </form>
         </div>
       </div>
-      <div class="actions-bar">
-        <div *ngIf="isApprovalRequest && openIssuesMatrix" class="buttons pull-right">
-          <button  (click)="closeModal(approvalRequestForm)" class="btn btn-default pull-right">Katkesta</button>
-          <button (click)="onSubmitApprovalRequest(approvalRequestForm)" class="btn btn-success pull-right">Salvesta</button>
-        </div>
-        <div *ngIf="!isApprovalRequest" class="buttons pull-right">
-          <button (click)="closeModal(newIssueForm)" class="btn btn-default pull-right">Katkesta</button>
-          <button (click)="onSubmitNewIssue(newIssueForm)" class="btn btn-success pull-right">Salvesta</button>
-        </div>
+    </div>
+    <div class="actions-bar">
+      <div *ngIf="isApprovalRequest && openIssuesMatrix" class="buttons pull-right">
+        <button  (click)="closeModal(approvalRequestForm)" class="btn btn-default pull-right">Katkesta</button>
+        <button (click)="onSubmitApprovalRequest(approvalRequestForm)" class="btn btn-success pull-right">Salvesta</button>
       </div>
+      <div *ngIf="!isApprovalRequest" class="buttons pull-right">
+        <button (click)="closeModal(newIssueForm)" class="btn btn-default pull-right">Katkesta</button>
+        <button (click)="onSubmitNewIssue(newIssueForm)" class="btn btn-success pull-right">Salvesta</button>
+      </div>
+    </div>
   </div>
 </section>
-
