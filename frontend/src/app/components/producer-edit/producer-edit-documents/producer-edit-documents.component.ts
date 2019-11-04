@@ -126,7 +126,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
 
   clearAccessRestriction(e, i){
     if (e){
-      let d = new Date();
+      const d = new Date();
       this.documents[i].accessRestriction = {
         startDate: {
           day: d.getDate(),
@@ -152,7 +152,7 @@ export class ProducerEditDocumentsComponent implements OnInit {
               public generalHelperService: GeneralHelperService) { }
 
   ngOnInit() {
-    let system = this.generalHelperService.cloneObject(this.system);
+    const system = this.generalHelperService.cloneObject(this.system);
     this.documents = this.prepareForDisplay(system.details.documents || []);
   }
 

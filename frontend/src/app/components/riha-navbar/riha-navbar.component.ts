@@ -34,10 +34,10 @@ export class RihaNavbarComponent implements OnInit {
    * even with applied [routerLinkActiveOptions]="{exact: false}
    */
   isListOrSubView(){
-    let cat = encodeURI('/Infosüsteemid?');
-    let obj = encodeURI('/Andmeobjektid');
-    let sub = encodeURI('/Infosüsteemid/Vaata');
-    let full = encodeURI('/Infosüsteemid');
+    const cat = encodeURI('/Infosüsteemid?');
+    const obj = encodeURI('/Andmeobjektid');
+    const sub = encodeURI('/Infosüsteemid/Vaata');
+    const full = encodeURI('/Infosüsteemid');
     if (this.router.url && typeof this.router.url === 'string'){
       return (-1 != this.router.url.indexOf(cat) || -1 != this.router.url.indexOf(obj) || -1 != this.router.url.indexOf(sub) || this.router.url === full);
     } else {
@@ -65,22 +65,22 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   isAllowedToChangeOrganization(): boolean {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getOrganizations().length > 1 || (user.getOrganizations().length == 1 && user.getActiveOrganization() == null);
   }
 
   isNoOrganizationPresent(): boolean {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getOrganizations().length == 0;
   }
 
   noOrganizationSelected(): boolean {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getActiveOrganization() == null;
   }
 
   getUserText(): string {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getFullNameWithActiveOrganization();
   }
 

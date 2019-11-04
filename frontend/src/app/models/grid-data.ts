@@ -67,7 +67,7 @@ export class GridData {
 
   setPageFromUrl(page: string): void{
     if (page){
-      let pageNumber = Number(page);
+      const pageNumber = Number(page);
       this.page = !isNaN(pageNumber) ? pageNumber - 1 : 0;
     }
   }

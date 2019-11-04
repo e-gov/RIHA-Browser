@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
+
 /**
  * Immutable representation of organization that user belongs to.
  *
@@ -13,7 +15,8 @@ import org.springframework.util.Assert;
 @EqualsAndHashCode(of = "code")
 @Getter
 @ToString
-public class RihaOrganization {
+public class RihaOrganization implements Serializable {
+    private static final long serialVersionUID = 0;
 
     private String code;
     private String name;

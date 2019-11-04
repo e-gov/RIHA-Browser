@@ -18,13 +18,9 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class RelationSummaryModel {
-
     private Long id;
     private UUID infoSystemUuid;
     private String infoSystemName;
     private String infoSystemShortName;
     private RelationType type;
-
-    public RelationSummaryModel() {
-    }
 }
