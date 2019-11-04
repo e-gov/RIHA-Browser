@@ -103,7 +103,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   canResolveGeneral(){
     let ret = false;
     if (this.feedback.status == 'OPEN'){
-      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      const bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
       if (this.feedback.type != classifiers.issue_type.TAKE_INTO_USE_REQUEST.code
         && this.feedback.type != classifiers.issue_type.MODIFICATION_REQUEST.code
         && this.feedback.type != classifiers.issue_type.FINALIZATION_REQUEST.code
@@ -120,7 +120,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
         || this.feedback.type == classifiers.issue_type.MODIFICATION_REQUEST.code
         || this.feedback.type == classifiers.issue_type.FINALIZATION_REQUEST.code
         || this.feedback.type == classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
-          let userMatrix = this.environmentService.getUserMatrix();
+          const userMatrix = this.environmentService.getUserMatrix();
           ret = userMatrix.hasApproverRole && userMatrix.isRiaMember;
       }
     }

@@ -10,14 +10,14 @@ export class ModalHelperService {
 
   public dismissActiveModal(reason?): void{
     if (this.modalRefs.length > 0){
-      let modalRef = this.modalRefs.pop();
+      const modalRef = this.modalRefs.pop();
       modalRef.dismiss(reason);
     }
   }
 
   public closeActiveModal(result?): void{
     if (this.modalRefs.length > 0){
-      let modalRef = this.modalRefs.pop();
+      const modalRef = this.modalRefs.pop();
       modalRef.close(result);
     }
   }
@@ -32,7 +32,7 @@ export class ModalHelperService {
     if (keepStacked !== true){
       this.dismissAllModals();
     }
-    let modalRef = this.modalService.open(content, options);
+    const modalRef = this.modalService.open(content, options);
     this.modalRefs.push(modalRef);
     return modalRef;
   }

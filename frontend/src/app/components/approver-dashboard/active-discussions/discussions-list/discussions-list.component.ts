@@ -53,7 +53,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.environmentService.getUserMatrix().isOrganizationSelected)){
       this.loaded = false;
       this.getActiveDiscussions();

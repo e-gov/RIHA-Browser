@@ -51,7 +51,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       return;
     }
 
-    let params = filters;
+    const params = filters;
     params.searchText = this.searchText;
     delete params.ownerName;
     delete params.ownerCode;
@@ -67,11 +67,11 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     if (params.dateUpdatedTo) {
       params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
     }
-    let sortProperty = this.gridData.getSortProperty();
+    const sortProperty = this.gridData.getSortProperty();
     if (sortProperty) {
       params.sort = sortProperty;
     }
-    let sortOrder = this.gridData.getSortOrder();
+    const sortOrder = this.gridData.getSortOrder();
     if (sortOrder) {
       params.dir = sortOrder;
     }
@@ -81,7 +81,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       this.gridData.page = 0;
     }
 
-    let q = this.generalHelperService.generateQueryString(params);
+    const q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Kirjelda', q);
 
     this.systemsService.getOwnSystems(params, this.gridData).subscribe(
@@ -175,7 +175,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnSystems();

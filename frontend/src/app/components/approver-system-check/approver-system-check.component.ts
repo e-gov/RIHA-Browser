@@ -23,8 +23,8 @@ export class ApproverSystemCheckComponent implements OnInit {
   private startSystemCheck(){
     this.hasErrors = false;
 
-    let statusPending = classifiers.system_check_status.PENDING.code;
-    let statusInProgress = classifiers.system_check_status.IN_PROGRESS.code;
+    const statusPending = classifiers.system_check_status.PENDING.code;
+    const statusInProgress = classifiers.system_check_status.IN_PROGRESS.code;
     this.systemCheckMatrix = {
       systemStatus: statusInProgress,
       developmentStatus: statusPending,
@@ -40,7 +40,7 @@ export class ApproverSystemCheckComponent implements OnInit {
       this.checkSystemStatus();
     }, err => {
       this.helper.showError();
-      let statusCancelled = classifiers.system_check_status.CANCELLED.code;
+      const statusCancelled = classifiers.system_check_status.CANCELLED.code;
       this.systemCheckMatrix = {
         systemStatus: statusCancelled,
         developmentStatus: statusCancelled,
@@ -135,7 +135,7 @@ export class ApproverSystemCheckComponent implements OnInit {
   }
 
   private setErrorStatus(){
-    for (let k in this.systemCheckMatrix) {
+    for (const k in this.systemCheckMatrix) {
       if (this.systemCheckMatrix[k] == classifiers.system_check_status.FAILED.code){
         this.hasErrors = true;
       }
