@@ -42,7 +42,7 @@ export class EnvironmentService {
   }
 
   public getSessionTimeoutInterval(): number{
-   return this.globalEnvironment.getSessionMaxInactiveInterval();
+    return this.globalEnvironment.getSessionMaxInactiveInterval();
   }
 
   public getUserMatrix(): UserMatrix{
@@ -72,8 +72,8 @@ export class EnvironmentService {
     });
   }
 
-  private runTrackingScripts(environment){
-    const googleAnalyticsId = environment.getGoogleAnalyticsId();
+  private runTrackingScripts(env){
+    const googleAnalyticsId = env.getGoogleAnalyticsId();
     if (googleAnalyticsId){
       (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
@@ -91,8 +91,8 @@ export class EnvironmentService {
       ga('send', 'pageview');
     }
 
-    const hjid = environment.getHotjarHjid();
-    const hjsv = environment.getHotjarHjsv();
+    const hjid = env.getHotjarHjid();
+    const hjsv = env.getHotjarHjsv();
     if (hjid && hjsv){
       (function(h, o, t, j, a, r){
         h.hj = h.hj || function(){(h.hj.q = h.hj.q || []).push(arguments); };
@@ -106,9 +106,12 @@ export class EnvironmentService {
   }
 
   public onAppStart(): Promise<any> {
-    return this.loadEnvironmentData().toPromise().then(env => {
-      this.runTrackingScripts(this.globalEnvironment);
+    const promise = this.loadEnvironmentData().toPromise();
+    promise.then(env => {
+      this.runTrackingScripts(new Environment(env));
     });
+
+    return promise;
   }
 
   public loadClassifiers(): Promise<any> {
@@ -119,9 +122,8 @@ export class EnvironmentService {
 
   public loadEnvironmentData(): Observable<Environment> {
     const observable = this.http.get<Environment>(this.environmentUrl);
-    observable.subscribe(environment => {
-      console.log('loadEnvironmentData type', typeof environment, environment);
-      this.globalEnvironment = new Environment(environment);
+    observable.subscribe(env => {
+      this.globalEnvironment = new Environment(env);
     });
 
     return observable;
