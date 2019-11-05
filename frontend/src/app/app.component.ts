@@ -26,9 +26,10 @@ export class AppComponent {
     // 'en' not supported yet
     translate.use('et');
 
-    const googleAnalyticsId = this.environmentService.globalEnvironment.getGoogleAnalyticsId();
+    const googleAnalyticsId = this.environmentService.globalEnvironment ?
+      this.environmentService.globalEnvironment.getGoogleAnalyticsId() : null;
 
-    this.router.routeReuseStrategy.shouldReuseRoute = function(future, curr){
+    this.router.routeReuseStrategy.shouldReuseRoute = function(future, curr) {
       return false;
     };
 

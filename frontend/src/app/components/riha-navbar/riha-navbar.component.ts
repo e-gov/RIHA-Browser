@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentChecked, Component, OnInit} from '@angular/core';
 import {EnvironmentService} from '../../services/environment.service';
 import {User} from '../../models/user';
 import {ModalHelperService} from '../../services/modal-helper.service';
@@ -13,14 +13,15 @@ import * as $ from 'jquery';
   templateUrl: './riha-navbar.component.html',
   styleUrls: ['./riha-navbar.component.scss']
 })
-export class RihaNavbarComponent implements OnInit {
+export class RihaNavbarComponent implements OnInit, AfterContentChecked {
   public activeUser: User = null;
+  public _dc: number = 0;
 
   isUserLoggedIn(): boolean {
     return this.environmentService.getActiveUser() != null;
   }
 
-  getRand(){
+  getRand() {
     return new Date().getSeconds();
   }
 
@@ -33,19 +34,19 @@ export class RihaNavbarComponent implements OnInit {
    * in version 4.1.3 it seems to be broken when working with queryParams,
    * even with applied [routerLinkActiveOptions]="{exact: false}
    */
-  isListOrSubView(){
+  isListOrSubView() {
     const cat = encodeURI('/Infosüsteemid?');
     const obj = encodeURI('/Andmeobjektid');
     const sub = encodeURI('/Infosüsteemid/Vaata');
     const full = encodeURI('/Infosüsteemid');
-    if (this.router.url && typeof this.router.url === 'string'){
+    if (this.router.url && typeof this.router.url === 'string') {
       return (-1 != this.router.url.indexOf(cat) || -1 != this.router.url.indexOf(obj) || -1 != this.router.url.indexOf(sub) || this.router.url === full);
     } else {
       return false;
     }
   }
 
-  logout(){
+  logout() {
     this.environmentService.doLogout().subscribe(res => {
       this.environmentService.loadEnvironmentData().subscribe(env => {
         this.sessionHelperService.refreshSessionTimer();
@@ -59,7 +60,7 @@ export class RihaNavbarComponent implements OnInit {
     return false;
   }
 
-  openNoOrganizationWarningModal() :boolean {
+  openNoOrganizationWarningModal(): boolean {
     const modalRef = this.modalService.open(NoOrganizationModalComponent);
     return false;
   }
@@ -100,6 +101,10 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterContentChecked() {
+    this._dc = this.getRand();
   }
 
   openNavigationMenu() {

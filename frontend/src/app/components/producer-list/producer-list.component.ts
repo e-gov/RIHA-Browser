@@ -51,7 +51,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       return;
     }
 
-    const params = filters;
+    const params = filters? filters: [];
     params.searchText = this.searchText;
     delete params.ownerName;
     delete params.ownerCode;
@@ -104,7 +104,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
 
   getOwnSystems(page?): void {
-    this._loadSystems(this.filterPanel.getFilters(), page);
+    this._loadSystems(this.filterPanel ? this.filterPanel.getFilters() : null, page);
   }
 
   openOrganizationsModal() {
@@ -118,7 +118,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   hasActiveFilters(): boolean{
-    return this.filterPanel.hasActiveFilters();
+    return this.filterPanel && this.filterPanel.hasActiveFilters();
   }
 
   clearFilters(){
