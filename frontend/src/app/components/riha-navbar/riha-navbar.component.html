@@ -41,7 +41,7 @@
             <a class="nav-link" [routerLink]="'/Avaleht'">Avaleht</a>
           </li>
           <li class="nav-item" [ngClass]="{'active': isListOrSubView()}">
-            <a class="nav-link" [routerLink]="'/Infosüsteemid'" [queryParams]="{_dc: getRand()}">RIHA kataloog</a>
+            <a class="nav-link" [routerLink]="'/Infosüsteemid'" [queryParams]="{_dc: _dc}">RIHA kataloog</a>
           </li>
           <li *ngIf="environmentService.getUserMatrix().hasApproverRole" class="nav-item" routerLinkActive="active">
             <a class="nav-link" [routerLink]="'/Hinda'">Hinda</a>

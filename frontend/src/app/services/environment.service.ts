@@ -42,7 +42,7 @@ export class EnvironmentService {
   }
 
   public getSessionTimeoutInterval(): number{
-   return this.globalEnvironment.getSessionMaxInactiveInterval();
+    return this.globalEnvironment.getSessionMaxInactiveInterval();
   }
 
   public getUserMatrix(): UserMatrix{
@@ -106,9 +106,12 @@ export class EnvironmentService {
   }
 
   public onAppStart(): Promise<any> {
-    return this.loadEnvironmentData().toPromise().then(env => {
+    const promise = this.loadEnvironmentData().toPromise();
+    promise.then(env => {
       this.runTrackingScripts(new Environment(env));
     });
+
+    return promise;
   }
 
   public loadClassifiers(): Promise<any> {
@@ -120,7 +123,6 @@ export class EnvironmentService {
   public loadEnvironmentData(): Observable<Environment> {
     const observable = this.http.get<Environment>(this.environmentUrl);
     observable.subscribe(env => {
-      console.log('loadEnvironmentData type', typeof env, env);
       this.globalEnvironment = new Environment(env);
     });
 
