@@ -1,14 +1,12 @@
 package ee.ria.riha.web;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.servlet.http.HttpServletRequest;
-
 import ee.ria.riha.authentication.RihaUserDetails;
+import ee.ria.riha.service.UserService;
+import ee.ria.riha.storage.util.*;
+import ee.ria.riha.web.model.UserDetailsModel;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,17 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ee.ria.riha.service.UserService;
-import ee.ria.riha.storage.util.ApiPageableAndCompositeRequestParams;
-import ee.ria.riha.storage.util.CompositeFilterRequest;
-import ee.ria.riha.storage.util.PageRequest;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
-import ee.ria.riha.web.model.UserDetailsModel;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 
@@ -38,15 +30,17 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 public class OrganizationController {
 
 	private static final String SORT_DELIMITER = "-";
-	private static final Map<String, Function<UserDetailsModel, ? extends Comparable>> sortFunctions;
+	static final Map<String, Comparator<UserDetailsModel>> USER_DETAILS_COMPARATORS;
+
 	static {
-		sortFunctions = new HashMap<>();
-		sortFunctions.put("firstName", UserDetailsModel::getFirstName);
-		sortFunctions.put("lastName", UserDetailsModel::getLastName);
-		sortFunctions.put("email", UserDetailsModel::getEmail);
-		sortFunctions.put("approver", UserDetailsModel::getApprover);
-		sortFunctions.put("producer", UserDetailsModel::getProducer);
+		USER_DETAILS_COMPARATORS = new HashMap<>();
+		USER_DETAILS_COMPARATORS.put("firstName", Comparator.comparing(UserDetailsModel::getFirstName, Comparator.nullsLast(String::compareToIgnoreCase)));
+		USER_DETAILS_COMPARATORS.put("lastName", Comparator.comparing(UserDetailsModel::getLastName, Comparator.nullsLast(String::compareToIgnoreCase)));
+		USER_DETAILS_COMPARATORS.put("email", Comparator.comparing(UserDetailsModel::getEmail, Comparator.nullsLast(String::compareToIgnoreCase)));
+		USER_DETAILS_COMPARATORS.put("approver", Comparator.comparing(UserDetailsModel::getApprover, Comparator.nullsLast(Boolean::compareTo)));
+		USER_DETAILS_COMPARATORS.put("producer", Comparator.comparing(UserDetailsModel::getProducer, Comparator.nullsLast(Boolean::compareTo)));
 	}
+
 
 	@Autowired
 	private UserService userService;
@@ -64,7 +58,15 @@ public class OrganizationController {
 		List<UserDetailsModel> users = userService.getUsersByOrganization(rihaUserDetails.getActiveOrganization().getCode());
 
 		int totalUsers = users.size();
-		sortUsers(filterRequest, users);
+		String sortParameter = getSortFieldFromFilterRequest(filterRequest);
+		Comparator<UserDetailsModel> sortFunction =
+				sortParameter != null
+						? USER_DETAILS_COMPARATORS.get(sortParameter.replace(SORT_DELIMITER, ""))
+						: null;
+		if (sortParameter != null && sortFunction != null) {
+			sortUsers(users, sortFunction, sortParameter.startsWith(SORT_DELIMITER));
+		}
+
 		users = applyPaging(pageable, users);
 
 		return ResponseEntity.ok(new PagedResponse(
@@ -73,17 +75,14 @@ public class OrganizationController {
 				users));
 	}
 
-	private void sortUsers(CompositeFilterRequest filterRequest, List<UserDetailsModel> users) {
-		List<String> sortParameters = filterRequest.getSortParameters();
-		if (!sortParameters.isEmpty()) {
-			String sort = sortParameters.get(0);
-			Function<UserDetailsModel, ? extends Comparable> sortFunction = sortFunctions.get(sort.replace(SORT_DELIMITER, ""));
-			if (sortFunction == null) {
-				return;
-			}
-			Comparator<UserDetailsModel> comparator = Comparator.comparing(sortFunction);
-			users.sort(sort.startsWith(SORT_DELIMITER) ? comparator.reversed() : comparator);
-		}
+	private String getSortFieldFromFilterRequest(CompositeFilterRequest filterRequest) {
+		return filterRequest != null && filterRequest.getSortParameters() != null && !filterRequest.getSortParameters().isEmpty()
+				? filterRequest.getSortParameters().get(0)
+				: null;
+	}
+
+	static void sortUsers(List<UserDetailsModel> users, Comparator<UserDetailsModel> sortFunction, boolean reverseSort) {
+		users.sort(reverseSort ? sortFunction.reversed() : sortFunction);
 	}
 
 	private List<UserDetailsModel> applyPaging(Pageable pageable, List<UserDetailsModel> users) {
