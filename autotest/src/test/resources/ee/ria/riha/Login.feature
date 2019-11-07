@@ -1,6 +1,6 @@
 Feature: Login
 
-  Scenario Outline: Login to application
+  Scenario Outline: Login to application (RIHAKB-308)
     Given A user navigates to HomePage "<url>"
     And user clicks on login button
     When user selects 'Mobiil-ID' tab

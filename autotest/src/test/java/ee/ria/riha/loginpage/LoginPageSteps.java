@@ -1,5 +1,6 @@
 package ee.ria.riha.loginpage;
 
+import ee.ria.riha.pages.LoginPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 
@@ -12,7 +13,7 @@ public class LoginPageSteps {
 
     @When("^user selects 'Mobiil-ID' tab$")
     public void userSelectsMobiilIdTab() {
-        this.loginPage.selectsMobiilIdTab();
+        this.loginPage.selectMobiilIdTab();
     }
 
     @And("^user enters 'isikukood' \"([^\"]*)\" and 'Telefoninumber' \"([^\"]*)\"$")
