@@ -32,13 +32,16 @@
     }
 }
 
-@include media-breakpoint-down(xl) {
-    .pagehead{
-      &:before{
-        left: -20px;
-        right: -20px;
-      }
+@include media-breakpoint-up(xl) {
+  .pagehead{
+    &:before{
+      left: -40px;
+      right: -40px;
     }
+  }
+}
+
+@include media-breakpoint-down(lg) {
     .menu-toggle {
         display: block;
         position: relative;
@@ -491,7 +494,7 @@
         }
     }
     .card {
-        .card-block {
+        .card-body {
             padding: 20px;
         }
         .card-footer {
@@ -501,7 +504,7 @@
             .card-title {
                 padding: 20px 20px 0px 20px;
             }
-            .card-block {
+            .card-body {
                 padding: 0px 20px;
             }
             .card-footer {
@@ -515,7 +518,7 @@
             }
         }
         &.filters {
-            .card-block {
+            .card-body {
                 .col-form-label {
                     flex: 0 0 100%;
                     max-width: 100%;
