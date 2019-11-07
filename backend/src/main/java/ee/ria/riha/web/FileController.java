@@ -28,11 +28,11 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @PostMapping(API_V1_PREFIX + "/systems/{reference}/files")
+    @PostMapping(value = API_V1_PREFIX + "/systems/{reference}/files", consumes = "multipart/form-data")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Upload file")
     public ResponseEntity upload(@PathVariable("reference") String reference,
-                                 @RequestParam("file") MultipartFile file) throws IOException {
+                                 @RequestPart("file") MultipartFile file) throws IOException {
         log.info("Receiving info system '{}' file '{}' [{}] with size {}b",
                 reference, file.getOriginalFilename(), file.getContentType(), file.getSize());
 
