@@ -1,4 +1,4 @@
-package ee.ria.riha.page;
+package ee.ria.riha.pages;
 
 import ee.ria.riha.driver.Setup;
 import ee.ria.riha.driver.Wait;
