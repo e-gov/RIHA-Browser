@@ -605,3 +605,11 @@
         }
     }
 }
+
+/****
+ *  Remove transformation on opened calendar & tooltip
+ *  THIS WILL FIX BLURRED FONT EFFECT ON BROWSER WINDOW ZOOMING
+ */
+.dropdown-menu.show.ngb-dp-body, .tooltip.show {
+  will-change: unset !important;
+}
