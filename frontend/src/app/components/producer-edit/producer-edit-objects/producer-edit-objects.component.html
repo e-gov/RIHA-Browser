@@ -1,6 +1,6 @@
 <div class="fixed-header">
   Andmed
-  <button (click)="closeModal(dataFilesForm, object)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal(dataFilesForm, object)" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
@@ -15,7 +15,7 @@
                (keyup.enter)="addStoredDataObject(object)"
                name="object">
         <div class="col-2">
-          <button class="btn btn-default" (click)="addStoredDataObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          <button class="btn btn-secondary" (click)="addStoredDataObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <app-tooltip [placement]="'bottom-right'" [text]="'Andmeobjektide detailne nimekiri, milles on esitatud isikuandmed, eriliiki isikuandmed ja põhiandmed: mallikohane csv-, xls- või xlsx-fail, mis kasutab koodisüsteemi Windows-1257'"></app-tooltip>
     </div>
     <div *ngIf="dataFile == null" class="form-group">
-      <label class="btn btn-default input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
+      <label class="btn btn-secondary input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
       <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event, dataFilesForm)">
     </div>
     <div *ngIf="dataFile != null" class="form-group">
@@ -74,7 +74,7 @@
                required>
       </div>
       <div class="form-group col-12">
-        <button class="btn btn-default pull-right"
+        <button class="btn btn-secondary pull-right"
                 [disabled]="uploading"
                 (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
       </div>
