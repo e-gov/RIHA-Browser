@@ -17,20 +17,20 @@ public class MyInfosystemsPage extends BasePage {
     @FindBy(id = "topics-input")
     private WebElement topicsInput;
 
-//    @FindBy(id = "name-input")
-//    private WebElement nameInput;
-//
-//    @FindBy(id = "short-name-input")
-//    private WebElement shortNameInput;
-//
-//    @FindBy(id = "purpose-textarea")
-//    private WebElement purposeInput;
-//
-//    @FindBy(css = ".table-responsive > .btn")
-//    private WebElement createNewLink;
-//
-//    @FindBy(xpath = "//button[@type='submit']")
-//    private WebElement submitButton;
+    @FindBy(id = "name-input")
+    private WebElement nameInput;
+
+    @FindBy(id = "short-name-input")
+    private WebElement shortNameInput;
+
+    @FindBy(id = "purpose-textarea")
+    private WebElement purposeInput;
+
+    @FindBy(css = ".table-responsive > .btn")
+    private WebElement createNewLink;
+
+    @FindBy(xpath = "//button[@type='submit']")
+    private WebElement submitButton;
 
     @FindBy(id = "infosystems-table")
     private WebElement infosystemsTable;
@@ -65,15 +65,15 @@ public class MyInfosystemsPage extends BasePage {
         driver.findElement(By.linkText(infosystem)).click();
     }
 
-//    public void goToCreateNewInfosystemPage() {
-//        this.wait.forElementToBeDisplayed(15, createNewLink, "createNewLink");
-//        this.createNewLink.click();
-//    }
-//
-//    public void enterNameSHortNameAndPurpose(String name, String shortName, String purpose) {
-//        this.nameInput.sendKeys(name);
-//        this.shortNameInput.sendKeys(shortName);
-//        this.purposeInput.sendKeys(purpose);
-//        this.submitButton.click();
-//    }
+    public void goToCreateNewInfosystemPage() {
+        this.wait.forElementToBeDisplayed(15, createNewLink, "createNewLink");
+        this.createNewLink.click();
+    }
+
+    public void enterNameSHortNameAndPurpose(String name, String shortName, String purpose) {
+        this.nameInput.sendKeys(name);
+        this.shortNameInput.sendKeys(shortName);
+        this.purposeInput.sendKeys(purpose);
+        this.submitButton.click();
+    }
 }
