@@ -53,9 +53,10 @@
       või lisa viide
     </div>
     <form #dataFilesForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+      <div class="form-group">
         <label for="url" class="separated-text">URL:</label>
         <input id="url" class="form-control"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
                [disabled]="uploading"
                #url="ngModel"
                [(ngModel)]="data.url"
@@ -63,9 +64,10 @@
                name="url"
                url required>
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched)}">
+      <div class="form-group">
         <label for="name" class="separated-text">Dokumendi pealkiri:</label>
         <input id="name" class="form-control"
+               [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched)}"
                [disabled]="uploading"
                #name="ngModel"
                [(ngModel)]="data.name"

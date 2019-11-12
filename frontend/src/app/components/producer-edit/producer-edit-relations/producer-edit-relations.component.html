@@ -5,10 +5,12 @@
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
     <form #addForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}">
+      <div class="form-group">
         <label for="infoSystem" class="text-muted separated-text">Infosüsteemi lühinimi:</label>
         <small class="label-small-text text-muted">Sisesta vähemalt 3 tähemärki, et otsida infosüsteemi nime alusel</small>
-        <input id="infoSystem" class="form-control col-12"
+        <input id="infoSystem"
+               [ngClass]="{'is-invalid': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}"
+               class="form-control col-12"
                #infoSystem="ngModel"
                [ngbTypeahead]="search"
                [inputFormatter]="inputFormatter"
@@ -17,9 +19,11 @@
                name="infoSystem" required>
 
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">
+      <div class="form-group">
         <label for="type" class="text-muted separated-text">Seose tüüp:</label>
-        <select id="type" class="form-control col-12"
+        <select id="type"
+                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched)}"
+                class="form-control col-12"
                 #type="ngModel"
                 [(ngModel)]="relation.type"
                 name="type" required>

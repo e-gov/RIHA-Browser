@@ -8,9 +8,11 @@
     <span>RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva eraõigusliku isiku infosüsteemid, mis asutatakse
       ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises lepingus sätestatud ülesannete täitmiseks.</span>
     <form #addForm="ngForm">
-        <div class="form-group" [ngClass]="{'has-danger':   name.invalid && (name.dirty || name.touched || addForm.submitted)}">
+        <div class="form-group">
         <label for="name" class="text-muted separated-text">Nimi: *</label>
-        <input id="name" class="form-control col-12"
+        <input id="name"
+               [ngClass]="{'is-invalid':   name.invalid && (name.dirty || name.touched || addForm.submitted)}"
+               class="form-control col-12"
                required
                ngModel
                #name="ngModel"
@@ -19,9 +21,11 @@
                name="name"/>
         </div>
 
-        <div class="form-group row"  [ngClass]="{'has-danger':  shortName.invalid && (shortName.dirty || shortName.touched || addForm.submitted)}">
+        <div class="form-group row">
           <label for="shortName" class="text-muted separated-text">Lühinimi: *</label>
-          <input id="shortName" class="form-control col-12"
+          <input id="shortName"
+                 [ngClass]="{'is-invalid':  shortName.invalid && (shortName.dirty || shortName.touched || addForm.submitted)}"
+                 class="form-control col-12"
                  pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
                  type="text"
                  required
@@ -31,9 +35,11 @@
                  name="shortName"/>
         </div>
 
-        <div class="form-group" [ngClass]="{'has-danger':  purpose.invalid && (purpose.dirty || purpose.touched || addForm.submitted)}">
+        <div class="form-group">
         <label for="goal" class="text-muted separated-text">Eesmärk: *</label>
-        <input id="goal" class="form-control col-12"
+        <input id="goal"
+               [ngClass]="{'is-invalid': purpose.invalid && (purpose.dirty || purpose.touched || addForm.submitted)}"
+               class="form-control col-12"
                type="text"
                required
                #purpose="ngModel"
@@ -41,10 +47,13 @@
                ngModel
                name="purpose"/>
         </div>
-      <div class="form-group" [ngClass]="{'has-danger':   differences.invalid && (differences.dirty || differences.touched || addForm.submitted)}">
-
+      <div class="form-group">
         <label for="infoSystem" class="text-muted separated-text">Erisused:</label>
-        <textarea id="infoSystem" class="form-control col-12" rows="5" cols="120"
+        <textarea id="infoSystem"
+            [ngClass]="{'is-invalid': differences.invalid && (differences.dirty || differences.touched || addForm.submitted)}"
+            class="form-control col-12"
+            rows="5"
+            cols="120"
             placeholder="Standardlahenduse kasutajaks registreerimiseks kirjeldage omapoolsed võimalikud erisused infosüsteemi kasutamisel: kasutusel moodulid, rakenduse versioon jmt."
             #differences="ngModel"
             ngModel

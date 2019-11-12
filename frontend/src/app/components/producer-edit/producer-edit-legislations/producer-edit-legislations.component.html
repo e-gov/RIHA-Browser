@@ -5,9 +5,11 @@
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
     <form #addForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+      <div class="form-group">
         <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
-        <input id="url" class="form-control col-12"
+        <input id="url"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+               class="form-control col-12"
                #url="ngModel"
                [(ngModel)]="data.url"
                type="url"
@@ -26,9 +28,11 @@
                name="name">
 
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">
+      <div class="form-group">
         <label for="type" class="text-muted separated-text">Õigusakti liik:</label>
-        <select id="type" class="form-control col-12"
+        <select id="type"
+                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched)}"
+                class="form-control col-12"
                 #type="ngModel"
                 [(ngModel)]="data.type"
                 name="type" required>

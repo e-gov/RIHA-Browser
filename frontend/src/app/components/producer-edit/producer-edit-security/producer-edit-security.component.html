@@ -108,8 +108,9 @@
             </div>
           </div>
         </div>
-        <div class="form-group" [ngClass]="{'has-danger': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched)}" *ngIf="!isIske">
+        <div class="form-group">
           <input class="form-control ml-1"
+                 [ngClass]="{'is-invalid': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched)}" *ngIf="!isIske"
                  #otherSecurityStandard="ngModel"
                  [(ngModel)]="security.standard"
                  name="standard"
@@ -132,8 +133,11 @@
           <div class="form-group mt-2">
             <label class="text-muted">Viimase auditi kuupäev: *</label>
             <div class="row">
-              <div class="input-group datepicker col-4" [ngClass]="{'has-danger': auditTimestampInput.invalid  && (auditTimestampInput.dirty || auditTimestampInput.touched)}">
-                <input id="audit_timestamp" class="form-control" placeholder="yyyy-mm-dd"
+              <div class="input-group datepicker col-4">
+                <input id="audit_timestamp"
+                       [ngClass]="{'is-invalid': auditTimestampInput.invalid  && (auditTimestampInput.dirty || auditTimestampInput.touched)}"
+                       class="form-control"
+                       placeholder="yyyy-mm-dd"
                        name="auditTimestamp"
                        [(ngModel)]="security.latest_audit_date"
                        [required]="isAuditApplied"
