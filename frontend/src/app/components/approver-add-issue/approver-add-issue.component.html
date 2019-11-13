@@ -20,16 +20,18 @@
           </div>
           <form #newIssueForm="ngForm">
             <div *ngIf="!isApprovalRequest">
-              <div class="form-group" [ngClass]="{'has-danger': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted)}">
+              <div class="form-group">
                 <input id="issueTitle" class="form-control col-12"
+                       [ngClass]="{'is-invalid': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted)}"
                        ngModel
                        #issueTitle="ngModel"
                        placeholder="lühikirjeldus hinnangust"
                        name="title" required>
 
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted)}">
+              <div class="form-group">
                   <textarea id="issueText" class="form-control col-12"
+                            [ngClass]="{'is-invalid': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted)}"
                             ngModel
                             rows="6"
                             #issueText="ngModel"
@@ -106,10 +108,11 @@
                        name="title">
 
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted)}">
+              <div class="form-group">
                 <label for="requestText" class="text-muted mb-0">Kommentaar: *</label>
                 <small class="label-small-text text-muted">kommentaarid on nähtavad ainult infosüsteemi omanikule ja RIHA hindajale</small>
                 <textarea id="requestText" class="form-control col-12"
+                          [ngClass]="{'is-invalid': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted)}"
                           [(ngModel)]="approvalRequest.comment"
                           rows="6"
                           #requestText="ngModel"
