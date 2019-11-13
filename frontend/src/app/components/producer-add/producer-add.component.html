@@ -15,16 +15,25 @@
       <p>
         RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva eraõigusliku isiku infosüsteemid, mis asutatakse ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises lepingus sätestatud ülesannete täitmiseks.
       </p>
-      <div class="form-group row" [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched || addForm.submitted)}">
+      <div class="form-group row">
         <label for="name-input" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Nimi:</label>
         <div class="col-sm-10">
-          <input #name="ngModel" class="form-control" name="name" ngModel type="text" id="name-input" placeholder="nt. Andmeomanike ametlik register" required>
+          <input #name="ngModel"
+                 [ngClass]="{'is-invalid': name.invalid  && (name.dirty || name.touched || addForm.submitted)}"
+                 class="form-control"
+                 name="name"
+                 ngModel
+                 type="text"
+                 id="name-input"
+                 placeholder="nt. Andmeomanike ametlik register"
+                 required>
         </div>
       </div>
-      <div class="form-group row" [ngClass]="{'has-danger': shortName.invalid  && (shortName.dirty || shortName.touched || addForm.submitted)}">
+      <div class="form-group row">
         <label for="short-name-input" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Lühinimi:</label>
         <div class="col-sm-10">
           <input #shortName="ngModel"
+                 [ngClass]="{'is-invalid': shortName.invalid  && (shortName.dirty || shortName.touched || addForm.submitted)}"
                  class="form-control"
                  name="short_name"
                  pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
@@ -33,10 +42,18 @@
                  placeholder="nt. AARE" required>
         </div>
       </div>
-      <div class="form-group row" [ngClass]="{'has-danger': purpose.invalid  && (purpose.dirty || purpose.touched || addForm.submitted)}">
+      <div class="form-group row">
         <label for="purpose-textarea" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Infosüsteemi eesmärk:</label>
         <div class="col-sm-10">
-          <textarea #purpose="ngModel" ngModel name="purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
+          <textarea #purpose="ngModel"
+                    [ngClass]="{'is-invalid': purpose.invalid  && (purpose.dirty || purpose.touched || addForm.submitted)}"
+                    ngModel name="purpose"
+                    class="form-control counter-element"
+                    id="purpose-textarea"
+                    rows="10"
+                    placeholder="kellele ja miks infosüsteem luuakse"
+                    required>
+          </textarea>
         </div>
       </div>
       <button type="submit" class="btn btn-success pull-right">Salvesta</button>
