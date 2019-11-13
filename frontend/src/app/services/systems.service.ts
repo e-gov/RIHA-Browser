@@ -7,7 +7,6 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {System} from "../models/system";
 import {SystemIssue} from "../models/system-issue";
 import {SystemRelation} from "../models/system-relation";
-import {SystemIssueReply} from "../models/system-issue-reply";
 import {environment} from "../../environments/environment";
 
 @Injectable()
@@ -198,7 +197,7 @@ export class SystemsService {
 
     params = params.set('size', '10');
 
-    const urlToUse = url || this.systemsUrl;
+    const urlToUse = url || (this.systemsUrl + "/autocomplete");
 
     return this.http.get<any>(urlToUse, {
       params: params
