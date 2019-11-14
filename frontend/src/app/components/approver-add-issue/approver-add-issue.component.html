@@ -129,11 +129,11 @@
     </div>
     <div class="actions-bar">
       <div *ngIf="isApprovalRequest && openIssuesMatrix" class="buttons pull-right">
-        <button  (click)="closeModal(approvalRequestForm)" class="btn btn-secondary pull-right">Katkesta</button>
+        <button  (click)="closeModal()" class="btn btn-secondary pull-right">Katkesta</button>
         <button (click)="onSubmitApprovalRequest(approvalRequestForm)" class="btn btn-success pull-right">Salvesta</button>
       </div>
       <div *ngIf="!isApprovalRequest" class="buttons pull-right">
-        <button (click)="closeModal(newIssueForm)" class="btn btn-secondary pull-right">Katkesta</button>
+        <button (click)="closeModal()" class="btn btn-secondary pull-right">Katkesta</button>
         <button (click)="onSubmitNewIssue(newIssueForm)" class="btn btn-success pull-right">Salvesta</button>
       </div>
     </div>

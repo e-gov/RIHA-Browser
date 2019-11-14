@@ -1,16 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { System } from '../../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { ModalHelperService } from '../../../services/modal-helper.service';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {System} from '../../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {NgForm} from "@angular/forms";
+import {Observable} from "rxjs";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
 
 @Component({
   selector: 'app-producer-edit-objects',
   templateUrl: './producer-edit-objects.component.html',
   styleUrls: ['./producer-edit-objects.component.scss']
 })
-export class ProducerEditObjectsComponent implements OnInit {
+export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('dataFilesForm', null) formObject: NgForm;
+  @ViewChild('object', null) inputObject: ElementRef;
 
   @Input() system: System;
   stored_data: string[] =[];
@@ -90,16 +96,34 @@ export class ProducerEditObjectsComponent implements OnInit {
     });
   }
 
-  closeModal(f, i){
-    if (this.isChanged || f.form.dirty || i.value.length > 0){
-      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.');
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
     }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.isChanged || this.formObject.form.dirty || this.inputObject.nativeElement.value.length > 0
   }
 
   constructor(private modalService: ModalHelperService,
@@ -113,5 +137,4 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.stored_data = system.details.stored_data || [];
     this.data_files = system.details.data_files || [];
   }
-
 }

@@ -1,17 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { System } from '../../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { classifiers } from '../../../services/environment.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {System} from '../../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {classifiers} from '../../../services/environment.service';
+import {NgForm} from "@angular/forms";
+import {Observable} from "rxjs";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
 
 @Component({
   selector: 'app-producer-edit-tech-docs',
   templateUrl: './producer-edit-documents.component.html',
   styleUrls: ['./producer-edit-documents.component.scss']
 })
-export class ProducerEditDocumentsComponent implements OnInit {
+export class ProducerEditDocumentsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('addForm', null) formObjectAdd: NgForm;
+  @ViewChild('editForm', null) formObjectEdit: NgForm;
 
   @Input() system: System;
   documents: any[] = [];
@@ -108,17 +114,6 @@ export class ProducerEditDocumentsComponent implements OnInit {
     }
   }
 
-  closeModal(addForm, editForm){
-    if (this.isChanged || addForm.form.dirty || editForm.form.dirty){
-      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
-    }
-  }
 
   isUploaded(doc){
     return doc.url.substr(0,7) == 'file://';
@@ -144,6 +139,36 @@ export class ProducerEditDocumentsComponent implements OnInit {
     } else {
       this.documents[i].accessRestriction = null;
     }
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.');
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.isChanged || this.formObjectAdd.form.dirty || this.formObjectEdit.form.dirty
   }
 
   constructor(private modalService: ModalHelperService,

@@ -1,17 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService, classifiers } from '../../services/environment.service';
-import { System } from '../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { User } from '../../models/user';
-import { ModalHelperService } from '../../services/modal-helper.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {classifiers, EnvironmentService} from '../../services/environment.service';
+import {System} from '../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {User} from '../../models/user';
+import {ModalHelperService} from '../../services/modal-helper.service';
+import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
+import {Observable} from "rxjs";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-approver-add-comment',
   templateUrl: './approver-add-issue.component.html',
   styleUrls: ['./approver-add-issue.component.scss']
 })
-export class ApproverAddIssueComponent implements OnInit {
+export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('approvalRequestForm', null) formObjectApprovalRequest: NgForm;
+  @ViewChild('newIssueForm', null) formObjectNewIssue: NgForm;
 
   @Input() system: System;
   activeUser: User;
@@ -78,20 +84,42 @@ export class ApproverAddIssueComponent implements OnInit {
     }
   }
 
-  closeModal(f){
-    if (f.form.dirty){
-      if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
-    }
-  }
-
   canSwitchViews(){
     return this.environmentService.getUserMatrix().hasApproverRole && this.activeUser.canEdit(this.system.getOwnerCode());
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit Ära ilma salvestamata, siis sinu muudatused kaovad.');
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    if (this.isApprovalRequest) {
+      return this.formObjectApprovalRequest.form.dirty;
+    } else {
+      return this.formObjectNewIssue.form.dirty;
+    }
   }
 
   constructor(private modalService: ModalHelperService,

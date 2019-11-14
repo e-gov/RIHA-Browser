@@ -1,17 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { System } from '../../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { classifiers } from "../../../services/environment.service";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {System} from '../../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {classifiers} from "../../../services/environment.service";
+import {Observable} from "rxjs";
+import {NgForm} from "@angular/forms";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
 
 @Component({
   selector: 'app-producer-edit-legislations',
   templateUrl: './producer-edit-legislations.component.html',
   styleUrls: ['./producer-edit-legislations.component.scss']
 })
-export class ProducerEditLegislationsComponent implements OnInit {
+export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('addForm', null) formObjectAdd: NgForm;
 
   @Input() system: System;
   legislations: any[] = [];
@@ -36,18 +41,6 @@ export class ProducerEditLegislationsComponent implements OnInit {
     this.isChanged = true;
   }
 
-  closeModal(f){
-    if (this.isChanged || f.form.dirty){
-      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
-    }
-  }
-
   saveSystem(){
     this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
       const system = new System(responseSystem);
@@ -60,6 +53,36 @@ export class ProducerEditLegislationsComponent implements OnInit {
     }, err => {
       this.toastrService.error('Serveri viga.');
     });
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.');
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.isChanged || this.formObjectAdd.form.dirty
   }
 
   constructor(private modalService: ModalHelperService,

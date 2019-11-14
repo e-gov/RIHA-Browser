@@ -80,6 +80,7 @@ import {LoginLinkComponent} from './components/login-link-component/login-link-c
 import {ProducerSearchFilterComponent} from './components/producer-search-filter/producer-search-filter-component';
 import {ProducerOrganizationComponent} from './components/producer-organization/producer-organization.component';
 import {httpInterceptorProviders} from "./http-interceptors";
+import {CanDeactivateModalGuard} from './guards/can-deactivate-modal.guard';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -104,7 +105,7 @@ const routes: Routes = [
   { path: 'Systems', component: BrowserListComponent },
   { path: 'Kirjelda', component: ProducerListComponent },
   { path: 'Describe', component: ProducerListComponent },
-  { path: 'Infosüsteemid/Vaata/:reference', component: ProducerDetailsComponent },
+  { path: 'Infosüsteemid/Vaata/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard] },
   { path: 'Infosüsteemid/Vaata/:reference/Arutelu/:issue_id', component: ProducerDetailsComponent },
   { path: 'Systems/Vaata/:reference', component: ProducerDetailsComponent },
   { path: 'Kirjelda/Vaata/:reference', component: ProducerDetailsComponent },
@@ -225,7 +226,8 @@ const routes: Routes = [
     { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true },
     { provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true },
     httpInterceptorProviders,
-    ]
+    CanDeactivateModalGuard,
+  ]
 })
 
 export class AppModule {}
