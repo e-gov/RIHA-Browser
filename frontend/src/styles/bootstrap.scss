@@ -125,4 +125,8 @@ $container-max-widths: (
   xxl: 1200px,
   xxxl: 1400px
 ) !default;
+
+/* Validation */
+$enable-validation-icons: false;
+
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
