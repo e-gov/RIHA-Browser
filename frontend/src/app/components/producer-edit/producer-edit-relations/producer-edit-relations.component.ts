@@ -1,20 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { classifiers } from "../../../services/environment.service";
-import { System } from '../../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { ModalHelperService } from '../../../services/modal-helper.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {classifiers} from "../../../services/environment.service";
+import {System} from '../../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {ModalHelperService} from '../../../services/modal-helper.service';
 
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import {NgForm} from "@angular/forms";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
 
 @Component({
   selector: 'app-producer-edit-relations',
   templateUrl: './producer-edit-relations.component.html',
   styleUrls: ['./producer-edit-relations.component.scss']
 })
-export class ProducerEditRelationsComponent implements OnInit {
+export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('addForm', null) formObjectAdd: NgForm;
 
   @Input() system: System;
   @Input() relations: any[];
@@ -73,9 +77,35 @@ export class ProducerEditRelationsComponent implements OnInit {
     )
   }
 
-  closeModal(){
-    this.modalService.closeActiveModal();
-  };
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.');
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.formObjectAdd.form.dirty
+  }
 
   constructor(private systemsService: SystemsService,
               private modalService: ModalHelperService,
