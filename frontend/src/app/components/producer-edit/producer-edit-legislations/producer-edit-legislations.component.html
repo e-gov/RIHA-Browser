@@ -1,13 +1,15 @@
 <div class="fixed-header">
   Õigusaktid
-  <button (click)="closeModal(addForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal(addForm)" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
     <form #addForm="ngForm">
-      <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+      <div class="form-group">
         <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
-        <input id="url" class="form-control col-12"
+        <input id="url"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+               class="form-control col-12"
                #url="ngModel"
                [(ngModel)]="data.url"
                type="url"
@@ -26,9 +28,11 @@
                name="name">
 
       </div>
-      <div class="form-group" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched)}">
+      <div class="form-group">
         <label for="type" class="text-muted separated-text">Õigusakti liik:</label>
-        <select id="type" class="form-control col-12"
+        <select id="type"
+                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched)}"
+                class="form-control col-12"
                 #type="ngModel"
                 [(ngModel)]="data.type"
                 name="type" required>
@@ -38,7 +42,7 @@
       </div>
       <div class="form-group row">
         <div class="col-12">
-          <button class="btn btn-default pull-right" (click)="addLegislation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          <button class="btn btn-secondary pull-right" (click)="addLegislation(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
         </div>
       </div>
       <div class="dataTables_wrapper">
