@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
 
@@ -52,6 +55,46 @@ public class InfoSystemController {
                 createPagedModel(
                         infoSystemService.list(pageable, filterable),
                         infoSystemModelMapper));
+    }
+    @GetMapping("/autocomplete")
+    @ApiOperation("List all existing information systems for autocomplete")
+    @ApiPageableAndFilterableParams
+    public ResponseEntity autocomplete(Pageable pageable, Filterable filterable) {
+
+        // search for exact matches
+        PagedResponse<InfoSystem> exactMatches = infoSystemService.list(pageable, createExactMatchFilterFromILikeFilter(filterable));
+        if (exactMatches != null && exactMatches.getTotalElements() >= pageable.getPageSize()) {
+            // there are more exact matches than requested.
+            return ResponseEntity.ok(createPagedModel(exactMatches, infoSystemModelMapper));
+        } else if (exactMatches != null && exactMatches.getTotalElements() < pageable.getPageSize()) {
+            // there are some exact matches, need to fetch fuzzy matches
+            LinkedHashSet<InfoSystem> joinedList = new LinkedHashSet<>(exactMatches.getContent());
+
+            PagedResponse<InfoSystem> fuzzyMatches = infoSystemService.list(pageable, filterable);
+            if (fuzzyMatches != null && fuzzyMatches.getContent() != null) {
+                joinedList.addAll(fuzzyMatches.getContent());
+            }
+
+            return ResponseEntity.ok(createPagedModel(
+                    new PagedResponse<>(
+                            pageable,
+                            joinedList.size(),
+                            new ArrayList<>(joinedList)),
+                    infoSystemModelMapper));
+        } else {
+            return ResponseEntity.ok(
+                    createPagedModel(
+                            infoSystemService.list(pageable, filterable),
+                            infoSystemModelMapper));
+        }
+
+    }
+
+    private Filterable createExactMatchFilterFromILikeFilter(Filterable filterable) {
+        return new FilterRequest(
+                filterable.getFilter().replaceAll("%", ""),
+                filterable.getSort(),
+                filterable.getFields());
     }
 
     @GetMapping(path = "/data-objects")

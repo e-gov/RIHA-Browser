@@ -7,7 +7,6 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {System} from "../models/system";
 import {SystemIssue} from "../models/system-issue";
 import {SystemRelation} from "../models/system-relation";
-import {SystemIssueReply} from "../models/system-issue-reply";
 import {environment} from "../../environments/environment";
 
 @Injectable()
@@ -78,7 +77,7 @@ export class SystemsService {
 
   public getAlertText(errObj): string{
     let ret = null;
-    const code = errObj.code;
+    const code = errObj.code || errObj.error.code;
     if (code === 'validation.system.shortNameAlreadyTaken'){
       ret = 'Lühinimi on juba kasutusel';
     } else {
@@ -198,7 +197,7 @@ export class SystemsService {
 
     params = params.set('size', '10');
 
-    const urlToUse = url || this.systemsUrl;
+    const urlToUse = url || (this.systemsUrl + "/autocomplete");
 
     return this.http.get<any>(urlToUse, {
       params: params
@@ -274,11 +273,11 @@ export class SystemsService {
     return this.http.post<System>(this.systemsUrl, system);
   }
 
-  public postDataFile(file, reference): Observable<String> {
+  public postDataFile(file, reference): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<String>(this.systemsUrl + `/${ reference }/files`, formData);
+    return this.http.post(this.systemsUrl + `/${ reference }/files`, formData, { responseType: 'text' });
   }
 
   public updateSystem(updatedData, reference?): Observable<System> {
