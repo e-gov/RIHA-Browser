@@ -22,4 +22,9 @@ public class InfosystemPageSteps {
     public void topicIsPresentInAssociatedTopicsList(String topic) {
         Assert.assertTrue("Associated topic list doen't contain topic " + topic, infosystemPage.getAssociatedTopicsList().contains(topic.toUpperCase()));
     }
+
+    @Then("InfosytemPage: infosystem creation purpose is {string}")
+    public void infosystemCreationPurposeIs(String purpose) {
+        Assert.assertTrue("Infosystem creation purpose is not " + purpose, purpose.equalsIgnoreCase(infosystemPage.getPurposeText()));
+    }
 }

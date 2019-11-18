@@ -1,4 +1,4 @@
-package ee.ria.riha.myinfosystemspage;
+package ee.ria.riha.infosystemmanagement;
 
 import ee.ria.riha.driver.Setup;
 import ee.ria.riha.pages.MyInfosystemsPage;
@@ -7,10 +7,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
-public class MyInfosystemsPageSteps {
+public class InfosystemManagementSteps {
     private MyInfosystemsPage myInfosystemsPage;
 
-    public MyInfosystemsPageSteps() {
+    public InfosystemManagementSteps() {
         myInfosystemsPage = Setup.pageFactory.getPage(MyInfosystemsPage.class);
     }
 
@@ -29,9 +29,16 @@ public class MyInfosystemsPageSteps {
         myInfosystemsPage.goToCreateNewInfosystemPage();
     }
 
-    @And("MyInfosystemsPage: user enters name as {string} short name as {string} and purpose as {string}")
-    public void userEntersNameShortNameAndPurpose(String name, String shortName, String purpose) {
-        myInfosystemsPage.enterNameShortNameAndPurpose(name, shortName, purpose);
+    @And("MyInfosystemsPage: user enters name as {string} short name as {string} increasing last number and purpose as {string}")
+    public void userEntersNameShortNameAndPurpose(String namePrefix, String shortNamePrefix, String purpose) {
+        myInfosystemsPage.enterNameShortNameAndPurpose(namePrefix, shortNamePrefix, purpose);
+    }
+
+    @And("MyInfosystemsPage: user knows the number of last created infosystem with prefix {string}")
+    public void userKnowsTheNameOfLastCreatedInfosystem(String namePrefix) {
+        myInfosystemsPage.enterSearchText(namePrefix);
+        myInfosystemsPage.sortByShortNameDesc();
+        myInfosystemsPage.saveFirstFoundInfosystemShortNameToScenarioContext();
     }
 
     @When("MyInfosystemsPage: user clicks on {string} infosystem link")
