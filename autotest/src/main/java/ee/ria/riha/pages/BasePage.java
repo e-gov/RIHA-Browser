@@ -19,4 +19,8 @@ public class BasePage {
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
+
+    public ScenarioContext getScenarioContext() {
+        return scenarioContext;
+    }
 }

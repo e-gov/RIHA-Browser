@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class ScenarioContext {
     public static final String APP_URL_KEY = "appUrl";
+    public static final String SEARCH_TEXT_KEY = "searchText";
+    public static final String LAST_INFOSYSTEM_NUMBER = "lastInfosystemNumber";
     public static final String DEFAULT_APP_URL = "https://riha-browser-ik.ci.kit";
 
     private final Map<String, String> context = new HashMap<>();

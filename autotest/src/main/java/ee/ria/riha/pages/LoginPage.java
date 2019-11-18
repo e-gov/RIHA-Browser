@@ -1,5 +1,6 @@
 package ee.ria.riha.pages;
 
+import ee.ria.riha.context.ScenarioContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -17,7 +18,8 @@ public class LoginPage extends BasePage {
     @FindBy(css = "tr:nth-child(3) .c-btn")
     private WebElement jatkanButton;
 
-    public LoginPage() {
+    public LoginPage(ScenarioContext scenarioContext) {
+        super(scenarioContext);
         PageFactory.initElements(driver, this);
     }
 
