@@ -1,5 +1,6 @@
 package ee.ria.riha.driver;
 
+import ee.ria.riha.pages.PageFactory;
 import io.cucumber.java.Before;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
@@ -9,9 +10,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class Setup {
     public static WebDriver driver;
+    public static PageFactory pageFactory;
 
     @Before
-    public void setWebDriver() throws Exception {
+    public void init() {
         String browser = System.getProperty("browser");
         if (browser == null) {
             browser = "chrome";
@@ -32,5 +34,7 @@ public class Setup {
             default:
                 throw new IllegalArgumentException("Browser \"" + browser + "\" isn't supported.");
         }
+
+        pageFactory = new PageFactory();
     }
 }

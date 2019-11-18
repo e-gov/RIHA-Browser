@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
+import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
+
 public class MyInfosystemsPage extends BasePage {
     @FindBy(xpath = "//main[@id='content']/app-producer-list/section/div[2]/a[4]")
     private WebElement detailedSearchLink;
@@ -40,17 +43,17 @@ public class MyInfosystemsPage extends BasePage {
     }
 
     public void openDetailedSearchForm() {
-        this.detailedSearchLink.click();
+        detailedSearchLink.click();
     }
 
-    public void searchByTopic(String topic) throws Exception {
-        this.topicsInput.sendKeys(topic);
-        this.topicsInput.sendKeys(Keys.RETURN);
-        this.wait.forElementToBeDisplayed(10, infosystemsTable, "infosystems-table");
-        Thread.sleep(2000);
+    public void searchByTopic(String topic) {
+        topicsInput.sendKeys(topic);
+        topicsInput.sendKeys(Keys.RETURN);
     }
 
     public List<String> getFoundInfosystemsTopics() {
+        waitForLoading();
+
         List<String> topics = new ArrayList<>();
 
         List<WebElement> tableRows = infosystemsTable.findElements(By.tagName("tr"));
@@ -66,14 +69,19 @@ public class MyInfosystemsPage extends BasePage {
     }
 
     public void goToCreateNewInfosystemPage() {
-        this.wait.forElementToBeDisplayed(15, createNewLink, "createNewLink");
-        this.createNewLink.click();
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, createNewLink, "createNewLink");
+        createNewLink.click();
     }
 
-    public void enterNameSHortNameAndPurpose(String name, String shortName, String purpose) {
-        this.nameInput.sendKeys(name);
-        this.shortNameInput.sendKeys(shortName);
-        this.purposeInput.sendKeys(purpose);
-        this.submitButton.click();
+    public void enterNameShortNameAndPurpose(String name, String shortName, String purpose) {
+        nameInput.sendKeys(name);
+        shortNameInput.sendKeys(shortName);
+        purposeInput.sendKeys(purpose);
+        submitButton.click();
+    }
+
+    public void waitForLoading() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, infosystemsTable, "infosystems-table");
+        wait.sleep(TABLE_SORT_TIMEOUT);
     }
 }

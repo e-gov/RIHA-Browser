@@ -1,6 +1,5 @@
 package ee.ria.riha.pages;
 
-import ee.ria.riha.pages.BasePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -23,12 +22,12 @@ public class LoginPage extends BasePage {
     }
 
     public void selectMobiilIdTab() {
-        this.mobiilIdTab.click();
+        mobiilIdTab.click();
     }
 
     public void enterIsikukoodAndTelefoninumber(String personalCode, String phoneNumber) {
-        this.isikukoodInput.sendKeys(personalCode);
-        this.telefoninumberInput.sendKeys(phoneNumber);
-        this.jatkanButton.click();
+        isikukoodInput.sendKeys(personalCode);
+        telefoninumberInput.sendKeys(phoneNumber);
+        jatkanButton.click();
     }
 }

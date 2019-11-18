@@ -1,5 +1,6 @@
 package ee.ria.riha;
 
+import ee.ria.riha.driver.Setup;
 import ee.ria.riha.pages.HomePage;
 import ee.ria.riha.pages.LoginPage;
 import io.cucumber.java.en.Given;
@@ -9,16 +10,16 @@ public class BackgroundSteps {
     private LoginPage loginPage;
 
     public BackgroundSteps() {
-        this.loginPage = new LoginPage();
-        this.homePage = new HomePage();
+        loginPage = Setup.pageFactory.getPage(LoginPage.class);
+        homePage = Setup.pageFactory.getPage(HomePage.class);
     }
 
-    @Given("^User is logged in to \"([^\"]*)\" as \"([^\"]*)\" using tel. number \"([^\"]*)\"$")
+    @Given("User is logged in to {string} as {string} using tel. number {string}")
     public void userIsLoggedInAsTestUser(String url, String personalCode, String phoneNumber) {
-        this.homePage.goToHomePage(url);
-        this.homePage.goToLoginPage();
-        this.loginPage.selectMobiilIdTab();
-        this.loginPage.enterIsikukoodAndTelefoninumber(personalCode, phoneNumber);
-        this.homePage.selectSecondOrganization();
+        homePage.goToPage(url);
+        homePage.goToLoginPage();
+        loginPage.selectMobiilIdTab();
+        loginPage.enterIsikukoodAndTelefoninumber(personalCode, phoneNumber);
+        homePage.selectSecondOrganization();
     }
 }

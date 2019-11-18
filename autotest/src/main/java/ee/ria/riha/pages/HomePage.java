@@ -1,10 +1,12 @@
 package ee.ria.riha.pages;
 
-import ee.ria.riha.pages.BasePage;
+import ee.ria.riha.context.ScenarioContext;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
 
 public class HomePage extends BasePage {
 
@@ -17,20 +19,25 @@ public class HomePage extends BasePage {
     @FindBy(css = ".card:nth-child(2) .btn")
     private WebElement goToMyInfosystemsPageButton;
 
+    @FindBy(css = ".nav-item:nth-child(2) > .nav-link")
+    private WebElement goToInfosystemsPageLink;
+
     @FindBy(tagName = "ngb-modal-window")
     private WebElement modalContainer;
 
-    public HomePage() {
+    public HomePage(ScenarioContext scenarioContext) {
+        super(scenarioContext);
         PageFactory.initElements(driver, this);
     }
 
-    public void goToHomePage(String url) {
-        driver.get(url);
-        wait.forLoading(5);
+    public void goToPage(String path) {
+        String url = scenarioContext.getFromContext(ScenarioContext.APP_URL_KEY);
+        driver.get(url + path);
+        checkLogoDisplay();
     }
 
     public void checkLogoDisplay() {
-        wait.forElementToBeDisplayed(5, this.logo, "Logo");
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, this.logo, "Logo");
     }
 
     public String getTitle() {
@@ -42,23 +49,25 @@ public class HomePage extends BasePage {
     }
 
     public void selectSecondOrganization() {
-        this.wait.forPresenceOfElements(25, By.tagName("ngb-modal-window"), "modal");
-        this.modalContainer.findElement(By.cssSelector("tr:nth-child(2) > td")).click();
+        wait.forPresenceOfElements(25, By.tagName("ngb-modal-window"), "modal");
+        modalContainer.findElement(By.cssSelector("tr:nth-child(2) > td")).click();
     }
 
     public void selectOrganization(String organization) {
-        this.driver.findElement(By.cssSelector(".right a")).click();
-        this.wait.forPresenceOfElements(2, By.tagName("ngb-modal-window"), "modal");
-        this.modalContainer.findElement(By.xpath("//td[contains(.,'" + organization +"')]")).click();
+        driver.findElement(By.cssSelector(".right a")).click();
+        wait.forPresenceOfElements(2, By.tagName("ngb-modal-window"), "modal");
+        modalContainer.findElement(By.xpath("//td[contains(.,'" + organization +"')]")).click();
     }
 
     public void goToLoginPage() {
-        this.loginButton.click();
-        wait.forLoading(5);
+        loginButton.click();
     }
 
     public void goToMyInfosystemsPage() {
-        this.goToMyInfosystemsPageButton.click();
-        wait.forLoading(5);
+        goToMyInfosystemsPageButton.click();
+    }
+
+    public void goToInfosystemsPage() {
+        goToInfosystemsPageLink.click();
     }
 }

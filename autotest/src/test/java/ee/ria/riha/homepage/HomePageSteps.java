@@ -1,5 +1,6 @@
 package ee.ria.riha.homepage;
 
+import ee.ria.riha.driver.Setup;
 import ee.ria.riha.pages.HomePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -10,47 +11,52 @@ public class HomePageSteps {
     private HomePage homePage;
 
     public HomePageSteps() {
-        this.homePage = new HomePage();
+        homePage = Setup.pageFactory.getPage(HomePage.class);
     }
 
-    @Given("^A user navigates to HomePage \"([^\"]*)\"$")
-    public void aUserNavigatesToHomePage(String url) {
-        this.homePage.goToHomePage(url);
+    @Given("HomePage: user navigates to page {string}")
+    public void userNavigatesToPage(String url) {
+        homePage.goToPage(url);
     }
 
-    @Given("^User selects organization \"([^\"]*)\"$")
+    @Given("HomePage: user selects organization {string}")
     public void userSelectsOrganization(String organization) {
-        this.homePage.selectOrganization(organization);
+        homePage.selectOrganization(organization);
     }
 
-    @Given("^User opens 'my organization infosystems page'$")
+    @And("HomePage: user opens 'infosystems' page")
+    public void userOpensInfosystemsPage() {
+        homePage.goToInfosystemsPage();
+    }
+
+    @And("HomePage: user opens 'my organization infosystems' page")
     public void userOpensMyInfosystemsPage() {
-        this.homePage.goToMyInfosystemsPage();
+        homePage.goToMyInfosystemsPage();
     }
 
-    @And("^user clicks on login button$")
+    @And("HomePage: user clicks on login button")
     public void userClicksOnLoginButton() {
-        this.homePage.goToLoginPage();
+        homePage.goToLoginPage();
     }
 
-    @Then("^logo is displayed$")
+    @Then("HomePage: logo is displayed")
     public void googleLogoIsDisplayed() {
-        this.homePage.checkLogoDisplay();
+        homePage.checkLogoDisplay();
     }
 
-    @Then("^page title is \"([^\"]*)\"$")
+    @Then("HomePage: page title is {string}")
     public void pageTitleIs(String title) {
-        Assert.assertTrue("Displayed title is " + this.homePage.getTitle() + " instead of " + title, title.equals(this.homePage.getTitle()));
+        Assert.assertTrue("Displayed title is " + homePage.getTitle() + " instead of " + title, title.equals(homePage.getTitle()));
     }
 
-    @Then("^home page is opened showing logged in user's name \"([^\"]*)\"$")
+    @Then("HomePage: home page is opened showing logged in user's name {string}")
     public void homePageIsOpenedShowingLoggedInUsersName(String name) {
-        this.homePage.selectSecondOrganization();
-        Assert.assertTrue("Displayed logged in user's name is " + this.homePage.getLoggedInUsersName() + " instead of " + name, this.homePage.getLoggedInUsersName().contains(name));
+        homePage.selectSecondOrganization();
+        Assert.assertTrue("Displayed logged in user's name is " + homePage.getLoggedInUsersName() + " instead of " + name, homePage.getLoggedInUsersName().contains(name));
     }
 
-    @Then("^Organization name \"([^\"]*)\" is shown next to user's name$")
+    @Then("HomePage: organization name {string} is shown next to user's name")
     public void organizationNameIsShownNextToUsersName(String organizationName) {
-        Assert.assertTrue("Organization name " + organizationName + " is not shown", this.homePage.getLoggedInUsersName().contains(organizationName));
+        Assert.assertTrue("Organization name " + organizationName + " is not shown", homePage.getLoggedInUsersName().contains(organizationName));
     }
 }
