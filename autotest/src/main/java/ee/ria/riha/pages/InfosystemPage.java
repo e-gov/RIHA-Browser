@@ -7,6 +7,8 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.stream.Collectors;
 
+import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
+
 public class InfosystemPage extends BasePage {
 
     @FindBy(xpath = "//div[@id='uldkirjeldus']/app-producer-details-general/section/div[2]/div[3]/div")
@@ -17,7 +19,7 @@ public class InfosystemPage extends BasePage {
     }
 
     public String getAssociatedTopicsList() {
-        wait.forElementToBeDisplayed(5, topicsDiv, "topicsDiv");
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, topicsDiv, "topicsDiv");
         return topicsDiv.findElements(By.tagName("button")).stream().map(button -> button.getText()).collect(Collectors.joining(","));
     }
 

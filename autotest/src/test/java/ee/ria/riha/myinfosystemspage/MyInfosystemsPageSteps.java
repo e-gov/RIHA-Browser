@@ -1,5 +1,6 @@
 package ee.ria.riha.myinfosystemspage;
 
+import ee.ria.riha.driver.Setup;
 import ee.ria.riha.pages.MyInfosystemsPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -7,39 +8,39 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 public class MyInfosystemsPageSteps {
-    MyInfosystemsPage myInfosystemsPage;
+    private MyInfosystemsPage myInfosystemsPage;
 
     public MyInfosystemsPageSteps() {
-        this.myInfosystemsPage = new MyInfosystemsPage();
+        myInfosystemsPage = Setup.pageFactory.getPage(MyInfosystemsPage.class);
     }
 
-    @And("^user clicks on 'täpsusta otsingut'$")
+    @And("MyInfosystemsPage: user clicks on 'täpsusta otsingut'")
     public void userClicksOnDetailedSearchLink() {
-        this.myInfosystemsPage.openDetailedSearchForm();
+        myInfosystemsPage.openDetailedSearchForm();
     }
 
-    @And("^user enters search topic \"([^\"]*)\" and presses 'enter'$")
-    public void userSearchesByTopic(String topic) throws Exception {
-        this.myInfosystemsPage.searchByTopic(topic);
+    @And("MyInfosystemsPage: user enters search topic {string} and presses 'enter'")
+    public void userSearchesByTopic(String topic) {
+        myInfosystemsPage.searchByTopic(topic);
     }
 
-    @And("^user clicks 'Lisa uus'$")
+    @And("MyInfosystemsPage: user clicks 'Lisa uus'")
     public void userClicksCreateNew() {
-        this.myInfosystemsPage.goToCreateNewInfosystemPage();
+        myInfosystemsPage.goToCreateNewInfosystemPage();
     }
 
-    @And("^user enters name as \"([^\"]*)\" short name as \"([^\"]*)\" and purpose as \"([^\"]*)\"$")
+    @And("MyInfosystemsPage: user enters name as {string} short name as {string} and purpose as {string}")
     public void userEntersNameShortNameAndPurpose(String name, String shortName, String purpose) {
-        this.myInfosystemsPage.enterNameSHortNameAndPurpose(name, shortName, purpose);
+        myInfosystemsPage.enterNameShortNameAndPurpose(name, shortName, purpose);
     }
 
-    @When("^user clicks on \"([^\"]*)\" infosystem link$")
+    @When("MyInfosystemsPage: user clicks on {string} infosystem link")
     public void userClicksOnIfosystemLink(String infosystem) {
-        this.myInfosystemsPage.goToInfosystemPage(infosystem);
+        myInfosystemsPage.goToInfosystemPage(infosystem);
     }
 
-    @Then("^All displayed infosystems on 'my infosystems' page have \"([^\"]*)\" associated topic$")
+    @Then("MyInfosystemsPage: all displayed infosystems on 'my infosystems' page have {string} associated topic")
     public void allDisplayedInfosystemsHaveTopic(String topic) {
-        this.myInfosystemsPage.getFoundInfosystemsTopics().forEach(topics -> Assert.assertTrue("Found infosystem desn't have associated topic " + topic, topics.contains(topic.toUpperCase())));
+        myInfosystemsPage.getFoundInfosystemsTopics().forEach(topics -> Assert.assertTrue("Found infosystem desn't have associated topic " + topic, topics.contains(topic.toUpperCase())));
     }
 }

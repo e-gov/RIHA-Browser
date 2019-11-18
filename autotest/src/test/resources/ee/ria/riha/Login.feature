@@ -1,11 +1,11 @@
 Feature: Login
 
   Scenario Outline: Login to application (RIHAKB-308)
-    Given A user navigates to HomePage "<url>"
-    And user clicks on login button
-    When user selects 'Mobiil-ID' tab
-    And user enters 'isikukood' "<personalCode>" and 'Telefoninumber' "<phoneNumber>"
-    Then home page is opened showing logged in user's name "<name>"
+    Given HomePage: user navigates to page "<url>"
+    And HomePage: user clicks on login button
+    When LoginPage: user selects 'Mobiil-ID' tab
+    And LoginPage: user enters 'Isikukood' "<personalCode>" and 'Telefoninumber' "<phoneNumber>"
+    Then HomePage: home page is opened showing logged in user's name "<name>"
 
     Examples:
       | url | personalCode | phoneNumber | name |
