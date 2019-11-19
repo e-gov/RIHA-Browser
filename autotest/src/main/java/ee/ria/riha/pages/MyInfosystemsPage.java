@@ -116,6 +116,11 @@ public class MyInfosystemsPage extends BasePage {
         scenarioContext.saveToContext(LAST_INFOSYSTEM_NUMBER, shortName.substring(scenarioContext.getFromContext(SEARCH_TEXT_KEY).length() + 1));
     }
 
+    public void selectFirstFoundInfosystem() {
+        WebElement firstRow = infosystemsTable.findElement(By.xpath("//tr[1]"));
+        firstRow.findElement(By.xpath("//td[1]")).findElement(By.tagName("a")).click();
+    }
+
     private void waitForLoading() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, infosystemsTable, "infosystems-table");
         wait.sleep(TABLE_SORT_TIMEOUT);
