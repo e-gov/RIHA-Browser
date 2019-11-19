@@ -7,7 +7,9 @@ import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.conf.ApplicationProperties.LdapAuthenticationProperties;
 import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -73,6 +75,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     protected ApplicationProperties applicationProperties;
 
+    @Value("${csp.policyDirective}")
+    private String policyDirective;
+
     @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
@@ -103,6 +108,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        if (StringUtils.isNotBlank(policyDirective)) {
+            http.headers()
+                    .contentSecurityPolicy(policyDirective);
+        }
+
         http
                 .csrf().disable() // needed for JWT verification
                 .cors().disable()
