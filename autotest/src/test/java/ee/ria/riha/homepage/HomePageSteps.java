@@ -5,7 +5,8 @@ import ee.ria.riha.pages.HomePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.junit.Assert;
+
+import static org.junit.Assert.assertTrue;
 
 public class HomePageSteps {
     private HomePage homePage;
@@ -46,17 +47,17 @@ public class HomePageSteps {
 
     @Then("HomePage: page title is {string}")
     public void pageTitleIs(String title) {
-        Assert.assertTrue("Displayed title is " + homePage.getTitle() + " instead of " + title, title.equals(homePage.getTitle()));
+        assertTrue("Displayed title is " + homePage.getTitle() + " instead of " + title, title.equals(homePage.getTitle()));
     }
 
     @Then("HomePage: home page is opened showing logged in user's name {string}")
     public void homePageIsOpenedShowingLoggedInUsersName(String name) {
         homePage.selectSecondOrganization();
-        Assert.assertTrue("Displayed logged in user's name is " + homePage.getLoggedInUsersName() + " instead of " + name, homePage.getLoggedInUsersName().contains(name));
+        assertTrue("Displayed logged in user's name is " + homePage.getLoggedInUsersName() + " instead of " + name, homePage.getLoggedInUsersName().contains(name));
     }
 
     @Then("HomePage: organization name {string} is shown next to user's name")
     public void organizationNameIsShownNextToUsersName(String organizationName) {
-        Assert.assertTrue("Organization name " + organizationName + " is not shown", homePage.getLoggedInUsersName().contains(organizationName));
+        assertTrue("Organization name " + organizationName + " is not shown", homePage.getLoggedInUsersName().contains(organizationName));
     }
 }

@@ -93,4 +93,5 @@ public class InfosystemsPage extends BasePage {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, infosystemsTable, "info-systems-table");
         wait.sleep(TABLE_SORT_TIMEOUT);
     }
+
 }
