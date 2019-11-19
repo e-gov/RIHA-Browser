@@ -1,5 +1,7 @@
 package ee.ria.riha.conf;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -14,6 +16,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @Profile("dev")
 public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
+
+
+	@Value("${csp.policyDirective}")
+	private String policyDirective;
+
 	@Bean
 	protected UsernamePasswordAuthenticationFilter authenticationFilter(DeveloperAuthenticationManager authenticationManager) {
 		UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
@@ -26,6 +33,12 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
+		if (StringUtils.isNotBlank(policyDirective)) {
+			http.headers()
+					.contentSecurityPolicy(policyDirective);
+		}
+
 		http
 			.csrf().disable()
 			.cors().disable()
