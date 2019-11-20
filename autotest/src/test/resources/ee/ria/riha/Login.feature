@@ -9,4 +9,4 @@ Feature: Login
 
     Examples:
       | url | personalCode | phoneNumber | name |
-      | https://riha-browser-ik.ci.kit | 60001019906 | 00000766 | MARY ÄNN O’CONNEŽ-ŠUSLIK TESTNUMBER |
+      | / | 60001019906 | 00000766 | MARY ÄNN O’CONNEŽ-ŠUSLIK TESTNUMBER |
