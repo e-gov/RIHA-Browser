@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -27,7 +29,7 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.csrf().disable()
+			.csrf().csrfTokenRepository(csrfTokenRepository()).and()
 			.cors().disable()
 			.authorizeRequests()
 				.anyRequest()
@@ -42,5 +44,12 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 				.permitAll()
 				.loginPage("/oauth2/authorization/tara")
 				.loginProcessingUrl("/oauth2/authorization/tara");
+	}
+
+	private CsrfTokenRepository csrfTokenRepository() {
+		CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
+		cookieCsrfTokenRepository.setCookieHttpOnly(false);
+		cookieCsrfTokenRepository.setCookiePath("/");
+		return cookieCsrfTokenRepository;
 	}
 }
