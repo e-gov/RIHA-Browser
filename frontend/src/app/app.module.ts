@@ -10,7 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {CustomFormsModule} from 'ng2-validation';
 import {UiSwitchModule} from 'ngx-ui-switch';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -196,6 +196,7 @@ const routes: Routes = [
         deps: [HttpClient]
       }
     }),
+    HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN'}),
     NgbModule
   ],
   entryComponents: [
