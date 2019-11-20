@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.stream.Collectors;
 
 import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
+import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
 import static ee.ria.riha.context.ScenarioContext.*;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 import static org.openqa.selenium.Keys.RETURN;
@@ -43,6 +44,9 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//div[@id='dokumentatsioon']/app-producer-details-tech-docs/section/div/button")
     private WebElement editDocumentationButton;
 
+    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div/button")
+    private WebElement editDataButton;
+
     @FindBy(xpath = "//div[@id='kontaktid']/app-producer-details-contacts/section/div[2]/table/tr/td[2]/span")
     private WebElement contactNameSpan;
 
@@ -69,6 +73,12 @@ public class InfosystemPage extends BasePage {
 
     @FindBy(css = "app-producer-details-tech-docs table")
     private WebElement techDocTable;
+
+    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div/table")
+    private WebElement dataObjectsTable;
+
+    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[2]/table")
+    private WebElement dataUrlsTable;
 
     @FindBy(tagName = "ngb-modal-window")
     private WebElement modalContainer;
@@ -200,15 +210,20 @@ public class InfosystemPage extends BasePage {
         modalContainer.findElement(By.cssSelector(".btn-secondary:nth-child(2)")).click();
     }
 
+    public void clickEditDataButton() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editDataButton, "editDataButton");
+        editDataButton.click();
+    }
+
     public void enterNewTechnicalDocumentationLink(String url, String name) {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
 
         modalContainer.findElement(By.id("url")).sendKeys(url);
         modalContainer.findElement(By.id("linkName")).sendKeys(name);
-        Select select = new Select(modalContainer.findElement(By.id("linkType")));
-        select.selectByValue("DOC_TYPE_OTHER");
 
-        wait.sleep(10000);
+        WebElement linkTypeElement = modalContainer.findElement(By.id("linkType"));
+        linkTypeElement.click();
+        new Select(linkTypeElement).selectByValue("DOC_TYPE_OTHER");
 
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
@@ -216,10 +231,84 @@ public class InfosystemPage extends BasePage {
 
     public String getTechDocUrls() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, techDocTable, "techDocTable");
+        wait.sleep(TABLE_SORT_TIMEOUT);
         return techDocTable.findElements(By.cssSelector(".name")).stream()
                 .map(td -> td.findElement(By.tagName("a")))
                 .map(WebElement::getText)
                 .collect(Collectors.joining(","));
 
+    }
+
+    public void removeLinkToTechnicalDocumentation(String name) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        WebElement techDocLinkDiv = modalContainer.findElement(By.className("expandable-blocks"))
+                .findElements(By.className("expandable-block"))
+                .stream()
+                .filter(div -> div.findElement(By.tagName("a")).getText().equals(name))
+                .findFirst().get();
+
+        techDocLinkDiv.findElement(By.className("btn-danger")).click();
+        modalContainer.findElement(By.cssSelector(".btn-success")).click();
+    }
+
+    public void addDataObjectFileNadUrlToInfosystem(String dataObject, String url, String urlName) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        //add data object
+        modalContainer.findElement(By.id("object")).sendKeys(dataObject);
+        modalContainer.findElement(By.cssSelector(".col-2 > .btn")).click();
+
+        //add url
+        modalContainer.findElement(By.id("url")).sendKeys(url);
+        modalContainer.findElement(By.id("name")).sendKeys(urlName);
+        modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
+        modalContainer.findElement(By.cssSelector(".btn-success")).click();
+    }
+
+    public String getDataObjects() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, dataObjectsTable, "dataObjectsTable");
+        wait.sleep(TABLE_SORT_TIMEOUT);
+
+        return dataObjectsTable.findElements(By.tagName("tr"))
+                .stream()
+                .map(tr -> tr.findElement(By.cssSelector("td:nth-child(2)")))
+                .map(WebElement::getText)
+                .collect(Collectors.joining(","));
+    }
+
+    public String getDataUrls() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, dataUrlsTable, "dataUrlsTable");
+        wait.sleep(TABLE_SORT_TIMEOUT);
+
+        return dataUrlsTable.findElements(By.tagName("tr"))
+                .stream()
+                .map(tr -> tr.findElement(By.cssSelector("td:nth-child(2) > a")))
+                .map(WebElement::getText)
+                .collect(Collectors.joining(","));
+    }
+
+    public void removeDataObjectAndUrl(String dataObject, String urlName) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        //remove data object
+        WebElement dataObjectTr = modalContainer.findElement(By.cssSelector(".details-list-table:nth-child(1)"))
+                .findElements(By.tagName("tr"))
+                .stream()
+                .filter(tr -> tr.findElement(By.cssSelector("td:nth-child(2)")).getText().equals(dataObject))
+                .findFirst().get();
+
+        dataObjectTr.findElement(By.className("btn-danger")).click();
+
+        //remove url
+        WebElement dataUrlTr = modalContainer.findElement(By.cssSelector(".dataTables_wrapper:nth-child(4) > .details-list-table"))
+                .findElements(By.tagName("tr"))
+                .stream()
+                .filter(tr -> tr.findElement(By.cssSelector("td:nth-child(2) > a")).getText().equals(urlName))
+                .findFirst().get();
+
+        dataUrlTr.findElement(By.className("btn-danger")).click();
+
+        modalContainer.findElement(By.cssSelector(".btn-success")).click();
     }
 }
