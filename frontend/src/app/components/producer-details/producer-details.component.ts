@@ -7,13 +7,15 @@ import {User} from '../../models/user';
 import {ToastrService} from 'ngx-toastr';
 import {UserMatrix} from '../../models/user-matrix';
 import {GeneralHelperService} from '../../services/general-helper.service';
+import {CanDeactivateModal} from "../../guards/can-deactivate-modal.guard";
+import {ModalHelperService} from "../../services/modal-helper.service";
 
 @Component({
   selector: 'app-producer-details',
   templateUrl: './producer-details.component.html',
   styleUrls: ['./producer-details.component.scss']
 })
-export class ProducerDetailsComponent implements OnInit, DoCheck {
+export class ProducerDetailsComponent implements OnInit, DoCheck, CanDeactivateModal {
   private system: System = new System();
   private user: User;
   public loaded: boolean;
@@ -21,6 +23,21 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   public issueId: any;
   public userMatrix: UserMatrix;
   private differ: any;
+
+  // canDeactivate guard handler
+  canDeactivate() {
+    const modal = this.modalService.lastModal;
+    if (modal) {
+      const component = modal && modal.componentInstance ? modal.componentInstance : null;
+      if (component && 'canDeactivate' in component) {
+        return component.canDeactivate()
+      }
+
+      return true;
+    }
+
+    return true;
+  }
 
   isEditingAllowed(){
     const user = this.environmentService.getActiveUser();
@@ -121,7 +138,8 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
               public generalHelperService: GeneralHelperService,
               private route: ActivatedRoute,
               private router: Router,
-              private toastrService: ToastrService) {
+              private toastrService: ToastrService,
+              private modalService: ModalHelperService) {
     this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }

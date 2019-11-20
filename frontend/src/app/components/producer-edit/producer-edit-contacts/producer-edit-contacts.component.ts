@@ -1,16 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { System } from '../../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {System} from '../../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {Observable} from "rxjs";
+import {NgForm} from "@angular/forms";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
+import {CONSTANTS} from '../../../utils/constants';
 
 @Component({
   selector: 'app-producer-edit-contacts',
   templateUrl: './producer-edit-contacts.component.html',
   styleUrls: ['./producer-edit-contacts.component.scss']
 })
-export class ProducerEditContactsComponent implements OnInit {
+export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('addForm', null) formObject: NgForm;
 
   @Input() system: System;
   contacts: any[] = [];
@@ -47,17 +53,36 @@ export class ProducerEditContactsComponent implements OnInit {
     });
   }
 
-  closeModal(f){
-    if (this.isChanged || f.form.dirty){
-      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
-    }
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
   }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.isChanged || this.formObject.form.dirty
+  }
+
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,

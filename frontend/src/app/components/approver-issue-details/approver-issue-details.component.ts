@@ -1,19 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService } from '../../services/environment.service';
-import { ToastrService } from 'ngx-toastr';
-import { User } from '../../models/user';
-import { ModalHelperService } from "../../services/modal-helper.service";
-import { classifiers } from "../../services/environment.service";
-import { System } from '../../models/system';
-import { GeneralHelperService } from '../../services/general-helper.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {classifiers, EnvironmentService} from '../../services/environment.service';
+import {ToastrService} from 'ngx-toastr';
+import {User} from '../../models/user';
+import {ModalHelperService} from "../../services/modal-helper.service";
+import {System} from '../../models/system';
+import {GeneralHelperService} from '../../services/general-helper.service';
+import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
+import {NgForm} from "@angular/forms";
+import {Observable} from "rxjs";
+import {CONSTANTS} from '../../utils/constants';
 
 @Component({
   selector: 'app-approver-feedback-details',
   templateUrl: './approver-issue-details.component.html',
   styleUrls: ['./approver-issue-details.component.scss']
 })
-export class ApproverIssueDetailsComponent implements OnInit {
+export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('commentForm', null) formObject: NgForm;
 
   @Input() feedback: any;
   @Input() system: System;
@@ -127,17 +132,36 @@ export class ApproverIssueDetailsComponent implements OnInit {
     return ret;
   }
 
-  closeModal(f){
-    if (f.form.dirty){
-      if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.modalService.closeActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.closeActiveModal();
-    }
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
   }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.formObject.form.dirty
+  }
+
 
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,
