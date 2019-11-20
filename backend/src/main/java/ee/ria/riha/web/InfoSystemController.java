@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
@@ -58,36 +60,46 @@ public class InfoSystemController {
     }
     @GetMapping("/autocomplete")
     @ApiOperation("List all existing information systems for autocomplete")
-    @ApiPageableAndFilterableParams
-    public ResponseEntity autocomplete(Pageable pageable, Filterable filterable) {
+    public ResponseEntity autocomplete(@RequestParam("searchTerm") String searchTerm) {
 
-        // search for exact matches
-        PagedResponse<InfoSystem> exactMatches = infoSystemService.list(pageable, createExactMatchFilterFromILikeFilter(filterable));
-        if (exactMatches != null && exactMatches.getTotalElements() >= pageable.getPageSize()) {
-            // there are more exact matches than requested.
-            return ResponseEntity.ok(createPagedModel(exactMatches, infoSystemModelMapper));
-        } else if (exactMatches != null && exactMatches.getTotalElements() < pageable.getPageSize()) {
-            // there are some exact matches, need to fetch fuzzy matches
-            LinkedHashSet<InfoSystem> joinedList = new LinkedHashSet<>(exactMatches.getContent());
+        PageRequest pageable = new PageRequest(0, 10);
+        FilterRequest shortNameExact = new FilterRequest("short_name,ilike," + searchTerm, "desc", "id");
+        FilterRequest nameExact = new FilterRequest("name,ilike," + searchTerm, "desc", "id");
+        FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
 
-            PagedResponse<InfoSystem> fuzzyMatches = infoSystemService.list(pageable, filterable);
-            if (fuzzyMatches != null && fuzzyMatches.getContent() != null) {
-                joinedList.addAll(fuzzyMatches.getContent());
+        List<InfoSystem> foundResults = new ArrayList<>();
+        for (FilterRequest filterRequest : Arrays.asList(shortNameExact, nameExact, nameFuzzy)) {
+
+            searchInfoSystemsByFilter(pageable, filterRequest)
+                    .forEach(infoSystem ->  {
+                            if (!foundResults.contains(infoSystem)) {
+                                foundResults.add(infoSystem);
+                            }
+            });
+
+            if (foundResults.size() >= pageable.getPageSize()) {
+                return getResponseEntity(pageable, foundResults.subList(0, pageable.getPageSize()));
             }
-
-            return ResponseEntity.ok(createPagedModel(
-                    new PagedResponse<>(
-                            pageable,
-                            joinedList.size(),
-                            new ArrayList<>(joinedList)),
-                    infoSystemModelMapper));
-        } else {
-            return ResponseEntity.ok(
-                    createPagedModel(
-                            infoSystemService.list(pageable, filterable),
-                            infoSystemModelMapper));
         }
 
+        return getResponseEntity(pageable, foundResults);
+    }
+
+    private ResponseEntity getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
+        return ResponseEntity.ok(
+                new PagedResponse(
+                        pageable,
+                        response.size(),
+                        response.stream()
+                                .map(infoSystemModelMapper::map)
+                                .collect(toList())));
+    }
+
+    private List<InfoSystem> searchInfoSystemsByFilter(PageRequest pageable, FilterRequest filterRequest) {
+        PagedResponse<InfoSystem> exactMatchesShortNames = infoSystemService.list(pageable, filterRequest);
+        return exactMatchesShortNames.getContent() == null
+                ? Collections.emptyList()
+                : exactMatchesShortNames.getContent();
     }
 
     private Filterable createExactMatchFilterFromILikeFilter(Filterable filterable) {
