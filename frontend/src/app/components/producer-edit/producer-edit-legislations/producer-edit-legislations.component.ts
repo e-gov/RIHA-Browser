@@ -8,6 +8,7 @@ import {classifiers} from "../../../services/environment.service";
 import {Observable} from "rxjs";
 import {NgForm} from "@angular/forms";
 import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
+import {CONSTANTS} from '../../../utils/constants';
 
 @Component({
   selector: 'app-producer-edit-legislations',
@@ -61,7 +62,7 @@ export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateM
 
   closeModal() {
     if (this.isFormChanged) {
-      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.');
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
       observer.subscribe(confirmed => {
         if (confirmed) {
           this.modalService.dismissActiveModal();

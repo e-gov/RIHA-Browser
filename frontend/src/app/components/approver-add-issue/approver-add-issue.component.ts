@@ -8,6 +8,7 @@ import {ModalHelperService} from '../../services/modal-helper.service';
 import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
 import {Observable} from "rxjs";
 import {NgForm} from "@angular/forms";
+import {CONSTANTS} from '../../utils/constants';
 
 @Component({
   selector: 'app-approver-add-comment',
@@ -94,7 +95,7 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
 
   closeModal() {
     if (this.isFormChanged) {
-      const observer = this.modalService.confirm('Oled väljades muudatusi teinud. Kui navigeerid siit Ära ilma salvestamata, siis sinu muudatused kaovad.');
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
       observer.subscribe(confirmed => {
         if (confirmed) {
           this.modalService.dismissActiveModal();
