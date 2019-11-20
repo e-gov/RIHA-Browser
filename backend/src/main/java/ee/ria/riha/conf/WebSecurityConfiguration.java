@@ -40,6 +40,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.util.UriUtils;
 
 import javax.servlet.Filter;
@@ -115,7 +117,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
 
         http
-                .csrf().disable() // needed for JWT verification
+                .csrf().csrfTokenRepository(csrfTokenRepository()).and()
                 .cors().disable()
 
                 .authorizeRequests()
@@ -163,6 +165,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessTokenResponseClient(accessTokenResponseClient)
                 .and()
                 .addObjectPostProcessor(new CustomPostProcessor());
+    }
+
+    private CsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
+        cookieCsrfTokenRepository.setCookieHttpOnly(false);
+        cookieCsrfTokenRepository.setCookiePath("/");
+        return cookieCsrfTokenRepository;
     }
 
     protected AuthenticationSuccessHandler successHandler() {
