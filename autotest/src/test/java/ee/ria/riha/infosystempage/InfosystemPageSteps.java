@@ -38,6 +38,21 @@ public class InfosystemPageSteps {
         infosystemPage.clickEditDocumentationButton();
     }
 
+    @And("InfosystemPage: user clicks on 'edit data' button")
+    public void userClicksOnEditDataButton() {
+        infosystemPage.clickEditDataButton();
+    }
+
+    @And("InfosystemPage: user adds data object {string} and url {string} - {string} to infosystem")
+    public void userAddsDataObjecFileAndUrlToInfosystem(String dataObject, String url, String urlName) {
+        infosystemPage.addDataObjectFileNadUrlToInfosystem(dataObject, url, urlName);
+    }
+
+    @And("InfosystemPage: user removes data object {string} and url {string}")
+    public void userRemovesDataObjectAndUrl(String dataObject, String urlName) {
+        infosystemPage.removeDataObjectAndUrl(dataObject, urlName);
+    }
+
     @And("InfosystemPage: user changes general description by adding {string} to all fields")
     public void userChangesGeneralDescription(String suffix) {
         infosystemPage.changeGeneralDescription(suffix);
@@ -61,6 +76,11 @@ public class InfosystemPageSteps {
     @And("InfosystemPage: user enters new technical documentation link {string} with name {string}")
     public void userEntersNewTechnicalDocumentationLink(String url, String name) {
         infosystemPage.enterNewTechnicalDocumentationLink(url, name);
+    }
+
+    @And("InfosystemPage: user removes link to technical documentation with name {string}")
+    public void userRemovesLinkToTechnicalDocumentation(String name) {
+        infosystemPage.removeLinkToTechnicalDocumentation(name);
     }
 
     @And("InfosystemPage: user enters new topic {string}")
@@ -94,11 +114,33 @@ public class InfosystemPageSteps {
                 infosystemPage.getTechDocUrls().contains(linkName));
     }
 
+    @Then("InfosystemPage: link to technical documentation with name {string} not present in 'documentation' block")
+    public void linkToTechnicalDocumentationNotPresentInDocBlock(String linkName) {
+        assertFalse("Documentation block have documentation link " + linkName,
+                Stream.of(infosystemPage.getTechDocUrls().split(","))
+                        .anyMatch(techDocUrl -> techDocUrl.equalsIgnoreCase(linkName)));
+    }
+
     @Then("InfosytemPage: {string} topic is not present in associated topics list")
     public void topicIsNotPresentInAssociatedTopicsList(String topic) {
         assertFalse("Associated topic list contains topic " + topic,
                 Stream.of(infosystemPage.getAssociatedTopicsList().split(","))
                         .anyMatch(associatedTopic -> associatedTopic.equalsIgnoreCase(topic)));
+    }
+
+    @Then("InfosystemPage: data object {string} and url {string} present in 'data' block")
+    public void dataObjectFileAndUrlPresentInDataBlock(String dataObject, String urlName) {
+        assertTrue("Data block doesn't contain data object " + dataObject, infosystemPage.getDataObjects().contains(dataObject));
+        assertTrue("Data block doesn't contain url " + urlName, infosystemPage.getDataUrls().contains(urlName));
+    }
+
+    @Then("InfosystemPage: data object {string} and url {string} not present in 'data' block")
+    public void dataObjectFileAndUrlNotPresentInDataBlock(String dataObject, String urlName) {
+        assertFalse("Data block contains data object " + dataObject,
+                Stream.of(infosystemPage.getDataObjects().split(",")).anyMatch(obj -> obj.equalsIgnoreCase(dataObject)));
+
+        assertFalse("Data block contains url " + urlName,
+                Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(urlName)));
     }
 
     @Then("InfosytemPage: infosystem creation purpose is {string}")
