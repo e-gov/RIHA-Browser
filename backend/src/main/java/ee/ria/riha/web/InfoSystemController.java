@@ -14,6 +14,7 @@ import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.StandardRealisationCreationModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,9 +63,16 @@ public class InfoSystemController {
     @ApiOperation("List all existing information systems for autocomplete")
     public ResponseEntity autocomplete(@RequestParam("searchTerm") String searchTerm) {
 
+        String paramToRestEndpoint;
+        if (StringUtils.isNumeric(searchTerm)) {
+            paramToRestEndpoint = "'" + searchTerm + "'";
+        } else {
+            paramToRestEndpoint = searchTerm;
+        }
+
         PageRequest pageable = new PageRequest(0, 10);
-        FilterRequest shortNameExact = new FilterRequest("short_name,ilike,'" + searchTerm + "'", "desc", "id");
-        FilterRequest nameExact = new FilterRequest("name,ilike,'" + searchTerm+"'", "desc", "id");
+        FilterRequest shortNameExact = new FilterRequest("short_name,ilike," + paramToRestEndpoint, "desc", "id");
+        FilterRequest nameExact = new FilterRequest("name,ilike," + paramToRestEndpoint, "desc", "id");
         FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
 
         List<InfoSystem> foundResults = new ArrayList<>();
