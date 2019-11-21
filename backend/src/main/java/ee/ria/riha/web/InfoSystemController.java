@@ -63,8 +63,8 @@ public class InfoSystemController {
     public ResponseEntity autocomplete(@RequestParam("searchTerm") String searchTerm) {
 
         PageRequest pageable = new PageRequest(0, 10);
-        FilterRequest shortNameExact = new FilterRequest("short_name,ilike," + searchTerm, "desc", "id");
-        FilterRequest nameExact = new FilterRequest("name,ilike," + searchTerm, "desc", "id");
+        FilterRequest shortNameExact = new FilterRequest("short_name,ilike,'" + searchTerm + "'", "desc", "id");
+        FilterRequest nameExact = new FilterRequest("name,ilike,'" + searchTerm+"'", "desc", "id");
         FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
 
         List<InfoSystem> foundResults = new ArrayList<>();
