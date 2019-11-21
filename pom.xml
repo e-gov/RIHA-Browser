@@ -27,6 +27,7 @@
     <modules>
         <module>frontend</module>
         <module>backend</module>
+        <module>autotest</module>
     </modules>
 
     <repositories>
