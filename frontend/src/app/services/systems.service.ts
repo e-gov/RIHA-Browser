@@ -189,14 +189,7 @@ export class SystemsService {
 
   public getSystemsForAutocomplete(text, ownShortName?, url?): Observable<any> {
     let params: HttpParams = new HttpParams();
-    const filtersArr: string[] = [];
-
-    filtersArr.push(`name,ilike,%${ text }%`);
-
-    params = params.set('filter', filtersArr.join());
-
-    params = params.set('size', '10');
-
+    params = params.set('searchTerm', text);
     const urlToUse = url || (this.systemsUrl + "/autocomplete");
 
     return this.http.get<any>(urlToUse, {
