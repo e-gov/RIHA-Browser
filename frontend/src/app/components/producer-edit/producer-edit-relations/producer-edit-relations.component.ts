@@ -87,13 +87,13 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
       const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
       observer.subscribe(confirmed => {
         if (confirmed) {
-          this.modalService.dismissActiveModal();
+          this.modalService.closeActiveModal();
         }
       });
       return observer;
     }
 
-    this.modalService.dismissActiveModal();
+    this.modalService.closeActiveModal();
     return true;
   }
 
