@@ -72,11 +72,12 @@ public class InfoSystemController {
 
         PageRequest pageable = new PageRequest(0, 10);
         FilterRequest shortNameExact = new FilterRequest("short_name,ilike," + paramToRestEndpoint, "desc", "id");
+        FilterRequest fuzzyNameExact = new FilterRequest("short_name,ilike,%" + searchTerm + "%", "desc", "id");
         FilterRequest nameExact = new FilterRequest("name,ilike," + paramToRestEndpoint, "desc", "id");
         FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
 
         List<InfoSystem> foundResults = new ArrayList<>();
-        for (FilterRequest filterRequest : Arrays.asList(shortNameExact, nameExact, nameFuzzy)) {
+        for (FilterRequest filterRequest : Arrays.asList(shortNameExact, fuzzyNameExact, nameExact, nameFuzzy)) {
 
             searchInfoSystemsByFilter(pageable, filterRequest)
                     .forEach(infoSystem ->  {
