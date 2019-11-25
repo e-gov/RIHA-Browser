@@ -38,10 +38,10 @@
       <div>
         <div class="row ml-0 mb-3">
           <label for="active-since-date" class="col-form-label advanced-label">
-            <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
-            <span *ngIf="system.getStatus() == classifiers.system_status.ESTABLISHING.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
-            <span *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
-            <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true" style="margin-right:15px;"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.ESTABLISHING.code"><i class="fa fa-exchange" aria-hidden="true" style="margin-right:15px;"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code"><i class="fa fa-exchange" aria-hidden="true" style="margin-right:15px;"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
+            <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true" style="margin-right:15px;"></i> Süsteemi staatus on <strong>määramata</strong></span>
           </label>
           <div class="col-sm-4">
             <div class="input-group datepicker" *ngIf="system.isUsed()">
