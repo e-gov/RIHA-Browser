@@ -1,17 +1,22 @@
 package ee.ria.riha.pages;
 
 import ee.ria.riha.context.ScenarioContext;
+import ee.ria.riha.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import java.io.File;
 import java.util.stream.Collectors;
 
 import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
 import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
-import static ee.ria.riha.context.ScenarioContext.*;
+import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
+import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
+import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 import static org.openqa.selenium.Keys.RETURN;
 
@@ -252,17 +257,24 @@ public class InfosystemPage extends BasePage {
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
     }
 
-    public void addDataObjectFileNadUrlToInfosystem(String dataObject, String url, String urlName) {
+    public void addDataObjectFileAndUrlToInfosystem(String dataObject, String fileName, String url, String urlName) {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
 
         //add data object
         modalContainer.findElement(By.id("object")).sendKeys(dataObject);
         modalContainer.findElement(By.cssSelector(".col-2 > .btn")).click();
 
+        //upload test data file
+        makeElementVisible("dataFile");
+        String path = Utils.getFileResourcePath(new File(fileName));
+        modalContainer.findElement(By.id("dataFile")).sendKeys(path);
+        wait.forElementToBeClickable(DISPLAY_ELEMENT_TIMEOUT, By.id("url"), "spinner");
+
         //add url
         modalContainer.findElement(By.id("url")).sendKeys(url);
         modalContainer.findElement(By.id("name")).sendKeys(urlName);
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
+
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
     }
 
@@ -288,7 +300,7 @@ public class InfosystemPage extends BasePage {
                 .collect(Collectors.joining(","));
     }
 
-    public void removeDataObjectAndUrl(String dataObject, String urlName) {
+    public void removeDataObjectFileAndUrl(String dataObject, String fileName, String urlName) {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
 
         //remove data object
@@ -300,15 +312,20 @@ public class InfosystemPage extends BasePage {
 
         dataObjectTr.findElement(By.className("btn-danger")).click();
 
-        //remove url
-        WebElement dataUrlTr = modalContainer.findElement(By.cssSelector(".dataTables_wrapper:nth-child(4) > .details-list-table"))
-                .findElements(By.tagName("tr"))
-                .stream()
-                .filter(tr -> tr.findElement(By.cssSelector("td:nth-child(2) > a")).getText().equals(urlName))
-                .findFirst().get();
+        //remove file
+        findTrWithText(fileName).findElement(By.className("btn-danger")).click();
 
-        dataUrlTr.findElement(By.className("btn-danger")).click();
+        //remove url
+        findTrWithText(urlName).findElement(By.className("btn-danger")).click();
 
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+    }
+
+    private WebElement findTrWithText(String text) {
+        return modalContainer.findElement(By.cssSelector(".dataTables_wrapper:nth-child(4) > .details-list-table"))
+                .findElements(By.tagName("tr"))
+                .stream()
+                .filter(tr -> tr.findElement(By.cssSelector("td:nth-child(2) > a")).getText().equals(text))
+                .findFirst().get();
     }
 }

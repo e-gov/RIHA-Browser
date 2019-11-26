@@ -8,8 +8,13 @@ import io.cucumber.java.en.When;
 
 import java.util.stream.Stream;
 
-import static ee.ria.riha.context.ScenarioContext.*;
-import static org.junit.Assert.*;
+import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
+import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
+import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class InfosystemPageSteps {
     private InfosystemPage infosystemPage;
@@ -43,14 +48,14 @@ public class InfosystemPageSteps {
         infosystemPage.clickEditDataButton();
     }
 
-    @And("InfosystemPage: user adds data object {string} and url {string} - {string} to infosystem")
-    public void userAddsDataObjecFileAndUrlToInfosystem(String dataObject, String url, String urlName) {
-        infosystemPage.addDataObjectFileNadUrlToInfosystem(dataObject, url, urlName);
+    @And("InfosystemPage: user adds data object {string}, data file {string} and url {string} - {string} to infosystem")
+    public void userAddsDataObjecFileAndUrlToInfosystem(String dataObject, String fileName, String url, String urlName) {
+        infosystemPage.addDataObjectFileAndUrlToInfosystem(dataObject, fileName, url, urlName);
     }
 
-    @And("InfosystemPage: user removes data object {string} and url {string}")
-    public void userRemovesDataObjectAndUrl(String dataObject, String urlName) {
-        infosystemPage.removeDataObjectAndUrl(dataObject, urlName);
+    @And("InfosystemPage: user removes data object {string}, data file {string} and url {string}")
+    public void userRemovesDataObjectAndUrl(String dataObject, String fileName, String urlName) {
+        infosystemPage.removeDataObjectFileAndUrl(dataObject, fileName, urlName);
     }
 
     @And("InfosystemPage: user changes general description by adding {string} to all fields")
@@ -128,16 +133,20 @@ public class InfosystemPageSteps {
                         .anyMatch(associatedTopic -> associatedTopic.equalsIgnoreCase(topic)));
     }
 
-    @Then("InfosystemPage: data object {string} and url {string} present in 'data' block")
-    public void dataObjectFileAndUrlPresentInDataBlock(String dataObject, String urlName) {
+    @Then("InfosystemPage: data object {string}, data file {string} and url {string} present in 'data' block")
+    public void dataObjectFileAndUrlPresentInDataBlock(String dataObject, String fileName, String urlName) {
         assertTrue("Data block doesn't contain data object " + dataObject, infosystemPage.getDataObjects().contains(dataObject));
+        assertTrue("Data block doesn't contain data file " + dataObject, infosystemPage.getDataUrls().contains(fileName));
         assertTrue("Data block doesn't contain url " + urlName, infosystemPage.getDataUrls().contains(urlName));
     }
 
-    @Then("InfosystemPage: data object {string} and url {string} not present in 'data' block")
-    public void dataObjectFileAndUrlNotPresentInDataBlock(String dataObject, String urlName) {
+    @Then("InfosystemPage: data object {string}, data file {string} and url {string} not present in 'data' block")
+    public void dataObjectFileAndUrlNotPresentInDataBlock(String dataObject, String fileName, String urlName) {
         assertFalse("Data block contains data object " + dataObject,
                 Stream.of(infosystemPage.getDataObjects().split(",")).anyMatch(obj -> obj.equalsIgnoreCase(dataObject)));
+
+        assertFalse("Data block contains file " + fileName,
+                Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(fileName)));
 
         assertFalse("Data block contains url " + urlName,
                 Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(urlName)));
