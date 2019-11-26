@@ -3,6 +3,7 @@ package ee.ria.riha;
 import ee.ria.riha.driver.Setup;
 import ee.ria.riha.pages.HomePage;
 import ee.ria.riha.pages.LoginPage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 
 public class BackgroundSteps {
@@ -21,5 +22,10 @@ public class BackgroundSteps {
         loginPage.selectMobiilIdTab();
         loginPage.enterIsikukoodAndTelefoninumber(personalCode, phoneNumber);
         homePage.selectSecondOrganization();
+    }
+
+    @And("Test sleeps for {int} seconds")
+    public void testSleeps(int seconds) {
+        homePage.getWait().sleep(seconds * 1000);
     }
 }

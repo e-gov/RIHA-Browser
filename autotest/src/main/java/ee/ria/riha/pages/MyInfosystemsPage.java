@@ -44,8 +44,8 @@ public class MyInfosystemsPage extends BasePage {
     @FindBy(id = "infosystems-table")
     private WebElement infosystemsTable;
 
-    @FindBy(xpath = "//table[@id='infosystems-table']/thead/th/app-sort-button/button")
-    private WebElement sortByShortNameButton;
+    @FindBy(xpath = "//table[@id='infosystems-table']/thead/th[6]/app-sort-button/button")
+    private WebElement sortByLastModifiedButton;
 
     public MyInfosystemsPage(ScenarioContext scenarioContext) {
         super(scenarioContext);
@@ -104,9 +104,9 @@ public class MyInfosystemsPage extends BasePage {
     }
 
     public void sortByShortNameDesc() {
-        sortByShortNameButton.click(); //asc
+        sortByLastModifiedButton.click(); //asc
         waitForLoading();
-        sortByShortNameButton.click(); //desc
+        sortByLastModifiedButton.click(); //desc
         waitForLoading();
     }
 
