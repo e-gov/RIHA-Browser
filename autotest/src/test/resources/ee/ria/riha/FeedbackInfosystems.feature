@@ -1,3 +1,4 @@
+@RIHAKB-710
 Feature: Infosystems feedback requesting
 
   Background:
@@ -10,6 +11,3 @@ Feature: Infosystems feedback requesting
 
     When InfosytemPage: feedback button is clicked
     And InfosytemPage: request feedback comment "test comment" is submitted
-
-#    And BackgroundSteps: wait 30000 milliseconds
-
