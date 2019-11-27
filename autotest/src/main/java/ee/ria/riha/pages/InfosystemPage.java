@@ -13,7 +13,10 @@ import java.util.stream.Collectors;
 
 import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
 import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
-import static ee.ria.riha.context.ScenarioContext.*;
+import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
+import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
+import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 import static org.openqa.selenium.Keys.RETURN;
 
@@ -88,6 +91,9 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[2]/table")
     private WebElement dataUrlsTable;
 
+    @FindBy(xpath = "//div[@id='ngb-tab-0-panel']/div/div/table")
+    private WebElement openIssuesTable;
+
     @FindBy(tagName = "ngb-modal-window")
     private WebElement modalContainer;
 
@@ -160,6 +166,29 @@ public class InfosystemPage extends BasePage {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, feedbackRequestButton, "feedback request button");
         feedbackRequestButton.click();
         wait.sleep(2000);
+    }
+
+    public void giveFeedback(String title, String comment) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("issueTitle"), "feedback comment");
+        modalContainer.findElement(By.id("issueTitle")).sendKeys(title);
+
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("issueText"), "feedback comment");
+        modalContainer.findElement(By.id("issueText")).sendKeys(comment);
+    }
+
+    public String getOpenIssues() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, openIssuesTable, "openIssuesTable");
+        wait.sleep(TABLE_SORT_TIMEOUT);
+
+        return openIssuesTable.findElements(By.tagName("tr"))
+                .stream()
+                .map(tr -> tr.findElement(By.cssSelector("td:nth-child(2)")))
+                .map(td -> td.findElement(By.tagName("a")))
+                .map(WebElement::getText)
+                .collect(Collectors.joining(","));
+
     }
 
     public enum FeedbackType {

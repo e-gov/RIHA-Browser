@@ -111,7 +111,7 @@ public class MyInfosystemsPage extends BasePage {
         waitForLoading();
     }
 
-    public void sortByShortNameDesc() {
+    public void sortByLastModifiedDesc() {
         sortByLastModifiedButton.click(); //asc
         waitForLoading();
         sortByLastModifiedButton.click(); //desc
