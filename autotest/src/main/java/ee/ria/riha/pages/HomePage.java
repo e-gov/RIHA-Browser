@@ -68,6 +68,7 @@ public class HomePage extends BasePage {
     }
 
     public void goToMyInfosystemsPage() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, goToMyInfosystemsPageButton, "goToMyInfosystemsPageButton");
         goToMyInfosystemsPageButton.click();
     }
 

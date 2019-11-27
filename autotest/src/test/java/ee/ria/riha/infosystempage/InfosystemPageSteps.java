@@ -9,6 +9,7 @@ import io.cucumber.java.en.When;
 import java.util.stream.Stream;
 
 import static ee.ria.riha.context.ScenarioContext.*;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class InfosystemPageSteps {
@@ -113,9 +114,25 @@ public class InfosystemPageSteps {
         infosystemPage.clickRequestFeedbackButton();
     }
 
-    @And("InfosytemPage: request feedback comment {string} is submitted")
-    public void submitFeedbackRequest(String feedbackComment) {
-        infosystemPage.requestFeedback(feedbackComment);
+    @And("InfosytemPage: feedback of type {string} with comment {string} is requested")
+    public void submitFeedbackRequest(String feedbackType, String feedbackComment) {
+        infosystemPage.requestFeedback(InfosystemPage.FeedbackType.valueOf(feedbackType), feedbackComment);
+    }
+
+    @Then("InfosystemPage: feedback form title is {string} and is editable {string}")
+    public void feedbackFormTitleIsNotEditable(String title, String editable) {
+        assertThat(infosystemPage.getFeedbackRequestTitleValue(), is(title));
+        assertThat(infosystemPage.isFeedbackRequestTitleEditable(), is(Boolean.valueOf(editable)));
+    }
+
+    @Then("InfosystemPage: feedback request with title {string} is saved")
+    public void checkCreationOfFeedbackRequest(String title) {
+        assertThat(infosystemPage.isFeedbackRequestWithTitlePresent(title), is(true));
+    }
+
+    @And("InfosytemPage: feedback request submit button is clicked")
+    public void clickSubmitFeedbackRequestButton() {
+        infosystemPage.clickSubmitFeedbackRequestButton();
     }
 
     @Then("InfosystemPage: link to technical documentation with name {string} presents in 'documentation' block")

@@ -38,6 +38,9 @@ public class MyInfosystemsPage extends BasePage {
     @FindBy(css = ".table-responsive > .btn")
     private WebElement createNewLink;
 
+    @FindBy(linkText = "Minu arutelud")
+    private WebElement myDiscussionsLink;
+
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement submitButton;
 
@@ -83,6 +86,11 @@ public class MyInfosystemsPage extends BasePage {
         createNewLink.click();
     }
 
+    public void goToMyDiscussionsInfosystemPage() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, myDiscussionsLink, "myDiscussionsLink");
+        myDiscussionsLink.click();
+    }
+
     public void enterNameShortNameAndPurpose(String namePrefix, String shortNamePrefix, String purpose) {
         String lastCreatedInfosystemNumber = scenarioContext.getFromContext(LAST_INFOSYSTEM_NUMBER);
 
@@ -113,7 +121,13 @@ public class MyInfosystemsPage extends BasePage {
     public void saveFirstFoundInfosystemShortNameToScenarioContext() {
         WebElement firstRow = infosystemsTable.findElement(By.xpath("//tr[1]"));
         String shortName = firstRow.findElement(By.xpath("//td[1]")).findElement(By.tagName("a")).getText();
-        scenarioContext.saveToContext(LAST_INFOSYSTEM_NUMBER, shortName.substring(scenarioContext.getFromContext(SEARCH_TEXT_KEY).length() + 1));
+        String lastInfoSystemNumber;
+        if (shortName.equalsIgnoreCase(scenarioContext.getFromContext(SEARCH_TEXT_KEY))) {
+            lastInfoSystemNumber = "1";
+        } else {
+            lastInfoSystemNumber = shortName.substring(scenarioContext.getFromContext(SEARCH_TEXT_KEY).length() + 1);
+        }
+        scenarioContext.saveToContext(LAST_INFOSYSTEM_NUMBER, lastInfoSystemNumber);
     }
 
     public void selectFirstFoundInfosystem() {
@@ -125,4 +139,5 @@ public class MyInfosystemsPage extends BasePage {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, infosystemsTable, "infosystems-table");
         wait.sleep(TABLE_SORT_TIMEOUT);
     }
+
 }
