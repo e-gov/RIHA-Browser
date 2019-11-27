@@ -157,27 +157,62 @@ public class InfosystemPage extends BasePage {
     }
 
     public void clickRequestFeedbackButton() {
-        wait.sleep(10000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, feedbackRequestButton, "feedback request button");
         feedbackRequestButton.click();
+        wait.sleep(2000);
     }
 
-    public void requestFeedback(String comment) {
+    public enum FeedbackType {
+        ASUTAMISEKS(".custom-control:nth-child(1) > .custom-control-label"),
+        KASUTUSELE_VOTMISEKS(".custom-control:nth-child(2) > .custom-control-label"),
+        ANDMEKOOSSEISU_MUUTMISEKS(".custom-control:nth-child(3) > .custom-control-label"),
+        LOPETAMISEKS(".custom-control:nth-child(4) > .custom-control-label");
+
+        private String cssRule;
+
+        FeedbackType(String cssRule) {
+            this.cssRule = cssRule;
+        }
+
+        public String getCssRule() {
+            return cssRule;
+        }
+    }
+
+    public void requestFeedback(FeedbackType feedbackType, String comment) {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
         //request feedback select box
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(".switch"), "control switch");
         modalContainer.findElement(By.cssSelector(".switch")).click();
 
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(feedbackType.cssRule), feedbackType.name());
+        modalContainer.findElement(By.cssSelector(feedbackType.cssRule)).click();
 
-        // asutamiseks radio button
-        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(".custom-control:nth-child(3) > .custom-control-label"), "asutamiseks button");
-        modalContainer.findElement(By.cssSelector(".custom-control:nth-child(3) > .custom-control-label")).click();
-
-        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("requestText"), "asutamiseks button");
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("requestText"), "feedback comment");
         modalContainer.findElement(By.id("requestText")).sendKeys(comment);
+    }
 
+    public boolean isFeedbackRequestTitleEditable() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+        String readOnlyAttribute = modalContainer.findElement(By.id("requestTitle")).getAttribute("readonly");
+
+        return readOnlyAttribute == null || "false".equalsIgnoreCase(readOnlyAttribute);
+    }
+
+    public String getFeedbackRequestTitleValue() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+        return  modalContainer.findElement(By.id("requestTitle")).getAttribute("value");
+    }
+
+    public boolean isFeedbackRequestWithTitlePresent(String title) {
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(title), "modalContainer");
+        return  driver.findElement(By.linkText(title)).isDisplayed();
+    }
+
+    public void clickSubmitFeedbackRequestButton() {
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(".btn-success"), "asutamiseks button");
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+        wait.sleep(2000);
     }
 
     public void clickSaveButton() {
