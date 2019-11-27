@@ -5,6 +5,7 @@ import ee.ria.riha.pages.HomePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.openqa.selenium.Keys;
 
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +19,11 @@ public class HomePageSteps {
     @Given("HomePage: user navigates to page {string}")
     public void userNavigatesToPage(String url) {
         homePage.goToPage(url);
+    }
+
+    @And("HomePage: user cancels organization select dialog")
+    public void userCancelsOrgSelectDialog() {
+       homePage.getModalContainer().sendKeys(Keys.ESCAPE);
     }
 
     @Given("HomePage: user selects organization {string}")

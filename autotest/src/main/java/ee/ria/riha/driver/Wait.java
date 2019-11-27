@@ -33,6 +33,11 @@ public class Wait {
         String timeoutMessage = webElementName + " was displayed after " + timeout + " seconds.";
         waitUntilCondition(condition, timeoutMessage, timeout);
     }
+    public void forElementToBeHidden(int timeout, WebElement webElement, String webElementName) {
+        ExpectedCondition<Boolean> condition = ExpectedConditions.not(ExpectedConditions.visibilityOf(webElement));
+        String timeoutMessage = webElementName + " wasn't hidden after " + Integer.toString(timeout) + " seconds.";
+        waitUntilCondition(condition, timeoutMessage, timeout);
+    }
 
     public void forPresenceOfElements(int timeout, By elementLocator, String elementName) {
         ExpectedCondition<List<WebElement>> condition = ExpectedConditions.presenceOfAllElementsLocatedBy(elementLocator);
@@ -40,9 +45,9 @@ public class Wait {
         waitUntilCondition(condition, timeoutMessage, timeout);
     }
 
-    public void sleep(int timeout) {
+    public void sleep(int timeoutMilliseconds) {
         try {
-            Thread.sleep(timeout);
+            Thread.sleep(timeoutMilliseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

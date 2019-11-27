@@ -8,13 +8,8 @@ import io.cucumber.java.en.When;
 
 import java.util.stream.Stream;
 
-import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
-import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
-import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
-import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static ee.ria.riha.context.ScenarioContext.*;
+import static org.junit.Assert.*;
 
 public class InfosystemPageSteps {
     private InfosystemPage infosystemPage;
@@ -75,7 +70,7 @@ public class InfosystemPageSteps {
 
     @And("InfosystemPage: user clicks on 'add new URL' button")
     public void userClicksOnAddNewUrlButton() {
-        infosystemPage.clickOnAddNewUrlButton();
+        infosystemPage.clickOnAddNewDocumentationUrlButton();
     }
 
     @And("InfosystemPage: user enters new technical documentation link {string} with name {string}")
@@ -111,6 +106,16 @@ public class InfosystemPageSteps {
     @Then("InfosytemPage: {string} topic is present in associated topics list")
     public void topicIsPresentInAssociatedTopicsList(String topic) {
         assertTrue("Associated topic list doesn't contain topic " + topic, infosystemPage.getAssociatedTopicsList().contains(topic.toUpperCase()));
+    }
+
+    @When("InfosytemPage: feedback button is clicked")
+    public void clickFeedbackRequestButton() {
+        infosystemPage.clickRequestFeedbackButton();
+    }
+
+    @And("InfosytemPage: request feedback comment {string} is submitted")
+    public void submitFeedbackRequest(String feedbackComment) {
+        infosystemPage.requestFeedback(feedbackComment);
     }
 
     @Then("InfosystemPage: link to technical documentation with name {string} presents in 'documentation' block")
