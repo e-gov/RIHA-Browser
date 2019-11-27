@@ -63,6 +63,10 @@ public class HomePage extends BasePage {
         loginButton.click();
     }
 
+    public WebElement getModalContainer() {
+        return modalContainer;
+    }
+
     public void goToMyInfosystemsPage() {
         goToMyInfosystemsPageButton.click();
     }

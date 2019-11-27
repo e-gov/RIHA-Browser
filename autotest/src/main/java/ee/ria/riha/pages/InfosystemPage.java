@@ -13,10 +13,7 @@ import java.util.stream.Collectors;
 
 import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
 import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
-import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
-import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
-import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
-import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.*;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 import static org.openqa.selenium.Keys.RETURN;
 
@@ -43,11 +40,17 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//div[@id='uldkirjeldus']/app-producer-details-general/section/div/button")
     private WebElement editButton;
 
+    @FindBy(xpath = "//div[@id='oigusaktid']/app-producer-details-legislations/section/div/button")
+    private WebElement editLegalActsButton;
+
     @FindBy(xpath = "//div[@id='kontaktid']/app-producer-details-contacts/section/div/button")
     private WebElement editContactsButton;
 
     @FindBy(xpath = "//div[@id='dokumentatsioon']/app-producer-details-tech-docs/section/div/button")
     private WebElement editDocumentationButton;
+
+    @FindBy(xpath = "//div[@id='tagasiside']/app-producer-details-issues/section/div[2]/button")
+    private WebElement feedbackRequestButton;
 
     @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div/button")
     private WebElement editDataButton;
@@ -132,9 +135,49 @@ public class InfosystemPage extends BasePage {
         editButton.click();
     }
 
+    public void clickEditLegalActsButton() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editLegalActsButton, "editButton");
+        editLegalActsButton.click();
+    }
+
     public void clickEditContactsButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editContactsButton, "editContactsButton");
         editContactsButton.click();
+    }
+
+    public void clickSelectSystemStatus(String status) {
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(status), "status select links");
+        driver.findElement(By.linkText(status)).click();
+    }
+
+    public void clickSelectDevelopmentStatus(boolean isActiveDevelopment) {
+        String linkText = isActiveDevelopment ? "Jah" : "Ei";
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(linkText), "development status links");
+        driver.findElement(By.linkText(linkText)).click();
+    }
+
+    public void clickRequestFeedbackButton() {
+        wait.sleep(10000);
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, feedbackRequestButton, "feedback request button");
+        feedbackRequestButton.click();
+    }
+
+    public void requestFeedback(String comment) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+        //request feedback select box
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(".switch"), "control switch");
+        modalContainer.findElement(By.cssSelector(".switch")).click();
+
+
+        // asutamiseks radio button
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(".custom-control:nth-child(3) > .custom-control-label"), "asutamiseks button");
+        modalContainer.findElement(By.cssSelector(".custom-control:nth-child(3) > .custom-control-label")).click();
+
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("requestText"), "asutamiseks button");
+        modalContainer.findElement(By.id("requestText")).sendKeys(comment);
+
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.cssSelector(".btn-success"), "asutamiseks button");
+        modalContainer.findElement(By.cssSelector(".btn-success")).click();
     }
 
     public void clickSaveButton() {
@@ -209,7 +252,7 @@ public class InfosystemPage extends BasePage {
         editDocumentationButton.click();
     }
 
-    public void clickOnAddNewUrlButton() {
+    public void clickOnAddNewDocumentationUrlButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
 
         modalContainer.findElement(By.cssSelector(".btn-secondary:nth-child(2)")).click();
@@ -230,6 +273,18 @@ public class InfosystemPage extends BasePage {
         linkTypeElement.click();
         new Select(linkTypeElement).selectByValue("DOC_TYPE_OTHER");
 
+        modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
+        modalContainer.findElement(By.cssSelector(".btn-success")).click();
+    }
+
+    public void enterNewLegalActInfo(String url, String title) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        modalContainer.findElement(By.id("url")).sendKeys(url);
+        modalContainer.findElement(By.id("name")).sendKeys(title);
+        WebElement legalTypeSelect = modalContainer.findElement(By.id("type"));
+        legalTypeSelect.click();
+        new Select(legalTypeSelect).selectByValue("LEGAL_TYPE_STATUTE");
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
     }
@@ -276,6 +331,7 @@ public class InfosystemPage extends BasePage {
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
 
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+        wait.sleep(2000);
     }
 
     public String getDataObjects() {
