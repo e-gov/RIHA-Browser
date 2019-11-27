@@ -45,13 +45,18 @@ public class InfosystemManagementSteps {
     @Given("MyInfosystemsPage: user knows the number of last created infosystem with prefix {string}")
     public void userKnowsTheNameOfLastCreatedInfosystem(String namePrefix) {
         myInfosystemsPage.enterSearchText(namePrefix);
-        myInfosystemsPage.sortByShortNameDesc();
+        myInfosystemsPage.sortByLastModifiedDesc();
         myInfosystemsPage.saveFirstFoundInfosystemShortNameToScenarioContext();
     }
 
     @Given("MyInfosystemsPage: user select {string} infosystem")
     public void userSelectsInfosystem(String shortName) {
         myInfosystemsPage.enterSearchText(shortName);
+        myInfosystemsPage.selectFirstFoundInfosystem();
+    }
+
+    @Given("MyInfosystemsPage: user select first found infosystem")
+    public void userSelectsFirstFoundInfosystem() {
         myInfosystemsPage.selectFirstFoundInfosystem();
     }
 

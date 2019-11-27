@@ -34,7 +34,7 @@ public class BackgroundSteps {
         homePage.selectSecondOrganization();
     }
 
-    @And("BackgroundSteps: user creates system with name {string}, shortName {string}, purpose {string}," +
+    @Given("BackgroundSteps: user creates system with name {string}, shortName {string}, purpose {string}," +
             " dataObject {string}, url {string}, urlName {string}," +
             " technicalDocumentationUrl {string}, technicalDocumentationLink {string}," +
             " contactName {string}, email {string}," +

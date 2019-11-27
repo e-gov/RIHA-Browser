@@ -8,9 +8,15 @@ import io.cucumber.java.en.When;
 
 import java.util.stream.Stream;
 
-import static ee.ria.riha.context.ScenarioContext.*;
+import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
+import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
+import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class InfosystemPageSteps {
     private InfosystemPage infosystemPage;
@@ -119,6 +125,11 @@ public class InfosystemPageSteps {
         infosystemPage.requestFeedback(InfosystemPage.FeedbackType.valueOf(feedbackType), feedbackComment);
     }
 
+    @And("InfosytemPage: approver gives feedback with tile {string} and comment {string}")
+    public void approverGivesFeedbackWithComment(String title, String comment) {
+        infosystemPage.giveFeedback(title, comment);
+    }
+
     @Then("InfosystemPage: feedback form title is {string} and is editable {string}")
     public void feedbackFormTitleIsNotEditable(String title, String editable) {
         assertThat(infosystemPage.getFeedbackRequestTitleValue(), is(title));
@@ -177,6 +188,11 @@ public class InfosystemPageSteps {
     @Then("InfosytemPage: infosystem creation purpose is {string}")
     public void infosystemCreationPurposeIs(String purpose) {
         assertTrue("Infosystem creation purpose is not " + purpose, purpose.equalsIgnoreCase(infosystemPage.getPurposeText()));
+    }
+
+    @Then("InfosytemPage: issue with title {string} is visible in open issues list")
+    public void issueIsVisibleInOpenIssuesList(String title) {
+        assertTrue("Issue with title " + title + " is not visible in open issues list", infosystemPage.getOpenIssues().contains(title));
     }
 
     @Then("InfosytemPage: infosystem short name, name, creation purpose and homepage url end with {string}")
