@@ -1,3 +1,4 @@
+@RIHAKB-710
 Feature: Home page functionality
 
   Background:
