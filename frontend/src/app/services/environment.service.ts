@@ -130,7 +130,7 @@ export class EnvironmentService {
   }
 
   public doLogout(): Observable<any> {
-    return this.http.post('/logout');
+    return this.http.post('/logout',null);
   }
 
   public doLogin(): Observable<any> {
