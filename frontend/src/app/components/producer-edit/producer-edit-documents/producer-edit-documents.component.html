@@ -18,7 +18,7 @@
         <div class="form-group">
           <label for="dataFile" class="text-muted separated-text">Fail:</label>
           <div></div>
-          <label class="btn btn-secondary input-file-label mb-0" for="dataFile">Vali fail</label>
+          <label class="btn btn-secondary input-file-label mb-0" style="margin-right:3px;" for="dataFile">Vali fail</label>
           <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event)">
           <span *ngIf="docFile != null" claas="col-4">{{ docFile.name }}</span>
           <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
