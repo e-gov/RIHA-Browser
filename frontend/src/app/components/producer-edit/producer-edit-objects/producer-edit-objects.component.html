@@ -87,6 +87,7 @@
               <i class="fa fa-file-o text-primary"></i>
             </td>
             <td>
+              <app-file-icon [file]="file" style="margin-right:3px;"></app-file-icon>
               <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}" target="_blank">{{ file.name }}</a>
             </td>
             <td>
