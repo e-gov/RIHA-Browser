@@ -38,7 +38,7 @@
         <app-alert *ngIf="closedIssues.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi suletud arutelu ei leidu',
-          text: 'Arutelusid algatada ja kommenteerida saavad vaid infosüsteemi kontaktid ning RIHA hindajad'
+          text: 'Arutelusid algatada ja kommenteerida saavad vaid asutuse kirjeldajad ning RIHA hindajad'
         }"></app-alert>
         <div class="my-1" *ngIf="closedIssues.length > 0">
           <div class="table-responsive">

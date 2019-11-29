@@ -41,7 +41,7 @@
             <tbody>
             <tr *ngFor="let doc of gridData.content">
               <td class="name">
-                <app-file-icon [file]="doc"></app-file-icon>
+                <app-file-icon [file]="doc" style="margin-right:5px;"></app-file-icon>
                 <a *ngIf="canDownload(doc)"
                    href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{
                   (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>
