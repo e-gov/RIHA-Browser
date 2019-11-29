@@ -8,15 +8,9 @@ import io.cucumber.java.en.When;
 
 import java.util.stream.Stream;
 
-import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
-import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
-import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
-import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class InfosystemPageSteps {
     private InfosystemPage infosystemPage;
@@ -123,6 +117,16 @@ public class InfosystemPageSteps {
     @And("InfosytemPage: feedback of type {string} with comment {string} is requested")
     public void submitFeedbackRequest(String feedbackType, String feedbackComment) {
         infosystemPage.requestFeedback(InfosystemPage.FeedbackType.valueOf(feedbackType), feedbackComment);
+    }
+
+    @And("InfosytemPage: user adds issue with title {string} and comment {string} to the system")
+    public void addFeedbackComment(String title, String comment) {
+        infosystemPage.createIssue(title, comment);
+    }
+
+    @Then("InfosystemPage: issue is saved")
+    public void checkThatFeedbackWasSaved() {
+        assertTrue(infosystemPage.isIssueSaved());
     }
 
     @And("InfosytemPage: approver gives feedback with tile {string} and comment {string}")

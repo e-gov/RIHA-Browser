@@ -14,6 +14,18 @@ Feature: Infosystems feedback requesting
     And InfosytemPage: feedback request submit button is clicked
     Then InfosystemPage: feedback request with title "Infosüsteemil puudub kasutusele võtmise kooskõlastus" is saved
 
+Scenario: Owner of the system with Approver role can leave comments (RIHAKB-464)
+  Given BackgroundSteps: user creates system with name "riha-auto-test", shortName "riha-auto-test", purpose "purpose test", dataObject "dataObject", url "https://ria.ee", urlName "Ria web", technicalDocumentationUrl "https://ria.ee", technicalDocumentationLink "riaDok", contactName "contactName", email "test@test.ee", legalUrl "https://riigiteataja.ee", legalName "riigiteataja"
+  When InfosytemPage: feedback button is clicked
+  And InfosytemPage: feedback of type "KASUTUSELE_VOTMISEKS" with comment "test comment" is requested
+  Then InfosystemPage: feedback form title is "Infosüsteemil puudub kasutusele võtmise kooskõlastus" and is editable "false"
+  And InfosytemPage: feedback request submit button is clicked
+  Then InfosystemPage: feedback request with title "Infosüsteemil puudub kasutusele võtmise kooskõlastus" is saved
+  When InfosytemPage: feedback button is clicked
+  And InfosytemPage: user adds issue with title "test title" and comment "this is a test comment" to the system
+  And InfosytemPage: feedback request submit button is clicked
+  Then InfosystemPage: issue is saved
+
   Scenario: Approver can give feedback to infosystem  (RIHAKB-342)
     Given MyInfosystemsPage: user select first found infosystem
     When InfosytemPage: feedback button is clicked

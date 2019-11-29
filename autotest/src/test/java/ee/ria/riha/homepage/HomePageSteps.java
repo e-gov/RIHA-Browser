@@ -23,7 +23,7 @@ public class HomePageSteps {
 
     @And("HomePage: user cancels organization select dialog")
     public void userCancelsOrgSelectDialog() {
-       homePage.getModalContainer().sendKeys(Keys.ESCAPE);
+        homePage.getModalContainer().sendKeys(Keys.ESCAPE);
     }
 
     @Given("HomePage: user selects organization {string}")
@@ -65,5 +65,10 @@ public class HomePageSteps {
     @Then("HomePage: organization name {string} is shown next to user's name")
     public void organizationNameIsShownNextToUsersName(String organizationName) {
         assertTrue("Organization name " + organizationName + " is not shown", homePage.getLoggedInUsersName().contains(organizationName));
+    }
+
+    @And("HomePage: user returns to the previous page")
+    public void goOnePageBack() {
+        homePage.goHistoryMinusOne();
     }
 }

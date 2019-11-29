@@ -13,15 +13,14 @@ import java.util.stream.Collectors;
 
 import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
 import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
-import static ee.ria.riha.context.ScenarioContext.HOMEPAGE_KEY;
-import static ee.ria.riha.context.ScenarioContext.NAME_KEY;
-import static ee.ria.riha.context.ScenarioContext.PURPOSE_KEY;
-import static ee.ria.riha.context.ScenarioContext.SHORT_NAME_KEY;
+import static ee.ria.riha.context.ScenarioContext.*;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 import static org.openqa.selenium.Keys.RETURN;
 
 public class InfosystemPage extends BasePage {
 
+    public static final String ISSUE_TEXT = "ISSUE_TEXT";
+    public static final String ISSUE_TITLE = "ISSUE_TITLE";
     @FindBy(xpath = "//div[@id='uldkirjeldus']/app-producer-details-general/section/div[2]/div[2]/p")
     private WebElement purposeP;
 
@@ -219,6 +218,34 @@ public class InfosystemPage extends BasePage {
 
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("requestText"), "feedback comment");
         modalContainer.findElement(By.id("requestText")).sendKeys(comment);
+    }
+
+    public void createIssue(String title, String comment) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("issueTitle"), "issue title");
+        modalContainer.findElement(By.id("issueTitle")).sendKeys(title);
+        scenarioContext.saveToContext(ISSUE_TITLE, title);
+
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("issueText"), "feedback comment");
+        modalContainer.findElement(By.id("issueText")).sendKeys(comment);
+        scenarioContext.saveToContext(ISSUE_TEXT, comment);
+
+    }
+    public boolean isIssueSaved() {
+        String issueTitle = scenarioContext.getFromContext(ISSUE_TITLE);
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(issueTitle), "linkTitle");
+        driver.findElement(By.linkText(issueTitle)).click();
+
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        By titleCssSelector = By.cssSelector(".text-gray-dark:nth-child(1)");
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, titleCssSelector, "issue title");
+
+        By issueTextSelector = By.cssSelector(".user-multiline-text:nth-child(1)");
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, issueTextSelector, "feedback comment");
+        return modalContainer.findElement(titleCssSelector).getText().equals(issueTitle) &&
+                modalContainer.findElement(issueTextSelector).getText().equals(scenarioContext.getFromContext(ISSUE_TEXT));
     }
 
     public boolean isFeedbackRequestTitleEditable() {
