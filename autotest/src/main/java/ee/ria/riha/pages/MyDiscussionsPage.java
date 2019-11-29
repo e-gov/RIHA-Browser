@@ -12,6 +12,8 @@ import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
 
 public class MyDiscussionsPage extends BasePage {
 
+    public static final String DISCUSSION_SYSTEM_SHORT_NAME = "DISCUSSION_SYSTEM_SHORT_NAME";
+    public static final String DISCUSSION_TITLE_NAME = "DISCUSSION_TITLE_NAME";
 
     @FindBy(id = "infosystems-table")
     private WebElement myDiscussionsTable;
@@ -48,5 +50,29 @@ public class MyDiscussionsPage extends BasePage {
         titleFilter.click();
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, lastCommentDateFilter, "myDiscussionsTable");
         lastCommentDateFilter.click();
+    }
+
+    public void clickOnFirstDiscussionShortNameAndRememberIt() {
+        WebElement shortNameLink = driver.findElement(By.cssSelector("tr:nth-child(1) > td:nth-child(2) > a"));
+        scenarioContext.saveToContext(DISCUSSION_SYSTEM_SHORT_NAME, shortNameLink.getText());
+        shortNameLink.click();
+    }
+
+    public boolean isUserRedirectedToSystemPageWithRememberedShortName() {
+        wait.sleep(2000);
+        return driver.findElement(By.cssSelector("h2"))
+                .getText().equalsIgnoreCase(scenarioContext.getFromContext(DISCUSSION_SYSTEM_SHORT_NAME));
+    }
+
+    public void clickOnFirstDiscussionTitleLinkAndRememberIt() {
+        WebElement discussionTitleLink = driver.findElement(By.cssSelector("tr:nth-child(1) > td:nth-child(3) > a"));
+        scenarioContext.saveToContext(DISCUSSION_TITLE_NAME, discussionTitleLink.getText());
+        discussionTitleLink.click();
+    }
+
+    public boolean isUserRedirectedToSystemPageAndPopupIsOpened() {
+        wait.sleep(2000);
+        return driver.findElement(By.cssSelector(".text-gray-dark:nth-child(1)"))
+                .getText().equalsIgnoreCase(scenarioContext.getFromContext(DISCUSSION_TITLE_NAME));
     }
 }

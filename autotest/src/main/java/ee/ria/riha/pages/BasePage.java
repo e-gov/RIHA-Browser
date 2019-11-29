@@ -37,4 +37,10 @@ public class BasePage {
         jsExecutor.executeScript(changeVisibilityScript);
         jsExecutor.executeScript(changeDisplayScript);
     }
+
+    public void goHistoryMinusOne() {
+        JavascriptExecutor jsExecutor = (JavascriptExecutor)driver;
+        jsExecutor.executeScript("window.history.go(-1)");
+        wait.sleep(3000);
+    }
 }
