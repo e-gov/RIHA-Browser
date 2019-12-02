@@ -5,6 +5,7 @@ import ee.ria.riha.pages.InfosystemPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import java.util.stream.Stream;
 
@@ -223,5 +224,81 @@ public class InfosystemPageSteps {
     @Then("InfosystemPage: placeholder {string} is visible in 'contacts' block")
     public void placeholderIsVisibleInContactsBlock(String text) {
         assertEquals("Empty contacts placeholder is wrong", text, infosystemPage.getEmptyContactsPlaceholder());
+    }
+
+    @When("InfosytemPage: user clicks on 'Seosed süsteemidega' in the navigation bar")
+    public void userNavigatesToAssociations() {
+        this.infosystemPage.navigateToAssociations();
+    }
+
+    @Then("InfosystemPage: url will contain {string}")
+    public void verifyUrlChange(String url) {
+        Assert.assertTrue("Url does not contain " + url, this.infosystemPage.getCurrentUrl(true).contains(url));
+    }
+
+    @When("InfosystemPage: user clicks on edit in 'Seosed süsteemidega' block")
+    public void userClicksEditInAssociationsBlock() {
+        this.infosystemPage.clickOnEditAssociationsButton();
+    }
+
+
+    @And("InfosystemPage: user enters {string} in shortname input box in modal window and clicks on suggested name")
+    public void userEntersShortNameInModal(String shortName) {
+        this.infosystemPage.enterShortNameForAssociatedSystem(shortName);
+    }
+
+    @And("InfosystemPage: user selects 'alaminfosüsteem' as type and saves")
+    public void userSelectsTypeAndSaves() {
+        this.infosystemPage.selectAssociationTypeAndSave();
+    }
+
+    @Then("InfosystemPage: a new associated infosystem {string} appears as a clickable link")
+    public void verifyNewAssociatedInfosystem(String name) {
+        assertEquals("New associated infosystem is not " + name, this.infosystemPage.getNewAssociatedInfosystemInModal(), name);
+    }
+
+
+    @When("InfosystemPage: user clicks the new associated infosystem and is redirected to a new tab")
+    public void userClicksAssociatedInfosystemInModal() {
+        this.infosystemPage.clickNewAssociatedInfosystemInModal();
+        this.infosystemPage.createNewTab();
+    }
+
+    @And("InfosystemPage: associated infosystem {string} will appear")
+    public void verifySystemInDetailView(String name) {
+        assertEquals("New associated infosystem is not " + name, this.infosystemPage.getAssociatedInfosystemInDetail(), name );
+    }
+
+
+    @When("InfosystemPage: user clicks on said associated infosystem and new detail view page opens")
+    public void userClicksAssociatedInfosystemInDetail() {
+        this.infosystemPage.clickAssociatedInfosystemInDetail();
+    }
+
+
+    @And("InfosystemPage: user goes back to last page")
+    public void userGoesToLastPage() {
+        this.infosystemPage.goToPreviousPage();
+    }
+
+    @And("InfosystemPage: user goes back to the last tab {string}")
+    public void userGoesToLastTab(String tab) {
+        this.infosystemPage.switchTabs(tab);
+    }
+
+    @And("InfosystemPage: user deletes infosystem association")
+    public void userDeletesAssociation() {
+        this.infosystemPage.deleteAssociation();
+    }
+
+
+    @Then("InfosystemPage: first infosystem is not listed as associated")
+    public void verifyAssociation() {
+        assertEquals("Infosystem association was still found!", "", this.infosystemPage.getAssociatedInfosystemInDetail());
+    }
+
+    @When("InfosystemPage: user refreshes current page")
+    public void refreshCurrentPage() {
+        this.infosystemPage.refreshPage();
     }
 }
