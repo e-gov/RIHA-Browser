@@ -36,6 +36,11 @@ public class InfosystemManagementSteps {
         myInfosystemsPage.goToMyDiscussionsInfosystemPage();
     }
 
+    @And("MyInfosystemsPage: user clicks 'Minu organisatsioon'")
+    public void userClicksMyOrganization() {
+        myInfosystemsPage.goToMyOrganizationInfosystemPage();
+    }
+
 
     @And("MyInfosystemsPage: user enters name as {string} short name as {string} increasing last number and purpose as {string}")
     public void userEntersNameShortNameAndPurpose(String namePrefix, String shortNamePrefix, String purpose) {
