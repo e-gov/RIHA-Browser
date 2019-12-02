@@ -2,6 +2,7 @@ package ee.ria.riha.pages;
 
 import ee.ria.riha.context.ScenarioContext;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -24,6 +25,9 @@ public class HomePage extends BasePage {
 
     @FindBy(tagName = "ngb-modal-window")
     private WebElement modalContainer;
+
+    @FindBy(xpath = "//input[@id='search']")
+    private WebElement searchBarInput;
 
     public HomePage(ScenarioContext scenarioContext) {
         super(scenarioContext);
@@ -75,4 +79,10 @@ public class HomePage extends BasePage {
     public void goToInfosystemsPage() {
         goToInfosystemsPageLink.click();
     }
+
+    public void inputSearchTerm(String word) {
+        this.searchBarInput.sendKeys(word);
+        this.searchBarInput.sendKeys(Keys.RETURN);
+    }
+
 }

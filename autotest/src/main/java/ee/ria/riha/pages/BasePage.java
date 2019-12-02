@@ -6,6 +6,9 @@ import ee.ria.riha.driver.Wait;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public class BasePage {
     protected WebDriver driver;
     protected Wait wait;
@@ -17,8 +20,16 @@ public class BasePage {
         this.scenarioContext = scenarioContext;
     }
 
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
+    public String getCurrentUrl(boolean decodeUrl) {
+        if (!decodeUrl) {
+            return driver.getCurrentUrl();
+        }
+
+        try {
+            return URLDecoder.decode(driver.getCurrentUrl(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ScenarioContext getScenarioContext() {
