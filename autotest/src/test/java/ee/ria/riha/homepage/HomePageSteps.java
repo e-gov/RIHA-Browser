@@ -71,4 +71,10 @@ public class HomePageSteps {
     public void goOnePageBack() {
         homePage.goHistoryMinusOne();
     }
+
+    @Given("HomePage: user clicks on the search bar and enters {string}")
+    public void userClicksOnSearchBar(String word) {
+        this.homePage.inputSearchTerm(word);
+    }
+
 }
