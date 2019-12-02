@@ -3,12 +3,15 @@ package ee.ria.riha.pages;
 import ee.ria.riha.context.ScenarioContext;
 import ee.ria.riha.util.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
@@ -19,8 +22,10 @@ import static org.openqa.selenium.Keys.RETURN;
 
 public class InfosystemPage extends BasePage {
 
+    private ArrayList<String> tabs;
     public static final String ISSUE_TEXT = "ISSUE_TEXT";
     public static final String ISSUE_TITLE = "ISSUE_TITLE";
+
     @FindBy(xpath = "//div[@id='uldkirjeldus']/app-producer-details-general/section/div[2]/div[2]/p")
     private WebElement purposeP;
 
@@ -95,6 +100,33 @@ public class InfosystemPage extends BasePage {
 
     @FindBy(tagName = "ngb-modal-window")
     private WebElement modalContainer;
+
+    @FindBy(xpath = "//div[@id='seosed']/app-producer-details-relations/section/div/button")
+    private WebElement AssociationsEditButton;
+
+    @FindBy(xpath = "//a[contains(text(),'Seosed süsteemidega')]")
+    private WebElement navigationToAssociations;
+
+    @FindBy(xpath = "//input[@id='infoSystem']")
+    private WebElement modalAssociationsShortName;
+
+    @FindBy(css = "ngb-highlight")
+    private WebElement modalAssociationsAutoOption;
+
+    @FindBy(xpath = "//select[@id='type']")
+    private WebElement associationTypeDropDown;
+
+    @FindBy(xpath = "//form/div[3]/div/button")
+    private WebElement saveNewAssociation;
+
+    @FindBy(xpath = "//a[contains(@href, '/Infosüsteemid/Vaata/ummik.test')]")
+    private WebElement newAssociatedInfosystemInModal;
+
+    @FindBy(xpath = "//a[contains(text(),'Riigi infosüsteemi haldussüsteem (riha-test)')]")
+    private WebElement newAssociatedInfosystemInDetail;
+
+    @FindBy(xpath = "//tr[4]/td[3]/button/i")
+    private WebElement deleteAssociationButton;
 
     public InfosystemPage(ScenarioContext scenarioContext) {
         super(scenarioContext);
@@ -232,6 +264,7 @@ public class InfosystemPage extends BasePage {
         scenarioContext.saveToContext(ISSUE_TEXT, comment);
 
     }
+
     public boolean isIssueSaved() {
         String issueTitle = scenarioContext.getFromContext(ISSUE_TITLE);
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(issueTitle), "linkTitle");
@@ -257,12 +290,12 @@ public class InfosystemPage extends BasePage {
 
     public String getFeedbackRequestTitleValue() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
-        return  modalContainer.findElement(By.id("requestTitle")).getAttribute("value");
+        return modalContainer.findElement(By.id("requestTitle")).getAttribute("value");
     }
 
     public boolean isFeedbackRequestWithTitlePresent(String title) {
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(title), "modalContainer");
-        return  driver.findElement(By.linkText(title)).isDisplayed();
+        return driver.findElement(By.linkText(title)).isDisplayed();
     }
 
     public void clickSubmitFeedbackRequestButton() {
@@ -474,5 +507,71 @@ public class InfosystemPage extends BasePage {
                 .stream()
                 .filter(tr -> tr.findElement(By.cssSelector("td:nth-child(2) > a")).getText().equals(text))
                 .findFirst().get();
+    }
+
+    public void clickOnEditAssociationsButton() {
+        this.AssociationsEditButton.click();
+    }
+
+    public void navigateToAssociations() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, navigationToAssociations, "navigationToAssociations");
+        this.navigationToAssociations.click();
+        wait.sleep(2000);
+    }
+
+    public void enterShortNameForAssociatedSystem(String shortName) {
+        wait.forPresenceOfElements(5, By.tagName("ngb-modal-window"), "modal");
+        this.modalAssociationsShortName.sendKeys(shortName);
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalAssociationsAutoOption, "modalAssociationsAutoOption");
+        this.modalAssociationsAutoOption.click();
+    }
+
+    public void selectAssociationTypeAndSave() {
+        this.associationTypeDropDown.click();
+        new Select(associationTypeDropDown).selectByValue("SUB_SYSTEM");
+        this.saveNewAssociation.click();
+    }
+
+    public String getNewAssociatedInfosystemInModal() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, newAssociatedInfosystemInModal, "newAssociatedInfosystemInModal");
+        return this.newAssociatedInfosystemInModal.getText();
+    }
+
+    public void clickNewAssociatedInfosystemInModal() {
+        this.newAssociatedInfosystemInModal.click();
+    }
+
+    public void createNewTab() {
+        tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+    }
+
+    public String getAssociatedInfosystemInDetail() {
+        try {
+            return this.newAssociatedInfosystemInDetail.getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+    }
+
+    public void clickAssociatedInfosystemInDetail() {
+        this.newAssociatedInfosystemInDetail.click();
+    }
+
+    public void goToPreviousPage() {
+        driver.navigate().back();
+    }
+
+    public void deleteAssociation() {
+        this.deleteAssociationButton.click();
+    }
+
+    public void switchTabs(String tab) {
+        driver.switchTo().window(tabs.get(Integer.parseInt(tab)));
+    }
+
+    public void refreshPage() {
+        driver.navigate().refresh();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 }
