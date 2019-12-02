@@ -41,6 +41,9 @@ public class MyInfosystemsPage extends BasePage {
     @FindBy(linkText = "Minu arutelud")
     private WebElement myDiscussionsLink;
 
+    @FindBy(linkText = "Minu organisatsioon")
+    private WebElement myOrganization;
+
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement submitButton;
 
@@ -89,6 +92,11 @@ public class MyInfosystemsPage extends BasePage {
     public void goToMyDiscussionsInfosystemPage() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, myDiscussionsLink, "myDiscussionsLink");
         myDiscussionsLink.click();
+    }
+
+    public void goToMyOrganizationInfosystemPage() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, myOrganization, "myOrganizationLink");
+        myOrganization.click();
     }
 
     public void enterNameShortNameAndPurpose(String namePrefix, String shortNamePrefix, String purpose) {
