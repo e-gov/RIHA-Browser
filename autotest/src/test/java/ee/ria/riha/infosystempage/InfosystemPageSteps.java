@@ -9,6 +9,7 @@ import org.junit.Assert;
 
 import java.util.stream.Stream;
 
+import static ee.ria.riha.BackgroundSteps.FILE_UPLOAD_NAME;
 import static ee.ria.riha.context.ScenarioContext.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -84,6 +85,27 @@ public class InfosystemPageSteps {
     public void userRemovesLinkToTechnicalDocumentation(String name) {
         infosystemPage.removeLinkToTechnicalDocumentation(name);
     }
+
+    @And("InfosystemPage: user clicks on 'upload file' button")
+    public void userClicksOnUploadNewFileButton() {
+        infosystemPage.userClicksOnUploadNewFileButton();
+    }
+
+    @And("InfosystemPage: user adds documentation file")
+    public void uploadDocumentationFile() {
+        infosystemPage.uploadNewFileDocumentFile(FILE_UPLOAD_NAME);
+    }
+
+    @Then("InfosystemPage: last uploaded file info is editable")
+    public void checkIfLastUploadedDocIsEditable() {
+        assertTrue("last uploaded file is not editable", infosystemPage.isUserCanEditLastUploadedDocument());
+    }
+
+    @And("InfosystemPage: last uploaded date is displayed in the documentation section")
+    public void checkIfLastUploadedDateIsDisplayed() {
+        assertTrue("last uploaded file is not editable", infosystemPage.isUploadedDateDisplayedOnTheLastUploadedDocument());
+    }
+
 
     @And("InfosystemPage: user enters new topic {string}")
     public void userEntersNewTopic(String topic) {

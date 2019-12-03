@@ -11,6 +11,8 @@ import io.cucumber.java.en.Given;
 
 public class BackgroundSteps {
 
+    public static final String FILE_UPLOAD_NAME = "test.txt";
+    
     private final Wait wait;
     private HomePage homePage;
     private LoginPage loginPage;
@@ -50,7 +52,7 @@ public class BackgroundSteps {
         infosystemPage.clickSaveButton();
         infosystemPage.clickEditDataButton();
 
-        infosystemPage.addDataObjectFileAndUrlToInfosystem(dataObject, "test.txt",  url, urlName);
+        infosystemPage.addDataObjectFileAndUrlToInfosystem(dataObject, FILE_UPLOAD_NAME,  url, urlName);
         testSleeps(2);
 
         infosystemPage.clickEditDocumentationButton();
