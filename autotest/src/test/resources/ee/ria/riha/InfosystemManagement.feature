@@ -60,3 +60,11 @@ Feature: My organization infosystems page functionality
     And InfosystemPage: user clicks on 'edit contacts' button
     And InfosystemPage: user clicks on 'delete contacts' button
     Then InfosystemPage: placeholder "Kontaktid puuduvad" is visible in 'contacts' block
+
+  Scenario: User can add documents and legal acts to infosystem (RIHAKB-793)
+    Given MyInfosystemsPage: user select "riha-test" infosystem
+    And InfosystemPage: user clicks on 'edit documentation' button
+    And InfosystemPage: user clicks on 'upload file' button
+    And InfosystemPage: user adds documentation file
+    Then InfosystemPage: last uploaded file info is editable
+    And InfosystemPage: last uploaded date is displayed in the documentation section

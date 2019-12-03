@@ -2,15 +2,20 @@ package ee.ria.riha.pages;
 
 import ee.ria.riha.context.ScenarioContext;
 import ee.ria.riha.util.Utils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -55,6 +60,9 @@ public class InfosystemPage extends BasePage {
 
     @FindBy(xpath = "//div[@id='dokumentatsioon']/app-producer-details-tech-docs/section/div/button")
     private WebElement editDocumentationButton;
+
+    @FindBy(xpath = "//div[@id='dokumentatsioon']/app-producer-details-tech-docs/section/div[2]")
+    private WebElement documentationSection;
 
     @FindBy(xpath = "//div[@id='tagasiside']/app-producer-details-issues/section/div[2]/button")
     private WebElement feedbackRequestButton;
@@ -220,6 +228,37 @@ public class InfosystemPage extends BasePage {
                 .map(WebElement::getText)
                 .collect(Collectors.joining(","));
 
+    }
+
+    public void userClicksOnUploadNewFileButton() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+        modalContainer.findElement(By.cssSelector(".ml-2:nth-child(1)")).click();
+    }
+
+    public boolean isUploadedDateDisplayedOnTheLastUploadedDocument() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, documentationSection, "documentationSection");
+
+        //sort by the end date desc
+        driver.findElement(By.cssSelector("app-producer-details-tech-docs:nth-child(1) th:nth-child(3) .btn:nth-child(1)")).click();
+        wait.sleep(1000);
+        driver.findElement(By.cssSelector("app-producer-details-tech-docs:nth-child(1) th:nth-child(3) .btn:nth-child(1)")).click();
+        wait.sleep(1000);
+
+        List<WebElement> tableRows = documentationSection.findElements(By.tagName("tr"));
+        //drop header
+        tableRows.remove(0);
+        //search for first date
+        String formattedDate = tableRows.stream()
+                .filter(row -> StringUtils.isNotBlank(((RemoteWebElement) row).findElementByCssSelector (".last-modified").getText()))
+                .findFirst()
+                .map(row -> ((RemoteWebElement) row).findElementByCssSelector (".last-modified").getText())
+                .orElse(null);
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(formattedDate);
+            return Math.abs(date.getTime() - System.currentTimeMillis()) < 60000L;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public enum FeedbackType {
@@ -399,6 +438,30 @@ public class InfosystemPage extends BasePage {
 
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+    }
+
+    public void uploadNewFileDocumentFile(String fileName) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+
+        WebElement linkTypeElement = modalContainer.findElement(By.id("fileType"));
+        linkTypeElement.click();
+        new Select(linkTypeElement).selectByValue("DOC_TYPE_ISKE_ACT");
+
+        //upload test data file
+        makeElementVisible("dataFile");
+        String path = Utils.getFileResourcePath(new File(fileName));
+        modalContainer.findElement(By.id("dataFile")).sendKeys(path);
+        modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
+        wait.sleep(3000);
+
+    }
+
+    public boolean isUserCanEditLastUploadedDocument() {
+        modalContainer.findElement(By.cssSelector(".expandable-block:last-child .mr-1")).click();
+        wait.sleep(1000);
+        boolean filenameInputVisible = modalContainer.findElement(By.cssSelector(".expandable-block:last-child .form-group:nth-child(1)")).isDisplayed();
+        modalContainer.findElement(By.cssSelector(".btn-success")).click();
+        return filenameInputVisible;
     }
 
     public void enterNewLegalActInfo(String url, String title) {
