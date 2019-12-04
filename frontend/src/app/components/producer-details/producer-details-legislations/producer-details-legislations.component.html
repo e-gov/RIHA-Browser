@@ -13,7 +13,7 @@
       <div class="my-1">
         <div class="table-responsive">
           <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
-            <thead class="thead-default">
+            <thead class="thead-light">
             <tr>
               <th>
                 <app-sort-button
@@ -41,7 +41,7 @@
             <tbody>
             <tr *ngFor="let legislation of gridData.content">
               <td class="name">
-                <i class="fa fa-external-link text-primary"></i>
+                <i class="fa fa-external-link text-primary" style="margin-right:5px;"></i>
                 <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
               </td>
               <td class="type"><span *ngIf="legislation.type && classifiers.legislation_types[legislation.type]">{{classifiers.legislation_types[legislation.type].value}}</span></td>

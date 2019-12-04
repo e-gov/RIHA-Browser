@@ -1,10 +1,7 @@
 package ee.ria.riha.web.model;
 
 import ee.ria.riha.domain.model.RelationType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Model of info system relationship request.
@@ -15,12 +12,9 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class RelationModel {
-
     private Long id;
     private String infoSystemShortName;
     private RelationType type;
-
-    public RelationModel() {
-    }
 }

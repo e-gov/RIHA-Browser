@@ -10,11 +10,12 @@
   <parent>
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.5.2</version>
+    <version>7.6</version>
   </parent>
 
 	<properties>
 		<yarn-args>${yarn.args}</yarn-args>
+    <sonar.sources>src</sonar.sources>
 	</properties>
 
 	<build>
@@ -44,16 +45,6 @@
 						<goals>
 							<goal>yarn</goal>
 						</goals>
-					</execution>
-					<execution>
-						<id>install-bower</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>run bower</arguments>
-						</configuration>
 					</execution>
 					<execution>
 						<id>upgrade-frontend-packages</id>
@@ -121,8 +112,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<nodeVersion>v8.0.0</nodeVersion>
-					<yarnVersion>v1.2.1</yarnVersion>
+					<nodeVersion>v10.16.3</nodeVersion>
+					<yarnVersion>v1.19.1</yarnVersion>
 					<npmVersion>4.4.4</npmVersion>
 					<workingDirectory>.</workingDirectory>
 				</configuration>

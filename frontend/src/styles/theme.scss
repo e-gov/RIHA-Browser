@@ -588,7 +588,7 @@ $CONTENTS
                 margin-bottom: 0px;
             }
         }
-        .card-block {
+        .card-body {
             padding: 25px 20px 20px 20px;
         }
         .card-footer {
@@ -612,7 +612,7 @@ $CONTENTS
             width: 100%;
             height: auto;
         }
-        .card-block {
+        .card-body {
             background: $grey;
             padding: 5px 10px;
         }
@@ -636,7 +636,7 @@ $CONTENTS
             color: $white;
             line-height: 20px;
         }
-        .card-block {
+        .card-body {
             border: 1px solid $grey;
             border-top: 0px;
             padding: 19px 19px 20px 19px;
@@ -703,7 +703,7 @@ $CONTENTS
                 vertical-align: middle;
             }
         }
-        .card-block {
+        .card-body {
             padding: 0px 40px;
             display: flex;
             justify-content: center;
@@ -1227,7 +1227,7 @@ mark {
                 }
             }
         }
-        .card-block {
+        .card-body {
             border-top: 1px solid $grey;
             padding: 14px 19px;
         }
@@ -1421,10 +1421,7 @@ mark {
         }
     }
 }
-.tooltip-inner {
-  background-color: $grey2;
-  color: $grey3;
-}
+
 .actions-bar {
     .links {
         a {

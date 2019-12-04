@@ -1,17 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService, classifiers } from '../../services/environment.service';
-import { System } from '../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { User } from '../../models/user';
-import { ModalHelperService } from '../../services/modal-helper.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {classifiers, EnvironmentService} from '../../services/environment.service';
+import {System} from '../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {User} from '../../models/user';
+import {ModalHelperService} from '../../services/modal-helper.service';
+import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
+import {Observable} from "rxjs";
+import {NgForm} from "@angular/forms";
+import {CONSTANTS} from '../../utils/constants';
 
 @Component({
   selector: 'app-approver-add-comment',
   templateUrl: './approver-add-issue.component.html',
   styleUrls: ['./approver-add-issue.component.scss']
 })
-export class ApproverAddIssueComponent implements OnInit {
+export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('approvalRequestForm', null) formObjectApprovalRequest: NgForm;
+  @ViewChild('newIssueForm', null) formObjectNewIssue: NgForm;
 
   @Input() system: System;
   activeUser: User;
@@ -35,8 +42,8 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onSubmitNewIssue(f) :void {
     if (f.valid){
-      this.systemsService.addSystemIssue(this.system.details.short_name, f.value).then(
-        res => {
+      this.systemsService.addSystemIssue(this.system.details.short_name, f.value).subscribe(
+        issue => {
           this.modalService.closeActiveModal();
         },
         err => {
@@ -47,8 +54,8 @@ export class ApproverAddIssueComponent implements OnInit {
 
   onSubmitApprovalRequest(f) :void {
     if (f.valid) {
-      this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).then(
-        res => {
+      this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).subscribe(
+        issue => {
           this.modalService.closeActiveModal();
         },
         err => {
@@ -78,20 +85,42 @@ export class ApproverAddIssueComponent implements OnInit {
     }
   }
 
-  closeModal(f){
-    if (f.form.dirty){
-      if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
-    }
-  }
-
   canSwitchViews(){
     return this.environmentService.getUserMatrix().hasApproverRole && this.activeUser.canEdit(this.system.getOwnerCode());
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    if (this.isApprovalRequest) {
+      return this.formObjectApprovalRequest.form.dirty;
+    } else {
+      return this.formObjectNewIssue.form.dirty;
+    }
   }
 
   constructor(private modalService: ModalHelperService,
@@ -105,17 +134,17 @@ export class ApproverAddIssueComponent implements OnInit {
     this.isApprovalRequest = !this.activeUser.hasApproverRole();
     if (this.activeUser.canEdit(this.system.getOwnerCode())){
 
-      this.systemsService.getSystemIssues(this.system.details.short_name).then(res =>{
+      this.systemsService.getSystemIssues(this.system.details.short_name).subscribe(res =>{
         this.openIssuesMatrix = {
           establishment: false,
           takingIntoUse: false,
           modification: false,
           finalization: false
         };
-        let issues = res.json().content;
-        issues.forEach(v => {
-          if (v.status == 'OPEN' && v.type != null){
-            switch (v.type){
+
+        res.content.forEach(issue => {
+          if (issue.status == 'OPEN' && issue.type != null){
+            switch (issue.type){
               case classifiers.issue_type.FINALIZATION_REQUEST.code: {
                 this.openIssuesMatrix.finalization = true;
                 break;

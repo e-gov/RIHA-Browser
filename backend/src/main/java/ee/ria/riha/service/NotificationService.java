@@ -56,8 +56,10 @@ public class NotificationService {
                         new NewIssueDecisionEmailNotification(),
                         decisionEvent.getIssueId(),
                         decisionEvent.getComment());
-        notificationModel.setDecision(decisionEvent.getResolutionType());
-        emailNotificationSenderService.sendNotification(notificationModel);
+        if (notificationModel != null) {
+            notificationModel.setDecision(decisionEvent.getResolutionType());
+            emailNotificationSenderService.sendNotification(notificationModel);
+        }
     }
 
     private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(T notificationModel,

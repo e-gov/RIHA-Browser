@@ -24,8 +24,8 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
 
   private getOwnOpenIssues(){
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData.sort).then(res =>{
-        this.gridData.updateData(res.json());
+      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData.sort).subscribe(res =>{
+        this.gridData.updateData(res);
         this.loaded = true;
       }, err => {
         this.helper.showError();
@@ -38,7 +38,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
               private helper: GeneralHelperService,
               private systemsService: SystemsService,
               private environmentService: EnvironmentService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -49,7 +49,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    let changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnOpenIssues();

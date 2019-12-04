@@ -1,17 +1,20 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Environment} from '../models/environment';
 import {User} from '../models/user';
 import {UserMatrix} from '../models/user-matrix';
+import {environment} from '../../environments/environment';
+import {Observable} from "rxjs";
 
-declare let ga: Function;
+declare const ga: Function;
 export let classifiers: any;
 
 @Injectable()
 export class EnvironmentService {
 
-  private environmentUrl = '/api/v1/environment';
-  private userInfoUrl = '/api/v1/user';
+  private environmentUrl = environment.api.environmentUrl;
+  private userInfoUrl = environment.api.userInfoUrl;
+  private classifiersUrl = environment.api.classifiersUrl;
 
   public globalEnvironment: any;
 
@@ -39,11 +42,11 @@ export class EnvironmentService {
   }
 
   public getSessionTimeoutInterval(): number{
-   return this.globalEnvironment.getSessionMaxInactiveInterval();
+    return this.globalEnvironment.getSessionMaxInactiveInterval();
   }
 
   public getUserMatrix(): UserMatrix{
-    let activeUser = this.getActiveUser();
+    const activeUser = this.getActiveUser();
     let hasDesciberRole = false;
     let hasApproverRole = false;
     let isOrganizationSelected = false;
@@ -69,78 +72,76 @@ export class EnvironmentService {
     });
   }
 
-  private runTrackingScripts(environment){
-    let googleAnalyticsId = environment.getGoogleAnalyticsId();
+  private runTrackingScripts(env){
+    const googleAnalyticsId = env.getGoogleAnalyticsId();
     if (googleAnalyticsId){
       (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
+          (i[r].q = i[r].q || []).push(arguments);
         }, i[r].l = 1 * <any>new Date();
         a = s.createElement(o),
           m = s.getElementsByTagName(o)[0];
         a.async = 1;
         a.src = g;
-        m.parentNode.insertBefore(a, m)
+        m.parentNode.insertBefore(a, m);
       })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create',googleAnalyticsId, 'auto');
+      ga('create', googleAnalyticsId, 'auto');
       ga('send', 'pageview');
     }
 
-    let hjid = environment.getHotjarHjid();
-    let hjsv = environment.getHotjarHjsv();
+    const hjid = env.getHotjarHjid();
+    const hjsv = env.getHotjarHjsv();
     if (hjid && hjsv){
-      (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:hjid,hjsv:hjsv};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+      (function(h, o, t, j, a, r){
+        h.hj = h.hj || function(){(h.hj.q = h.hj.q || []).push(arguments); };
+        h._hjSettings = {hjid: hjid, hjsv: hjsv};
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script'); r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
         a.appendChild(r);
-      })(<any>window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      })(<any>window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     }
   }
 
   public onAppStart(): Promise<any> {
-    let promise = this.http.get(this.environmentUrl).toPromise();
-    promise.then(response => {
-      this.globalEnvironment = new Environment(response.json());
-      this.runTrackingScripts(this.globalEnvironment);
+    const promise = this.loadEnvironmentData().toPromise();
+    promise.then(env => {
+      this.runTrackingScripts(new Environment(env));
     });
+
     return promise;
   }
 
   public loadClassifiers(): Promise<any> {
-    let promise = this.http.get(this.environmentUrl + "/classifiers").toPromise();
-    promise.then(response => {
-      classifiers = Object.freeze(response.json());
+    return this.http.get(this.classifiersUrl).toPromise().then(response => {
+      classifiers = Object.freeze(response);
+    });
+  }
+
+  public loadEnvironmentData(): Observable<Environment> {
+    const observable = this.http.get<Environment>(this.environmentUrl);
+    observable.subscribe(env => {
+      this.globalEnvironment = new Environment(env);
     });
 
-    return promise;
+    return observable;
   }
 
-  public loadEnvironmentData(){
-    let promise = this.http.get(this.environmentUrl).toPromise();
-    promise.then(res => {
-      this.globalEnvironment = new Environment(res.json());
-    });
-    return promise;
+  public doLogout(): Observable<any> {
+    return this.http.post('/logout',null);
   }
 
-  public doLogout(): Promise<any> {
-    return this.http.get('/logout').toPromise();
+  public doLogin(): Observable<any> {
+    return this.http.get(this.userInfoUrl);
   }
 
-  public doLogin(): Promise<any> {
-    return this.http.get(this.userInfoUrl).toPromise();
+  public setActiveOrganization(organizationCode): Observable<Environment> {
+    return this.http.put<Environment>(this.environmentUrl + '/organization', organizationCode);
   }
 
-  public setActiveOrganization(organizationCode): Promise<any> {
-    return this.http.put(this.environmentUrl + '/organization', organizationCode).toPromise();
-  }
-
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
 
   }
 

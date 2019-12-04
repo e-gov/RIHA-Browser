@@ -10,18 +10,20 @@
   <div class="my-1 col-lg-10">
     <form class="col-12" #editForm="ngForm">
       <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
-      <div [ngClass]="{'has-danger': name.invalid  && (name.dirty || name.touched || editForm.submitted)}">
+      <div>
         <label for="name-input" class="text-muted">Infosüsteemi nimi:</label>
         <input #name="ngModel"
+               [ngClass]="{'is-invalid': name.invalid  && (name.dirty || name.touched || editForm.submitted)}"
                class="form-control h1"
                [(ngModel)]="system.details.name"
                name="system.details.name"
                (keydown.enter)="$event.preventDefault()"
                type="text" id="name-input" required>
       </div>
-      <div class="mb-4" [ngClass]="{'has-danger': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}">
+      <div class="mb-4">
         <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
         <input #shortName="ngModel"
+               [ngClass]="{'is-invalid': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}"
                class="form-control h2"
                [(ngModel)]="system.details.short_name"
                name="short_name"
@@ -36,10 +38,10 @@
       <div>
         <div class="row ml-0 mb-3">
           <label for="active-since-date" class="col-form-label advanced-label">
-            <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
+            <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary" style="margin-right:3px;">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
             <span *ngIf="system.getStatus() == classifiers.system_status.ESTABLISHING.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
             <span *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
-            <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
+            <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o" aria-hidden="true" style="margin-right:15px;"></i> Süsteemi staatus on <strong>määramata</strong></span>
           </label>
           <div class="col-sm-4">
             <div class="input-group datepicker" *ngIf="system.isUsed()">
@@ -70,14 +72,25 @@
 
       <hr class="short" align="left">
 
-      <div class="mb-3" [ngClass]="{'has-danger': purpose.invalid  && (purpose.dirty || purpose.touched || editForm.submitted)}">
+      <div class="mb-3">
         <label for="purpose-textarea" class="text-muted">Infosüsteemi eesmärk:</label>
-        <textarea #purpose="ngModel" [(ngModel)]="system.details.purpose" name="purpose" class="form-control counter-element" id="purpose-textarea" rows="10" placeholder="kellele ja miks infosüsteem luuakse" required></textarea>
+
+        <textarea #purpose="ngModel"
+                  [ngClass]="{'is-invalid': purpose.invalid  && (purpose.dirty || purpose.touched || editForm.submitted)}"
+                  [(ngModel)]="system.details.purpose"
+                  name="purpose"
+                  class="form-control counter-element"
+                  id="purpose-textarea"
+                  rows="10"
+                  placeholder="kellele ja miks infosüsteem luuakse"
+                  required>
+        </textarea>
       </div>
 
-      <div class="mb-3" *ngIf="system.details.showDifferences" [ngClass]="{'has-danger': differences.invalid  && (differences.dirty || differences.touched || editForm.submitted)}">
+      <div class="mb-3" *ngIf="system.details.showDifferences">
         <label for="differences-textarea" class="text-muted">Infosüsteemi erisused:</label>
         <textarea #differences="ngModel"
+                  [ngClass]="{'is-invalid': differences.invalid  && (differences.dirty || differences.touched || editForm.submitted)}"
                   [(ngModel)]="system.details.differences"
                   name="differences"
                   class="form-control counter-element"
@@ -108,13 +121,15 @@
       <hr class="short" align="left">
 
       <div>
-        <div class="row ml-0 mb-3" [ngClass]="{'has-danger': homepage.invalid}">
+        <div class="row ml-0 mb-3">
           <label for="homepage" class="col-form-label advanced-label">
             <i class="fa fa-external-link text-muted" aria-hidden="true"></i><strong>Avalik kasutajaliides</strong>
           </label>
           <div class="col">
             <div class="input-group">
-              <input id="homepage" class="form-control"
+              <input id="homepage"
+                     [ngClass]="{'is-invalid': homepage.invalid}"
+                     class="form-control"
                      placeholder="http://"
                      type="url"
                      (keydown.enter)="$event.preventDefault()"
@@ -156,7 +171,7 @@
       </p>
       <div class="actions-bar">
         <div class="buttons pull-right">
-          <button class="btn btn-default" (click)="goBackToDetails(editForm)">Tühista</button>
+          <button class="btn btn-secondary" (click)="goBackToDetails(editForm)">Tühista</button>
           <button class="btn btn-success" (click)="onSubmit(editForm)"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i> Salvesta</button>
         </div>
       </div>

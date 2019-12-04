@@ -1,16 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { System } from '../../../models/system';
-import { ToastrService } from 'ngx-toastr';
-import { ModalHelperService } from '../../../services/modal-helper.service';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {System} from '../../../models/system';
+import {ToastrService} from 'ngx-toastr';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {NgForm} from "@angular/forms";
+import {Observable} from "rxjs";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
+import {CONSTANTS} from '../../../utils/constants';
 
 @Component({
   selector: 'app-producer-edit-objects',
   templateUrl: './producer-edit-objects.component.html',
   styleUrls: ['./producer-edit-objects.component.scss']
 })
-export class ProducerEditObjectsComponent implements OnInit {
+export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('dataFilesForm', null) formObject: NgForm;
+  @ViewChild('object', null) inputObject: ElementRef;
 
   @Input() system: System;
   stored_data: string[] =[];
@@ -45,10 +52,10 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.dataFile = event.target.files[0];
     this.uploading = true;
 
-    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).then(res =>{
+    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).subscribe(fileUrl => {
       this.uploading = false;
       this.data_files.push({
-        url: 'file://' + res.text(),
+        url: 'file://' + fileUrl,
         name: this.dataFile.name
       });
       this.dataFile = null;
@@ -75,13 +82,13 @@ export class ProducerEditObjectsComponent implements OnInit {
     this.isChanged = true;
   }
 
-  saveSystem(){
-    this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-      let s = new System(res.json());
-      s.details.stored_data = this.stored_data;
-      s.details.data_files = this.data_files;
-      this.systemsService.updateSystem(s).then(response => {
-        this.modalService.closeActiveModal({system: new System(response.json())});
+  saveSystem() {
+    this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
+      const system = new System(responseSystem);
+      system.details.stored_data = this.stored_data;
+      system.details.data_files = this.data_files;
+      this.systemsService.updateSystem(system).subscribe(updatedSystem => {
+        this.modalService.closeActiveModal({system: new System(updatedSystem)});
       }, err => {
         this.toastrService.error('Serveri viga.');
       });
@@ -90,16 +97,34 @@ export class ProducerEditObjectsComponent implements OnInit {
     });
   }
 
-  closeModal(f, i){
-    if (this.isChanged || f.form.dirty || i.value.length > 0){
-      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
     }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.isChanged || this.formObject.form.dirty || this.inputObject.nativeElement.value.length > 0
   }
 
   constructor(private modalService: ModalHelperService,
@@ -109,9 +134,8 @@ export class ProducerEditObjectsComponent implements OnInit {
   }
 
   ngOnInit() {
-    let system = this.generalHelperService.cloneObject(this.system);
+    const system = this.generalHelperService.cloneObject(this.system);
     this.stored_data = system.details.stored_data || [];
     this.data_files = system.details.data_files || [];
   }
-
 }

@@ -8,7 +8,6 @@ import {Location} from "@angular/common";
 import {SystemsService} from "../../services/systems.service";
 import {ToastrService} from "ngx-toastr";
 import {User} from "../../models/user";
-import {ActiveOrganizationChooserComponent} from "../active-organization-chooser/active-organization-chooser.component";
 import {ModalHelperService} from "../../services/modal-helper.service";
 
 @Component({
@@ -36,12 +35,12 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
 
   getUsers(page?): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      let params = {'sort': null, 'dir': null, 'page': null};
-      let sortProperty = this.gridData.getSortProperty();
+      const params = {'sort': null, 'dir': null, 'page': null};
+      const sortProperty = this.gridData.getSortProperty();
       if (sortProperty) {
         params.sort = sortProperty;
       }
-      let sortOrder = this.gridData.getSortOrder();
+      const sortOrder = this.gridData.getSortOrder();
       if (sortOrder) {
         params.dir = sortOrder;
       }
@@ -49,12 +48,12 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
         params.page = page + 1;
       }
 
-      let q = this.generalHelperService.generateQueryString(params);
+      const q = this.generalHelperService.generateQueryString(params);
       this.location.replaceState('/Minu/Organisatsioon', q);
       this.gridData.page = page || 0;
 
-      this.systemsService.getOrganizationUsers(this.gridData).then(res => {
-          this.gridData.updateData(res.json());
+      this.systemsService.getOrganizationUsers(this.gridData).subscribe(res => {
+          this.gridData.updateData(res);
           if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
             this.getUsers();
           } else {
@@ -68,7 +67,6 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
   }
 
   openOrganizationsModal() {
-    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
     return false;
   }
 
@@ -80,7 +78,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
               private route: ActivatedRoute,
               private location: Location,
               private differs: KeyValueDiffers) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -93,7 +91,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getUsers();

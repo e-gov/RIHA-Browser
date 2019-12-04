@@ -12,6 +12,8 @@ import {Location} from '@angular/common';
 import {System} from '../../models/system';
 import _ from 'lodash';
 import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
+import {of} from "rxjs";
+import {delay, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-producer-list',
@@ -30,7 +32,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   extendedSearch: boolean = false;
 
 
-  @ViewChild(ProducerSearchFilterComponent)
+  @ViewChild(ProducerSearchFilterComponent, { static: false })
   filterPanel: ProducerSearchFilterComponent;
 
   onPageChange(newPage): void{
@@ -49,7 +51,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       return;
     }
 
-    let params = filters;
+    const params = filters? filters: [];
     params.searchText = this.searchText;
     delete params.ownerName;
     delete params.ownerCode;
@@ -65,11 +67,11 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     if (params.dateUpdatedTo) {
       params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
     }
-    let sortProperty = this.gridData.getSortProperty();
+    const sortProperty = this.gridData.getSortProperty();
     if (sortProperty) {
       params.sort = sortProperty;
     }
-    let sortOrder = this.gridData.getSortOrder();
+    const sortOrder = this.gridData.getSortOrder();
     if (sortOrder) {
       params.dir = sortOrder;
     }
@@ -79,12 +81,12 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       this.gridData.page = 0;
     }
 
-    let q = this.generalHelperService.generateQueryString(params);
+    const q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Kirjelda', q);
 
-    this.systemsService.getOwnSystems(params, this.gridData).then(
-      res => {
-        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+    this.systemsService.getOwnSystems(params, this.gridData).subscribe(
+      items => {
+        this.gridData.updateData(items, (content) => _.map(content, (contentElement) => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getOwnSystems();
         } else {
@@ -102,7 +104,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
 
   getOwnSystems(page?): void {
-    this._loadSystems(this.filterPanel.getFilters(), page);
+    this._loadSystems(this.filterPanel ? this.filterPanel.getFilters() : null, page);
   }
 
   openOrganizationsModal() {
@@ -116,7 +118,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   hasActiveFilters(): boolean{
-    return this.filterPanel.hasActiveFilters();
+    return this.filterPanel && this.filterPanel.hasActiveFilters();
   }
 
   clearFilters(){
@@ -144,7 +146,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
               private differs: KeyValueDiffers,
               public  generalHelperService: GeneralHelperService,
               private modalService: ModalHelperService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -160,15 +162,20 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngAfterViewInit() {
 
-    if (this.hasActiveFilters()){
-      this.extendedSearch = true;
+    if (this.hasActiveFilters()) {
+      of(null).pipe(
+        delay(0),
+        tap(() => {
+          this.extendedSearch = true;
+        })
+      ).subscribe();
     }
 
     this.getOwnSystems(this.gridData.page);
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnSystems();

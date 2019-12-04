@@ -13,7 +13,7 @@
       <div class="my-1">
         <div class="table-responsive">
           <table id="info-systems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
-            <thead class="thead-default">
+            <thead class="thead-light">
             <tr>
               <th>
                 <app-sort-button
@@ -41,7 +41,7 @@
             <tbody>
             <tr *ngFor="let doc of gridData.content">
               <td class="name">
-                <app-file-icon [file]="doc"></app-file-icon>
+                <app-file-icon [file]="doc" style="margin-right:5px;"></app-file-icon>
                 <a *ngIf="canDownload(doc)"
                    href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{
                   (!doc.name || doc.name.trim()=='') ? generalHelperService.getFileUrl(doc.url) : doc.name }}</a>

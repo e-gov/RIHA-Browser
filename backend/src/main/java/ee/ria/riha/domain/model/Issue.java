@@ -1,9 +1,6 @@
 package ee.ria.riha.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -20,6 +17,7 @@ import static ee.ria.riha.domain.model.IssueEntityType.ISSUE;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Issue implements IssueEntity {
 
     private Long id;
@@ -35,9 +33,6 @@ public class Issue implements IssueEntity {
     private IssueType type;
     private IssueResolutionType resolutionType;
     private LocalDate decisionDeadline;
-
-    public Issue() {
-    }
 
     @Override
     public IssueEntityType getEntityType() {

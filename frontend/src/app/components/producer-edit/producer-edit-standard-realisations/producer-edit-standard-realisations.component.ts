@@ -2,10 +2,6 @@ import {Component, Input} from '@angular/core';
 import {SystemsService} from '../../../services/systems.service';
 import {System} from '../../../models/system';
 import {ModalHelperService} from '../../../services/modal-helper.service';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import {Router} from '@angular/router';
 
 @Component({
@@ -23,15 +19,15 @@ export class ProducerEditStandardRealisationsComponent {
   createStandardRealisationSystem(addForm){
     if (addForm.valid){
       this.systemsService.createStandardRealisationSystem(
-        this.system.details.short_name, addForm.value).then(res => {
+        this.system.details.short_name, addForm.value).subscribe(responseSystem => {
         this.closeModal();
-        this.router.navigate(['/Infosüsteemid/Vaata', res.json().details.short_name]);
+        this.router.navigate(['/Infosüsteemid/Vaata', responseSystem.details.short_name]);
 
       }, err => {
 
         let errJson = null;
         try {
-          errJson = err.json();
+          errJson = err;
         } catch (e) {
           //ignored
         }

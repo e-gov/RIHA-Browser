@@ -1,4 +1,4 @@
-<div class="header-top hidden-xs-down">
+<div class="header-top d-none d-md-block">
   <div class="container">
     <div class="left">
 
@@ -31,7 +31,7 @@
   </div>
 </div>
 <div class="header-bottom">
-  <nav class="navbar navbar-toggleable-xl">
+  <nav class="navbar navbar-expand-xl">
     <div class="container">
       <a class="navbar-brand" routerLink="/Avaleht">
         <img src="assets/images/base/RIHA.png" width="234" height="78" alt="Riigi infosüsteemi haldussüsteem"></a>
@@ -41,7 +41,7 @@
             <a class="nav-link" [routerLink]="'/Avaleht'">Avaleht</a>
           </li>
           <li class="nav-item" [ngClass]="{'active': isListOrSubView()}">
-            <a class="nav-link" [routerLink]="'/Infosüsteemid'" [queryParams]="{_dc: getRand()}">RIHA kataloog</a>
+            <a class="nav-link" [routerLink]="'/Infosüsteemid'" [queryParams]="{_dc: _dc}">RIHA kataloog</a>
           </li>
           <li *ngIf="environmentService.getUserMatrix().hasApproverRole" class="nav-item" routerLinkActive="active">
             <a class="nav-link" [routerLink]="'/Hinda'">Hinda</a>
@@ -54,7 +54,7 @@
           </li>
         </ul>
         <form class="form-inline search-bar">
-          <label for="search" class="hidden-xs-up">Otsing</label>
+          <label for="search" class="d-block d-sm-none">Otsing</label>
           <input id="search"
                  #keywordInput
                  class="form-control"

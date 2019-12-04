@@ -9,6 +9,10 @@ import {classifiers} from "../../services/environment.service";
 import {System} from '../../models/system';
 import _ from 'lodash';
 import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
+import {of} from "rxjs";
+import {delay, tap} from "rxjs/operators";
+
+
 
 @Component({
   selector: 'app-browser-list',
@@ -19,7 +23,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
 
   gridData: GridData = new GridData();
 
-  @ViewChild(ProducerSearchFilterComponent)
+  @ViewChild(ProducerSearchFilterComponent, { static: false })
   filterPanel: ProducerSearchFilterComponent;
 
   searchText: string;
@@ -40,7 +44,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
   }
 
   _loadSystems(filters, page?) {
-    let params = this.generalHelperService.cloneObject(filters);
+    const params = this.generalHelperService.cloneObject(filters);
     params.searchText = this.searchText;
 
     if (params.dateCreatedFrom) {
@@ -56,11 +60,11 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
       params.dateUpdatedTo = this.systemsService.dateObjToTimestamp(params.dateUpdatedTo, true);
     }
 
-    let sortProperty = this.gridData.getSortProperty();
+    const sortProperty = this.gridData.getSortProperty();
     if (sortProperty) {
       params.sort = sortProperty;
     }
-    let sortOrder = this.gridData.getSortOrder();
+    const sortOrder = this.gridData.getSortOrder();
     if (sortOrder) {
       params.dir = sortOrder;
     }
@@ -68,13 +72,14 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
       params.page = page + 1;
     }
 
-    let q = this.generalHelperService.generateQueryString(params);
+    const q = this.generalHelperService.generateQueryString(params);
     this.location.replaceState('/Infosüsteemid', q);
     this.gridData.page = page || 0;
-    this.systemsService.getSystems(params, this.gridData).then(
-      res => {
+    this.systemsService.getSystems(params, this.gridData).subscribe(
+      items => {
 
-        this.gridData.updateData(res.json(), (content) => _.map(content, (contentElement) => new System(contentElement)));
+        this.gridData.updateData(items, (content) => content.map((contentElement) => new System(contentElement)));
+
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getSystems();
         } else {
@@ -141,8 +146,13 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-    if (this.hasActiveFilters()){
-      this.extendedSearch = true;
+    if (this.hasActiveFilters()) {
+      of(null).pipe(
+        delay(0),
+        tap(() => {
+          this.extendedSearch = true;
+        })
+      ).subscribe();
     }
 
     this.getSystems(this.gridData.page);
