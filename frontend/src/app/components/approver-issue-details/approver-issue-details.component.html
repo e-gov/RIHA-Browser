@@ -1,6 +1,6 @@
 <div class="fixed-header">
   Hindajate tagasiside
-  <button (click)="closeModal(commentForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal()" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
@@ -15,7 +15,7 @@
       <span *ngIf="feedback.status == 'OPEN'"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Aktiivne</span>
       <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span><br>
       <span *ngIf="feedback.type !=null">
-        <span class="text-muted">Arutelu tüüp:</span>
+        <span class="text-muted" style="margin-right:3px;">Arutelu tüüp:</span>
         <strong *ngIf="feedback.type && classifiers.issue_type[feedback.type]">{{classifiers.issue_type[feedback.type].value}}</strong>
         <span *ngIf="feedback.status == 'OPEN'"><br>Otsuse tähtpäev:
           <span [ngClass]="{'text-danger': deadlinePassed}">{{ feedback.decisionDeadline }}</span>
@@ -40,22 +40,22 @@
         </div>
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && !reply.resolutionType" class="card-text ml-4">
-        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
+        <i class="fa fa-check-circle text-success" aria-hidden="true" style="margin-right:3px;"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ml-4">
-        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-danger font-weight-bold">mittekooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
+        <i class="fa fa-check-circle text-success" aria-hidden="true" style="margin-right:3px;"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-danger font-weight-bold">mittekooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ml-4">
-        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-success font-weight-bold">kooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
+        <i class="fa fa-check-circle text-success" aria-hidden="true" style="margin-right:3px;"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-success font-weight-bold">kooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ml-4">
-        <i class="fa fa-check-circle text-success" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> kooskõlastas {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
+        <i class="fa fa-check-circle text-success" aria-hidden="true" style="margin-right:3px;"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> kooskõlastas {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ml-4">
-        <i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> ei kooskõlastanud {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
+        <i class="fa fa-exclamation-circle text-danger" aria-hidden="true" style="margin-right:3px;"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> ei kooskõlastanud {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
       <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.DISMISSED.code" class="card-text ml-4">
-        <i class="fa fa-eye-slash text-muted" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> jättis läbi vaatamata {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
+        <i class="fa fa-eye-slash text-muted" aria-hidden="true" style="margin-right:3px;"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> jättis läbi vaatamata {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
     </div>
     <form class="col-12" #commentForm="ngForm" class="m-4">

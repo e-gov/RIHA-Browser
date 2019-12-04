@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentChecked, Component, OnInit} from '@angular/core';
 import {EnvironmentService} from '../../services/environment.service';
 import {User} from '../../models/user';
 import {ModalHelperService} from '../../services/modal-helper.service';
@@ -6,22 +6,22 @@ import {ActiveOrganizationChooserComponent} from '../active-organization-chooser
 import {Router} from '@angular/router';
 import {SessionHelperService} from '../../services/session-helper.service';
 import {NoOrganizationModalComponent} from '../no-organization-modal/no-organization-modal.component';
-
-declare var $: any;
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-riha-navbar',
   templateUrl: './riha-navbar.component.html',
   styleUrls: ['./riha-navbar.component.scss']
 })
-export class RihaNavbarComponent implements OnInit {
+export class RihaNavbarComponent implements OnInit, AfterContentChecked {
   public activeUser: User = null;
+  public _dc: number = 0;
 
   isUserLoggedIn(): boolean {
     return this.environmentService.getActiveUser() != null;
   }
 
-  getRand(){
+  getRand() {
     return new Date().getSeconds();
   }
 
@@ -34,21 +34,21 @@ export class RihaNavbarComponent implements OnInit {
    * in version 4.1.3 it seems to be broken when working with queryParams,
    * even with applied [routerLinkActiveOptions]="{exact: false}
    */
-  isListOrSubView(){
-    let cat = encodeURI('/Infosüsteemid?');
-    let obj = encodeURI('/Andmeobjektid');
-    let sub = encodeURI('/Infosüsteemid/Vaata');
-    let full = encodeURI('/Infosüsteemid');
-    if (this.router.url && typeof this.router.url === 'string'){
+  isListOrSubView() {
+    const cat = encodeURI('/Infosüsteemid?');
+    const obj = encodeURI('/Andmeobjektid');
+    const sub = encodeURI('/Infosüsteemid/Vaata');
+    const full = encodeURI('/Infosüsteemid');
+    if (this.router.url && typeof this.router.url === 'string') {
       return (-1 != this.router.url.indexOf(cat) || -1 != this.router.url.indexOf(obj) || -1 != this.router.url.indexOf(sub) || this.router.url === full);
     } else {
       return false;
     }
   }
 
-  logout(){
-    this.environmentService.doLogout().then(res => {
-      this.environmentService.loadEnvironmentData().then(env => {
+  logout() {
+    this.environmentService.doLogout().subscribe(res => {
+      this.environmentService.loadEnvironmentData().subscribe(env => {
         this.sessionHelperService.refreshSessionTimer();
         this.router.navigate(['/']);
       });
@@ -60,28 +60,28 @@ export class RihaNavbarComponent implements OnInit {
     return false;
   }
 
-  openNoOrganizationWarningModal() :boolean {
+  openNoOrganizationWarningModal(): boolean {
     const modalRef = this.modalService.open(NoOrganizationModalComponent);
     return false;
   }
 
   isAllowedToChangeOrganization(): boolean {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getOrganizations().length > 1 || (user.getOrganizations().length == 1 && user.getActiveOrganization() == null);
   }
 
   isNoOrganizationPresent(): boolean {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getOrganizations().length == 0;
   }
 
   noOrganizationSelected(): boolean {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getActiveOrganization() == null;
   }
 
   getUserText(): string {
-    let user = this.environmentService.getActiveUser();
+    const user = this.environmentService.getActiveUser();
     return user.getFullNameWithActiveOrganization();
   }
 
@@ -101,6 +101,10 @@ export class RihaNavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterContentChecked() {
+    this._dc = this.getRand();
   }
 
   openNavigationMenu() {

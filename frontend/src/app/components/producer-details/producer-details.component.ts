@@ -7,15 +7,15 @@ import {User} from '../../models/user';
 import {ToastrService} from 'ngx-toastr';
 import {UserMatrix} from '../../models/user-matrix';
 import {GeneralHelperService} from '../../services/general-helper.service';
-
-declare var $: any;
+import {CanDeactivateModal} from "../../guards/can-deactivate-modal.guard";
+import {ModalHelperService} from "../../services/modal-helper.service";
 
 @Component({
   selector: 'app-producer-details',
   templateUrl: './producer-details.component.html',
   styleUrls: ['./producer-details.component.scss']
 })
-export class ProducerDetailsComponent implements OnInit, DoCheck {
+export class ProducerDetailsComponent implements OnInit, DoCheck, CanDeactivateModal {
   private system: System = new System();
   private user: User;
   public loaded: boolean;
@@ -24,9 +24,24 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   public userMatrix: UserMatrix;
   private differ: any;
 
+  // canDeactivate guard handler
+  canDeactivate() {
+    const modal = this.modalService.lastModal;
+    if (modal) {
+      const component = modal && modal.componentInstance ? modal.componentInstance : null;
+      if (component && 'canDeactivate' in component) {
+        return component.canDeactivate()
+      }
+
+      return true;
+    }
+
+    return true;
+  }
+
   isEditingAllowed(){
+    const user = this.environmentService.getActiveUser();
     let editable = false;
-    let user = this.environmentService.getActiveUser();
     if (user) {
       editable = user.canEdit(this.system.getOwnerCode());
     }
@@ -34,7 +49,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   }
 
   isBlockVisible(blockName){
-    let editable = this.isEditingAllowed();
+    const editable = this.isEditingAllowed();
     let ret = false;
     switch (blockName) {
       case 'legislations': {
@@ -90,7 +105,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   isCannotViewCommentsErrorVisible(){
     this.userMatrix = this.environmentService.getUserMatrix();
     if (this.loaded && this.userMatrix.isLoggedIn){
-      let user = this.environmentService.getActiveUser();
+      const user = this.environmentService.getActiveUser();
       return this.issueId && this.userMatrix.isLoggedIn && !(user.canEdit(this.system.getOwnerCode()) || this.userMatrix.hasApproverRole);
     } else {
       return false;
@@ -98,13 +113,13 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   }
 
   getSystem(reference){
-    this.systemsService.getSystem(reference).then(response => {
-      this.system = new System(response.json());
+    this.systemsService.getSystem(reference).subscribe(responseSystem => {
+      this.system = new System(responseSystem);
       this.generalHelperService.setRihaPageTitle(this.system.details.name);
       this.loaded = true;
       setTimeout(()=>{this.generalHelperService.adjustSection(this.issueId ? '#tagasiside' : null)}, 0);
     }, err => {
-      let status = err.status;
+      const status = err.status;
       if (status == '404'){
         this.notFound = true;
         this.generalHelperService.setRihaPageTitle('Lehekülge ei leitud');
@@ -123,8 +138,9 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
               public generalHelperService: GeneralHelperService,
               private route: ActivatedRoute,
               private router: Router,
-              private toastrService: ToastrService) {
-    this.differ = differs.find({}).create(null);
+              private toastrService: ToastrService,
+              private modalService: ModalHelperService) {
+    this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
@@ -144,7 +160,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    let changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
       this.userMatrix = this.environmentService.getUserMatrix();
     }

@@ -1,16 +1,16 @@
 <div class="fixed-header">
   Dokumentatsioon
-  <button (click)="closeModal(addForm, editForm)" class="btn btn-sm btn-default close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal()" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
     <app-tooltip [text]='"Laadi üles infosüsteemi dokumentatsioon: arhitektuuri dokument, eelanalüüs, liideste kirjeldus ja muud sarnast"'></app-tooltip>
     <form #addForm="ngForm">
       <div class="form-group">
-        <button class="btn btn-default ml-2"
+        <button class="btn btn-secondary ml-2"
                 [disabled]="uploading"
                 (click)="showAddFileFields = !showAddFileFields; showAddLinkFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Laadi fail</button>
-        <button class="btn btn-default ml-2"
+        <button class="btn btn-secondary ml-2"
                 [disabled]="uploading"
                 (click)="showAddLinkFields = !showAddLinkFields; showAddFileFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa veebiviide</button>
       </div>
@@ -18,14 +18,16 @@
         <div class="form-group">
           <label for="dataFile" class="text-muted separated-text">Fail:</label>
           <div></div>
-          <label class="btn btn-default input-file-label mb-0" for="dataFile">Vali fail</label>
+          <label class="btn btn-secondary input-file-label mb-0" style="margin-right:5px;" for="dataFile">Vali fail</label>
           <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event)">
           <span *ngIf="docFile != null" claas="col-4">{{ docFile.name }}</span>
           <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
         </div>
-        <div class="form-group" [ngClass]="{'has-danger': fileType.invalid && (fileType.dirty || fileType.touched)}">
+        <div class="form-group">
           <label for="fileType" class="text-muted separated-text">Liik:</label>
-          <select id="fileType" class="form-control col-12"
+          <select id="fileType"
+                  [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched)}"
+                  class="form-control col-12"
                   #fileType="ngModel"
                   [(ngModel)]="data.type"
                   name="fileType" required>
@@ -35,16 +37,18 @@
         </div>
         <div class="form-group row">
           <div class="col-12">
-            <button class="btn btn-default pull-right"
+            <button class="btn btn-secondary pull-right"
                     [disabled]="docFile === null || uploading"
                     (click)="uploadFile($event, addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
           </div>
         </div>
       </div>
       <div *ngIf="showAddLinkFields">
-        <div class="form-group" [ngClass]="{'has-danger': url.invalid && (url.dirty || url.touched)}">
+        <div class="form-group">
           <label for="url" class="text-muted separated-text">URL:</label>
-          <input id="url" class="form-control col-12"
+          <input id="url"
+                 [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+                 class="form-control col-12"
                  #url="ngModel"
                  [disabled]="uploading"
                  [(ngModel)]="data.url"
@@ -54,9 +58,11 @@
                  name="url" url required>
 
         </div>
-        <div class="form-group" [ngClass]="{'has-danger': linkName.invalid && (linkName.dirty || linkName.touched)}">
+        <div class="form-group">
           <label for="linkName" class="text-muted separated-text">Pealkiri:</label>
-          <input id="linkName" class="form-control col-12"
+          <input id="linkName"
+                 [ngClass]="{'is-invalid': linkName.invalid && (linkName.dirty || linkName.touched)}"
+                 class="form-control col-12"
                  #linkName="ngModel"
                  [disabled]="uploading"
                  [(ngModel)]="data.name"
@@ -65,9 +71,11 @@
                  name="linkName" required>
 
         </div>
-        <div class="form-group" [ngClass]="{'has-danger': linkType.invalid && (linkType.dirty || linkType.touched)}">
+        <div class="form-group">
           <label for="linkType" class="text-muted separated-text">Liik:</label>
-          <select id="linkType" class="form-control col-12"
+          <select id="linkType"
+                  [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched)}"
+                  class="form-control col-12"
                   #linkType="ngModel"
                   [(ngModel)]="data.type"
                   name="linkType" required>
@@ -77,7 +85,7 @@
         </div>
         <div class="form-group row">
           <div class="col-12">
-            <button class="btn btn-default pull-right"
+            <button class="btn btn-secondary pull-right"
                     [disabled]="uploading"
                     (click)="addTechDoc(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
           </div>
@@ -88,7 +96,7 @@
       <div class="expandable-blocks">
         <div class="expandable-block" *ngFor="let doc of documents; let i = index">
           <div class="expandable-block-header" [ngClass]="{'highlighted': blocks[i]}">
-            <app-file-icon [file]="doc"></app-file-icon>
+            <app-file-icon [file]="doc" style="margin-right:5px;"></app-file-icon>
             <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ doc.name }}</a>
             <app-file-hint [file]="doc"></app-file-hint>
             <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
@@ -96,9 +104,11 @@
           </div>
           <div *ngIf="blocks[i]" class="expandable-block-body">
             <div *ngIf="!isUploaded(doc)">
-              <div class="form-group" [ngClass]="{'has-danger': urlEdit.invalid}">
+              <div class="form-group">
                 <label for="{{'url' + i}}" class="text-muted separated-text">URL:</label>
-                <input id="{{'url' + i}}" class="form-control col-12"
+                <input id="{{'url' + i}}"
+                       [ngClass]="{'is-invalid': urlEdit.invalid}"
+                       class="form-control col-12"
                        [(ngModel)]="documents[i].url"
                        #urlEdit="ngModel"
                        type="url"
@@ -106,18 +116,22 @@
                        name="{{'url' + i}}" url required>
 
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': nameEdit.invalid}">
+              <div class="form-group">
                 <label for="{{'linkName' + i}}" class="text-muted separated-text">Pealkiri:</label>
-                <input id="{{'linkName' + i}}" class="form-control col-12"
+                <input id="{{'linkName' + i}}"
+                       [ngClass]="{'is-invalid': nameEdit.invalid}"
+                       class="form-control col-12"
                        [(ngModel)]="documents[i].name"
                        #nameEdit="ngModel"
                        placeholder="Lähtekood"
                        name="{{'name' + i}}" required>
 
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': linkTypeEdit.invalid}">
+              <div class="form-group">
                 <label for="{{'linkType' + i}}" class="text-muted separated-text">Liik:</label>
-                <select id="{{'linkType' + i}}" class="form-control col-12"
+                <select id="{{'linkType' + i}}"
+                        [ngClass]="{'is-invalid': linkTypeEdit.invalid}"
+                        class="form-control col-12"
                         #linkTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'linkType' + i}}" required>
@@ -127,18 +141,22 @@
               </div>
             </div>
             <div *ngIf="isUploaded(doc)">
-              <div class="form-group" [ngClass]="{'has-danger': nameEdit.invalid}">
+              <div class="form-group">
                 <label for="{{'fileName' + i}}" class="text-muted separated-text">Pealkiri:</label>
-                <input id="{{'fileName' + i}}" class="form-control col-12"
+                <input id="{{'fileName' + i}}"
+                       [ngClass]="{'is-invalid': nameEdit.invalid}"
+                       class="form-control col-12"
                        [(ngModel)]="documents[i].name"
                        #nameEdit="ngModel"
                        placeholder="Lähtekood"
                        name="{{'name' + i}}" required>
 
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': fileTypeEdit.invalid}">
+              <div class="form-group">
                 <label for="{{'fileType' + i}}" class="text-muted separated-text">Liik:</label>
-                <select id="{{'fileType' + i}}" class="form-control col-12"
+                <select id="{{'fileType' + i}}"
+                        [ngClass]="{'is-invalid': fileTypeEdit.invalid}"
+                        class="form-control col-12"
                         #fileTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'fileType' + i}}" required>
@@ -157,9 +175,11 @@
                 <div [ngClass]="{'text-muted': !documents[i].accessRestriction}" class="ml-2">Juurdepääsupiiranguga</div>
               </div>
               <div *ngIf="documents[i].accessRestriction">
-                <div class="form-group mt-2" [ngClass]="{'has-danger': restrictionReason.invalid && (restrictionReason.dirty || restrictionReason.touched)}">
+                <div class="form-group mt-2">
                   <label for="restrictionReason" class="text-muted separated-text">Alus:</label>
-                  <select id="restrictionReason" class="form-control col-12"
+                  <select id="restrictionReason"
+                          [ngClass]="{'is-invalid': restrictionReason.invalid && (restrictionReason.dirty || restrictionReason.touched)}"
+                          class="form-control col-12"
                           #restrictionReason="ngModel"
                           [(ngModel)]="documents[i].accessRestriction.reasonCode"
                           name="restrictionReason" required>
@@ -171,9 +191,13 @@
                   <div class="form-group col-6">
                     <label class="text-muted">Juurepääs piiratud alates:</label>
                     <div class="row">
-                      <div class="input-group datepicker col-8" [ngClass]="{'has-danger': restrictionStartTimestampInput.invalid  && (restrictionStartTimestampInput.dirty || restrictionStartTimestampInput.touched)}">
-                        <input id="{{ 'access_restriction_start_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
-                               [container]="'body'"                               name="{{ 'restrictionStart' + i }}"
+                      <div class="input-group datepicker col-8">
+                        <input id="{{ 'access_restriction_start_' + i }}"
+                               [ngClass]="{'is-invalid': restrictionStartTimestampInput.invalid  && (restrictionStartTimestampInput.dirty || restrictionStartTimestampInput.touched)}"
+                               class="form-control"
+                               placeholder="yyyy-mm-dd"
+                               [container]="'body'"
+                               name="{{ 'restrictionStart' + i }}"
                                [(ngModel)]="documents[i].accessRestriction.startDate"
                                [required]="documents[i].accessRestriction"
                                #restrictionStartTimestampInput="ngModel"
@@ -189,8 +213,11 @@
                   <div class="form-group col-6">
                     <label class="text-muted">Juurepääs piiratud kuni:</label>
                     <div class="row">
-                      <div class="input-group datepicker col-8" [ngClass]="{'has-danger': restrictionEndTimestampInput.invalid  && (restrictionEndTimestampInput.dirty || restrictionEndTimestampInput.touched)}">
-                        <input id="{{ 'access_restriction_end_' + i }}" class="form-control" placeholder="yyyy-mm-dd"
+                      <div class="input-group datepicker col-8">
+                        <input id="{{ 'access_restriction_end_' + i }}"
+                               [ngClass]="{'is-invalid': restrictionEndTimestampInput.invalid  && (restrictionEndTimestampInput.dirty || restrictionEndTimestampInput.touched)}"
+                               class="form-control"
+                               placeholder="yyyy-mm-dd"
                                [container]="'body'"
                                name="{{ 'restrictionEnd' + i }}"
                                [(ngModel)]="documents[i].accessRestriction.endDate"

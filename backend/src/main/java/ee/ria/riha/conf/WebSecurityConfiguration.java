@@ -7,7 +7,9 @@ import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.conf.ApplicationProperties.LdapAuthenticationProperties;
 import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -37,12 +39,12 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.util.UriUtils;
 
 import javax.servlet.Filter;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -75,6 +77,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     protected ApplicationProperties applicationProperties;
 
+    @Value("${csp.policyDirective}")
+    private String policyDirective;
+
     @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
@@ -105,8 +110,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        if (StringUtils.isNotBlank(policyDirective)) {
+            http.headers()
+                    .contentSecurityPolicy(policyDirective);
+        }
+
         http
-                .csrf().disable() // needed for JWT verification
+                .csrf().csrfTokenRepository(csrfTokenRepository()).and()
                 .cors().disable()
 
                 .authorizeRequests()
@@ -156,6 +167,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addObjectPostProcessor(new CustomPostProcessor());
     }
 
+    private CsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
+        cookieCsrfTokenRepository.setCookieHttpOnly(false);
+        cookieCsrfTokenRepository.setCookiePath("/");
+        return cookieCsrfTokenRepository;
+    }
+
     protected AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
 			log.info("Kasutaja {} ID koodiga {} logis sisse kasutades amr: {} ",
@@ -164,7 +182,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
 			);
 
-			String fromUrl = (String) request.getSession(false).getAttribute("fromUrl");
+			String fromUrl = (String) request.getSession(false).getAttribute(REDIRECT_URL_PARAMETER_MARKER);
 
 			if (fromUrl != null) {
 				// fromUrl param has the following format:

@@ -3,22 +3,23 @@
     Leitud {{ gridData.content.length }}
   </div>
   <table id="infosystems-table" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
-    <thead class="thead-default">
+    <thead class="thead-light">
+    <tr>
       <th>
-        <span class="btn-sm btn text-nowrap">Staatus</span>
+        <span class="btn-sm btn btn-primary text-nowrap">Staatus</span>
+      <th>
+        <span class="btn-sm btn btn-primary text-nowrap">Infosüsteemi nimi</span>
       </th>
       <th>
-        <span class="btn-sm btn text-nowrap">Infosüsteemi nimi</span>
+        <span class="btn-sm btn btn-primary text-nowrap">Lühinimi</span>
       </th>
       <th>
-        <span class="btn-sm btn text-nowrap">Lühinimi</span>
+        <span class="btn-sm btn btn-primary text-nowrap">Pealkiri</span>
       </th>
       <th>
-        <span class="btn-sm btn text-nowrap">Pealkiri</span>
+        <span class="btn-sm btn btn-primary text-nowrap">Viimane kommentaar  <i class="fa fa-sort-desc" aria-hidden="true"></i></span>
       </th>
-      <th>
-        <span class="btn-sm btn text-nowrap">Viimane kommentaar  <i class="fa fa-sort-desc" aria-hidden="true"></i></span>
-      </th>
+    </tr>
     </thead>
     <tbody>
     <tr *ngFor="let ad of gridData.content">

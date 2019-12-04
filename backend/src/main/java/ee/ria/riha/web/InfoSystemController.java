@@ -14,9 +14,15 @@ import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.StandardRealisationCreationModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
@@ -52,6 +58,64 @@ public class InfoSystemController {
                 createPagedModel(
                         infoSystemService.list(pageable, filterable),
                         infoSystemModelMapper));
+    }
+    @GetMapping("/autocomplete")
+    @ApiOperation("List all existing information systems for autocomplete")
+    public ResponseEntity autocomplete(@RequestParam("searchTerm") String searchTerm) {
+
+        String paramToRestEndpoint;
+        if (StringUtils.isNumeric(searchTerm)) {
+            paramToRestEndpoint = "'" + searchTerm + "'";
+        } else {
+            paramToRestEndpoint = searchTerm;
+        }
+
+        PageRequest pageable = new PageRequest(0, 10);
+        FilterRequest shortNameExact = new FilterRequest("short_name,ilike," + paramToRestEndpoint, "desc", "id");
+        FilterRequest fuzzyNameExact = new FilterRequest("short_name,ilike,%" + searchTerm + "%", "desc", "id");
+        FilterRequest nameExact = new FilterRequest("name,ilike," + paramToRestEndpoint, "desc", "id");
+        FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
+
+        List<InfoSystem> foundResults = new ArrayList<>();
+        for (FilterRequest filterRequest : Arrays.asList(shortNameExact, fuzzyNameExact, nameExact, nameFuzzy)) {
+
+            searchInfoSystemsByFilter(pageable, filterRequest)
+                    .forEach(infoSystem ->  {
+                            if (!foundResults.contains(infoSystem)) {
+                                foundResults.add(infoSystem);
+                            }
+            });
+
+            if (foundResults.size() >= pageable.getPageSize()) {
+                return getResponseEntity(pageable, foundResults.subList(0, pageable.getPageSize()));
+            }
+        }
+
+        return getResponseEntity(pageable, foundResults);
+    }
+
+    private ResponseEntity getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
+        return ResponseEntity.ok(
+                new PagedResponse(
+                        pageable,
+                        response.size(),
+                        response.stream()
+                                .map(infoSystemModelMapper::map)
+                                .collect(toList())));
+    }
+
+    private List<InfoSystem> searchInfoSystemsByFilter(PageRequest pageable, FilterRequest filterRequest) {
+        PagedResponse<InfoSystem> exactMatchesShortNames = infoSystemService.list(pageable, filterRequest);
+        return exactMatchesShortNames.getContent() == null
+                ? Collections.emptyList()
+                : exactMatchesShortNames.getContent();
+    }
+
+    private Filterable createExactMatchFilterFromILikeFilter(Filterable filterable) {
+        return new FilterRequest(
+                filterable.getFilter().replaceAll("%", ""),
+                filterable.getSort(),
+                filterable.getFields());
     }
 
     @GetMapping(path = "/data-objects")

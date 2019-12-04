@@ -15,13 +15,16 @@ $frm-focus: #98b6fa;
 $frm-placeholder: #808080;
 $black: #000;
 $white: #fff;
-$grey2: #f7f8fa;
+$grey4: #f7f8fa;
 /* Global */
 $spacer: 20px !default;
+$grid-gutter-width: 20px;
 $grid-gutter-width-base: 20px !default;
 $line-height-base: 1.25 !default;
 /* Buttons */
 $btn-line-height: 1.25rem !default;
+$line-height-lg: 1.1111111111111112;
+$line-height-sm: 1.6666666666666667;
 $btn-secondary-color: $brand-dark !default;
 $btn-secondary-border: $body-bg !default;
 $btn-success-color: $brand-dark!default;
@@ -34,11 +37,11 @@ $btn-border-radius-lg: 25px!default;
 /* Cards */
 $card-border-width: 0px !default;
 $card-border-radius: 0px !default;
-$card-spacer-x: 40px !default;
+$card-spacer-x: 20px !default;
 /* Forms */
-$input-padding-x: 9px !default;
+$input-padding-x: 0.563rem !default;
 $input-padding-y: 8px !default;
-$input-line-height: 20px !default;
+$input-line-height: 1.25;
 $input-btn-border-width: 2px !default;
 $input-height: 40px !default;
 $input-color-placeholder: $frm-placeholder !default;
@@ -63,10 +66,10 @@ $popover-arrow-width: 10px !default;
 $popover-arrow-color: $popover-bg !default;
 $popover-arrow-outer-width: $popover-arrow-width !default;
 /* Custom control */
-$custom-control-gutter: 25px !default;
+$custom-control-gutter: 0.5625rem !default;
 $custom-control-spacer-x: 11px !default;
 $custom-control-spacer-y: 10px !default;
-$custom-control-indicator-size: 16px !default;
+$custom-control-indicator-size: 1rem !default;
 $custom-control-indicator-margin-y: 20px !default;
 $custom-control-indicator-bg: $white !default;
 $custom-control-indicator-bg-size: 50% 50% !default;
@@ -77,7 +80,7 @@ $custom-control-checked-indicator-box-shadow: none !default;
 $custom-checkbox-radius: 3px !default;
 /* Tables */
 $table-cell-padding: 15px 6px !default;
-$table-bg-accent: $grey2 !default;
+$table-bg-accent: $grey4 !default;
 $table-bg-hover: $body-bg !default;
 $table-bg-active: $table-bg-accent !default;
 $table-head-bg: $brand-primary !default;
@@ -98,5 +101,32 @@ $progress-bg: $body-bg !default;
 $text-muted: $frm-placeholder !default;
 $font-family-sans-serif: "Roboto",
 sans-serif;
-/* Import bootstrap */
-@import "../../bower_components/bootstrap/scss/bootstrap.scss";
+
+/* Tooltip customization */
+$tooltip-opacity: 1.0;
+$tooltip-bg: $grey2;
+$tooltip-color: $grey3;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px
+) !default;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1200px,
+  xxxl: 1400px
+) !default;
+
+/* Validation */
+$enable-validation-icons: false;
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";

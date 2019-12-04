@@ -1,17 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ModalHelperService } from '../../../services/modal-helper.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
-import { System } from '../../../models/system';
-import { SystemsService } from '../../../services/systems.service';
-import { ToastrService } from 'ngx-toastr';
-import { classifiers } from "../../../services/environment.service";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ModalHelperService} from '../../../services/modal-helper.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
+import {System} from '../../../models/system';
+import {SystemsService} from '../../../services/systems.service';
+import {ToastrService} from 'ngx-toastr';
+import {classifiers} from "../../../services/environment.service";
+import {Observable} from "rxjs";
+import {NgForm} from "@angular/forms";
+import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
+import {CONSTANTS} from '../../../utils/constants';
 
 @Component({
   selector: 'app-producer-edit-security',
   templateUrl: './producer-edit-security.component.html',
   styleUrls: ['./producer-edit-security.component.scss']
 })
-export class ProducerEditSecurityComponent implements OnInit {
+export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('securityForm', null) formObject: NgForm;
 
   @Input() system: System;
   security: any;
@@ -42,29 +48,17 @@ export class ProducerEditSecurityComponent implements OnInit {
 
   saveSystem(f){
     if (f.valid){
-      this.systemsService.getSystem(this.system.details.short_name).then(res =>{
-        let s = new System(res.json());
-        s.details.security = this.prepareSecurityInfoForSending(this.security);
-        this.systemsService.updateSystem(s).then(response => {
-          this.modalService.closeActiveModal({system: new System(response.json())});
+      this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
+        const system = new System(responseSystem);
+        system.details.security = this.prepareSecurityInfoForSending(this.security);
+        this.systemsService.updateSystem(system).subscribe(updatedSystem => {
+          this.modalService.closeActiveModal({system: new System(updatedSystem)});
         }, err => {
           this.toastrService.error('Serveri viga.');
         });
       }, err => {
         this.toastrService.error('Serveri viga.');
       });
-    }
-  }
-
-  closeModal(f){
-    if (f.form.dirty){
-      if (confirm('Oled väljades muudatusi teinud. Kui navigeerid siit ära ilma salvestamata, siis sinu muudatused kaovad.')){
-        this.modalService.dismissActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.dismissActiveModal();
     }
   }
 
@@ -109,13 +103,43 @@ export class ProducerEditSecurityComponent implements OnInit {
     return security;
   }
 
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
+  }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.formObject.form.dirty
+  }
+
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
               private toastrService: ToastrService,
               private generalHelperService: GeneralHelperService) { }
 
   ngOnInit(){
-    let system = this.generalHelperService.cloneObject(this.system);
+    const system = this.generalHelperService.cloneObject(this.system);
     this.security = system.details.security || {
       standard: null,
       class: null,

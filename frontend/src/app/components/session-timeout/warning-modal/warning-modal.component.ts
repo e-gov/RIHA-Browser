@@ -11,6 +11,7 @@ import { InfoModalComponent } from '../info-modal/info-modal.component';
   styleUrls: ['./warning-modal.component.scss']
 })
 export class WarningModalComponent implements OnInit, OnDestroy {
+  private static readonly ERROR_MESSAGE = 'Serveri viga.';
 
   @Input() timerStart;
   public minutesLeft: number;
@@ -22,7 +23,7 @@ export class WarningModalComponent implements OnInit, OnDestroy {
 
   startCountdown(){
     this.timerId = setTimeout(() =>{
-      let ml = this.getMilisecondsLeft();
+      const ml = this.getMilisecondsLeft();
       if (ml > 0) {
         this.minutesLeft = Math.floor((this.getMilisecondsLeft()/1000)/60);
         this.startCountdown();
@@ -33,39 +34,39 @@ export class WarningModalComponent implements OnInit, OnDestroy {
   }
 
   forceLogout(){
-    this.environmentService.doLogout().then(
+    this.environmentService.doLogout().subscribe(
       res => {
-        this.environmentService.loadEnvironmentData().then(env => {
+        this.environmentService.loadEnvironmentData().subscribe(env => {
           this.modalService.open(InfoModalComponent);
           this.router.navigate(['/']);
         });
       }, err => {
         this.modalService.dismissAllModals();
         this.router.navigate(['/']);
-        this.toastrService.error('Serveri viga.');
+        this.toastrService.error(WarningModalComponent.ERROR_MESSAGE);
       }
     )
   }
 
   doLogout(){
-    this.environmentService.doLogout().then(
+    this.environmentService.doLogout().subscribe(
       res => {
-        this.environmentService.loadEnvironmentData().then(env => {
+        this.environmentService.loadEnvironmentData().subscribe(env => {
           this.modalService.dismissAllModals();
           this.router.navigate(['/']);
         });
       }, err => {
-        this.toastrService.error('Serveri viga.');
+        this.toastrService.error(WarningModalComponent.ERROR_MESSAGE);
       }
     )
   };
 
   refreshSession(){
-    this.environmentService.loadEnvironmentData().then(
-      res => {
+    this.environmentService.loadEnvironmentData().subscribe(
+      env => {
         this.modalService.closeActiveModal();
       }, err => {
-        this.toastrService.error('Serveri viga.');
+        this.toastrService.error(WarningModalComponent.ERROR_MESSAGE);
       }
     )
   }

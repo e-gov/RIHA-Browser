@@ -56,7 +56,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   openIssueDetailsModal(issueId){
-    this.systemsService.getSystemIssueById(issueId).then(res => {
+    this.systemsService.getSystemIssueById(issueId).subscribe(systemIssue => {
       this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }/Arutelu/${ issueId }`);
       const modalRef = this.modalService.open(ApproverIssueDetailsComponent,
         {
@@ -65,11 +65,11 @@ export class ProducerDetailsIssuesComponent implements OnInit {
           windowClass: "fixed-header-modal",
           keyboard: false
         });
-      modalRef.componentInstance.feedback = res.json();
+      modalRef.componentInstance.feedback = systemIssue;
       modalRef.componentInstance.system = this.system;
       modalRef.result.then(res => {
         this.refreshIssues();
-        let issueType = res && res.issueType ? res.issueType : null;
+        const issueType = res && res.issueType ? res.issueType : null;
         this.onIssueResolve.emit(issueType);
         this.location.replaceState(`/Infosüsteemid/Vaata/${ this.system.details.short_name }`);
       },
@@ -83,13 +83,13 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   }
 
   refreshIssues(){
-    this.systemsService.getSystemIssues(this.system.details.short_name).then(
+    this.systemsService.getSystemIssues(this.system.details.short_name).subscribe(
       res => {
         this.issues = [];
         this.activeIssues = [];
         this.closedIssues = [];
 
-        this.issues = res.json().content;
+        this.issues = res.content;
         this.activeIssues = this.issues.filter(i => i.status == 'OPEN');
         this.closedIssues = this.issues.filter(i => i.status == 'CLOSED');
       }
@@ -108,9 +108,9 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   ngOnInit() {
     this.refreshIssues();
 
-    this.systemsService.getSystemRelations(this.system.details.short_name).then(res => {
-      this.hasStandardRelations = res.json() != null
-        && typeof _.find(res.json(), relation => relation != null && "USED_SYSTEM" === relation.type) !== 'undefined';
+    this.systemsService.getSystemRelations(this.system.details.short_name).subscribe(systemRelations => {
+      this.hasStandardRelations = systemRelations != null
+        && typeof _.find(systemRelations, relation => relation != null && "USED_SYSTEM" === relation.type) !== 'undefined';
     });
 
     if (this.issueId){

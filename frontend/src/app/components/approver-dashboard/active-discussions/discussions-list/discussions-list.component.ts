@@ -30,8 +30,8 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   }
 
   private getActiveDiscussions(){
-    this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).then( res => {
-      this.gridData.updateData(res.json());
+    this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).subscribe( res => {
+      this.gridData.updateData(res);
       this.loaded = true;
     }, err => {
       this.loaded = true;
@@ -44,7 +44,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
               private differs: KeyValueDiffers,
               private environmentService: EnvironmentService,
               private toastrService: ToastrService) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
   }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    var changes = this.differ.diff(this.environmentService.globalEnvironment);
+    const changes = this.differ.diff(this.environmentService.globalEnvironment);
     if (changes && (this.loaded || !this.environmentService.getUserMatrix().isOrganizationSelected)){
       this.loaded = false;
       this.getActiveDiscussions();

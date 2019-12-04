@@ -477,10 +477,7 @@ public class InfoSystem {
         filesNode.removeAll();
 
         currentFilesMetadataList.forEach(currentFileMetadata -> {
-            Optional<? extends InfoSystemFileMetadata> foundPrevFileMetadata = prevFilesMetadataList.stream().filter(prevFileMetadata ->
-                    prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
-                            || prevFileMetadata.getName().equals(currentFileMetadata.getName())
-            ).findFirst();
+            Optional<? extends InfoSystemFileMetadata> foundPrevFileMetadata = getPrevFileMetadata(prevFilesMetadataList, currentFileMetadata);
 
             if (foundPrevFileMetadata.isPresent()) {
                 //found prev version of same doc
@@ -495,25 +492,37 @@ public class InfoSystem {
                 currentFileMetadata.setCreationTimestamp(this.getUpdateTimestamp());
             }
 
-            ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
-                    .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl());
-
-            if (currentFileMetadata.getType() != null) {
-                docNode.put(FILE_METADATA_TYPE_KEY, currentFileMetadata.getType());
-            }
-            if (currentFileMetadata.getCreationTimestamp() != null) {
-                docNode.put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp());
-            }
-            if (currentFileMetadata.getUpdateTimestamp() != null) {
-                docNode.put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
-            }
-
-            if (currentFileMetadata instanceof InfoSystemDocumentMetadata &&
-                    ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson() != null) {
-                docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
-                        ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
-            }
+            updateFilesNode(filesNode, currentFileMetadata);
         });
+    }
+
+    private void updateFilesNode(ArrayNode filesNode, InfoSystemFileMetadata currentFileMetadata) {
+        ObjectNode docNode = filesNode.addObject().put(FILE_METADATA_NAME_KEY, currentFileMetadata.getName())
+                .put(FILE_METADATA_URL_KEY, currentFileMetadata.getUrl());
+
+        if (currentFileMetadata.getType() != null) {
+            docNode.put(FILE_METADATA_TYPE_KEY, currentFileMetadata.getType());
+        }
+        if (currentFileMetadata.getCreationTimestamp() != null) {
+            docNode.put(META_CREATION_TIMESTAMP_KEY, currentFileMetadata.getCreationTimestamp());
+        }
+        if (currentFileMetadata.getUpdateTimestamp() != null) {
+            docNode.put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
+        }
+
+        if (currentFileMetadata instanceof InfoSystemDocumentMetadata &&
+                ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson() != null) {
+            docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
+                    ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
+        }
+    }
+
+    private Optional<? extends InfoSystemFileMetadata> getPrevFileMetadata(List<? extends InfoSystemFileMetadata> prevFilesMetadataList,
+                                                                                 InfoSystemFileMetadata currentFileMetadata) {
+        return prevFilesMetadataList.stream().filter(prevFileMetadata ->
+                prevFileMetadata.getUrl().equals(currentFileMetadata.getUrl())
+                        || prevFileMetadata.getName().equals(currentFileMetadata.getName())
+        ).findFirst();
     }
 
     public void replaceFileUrl(String oldUrl, String newUrl) {
@@ -531,5 +540,20 @@ public class InfoSystem {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InfoSystem that = (InfoSystem) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

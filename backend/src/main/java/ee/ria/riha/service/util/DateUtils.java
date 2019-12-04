@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class DateUtils {
 
-	public static final Set<LocalDate> daysOffWork = NationalHolidays.get().stream()
+	private static final Set<LocalDate> daysOffWork = NationalHolidays.get().stream()
 			.filter(DateUtils::isDayOffFromWork)
 			.map(NationalHoliday::getDate)
 			.collect(Collectors.toSet());
@@ -34,15 +34,15 @@ public class DateUtils {
 		return date;
 	}
 
-	public static boolean isWorkDay(LocalDate date) {
+	private static boolean isWorkDay(LocalDate date) {
 		return !isWeekend(date) && !isHoliday(date);
 	}
 
-	public static boolean isWeekend(LocalDate date) {
+	private static boolean isWeekend(LocalDate date) {
 		return EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(date.getDayOfWeek());
 	}
 
-	public static boolean isHoliday(LocalDate date) {
+	private static boolean isHoliday(LocalDate date) {
 		return daysOffWork.contains(date);
 	}
 
@@ -51,7 +51,8 @@ public class DateUtils {
 		case NATIONAL_HOLIDAY:
 		case PUBLIC_HOLIDAY:
 			return true;
+		default:
+			return false;
 		}
-		return false;
 	}
 }

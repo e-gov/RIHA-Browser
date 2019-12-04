@@ -44,13 +44,13 @@ export class BrowserFilesListComponent implements OnInit {
 
   public getDataObjectFiles(page?){
     // if (this.filters.searchText && this.filters.searchText.length > 1){
-      let params = this.helper.cloneObject(this.filters);
+      const params = this.helper.cloneObject(this.filters);
 
-      let sortProperty = this.gridData.getSortProperty();
+      const sortProperty = this.gridData.getSortProperty();
       if (sortProperty) {
         params.sort = sortProperty;
       }
-      let sortOrder = this.gridData.getSortOrder();
+    const sortOrder = this.gridData.getSortOrder();
       if (sortOrder) {
         params.dir = sortOrder;
       }
@@ -60,11 +60,11 @@ export class BrowserFilesListComponent implements OnInit {
 
       this.gridData.page = page || 0;
 
-      let q = this.helper.generateQueryString(params);
+      const q = this.helper.generateQueryString(params);
       this.location.replaceState('/Andmeobjektid', q);
 
-      this.systemsService.getSystemsDataObjects(this.filters, this.gridData).then(res =>{
-        this.gridData.updateData(res.json());
+      this.systemsService.getSystemsDataObjects(this.filters, this.gridData).subscribe(res =>{
+        this.gridData.updateData(res);
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getDataObjectFiles();
         }
@@ -107,7 +107,7 @@ export class BrowserFilesListComponent implements OnInit {
 
   private filtersNotEmpty() : boolean {
 
-    for (let key in this.filters) {
+    for (const key in this.filters) {
       if (this.filters[key]){
         return true;
       }

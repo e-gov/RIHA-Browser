@@ -1,19 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SystemsService } from '../../services/systems.service';
-import { EnvironmentService } from '../../services/environment.service';
-import { ToastrService } from 'ngx-toastr';
-import { User } from '../../models/user';
-import { ModalHelperService } from "../../services/modal-helper.service";
-import { classifiers } from "../../services/environment.service";
-import { System } from '../../models/system';
-import { GeneralHelperService } from '../../services/general-helper.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SystemsService} from '../../services/systems.service';
+import {classifiers, EnvironmentService} from '../../services/environment.service';
+import {ToastrService} from 'ngx-toastr';
+import {User} from '../../models/user';
+import {ModalHelperService} from "../../services/modal-helper.service";
+import {System} from '../../models/system';
+import {GeneralHelperService} from '../../services/general-helper.service';
+import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
+import {NgForm} from "@angular/forms";
+import {Observable} from "rxjs";
+import {CONSTANTS} from '../../utils/constants';
 
 @Component({
   selector: 'app-approver-feedback-details',
   templateUrl: './approver-issue-details.component.html',
   styleUrls: ['./approver-issue-details.component.scss']
 })
-export class ApproverIssueDetailsComponent implements OnInit {
+export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal {
+
+  @ViewChild('commentForm', null) formObject: NgForm;
 
   @Input() feedback: any;
   @Input() system: System;
@@ -26,9 +31,9 @@ export class ApproverIssueDetailsComponent implements OnInit {
   deadlinePassed: boolean;
 
   refreshReplies(){
-    this.systemService.getSystemIssueTimeline(this.feedback.id).then(
-      res => {
-        this.replies = res.json().content;
+    this.systemService.getSystemIssueTimeline(this.feedback.id).subscribe(
+      replies => {
+        this.replies = replies.content;
       });
   }
 
@@ -39,7 +44,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   }
 
   markResolved(resolutionType?){
-    this.systemService.closeSystemIssue(this.feedback.id, resolutionType).then(
+    this.systemService.closeSystemIssue(this.feedback.id, resolutionType).subscribe(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
@@ -59,7 +64,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
     if (f.valid && this.commentText){
       this.systemService.postSystemIssueComment(this.feedback.id, {
         comment: this.commentText
-      }).then(
+      }).subscribe(
         res => {
           this.resetValues(f);
           this.refreshReplies();
@@ -78,7 +83,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
       this.systemService.postSystemIssueDecision(this.feedback.id, {
         comment: this.commentText,
         decisionType: this.decisionType
-      }).then(
+      }).subscribe(
         res => {
           this.resetValues(f);
           this.refreshReplies();
@@ -103,7 +108,7 @@ export class ApproverIssueDetailsComponent implements OnInit {
   canResolveGeneral(){
     let ret = false;
     if (this.feedback.status == 'OPEN'){
-      let bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
+      const bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
       if (this.feedback.type != classifiers.issue_type.TAKE_INTO_USE_REQUEST.code
         && this.feedback.type != classifiers.issue_type.MODIFICATION_REQUEST.code
         && this.feedback.type != classifiers.issue_type.FINALIZATION_REQUEST.code
@@ -120,24 +125,43 @@ export class ApproverIssueDetailsComponent implements OnInit {
         || this.feedback.type == classifiers.issue_type.MODIFICATION_REQUEST.code
         || this.feedback.type == classifiers.issue_type.FINALIZATION_REQUEST.code
         || this.feedback.type == classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
-          let userMatrix = this.environmentService.getUserMatrix();
+          const userMatrix = this.environmentService.getUserMatrix();
           ret = userMatrix.hasApproverRole && userMatrix.isRiaMember;
       }
     }
     return ret;
   }
 
-  closeModal(f){
-    if (f.form.dirty){
-      if (confirm('Oled sisestanud väljadesse infot. Kui navigeerid siit ära ilma salvestamata, siis sinu sisestatud info kaob.')){
-        this.modalService.closeActiveModal();
-      } else {
-        return false;
-      }
-    } else {
-      this.modalService.closeActiveModal();
-    }
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.closeModal();
   }
+
+  closeModal() {
+    if (this.isFormChanged) {
+      const observer = this.modalService.confirm(CONSTANTS.CLOSE_DIALOG_WARNING);
+      observer.subscribe(confirmed => {
+        if (confirmed) {
+          this.modalService.dismissActiveModal();
+        }
+      });
+      return observer;
+    }
+
+    this.modalService.dismissActiveModal();
+    return true;
+  }
+
+  /**
+   * Getters
+   */
+
+  /**
+   * Is form data changed ?
+   */
+  get isFormChanged(): boolean {
+    return this.formObject.form.dirty
+  }
+
 
   constructor(private systemService: SystemsService,
               private toastrService: ToastrService,

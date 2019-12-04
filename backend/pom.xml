@@ -12,7 +12,7 @@
     <parent>
         <groupId>ee.ria.riha</groupId>
         <artifactId>browser</artifactId>
-        <version>7.5.2</version>
+        <version>7.6</version>
     </parent>
 
     <dependencies>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.10</version>
+            <version>2.9.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -95,9 +95,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.7.0</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -172,35 +172,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.github.kongchen</groupId>
-                <artifactId>swagger-maven-plugin</artifactId>
-                <version>3.1.5</version>
-                <configuration>
-                    <apiSources>
-                        <apiSource>
-                            <springmvc>true</springmvc>
-                            <info>
-                                <title>RIHA-Browser API</title>
-                                <version>1.0</version>
-                                <description>RIHA-Browser API documentation</description>
-                                <license>
-                                    <name>MIT</name>
-                                </license>
-                            </info>
-                            <schemes>
-                                <scheme>http</scheme>
-                            </schemes>
-                            <basePath>/</basePath>
-                            <locations>
-                                <location>ee.ria.riha.web</location>
-                            </locations>
-                            <swaggerDirectory>${basedir}/src/main/resources/static</swaggerDirectory>
-                            <outputFormats>yaml</outputFormats>
-                        </apiSource>
-                    </apiSources>
-                </configuration>
             </plugin>
         </plugins>
     </build>
