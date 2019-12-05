@@ -1,20 +1,15 @@
 package ee.ria.riha.pages;
 
-import ee.ria.riha.context.ScenarioContext;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import ee.ria.riha.context.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
-import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
-import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
-import static ee.ria.riha.context.ScenarioContext.LAST_INFOSYSTEM_NUMBER;
-import static ee.ria.riha.context.ScenarioContext.SEARCH_TEXT_KEY;
+import static ee.ria.riha.Timeouts.*;
+import static ee.ria.riha.context.ScenarioContext.*;
 
 public class MyInfosystemsPage extends BasePage {
     @FindBy(xpath = "//main[@id='content']/app-producer-list/section/div[2]/a[4]")
@@ -105,8 +100,14 @@ public class MyInfosystemsPage extends BasePage {
         int i = Integer.parseInt(lastCreatedInfosystemNumber);
         i++;
 
-        nameInput.sendKeys(namePrefix + " " + i);
-        shortNameInput.sendKeys(shortNamePrefix + "-" + i);
+        String systemName = namePrefix + " " + i;
+        nameInput.sendKeys(systemName);
+        scenarioContext.saveToContext(CREATED_SYSTEM_NAME, systemName);
+
+        String shortName = shortNamePrefix + "-" + i;
+        shortNameInput.sendKeys(shortName);
+        scenarioContext.saveToContext(CREATED_SYSTEM_SHORT_NAME, shortName);
+
         purposeInput.sendKeys(purpose);
         submitButton.click();
     }

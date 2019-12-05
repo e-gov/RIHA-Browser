@@ -1,29 +1,24 @@
 package ee.ria.riha.pages;
 
-import ee.ria.riha.context.ScenarioContext;
-import ee.ria.riha.util.Utils;
-import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
+import ee.ria.riha.context.*;
+import ee.ria.riha.util.*;
+import org.apache.commons.lang3.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.ui.*;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.*;
 
-import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
-import static ee.ria.riha.Timeouts.TABLE_SORT_TIMEOUT;
+import static ee.ria.riha.Timeouts.*;
 import static ee.ria.riha.context.ScenarioContext.*;
-import static org.openqa.selenium.Keys.BACK_SPACE;
-import static org.openqa.selenium.Keys.RETURN;
+import static org.openqa.selenium.Keys.*;
 
 public class InfosystemPage extends BasePage {
 
@@ -135,6 +130,9 @@ public class InfosystemPage extends BasePage {
 
     @FindBy(xpath = "//tr[4]/td[3]/button/i")
     private WebElement deleteAssociationButton;
+
+    @FindBy(xpath = "//header[@id='header']/div[2]/app-riha-navbar/div/div/div[2]/div/button/span")
+    private WebElement logOutButton;
 
     public InfosystemPage(ScenarioContext scenarioContext) {
         super(scenarioContext);
@@ -289,6 +287,17 @@ public class InfosystemPage extends BasePage {
 
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.id("requestText"), "feedback comment");
         modalContainer.findElement(By.id("requestText")).sendKeys(comment);
+    }
+
+    public void userAddsFeedbackWithTypeAndComment(String type, String comment) {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
+        modalContainer.findElement(By.name("commentText")).sendKeys(comment);
+
+        new Select(modalContainer.findElement(By.name("decisionType"))).selectByVisibleText(type);
+
+        modalContainer.findElement(By.cssSelector(".mx-2 > .btn")).click();
+        wait.sleep(10000);
+        modalContainer.findElement(By.cssSelector(".btn-secondary")).click();
     }
 
     public void createIssue(String title, String comment) {
@@ -605,6 +614,7 @@ public class InfosystemPage extends BasePage {
     }
 
     public void createNewTab() {
+        driver.findElement(By.tagName("body")).sendKeys(Keys.CONTROL,"t");
         tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
     }
@@ -637,4 +647,15 @@ public class InfosystemPage extends BasePage {
         driver.navigate().refresh();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
+
+    public void clickLogOut() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, logOutButton, "logOutButton");
+        this.logOutButton.click();
+    }
+
+    public void clickFeedbackTopic(String topic) {
+        wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(topic), "feedbackTopic");
+        driver.findElement(By.linkText(topic)).click();
+    }
+
 }
