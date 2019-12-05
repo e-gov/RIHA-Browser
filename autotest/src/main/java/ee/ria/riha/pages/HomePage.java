@@ -1,13 +1,11 @@
 package ee.ria.riha.pages;
 
-import ee.ria.riha.context.ScenarioContext;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import ee.ria.riha.context.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.*;
 
-import static ee.ria.riha.Timeouts.DISPLAY_ELEMENT_TIMEOUT;
+import static ee.ria.riha.Timeouts.*;
 
 public class HomePage extends BasePage {
 
@@ -28,6 +26,13 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//input[@id='search']")
     private WebElement searchBarInput;
+
+    @FindBy(xpath = "//a[contains(text(),'Hinda')]")
+    private WebElement evaluateButton;
+
+    @FindBy(xpath = "//header[@id='header']/div[2]/app-riha-navbar/div/div/div[2]/div/span/a")
+    private WebElement selectOrganizationButton;
+
 
     public HomePage(ScenarioContext scenarioContext) {
         super(scenarioContext);
@@ -58,12 +63,13 @@ public class HomePage extends BasePage {
     }
 
     public void selectOrganization(String organization) {
-        driver.findElement(By.cssSelector(".right a")).click();
-        wait.forPresenceOfElements(2, By.tagName("ngb-modal-window"), "modal");
+        wait.forPresenceOfElements(25, By.tagName("ngb-modal-window"), "modal");
         modalContainer.findElement(By.xpath("//td[contains(.,'" + organization +"')]")).click();
     }
 
     public void goToLoginPage() {
+        driver.navigate().refresh();
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, loginButton, "loginButton");
         loginButton.click();
     }
 
@@ -83,6 +89,16 @@ public class HomePage extends BasePage {
     public void inputSearchTerm(String word) {
         this.searchBarInput.sendKeys(word);
         this.searchBarInput.sendKeys(Keys.RETURN);
+    }
+
+    public void clickEvaluate() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, evaluateButton, "evaluateButton");
+        this.evaluateButton.click();
+    }
+
+    public void openSelectOrganizationDialog() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, selectOrganizationButton, "selectOrganizationButton");
+        selectOrganizationButton.click();
     }
 
 }

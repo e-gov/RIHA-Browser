@@ -1,13 +1,11 @@
 package ee.ria.riha.homepage;
 
-import ee.ria.riha.driver.Setup;
-import ee.ria.riha.pages.HomePage;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import org.openqa.selenium.Keys;
+import ee.ria.riha.driver.*;
+import ee.ria.riha.pages.*;
+import io.cucumber.java.en.*;
+import org.openqa.selenium.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class HomePageSteps {
     private HomePage homePage;
@@ -75,6 +73,31 @@ public class HomePageSteps {
     @Given("HomePage: user clicks on the search bar and enters {string}")
     public void userClicksOnSearchBar(String word) {
         this.homePage.inputSearchTerm(word);
+    }
+
+    @And("HomePage: user clicks on evaluate button")
+    public void userClicksEvaluate() {
+        homePage.clickEvaluate();
+    }
+
+    @And("HomePage: user opens Select Organization dialog")
+    public void openSelectOrganizationDialog() {
+        homePage.openSelectOrganizationDialog();
+    }
+
+    @Then("HomePage: option {string} is visible in left menu")
+    public void checkIfMenuOptionInLeftMenuIsVisible(String menuOptionLabel) {
+        assertTrue(homePage.isLeftMenuOptionVisible(menuOptionLabel));
+    }
+
+    @And("HomePage: table with headers {string} is visible")
+    public void checkIfTableWithHeadersIsVisible(String commaSeparatedHeaderNames) {
+        assertTrue(homePage.checkIfTableWithHeadersIsVisible(commaSeparatedHeaderNames));
+    }
+
+    @Given("HomePage: user remembers systemName {} and shortName: {}")
+    public void rememberSystemNameAndShortName(String systemName, String shortName) {
+        homePage.rememberSystemNameAndShortName(systemName, shortName);
     }
 
 }

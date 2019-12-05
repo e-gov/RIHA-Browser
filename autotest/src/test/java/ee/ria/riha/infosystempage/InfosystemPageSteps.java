@@ -1,17 +1,15 @@
 package ee.ria.riha.infosystempage;
 
-import ee.ria.riha.driver.Setup;
-import ee.ria.riha.pages.InfosystemPage;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import org.junit.Assert;
+import ee.ria.riha.driver.*;
+import ee.ria.riha.pages.*;
+import io.cucumber.java.en.*;
+import org.junit.*;
 
-import java.util.stream.Stream;
+import java.util.stream.*;
 
-import static ee.ria.riha.BackgroundSteps.FILE_UPLOAD_NAME;
+import static ee.ria.riha.BackgroundSteps.*;
 import static ee.ria.riha.context.ScenarioContext.*;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
 public class InfosystemPageSteps {
@@ -323,4 +321,20 @@ public class InfosystemPageSteps {
     public void refreshCurrentPage() {
         this.infosystemPage.refreshPage();
     }
+
+    @When("InfosystemPage: user logs out of organization")
+    public void logOut() {
+        this.infosystemPage.clickLogOut();
+    }
+
+    @And("InfosystemPage: user clicks on feedback topic {string}")
+    public void userClicksOnFeedbackTopic(String topic) {
+        infosystemPage.clickFeedbackTopic(topic);
+    }
+
+    @And("InfosystemPage: user adds feedback with type {string} and comment {string}")
+    public void userAddsFeedbackWithTypeAndComment(String type, String comment) {
+        infosystemPage.userAddsFeedbackWithTypeAndComment(type, comment);
+    }
+
 }
