@@ -64,7 +64,7 @@ public class HomePage extends BasePage {
 
     public void selectOrganization(String organization) {
         wait.forPresenceOfElements(25, By.tagName("ngb-modal-window"), "modal");
-        modalContainer.findElement(By.xpath("//td[contains(.,'" + organization +"')]")).click();
+        modalContainer.findElement(By.xpath("//td[text()='"+organization+"']")).click();
     }
 
     public void goToLoginPage() {
@@ -92,7 +92,8 @@ public class HomePage extends BasePage {
     }
 
     public void clickEvaluate() {
-        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, evaluateButton, "evaluateButton");
+        driver.navigate().refresh();
+        wait.forElementToBeClickable(DISPLAY_ELEMENT_TIMEOUT, By.xpath("//a[contains(text(),'Hinda')]"), "evaluateButton");
         this.evaluateButton.click();
     }
 

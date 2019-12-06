@@ -128,7 +128,7 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//a[contains(text(),'Riigi infosüsteemi haldussüsteem (riha-test)')]")
     private WebElement newAssociatedInfosystemInDetail;
 
-    @FindBy(xpath = "//tr[4]/td[3]/button/i")
+    @FindBy(xpath = "//tr[contains(.,\"ummik.test\")]/td[3]/button")
     private WebElement deleteAssociationButton;
 
     @FindBy(xpath = "//header[@id='header']/div[2]/app-riha-navbar/div/div/div[2]/div/button/span")
@@ -293,10 +293,13 @@ public class InfosystemPage extends BasePage {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
         modalContainer.findElement(By.name("commentText")).sendKeys(comment);
 
+        modalContainer.findElement(By.name("decisionType")).click();
         new Select(modalContainer.findElement(By.name("decisionType"))).selectByVisibleText(type);
 
+        wait.sleep(2000);
         modalContainer.findElement(By.cssSelector(".mx-2 > .btn")).click();
-        wait.sleep(10000);
+
+        wait.sleep(2000);
         modalContainer.findElement(By.cssSelector(".btn-secondary")).click();
     }
 
