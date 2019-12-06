@@ -51,10 +51,11 @@ Scenario: Owner of the system with Approver role can leave comments (RIHAKB-464)
     When EvaluateSystemsPage: previously saved system shortName link is clicked
     And  InfosystemPage: user clicks on feedback topic 'Infosüsteemil puudub andmekoosseisu muutmise kooskõlastus'
     And InfosystemPage: user adds feedback with type 'Kooskõlastan' and comment 'test comment on feedback form'
+    When HomePage: user clicks on evaluate button
+    Then EvaluateSystemsPage: previously saved system is not visible in required feedback table
     And HomePage: user opens Select Organization dialog
     And HomePage: user selects organization 'Testasutus'
     When HomePage: user clicks on evaluate button
-#  TODO!! last step fails because of missing roles
-#    And EvaluateSystemsPage: previously saved system is not visible in required feedback table
+    And EvaluateSystemsPage: previously saved system is visible in required feedback table
 
 
