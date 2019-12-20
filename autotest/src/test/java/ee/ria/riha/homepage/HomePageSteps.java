@@ -1,12 +1,11 @@
 package ee.ria.riha.homepage;
 
-import ee.ria.riha.driver.Setup;
-import ee.ria.riha.pages.HomePage;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
+import ee.ria.riha.driver.*;
+import ee.ria.riha.pages.*;
+import io.cucumber.java.en.*;
+import org.openqa.selenium.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class HomePageSteps {
     private HomePage homePage;
@@ -18,6 +17,11 @@ public class HomePageSteps {
     @Given("HomePage: user navigates to page {string}")
     public void userNavigatesToPage(String url) {
         homePage.goToPage(url);
+    }
+
+    @And("HomePage: user cancels organization select dialog")
+    public void userCancelsOrgSelectDialog() {
+        homePage.getModalContainer().sendKeys(Keys.ESCAPE);
     }
 
     @Given("HomePage: user selects organization {string}")
@@ -60,4 +64,40 @@ public class HomePageSteps {
     public void organizationNameIsShownNextToUsersName(String organizationName) {
         assertTrue("Organization name " + organizationName + " is not shown", homePage.getLoggedInUsersName().contains(organizationName));
     }
+
+    @And("HomePage: user returns to the previous page")
+    public void goOnePageBack() {
+        homePage.goHistoryMinusOne();
+    }
+
+    @Given("HomePage: user clicks on the search bar and enters {string}")
+    public void userClicksOnSearchBar(String word) {
+        this.homePage.inputSearchTerm(word);
+    }
+
+    @And("HomePage: user clicks on evaluate button")
+    public void userClicksEvaluate() {
+        homePage.clickEvaluate();
+    }
+
+    @And("HomePage: user opens Select Organization dialog")
+    public void openSelectOrganizationDialog() {
+        homePage.openSelectOrganizationDialog();
+    }
+
+    @Then("HomePage: option {string} is visible in left menu")
+    public void checkIfMenuOptionInLeftMenuIsVisible(String menuOptionLabel) {
+        assertTrue(homePage.isLeftMenuOptionVisible(menuOptionLabel));
+    }
+
+    @And("HomePage: table with headers {string} is visible")
+    public void checkIfTableWithHeadersIsVisible(String commaSeparatedHeaderNames) {
+        assertTrue(homePage.checkIfTableWithHeadersIsVisible(commaSeparatedHeaderNames));
+    }
+
+    @Given("HomePage: user remembers systemName {} and shortName: {}")
+    public void rememberSystemNameAndShortName(String systemName, String shortName) {
+        homePage.rememberSystemNameAndShortName(systemName, shortName);
+    }
+
 }

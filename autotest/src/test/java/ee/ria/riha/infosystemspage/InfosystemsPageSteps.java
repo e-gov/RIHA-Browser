@@ -5,6 +5,7 @@ import ee.ria.riha.pages.InfosystemsPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class InfosystemsPageSteps {
@@ -36,9 +37,9 @@ public class InfosystemsPageSteps {
 
     @Then("InfosystemsPage: URL contains 'ownerName={string}', 'name={string}' and 'topic={string}' elements")
     public void urlContainsOwnerNameAndtopicElements(String ownerName, String name, String topic) {
-        assertTrue("Search URL doesn't contain 'ownerName' element", infosystemsPage.getCurrentUrl().contains("ownerName=" + ownerName));
-        assertTrue("Search URL doesn't contain 'name' element", infosystemsPage.getCurrentUrl().contains("name=" + name));
-        assertTrue("Search URL doesn't contain 'topic' element", infosystemsPage.getCurrentUrl().contains("topic=" + topic));
+        assertTrue("Search URL doesn't contain 'ownerName' element", infosystemsPage.getCurrentUrl(false).contains("ownerName=" + ownerName));
+        assertTrue("Search URL doesn't contain 'name' element", infosystemsPage.getCurrentUrl(false).contains("name=" + name));
+        assertTrue("Search URL doesn't contain 'topic' element", infosystemsPage.getCurrentUrl(false).contains("topic=" + topic));
     }
 
     @Then("InfosytemsPage: 'owner' input has {string} text, 'name' input has {string} text and 'topic' input has {string} text")
@@ -51,6 +52,12 @@ public class InfosystemsPageSteps {
     @And("InfosytemsPage: found infosystem with short name {string}")
     public void foundInfosystemHasShortName(String shortName) {
         assertTrue("Infosystem with short name " + shortName + " not found", infosystemsPage.getFoundInfosystemsShortName().stream().anyMatch(shortName::equalsIgnoreCase));
+    }
+
+    @Then("InfosytemsPage: the search bar still contains entered words {string} and url ends with {string}")
+    public void checkSearchAndUrl(String word, String url) {
+        assertEquals("Search bar does not contain " + word, infosystemsPage.getInputSearchTerm(), word);
+        assertTrue("Url does not end with " + url, infosystemsPage.getCurrentUrl(true).contains(url));
     }
 
 }
