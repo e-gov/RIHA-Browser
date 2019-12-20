@@ -1,3 +1,4 @@
+@RIHAKB-710
 Feature: Search infosystems functionality
 
   Scenario: User can search infosystem by keyword (among his own infosystems) (RIHAKB-425)

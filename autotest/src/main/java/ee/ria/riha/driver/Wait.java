@@ -24,19 +24,30 @@ public class Wait {
 
     public void forElementToBeDisplayed(int timeout, WebElement webElement, String webElementName) {
         ExpectedCondition<WebElement> condition = ExpectedConditions.visibilityOf(webElement);
-        String timeoutMessage = webElementName + " wasn't displayed after " + Integer.toString(timeout) + " seconds.";
+        String timeoutMessage = webElementName + " wasn't displayed after " + timeout + " seconds.";
+        waitUntilCondition(condition, timeoutMessage, timeout);
+    }
+
+    public void forElementToBeClickable(int timeout, By elementLocator, String webElementName) {
+        ExpectedCondition<WebElement> condition = ExpectedConditions.elementToBeClickable(elementLocator);
+        String timeoutMessage = webElementName + " was displayed after " + timeout + " seconds.";
+        waitUntilCondition(condition, timeoutMessage, timeout);
+    }
+    public void forElementToBeHidden(int timeout, WebElement webElement, String webElementName) {
+        ExpectedCondition<Boolean> condition = ExpectedConditions.not(ExpectedConditions.visibilityOf(webElement));
+        String timeoutMessage = webElementName + " wasn't hidden after " + Integer.toString(timeout) + " seconds.";
         waitUntilCondition(condition, timeoutMessage, timeout);
     }
 
     public void forPresenceOfElements(int timeout, By elementLocator, String elementName) {
         ExpectedCondition<List<WebElement>> condition = ExpectedConditions.presenceOfAllElementsLocatedBy(elementLocator);
-        String timeoutMessage = elementName + " elements were not displayed after " + Integer.toString(timeout) + " seconds.";
+        String timeoutMessage = elementName + " elements were not displayed after " + timeout + " seconds.";
         waitUntilCondition(condition, timeoutMessage, timeout);
     }
 
-    public void sleep(int timeout) {
+    public void sleep(int timeoutMilliseconds) {
         try {
-            Thread.sleep(timeout);
+            Thread.sleep(timeoutMilliseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

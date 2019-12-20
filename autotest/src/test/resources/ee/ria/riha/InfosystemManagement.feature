@@ -1,3 +1,4 @@
+@RIHAKB-710
 Feature: My organization infosystems page functionality
 
   Background:
@@ -45,11 +46,11 @@ Feature: My organization infosystems page functionality
   Scenario: User can add infosystem data (RIHAKB-356)
     Given MyInfosystemsPage: user select "riha-test" infosystem
     And InfosystemPage: user clicks on 'edit data' button
-    And InfosystemPage: user adds data object "Minu andmeobjekti" and url "https://www.riha.ee" - "RIHA testimine" to infosystem
-    Then InfosystemPage: data object "Minu andmeobjekti" and url "RIHA testimine" present in 'data' block
+    And InfosystemPage: user adds data object "Minu andmeobjekti", data file "test.txt" and url "https://www.riha.ee" - "RIHA testimine" to infosystem
+    Then InfosystemPage: data object "Minu andmeobjekti", data file "test.txt" and url "RIHA testimine" present in 'data' block
     And InfosystemPage: user clicks on 'edit data' button
-    And InfosystemPage: user removes data object "Minu andmeobjekti" and url "RIHA testimine"
-    Then InfosystemPage: data object "Minu andmeobjekti" and url "RIHA testimine" not present in 'data' block
+    And InfosystemPage: user removes data object "Minu andmeobjekti", data file "test.txt" and url "RIHA testimine"
+    Then InfosystemPage: data object "Minu andmeobjekti", data file "test.txt" and url "RIHA testimine" not present in 'data' block
 
   Scenario: User can add contact to infosystem (RIHAKB-357)
     Given MyInfosystemsPage: user select "riha-test" infosystem
@@ -59,3 +60,11 @@ Feature: My organization infosystems page functionality
     And InfosystemPage: user clicks on 'edit contacts' button
     And InfosystemPage: user clicks on 'delete contacts' button
     Then InfosystemPage: placeholder "Kontaktid puuduvad" is visible in 'contacts' block
+
+  Scenario: User can add documents and legal acts to infosystem (RIHAKB-793)
+    Given MyInfosystemsPage: user select "riha-test" infosystem
+    And InfosystemPage: user clicks on 'edit documentation' button
+    And InfosystemPage: user clicks on 'upload file' button
+    And InfosystemPage: user adds documentation file
+    Then InfosystemPage: last uploaded file info is editable
+    And InfosystemPage: last uploaded date is displayed in the documentation section
