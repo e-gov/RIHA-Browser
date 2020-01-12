@@ -166,7 +166,7 @@ export class GeneralHelperService {
     $('html, body').animate({
       scrollTop: $(el).offset().top
     }, 500);
-    this.location.replaceState(this.router.url.split('#')[0] + el)
+    this.location.replaceState(this.location.path().split('#')[0] + el)
   }
 
   public adjustSection(hash?){
