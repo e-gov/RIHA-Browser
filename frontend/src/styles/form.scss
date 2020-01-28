@@ -46,7 +46,7 @@ textarea {
 .form-control {
     box-shadow: 0px 1px 4px 0px rgba($black, 0.1);
     font-size: 14px;
-    height: unset!important;
+    height: unset;
     &:disabled,
     &[readonly] {
         border-width: 1px;

@@ -1,3 +1,4 @@
+@RIHAKB-710
 Feature: Login
 
   Scenario Outline: Login to application (RIHAKB-308)

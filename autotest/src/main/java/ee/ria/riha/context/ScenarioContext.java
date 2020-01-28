@@ -1,7 +1,6 @@
 package ee.ria.riha.context;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ScenarioContext {
     public static final String APP_URL_KEY = "appUrl";
@@ -12,6 +11,9 @@ public class ScenarioContext {
     public static final String PURPOSE_KEY = "purpose";
 
     public static final String LAST_INFOSYSTEM_NUMBER = "lastInfosystemNumber";
+
+    public static final String CREATED_SYSTEM_NAME = "CREATED_SYSTEM_NAME";
+    public static final String CREATED_SYSTEM_SHORT_NAME = "CREATED_SYSTEM_SHORT_NAME";
 
     public static final String DEFAULT_APP_URL = "https://riha-browser-ik.ci.kit";
 
