@@ -30,6 +30,9 @@ public class InfosystemsPage extends BasePage {
     @FindBy(id = "info-systems-table")
     private WebElement infosystemsTable;
 
+    @FindBy(xpath = "//input[@id='search-text-input']")
+    private WebElement searchBarInput;
+
     public InfosystemsPage(ScenarioContext scenarioContext) {
         super(scenarioContext);
         PageFactory.initElements(driver, this);
@@ -93,5 +96,11 @@ public class InfosystemsPage extends BasePage {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, infosystemsTable, "info-systems-table");
         wait.sleep(TABLE_SORT_TIMEOUT);
     }
+
+    public String getInputSearchTerm() {
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, searchBarInput, "searchBarInput");
+        return this.searchBarInput.getAttribute("value");
+    }
+
 
 }

@@ -30,6 +30,18 @@ public class InfosystemManagementSteps {
         myInfosystemsPage.goToCreateNewInfosystemPage();
     }
 
+
+    @And("MyInfosystemsPage: user clicks 'Minu arutelud'")
+    public void userClicksMyFeedbackDiscussions() {
+        myInfosystemsPage.goToMyDiscussionsInfosystemPage();
+    }
+
+    @And("MyInfosystemsPage: user clicks 'Minu organisatsioon'")
+    public void userClicksMyOrganization() {
+        myInfosystemsPage.goToMyOrganizationInfosystemPage();
+    }
+
+
     @And("MyInfosystemsPage: user enters name as {string} short name as {string} increasing last number and purpose as {string}")
     public void userEntersNameShortNameAndPurpose(String namePrefix, String shortNamePrefix, String purpose) {
         myInfosystemsPage.enterNameShortNameAndPurpose(namePrefix, shortNamePrefix, purpose);
@@ -38,13 +50,18 @@ public class InfosystemManagementSteps {
     @Given("MyInfosystemsPage: user knows the number of last created infosystem with prefix {string}")
     public void userKnowsTheNameOfLastCreatedInfosystem(String namePrefix) {
         myInfosystemsPage.enterSearchText(namePrefix);
-        myInfosystemsPage.sortByShortNameDesc();
+        myInfosystemsPage.sortByLastModifiedDesc();
         myInfosystemsPage.saveFirstFoundInfosystemShortNameToScenarioContext();
     }
 
     @Given("MyInfosystemsPage: user select {string} infosystem")
     public void userSelectsInfosystem(String shortName) {
         myInfosystemsPage.enterSearchText(shortName);
+        myInfosystemsPage.selectFirstFoundInfosystem();
+    }
+
+    @Given("MyInfosystemsPage: user select first found infosystem")
+    public void userSelectsFirstFoundInfosystem() {
         myInfosystemsPage.selectFirstFoundInfosystem();
     }
 
