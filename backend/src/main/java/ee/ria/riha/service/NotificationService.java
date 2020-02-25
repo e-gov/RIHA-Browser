@@ -129,9 +129,7 @@ public class NotificationService {
         IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
 
         InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
-        Set<String> participantsEmails = getIssueParticipantsEmails(issue.getId());
-        participantsEmails.addAll(infoSystem.getContactsEmails());
-
+        Set<String> participantsEmails = new HashSet<>(infoSystem.getContactsEmails());
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
         notificationModel.setBcc(participantsEmails.toArray(new String[0]));
