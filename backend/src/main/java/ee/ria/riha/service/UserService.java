@@ -1,25 +1,19 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.authentication.RihaUserDetails;
-import ee.ria.riha.domain.LdapRepository;
-import ee.ria.riha.domain.model.LdapUser;
-import ee.ria.riha.web.model.UserDetailsModel;
+import ee.ria.riha.authentication.*;
+import ee.ria.riha.domain.*;
+import ee.ria.riha.domain.model.*;
+import ee.ria.riha.web.model.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
+import org.springframework.stereotype.*;
+import org.springframework.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
+import javax.mail.internet.*;
+import javax.naming.ldap.*;
 
 /**
  * @author Valentin Suhnjov
@@ -74,7 +68,10 @@ public class UserService {
      * @return set of unique approvers emails, excluding null values
      */
     public Set<String> getApproversEmailsByOrganization(String organizationCode) {
-        return getApproversEmails(ldapRepository.getApproversByOrganization(organizationCode));
+        return getApproversEmails(
+                organizationCode == null
+                        ? ldapRepository.getAllApprovers()
+                        : ldapRepository.getApproversByOrganization(organizationCode));
     }
 
     private Set<String> getApproversEmails(List<LdapUser> approvers) {
