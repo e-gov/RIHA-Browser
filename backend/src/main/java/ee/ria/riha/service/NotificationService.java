@@ -1,22 +1,18 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.conf.ApplicationProperties;
-import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.domain.model.Issue;
-import ee.ria.riha.domain.model.IssueComment;
-import ee.ria.riha.domain.model.IssueEvent;
-import ee.ria.riha.service.notification.EmailNotificationSenderService;
+import ee.ria.riha.conf.*;
+import ee.ria.riha.domain.model.*;
+import ee.ria.riha.service.notification.*;
 import ee.ria.riha.service.notification.model.*;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+import lombok.*;
+import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+import org.springframework.util.*;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
+import static ee.ria.riha.service.SecurityContextUtil.*;
 
 @Service
 @Getter
@@ -133,9 +129,7 @@ public class NotificationService {
         IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
 
         InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
-        Set<String> participantsEmails = getIssueParticipantsEmails(issue.getId());
-        participantsEmails.addAll(infoSystem.getContactsEmails());
-
+        Set<String> participantsEmails = new HashSet<>(infoSystem.getContactsEmails());
         notificationModel.setFrom(getDefaultNotificationSender());
         notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
         notificationModel.setBcc(participantsEmails.toArray(new String[0]));
@@ -163,7 +157,7 @@ public class NotificationService {
             return;
         }
 
-        Set<String> approversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
+        Set<String> approversEmails = userService.getApproversEmailsByOrganization(null);
 
         NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
