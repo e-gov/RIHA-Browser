@@ -11,7 +11,7 @@
     <parent>
         <artifactId>browser</artifactId>
         <groupId>ee.ria.riha</groupId>
-        <version>7.6</version>
+        <version>7.6.3</version>
     </parent>
 
     <properties>
