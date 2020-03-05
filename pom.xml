@@ -5,7 +5,7 @@
 
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.6.2</version>
+    <version>7.6.3</version>
     <packaging>pom</packaging>
 
     <name>RIHA-Browser</name>
