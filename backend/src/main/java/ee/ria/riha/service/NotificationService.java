@@ -144,7 +144,7 @@ public class NotificationService {
 
         notificationModel.setInfoSystem(InfoSystemDataModel.builder()
                 .fullName(infoSystem.getFullName())
-                .shortName(infoSystem.getShortName())
+                .uuid(infoSystem.getUuid())
                 .build());
 
         notificationModel.setCommented(commented);
