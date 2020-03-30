@@ -83,7 +83,6 @@ public class NotificationService {
         notificationModel.setBcc(issueParticipantsEmails.toArray(new String[issueParticipantsEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
         notificationModel.setBaseUrl(getBaseUrl());
         notificationModel.setIssueId(issueId);
         notificationModel.setIssueTitle(issue.getTitle());
@@ -116,7 +115,6 @@ public class NotificationService {
         notificationModel.setBcc(to.toArray(new String[to.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
         notificationModel.setBaseUrl(getBaseUrl());
 
         emailNotificationSenderService.sendNotification(notificationModel);
@@ -144,7 +142,7 @@ public class NotificationService {
 
         notificationModel.setInfoSystem(InfoSystemDataModel.builder()
                 .fullName(infoSystem.getFullName())
-                .uuid(infoSystem.getUuid())
+                .shortName(infoSystem.getShortName())
                 .build());
 
         notificationModel.setCommented(commented);
@@ -167,7 +165,6 @@ public class NotificationService {
         notificationModel.setBcc(approversEmails.toArray(new String[approversEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
 
         notificationModel.setIssue(IssueDataModel.builder()
                 .id(issue.getId())
