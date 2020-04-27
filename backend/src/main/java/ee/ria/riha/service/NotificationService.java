@@ -166,6 +166,7 @@ public class NotificationService {
         notificationModel.setBcc(approversEmails.toArray(new String[approversEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
 
         notificationModel.setIssue(IssueDataModel.builder()
                 .id(issue.getId())
