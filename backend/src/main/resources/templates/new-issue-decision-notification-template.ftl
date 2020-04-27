@@ -3,7 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
-    <p>Infosüsteemi <a href="${baseUrl}/Infosüsteemid/Vaata/${infoSystem.uuid}">${name}</a> arutelusse "<a href="${baseUrl}/Infosüsteemid/Vaata/${infoSystem.uuid}/Arutelu/${issueId?c}">${issueTitle}</a>" on lisatud uus otsus:</p>
+    <p>Infosüsteemi <a href="${baseUrl}/Infosüsteemid/Vaata/${uuid}">${name}</a> arutelusse "<a href="${baseUrl}/Infosüsteemid/Vaata/${uuid}/Arutelu/${issueId?c}">${issueTitle}</a>" on lisatud uus otsus:</p>
     <p>${decision}<#if comment != ""> (<i>"${comment}"</i>)</#if> - ${author}</p>
     <p>Sisene RIHAsse, et arutelu lähemalt vaadata.</p>
     <p>----</p>
