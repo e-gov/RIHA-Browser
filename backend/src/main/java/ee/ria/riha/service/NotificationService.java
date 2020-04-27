@@ -88,6 +88,7 @@ public class NotificationService {
         notificationModel.setIssueTitle(issue.getTitle());
         notificationModel.setComment(comment);
         notificationModel.setAuthorName(organization);
+        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
         return notificationModel;
     }
 
