@@ -14,5 +14,5 @@ public class NewIssueToSystemContactsEmailNotification extends SimpleHtmlEmailNo
     private String infoSystemFullName;
     private String infoSystemShortName;
     private String baseUrl;
-    private String infoSystemUuid;
+    private UUID infoSystemUuid;
 }
