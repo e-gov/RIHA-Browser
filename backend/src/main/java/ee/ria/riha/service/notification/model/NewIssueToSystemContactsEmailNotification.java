@@ -12,7 +12,6 @@ import java.util.UUID;
 public class NewIssueToSystemContactsEmailNotification extends SimpleHtmlEmailNotification {
 
     private String infoSystemFullName;
-    private String infoSystemShortName;
     private String baseUrl;
     private UUID infoSystemUuid;
 }
