@@ -115,6 +115,7 @@ public class NotificationService {
         notificationModel.setBcc(to.toArray(new String[to.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
         notificationModel.setBaseUrl(getBaseUrl());
 
         emailNotificationSenderService.sendNotification(notificationModel);
