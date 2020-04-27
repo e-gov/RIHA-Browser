@@ -7,7 +7,7 @@
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.803.12.tgz#0dac8d648ab6cd7f6aeb2dd6a0f919c9b5cb7c5f"
   integrity sha512-BUYnXz0btv0kJ4xfQOGd8yMaNkgv8PPyZl0EfuH5LJ0OC94gNrPuLvKQC14aIan19T8Z36R6sErPl7umLgWJDQ==
   dependencies:
-    "@angular-devkit/core" "8.3.12"a
+    "@angular-devkit/core" "8.3.12"
     rxjs "6.4.0"
 
 "@angular-devkit/build-angular@~0.803.10":
