@@ -42,7 +42,6 @@
     "ngx-toastr": "^11.1.0",
     "ngx-ui-switch": "^8.2.0",
     "poor-mans-proxy": "1.0.0",
-    "popper.js": "^1.14.7",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.0"
