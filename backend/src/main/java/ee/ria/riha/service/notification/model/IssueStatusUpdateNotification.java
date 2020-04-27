@@ -2,6 +2,7 @@ package ee.ria.riha.service.notification.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.UUID;
 
 /**
  * Notification model reflecting issue update event.
@@ -29,5 +30,11 @@ public class IssueStatusUpdateNotification extends SimpleHtmlEmailNotification {
      * Application base URL for reference
      */
     private String baseUrl;
+  
+    /**
+     * Info system uuid that this issue is related to
+     */
+    private UUID infoSystemUuid;
+
 
 }
