@@ -58,6 +58,7 @@ public class NewIssueToApproversNotificationHandler extends IssueNotificationHan
         model.put("baseUrl", notification.getBaseUrl());
         model.put("name", notification.getInfoSystemFullName());
         model.put("shortName", notification.getInfoSystemShortName());
+        model.put("uuid", notification.getInfoSystemUuid());
         model.put("issue", notification.getIssue());
         return model;
     }

@@ -59,6 +59,7 @@ public class NewIssueDecisionNotificationHandler extends IssueNotificationHandle
 		model.put("author", notification.getAuthorName());
 		model.put("comment", notification.getComment());
 		model.put("decision", messageSource.getMessage(decisionCode, null, Locale.getDefault()));
+        model.put("uuid", notification.getInfoSystemUuid());
 		return model;
 	}
 }
