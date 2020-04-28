@@ -4,6 +4,8 @@ import ee.ria.riha.domain.model.IssueResolutionType;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.UUID;
+
 
 /**
  * Holds data for new issue decision email notification messages.
@@ -13,4 +15,5 @@ import lombok.Setter;
 public class NewIssueDecisionEmailNotification extends NewIssueCommentEmailNotification {
 
 	private IssueResolutionType decision;
+    private UUID infoSystemUuid;
 }
