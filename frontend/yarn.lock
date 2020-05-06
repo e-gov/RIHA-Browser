@@ -926,9 +926,9 @@
     "@types/node" "*"
 
 "@types/jasmine@^3.4.0":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.4.4.tgz#be3fbd73e72725edb44e6f7f509cd52912d1550c"
-  integrity sha512-+/sHcTPyDS1JQacDRRRWb+vNrjBwnD+cKvTaWlxlJ/uOOFvzCkjOwNaqVjYMLfsjzNi0WtDH9RyReDXPG1Cdug==
+  version "3.5.10"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.5.10.tgz#a1a41012012b5da9d4b205ba9eba58f6cce2ab7b"
+  integrity sha512-3F8qpwBAiVc5+HPJeXJpbrl+XjawGmciN5LgiO7Gv1pl1RHtjoMNqZpqEksaPJW05ViKe8snYInRs6xB25Xdew==
 
 "@types/minimatch@*":
   version "3.0.3"
