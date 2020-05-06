@@ -39,6 +39,7 @@ public class IssueStatusUpdateNotificationHandler extends IssueNotificationHandl
         model.put("infoSystem", notification.getInfoSystem());
         model.put("commented", notification.isCommented());
         model.put("baseUrl", notification.getBaseUrl());
+        model.put("uuid", notification.getInfoSystemUuid());
         return model;
     }
 }
