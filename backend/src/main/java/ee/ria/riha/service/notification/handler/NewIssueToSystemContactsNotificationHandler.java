@@ -37,6 +37,7 @@ public class NewIssueToSystemContactsNotificationHandler extends IssueNotificati
         model.put("baseUrl", notification.getBaseUrl());
         model.put("name", notification.getInfoSystemFullName());
         model.put("shortName", notification.getInfoSystemShortName());
+        model.put("uuid", notification.getInfoSystemUuid());
         return model;
     }
 }

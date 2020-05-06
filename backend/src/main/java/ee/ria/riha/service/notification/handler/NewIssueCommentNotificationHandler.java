@@ -41,6 +41,7 @@ public class NewIssueCommentNotificationHandler extends IssueNotificationHandler
         model.put("issueTitle", notification.getIssueTitle());
         model.put("author", notification.getAuthorName());
         model.put("comment", notification.getComment());
+        model.put("uuid", notification.getInfoSystemUuid());
         return model;
     }
 }
