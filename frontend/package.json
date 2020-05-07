@@ -26,7 +26,7 @@
     "@angular/platform-server": "^8.2.11",
     "@angular/router": "^8.2.11",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
-    "@ngx-translate/core": "^11.0",
+    "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "^4.0",
     "angular-in-memory-web-api": "^0.9.0",
     "bootstrap-4": "^4.0.0",
