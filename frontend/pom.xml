@@ -10,7 +10,7 @@
   <parent>
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.6.5</version>
+    <version>7.6.6</version>
   </parent>
 
 	<properties>
@@ -113,7 +113,7 @@
 				</executions>
 				<configuration>
 					<nodeVersion>v10.16.3</nodeVersion>
-					<yarnVersion>v1.19.1</yarnVersion>
+					<yarnVersion>v1.22.4</yarnVersion>
 					<npmVersion>4.4.4</npmVersion>
 					<workingDirectory>.</workingDirectory>
 				</configuration>
