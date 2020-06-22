@@ -1047,6 +1047,7 @@ p {
     &.user-multiline-text {
       margin-bottom: 0;
       white-space: pre-line;
+      word-break: break-word;
       .user-link {
         text-decoration: underline;
         border-width: 0px !important;
