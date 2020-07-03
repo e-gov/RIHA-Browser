@@ -6,6 +6,7 @@ export const environment = {
     classifiersUrl: '/api/v1/environment/classifiers',
     systemsUrl: '/api/v1/systems',
     issuesUrl: '/api/v1/issues',
-    myOrganizationUrl: '/api/v1/my/organization/users'
+    myOrganizationUrl: '/api/v1/my/organization/users',
+    systemFeedbackUrl: '/api/v1/system-feedback'
   }
 };
