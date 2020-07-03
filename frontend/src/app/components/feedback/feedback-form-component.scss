@@ -21,6 +21,11 @@
   font-size: 12px;
 }
 
+.feedback-form__characters-count-invalid {
+  color: $danger-dark;
+  font-size: 12px;
+}
+
 .feedback-form__grade-mark {
   margin-left: 12px;
   margin-right: 12px;

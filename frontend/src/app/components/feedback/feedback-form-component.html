@@ -30,8 +30,10 @@
                   [maxLength]="4000"
                   placeholder="Palun kommenteeri oma hinnangut. NB! Palume siia isikuandmeid mitte sisestada. Kui sul on küsimus, millele soovid vastust, kirjuta palun help@ria.ee"
                   rows="3" [(ngModel)]="systemFeedback.comment"></textarea>
-        <span class="text float-right feedback-form__characters-count">Sümboleid: {{systemFeedback.comment.length}}
-          /4000</span>
+        <span class="text float-right "
+              [ngClass]="{ 'feedback-form__characters-count' : systemFeedback.comment.length < 4000, 'feedback-form__characters-count-invalid': systemFeedback.comment.length >= 4000 }" >
+          Sümboleid: {{systemFeedback.comment.length}} / 4000
+        </span>
       </div>
     </div>
     <div class="col-12 mb-3 text-center">
@@ -41,11 +43,9 @@
           'feedback-form__invalid-submit--button': submissionError && validateInput(), 'btn-primary': !validateInput()}"
               (click)="submitFeedbackForm()">Edasta tagasiside
       </button>
-      <p class="feedback-form__invalid-submit--text"
-         *ngIf="submissionError && systemFeedback.grade == ''">Hinnang valimata!
-        Tagasiside edastamiseks
-        vali
-        palun hinnang</p>
+      <p class="feedback-form__invalid-submit--text" *ngIf="submissionError && systemFeedback.grade == ''">
+        Hinnang valimata! Tagasiside edastamiseks vali palun hinnang.
+      </p>
     </div>
   </div>
 </section>
