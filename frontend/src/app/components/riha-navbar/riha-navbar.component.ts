@@ -50,7 +50,7 @@ export class RihaNavbarComponent implements OnInit, AfterContentChecked {
     this.environmentService.doLogout().subscribe(res => {
       this.environmentService.loadEnvironmentData().subscribe(env => {
         this.sessionHelperService.refreshSessionTimer();
-        this.router.navigate(['/']);
+        this.router.navigate(['/Tagasiside/logout']);
       });
     });
   }

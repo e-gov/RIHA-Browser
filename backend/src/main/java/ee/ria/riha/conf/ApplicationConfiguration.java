@@ -1,39 +1,70 @@
 package ee.ria.riha.conf;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.github.fge.jackson.JsonLoader;
-import ee.ria.riha.domain.model.NationalHolidays;
-import ee.ria.riha.service.JsonValidationService;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.task.TaskExecutorBuilder;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jsr310.*;
+import com.github.fge.jackson.*;
+import ee.ria.riha.domain.model.*;
+import ee.ria.riha.service.*;
+import io.swagger.v3.oas.models.*;
+import io.swagger.v3.oas.models.info.*;
+import lombok.extern.slf4j.*;
+import org.apache.http.impl.client.*;
+import org.apache.http.ssl.*;
+import org.springframework.boot.context.properties.*;
+import org.springframework.boot.task.*;
+import org.springframework.boot.web.client.*;
+import org.springframework.context.annotation.*;
+import org.springframework.core.task.*;
+import org.springframework.http.client.*;
+import org.springframework.scheduling.annotation.*;
+import org.springframework.web.client.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.*;
+import java.net.*;
+import javax.net.ssl.*;
 
 /**
  * @author Valentin Suhnjov
  */
 @Configuration
-@EnableConfigurationProperties(ApplicationProperties.class)
+@EnableConfigurationProperties({ApplicationProperties.class, FeedbackServiceConnectionProperties.class})
 @EnableScheduling
 @EnableAsync
+@Slf4j
 public class ApplicationConfiguration {
+
+    public static final String FEEDBACK_SERVICE = "feedbackService";
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder.build();
+    }
+
+    @Bean(FEEDBACK_SERVICE)
+    public RestTemplate feedbackRestTemplate(RestTemplateBuilder restTemplateBuilder, FeedbackServiceConnectionProperties feedbackServiceConnectionProperties) {
+
+        SSLContext context;
+        try {
+            context = SSLContextBuilder.create()
+                    .loadTrustMaterial(
+                            feedbackServiceConnectionProperties.getTrustStore(),
+                            feedbackServiceConnectionProperties.getTrustStorePassword())
+                    .loadKeyMaterial(
+                            feedbackServiceConnectionProperties.getKeyStore(),
+                            feedbackServiceConnectionProperties.getKeyStorePassword(),
+                            feedbackServiceConnectionProperties.getKeyStoreKeyPassword(),
+                            (map, socket) -> feedbackServiceConnectionProperties.getKeyStoreAlias()
+                    )
+                    .setProtocol(feedbackServiceConnectionProperties.getProtocol())
+                    .build();
+        } catch (Exception fatal) {
+            log.error("unable to create feedback service connection factory", fatal);
+            throw new IllegalStateException(fatal);
+        }
+
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().setSSLContext(context).build());
+
+        return restTemplateBuilder.requestFactory(() -> factory::createRequest).build();
     }
 
     @Bean
