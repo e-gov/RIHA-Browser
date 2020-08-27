@@ -106,7 +106,7 @@ export class EnvironmentService {
   }
 
   public onAppStart(): Promise<any> {
-    const promise = this.loadEnvironmentData().toPromise();
+    const promise = this.loadEnvironmentDataProperly();
     promise.then(env => {
       this.runTrackingScripts(new Environment(env));
     });
@@ -127,6 +127,11 @@ export class EnvironmentService {
     });
 
     return observable;
+  }
+
+  public async loadEnvironmentDataProperly(): Promise<Environment> {
+    this.globalEnvironment = new Environment(await this.http.get<Environment>(this.environmentUrl).toPromise());
+    return this.globalEnvironment;
   }
 
   public doLogout(): Observable<any> {
