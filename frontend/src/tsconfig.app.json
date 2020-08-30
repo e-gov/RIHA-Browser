@@ -5,6 +5,13 @@
     "baseUrl": "",
     "types": []
   },
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

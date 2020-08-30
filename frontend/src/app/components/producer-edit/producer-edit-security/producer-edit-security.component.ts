@@ -17,7 +17,7 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('securityForm', null) formObject: NgForm;
+  @ViewChild('securityForm') formObject: NgForm;
 
   @Input() system: System;
   security: any;
