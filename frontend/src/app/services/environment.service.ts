@@ -16,7 +16,7 @@ export class EnvironmentService {
   private userInfoUrl = environment.api.userInfoUrl;
   private classifiersUrl = environment.api.classifiersUrl;
 
-  public globalEnvironment: any;
+  public globalEnvironment = new Environment({});
 
   private lastVisitedLocations = [null, null];
 
