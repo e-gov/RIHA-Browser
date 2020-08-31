@@ -8,8 +8,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
-import {CustomFormsModule} from 'ng2-validation';
 import {UiSwitchModule} from 'ngx-ui-switch';
+import {CustomFormsModule} from 'ngx-custom-validators';
 import {HttpClient, HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 
 import missingTranslationHandler from './app.missingTranslation';
@@ -208,23 +208,7 @@ const routes: Routes = [
     HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN'}),
     NgbModule
   ],
-  entryComponents: [
-    ProducerEditObjectsComponent,
-    ProducerEditDocumentsComponent,
-    ProducerEditLegislationsComponent,
-    ApproverAddIssueComponent,
-    ApproverIssueDetailsComponent,
-    ActiveOrganizationChooserComponent,
-    NoOrganizationModalComponent,
-    ProducerEditContactsComponent,
-    InfoModalComponent,
-    WarningModalComponent,
-    ProducerEditRelationsComponent,
-    ProducerEditSecurityComponent,
-    ProducerEditStandardRealisationsComponent,
-    LoginLinkComponent,
-    ProducerSearchFilterComponent
-  ],
+  entryComponents: [ ],
   bootstrap: [AppComponent],
   providers: [
     SystemsService,
