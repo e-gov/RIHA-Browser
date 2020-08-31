@@ -25,7 +25,7 @@ export class CardDeckComponent implements OnInit {
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
-            "hash":"https://abi.riha.ee/kataloogi-kasutamine",
+            "hash":"https://abi.ria.ee/riha/infootsingud-riha-st/riha-kataloogi-kasutamine",
             "type": "external"
           }],
           "buttons": [{
@@ -49,7 +49,7 @@ export class CardDeckComponent implements OnInit {
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
-            "hash": "https://abi.riha.ee/RIHAs-kirjeldamine",
+            "hash": "https://abi.ria.ee/riha/kirjeldamine",
             "type": "external"
           }],
           "buttons": [{
@@ -62,23 +62,24 @@ export class CardDeckComponent implements OnInit {
         "iconType": "times",
         "title": "X-teega liitumine",
         "content": [
-          "Teistest infosüsteemidest andmete saamiseks või sinna sisestamiseks tuleb kasutada X-teed. See tagab koosvõimelise andmevahetuse kõikide riigiasutustega.",
+          "Riigi infosüsteemidega turvaliseks ja koosvõimeliseks andmevahetuseks on võimalik kasutada X-tee andmevahetuskihti.",
           [
-            "X-teega liitumine:",
-            "avab sulle päringud teistesse infosüsteemidesse",
-            "annab teistele turvalise ligipääsu sinu andmetele",
-            "võimaldab sul keskenduda infosüsteemi funktsionaalsuse ja andmekvaliteedile ning jätta andmevahetus X-tee hooleks"
+            "X-teega liitumine võimaldab:",
+            "keskenduda infosüsteemi funktsionaalsusele ning jätta andmevahetuse turvalisus X-tee hooleks",
+            "kasutada riigi infosüsteemide teenuseid oma äriprotsesside optimeerimiseks",
+            "pakkuda teistele turvalist ligipääsu enda andmetele"
           ]
         ],
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
-            "hash": "https://abi.riha.ee/X-tee-alamsysteem",
+            "hash": "https://abi.ria.ee/xtee/et/x-tee-juhend/x-teega-liitumine",
             "type": "external"
           }],
           "buttons": [{
             "label": "Alustan",
-            "link": "/Kirjelda/Uus"
+            "link": "https://www.x-tee.ee",
+            "type": "external"
           }]
         }
       }
