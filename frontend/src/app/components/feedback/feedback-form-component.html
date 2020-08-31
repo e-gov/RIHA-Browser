@@ -1,0 +1,52 @@
+<app-page-header [subHeader]="'Sinu rahulolu on meile oluline - palun edasta oma hinnang!'"
+                 [text]="'Tagasiside'"></app-page-header>
+<section class="col card p-3">
+  <app-alert *ngIf="isSubmitted" [conf]="{
+          type: getNotificationClass(),
+          heading: getNotificationHeader()
+        }"></app-alert>
+  <div class="row">
+    <div class="col-12 mt-3">
+      <h3 class="text text-center">Mõeldes viimase 3 kuu RIHA kasutamise peale, kuidas hindad oma
+        kogemust?</h3>
+    </div>
+    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center">
+      <div class="d-inline-block" *ngFor="let grade of grades">
+        <input class="feedback-form__grade-mark" id="grade-{{grade}}" [value]="grade" type="radio" name="feedback__grade"
+               [(ngModel)]="systemFeedback.grade"/>
+        <br/>
+        <label class="feedback-form__grade-mark" for="grade-{{grade}}">
+          {{grade}}
+        </label>
+      </div>
+      <div class="d-xs-inline-block d-sm-inline">
+        <p class="d-inline-block float-left">Väga Halb</p>
+        <p class="d-inline-block float-right">Suurepärane</p>
+      </div>
+    </div>
+    <div class="col-12 my-3">
+      <div class="col-12 col-md-10 mx-auto">
+        <textarea class="mx-auto my-2 form-control feedback-form__comment"
+                  [maxLength]="4000"
+                  placeholder="Palun kommenteeri oma hinnangut. NB! Palume siia isikuandmeid mitte sisestada. Kui sul on küsimus, millele soovid vastust, kirjuta palun help@ria.ee"
+                  rows="3" [(ngModel)]="systemFeedback.comment"></textarea>
+        <span class="text float-right "
+              [ngClass]="{ 'feedback-form__characters-count' : systemFeedback.comment.length < 4000, 'feedback-form__characters-count-invalid': systemFeedback.comment.length >= 4000 }" >
+          Sümboleid: {{systemFeedback.comment.length}} / 4000
+        </span>
+      </div>
+    </div>
+    <div class="col-12 mb-3 text-center">
+      <button class="btn btn-lg btn-01 mb-2"
+              [disabled]="isSubmitted"
+              [ngClass]="{' btn-secondary ': validateInput(),
+          'feedback-form__invalid-submit--button': submissionError && validateInput(), 'btn-primary': !validateInput()}"
+              (click)="submitFeedbackForm()">Edasta tagasiside
+      </button>
+      <p class="feedback-form__invalid-submit--text" *ngIf="submissionError && systemFeedback.grade == ''">
+        Hinnang valimata! Tagasiside edastamiseks vali palun hinnang.
+      </p>
+    </div>
+  </div>
+</section>
+

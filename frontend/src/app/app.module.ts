@@ -23,6 +23,7 @@ import {EnvironmentService} from './services/environment.service';
 import {GeneralHelperService} from './services/general-helper.service';
 import {SessionHelperService} from './services/session-helper.service';
 import {ModalHelperService} from './services/modal-helper.service';
+import {SystemFeedbackService} from "./services/system-feedback.service";
 //components
 import {CardDeckComponent} from './components/card-deck/card-deck.component';
 import {ProducerListComponent} from './components/producer-list/producer-list.component';
@@ -71,6 +72,7 @@ import {ApproverSystemCheckComponent} from './components/approver-system-check/a
 import {CheckResultRowComponent} from './components/approver-system-check/check-result-row/check-result-row.component';
 import {ProducerDashboardComponent} from './components/producer-dashboard/producer-dashboard.component';
 import {BrowserFilesListComponent} from './components/browser-list/browser-files-list/browser-files-list.component';
+import {FeedbackFormComponent} from './components/feedback/feedback-form-component';
 //pipes
 import {DatemPipe} from './pipes/datem.pipe';
 import {LinkifyPipe} from './pipes/linkify.pipe';
@@ -86,37 +88,43 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function onApplicationStart(environmentService: EnvironmentService){
+export function onApplicationStart(environmentService: EnvironmentService) {
   return () => environmentService.onAppStart();
 }
 
-export function loadClassifiers(environmentService: EnvironmentService){
+export function loadClassifiers(environmentService: EnvironmentService) {
   return () => environmentService.loadClassifiers();
 }
 
 const routes: Routes = [
-  { path: '', redirectTo: 'Avaleht', pathMatch: 'full' },
-  { path: 'Avaleht', component: FrontPageComponent },
-  { path: 'Home', component: FrontPageComponent },
-  { path: 'Login', component: LoginFormComponent },
-  { path: 'Infosüsteemid', component: BrowserListComponent },
-  { path: 'MinuInfosüsteemid/Arutelud', component: ProducerDashboardComponent },
-  { path: 'Andmeobjektid', component: BrowserFilesListComponent },
-  { path: 'Systems', component: BrowserListComponent },
-  { path: 'Kirjelda', component: ProducerListComponent },
-  { path: 'Describe', component: ProducerListComponent },
-  { path: 'Infosüsteemid/Vaata/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard] },
-  { path: 'Infosüsteemid/Vaata/:reference/Arutelu/:issue_id', component: ProducerDetailsComponent },
-  { path: 'Systems/Vaata/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard]  },
-  { path: 'Kirjelda/Vaata/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard] },
-  { path: 'Describe/View/:reference', component: ProducerDetailsComponent,canDeactivate: [CanDeactivateModalGuard]  },
-  { path: 'Kirjelda/Muuda/:reference', component: ProducerEditComponent },
-  { path: 'Describe/Edit/:reference', component: ProducerEditComponent },
-  { path: 'Kirjelda/Uus', component: ProducerAddComponent },
-  { path: 'Describe/New', component: ProducerAddComponent },
-  { path: 'Hinda', component: ApproverDashboardComponent },
-  { path: 'Minu/Organisatsioon', component: ProducerOrganizationComponent },
-  { path: '**', component: PageNotFoundComponent }
+  {path: '', redirectTo: 'Avaleht', pathMatch: 'full'},
+  {path: 'Avaleht', component: FrontPageComponent},
+  {path: 'Home', component: FrontPageComponent},
+  {path: 'Login', component: LoginFormComponent},
+  {path: 'Infosüsteemid', component: BrowserListComponent},
+  {path: 'MinuInfosüsteemid/Arutelud', component: ProducerDashboardComponent},
+  {path: 'Andmeobjektid', component: BrowserFilesListComponent},
+  {path: 'Systems', component: BrowserListComponent},
+  {path: 'Kirjelda', component: ProducerListComponent},
+  {path: 'Describe', component: ProducerListComponent},
+  {
+    path: 'Infosüsteemid/Vaata/:reference',
+    component: ProducerDetailsComponent,
+    canDeactivate: [CanDeactivateModalGuard]
+  },
+  {path: 'Infosüsteemid/Vaata/:reference/Arutelu/:issue_id', component: ProducerDetailsComponent},
+  {path: 'Systems/Vaata/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard]},
+  {path: 'Kirjelda/Vaata/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard]},
+  {path: 'Describe/View/:reference', component: ProducerDetailsComponent, canDeactivate: [CanDeactivateModalGuard]},
+  {path: 'Kirjelda/Muuda/:reference', component: ProducerEditComponent},
+  {path: 'Describe/Edit/:reference', component: ProducerEditComponent},
+  {path: 'Kirjelda/Uus', component: ProducerAddComponent},
+  {path: 'Describe/New', component: ProducerAddComponent},
+  {path: 'Hinda', component: ApproverDashboardComponent},
+  {path: 'Minu/Organisatsioon', component: ProducerOrganizationComponent},
+  {path: 'Tagasiside', component: FeedbackFormComponent},
+  {path: 'Tagasiside/:logout', component: FeedbackFormComponent},
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({
@@ -176,7 +184,8 @@ const routes: Routes = [
     ProducerEditStandardRealisationsComponent,
     LoginLinkComponent,
     ProducerSearchFilterComponent,
-    ProducerOrganizationComponent
+    ProducerOrganizationComponent,
+    FeedbackFormComponent
   ],
   imports: [
     BrowserModule,
@@ -186,7 +195,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     CustomFormsModule,
     RouterModule.forRoot(routes),
-    UiSwitchModule ,
+    UiSwitchModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
       missingTranslationHandler,
@@ -224,11 +233,13 @@ const routes: Routes = [
     GeneralHelperService,
     SessionHelperService,
     ModalHelperService,
-    { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true },
-    { provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true },
+    SystemFeedbackService,
+    {provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true},
+    {provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true},
     httpInterceptorProviders,
     CanDeactivateModalGuard,
   ]
 })
 
-export class AppModule {}
+export class AppModule {
+}
