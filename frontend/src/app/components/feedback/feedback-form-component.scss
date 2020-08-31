@@ -1,0 +1,40 @@
+@import "src/styles/vars";
+
+.feedback-form__comment {
+  resize: none;
+  height: 100px;
+}
+
+
+.feedback-form__invalid-submit--text {
+  color: $danger-dark;
+}
+
+.feedback-form__invalid-submit--button {
+  border-color: $danger-dark;
+  border-width: 3px;
+}
+
+
+.feedback-form__characters-count {
+  color: $grey-dark2;
+  font-size: 12px;
+}
+
+.feedback-form__characters-count-invalid {
+  color: $danger-dark;
+  font-size: 12px;
+}
+
+.feedback-form__grade-mark {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+@media (max-width: 560px) {
+  .feedback-form__grade-mark {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+

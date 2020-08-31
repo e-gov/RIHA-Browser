@@ -7,6 +7,6 @@
     <p><i>"${comment}"</i> - ${author}</p>
     <p>Sisene RIHAsse, et arutelu lähemalt vaadata.</p>
     <p>----</p>
-    <p>See on automaatne kiri RIHA rakendusest. Palun ära vasta sellele. Küsimuste korral saada kiri <a href="mailto:help@ria.ee">RIA kasutajatoele</a>.</p>
+    <p>See on automaatne kiri RIHA rakendusest. Palun ära vasta sellele. Küsimuste korral tutvu <a href="https://abi.ria.ee/riha">RIHA abikeskusega</a> või saada kiri <a href="mailto:help@ria.ee">kasutajatoele</a></p>
 </body>
 </html>
