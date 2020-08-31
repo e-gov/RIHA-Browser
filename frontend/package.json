@@ -38,7 +38,7 @@
     "linkifyjs": "~2.1.5",
     "lodash": "^4.17.19",
     "moment": "2.25.3",
-    "ng2-validation": "4.2.0",
+    "ngx-custom-validators": "^8.0.0",
     "ngx-chips": "^2.1.0",
     "ngx-toastr": "11.3.3",
     "ngx-ui-switch": "^8.2.0",
