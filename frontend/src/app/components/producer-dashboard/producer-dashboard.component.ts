@@ -1,9 +1,9 @@
-import { Component, OnInit, DoCheck, KeyValueDiffers } from '@angular/core';
-import { UserMatrix } from '../../models/user-matrix';
-import { EnvironmentService } from '../../services/environment.service';
-import { GridData } from '../../models/grid-data';
-import { SystemsService } from '../../services/systems.service';
-import { GeneralHelperService } from '../../services/general-helper.service';
+import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
+import {UserMatrix} from '../../models/user-matrix';
+import {EnvironmentService} from '../../services/environment.service';
+import {GridData} from '../../models/grid-data';
+import {SystemsService} from '../../services/systems.service';
+import {GeneralHelperService} from '../../services/general-helper.service';
 
 @Component({
   selector: 'app-producer-dashboard',
@@ -23,7 +23,7 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
   }
 
   private getOwnOpenIssues(){
-    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
+    if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected && this.environmentService.getActiveUser()) {
       this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData.sort).subscribe(res =>{
         this.gridData.updateData(res);
         this.loaded = true;
