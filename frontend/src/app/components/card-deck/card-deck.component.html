@@ -8,6 +8,8 @@
         <div class="card-text">
           <ng-container *ngFor="let item of card.content">
             <p *ngIf="item.type==='p'">{{ item.value }}</p>
+            <p><b>NB! X-teega liitumise tingimused on muutunud.</b><p>
+            <a href="abi.ria.ee">Loe lähemalt</a>
             <ng-container *ngIf="item.type==='list'">
               <p><strong>{{ item.title }}</strong></p>
               <ul *ngIf="item.items !==null">
