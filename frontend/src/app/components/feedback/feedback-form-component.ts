@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserMatrix} from "../../models/user-matrix";
 import {EnvironmentService} from "../../services/environment.service";
+import {GeneralHelperService} from '../../services/general-helper.service';
 import {SystemFeedback} from "../../models/system-feedback";
 import {SystemFeedbackService} from "../../services/system-feedback.service";
 import {ActivatedRoute} from '@angular/router';
@@ -22,6 +23,7 @@ export class FeedbackFormComponent implements OnInit {
   userMatrix: UserMatrix;
 
   constructor(private environmentService: EnvironmentService,
+              private generalHelperService: GeneralHelperService,
               private systemFeedbackService: SystemFeedbackService,
               private route: ActivatedRoute,
               private toastrService: ToastrService) {
@@ -31,7 +33,8 @@ export class FeedbackFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isRedirectedLogout = this.route.snapshot.params.logout != null;
+    this.generalHelperService.setRihaPageTitle('Tagasiside');
+    this.isRedirectedLogout = this.route.snapshot.params.logout != null;   
   }
 
   submitFeedbackForm() {
