@@ -113,7 +113,7 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
         && this.feedback.type != classifiers.issue_type.MODIFICATION_REQUEST.code
         && this.feedback.type != classifiers.issue_type.FINALIZATION_REQUEST.code
         && this.feedback.type != classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
-        ret = bHasApproverRole || this.activeUser.canEdit(this.system.getOwnerCode());
+        ret = bHasApproverRole || (this.activeUser && this.activeUser.canEdit(this.system.getOwnerCode()));
       }
     }
     return ret;
