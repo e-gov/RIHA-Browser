@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { System } from '../../../models/system';
-import { SystemsService } from '../../../services/systems.service';
-import { EnvironmentService, classifiers } from "../../../services/environment.service";
-import { WindowRefService } from '../../../services/window-ref.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {System} from '../../../models/system';
+import {SystemsService} from '../../../services/systems.service';
+import {classifiers, EnvironmentService} from "../../../services/environment.service";
+import {WindowRefService} from '../../../services/window-ref.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-producer-edit-general',
@@ -76,7 +76,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   }
 
   isLoggedIn(){
-    return this.environmentService.getActiveUser() != null;
+    return typeof this.environmentService.getActiveUser() !== 'undefined' && this.environmentService.getActiveUser() != null;
   }
 
   goBackToDetails(f){

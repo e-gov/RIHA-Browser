@@ -1,11 +1,11 @@
-import { Component, OnInit, KeyValueDiffers } from '@angular/core';
-import { SystemsService } from '../../../services/systems.service';
-import { ToastrService } from 'ngx-toastr';
-import { GridData } from '../../../models/grid-data';
-import { EnvironmentService, classifiers } from '../../../services/environment.service';
-import { GeneralHelperService } from '../../../services/general-helper.service';
+import {Component, KeyValueDiffers, OnInit} from '@angular/core';
+import {SystemsService} from '../../../services/systems.service';
+import {ToastrService} from 'ngx-toastr';
+import {GridData} from '../../../models/grid-data';
+import {classifiers, EnvironmentService} from '../../../services/environment.service';
+import {GeneralHelperService} from '../../../services/general-helper.service';
 import * as moment from 'moment';
-import { UserMatrix } from '../../../models/user-matrix';
+import {UserMatrix} from '../../../models/user-matrix';
 
 @Component({
   selector: 'app-systems-for-approval-list',
@@ -43,7 +43,7 @@ export class SystemsForApprovalListComponent implements OnInit {
           const eventsCount = ar.events.length;
           for (let i = 0; i < eventsCount; i++){
             const event = ar.events[i];
-            const activeOrganization = this.environmentService.getActiveUser().getActiveOrganization();
+            const activeOrganization = this.environmentService.getActiveUser() ? this.environmentService.getActiveUser().getActiveOrganization() : null;
             if (event.type == this.classifiers.event_type.DECISION.code && activeOrganization && activeOrganization.code == event.organizationCode){
               hasDecision = true;
               break;

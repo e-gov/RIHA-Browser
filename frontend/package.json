@@ -1,6 +1,6 @@
 {
   "name": "riha",
-  "version": "7.7.0",
+  "version": "7.7.2",
   "license": "MIT",
   "scripts": {
     "static": "static ../main/resources --port 8085",
@@ -37,9 +37,9 @@
     "jquery": "^3.5.1",
     "linkifyjs": "~2.1.5",
     "lodash": "^4.17.19",
-    "moment": "2.25.3",
-    "ngx-custom-validators": "^8.0.0",
+    "moment": "2.27.0",
     "ngx-chips": "^2.1.0",
+    "ngx-custom-validators": "^8.0.0",
     "ngx-toastr": "11.3.3",
     "ngx-ui-switch": "^8.2.0",
     "poor-mans-proxy": "1.0.0",
@@ -56,17 +56,17 @@
     "codelyzer": "^5.1.2",
     "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "5.0.2",
-    "karma": "5.0.4",
+    "karma": "5.2.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-cli": "~2.0.0",
-    "karma-coverage-istanbul-reporter": "3.0.2",
+    "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-jasmine": "3.1.1",
     "karma-jasmine-html-reporter": "^1.4.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "node-static": "^0.7.9",
     "protractor": "6.0.0-beta",
     "ts-node": "8.10.1",
-    "tslint": "6.1.2",
+    "tslint": "6.1.3",
     "typescript": "3.8.3"
   }
 }
