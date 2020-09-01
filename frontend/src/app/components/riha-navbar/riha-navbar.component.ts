@@ -18,7 +18,7 @@ export class RihaNavbarComponent implements OnInit, AfterContentChecked {
   public _dc: number = 0;
 
   isUserLoggedIn(): boolean {
-    return this.environmentService.getActiveUser() != null;
+    return typeof this.environmentService.getActiveUser() !== 'undefined' && this.environmentService.getActiveUser() != null;
   }
 
   getRand() {
@@ -67,22 +67,22 @@ export class RihaNavbarComponent implements OnInit, AfterContentChecked {
 
   isAllowedToChangeOrganization(): boolean {
     const user = this.environmentService.getActiveUser();
-    return user.getOrganizations().length > 1 || (user.getOrganizations().length == 1 && user.getActiveOrganization() == null);
+    return user && user.getOrganizations().length > 1 || (user.getOrganizations().length == 1 && user.getActiveOrganization() == null);
   }
 
   isNoOrganizationPresent(): boolean {
     const user = this.environmentService.getActiveUser();
-    return user.getOrganizations().length == 0;
+    return user && user.getOrganizations().length == 0;
   }
 
   noOrganizationSelected(): boolean {
     const user = this.environmentService.getActiveUser();
-    return user.getActiveOrganization() == null;
+    return user && user.getActiveOrganization() == null;
   }
 
   getUserText(): string {
     const user = this.environmentService.getActiveUser();
-    return user.getFullNameWithActiveOrganization();
+    return user && user.getFullNameWithActiveOrganization();
   }
 
   searchInfosystems(input) {

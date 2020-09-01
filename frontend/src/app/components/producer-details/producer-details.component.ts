@@ -65,7 +65,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck, CanDeactivateM
         break;
       }
       case 'contacts': {
-        ret = (this.system.hasContacts() && this.environmentService.getActiveUser() != null) || editable;
+        ret = (this.system.hasContacts() && typeof this.environmentService.getActiveUser() !== 'undefined' && this.environmentService.getActiveUser() != null) || editable;
         break;
       }
       case 'security': {
@@ -106,7 +106,7 @@ export class ProducerDetailsComponent implements OnInit, DoCheck, CanDeactivateM
     this.userMatrix = this.environmentService.getUserMatrix();
     if (this.loaded && this.userMatrix.isLoggedIn){
       const user = this.environmentService.getActiveUser();
-      return this.issueId && this.userMatrix.isLoggedIn && !(user.canEdit(this.system.getOwnerCode()) || this.userMatrix.hasApproverRole);
+      return this.issueId && this.userMatrix.isLoggedIn && user && !(user.canEdit(this.system.getOwnerCode()) || this.userMatrix.hasApproverRole);
     } else {
       return false;
     }

@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, DoCheck, KeyValueDiffers  } from '@angular/core';
-import { SystemsService } from '../../../../services/systems.service';
-import { ToastrService } from 'ngx-toastr';
-import { GridData } from '../../../../models/grid-data';
-import { EnvironmentService } from '../../../../services/environment.service';
-import { GeneralHelperService } from '../../../../services/general-helper.service';
-import { classifiers } from "../../../../services/environment.service";
-import { UserMatrix } from '../../../../models/user-matrix';
+import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core';
+import {SystemsService} from '../../../../services/systems.service';
+import {ToastrService} from 'ngx-toastr';
+import {GridData} from '../../../../models/grid-data';
+import {classifiers, EnvironmentService} from '../../../../services/environment.service';
+import {GeneralHelperService} from '../../../../services/general-helper.service';
+import {UserMatrix} from '../../../../models/user-matrix';
 
 @Component({
   selector: 'app-discussions-list',
@@ -23,7 +22,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
 
   public isNewDiscussion(ad){
     if (ad.lastComment){
-      return ad.lastComment.organizationCode != this.environmentService.getActiveUser().activeOrganization.code;
+      return this.environmentService.getActiveUser() != null && ad.lastComment.organizationCode != this.environmentService.getActiveUser().activeOrganization.code;
     } else {
       return true;
     }
