@@ -19,7 +19,7 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('addForm', null) formObjectAdd: NgForm;
+  @ViewChild('addForm') formObjectAdd: NgForm;
 
   @Input() system: System;
   @Input() relations: any[];
