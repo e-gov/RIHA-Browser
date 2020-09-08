@@ -17,8 +17,8 @@ import {CONSTANTS} from '../../utils/constants';
 })
 export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('approvalRequestForm', null) formObjectApprovalRequest: NgForm;
-  @ViewChild('newIssueForm', null) formObjectNewIssue: NgForm;
+  @ViewChild('approvalRequestForm') formObjectApprovalRequest: NgForm;
+  @ViewChild('newIssueForm') formObjectNewIssue: NgForm;
 
   @Input() system: System;
   activeUser: User;

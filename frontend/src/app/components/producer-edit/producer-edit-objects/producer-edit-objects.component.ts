@@ -16,8 +16,8 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('dataFilesForm', null) formObject: NgForm;
-  @ViewChild('object', null) inputObject: ElementRef;
+  @ViewChild('dataFilesForm') formObject: NgForm;
+  @ViewChild('object') inputObject: ElementRef;
 
   @Input() system: System;
   stored_data: string[] =[];
