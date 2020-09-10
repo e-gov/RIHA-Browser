@@ -25,7 +25,7 @@ export class CardDeckComponent implements OnInit {
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
-            "hash":"https://abi.ria.ee/riha/infootsingud-riha-st/riha-kataloogi-kasutamine",
+            "hash":"https://abi.ria.ee/riha/infootsingud-riha-st",
             "type": "external"
           }],
           "buttons": [{
