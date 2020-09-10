@@ -2,7 +2,7 @@
 <app-login-link *ngIf="!userMatrix.isLoggedIn" loginBoxText="Arutelude nägemiseks on vaja RIHAsse sisse logida. " ></app-login-link>
 
 <div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
-  <h3 class="alert-heading">Palun valige asutus</h3>
+  <h3 class="alert-heading">Palun vali asutus</h3>
   <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
 </div>
 <div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole || !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">
