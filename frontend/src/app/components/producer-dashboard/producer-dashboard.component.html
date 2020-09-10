@@ -1,5 +1,5 @@
 <app-page-header [text]="'Minu arutelud'"></app-page-header>
-<app-login-link *ngIf="!userMatrix.isLoggedIn" loginBoxText="Kirjeldamise alustamiseks on vaja RIHAsse sisse logida."></app-login-link>
+<app-login-link *ngIf="!userMatrix.isLoggedIn"></app-login-link>
 
 <div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Palun valige asutus</h3>
