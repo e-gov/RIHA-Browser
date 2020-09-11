@@ -1,9 +1,15 @@
 import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
-import {UserMatrix} from '../../models/user-matrix';
-import {EnvironmentService} from '../../services/environment.service';
-import {GridData} from '../../models/grid-data';
-import {SystemsService} from '../../services/systems.service';
-import {GeneralHelperService} from '../../services/general-helper.service';
+import {GridData} from "../../models/grid-data";
+import {UserMatrix} from "../../models/user-matrix";
+import {EnvironmentService} from "../../services/environment.service";
+import {ActivatedRoute} from "@angular/router";
+import {GeneralHelperService} from "../../services/general-helper.service";
+import {Location} from "@angular/common";
+import {SystemsService} from "../../services/systems.service";
+import {ToastrService} from "ngx-toastr";
+import {User} from "../../models/user";
+import {ModalHelperService} from "../../services/modal-helper.service";
+import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-producer-dashboard',
@@ -33,11 +39,20 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
       });
     }
   }
+  
+  openOrganizationsModal() {
+    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
+    return false;
+  }
 
-  constructor(private differs: KeyValueDiffers,
+  constructor(private environmentService: EnvironmentService,
               private helper: GeneralHelperService,
               private systemsService: SystemsService,
-              private environmentService: EnvironmentService) {
+              private toastrService: ToastrService,
+              private modalService: ModalHelperService,
+              private route: ActivatedRoute,
+              private location: Location,
+              private differs: KeyValueDiffers) {
     this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
