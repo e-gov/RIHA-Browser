@@ -9,6 +9,7 @@ import {SystemsService} from "../../services/systems.service";
 import {ToastrService} from "ngx-toastr";
 import {User} from "../../models/user";
 import {ModalHelperService} from "../../services/modal-helper.service";
+import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-producer-organization',
@@ -67,6 +68,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
   }
 
   openOrganizationsModal() {
+    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
     return false;
   }
 
