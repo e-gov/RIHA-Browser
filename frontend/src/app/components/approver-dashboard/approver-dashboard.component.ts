@@ -1,9 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { UserMatrix } from "../../models/user-matrix";
 import { GeneralHelperService } from '../../services/general-helper.service';
 import { EnvironmentService } from '../../services/environment.service';
-import { ModalHelperService } from "../../services/modal-helper.service";
-import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-approver-dashboard',
@@ -11,20 +8,10 @@ import { ActiveOrganizationChooserComponent } from '../active-organization-choos
   styleUrls: ['./approver-dashboard.component.scss']
 })
 export class ApproverDashboardComponent implements OnInit {
-  
-  userMatrix: UserMatrix;
 
-  openOrganizationsModal() {
-    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
-    return false;
-  }
-  
   constructor(public helper: GeneralHelperService,
               public generalHelperService: GeneralHelperService,
-              public environmentService: EnvironmentService,
-              private modalService: ModalHelperService) {
-    this.userMatrix = this.environmentService.getUserMatrix();
-  }
+              public environmentService: EnvironmentService) { }
 
   ngOnInit() {
     this.generalHelperService.setRihaPageTitle('Hinda');
