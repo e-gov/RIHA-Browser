@@ -1,11 +1,15 @@
 <app-page-header></app-page-header>
-<app-login-link *ngIf="!environmentService.getUserMatrix().isLoggedIn"  loginBoxText="See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele. Kui oled RIHA hindaja, siis " loginLinkText="logi sisse."></app-login-link>
+<app-login-link *ngIf="!userMatrix.isLoggedIn" loginBoxText="See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele. Kui oled RIHA hindaja, siis " loginLinkText="logi sisse."></app-login-link>
 
-<div *ngIf="environmentService.getUserMatrix().isLoggedIn && (environmentService.getUserMatrix().isOrganizationSelected && !environmentService.getUserMatrix().hasApproverRole|| !environmentService.getUserMatrix().hasOrganizations)" class="alert alert-info" role="alert">  
+<div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasApproverRole" class="alert alert-info" role="alert">
+  <h3 class="alert-heading">Palun vali asutus</h3>
+  <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
+</div>
+<div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasApproverRole|| !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">  
   <h3 class="alert-heading">Lehekülje vaatamiseks ei ole õiguseid</h3>
   <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele.Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
-<section id="page" class="row no-gutters" *ngIf="environmentService.getUserMatrix().isLoggedIn && environmentService.getUserMatrix().hasApproverRole">
+<section id="page" class="row no-gutters" *ngIf="userMatrix.isLoggedIn && userMatrix.hasApproverRole">
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
