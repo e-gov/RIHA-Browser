@@ -41,10 +41,14 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
     return false;
   }
 
-  constructor(private differs: KeyValueDiffers,
+  constructor(private environmentService: EnvironmentService,
               private helper: GeneralHelperService,
               private systemsService: SystemsService,
-              private environmentService: EnvironmentService) {
+              private toastrService: ToastrService,
+              private modalService: ModalHelperService,
+              private route: ActivatedRoute,
+              private location: Location,
+              private differs: KeyValueDiffers) {
     this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
