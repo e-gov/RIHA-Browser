@@ -4,6 +4,7 @@ import {EnvironmentService} from '../../services/environment.service';
 import {GridData} from '../../models/grid-data';
 import {SystemsService} from '../../services/systems.service';
 import {GeneralHelperService} from '../../services/general-helper.service';
+import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-producer-dashboard',
@@ -32,6 +33,11 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
         this.loaded = true;
       });
     }
+  }
+  
+  openOrganizationsModal() {
+    const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
+    return false;
   }
 
   constructor(private differs: KeyValueDiffers,
