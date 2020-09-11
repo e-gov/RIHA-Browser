@@ -17,7 +17,7 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('addForm', null) formObjectAdd: NgForm;
+  @ViewChild('addForm') formObjectAdd: NgForm;
 
   @Input() system: System;
   legislations: any[] = [];
