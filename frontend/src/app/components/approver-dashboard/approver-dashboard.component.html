@@ -1,13 +1,9 @@
 <app-page-header></app-page-header>
 <app-login-link *ngIf="!environmentService.getUserMatrix().isLoggedIn"  loginBoxText="See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele. Kui oled RIHA hindaja, siis " loginLinkText="logi sisse."></app-login-link>
 
-<div *ngIf="environmentService.getUserMatrix().isLoggedIn && !environmentService.getUserMatrix().isOrganizationSelected && environmentService.getUserMatrix().hasApproverRole" class="alert alert-info" role="alert">
-  <h3 class="alert-heading">Palun vali asutus</h3>
-  <p class="mb-0">Sul ei ole ühegi asutuse hindaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
-</div>
 <div *ngIf="environmentService.getUserMatrix().isLoggedIn && environmentService.getUserMatrix().isOrganizationSelected && !environmentService.getUserMatrix().hasApproverRole" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Lehekülje vaatamiseks ei ole õiguseid</h3>
-  <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele.</p>
+  <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele.Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
 <section id="page" class="row no-gutters" *ngIf="environmentService.getUserMatrix().isLoggedIn && environmentService.getUserMatrix().hasApproverRole">
   <aside class="col sidebar">
