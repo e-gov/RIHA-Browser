@@ -16,7 +16,7 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('addForm', null) formObject: NgForm;
+  @ViewChild('addForm') formObject: NgForm;
 
   @Input() system: System;
   contacts: any[] = [];
