@@ -5,7 +5,7 @@
   <h3 class="alert-heading">Palun vali asutus</h3>
   <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
 </div>
-<div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole || !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">
+<div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole && !userMatrix.hasApproverRole|| !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Organisatsiooni kirjeldajate ja hindajate nimekirja vaatamine ei ole lubatud</h3>
   <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise või hindamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
