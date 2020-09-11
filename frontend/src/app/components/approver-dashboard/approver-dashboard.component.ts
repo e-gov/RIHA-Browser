@@ -11,6 +11,9 @@ import { ActiveOrganizationChooserComponent } from '../active-organization-choos
   styleUrls: ['./approver-dashboard.component.scss']
 })
 export class ApproverDashboardComponent implements OnInit {
+  
+  userMatrix: UserMatrix;
+}
 
   openOrganizationsModal() {
     const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
