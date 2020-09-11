@@ -13,7 +13,6 @@ import { ActiveOrganizationChooserComponent } from '../active-organization-choos
 export class ApproverDashboardComponent implements OnInit {
   
   userMatrix: UserMatrix;
-}
 
   openOrganizationsModal() {
     const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
