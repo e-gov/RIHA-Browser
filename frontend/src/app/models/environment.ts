@@ -1,4 +1,4 @@
-import { User } from './user';
+import {User} from './user';
 
 export class Environment {
   private userDetails: User;
@@ -33,6 +33,10 @@ export class Environment {
     return ret;
   }
 
+  public getMatomoProperties() {
+    return this.tracking.matomo;
+  }
+
   public getUserDetails(): User {
     return this.userDetails;
   }
@@ -55,6 +59,10 @@ export class Environment {
       hotjar: {
         hjid: null,
         hjsv: null
+      },
+      matomo: {
+        url: null,
+        properties: null,
       }
     }
   }
