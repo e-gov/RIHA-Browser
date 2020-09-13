@@ -1,12 +1,11 @@
 package ee.ria.riha.conf;
 
-import java.util.List;
+import lombok.*;
+import org.hibernate.validator.constraints.*;
+import org.springframework.boot.context.properties.*;
+import org.springframework.context.annotation.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import java.util.*;
 
 /**
  * @author Valentin Suhnjov
@@ -120,6 +119,14 @@ public class ApplicationProperties {
     public static class TrackingProperties {
         private final GoogleAnalyticsProperties googleAnalytics = new GoogleAnalyticsProperties();
         private final HotjarProperties hotjar = new HotjarProperties();
+        private final MatomoProperties matomo = new MatomoProperties();
+    }
+
+    @Getter
+    @Setter
+    public static class MatomoProperties {
+        private String url;
+        private String properties;
     }
 
     @Getter
