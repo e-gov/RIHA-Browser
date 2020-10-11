@@ -1,18 +1,16 @@
 package ee.ria.riha.web;
 
-import ee.ria.riha.conf.ApplicationProperties;
-import ee.ria.riha.service.EnvironmentService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import ee.ria.riha.conf.*;
+import ee.ria.riha.service.*;
+import io.swagger.annotations.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import javax.servlet.http.*;
 
-import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
+import static ee.ria.riha.conf.ApplicationProperties.*;
 
 /**
  * @author Valentin Suhnjov
@@ -37,6 +35,13 @@ public class EnvironmentController {
         Map<String, Object> environment = new HashMap<>();
         environment.put("userDetails", userController.createUserDetailsModel().orElse(null));
         environment.put("tracking", applicationProperties.getTracking());
+        ApplicationProperties.FeedbackRecaptcha feedbackRecaptcha = applicationProperties.getFeedbackRecaptcha();
+
+        Map<String, String> recaptchaProperties = new HashMap<>();
+        recaptchaProperties.put("siteKey", feedbackRecaptcha.getSiteKey());
+        recaptchaProperties.put("enabled", feedbackRecaptcha.isEnabled() + "");
+
+        environment.put("feedbackRecaptcha", recaptchaProperties);
         environment.put("sessionMaxInactiveInterval", session.getMaxInactiveInterval() * 1000);
 
         return ResponseEntity.ok(environment);
