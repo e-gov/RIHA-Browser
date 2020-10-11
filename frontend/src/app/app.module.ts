@@ -83,6 +83,7 @@ import {ProducerSearchFilterComponent} from './components/producer-search-filter
 import {ProducerOrganizationComponent} from './components/producer-organization/producer-organization.component';
 import {httpInterceptorProviders} from "./http-interceptors";
 import {CanDeactivateModalGuard} from './guards/can-deactivate-modal.guard';
+import {RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module} from 'ng-recaptcha';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -94,6 +95,11 @@ export function onApplicationStart(environmentService: EnvironmentService) {
 
 export function loadClassifiers(environmentService: EnvironmentService) {
   return () => environmentService.loadClassifiers();
+}
+
+export function loadRecaptchaSiteKey(environmentService: EnvironmentService) {
+  console.log('recaptcha site key:', environmentService.getRecaptchaProperties().siteKey);
+  return  environmentService.getRecaptchaProperties().siteKey;
 }
 
 const routes: Routes = [
@@ -206,7 +212,8 @@ const routes: Routes = [
       }
     }),
     HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN'}),
-    NgbModule
+    NgbModule,
+    RecaptchaV3Module
   ],
   entryComponents: [ ],
   bootstrap: [AppComponent],
@@ -220,6 +227,9 @@ const routes: Routes = [
     SystemFeedbackService,
     {provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true},
+    // { provide: RECAPTCHA_V3_SITE_KEY, useValue: '6Lfm39QZAAAAAGefZSqsv3poar50pSIpdGs4qVb6'},
+    { provide: RECAPTCHA_V3_SITE_KEY, useFactory: loadRecaptchaSiteKey, deps: [EnvironmentService], multi: false},
+
     httpInterceptorProviders,
     CanDeactivateModalGuard,
   ]

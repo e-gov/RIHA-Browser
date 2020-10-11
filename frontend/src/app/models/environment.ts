@@ -4,6 +4,7 @@ export class Environment {
   private userDetails: User;
   private tracking: any;
   private sessionMaxInactiveInterval: number;
+  private feedbackRecaptcha: any;
 
   public getSessionMaxInactiveInterval(){
     return this.sessionMaxInactiveInterval;
@@ -37,6 +38,10 @@ export class Environment {
     return this.tracking.matomo;
   }
 
+  public getRecaptchaProperties() {
+    return this.feedbackRecaptcha;
+  }
+
   public getUserDetails(): User {
     return this.userDetails;
   }
@@ -65,6 +70,7 @@ export class Environment {
         properties: null,
       }
     }
+    this.feedbackRecaptcha = options.feedbackRecaptcha;
   }
 
 }

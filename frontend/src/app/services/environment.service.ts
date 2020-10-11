@@ -45,6 +45,10 @@ export class EnvironmentService {
     return this.globalEnvironment.getSessionMaxInactiveInterval();
   }
 
+  public getRecaptchaProperties(): any {
+    return this.globalEnvironment.getRecaptchaProperties();
+  }
+
   public getUserMatrix(): UserMatrix{
     const activeUser = this.getActiveUser();
     let hasDesciberRole = false;
