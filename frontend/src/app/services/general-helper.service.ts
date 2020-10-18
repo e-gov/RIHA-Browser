@@ -126,6 +126,10 @@ export class GeneralHelperService {
     });
   }
 
+  public compareClassifiers(c1, c2): boolean {
+    return (!c1 && !c2) || (c1 && c2 && c1 === c2);
+  }
+
   public toJsonArray(obj) {
     return Object.keys(obj).map((key) => {
       return {code: obj[key].code, value: JSON.parse(obj[key].value)}
