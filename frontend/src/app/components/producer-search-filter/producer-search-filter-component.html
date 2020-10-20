@@ -9,11 +9,12 @@
         <div class="form-group">
           <label for="x-road-status-input">X-teega liidestumine</label>
           <select id="x-road-status-input" class="form-control"
+                  [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.xRoadStatus">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">määramata</option>
-            <option *ngFor="let type of generalHelperService.toArray(classifiers.x_road_status)" [value]="type.code" selected>{{ type.value }}</option>
+            <option [ngValue]="''">kõik</option>
+            <option [ngValue]="'null'">määramata</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.x_road_status)" [ngValue]="type.code" selected>{{ type.value }}</option>
           </select>
         </div>
         <div class="form-group">
@@ -45,11 +46,12 @@
         <div class="form-group">
           <label for="development-status-input">Arendamise staatus</label>
           <select id="development-status-input" class="form-control"
+                  [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.developmentStatus">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">määramata</option>
-            <option *ngFor="let type of generalHelperService.toArray(classifiers.development_status)" [value]="type.code" selected>{{ type.value }}</option>
+            <option [ngValue]="''">kõik</option>
+            <option [ngValue]="'null'">määramata</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.development_status)" [ngValue]="type.code" selected>{{ type.value }}</option>
           </select>
         </div>
         <div class="form-group">
@@ -89,14 +91,15 @@
         <div class="form-group">
           <label for="approval-status">Kooskõlastamise staatus</label>
           <select id="approval-status" class="form-control"
+                  [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.lastPositiveApprovalRequestType">
-            <option [value]="''">kõik</option>
-            <option [value]="classifiers.issue_type.AUTOMATICALLY_REGISTERED.code">registreeritud</option>
-            <option [value]="'null'">kooskõlastamata</option>
-            <option [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine kooskõlastatud</option>
-            <option [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutamine kooskõlastatud</option>
-            <option [value]="classifiers.issue_type.FINALIZATION_REQUEST.code">lõpetamine kooskõlastatud</option>
+            <option [ngValue]="''">kõik</option>
+            <option [ngValue]="classifiers.issue_type.AUTOMATICALLY_REGISTERED.code">registreeritud</option>
+            <option [ngValue]="'null'">kooskõlastamata</option>
+            <option [ngValue]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code">asutamine kooskõlastatud</option>
+            <option [ngValue]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code">kasutamine kooskõlastatud</option>
+            <option [ngValue]="classifiers.issue_type.FINALIZATION_REQUEST.code">lõpetamine kooskõlastatud</option>
           </select>
         </div>
 
@@ -107,10 +110,12 @@
         <div class="form-group">
           <label for="system-status-input">Infosüsteemi staatus</label>
           <select id="system-status-input" class="form-control"
+                  [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.systemStatus">
-            <option [value]="''">kõik</option>
-            <option [value]="'null'">määramata</option><option *ngFor="let type of generalHelperService.toArray(classifiers.system_status)" [value]="type.code" selected>{{ type.value }}</option>
+            <option [ngValue]="''">kõik</option>
+            <option [ngValue]="'null'">määramata</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.system_status)" [ngValue]="type.code" selected>{{ type.value }}</option>
           </select>
         </div>
         <div class="form-group">
