@@ -27,6 +27,7 @@ public class ApplicationProperties {
     private final TrackingProperties tracking = new TrackingProperties();
     private final TaraProperties tara = new TaraProperties();
     private final DeveloperUser developerUser = new DeveloperUser();
+    private final FeedbackRecaptcha feedbackRecaptcha = new FeedbackRecaptcha();
 
     @Setter
     private String baseUrl;
@@ -127,6 +128,16 @@ public class ApplicationProperties {
     public static class MatomoProperties {
         private String url;
         private String properties;
+    }
+
+    @Getter
+    @Setter
+    public static class FeedbackRecaptcha {
+        private boolean enabled;
+        private String siteKey;
+        private String serverKey;
+        private float passingScore;
+        private boolean reportErrorsToClient;
     }
 
     @Getter

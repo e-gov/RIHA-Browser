@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class SystemFeedbackRequest {
 
     @NotNull(message = "validation.feedback.invalidInput")
@@ -21,6 +22,7 @@ public class SystemFeedbackRequest {
 
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
+    private String recaptchaToken;
 
     public void setGrade(Integer grade) {
         this.grade = grade;
