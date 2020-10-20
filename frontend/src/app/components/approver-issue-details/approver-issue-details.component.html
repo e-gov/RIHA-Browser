@@ -73,10 +73,11 @@
             <div class="row pull-right">
               <div *ngIf="canPostDecision()">
                 <select class="form-control"
+                        [compareWith]="generalHelperService.compareClassifiers"
                         [(ngModel)]="decisionType"
                         name="decisionType">
-                  <option [value]="'null'" selected>Vali otsus...</option>
-                  <option *ngFor="let type of generalHelperService.toArray(classifiers.issue_resolution_type)" [value]="type.code" selected>{{ type.value }}</option>
+                  <option [ngValue]="'null'" selected>Vali otsus...</option>
+                  <option *ngFor="let type of generalHelperService.toArray(classifiers.issue_resolution_type)" [ngValue]="type.code" selected>{{ type.value }}</option>
                 </select>
               </div>
               <div class="mx-2" *ngIf="feedback.status == 'OPEN'" >

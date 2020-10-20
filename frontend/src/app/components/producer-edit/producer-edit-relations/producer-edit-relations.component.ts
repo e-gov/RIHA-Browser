@@ -62,6 +62,10 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
     }
   };
 
+  compareClassifiers(first, second): boolean {
+    return this.generalHelperService.compareClassifiers(first, second);
+  }
+
   deleteRelation(id){
     this.systemsService.deleteSystemRelation(this.system.details.short_name, id).subscribe(res => {
       this.refreshRelations();
