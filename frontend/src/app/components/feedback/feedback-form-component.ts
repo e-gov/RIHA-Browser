@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserMatrix} from "../../models/user-matrix";
 import {EnvironmentService} from "../../services/environment.service";
 import {GeneralHelperService} from '../../services/general-helper.service';
@@ -7,6 +7,7 @@ import {SystemFeedbackService} from "../../services/system-feedback.service";
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from "ngx-toastr";
 import {ReCaptchaV3Service} from 'ng-recaptcha';
+import {makeRecaptchaBadgeInvisible, makeRecaptchaBadgeVisible} from '../../utils/commonUtils';
 
 
 @Component({
@@ -14,7 +15,7 @@ import {ReCaptchaV3Service} from 'ng-recaptcha';
   templateUrl: './feedback-form-component.html',
   styleUrls: ['./feedback-form-component.scss']
 })
-export class FeedbackFormComponent implements OnInit {
+export class FeedbackFormComponent implements OnInit, OnDestroy {
 
   systemFeedback: SystemFeedback;
   isRedirectedLogout: boolean;
@@ -24,6 +25,7 @@ export class FeedbackFormComponent implements OnInit {
   isError = false;
   userMatrix: UserMatrix;
   recaptchaProperties: any;
+  recaptchaBadgeStyle: HTMLStyleElement;
 
   constructor(private environmentService: EnvironmentService,
               private generalHelperService: GeneralHelperService,
@@ -36,10 +38,15 @@ export class FeedbackFormComponent implements OnInit {
     this.userMatrix = this.environmentService.getUserMatrix()
   }
 
+  ngOnDestroy(): void {
+    makeRecaptchaBadgeInvisible(this.recaptchaBadgeStyle);
+  }
+
   ngOnInit() {
     this.generalHelperService.setRihaPageTitle('Tagasiside');
     this.isRedirectedLogout = this.route.snapshot.params.logout != null;
     this.recaptchaProperties = this.environmentService.getRecaptchaProperties();
+    this.recaptchaBadgeStyle = makeRecaptchaBadgeVisible();
   }
 
   submitFeedbackForm() {
