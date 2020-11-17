@@ -45,6 +45,10 @@ export class EnvironmentService {
     return this.globalEnvironment.getSessionMaxInactiveInterval();
   }
 
+  public getRecaptchaProperties(): any {
+    return this.globalEnvironment.getRecaptchaProperties();
+  }
+
   public getUserMatrix(): UserMatrix{
     const activeUser = this.getActiveUser();
     let hasDesciberRole = false;
@@ -72,7 +76,7 @@ export class EnvironmentService {
     });
   }
 
-  private runTrackingScripts(env){
+  private runTrackingScripts(env: Environment){
     const googleAnalyticsId = env.getGoogleAnalyticsId();
     if (googleAnalyticsId){
       (function (i, s, o, g, r, a, m) {
@@ -103,6 +107,26 @@ export class EnvironmentService {
         a.appendChild(r);
       })(<any>window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     }
+
+    const matomoProperties = env.getMatomoProperties();
+    if (matomoProperties && matomoProperties.url && matomoProperties.properties) {
+        ((h, props) => {
+          h._paq = h._paq || (() => {
+            const r = [];
+            props.split(";;").forEach(prop => r.push(prop.split("::")))
+            return r;
+          })();
+
+        })(<any>window, matomoProperties.properties);
+
+        const head = document.getElementsByTagName('head')[0];
+        const matomoScriptTag = document.createElement('script');
+
+        matomoScriptTag.async = true;
+        matomoScriptTag.defer = true;
+        matomoScriptTag.src = matomoProperties.url;
+        head.appendChild(matomoScriptTag);
+      }
   }
 
   public onAppStart(): Promise<any> {
