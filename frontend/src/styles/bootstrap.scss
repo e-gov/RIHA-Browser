@@ -40,7 +40,7 @@ $card-border-radius: 0px !default;
 $card-spacer-x: 20px !default;
 /* Forms */
 $input-padding-x: 0.563rem !default;
-$input-padding-y: 8px !default;
+$input-padding-y: 0.563rem !default;
 $input-line-height: 1.25;
 $input-btn-border-width: 2px !default;
 $input-height: 40px !default;
@@ -87,7 +87,7 @@ $table-head-bg: $brand-primary !default;
 $table-head-color: $white !default;
 $table-border-color: $body-bg !default;
 /* Modals */
-$modal-inner-padding: 20px !default;
+$modal-inner-padding: 1.25rem !default;
 $modal-title-line-height: 20px !default;
 $modal-content-border-width: 0px !default;
 $modal-content-xs-box-shadow: 0px 3px 10px 0px rgba($black, 0.2) !default;

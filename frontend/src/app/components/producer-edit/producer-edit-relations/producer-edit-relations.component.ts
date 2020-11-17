@@ -19,7 +19,7 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('addForm', null) formObjectAdd: NgForm;
+  @ViewChild('addForm') formObjectAdd: NgForm;
 
   @Input() system: System;
   @Input() relations: any[];
@@ -61,6 +61,10 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
       });
     }
   };
+
+  compareClassifiers(first, second): boolean {
+    return this.generalHelperService.compareClassifiers(first, second);
+  }
 
   deleteRelation(id){
     this.systemsService.deleteSystemRelation(this.system.details.short_name, id).subscribe(res => {

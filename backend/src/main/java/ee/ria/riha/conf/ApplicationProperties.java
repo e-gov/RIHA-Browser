@@ -1,12 +1,11 @@
 package ee.ria.riha.conf;
 
-import java.util.List;
+import lombok.*;
+import org.hibernate.validator.constraints.*;
+import org.springframework.boot.context.properties.*;
+import org.springframework.context.annotation.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import java.util.*;
 
 /**
  * @author Valentin Suhnjov
@@ -28,6 +27,7 @@ public class ApplicationProperties {
     private final TrackingProperties tracking = new TrackingProperties();
     private final TaraProperties tara = new TaraProperties();
     private final DeveloperUser developerUser = new DeveloperUser();
+    private final FeedbackRecaptcha feedbackRecaptcha = new FeedbackRecaptcha();
 
     @Setter
     private String baseUrl;
@@ -120,6 +120,24 @@ public class ApplicationProperties {
     public static class TrackingProperties {
         private final GoogleAnalyticsProperties googleAnalytics = new GoogleAnalyticsProperties();
         private final HotjarProperties hotjar = new HotjarProperties();
+        private final MatomoProperties matomo = new MatomoProperties();
+    }
+
+    @Getter
+    @Setter
+    public static class MatomoProperties {
+        private String url;
+        private String properties;
+    }
+
+    @Getter
+    @Setter
+    public static class FeedbackRecaptcha {
+        private boolean enabled;
+        private String siteKey;
+        private String serverKey;
+        private float passingScore;
+        private boolean reportErrorsToClient;
     }
 
     @Getter

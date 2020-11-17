@@ -54,11 +54,11 @@
           <label for="personal-data-input">Isikuandmed</label>
           <select id="personal-data-input" class="form-control"
                   [(ngModel)]="filters.personalData" (keyup.enter)="getDataObjectFiles()">
-            <option [value]="''" selected>kõik</option>
-            <option [value]="'eriliigiline'">jah, eriliigiline</option>
-            <option [value]="'delikaatne'">jah, delikaatne</option>
-            <option [value]="'jah'">jah</option>
-            <option [value]="'ei'">ei</option>
+            <option [ngValue]="''" selected>kõik</option>
+            <option [ngValue]="'eriliigiline'">jah, eriliigiline</option>
+            <option [ngValue]="'delikaatne'">jah, delikaatne</option>
+            <option [ngValue]="'jah'">jah</option>
+            <option [ngValue]="'ei'">ei</option>
           </select>
         </div>
       </div>
