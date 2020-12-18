@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { GridTotalFoundComponent } from './grid-total-found.component';
+import {GridTotalFoundComponent} from './grid-total-found.component';
 
 describe('GridTotalFoundComponent', () => {
   let component: GridTotalFoundComponent;
   let fixture: ComponentFixture<GridTotalFoundComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GridTotalFoundComponent ]
     })

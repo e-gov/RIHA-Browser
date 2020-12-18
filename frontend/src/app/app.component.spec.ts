@@ -1,12 +1,10 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
-import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {LangChangeEvent, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {MissingTranslationHandler} from '@ngx-translate/core';
 import {DebugElement} from '@angular/core';
 
-import { AppComponent} from './app.component';
+import {AppComponent} from './app.component';
 import missingTranslationHandler from './app.missingTranslation';
 
 export function HttpLoaderFactory(http: HttpClient) {

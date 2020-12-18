@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ProducerSearchFilterComponent} from './producer-search-filter-component';
 
@@ -6,7 +6,7 @@ describe('ProducerListComponent', () => {
   let component: ProducerSearchFilterComponent;
   let fixture: ComponentFixture<ProducerSearchFilterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProducerSearchFilterComponent ]
     })
