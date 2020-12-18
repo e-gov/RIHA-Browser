@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CheckResultRowComponent } from './check-result-row.component';
+import {CheckResultRowComponent} from './check-result-row.component';
 
 describe('CheckResultRowComponent', () => {
   let component: CheckResultRowComponent;
   let fixture: ComponentFixture<CheckResultRowComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CheckResultRowComponent ]
     })
