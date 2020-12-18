@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { ProducerEditObjectsComponent } from './producer-edit-objects.component';
+import {ProducerEditObjectsComponent} from './producer-edit-objects.component';
 
 describe('ProducerEditObjectsComponent', () => {
   let component: ProducerEditObjectsComponent;
   let fixture: ComponentFixture<ProducerEditObjectsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProducerEditObjectsComponent ]
     })
