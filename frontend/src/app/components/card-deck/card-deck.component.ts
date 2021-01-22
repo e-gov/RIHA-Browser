@@ -68,7 +68,8 @@ export class CardDeckComponent implements OnInit {
             "keskenduda infosüsteemi funktsionaalsusele ning jätta andmevahetuse turvalisus X-tee hooleks",
             "kasutada riigi infosüsteemide teenuseid oma äriprotsesside optimeerimiseks",
             "pakkuda teistele turvalist ligipääsu enda andmetele"
-          ],
+          ]
+        ],
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
