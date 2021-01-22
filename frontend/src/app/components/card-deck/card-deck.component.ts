@@ -69,8 +69,6 @@ export class CardDeckComponent implements OnInit {
             "kasutada riigi infosüsteemide teenuseid oma äriprotsesside optimeerimiseks",
             "pakkuda teistele turvalist ligipääsu enda andmetele"
           ],
-          "X-tee iseteeninduskeskkonnaga tutvumiseks vajuta 'Alustan'"
-        ],
         "actions": {
           "links": [{
             "label": "Loe lähemalt",
