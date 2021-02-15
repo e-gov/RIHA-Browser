@@ -29,6 +29,7 @@ import org.springframework.web.util.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import javax.annotation.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -60,8 +61,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     protected ApplicationProperties applicationProperties;
 
+    @Autowired
+    protected FeedbackServiceConnectionProperties feedbackServiceConnectionProperties;
+
     @Value("${csp.policyDirective}")
     private String policyDirective;
+
+    @PostConstruct
+    public void postConstruct() {
+        System.setProperty("javax.net.ssl.trustStore", feedbackServiceConnectionProperties.getTrustStore().getAbsolutePath());
+        System.setProperty("javax.net.ssl.trustStorePassword", new String(feedbackServiceConnectionProperties.getTrustStorePassword()));
+    }
 
     @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
