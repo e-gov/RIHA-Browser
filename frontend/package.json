@@ -43,7 +43,7 @@
     "ngx-custom-validators": "^8.0.0",
     "ngx-toastr": "11.3.3",
     "ngx-ui-switch": "^8.2.0",
-    "phantomjs": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.7",
     "poor-mans-proxy": "1.0.0",
     "rxjs": "^6.5.3",
     "tslib": "^2.0.0",
