@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { BrowserListComponent } from './browser-list.component';
+import {BrowserListComponent} from './browser-list.component';
 
 describe('BrowserListComponent', () => {
   let component: BrowserListComponent;
   let fixture: ComponentFixture<BrowserListComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BrowserListComponent ]
     })

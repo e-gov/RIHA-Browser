@@ -18,6 +18,7 @@ import java.util.stream.*;
 
 import static ee.ria.riha.Timeouts.*;
 import static ee.ria.riha.context.ScenarioContext.*;
+import static ee.ria.riha.util.Utils.*;
 import static org.openqa.selenium.Keys.*;
 
 public class InfosystemPage extends BasePage {
@@ -234,8 +235,9 @@ public class InfosystemPage extends BasePage {
     }
 
     public boolean isUploadedDateDisplayedOnTheLastUploadedDocument() {
+        wait.sleep(3000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, documentationSection, "documentationSection");
-
+        wait.sleep(3000);
         //sort by the end date desc
         driver.findElement(By.cssSelector("app-producer-details-tech-docs:nth-child(1) th:nth-child(3) .btn:nth-child(1)")).click();
         wait.sleep(1000);
@@ -446,7 +448,7 @@ public class InfosystemPage extends BasePage {
 
         WebElement linkTypeElement = modalContainer.findElement(By.id("linkType"));
         linkTypeElement.click();
-        new Select(linkTypeElement).selectByValue("DOC_TYPE_OTHER");
+        modifiedSelectByValue(new Select(linkTypeElement), "DOC_TYPE_OTHER");
 
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
@@ -457,7 +459,7 @@ public class InfosystemPage extends BasePage {
 
         WebElement linkTypeElement = modalContainer.findElement(By.id("fileType"));
         linkTypeElement.click();
-        new Select(linkTypeElement).selectByValue("DOC_TYPE_ISKE_ACT");
+        modifiedSelectByValue(new Select(linkTypeElement), "DOC_TYPE_ISKE_ACT");
 
         //upload test data file
         makeElementVisible("dataFile");
@@ -483,7 +485,7 @@ public class InfosystemPage extends BasePage {
         modalContainer.findElement(By.id("name")).sendKeys(title);
         WebElement legalTypeSelect = modalContainer.findElement(By.id("type"));
         legalTypeSelect.click();
-        new Select(legalTypeSelect).selectByValue("LEGAL_TYPE_STATUTE");
+        modifiedSelectByValue(new Select(legalTypeSelect), "LEGAL_TYPE_STATUTE");
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
     }
@@ -603,7 +605,7 @@ public class InfosystemPage extends BasePage {
 
     public void selectAssociationTypeAndSave() {
         this.associationTypeDropDown.click();
-        new Select(associationTypeDropDown).selectByValue("SUB_SYSTEM");
+        modifiedSelectByValue(new Select(associationTypeDropDown), "SUB_SYSTEM");
         this.saveNewAssociation.click();
     }
 
