@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ProducerEditStandardRealisationsComponent} from './producer-edit-standard-realisations.component';
 
@@ -6,7 +6,7 @@ describe('ProducerEditStandardRealisationsComponent', () => {
   let component: ProducerEditStandardRealisationsComponent;
   let fixture: ComponentFixture<ProducerEditStandardRealisationsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProducerEditStandardRealisationsComponent ]
     })
