@@ -5,7 +5,6 @@ import ee.ria.riha.conf.ApplicationProperties.*;
 import lombok.extern.slf4j.*;
 import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.actuate.health.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
 import org.springframework.ldap.core.*;
@@ -27,6 +26,7 @@ import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.authentication.logout.*;
 import org.springframework.security.web.csrf.*;
 import org.springframework.web.util.*;
+import org.springframework.boot.actuate.health.*;
 
 import java.lang.reflect.*;
 import java.util.*;
