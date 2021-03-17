@@ -5,7 +5,7 @@ import ee.ria.riha.conf.ApplicationProperties.*;
 import lombok.extern.slf4j.*;
 import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.actuate.health.HealthComponent;
+import org.springframework.boot.actuate.health.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
 import org.springframework.ldap.core.*;
