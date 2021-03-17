@@ -15,8 +15,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration;
 
 import java.util.Collections;
 import java.util.List;
