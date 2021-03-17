@@ -64,7 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${csp.policyDirective}")
     private String policyDirective;
 
-    @Bean @Lazy
+    @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
         LdapAuthenticationProperties ldapAuthenticationProperties = applicationProperties.getLdapAuthentication();
@@ -79,7 +79,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return userDetailsService;
     }
 
-    @Bean @Lazy
+    @Bean
     public LdapContextSource contextSource(ApplicationProperties applicationProperties) {
         LdapContextSource contextSource = new LdapContextSource();
 
