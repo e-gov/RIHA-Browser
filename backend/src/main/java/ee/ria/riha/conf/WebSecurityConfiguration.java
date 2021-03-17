@@ -26,11 +26,7 @@ import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.authentication.logout.*;
 import org.springframework.security.web.csrf.*;
 import org.springframework.web.util.*;
-import org.springframework.boot.actuate.health.CompositeHealthContributor;
-import org.springframework.boot.actuate.health.HealthContributor;
-import org.springframework.boot.actuate.health.NamedContributor;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.*;
 
 import java.lang.reflect.*;
 import java.util.*;
