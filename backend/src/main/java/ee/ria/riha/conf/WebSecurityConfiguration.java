@@ -79,7 +79,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return userDetailsService;
     }
 
-    @Bean
+    @Bean 
+    @Primary
     public LdapContextSource contextSource(ApplicationProperties applicationProperties) {
         LdapContextSource contextSource = new LdapContextSource();
 
