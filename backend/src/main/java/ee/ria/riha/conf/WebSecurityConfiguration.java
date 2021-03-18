@@ -65,6 +65,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String policyDirective;
 
     @Bean
+    @Primary
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
         LdapAuthenticationProperties ldapAuthenticationProperties = applicationProperties.getLdapAuthentication();
