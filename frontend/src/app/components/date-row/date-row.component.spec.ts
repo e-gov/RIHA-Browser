@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { DateRowComponent } from './date-row.component';
+import {DateRowComponent} from './date-row.component';
 
 describe('DateRowComponent', () => {
   let component: DateRowComponent;
   let fixture: ComponentFixture<DateRowComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DateRowComponent ]
     })
