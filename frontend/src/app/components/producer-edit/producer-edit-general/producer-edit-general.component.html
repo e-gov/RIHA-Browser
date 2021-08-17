@@ -14,17 +14,31 @@
         <label for="name-input" class="text-muted">Infosüsteemi nimi:</label>
         <input #name="ngModel"
                [ngClass]="{'is-invalid': name.invalid  && (name.dirty || name.touched || editForm.submitted)}"
-               class="form-control h1"
+               class="form-control h1 mb-2"
                [(ngModel)]="system.details.name"
                name="system.details.name"
                (keydown.enter)="$event.preventDefault()"
                type="text" id="name-input" required>
       </div>
-      <div class="mb-4">
+      <div class="mb-2 row ml-0">
+        <div class="col-form-label">
+          <label for="name-eng-input" class="text-muted">Infosüsteemi nimi inglise keeles:</label>
+        </div>
+        <div class="col">
+          <input #nameEng="ngModel"
+                 [ngClass]="{'is-invalid': nameEng.invalid  && (nameEng.dirty || nameEng.touched || editForm.submitted)}"
+                 class="form-control"
+                 [(ngModel)]="system.details.name_eng"
+                 name="system.details.name_eng"
+                 (keydown.enter)="$event.preventDefault()"
+                 type="text" id="name-eng-input">
+        </div>
+      </div>
+      <div>
         <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
         <input #shortName="ngModel"
                [ngClass]="{'is-invalid': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}"
-               class="form-control h2"
+               class="form-control h2 mb-2"
                [(ngModel)]="system.details.short_name"
                name="short_name"
                pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
@@ -32,7 +46,21 @@
                (keydown.enter)="$event.preventDefault()"
                id="short-name-input" required>
       </div>
-
+      <div class="mb-4 row ml-0">
+        <div class="col-form-label">
+          <label for="short-name-eng-input" class="text-muted">Infosüsteemi lühinimi inglise keeles:</label>
+        </div>
+        <div class="col">
+          <input #shortNameEng="ngModel"
+                 [ngClass]="{'is-invalid': shortNameEng.invalid  && (shortNameEng.dirty || shortNameEng.touched || editForm.submitted)}"
+                 class="form-control"
+                 [(ngModel)]="system.details.short_name_eng"
+                 pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-Z0-9.-]*)$"
+                 name="system.details.short_name_eng"
+                 (keydown.enter)="$event.preventDefault()"
+                 type="text" id="short-name-eng-input">
+        </div>
+      </div>
       <hr>
 
       <div>
