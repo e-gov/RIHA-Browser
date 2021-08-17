@@ -188,6 +188,10 @@
       "type": "string",
       "minLength": 1
     },
+    "name_eng": {
+      "description": "Infosüsteemi täispikk, ametlik nimi inglise keeles",
+      "type": "string"
+    },
     "owner": {
       "properties": {
         "code": {
@@ -244,6 +248,11 @@
       "type": "string",
       "pattern": "^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$",
       "minLength": 1
+    },
+    "short_name_eng": {
+      "description": "Infosüsteemi lühinimi inglise keeles",
+      "type": "string",
+      "pattern": "^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-Z0-9.-]*)$"
     },
     "topics": {
       "items": {
