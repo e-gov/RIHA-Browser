@@ -46,7 +46,7 @@
           </execution>
 
           <execution>
-            <id>yarn config list</id>
+            <id>yarn config -v</id>
             <goals>
               <goal>exec</goal>
             </goals>
