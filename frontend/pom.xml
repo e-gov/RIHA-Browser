@@ -32,7 +32,7 @@
         <version>3.0.0</version>
         <executions>
           <execution>
-            <id>yarn install</id>
+            <id>yarn install (initialize)</id>
             <goals>
               <goal>exec</goal>
             </goals>
@@ -52,7 +52,7 @@
             </goals>
             <phase>validate</phase>
             <configuration>
-              <executable>npm</executable>
+              <executable>yarn</executable>
               <arguments>
                 <argument>config</argument>
                 <argument>-v</argument>
