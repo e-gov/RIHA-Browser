@@ -19,104 +19,62 @@
 	</properties>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>target/frontend</directory>
-				<targetPath>static</targetPath>
-			</resource>
-		</resources>
+    <resources>
+      <resource>
+        <directory>target/frontend</directory>
+        <targetPath>static</targetPath>
+      </resource>
+    </resources>
 		<plugins>
 			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.6</version>
-
-				<executions>
-					<execution>
-						<id>install node and yarn</id>
-						<phase>none</phase>
-						<goals>
-							<goal>install-node-and-yarn</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>install-node-modules</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>upgrade-frontend-packages</id>
-						<!--
-                         You can create configuration, but advice to run the command from real console:
-                         mvn frontend:yarn@upgrade-frontend-packages
-                        -->
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>upgrade-interactive</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>build</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
           <execution>
-            <id>build-production</id>
-            <phase>none</phase>
+            <id>yarn install</id>
             <goals>
-                <goal>yarn</goal>
+              <goal>exec</goal>
             </goals>
+            <phase>initialize</phase>
             <configuration>
-                <arguments>run build-production</arguments>
+              <executable>yarn</executable>
+              <arguments>
+                <argument>install</argument>
+              </arguments>
             </configuration>
           </execution>
-					<execution>
-						<id>lint</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>run lint</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>test</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>run test</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>args</id>
-						<phase>none</phase>
-						<goals>
-							<goal>yarn</goal>
-						</goals>
-						<configuration>
-							<arguments>${yarn-args}</arguments>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<nodeVersion>v12.18.3</nodeVersion>
-					<yarnVersion>v1.22.4</yarnVersion>
-					<npmVersion>6.11.3</npmVersion>
-					<workingDirectory>.</workingDirectory>
-				</configuration>
+
+          <execution>
+            <id>yarn config list</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>config</argument>
+                <argument>-v</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>yarn run build (compile)</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>compile</phase>
+            <configuration>
+              <executable>yarn</executable>
+              <arguments>
+                <argument>run</argument>
+                <argument>build</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
 			</plugin>
 		</plugins>
 	</build>
