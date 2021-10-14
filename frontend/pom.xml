@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
   <artifactId>browser-frontend</artifactId>
   <name>Frontend</name>
@@ -13,20 +13,20 @@
     <version>7.7.5</version>
   </parent>
 
-	<properties>
-		<yarn-args>${yarn.args}</yarn-args>
+  <properties>
+    <yarn-args>${yarn.args}</yarn-args>
     <sonar.sources>src</sonar.sources>
-	</properties>
+  </properties>
 
-	<build>
+  <build>
     <resources>
       <resource>
         <directory>target/frontend</directory>
         <targetPath>static</targetPath>
       </resource>
     </resources>
-		<plugins>
-			<plugin>
+    <plugins>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.0.0</version>
@@ -45,20 +45,20 @@
             </configuration>
           </execution>
 
-<!--          <execution>-->
-<!--            <id>yarn config -v</id>-->
-<!--            <goals>-->
-<!--              <goal>exec</goal>-->
-<!--            </goals>-->
-<!--            <phase>validate</phase>-->
-<!--            <configuration>-->
-<!--              <executable>yarn</executable>-->
-<!--              <arguments>-->
-<!--                <argument>config</argument>-->
-<!--                <argument>-v</argument>-->
-<!--              </arguments>-->
-<!--            </configuration>-->
-<!--          </execution>-->
+          <execution>
+            <id>yarn config -v</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <executable>yarn</executable>
+              <arguments>
+                <argument>config</argument>
+                <argument>-v</argument>
+              </arguments>
+            </configuration>
+          </execution>
 
           <execution>
             <id>yarn run build (compile)</id>
@@ -74,10 +74,25 @@
               </arguments>
             </configuration>
           </execution>
+
+<!--          <execution>-->
+<!--            <id>yarn run test</id>-->
+<!--            <goals>-->
+<!--              <goal>exec</goal>-->
+<!--            </goals>-->
+<!--            <phase>test</phase>-->
+<!--            <configuration>-->
+<!--              <executable>yarn</executable>-->
+<!--              <arguments>-->
+<!--                <argument>run</argument>-->
+<!--                <argument>test</argument>-->
+<!--              </arguments>-->
+<!--            </configuration>-->
+<!--          </execution>-->
         </executions>
-			</plugin>
-		</plugins>
-	</build>
+      </plugin>
+    </plugins>
+  </build>
 
 
 </project>
