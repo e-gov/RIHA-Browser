@@ -46,6 +46,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+yarn.lock
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -53,3 +54,4 @@ Thumbs.db
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
