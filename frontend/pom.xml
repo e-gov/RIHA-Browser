@@ -45,20 +45,6 @@
             </configuration>
           </execution>
 
-          <execution>
-            <id>yarn config -v</id>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <phase>validate</phase>
-            <configuration>
-              <executable>yarn</executable>
-              <arguments>
-                <argument>config</argument>
-                <argument>-v</argument>
-              </arguments>
-            </configuration>
-          </execution>
 
           <execution>
             <id>yarn run build (compile)</id>
