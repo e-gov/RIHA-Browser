@@ -30,6 +30,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   newAdded: boolean = false;
   userMatrix: UserMatrix;
   hasStandardRelations: boolean = false;
+  active = 1;
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
