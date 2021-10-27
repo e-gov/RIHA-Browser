@@ -36,7 +36,7 @@
 npm-debug.log
 testem.log
 /typings
-yarn.lock
+
 
 # e2e
 /e2e/*.js
@@ -46,10 +46,8 @@ yarn.lock
 .DS_Store
 Thumbs.db
 
-!/yarn.lock
-
+.pnp.*
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
