@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {isNullOrUndefined} from 'util';
 import {EnvironmentService} from './environment.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -17,7 +16,7 @@ export class SystemsService {
   private myOrganizationUrl =  environment.api.myOrganizationUrl;
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
-    if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
+    if ((dateObj) && dateObj.year && dateObj.month && dateObj.day){
       const year = dateObj.year.toString();
       let month = dateObj.month.toString();
       let day = dateObj.day.toString();
@@ -35,7 +34,7 @@ export class SystemsService {
   }
 
   public timestampToDateObj(timestamp: string): any {
-    if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
+    if (timestamp != null || timestamp != undefined && timestamp.substr && timestamp != ''){
       const year = parseInt(timestamp.substr(0, 4), 10);
       const month = parseInt(timestamp.substr(5, 2), 10);
       const day = parseInt(timestamp.substr(8, 2), 10);
@@ -102,7 +101,7 @@ export class SystemsService {
     const filtersArr: string[] = [];
     let params: HttpParams = new HttpParams();
 
-    if (!isNullOrUndefined(filters)){
+    if (filters !== null){
       if (filters.searchText){
         filtersArr.push(`search_content,ilike,%${ filters.searchText }%`);
       }
@@ -173,11 +172,11 @@ export class SystemsService {
       }
     }
 
-    if (!isNullOrUndefined(gridData.page)){
+    if (gridData.page !== null){
       params = params.set('page', gridData.page);
     }
 
-    if (!isNullOrUndefined(gridData.sort)){
+    if (gridData.sort !== null){
       params = params.set('sort', gridData.sort);
     }
 
@@ -201,16 +200,16 @@ export class SystemsService {
   public getSystemsObjectFiles(filters?, gridData?): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (!isNullOrUndefined(filters)) {
+    if (filters !== null) {
       params.append('filter', `data:Kommentaar:%${ filters.searchText }%`);
       params.append('filter', `data:Andmeobjekti nimi:%${ filters.searchText }%`);
     }
 
-    if (!isNullOrUndefined(gridData.page)){
+    if (gridData.page !== null){
       params = params.set('page', gridData.page);
     }
 
-    if (!isNullOrUndefined(gridData.sort)){
+    if (gridData.sort != null || gridData.sort != undefined){
       params = params.set('sort', gridData.sort);
     }
 
@@ -222,7 +221,7 @@ export class SystemsService {
   public getSystemsDataObjects(filters?, gridData?): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (!isNullOrUndefined(filters)) {
+    if (filters != null || filters != undefined) {
 
       const possibleFilters = ['searchText', 'searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
 
@@ -238,11 +237,11 @@ export class SystemsService {
       }
     }
 
-    if (!isNullOrUndefined(gridData.page)){
+    if (gridData.page != null || gridData.page != undefined){
       params = params.set('page', gridData.page);
     }
 
-    if (!isNullOrUndefined(gridData.sort)){
+    if (gridData.sort != null || gridData.sort != undefined){
       params = params.set('sort', gridData.sort);
     }
 
@@ -338,10 +337,10 @@ export class SystemsService {
   public getOrganizationUsers(gridData): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (!isNullOrUndefined(gridData.page)){
+    if (gridData.page != null || gridData.page != undefined){
       params = params.set('page', gridData.page);
     }
-    if (!isNullOrUndefined(gridData.sort)){
+    if (gridData.sort != null || gridData.sort != undefined){
       params = params.set('sort', gridData.sort);
     }
 
