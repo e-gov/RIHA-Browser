@@ -7,10 +7,10 @@
           heading: 'Uus arutelu',
           text: 'Uus arutelu on edukalt lisatud'
         }"></app-alert>
-  <ngb-tabset>
-    <ngb-tab>
-      <ng-template ngbTabTitle><i class="fa fa-exclamation-circle text-danger tab-icon" aria-hidden="true"></i> Hetkel aktiivsed</ng-template>
-      <ng-template ngbTabContent>
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <a ngbNavLink><i class="fa fa-exclamation-circle text-danger tab-icon" aria-hidden="true"></i> Hetkel aktiivsed</a>
+      <ng-template ngbNavContent>
         <app-alert *ngIf="activeIssues.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi aktiivset arutelu ei leidu',
@@ -31,10 +31,10 @@
           </div>
         </div>
       </ng-template>
-    </ngb-tab>
-    <ngb-tab>
-      <ng-template ngbTabTitle><i class="fa fa-check-circle text-success tab-icon" aria-hidden="true"></i> Suletud</ng-template>
-      <ng-template ngbTabContent>
+    </li>>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink><i class="fa fa-check-circle text-success tab-icon" aria-hidden="true"></i> Suletud</a>
+      <ng-template ngbNavContent>
         <app-alert *ngIf="closedIssues.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi suletud arutelu ei leidu',
@@ -55,10 +55,10 @@
           </div>
         </div>
       </ng-template>
-    </ngb-tab>
-    <ngb-tab>
-      <ng-template ngbTabTitle>Kõik</ng-template>
-      <ng-template ngbTabContent>
+    </li>>
+    <li [ngbNavItem]="3">
+      <a ngbNavLink>Kõik</a>
+      <ng-template ngbNavContent>
         <app-alert *ngIf="issues.length == 0" [conf]="{
           type: 'info',
           heading: 'Ühtegi arutelu ei leidu',
@@ -82,8 +82,9 @@
           </div>
         </div>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
   <div *ngIf="canApprove()" class="actions-bar">
     <button *ngIf="userMatrix.hasApproverRole && allowEdit" class="btn btn-primary" (click)="openAddIssueModal()">Loo uus arutelu</button>
     <button *ngIf="userMatrix.hasApproverRole && !allowEdit" class="btn btn-primary" (click)="openAddIssueModal()">Lisa hinnang</button>

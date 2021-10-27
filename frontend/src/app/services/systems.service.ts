@@ -34,7 +34,7 @@ export class SystemsService {
   }
 
   public timestampToDateObj(timestamp: string): any {
-    if ((timestamp !== null) && timestamp.substr && timestamp != ''){
+    if (timestamp != null || timestamp != undefined && timestamp.substr && timestamp != ''){
       const year = parseInt(timestamp.substr(0, 4), 10);
       const month = parseInt(timestamp.substr(5, 2), 10);
       const day = parseInt(timestamp.substr(8, 2), 10);
@@ -209,7 +209,7 @@ export class SystemsService {
       params = params.set('page', gridData.page);
     }
 
-    if (gridData.sort !== null){
+    if (gridData.sort != null || gridData.sort != undefined){
       params = params.set('sort', gridData.sort);
     }
 
@@ -221,7 +221,7 @@ export class SystemsService {
   public getSystemsDataObjects(filters?, gridData?): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (filters !== null) {
+    if (filters != null || filters != undefined) {
 
       const possibleFilters = ['searchText', 'searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
 
@@ -237,11 +237,11 @@ export class SystemsService {
       }
     }
 
-    if (gridData.page !== null){
+    if (gridData.page != null || gridData.page != undefined){
       params = params.set('page', gridData.page);
     }
 
-    if (gridData.sort !== null){
+    if (gridData.sort != null || gridData.sort != undefined){
       params = params.set('sort', gridData.sort);
     }
 
@@ -337,10 +337,10 @@ export class SystemsService {
   public getOrganizationUsers(gridData): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (gridData.page !== null){
+    if (gridData.page != null || gridData.page != undefined){
       params = params.set('page', gridData.page);
     }
-    if (gridData.sort !== null){
+    if (gridData.sort != null || gridData.sort != undefined){
       params = params.set('sort', gridData.sort);
     }
 
