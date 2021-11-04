@@ -34,7 +34,7 @@
     <repositories>
         <repository>
             <id>ria-artifactory</id>
-            <url>https://nexus.ria.ee/repository/riha-maven-mixed-local/</url>
+            <url>https://nexus.example.ee/repository/riha-maven-mixed-local/</url>
         </repository>
     </repositories>
 
