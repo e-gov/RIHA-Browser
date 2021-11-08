@@ -72,6 +72,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         configureFontCacheControl(registry);
+        registry.addResourceHandler("/infosystem_schema.json").addResourceLocations("classpath:/infosystem_schema.json");
     }
 
     /**
