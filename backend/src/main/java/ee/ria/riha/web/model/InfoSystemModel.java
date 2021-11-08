@@ -28,6 +28,7 @@ public class InfoSystemModel {
     @JsonRawValue
     @JsonProperty("details")
     @ApiModelProperty(dataType = "object")
+    @Schema(ref = "/infosystem_schema.json")
     private JsonNode json;
 
     private IssueType lastPositiveApprovalRequestType;
