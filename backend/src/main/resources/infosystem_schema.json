@@ -2,6 +2,15 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {},
   "id": "https://riha.ee/infosystem_schema.json",
+  "type": "object",
+  "description": "Süsteemi lühiandmestik. Andmed, mis on peamiselt olulised süsteemi elutsükli mõttes",
+  "required": [
+    "name",
+    "purpose",
+    "owner",
+    "short_name",
+    "uuid"
+  ],
   "properties": {
     "stored_data": {
       "items": {
@@ -26,12 +35,12 @@
           },
           "creation_timestamp": {
             "description": "Dokumendi loomise aeg",
-            "type": "string",
+            "type": ["string", "null"],
             "format": "date-time"
           },
           "update_timestamp": {
             "description": "Dokumendi viimase muutmise aeg",
-            "type": "string",
+            "type": ["string", "null"],
             "format": "date-time"
           }
         },
@@ -59,7 +68,7 @@
           },
           "type": {
             "description": "Dokumendi tüüp",
-            "type": "string",
+            "type": ["string", "null"],
              "enum": ["DOC_TYPE_ARCHITECTURE",
               "DOC_TYPE_CLASSIFICATOR",
               "DOC_TYPE_GDPR_IMPACT_ASSESSMENT",
@@ -76,12 +85,12 @@
           },
           "creation_timestamp": {
             "description": "Dokumendi loomise aeg",
-            "type": "string",
+            "type": ["string", "null"],
             "format": "date-time"
           },
           "update_timestamp": {
             "description": "Dokumendi viimase muutmise aeg",
-            "type": "string",
+            "type": ["string", "null"],
             "format": "date-time"
           }
         },
@@ -117,7 +126,7 @@
       "type": "array"
     },
     "homepage": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "URL, mis viitab infosüsteemi avalikule kasutajaliidesele"
     },
     "meta": {
@@ -136,10 +145,10 @@
           "properties": {
             "status": {
               "description": "Staatuse tekstiline kirjeldus: kooskõlastatud / mitte kooskõlastatud",
-              "type": "string"
+              "type": ["string", "null"]
             },
             "timestamp": {
-              "type": "string",
+              "type": ["string", "null"],
               "format": "date-time",
               "description": "Staatuse saamise aeg"
             }
@@ -148,18 +157,18 @@
           "description": "Süsteemi kooskõlastuse olek - Infosüsteemi hinnangute koondstaatus"
         },
         "development_status": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Infosüsteemi arendamise tekstiline kirjeldus: aktiivses arenduses / ei ole aktiivses arenduses"
         },
         "system_status": {
           "properties": {
             "status": {
               "description": "Infosüsteemi staatuse tekstiline kirjeldus: kasutusel, asutamisel, lõpetatud",
-              "type": "string"
+              "type": ["string", "null"]
             },
             "timestamp": {
               "description": "Staatuse saamise aeg -  millal infosüsteem kasutusele võeti, lõpetati või arendama (asutama) hakati",
-              "type": "string",
+              "type": ["string", "null"],
               "format": "date-time"
             }
           },
@@ -170,11 +179,11 @@
           "properties": {
             "status": {
               "description": "Kas infosüsteem on X-teega liidestatud",
-              "type": "string"
+              "type": ["string", "null"]
             },
             "timestamp": {
               "description": "Millisest ajast alates on infosüsteem X-teega liidestatud",
-              "type": "string",
+              "type": ["string", "null"],
               "format": "date-time"
             }
           },
@@ -218,11 +227,11 @@
           },
           "name": {
             "description": "Õigusakti nimi",
-            "type": "string"
+            "type": ["string", "null"]
           },
           "type": {
             "description": "Õigusakti tüüp",
-            "type": "string",
+            "type": ["string", "null"],
             "enum": ["LEGAL_TYPE_DRAFT_STATUTE",
               "LEGAL_TYPE_DRAFT_STATUTE_NOTE",
               "LEGAL_TYPE_STATUTE",
@@ -260,27 +269,27 @@
       "properties": {
         "standard": {
           "description": "Infosüsteemi etalonturve. Näiteks \"ISKE\", \"ISO 27001\", \"ISO 27002\" või muu.",
-          "type": "string",
+          "type": ["string", "null"],
           "minLength": 1
         },
         "class": {
           "description": "Infosüsteemi turvaklass. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\"",
-          "type": "string",
+          "type": ["string", "null"],
           "pattern": "^K[0-3]{1}T[0-3]{1}S[0-3]{1}$"
         },
         "level": {
           "description": "Infosüsteemi turbeaste. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\"",
-          "type": "string",
+          "type": ["string", "null"],
           "pattern": "^[HML]{1}$"
         },
         "latest_audit_date": {
           "description": "Viimase audiitorkontrolli toimumise aeg",
-          "type": "string",
+          "type": ["string", "null"],
           "format": "date-time"
         },
         "latest_audit_resolution": {
           "description": "Viimase audiitorkontrolli otsus. Kohustuslik kui on määratud viimase audiitorkontrolli toimumise aeg.",
-          "type": "string",
+          "type": ["string", "null"],
           "enum": ["PASSED_WITHOUT_REMARKS", "PASSED_WITH_REMARKS", "DID_NOT_PASS", null]
         }
       },
