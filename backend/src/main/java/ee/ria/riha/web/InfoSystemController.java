@@ -9,7 +9,6 @@ import ee.ria.riha.service.RelationService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.service.auth.PrincipalHasRoleProducer;
 import ee.ria.riha.storage.util.*;
-import ee.ria.riha.web.model.InfoSystemDataObjectModel;
 import ee.ria.riha.web.model.InfoSystemModel;
 import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.StandardRealisationCreationModel;
@@ -54,7 +53,7 @@ public class InfoSystemController {
     @GetMapping
     @ApiOperation("List all existing information systems")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<InfoSystemModel>> list(Pageable pageable, Filterable filterable) {
+    public ResponseEntity list(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(
                 createPagedModel(
                         infoSystemService.list(pageable, filterable),
@@ -62,7 +61,7 @@ public class InfoSystemController {
     }
     @GetMapping("/autocomplete")
     @ApiOperation("List all existing information systems for autocomplete")
-    public ResponseEntity<PagedResponse<InfoSystemModel>> autocomplete(@RequestParam("searchTerm") String searchTerm) {
+    public ResponseEntity autocomplete(@RequestParam("searchTerm") String searchTerm) {
 
         String paramToRestEndpoint;
         if (StringUtils.isNumeric(searchTerm)) {
@@ -122,14 +121,14 @@ public class InfoSystemController {
     @GetMapping(path = "/data-objects")
     @ApiOperation("List all existing information systems data objects")
     @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<InfoSystemDataObjectModel>> listDataObjects(Pageable pageable, Filterable filterable) {
+    public ResponseEntity listDataObjects(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(
                 createPagedModel(
                         infoSystemDataObjectService.list(pageable, filterable),
                         infoSystemDataObjectMapper));
     }
 
-    private <E,R> PagedResponse<R> createPagedModel(PagedResponse<E> list, ModelMapper<E,R> mapper) {
+    private  <E,R> PagedResponse<R> createPagedModel(PagedResponse<E> list, ModelMapper<E,R> mapper) {
         return new PagedResponse<>(new PageRequest(list.getPage(), list.getSize()),
                                    list.getTotalElements(),
                                    list.getContent().stream()
