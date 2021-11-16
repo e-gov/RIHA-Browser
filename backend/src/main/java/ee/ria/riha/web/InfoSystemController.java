@@ -129,7 +129,7 @@ public class InfoSystemController {
                         infoSystemDataObjectMapper));
     }
 
-    private <E,R> PagedResponse<R> createPagedModel(PagedResponse<E> list, ModelMapper<E,R> mapper) {
+    private  <E,R> PagedResponse<R> createPagedModel(PagedResponse<E> list, ModelMapper<E,R> mapper) {
         return new PagedResponse<>(new PageRequest(list.getPage(), list.getSize()),
                                    list.getTotalElements(),
                                    list.getContent().stream()
