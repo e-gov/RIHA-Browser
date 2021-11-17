@@ -4,14 +4,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>browser-frontend</artifactId>
-  <name>Frontend</name>
-  <description>Frontend</description>
 
   <parent>
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
     <version>7.7.5</version>
   </parent>
+
+  <name>Frontend</name>
+  <description>Angular frontend for RIHA application</description>
 
   <properties>
     <yarn-args>${yarn.args}</yarn-args>
@@ -44,8 +45,6 @@
               </arguments>
             </configuration>
           </execution>
-
-
           <execution>
             <id>yarn run build (compile)</id>
             <goals>
@@ -64,6 +63,4 @@
       </plugin>
     </plugins>
   </build>
-
-
 </project>
