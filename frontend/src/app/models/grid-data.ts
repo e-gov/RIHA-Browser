@@ -32,18 +32,18 @@ export class GridData {
   }
 
   updateData(data: any, contentTransformer?: any): void {
-    if ((data.totalElements !== null)) this.totalElements = data.totalElements;
-    if (data.content !== null) {
+    if (data.totalElements) this.totalElements = data.totalElements;
+    if (data.content) {
       if (contentTransformer) {
         this.content = contentTransformer(data.content);
       } else {
         this.content = data.content;
       }
     }
-    if (data.size !== null) this.size = data.size;
-    if (data.totalPages !== null) this.totalPages = data.totalPages;
-    if (data.page !== null) this.page = data.page;
-    if (data.sort !== null) this.sort = data.sort;
+    if (data.size) this.size = data.size;
+    if (data.totalPages) this.totalPages = data.totalPages;
+    if (data.page) this.page = data.page;
+    if (data.sort) this.sort = data.sort;
   }
 
   changeSortOrder(prop: string, dir?: string): void {
