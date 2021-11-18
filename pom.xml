@@ -8,15 +8,18 @@
     <version>7.7.5</version>
     <packaging>pom</packaging>
 
-    <name>RIHA-Browser</name>
-    <description>RIHA-Browser</description>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.2.RELEASE</version>
+        <version>2.5.6</version>
         <relativePath/>
     </parent>
+
+    <modules>
+        <module>frontend</module>
+        <module>backend</module>
+<!--        <module>autotest</module>-->
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,11 +28,8 @@
         <java.version>11</java.version>
     </properties>
 
-    <modules>
-        <module>frontend</module>
-        <module>backend</module>
-<!--        <module>autotest</module>-->
-    </modules>
+    <name>RIHA-Browser</name>
+    <description>Application providing UI for managing info-systems meta information. Divided into backend and frontend modules.</description>
 
     <repositories>
         <repository>
@@ -37,5 +37,4 @@
             <url>https://nexus.example.ee/repository/riha-maven-mixed-local/</url>
         </repository>
     </repositories>
-
 </project>
