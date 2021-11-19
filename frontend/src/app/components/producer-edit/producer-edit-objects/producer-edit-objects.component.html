@@ -84,7 +84,7 @@
         <table class="details-list-table">
           <tr *ngFor="let file of data_files; let i = index">
             <td>
-             <app-file-icon [file]="file" style="margin-right:3px;"></app-file-icon>
+             <app-file-icon [file]="file"></app-file-icon>
             </td>
             <td>
               <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}" target="_blank">{{ file.name }}</a>
