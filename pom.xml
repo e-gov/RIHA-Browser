@@ -31,10 +31,11 @@
     <name>RIHA-Browser</name>
     <description>Application providing UI for managing info-systems meta information. Divided into backend and frontend modules.</description>
 
-    <repositories>
+<!--    <repositories>
         <repository>
             <id>ria-artifactory</id>
             <url>https://nexus.riaint.ee/repository/riha-maven-mixed-local/</url>
         </repository>
-    </repositories>
+    </repositories>-->
+  
 </project>
