@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.util.*;
-import java.util.function.Function;
 
 /**
  * Holds Information System data and provides accessors for JSON manipulation.
@@ -88,7 +92,7 @@ public class InfoSystem {
      * @param jsonContent source {@link JsonNode}
      */
     public InfoSystem(JsonNode jsonContent) {
-        Assert.notNull(jsonContent);
+        Assert.notNull(jsonContent, "Content in null");
         this.jsonContent = jsonContent;
     }
 
