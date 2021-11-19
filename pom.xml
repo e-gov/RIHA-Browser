@@ -5,7 +5,7 @@
 
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.7.5</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -22,8 +22,9 @@
     </modules>
 
     <properties>
+        <revision>7.7.5</revision>
+        <spring.boot.version>2.5.6</spring.boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.version>7.7.4</project.build.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
     </properties>
