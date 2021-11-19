@@ -8,7 +8,7 @@
   <parent>
     <groupId>ee.ria.riha</groupId>
     <artifactId>browser</artifactId>
-    <version>7.7.5</version>
+    <version>${revision}</version>
   </parent>
 
   <name>Frontend</name>
