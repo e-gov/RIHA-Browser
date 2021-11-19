@@ -38,4 +38,5 @@
             <url>https://nexus.example.ee/repository/riha-maven-mixed-local/</url>
         </repository>
     </repositories>
+  
 </project>
