@@ -25,10 +25,7 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/styles/fonts.scss",
-              "src/styles.css",
-              "src/styles/app.scss",
-              "./node_modules/font-awesome/css/font-awesome.css"
+              "src/styles/app.scss"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
@@ -49,7 +46,7 @@
                   "minify": true,
                   "inlineCritical": false
                 },
-                "fonts": false
+                "fonts": true
               },
               "outputHashing": "all",
               "sourceMap": false,
