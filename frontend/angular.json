@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "a6e6fb63-9f9b-4fbf-bd10-501426c8d549"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -22,10 +25,7 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/styles/fonts.scss",
-              "src/styles.css",
-              "src/styles/app.scss",
-              "./node_modules/font-awesome/css/font-awesome.css"
+              "src/styles/app.scss"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
@@ -40,10 +40,16 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
