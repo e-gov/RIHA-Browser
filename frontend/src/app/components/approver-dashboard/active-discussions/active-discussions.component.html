@@ -3,19 +3,20 @@
     Aktiivsed arutelud
   </div>
   <div class="my-1 card-content">
-    <ngb-tabset>
-      <ngb-tab>
-        <ng-template ngbTabTitle>Minuga seotud</ng-template>
-        <ng-template ngbTabContent>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>Minuga seotud</a>
+        <ng-template ngbNavContent>
           <app-discussions-list [relation]="'person'"></app-discussions-list>
         </ng-template>
-      </ngb-tab>
-      <ngb-tab>
-        <ng-template ngbTabTitle>Minu asutusega seotud</ng-template>
-        <ng-template ngbTabContent>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>Minu asutusega seotud</a>
+        <ng-template ngbNavContent>
           <app-discussions-list [relation]="'organization'"></app-discussions-list>
         </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
   </div>
 </section>
