@@ -21,7 +21,7 @@ public class HomePage extends BasePage {
     @FindBy(css = ".nav-item:nth-child(2) > .nav-link")
     private WebElement goToInfosystemsPageLink;
 
-    @FindBy(tagName = "ngb-modal-window")
+    @FindBy(xpath = "/html/body/ngb-modal-window")
     private WebElement modalContainer;
 
     @FindBy(xpath = "//input[@id='search']")
@@ -58,12 +58,13 @@ public class HomePage extends BasePage {
     }
 
     public void selectSecondOrganization() {
-        wait.forPresenceOfElements(25, By.tagName("ngb-modal-window"), "modal");
+        wait.forPresenceOfElements(25, By.xpath("/html/body/ngb-modal-window"), "modal");
         modalContainer.findElement(By.cssSelector("tr:nth-child(2) > td")).click();
+        wait.sleep(3000);
     }
 
     public void selectOrganization(String organization) {
-        wait.forPresenceOfElements(25, By.tagName("ngb-modal-window"), "modal");
+        wait.forPresenceOfElements(25, By.xpath("/html/body/ngb-modal-window"), "modal");
         modalContainer.findElement(By.xpath("//td[text()='"+organization+"']")).click();
     }
 
