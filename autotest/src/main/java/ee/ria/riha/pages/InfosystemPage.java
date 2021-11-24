@@ -60,7 +60,7 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//div[@id='dokumentatsioon']/app-producer-details-tech-docs/section/div[2]")
     private WebElement documentationSection;
 
-    @FindBy(xpath = "//div[@id='tagasiside']/app-producer-details-issues/section/div[2]/button")
+    @FindBy(xpath = "//div[@id='tagasiside']/app-producer-details-issues/section/div[3]/button")
     private WebElement feedbackRequestButton;
 
     @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div/button")
@@ -90,19 +90,19 @@ public class InfosystemPage extends BasePage {
     @FindBy(css = ".ng2-tag-input__text-input")
     private WebElement topicsInput;
 
-    @FindBy(css = "app-producer-details-tech-docs table")
+    @FindBy(xpath = "//*[@id=\"info-systems-table\"]/tbody")
     private WebElement techDocTable;
 
-    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div/table")
+    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[1]/table")
     private WebElement dataObjectsTable;
 
     @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[2]/table")
     private WebElement dataUrlsTable;
 
-    @FindBy(xpath = "//div[@id='ngb-tab-0-panel']/div/div/table")
+    @FindBy(xpath = "//div[contains(@id,'ngb-nav')]/div/div/table")
     private WebElement openIssuesTable;
 
-    @FindBy(tagName = "ngb-modal-window")
+    @FindBy(xpath = "//div[contains(@class,'modal-dialog')]")
     private WebElement modalContainer;
 
     @FindBy(xpath = "//div[@id='seosed']/app-producer-details-relations/section/div/button")
