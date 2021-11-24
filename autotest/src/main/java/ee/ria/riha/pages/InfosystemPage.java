@@ -552,7 +552,7 @@ public class InfosystemPage extends BasePage {
 
         return dataUrlsTable.findElements(By.tagName("tr"))
                 .stream()
-                .map(tr -> tr.findElement(By.cssSelector("td:nth-child(2) > a")))
+                .map(tr -> tr.findElement(By.xpath("td/a")))
                 .map(WebElement::getText)
                 .collect(Collectors.joining(","));
     }
