@@ -9,7 +9,7 @@ public class LoginPage extends BasePage {
     @FindBy(css = ".c-tab-login__nav-label > .icon-mobile-id")
     private WebElement mobiilIdTab;
 
-    @FindBy(id = "mid-personal-code")
+    @FindBy(xpath = "//*[@id=\"mid-personal-code\"]")
     private WebElement isikukoodInput;
 
     @FindBy(id = "mid-phone-number")
