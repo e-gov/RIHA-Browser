@@ -12,6 +12,21 @@
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+    <logger name="com" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="io" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="org" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="javax" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="springfox" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
     <root>
         <level>info</level>
         <appender-ref ref="FILEJSON"/>
