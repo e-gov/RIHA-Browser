@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 <configuration>
     <property name="LOG_DIR" value="logs"/>
-    <property name="appName" value="riha"/>
+    <property name="appName" value="riha-browser"/>
     <appender name="FILEJSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${appName}.json.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
