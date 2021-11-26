@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 <configuration>
     <property name="LOG_DIR" value="logs"/>
-    <property name="appName" value="riha"/>
+    <property name="appName" value="riha-browser"/>
     <appender name="FILEJSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${appName}.json.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -12,6 +12,21 @@
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+    <logger name="com" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="io" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="org" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="javax" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="springfox" level="WARN">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
     <root>
         <level>info</level>
         <appender-ref ref="FILEJSON"/>
