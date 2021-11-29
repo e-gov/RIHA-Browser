@@ -1,5 +1,6 @@
 package ee.ria.riha.conf;
 
+import ee.ria.riha.logging.auditlog.AuditLogger;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,10 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 
 	@Value("${csp.policyDirective}")
 	private String policyDirective;
+
+	public WebSecurityDevConfiguration(AuditLogger auditLogger) {
+		super(auditLogger);
+	}
 
 	@Bean
 	protected UsernamePasswordAuthenticationFilter authenticationFilter(DeveloperAuthenticationManager authenticationManager) {
