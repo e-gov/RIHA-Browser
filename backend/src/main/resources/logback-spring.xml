@@ -12,6 +12,15 @@
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+    <appender name="AUDIT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${appName}-audit.json.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${appName}.%d{yyyy-MM-dd}.%i.json.log</fileNamePattern>
+            <maxHistory>14</maxHistory>
+            <maxFileSize>100MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
     <logger name="com" level="WARN">
         <appender-ref ref="FILEJSON"/>
     </logger>
@@ -26,6 +35,9 @@
     </logger>
     <logger name="springfox" level="WARN">
         <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="ee.ria.riha.logging.auditlog" level="INFO" additivity="false">
+        <appender-ref ref="AUDIT_LOG"/>
     </logger>
     <root>
         <level>info</level>
