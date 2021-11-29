@@ -8,6 +8,11 @@ import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
 import java.util.Map;
 import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
+
+import ee.ria.riha.logging.auditlog.AuditEvent;
+import ee.ria.riha.logging.auditlog.AuditLogger;
+import ee.ria.riha.logging.auditlog.AuditType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +53,7 @@ import org.springframework.web.util.UriUtils;
 /**
  * @author Valentin Suhnjov
  */
+@RequiredArgsConstructor
 @Configuration
 @Profile("!dev")
 @EnableWebSecurity
@@ -69,6 +75,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     protected ApplicationProperties applicationProperties;
+
+    public final AuditLogger auditLogger;
 
     @Value("${csp.policyDirective}")
     private String policyDirective;
@@ -173,6 +181,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
 					((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
 			);
+
+            auditLogger.log(AuditEvent.AUTH, AuditType.AUTHENTICATION, authentication);
 
 			String fromUrl = (String) request.getSession(false).getAttribute(REDIRECT_URL_PARAMETER_MARKER);
 
