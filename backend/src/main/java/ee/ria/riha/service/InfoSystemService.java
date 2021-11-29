@@ -28,12 +28,12 @@ import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 /**
  * @author Valentin Suhnjov
  */
-@RequiredArgsConstructor
 @Service
 @Slf4j
 public class InfoSystemService {
 
     private static final String NOT_SET_VALUE = "[NOT SET]";
+
 
     @Autowired
     private InfoSystemRepository infoSystemRepository;
@@ -41,11 +41,7 @@ public class InfoSystemService {
     @Autowired
     private JsonValidationService infoSystemValidationService;
     private IssueService issueService;
-
-    public final AuditLogger auditLogger;
-
     private DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
 
     public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
         return infoSystemRepository.list(pageable, filterable);
@@ -67,8 +63,6 @@ public class InfoSystemService {
                 getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
                 organization,
                 model.getShortName());
-
-        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, model);
 
         model.setUuid(UUID.randomUUID());
         model.setOwnerCode(organization.getCode());
@@ -138,9 +132,6 @@ public class InfoSystemService {
                 existingInfoSystem.getId(),
                 existingInfoSystem.getOwnerCode(),
                 existingInfoSystem.getShortName());
-
-        auditLogger.log(AuditEvent.UPDATE, AuditType.INFOSYSTEM, model);
-
         if (!existingInfoSystem.getShortName().equals(model.getShortName())) {
             validateInfoSystemShortName(model.getShortName());
         }
