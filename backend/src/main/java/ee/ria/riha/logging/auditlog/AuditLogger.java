@@ -31,15 +31,17 @@ public class AuditLogger {
         var userIdO = userContext.getRihaUserId();
         String userId = userIdO.isEmpty() ? "0" : userIdO.get();
         String userName = "";
+        String organization = "";
         if (userIdO.isEmpty()) {
             userName = "ANON";
+            organization = "ANON";
         } else {
             if (userContext.getRihaUserFullName().isPresent()) {
                 userName = userContext.getRihaUserFullName().get();
+            } else if (getActiveOrganization().isPresent()){
+                organization = getActiveOrganization().get().toString();
             }
         }
-        RihaOrganization organization = getActiveOrganization()
-                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
 
         sb.append(String.format(" %s:%s; ", auditEvent, auditType));
         sb.append(String.format("%s:%s:%s; ", userId, userName, organization));
