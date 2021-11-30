@@ -182,7 +182,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
 			);
 
-            auditLogger.log(AuditEvent.AUTH, AuditType.AUTHENTICATION, request, ((RihaUserDetails) authentication.getPrincipal()).getDelegate());
+            auditLogger.log(AuditEvent.AUTH, AuditType.AUTHENTICATION, request, ((RihaUserDetails) authentication.getPrincipal()).getDelegate().getAuthorities().toString());
 
 			String fromUrl = (String) request.getSession(false).getAttribute(REDIRECT_URL_PARAMETER_MARKER);
 
