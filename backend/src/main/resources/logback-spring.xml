@@ -36,8 +36,17 @@
     <logger name="springfox" level="WARN">
         <appender-ref ref="FILEJSON"/>
     </logger>
+    <logger name="springfox.documentation.swagger.readers.operation.OperationImplicitParameterReader" level="ERROR">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
     <logger name="ee.ria.riha.logging.auditlog" level="INFO" additivity="false">
         <appender-ref ref="AUDIT_LOG"/>
+    </logger>
+    <logger name="Validator" level="INFO">
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO">
+        <appender-ref ref="FILEJSON"/>
     </logger>
     <root>
         <level>info</level>
