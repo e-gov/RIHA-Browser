@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -147,9 +149,9 @@ public class InfoSystemController {
     @PostMapping
     @ApiOperation("Create new information system")
     @PrincipalHasRoleProducer
-    public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model) {
+    public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model, HttpServletRequest request) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
-        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, model);
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
@@ -164,9 +166,9 @@ public class InfoSystemController {
     @PreAuthorizeInfoSystemOwner
     @ApiOperation("Update existing information system")
     public ResponseEntity<InfoSystemModel> update(@PathVariable("reference") String reference,
-                                                  @RequestBody InfoSystemModel model) {
+                                                  @RequestBody InfoSystemModel model, HttpServletRequest request) {
         InfoSystem infoSystem = infoSystemService.update(reference, new InfoSystem(model.getJson()));
-        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, model);
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
