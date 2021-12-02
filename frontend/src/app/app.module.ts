@@ -84,6 +84,7 @@ import {ProducerOrganizationComponent} from './components/producer-organization/
 import {httpInterceptorProviders} from "./http-interceptors";
 import {CanDeactivateModalGuard} from './guards/can-deactivate-modal.guard';
 import {RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module} from 'ng-recaptcha';
+import { TopicsButtonComponent } from './components/grid-view/topics-button/topics-button.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -191,7 +192,8 @@ const routes: Routes = [
     LoginLinkComponent,
     ProducerSearchFilterComponent,
     ProducerOrganizationComponent,
-    FeedbackFormComponent
+    FeedbackFormComponent,
+    TopicsButtonComponent
   ],
   imports: [
     BrowserModule,
