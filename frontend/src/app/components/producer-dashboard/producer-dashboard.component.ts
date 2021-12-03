@@ -19,27 +19,37 @@ import {ActiveOrganizationChooserComponent} from '../active-organization-chooser
 export class ProducerDashboardComponent implements OnInit, DoCheck {
 
   public userMatrix: UserMatrix;
-  public loaded: boolean = false;
+  public loaded: Boolean = false;
   private differ: any;
   public gridData: GridData = new GridData();
 
-  public onSortChange(property): void{
+  onPageChange(newPage): void {
+    this.gridData.page = newPage - 1;
+    this.getOwnOpenIssues();
+  }
+
+  public onSortChange(property): void {
     this.gridData.changeSortOrder(property);
     this.getOwnOpenIssues();
   }
 
-  private getOwnOpenIssues(){
+  private getOwnOpenIssues() {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected && this.environmentService.getActiveUser()) {
-      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData.sort).subscribe(res =>{
+      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData).subscribe(res => {
         this.gridData.updateData(res);
-        this.loaded = true;
+        if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
+          this.gridData.page = 0;
+          this.getOwnOpenIssues();
+        } else {
+          this.loaded = true;
+        }
       }, err => {
         this.helper.showError();
         this.loaded = true;
       });
     }
   }
-  
+
   openOrganizationsModal() {
     const modalRef = this.modalService.open(ActiveOrganizationChooserComponent);
     return false;
@@ -65,10 +75,9 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     const changes = this.differ.diff(this.environmentService.globalEnvironment);
-    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
+    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)) {
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnOpenIssues();
     }
   }
-
 }
