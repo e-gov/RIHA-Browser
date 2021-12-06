@@ -56,7 +56,7 @@
       <div class="form-group">
         <label for="url" class="separated-text">URL:</label>
         <input id="url" class="form-control"
-               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || buttonClicked)}"
                [disabled]="uploading"
                #url="ngModel"
                [(ngModel)]="data.url"
@@ -67,7 +67,7 @@
       <div class="form-group">
         <label for="name" class="separated-text">Dokumendi pealkiri:</label>
         <input id="name" class="form-control"
-               [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched)}"
+               [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched || buttonClicked)}"
                [disabled]="uploading"
                #name="ngModel"
                [(ngModel)]="data.name"

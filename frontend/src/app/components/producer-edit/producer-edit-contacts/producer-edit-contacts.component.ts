@@ -21,6 +21,7 @@ export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal
   @Input() system: System;
   contacts: any[] = [];
   isChanged: boolean = false;
+  buttonClicked: boolean = false;
 
   data: any = {email: '', name: ''};
 
@@ -31,15 +32,19 @@ export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal
       this.data = {email: '', name: ''};
       addForm.reset();
       this.isChanged = true;
+      this.buttonClicked = false;
+    } else {
+      this.buttonClicked = true;
     }
   }
+
 
   deleteContact(i): void {
     this.contacts.splice(i, 1);
     this.isChanged = true;
   }
 
-  saveSystem(){
+  saveSystem() {
     this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
       const system = new System(responseSystem);
       system.details.contacts = this.contacts;

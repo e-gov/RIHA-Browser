@@ -23,6 +23,7 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
   stored_data: string[] =[];
   data_files: any[] = [];
   isChanged: boolean = false;
+  buttonClicked: boolean = false;
 
   dataFile: any = null;
   uploading: boolean = false;
@@ -74,6 +75,9 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
       });
       form.reset();
       this.isChanged = true;
+      this.buttonClicked = false;
+    }else {
+      this.buttonClicked = true;
     }
   }
 
