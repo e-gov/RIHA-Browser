@@ -27,7 +27,7 @@
           <label for="fileType" class="text-muted separated-text">Liik:</label>
           <select id="fileType"
                   [compareWith]="generalHelperService.compareClassifiers"
-                  [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched)}"
+                  [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched || uploadButtonClicked)}"
                   class="form-control col-12"
                   #fileType="ngModel"
                   [(ngModel)]="data.type"
@@ -48,7 +48,7 @@
         <div class="form-group">
           <label for="url" class="text-muted separated-text">URL:</label>
           <input id="url"
-                 [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+                 [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || docsButtonClicked)}"
                  class="form-control col-12"
                  #url="ngModel"
                  [disabled]="uploading"
@@ -62,7 +62,7 @@
         <div class="form-group">
           <label for="linkName" class="text-muted separated-text">Pealkiri:</label>
           <input id="linkName"
-                 [ngClass]="{'is-invalid': linkName.invalid && (linkName.dirty || linkName.touched)}"
+                 [ngClass]="{'is-invalid': linkName.invalid && (linkName.dirty || linkName.touched || docsButtonClicked)}"
                  class="form-control col-12"
                  #linkName="ngModel"
                  [disabled]="uploading"
@@ -76,7 +76,7 @@
           <label for="linkType" class="text-muted separated-text">Liik:</label>
           <select id="linkType"
                   [compareWith]="generalHelperService.compareClassifiers"
-                  [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched)}"
+                  [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched || docsButtonClicked)}"
                   class="form-control col-12"
                   #linkType="ngModel"
                   [(ngModel)]="data.type"
