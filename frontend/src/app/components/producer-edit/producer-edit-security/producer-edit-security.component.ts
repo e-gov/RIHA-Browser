@@ -22,6 +22,7 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
   @Input() system: System;
   security: any;
   classifiers = classifiers;
+  buttonClicked: boolean = false;
 
   hasSecurity: boolean = false;
   isAuditApplied: boolean = false;
@@ -59,6 +60,9 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
       }, err => {
         this.toastrService.error('Serveri viga.');
       });
+      this.buttonClicked = false;
+    } else {
+      this.buttonClicked = true;
     }
   }
 
