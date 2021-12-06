@@ -110,7 +110,7 @@
         </div>
         <div class="form-group">
           <input class="form-control ml-1"
-                 [ngClass]="{'is-invalid': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched)}" *ngIf="!isIske"
+                 [ngClass]="{'is-invalid': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched || buttonClicked)}" *ngIf="!isIske"
                  #otherSecurityStandard="ngModel"
                  [(ngModel)]="security.standard"
                  name="standard"
@@ -135,7 +135,7 @@
             <div class="row">
               <div class="input-group datepicker col-4">
                 <input id="audit_timestamp"
-                       [ngClass]="{'is-invalid': auditTimestampInput.invalid  && (auditTimestampInput.dirty || auditTimestampInput.touched)}"
+                       [ngClass]="{'is-invalid': auditTimestampInput.invalid  && (auditTimestampInput.dirty || auditTimestampInput.touched || buttonClicked)}"
                        class="form-control"
                        placeholder="yyyy-mm-dd"
                        name="auditTimestamp"
@@ -157,31 +157,40 @@
               <div class="custom-control custom-radio">
                 <input id="audit_resolution_type_no_rem"
                        class="custom-control-input"
+                       ngModel
+                       #radio = "ngModel"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.code"
                        name="auditResolution">
-                <label for="audit_resolution_type_no_rem" class="custom-control-label">{{classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.value}}</label>
+                <label for="audit_resolution_type_no_rem" class="custom-control-label"
+                       [ngClass]="{'inva': buttonClicked && radio.invalid}">{{classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.value}}</label>
               </div>
               <div class="custom-control custom-radio">
                 <input id="audit_resolution_type_w_rem" class="custom-control-input"
+                       ngModel
+                       #radio = "ngModel"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.PASSED_WITH_REMARKS.code"
                        name="auditResolution">
-                <label for="audit_resolution_type_w_rem" class="custom-control-label">{{classifiers.audit_resolution_type.PASSED_WITH_REMARKS.value}}</label>
+                <label for="audit_resolution_type_w_rem" class="custom-control-label"
+                       [ngClass]="{'inva': buttonClicked && radio.invalid}">{{classifiers.audit_resolution_type.PASSED_WITH_REMARKS.value}}</label>
               </div>
               <div class="custom-control custom-radio">
                 <input id="audit_resolution_type_no_pass"
+                       ngModel
+                       #radio = "ngModel"
                        class="custom-control-input"
                        [required]="isAuditApplied"
                        type="radio"
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.DID_NOT_PASS.code"
                        name="auditResolution">
-                <label for="audit_resolution_type_no_pass" class="custom-control-label">{{classifiers.audit_resolution_type.DID_NOT_PASS.value}}</label>
+                <label for="audit_resolution_type_no_pass" class="custom-control-label"
+                       [ngClass]="{'inva': buttonClicked && radio.invalid}">{{classifiers.audit_resolution_type.DID_NOT_PASS.value}}</label>
               </div>
             </div>
           </div>
