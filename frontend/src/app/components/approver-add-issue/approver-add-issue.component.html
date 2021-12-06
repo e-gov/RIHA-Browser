@@ -22,7 +22,7 @@
             <div *ngIf="!isApprovalRequest">
               <div class="form-group">
                 <input id="issueTitle" class="form-control col-12"
-                       [ngClass]="{'is-invalid': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted)}"
+                       [ngClass]="{'is-invalid': issueTitle.invalid  && (issueTitle.dirty || issueTitle.touched || newIssueForm.submitted || issueButtonClicked)}"
                        ngModel
                        #issueTitle="ngModel"
                        placeholder="lühikirjeldus hinnangust"
@@ -31,7 +31,7 @@
               </div>
               <div class="form-group">
                   <textarea id="issueText" class="form-control col-12"
-                            [ngClass]="{'is-invalid': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted)}"
+                            [ngClass]="{'is-invalid': issueText.invalid  && (issueText.dirty || issueText.touched || newIssueForm.submitted || issueButtonClicked)}"
                             ngModel
                             rows="6"
                             #issueText="ngModel"
@@ -49,6 +49,8 @@
                 <div class="custom-controls-stacked ml-2">
                   <div class="custom-control custom-radio">
                     <input id="issue_type_establishment_request"
+                           ngModel
+                           #radio = "ngModel"
                            class="custom-control-input"
                            type="radio"
                            [disabled]="openIssuesMatrix.establishment"
@@ -56,43 +58,54 @@
                            [value]="classifiers.issue_type.ESTABLISHMENT_REQUEST.code"
                            name="type_est"
                            (change)="onIssueTypeChange(classifiers.issue_type.ESTABLISHMENT_REQUEST.code)" required>
-                    <label for="issue_type_establishment_request" class="custom-control-label">asutamiseks
+                    <label for="issue_type_establishment_request"
+                           class="custom-control-label"
+                           [ngClass]="{'inva': requestButtonClicked && radio.invalid}">asutamiseks
                       <small *ngIf="openIssuesMatrix.establishment"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
                   </div>
                   <div class="custom-control custom-radio">
                     <input id="issue_type_take_into_use_request"
+                           ngModel
+                           #radio = "ngModel"
                            class="custom-control-input" type="radio"
                            [(ngModel)]="approvalRequest.type"
                            [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"
                            name="type_use"
                            [disabled]="openIssuesMatrix.takingIntoUse"
                            (change)="onIssueTypeChange(classifiers.issue_type.TAKE_INTO_USE_REQUEST.code)" required>
-                    <label for="issue_type_take_into_use_request" class="custom-control-label">kasutusele võtmiseks
+                    <label for="issue_type_take_into_use_request" class="custom-control-label"
+                           [ngClass]="{'inva': requestButtonClicked && radio.invalid}">kasutusele võtmiseks
                       <small *ngIf="openIssuesMatrix.takingIntoUse"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
                   </div>
                   <div class="custom-control custom-radio">
                     <input id="issue_type_modification_request"
+                           ngModel
+                           #radio = "ngModel"
                            class="custom-control-input" type="radio"
                            [(ngModel)]="approvalRequest.type"
                            [value]="classifiers.issue_type.MODIFICATION_REQUEST.code"
                            name="type_mod"
                            [disabled]="openIssuesMatrix.modification"
                            (change)="onIssueTypeChange(classifiers.issue_type.MODIFICATION_REQUEST.code)" required>
-                    <label for="issue_type_modification_request" class="custom-control-label">andmekoosseisu muutmiseks
+                    <label for="issue_type_modification_request" class="custom-control-label"
+                           [ngClass]="{'inva': requestButtonClicked && radio.invalid}">andmekoosseisu muutmiseks
                       <small *ngIf="openIssuesMatrix.modification"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
                   </div>
                   <div class="custom-control custom-radio">
                     <input id="issue_type_finalization_request" class="custom-control-input"
+                           ngModel
+                           #radio = "ngModel"
                            type="radio"
                            [(ngModel)]="approvalRequest.type"
                            [value]="classifiers.issue_type.FINALIZATION_REQUEST.code"
                            name="type_fin"
                            [disabled]="openIssuesMatrix.finalization"
                            (change)="onIssueTypeChange(classifiers.issue_type.FINALIZATION_REQUEST.code)" required>
-                    <label for="issue_type_finalization_request" class="custom-control-label">lõpetamiseks
+                    <label for="issue_type_finalization_request" class="custom-control-label"
+                           [ngClass]="{'inva': requestButtonClicked && radio.invalid}">lõpetamiseks
                       <small *ngIf="openIssuesMatrix.finalization"> (Sellist tüüpi arutelu on juba aktiivne. Uue tagasiside küsimiseks oota, et aktiivne arutelu suletaks)</small>
                     </label>
                   </div>
@@ -112,7 +125,7 @@
                 <label for="requestText" class="text-muted mb-0">Kommentaar: *</label>
                 <small class="label-small-text text-muted">kommentaarid on nähtavad ainult infosüsteemi omanikule ja RIHA hindajale</small>
                 <textarea id="requestText" class="form-control col-12"
-                          [ngClass]="{'is-invalid': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted)}"
+                          [ngClass]="{'is-invalid': requestText.invalid  && (requestText.dirty || requestText.touched || approvalRequestForm.submitted || requestButtonClicked)}"
                           [(ngModel)]="approvalRequest.comment"
                           rows="6"
                           #requestText="ngModel"
