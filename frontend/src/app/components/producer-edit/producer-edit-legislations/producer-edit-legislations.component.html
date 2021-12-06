@@ -8,7 +8,7 @@
       <div class="form-group">
         <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
         <input id="url"
-               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || buttonClicked)}"
                class="form-control col-12"
                #url="ngModel"
                [(ngModel)]="data.url"
@@ -32,7 +32,7 @@
         <label for="type" class="text-muted separated-text">Õigusakti liik:</label>
         <select id="type"
                 [compareWith]="generalHelperService.compareClassifiers"
-                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched)}"
+                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched || buttonClicked)}"
                 class="form-control col-12"
                 #type="ngModel"
                 [(ngModel)]="data.type"

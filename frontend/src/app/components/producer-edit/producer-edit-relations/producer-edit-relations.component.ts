@@ -29,6 +29,7 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
     infoSystem: any,
     type: string
   };
+  buttonClicked: boolean = false;
 
 
   dropDownFormatter = (v)=> {
@@ -59,6 +60,9 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
       }, err => {
         this.toastrService.error('Serveri viga');
       });
+      this.buttonClicked = false;
+    }else {
+      this.buttonClicked = true;
     }
   };
 

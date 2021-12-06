@@ -9,7 +9,7 @@
         <label for="infoSystem" class="text-muted separated-text">Infosüsteemi lühinimi:</label>
         <small class="label-small-text text-muted">Sisesta vähemalt 3 tähemärki, et otsida infosüsteemi nime alusel</small>
         <input id="infoSystem"
-               [ngClass]="{'is-invalid': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched)}"
+               [ngClass]="{'is-invalid': infoSystem.invalid && (infoSystem.dirty || infoSystem.touched || buttonClicked)}"
                class="form-control col-12"
                #infoSystem="ngModel"
                [ngbTypeahead]="search"
@@ -23,7 +23,7 @@
         <label for="type" class="text-muted separated-text">Seose tüüp:</label>
         <select id="type"
                 [compareWith]="generalHelperService.compareClassifiers"
-                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched)}"
+                [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched || buttonClicked)}"
                 class="form-control col-12"
                 #type="ngModel"
                 [(ngModel)]="relation.type"
