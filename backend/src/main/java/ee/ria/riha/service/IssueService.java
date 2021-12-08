@@ -247,7 +247,6 @@ public class IssueService {
 
         Issue createdIssue = getIssueById(createdIssueIds.get(0));
 
-        notificationService.sendNewIssueToSystemContactsNotification(infoSystem);
         notificationService.sendNewIssueToApproversNotification(createdIssue, infoSystem);
 
         return createdIssue;
