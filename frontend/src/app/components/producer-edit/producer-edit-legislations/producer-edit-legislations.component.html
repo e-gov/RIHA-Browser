@@ -6,29 +6,6 @@
   <div class="my-1">
     <form #addForm="ngForm">
       <div class="form-group">
-        <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
-        <input id="url"
-               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || buttonClicked)}"
-               class="form-control col-12"
-               #url="ngModel"
-               [(ngModel)]="data.url"
-               type="url"
-               placeholder="https://www.riigiteataja.ee/akt/126082015036"
-               (keyup.enter)="addLegislation(addForm)"
-               name="url" url required>
-
-      </div>
-      <div class="form-group">
-        <label for="name" class="text-muted separated-text">Õigusakti pealkiri:</label>
-        <input id="name" class="form-control col-12"
-               #name="ngModel"
-               [(ngModel)]="data.name"
-               placeholder="Põllumajandustoetuste ja põllumassiivide registri põhimäärus"
-               (keyup.enter)="addLegislation(addForm)"
-               name="name">
-
-      </div>
-      <div class="form-group">
         <label for="type" class="text-muted separated-text">Õigusakti liik:</label>
         <select id="type"
                 [compareWith]="generalHelperService.compareClassifiers"
@@ -40,6 +17,28 @@
           <option [ngValue]="''" disabled selected>Vali õigusakti liik...</option>
           <option *ngFor="let type of generalHelperService.toArray(classifiers.legislation_types)" [ngValue]="type.code" selected>{{ type.value }}</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label for="url" class="text-muted separated-text">Õigusakti URL:</label>
+        <input id="url"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || buttonClicked)}"
+               class="form-control col-12"
+               #url="ngModel"
+               [(ngModel)]="data.url"
+               type="url"
+               placeholder="https://www.riigiteataja.ee/akt/126082015036"
+               (keyup.enter)="addLegislation(addForm)"
+               name="url" url required>
+      </div>
+      <div class="form-group">
+        <label for="name" class="text-muted separated-text">Õigusakti pealkiri:</label>
+        <input id="name" class="form-control col-12"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || buttonClicked)}"
+               #name="ngModel"
+               [(ngModel)]="data.name"
+               placeholder="Põllumajandustoetuste ja põllumassiivide registri põhimäärus"
+               (keyup.enter)="addLegislation(addForm)"
+               name="name">
       </div>
       <div class="form-group row">
         <div class="col-12">
