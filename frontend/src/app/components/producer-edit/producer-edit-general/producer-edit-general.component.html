@@ -17,8 +17,10 @@
                class="form-control h1"
                [(ngModel)]="system.details.name"
                name="system.details.name"
+               pattern="^[a-zA-ZõÕäÄöÖüÜ0-9][\S ]*[\S]$"
                (keydown.enter)="$event.preventDefault()"
-               type="text" id="name-input" required>
+               type="text"
+               id="name-input" required>
       </div>
       <div class="mb-4">
         <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
@@ -28,8 +30,8 @@
                [(ngModel)]="system.details.short_name"
                name="short_name"
                pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
-               type="text"
                (keydown.enter)="$event.preventDefault()"
+               type="text"
                id="short-name-input" required>
       </div>
 
