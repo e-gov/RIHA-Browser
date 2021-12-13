@@ -15,7 +15,7 @@ Feature: Infosystems feedback requesting
     When InfosystemPage: user clicks the new associated infosystem and is redirected to a new tab
     And InfosytemPage: user clicks on 'Seosed süsteemidega' in the navigation bar
     Then InfosystemPage: url will contain 'Infosüsteemid/Vaata/ummik.test#seosed'
-    And InfosystemPage: associated infosystem 'Riigi infosüsteemi haldussüsteem (riha-test)' will appear
+    And InfosystemPage: associated infosystem 'riha-test (riha-test)' will appear
     When InfosystemPage: user clicks on said associated infosystem and new detail view page opens
     And InfosystemPage: user goes back to last page
     And InfosystemPage: user goes back to the last tab '0'

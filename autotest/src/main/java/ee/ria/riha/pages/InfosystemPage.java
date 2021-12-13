@@ -96,8 +96,14 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[1]/table")
     private WebElement dataObjectsTable;
 
+    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[1]")
+    private WebElement emptyDataObjectsTable;
+
     @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[2]/table")
     private WebElement dataUrlsTable;
+
+    @FindBy(xpath = "//div[@id='andmed']/app-producer-details-objects/section/div[2]/div[2]")
+    private WebElement emptyDataUrlsTable;
 
     @FindBy(xpath = "//div[contains(@id,'ngb-nav')]/div/div/table")
     private WebElement openIssuesTable;
@@ -126,7 +132,7 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//a[contains(@href, '/Infosüsteemid/Vaata/ummik.test')]")
     private WebElement newAssociatedInfosystemInModal;
 
-    @FindBy(xpath = "//a[contains(text(),'Riigi infosüsteemi haldussüsteem (riha-test)')]")
+    @FindBy(xpath = "//a[contains(text(),'riha-test (riha-test)')]")
     private WebElement newAssociatedInfosystemInDetail;
 
     @FindBy(xpath = "//tr[contains(.,\"ummik.test\")]/td[3]/button")
@@ -231,7 +237,7 @@ public class InfosystemPage extends BasePage {
 
     public void userClicksOnUploadNewFileButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
-        modalContainer.findElement(By.cssSelector(".ml-2:nth-child(1)")).click();
+        modalContainer.findElement(By.cssSelector(".ml-2:nth-child(2)")).click();
     }
 
     public boolean isUploadedDateDisplayedOnTheLastUploadedDocument() {
@@ -255,7 +261,7 @@ public class InfosystemPage extends BasePage {
                 .orElse(null);
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(formattedDate);
-            return Math.abs(date.getTime() - System.currentTimeMillis()) < 60000L;
+            return Math.abs(date.getTime() - System.currentTimeMillis()) < 90000L;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -401,6 +407,7 @@ public class InfosystemPage extends BasePage {
 
         modalContainer.findElement(By.cssSelector(".btn-danger")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+        wait.sleep(1000);
     }
 
     public String getEmptyContactsPlaceholder() {
@@ -432,7 +439,7 @@ public class InfosystemPage extends BasePage {
     public void clickOnAddNewDocumentationUrlButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
 
-        modalContainer.findElement(By.cssSelector(".btn-secondary:nth-child(2)")).click();
+        modalContainer.findElement(By.xpath("/html/body/ngb-modal-window/div/div/app-producer-edit-tech-docs/section/div/form[1]/div/button[1]")).click();
     }
 
     public void clickEditDataButton() {
@@ -459,6 +466,7 @@ public class InfosystemPage extends BasePage {
 
         WebElement linkTypeElement = modalContainer.findElement(By.id("fileType"));
         linkTypeElement.click();
+        wait.sleep(3000);
         modifiedSelectByValue(new Select(linkTypeElement), "DOC_TYPE_ISKE_ACT");
 
         //upload test data file
@@ -493,7 +501,8 @@ public class InfosystemPage extends BasePage {
     public String getTechDocUrls() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, techDocTable, "techDocTable");
         wait.sleep(TABLE_SORT_TIMEOUT);
-        return techDocTable.findElements(By.cssSelector(".name")).stream()
+        return techDocTable.findElements(By.tagName("tr")).stream()
+                .map(tr -> tr.findElement(By.cssSelector(".name")))
                 .map(td -> td.findElement(By.tagName("a")))
                 .map(WebElement::getText)
                 .collect(Collectors.joining(","));
@@ -511,6 +520,7 @@ public class InfosystemPage extends BasePage {
 
         techDocLinkDiv.findElement(By.className("btn-danger")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+        wait.sleep(1000);
     }
 
     public void addDataObjectFileAndUrlToInfosystem(String dataObject, String fileName, String url, String urlName) {
@@ -536,6 +546,7 @@ public class InfosystemPage extends BasePage {
     }
 
     public String getDataObjects() {
+
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, dataObjectsTable, "dataObjectsTable");
         wait.sleep(TABLE_SORT_TIMEOUT);
 
@@ -544,6 +555,13 @@ public class InfosystemPage extends BasePage {
                 .map(tr -> tr.findElement(By.cssSelector("td:nth-child(2)")))
                 .map(WebElement::getText)
                 .collect(Collectors.joining(","));
+    }
+
+    public boolean getEmptyDataTable(){
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, emptyDataObjectsTable, "dataObjectsTable");
+        wait.sleep(TABLE_SORT_TIMEOUT);
+        boolean emptyTable = emptyDataObjectsTable.findElement(By.tagName("p")).getText().contains("Objektid puuduvad");
+        return emptyTable;
     }
 
     public String getDataUrls() {
@@ -555,6 +573,13 @@ public class InfosystemPage extends BasePage {
                 .map(tr -> tr.findElement(By.xpath("td/a")))
                 .map(WebElement::getText)
                 .collect(Collectors.joining(","));
+    }
+
+    public boolean getEmptyUrlTable(){
+        wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, emptyDataUrlsTable, "dataUrlsTable");
+        wait.sleep(TABLE_SORT_TIMEOUT);
+        boolean emptyTable = emptyDataUrlsTable.findElement(By.tagName("p")).getText().contains("Failid puuduvad");
+        return emptyTable;
     }
 
     public void removeDataObjectFileAndUrl(String dataObject, String fileName, String urlName) {
