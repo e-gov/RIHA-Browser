@@ -85,7 +85,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-      this.helper.setRihaPageTitle('Minu organisatsioon');
+      this.generalHelperService.setRihaPageTitle('Minu organisatsioon');
       this.route.queryParams.subscribe( params => {
       this.gridData.changeSortOrder(params['sort'] || 'lastName');
       this.gridData.setPageFromUrl(params['page']);
