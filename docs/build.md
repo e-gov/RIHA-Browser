@@ -13,7 +13,7 @@ These prerequisites are not strict but reflect an actual build environment:
 
 ### Install OpenJDK
 ~~~bash
-sudo apt-get install openjdk-8-jdk
+sudo apt-get install openjdk-11-jdk
 ~~~
 
 ### Install and configure Maven
