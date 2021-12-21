@@ -4,14 +4,14 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   api: {
-    environmentUrl: 'http://localhost:8080/api/v1/environment',
-    userInfoUrl: 'http://localhost:8080/api/v1/user',
-    classifiersUrl: 'http://localhost:8080/api/v1/environment/classifiers',
-    systemsUrl: 'http://localhost:8080/api/v1/systems',
-    issuesUrl: 'http://localhost:8080/api/v1/issues',
-    myOrganizationUrl: 'http://localhost:8080/api/v1/my/organization/users',
-    systemFeedbackUrl: 'http://localhost:8080/api/v1/system-feedback'
+    environmentUrl: '/api/v1/environment',
+    userInfoUrl: '/api/v1/user',
+    classifiersUrl: '/api/v1/environment/classifiers',
+    systemsUrl: '/api/v1/systems',
+    issuesUrl: '/api/v1/issues',
+    myOrganizationUrl: '/api/v1/my/organization/users',
+    systemFeedbackUrl: '/api/v1/system-feedback'
   }
 };
