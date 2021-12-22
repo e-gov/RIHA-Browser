@@ -20,6 +20,10 @@ export class System {
     return this.details.meta.system_status.status;
   }
 
+  getStandardInformationSystem() : boolean{
+    return this.details.meta.standard_information_system;
+  }
+
   getSecurityStandard() {
     return this.details.security.standard ? this.details.security.standard : null;
   }
@@ -50,6 +54,10 @@ export class System {
 
   setStatus(status): void {
     this.details.meta.system_status.status = status;
+  }
+
+  setStandardInformationSystem(standard): void {
+    this.details.meta.standard_information_system = standard;
   }
 
   isUsed(): boolean{
@@ -112,13 +120,13 @@ export class System {
     return this.details.security.latest_audit_resolution != null;
   }
 
-  hasStandardRealisationTopic() : boolean {
-    if (!this.getTopics()) {
-      return false;
-    }
-
-    return this.getTopics().find(value => value == 'standardlahendus');
-  }
+  // hasStandardRealisationTopic() : boolean {
+  //   if (!this.getTopics()) {
+  //     return false;
+  //   }
+  //
+  //   return this.getTopics().find(value => value == 'standardlahendus');
+  // }
 
   constructor(system?){
     system = system || {};
@@ -144,6 +152,9 @@ export class System {
           timestamp: null
         }
       }
+      if (!this.details.meta.standard_information_system){
+        this.details.meta.standard_information_system = false;
+      }
     }
     else {
       this.details.meta = {
@@ -155,7 +166,8 @@ export class System {
         x_road_status: {
           status: null,
           timestamp: null
-        }
+        },
+        standard_information_system: false
       }
     }
     this.details.topics = this.details.topics || [];
