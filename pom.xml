@@ -22,8 +22,8 @@
     </modules>
 
     <properties>
-        <revision>7.7.5</revision>
-        <spring.boot.version>2.5.6</spring.boot.version>
+        <revision>7.7.6</revision>
+        <spring.boot.version>2.5.8</spring.boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
