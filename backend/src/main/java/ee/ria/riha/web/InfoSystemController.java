@@ -184,6 +184,7 @@ public class InfoSystemController {
         }
 
         InfoSystem newlyCreatedInfoSystem = existingInfoSystem.copy();
+        newlyCreatedInfoSystem.setStandardInformationSystem(false);
         newlyCreatedInfoSystem.setShortName(standardRealisationCreationModel.getShortName());
         newlyCreatedInfoSystem.setDifferences(standardRealisationCreationModel.getDifferences());
         newlyCreatedInfoSystem.setFullName(standardRealisationCreationModel.getName());
