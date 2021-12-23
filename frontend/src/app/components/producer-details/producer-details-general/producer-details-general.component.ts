@@ -24,14 +24,12 @@ export class ProducerDetailsGeneralComponent implements OnInit {
   }
 
   openStandardUserInfosystemModal() {
-    this.system.setStandardInformationSystem(false)
     const modalRef = this.modalService.open(ProducerEditStandardRealisationsComponent, {
       size: "lg",
       backdrop: "static",
       windowClass: "fixed-header-modal",
       keyboard: false
     });
-    console.log(this.system.getStandardInformationSystem() + " openStandardUserInfosystemModal")
     modalRef.componentInstance.system = this.system;
   }
 

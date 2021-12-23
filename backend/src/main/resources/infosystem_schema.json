@@ -188,10 +188,6 @@
             }
           },
           "type": "object"
-        },
-        "standard_information_system": {
-          "type": "boolean",
-          "description": "Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks"
         }
       },
       "type": "object"
@@ -306,6 +302,10 @@
       ],
       "type": "object",
       "description": "Infosüsteemi turvainfo"
+    },
+    "standard_information_system": {
+      "type": "boolean",
+      "description": "Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks"
     }
   }
 }
