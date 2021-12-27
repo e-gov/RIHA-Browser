@@ -20,6 +20,10 @@ export class System {
     return this.details.meta.system_status.status;
   }
 
+  getStandardInformationSystem() : boolean{
+    return this.details.standard_information_system;
+  }
+
   getSecurityStandard() {
     return this.details.security.standard ? this.details.security.standard : null;
   }
@@ -50,6 +54,10 @@ export class System {
 
   setStatus(status): void {
     this.details.meta.system_status.status = status;
+  }
+
+  setStandardInformationSystem(standard): void {
+    this.details.standard_information_system = standard;
   }
 
   isUsed(): boolean{
@@ -112,13 +120,13 @@ export class System {
     return this.details.security.latest_audit_resolution != null;
   }
 
-  hasStandardRealisationTopic() : boolean {
-    if (!this.getTopics()) {
-      return false;
-    }
-
-    return this.getTopics().find(value => value == 'standardlahendus');
-  }
+  // hasStandardRealisationTopic() : boolean {
+  //   if (!this.getTopics()) {
+  //     return false;
+  //   }
+  //
+  //   return this.getTopics().find(value => value == 'standardlahendus');
+  // }
 
   constructor(system?){
     system = system || {};
@@ -143,6 +151,11 @@ export class System {
           status: null,
           timestamp: null
         }
+      }
+      if (!this.details.standard_information_system){
+        this.details.standard_information_system = false;
+      } else if (this.details.standard_information_system == true && this.lastPositiveApprovalRequestType == classifiers.issue_type.AUTOMATICALLY_REGISTERED.code){
+        this.details.standard_information_system = false;
       }
     }
     else {

@@ -3,6 +3,10 @@ import {System} from '../../../models/system';
 import {classifiers} from "../../../services/environment.service";
 import {Router} from '@angular/router';
 import {GeneralHelperService} from '../../../services/general-helper.service';
+import {
+  ProducerEditStandardRealisationsComponent
+} from "../../producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component";
+import {ModalHelperService} from "../../../services/modal-helper.service";
 
 @Component({
   selector: 'app-producer-details-general',
@@ -19,7 +23,17 @@ export class ProducerDetailsGeneralComponent implements OnInit {
     this.router.navigate(['/Infosüsteemid'], {queryParams: {topic: topic}});
   }
 
-  constructor(private router: Router,  private helper: GeneralHelperService) { }
+  openStandardUserInfosystemModal() {
+    const modalRef = this.modalService.open(ProducerEditStandardRealisationsComponent, {
+      size: "lg",
+      backdrop: "static",
+      windowClass: "fixed-header-modal",
+      keyboard: false
+    });
+    modalRef.componentInstance.system = this.system;
+  }
+
+  constructor(private router: Router,  private helper: GeneralHelperService, private modalService: ModalHelperService) { }
 
   ngOnInit() {
   }
