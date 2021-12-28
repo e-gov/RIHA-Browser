@@ -21,5 +21,4 @@ public class RelationSummaryModel {
     private String infoSystemName;
     private String infoSystemShortName;
     private RelationType type;
-    private String infoSystemStatus;
 }
