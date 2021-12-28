@@ -21,6 +21,7 @@ public class Relation {
     private UUID infoSystemUuid;
     private String infoSystemName;
     private String infoSystemShortName;
+    private String infoSystemStatus;
 
     private UUID relatedInfoSystemUuid;
     private String relatedInfoSystemName;
@@ -29,6 +30,7 @@ public class Relation {
     private RelationType type;
 
     private boolean reversed;
+
 
     public Relation reverse() {
         return Relation.builder()
@@ -43,6 +45,7 @@ public class Relation {
                 .relatedInfoSystemShortName(this.infoSystemShortName)
                 .type(this.type != null ? this.type.getOpposite() : null)
                 .reversed(!this.reversed)
+                .infoSystemStatus(this.infoSystemStatus)
                 .build();
     }
 }
