@@ -39,6 +39,7 @@ public class RelationController {
                 .infoSystemUuid(normalizedRelation.getRelatedInfoSystemUuid())
                 .infoSystemName(normalizedRelation.getRelatedInfoSystemName())
                 .infoSystemShortName(normalizedRelation.getRelatedInfoSystemShortName())
+                .infoSystemStatus(normalizedRelation.getInfoSystemStatus())
                 .type(normalizedRelation.getType())
                 .build();
     };
