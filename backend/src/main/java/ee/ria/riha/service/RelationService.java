@@ -1,5 +1,6 @@
 package ee.ria.riha.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Relation;
 import ee.ria.riha.domain.model.RelationType;
@@ -81,15 +82,42 @@ public class RelationService {
 
         List<Relation> allRelations = directRelations.stream()
                 .map(MAIN_RESOURCE_RELATION_TO_RELATION)
+                .peek(relation -> {
+                    InfoSystem infoSys = infoSystemService.get(relation.getRelatedInfoSystemName());
+                    JsonNode jsonContent = infoSys.getJsonContent();
+                    String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
+                    relation.setInfoSystemStatus(status);
+                })
                 .collect(Collectors.toList());
 
         List<MainResourceRelation> reverseRelations = getReverseRelations(infoSystem);
 
+
         allRelations.addAll(reverseRelations.stream()
                 .map(MAIN_RESOURCE_RELATION_TO_RELATION)
                 .peek(relation -> relation.setReversed(true))
+                .peek(relation -> {
+                    InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemName());
+                    JsonNode jsonContent = infoSys.getJsonContent();
+                    String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
+                    relation.setInfoSystemStatus(status);
+                })
                 .collect(Collectors.toList())
         );
+
+//        for (Relation relation : allRelations){
+//            InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemName());
+//            JsonNode jsonContent = infoSys.getJsonContent();
+//            String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
+//        }
+//
+//        allRelations.stream().peek(relation -> {
+//            InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemName());
+//            JsonNode jsonContent = infoSys.getJsonContent();
+//            String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
+//            relation.setInfoSystemStatus(status);
+//        }).collect(Collectors.toList());
+
 
         return allRelations;
     }
