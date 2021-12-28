@@ -7,7 +7,7 @@
     <h1 class="mt-0">{{ system.details.name }}</h1>
     <h2>{{ system.details.short_name }}</h2>
     <div *ngIf="system.getStatus() || system.getDevelopmentStatus() || allowEdit">
-      <div *ngIf="system.getStandardInformationSystem() == true">
+      <div *ngIf="system.getStandardInformationSystem() == true && allowEdit">
         <span class="col-form-label advanced-label"><i class="fa fa-align-justify" aria-hidden="true"></i><strong class="text-primary"> On standardlahendus</strong>
           <button *ngIf="system.getStandardInformationSystem() == true && system.getStatus() == classifiers.system_status.IN_USE.code && system.getLastPositiveApprovalRequestType() == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code" (click)="openStandardUserInfosystemModal()" class="btn btn-primary btn-sm ml-3 mb-1"><i class="fa fa-user-plus " aria-hidden="true"></i>&nbsp;Registreerin kasutajaks</button>
         </span>
