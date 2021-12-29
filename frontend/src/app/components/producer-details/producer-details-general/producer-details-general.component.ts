@@ -7,6 +7,7 @@ import {
   ProducerEditStandardRealisationsComponent
 } from "../../producer-edit/producer-edit-standard-realisations/producer-edit-standard-realisations.component";
 import {ModalHelperService} from "../../../services/modal-helper.service";
+import {UserMatrix} from "../../../models/user-matrix";
 
 @Component({
   selector: 'app-producer-details-general',
@@ -17,6 +18,7 @@ export class ProducerDetailsGeneralComponent implements OnInit {
 
   @Input() system: System;
   @Input() allowEdit: boolean;
+  @Input() userMatrix: UserMatrix;
   classifiers = classifiers;
 
   listSystemsWithTopic(topic){
