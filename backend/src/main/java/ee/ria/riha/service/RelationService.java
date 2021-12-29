@@ -3,6 +3,7 @@ package ee.ria.riha.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Relation;
+import ee.ria.riha.domain.model.RelationResponse;
 import ee.ria.riha.domain.model.RelationType;
 import ee.ria.riha.storage.domain.MainResourceRelationRepository;
 import ee.ria.riha.storage.domain.model.MainResourceRelation;
@@ -27,6 +28,27 @@ public class RelationService {
         }
 
         return Relation.builder()
+                .id(mainResourceRelation.getMain_resource_relation_id())
+                .infoSystemUuid(mainResourceRelation.getInfosystem_uuid())
+                .infoSystemName(mainResourceRelation.getInfosystem_name())
+                .infoSystemShortName(mainResourceRelation.getInfosystem_short_name())
+                .relatedInfoSystemUuid(mainResourceRelation.getRelated_infosystem_uuid())
+                .relatedInfoSystemName(mainResourceRelation.getRelated_infosystem_name())
+                .relatedInfoSystemShortName(mainResourceRelation.getRelated_infosystem_short_name())
+                .type(mainResourceRelation.getType() != null
+                        ? RelationType.valueOf(mainResourceRelation.getType())
+                        : null)
+                .creationDate(mainResourceRelation.getCreation_date())
+                .modifiedDate(mainResourceRelation.getModified_date())
+                .build();
+    };
+
+    private static final Function<MainResourceRelation, RelationResponse> MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE = mainResourceRelation -> {
+        if (mainResourceRelation == null) {
+            return null;
+        }
+
+        return RelationResponse.builder()
                 .id(mainResourceRelation.getMain_resource_relation_id())
                 .infoSystemUuid(mainResourceRelation.getInfosystem_uuid())
                 .infoSystemName(mainResourceRelation.getInfosystem_name())
@@ -75,15 +97,15 @@ public class RelationService {
      * @param reference info system reference
      * @return list of relations (related info systems)
      */
-    public List<Relation> listRelations(String reference) {
+    public List<RelationResponse> listRelations(String reference) {
         InfoSystem infoSystem = infoSystemService.get(reference);
 
         List<MainResourceRelation> directRelations = getDirectRelations(infoSystem);
 
-        List<Relation> allRelations = directRelations.stream()
-                .map(MAIN_RESOURCE_RELATION_TO_RELATION)
+        List<RelationResponse> allRelations = directRelations.stream()
+                .map(MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE)
                 .peek(relation -> {
-                    InfoSystem infoSys = infoSystemService.get(relation.getRelatedInfoSystemName());
+                    InfoSystem infoSys = infoSystemService.get(relation.getRelatedInfoSystemUuid());
                     JsonNode jsonContent = infoSys.getJsonContent();
                     String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
                     relation.setInfoSystemStatus(status);
@@ -94,30 +116,16 @@ public class RelationService {
 
 
         allRelations.addAll(reverseRelations.stream()
-                .map(MAIN_RESOURCE_RELATION_TO_RELATION)
+                .map(MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE)
                 .peek(relation -> relation.setReversed(true))
                 .peek(relation -> {
-                    InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemName());
+                    InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemUuid());
                     JsonNode jsonContent = infoSys.getJsonContent();
                     String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
                     relation.setInfoSystemStatus(status);
                 })
                 .collect(Collectors.toList())
         );
-
-//        for (Relation relation : allRelations){
-//            InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemName());
-//            JsonNode jsonContent = infoSys.getJsonContent();
-//            String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
-//        }
-//
-//        allRelations.stream().peek(relation -> {
-//            InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemName());
-//            JsonNode jsonContent = infoSys.getJsonContent();
-//            String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
-//            relation.setInfoSystemStatus(status);
-//        }).collect(Collectors.toList());
-
 
         return allRelations;
     }
