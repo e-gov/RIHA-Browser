@@ -105,7 +105,7 @@ public class RelationService {
         List<RelationResponse> allRelations = directRelations.stream()
                 .map(MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE)
                 .peek(relation -> {
-                    InfoSystem infoSys = infoSystemService.get(relation.getRelatedInfoSystemShortName());
+                    InfoSystem infoSys = infoSystemService.get(relation.getRelatedInfoSystemUuid());
                     JsonNode jsonContent = infoSys.getJsonContent();
                     String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
                     relation.setInfoSystemStatus(status);
@@ -119,7 +119,7 @@ public class RelationService {
                 .map(MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE)
                 .peek(relation -> relation.setReversed(true))
                 .peek(relation -> {
-                    InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemShortName());
+                    InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemUuid());
                     JsonNode jsonContent = infoSys.getJsonContent();
                     String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
                     relation.setInfoSystemStatus(status);
