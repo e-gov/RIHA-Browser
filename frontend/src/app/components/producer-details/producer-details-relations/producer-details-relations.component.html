@@ -14,7 +14,7 @@
           <i class="fa fa-circle text-primary"></i>
         </td>
         <td>
-          <a href="#" (click)="openSystemDetails(relation.infoSystemShortName)" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }}) - {{getSystemStatusValue(relation.infoSystemStatus)}}</a><br />
+          <a href="/Infosüsteemid/Vaata/{{ relation.infoSystemShortName }}" onclick="return false;" (click)="openSystemDetails(relation.infoSystemShortName)" class="font-weight-bold">{{ relation.infoSystemName }} ({{ relation.infoSystemShortName }}) - {{getSystemStatusValue(relation.infoSystemStatus)}}</a><br />
           <span *ngIf="relation.type && classifiers.relation_type[relation.type]" class="text-gray-dark small">{{classifiers.relation_type[relation.type].value}}</span>
         </td>
       </tr>
