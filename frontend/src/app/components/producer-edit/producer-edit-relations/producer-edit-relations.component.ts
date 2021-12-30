@@ -31,6 +31,10 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
   };
   buttonClicked: boolean = false;
 
+  getRelationTypesArray(){
+    const removeRelations = ["USED_SYSTEM", "USER_SYSTEM"];
+    return this.generalHelperService.toArray(classifiers.relation_type).filter(obj => !removeRelations.includes(obj.code));
+  }
 
   dropDownFormatter = (v)=> {
     return `${v.details.short_name} - ${this.generalHelperService.truncateString(v.details.name, 90)}`;
