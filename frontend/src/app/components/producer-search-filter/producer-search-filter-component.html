@@ -126,6 +126,16 @@
           <label for="owner-code-input">Omaniku registrikood</label>
           <input class="form-control" (keyup.enter)="search()" [(ngModel)]="filters.ownerCode" type="text" id="owner-code-input">
         </div>
+        <div class="form-group">
+          <label for="standard_system">Infosüsteemi lahendus</label>
+          <select id="standard_system" class="form-control"
+                  [compareWith]="generalHelperService.compareClassifiers"
+                  (keyup.enter)="search()"
+                  [(ngModel)]="filters.standardSystem">
+            <option [ngValue]="''">kõik</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.standard_system)" [ngValue]="type.code" selected>{{ type.value }}</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="actions-bar mt-2 mb-1">

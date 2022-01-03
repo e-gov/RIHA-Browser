@@ -303,7 +303,7 @@
       "type": "object",
       "description": "Infosüsteemi turvainfo"
     },
-    "standard_information_system": {
+    "standard_system": {
       "type": "boolean",
       "description": "Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks"
     }
