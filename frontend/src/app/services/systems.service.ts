@@ -111,6 +111,9 @@ export class SystemsService {
       if (filters.shortName) {
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
+      if (filters.standardSystem) {
+        filtersArr.push(`standard_system,ilike,${ filters.standardSystem }`);
+      }
       if (filters.ownerCode) {
         filtersArr.push(`owner.code,jilike,%${ filters.ownerCode }%`);
       }
@@ -166,7 +169,6 @@ export class SystemsService {
       if (filters.dateUpdatedTo) {
         filtersArr.push(`j_update_timestamp,<,${ filters.dateUpdatedTo }T23:59:59`);
       }
-
       if (filtersArr.length > 0) {
         params = params.set('filter', filtersArr.join());
       }

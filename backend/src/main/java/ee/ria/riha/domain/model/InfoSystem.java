@@ -26,7 +26,7 @@ public class InfoSystem {
     private static final String OWNER_NAME_KEY = "name";
     private static final String OWNER_CODE_KEY = "code";
     private static final String SHORT_NAME_KEY = "short_name";
-    private static final String STANDARD_INFORMATION_SYSTEM = "standard_information_system";
+    private static final String STANDARD_SYSTEM = "standard_system";
     private static final String FULL_NAME_KEY = "name";
     private static final String PURPOSE = "purpose";
     private static final String CONTACTS_KEY = "contacts";
@@ -254,7 +254,7 @@ public class InfoSystem {
     }
 
     public void setStandardInformationSystem(boolean type) {
-        ((ObjectNode) jsonContent).put(STANDARD_INFORMATION_SYSTEM, type);
+        ((ObjectNode) jsonContent).put(STANDARD_SYSTEM, type);
     }
 
     /**
