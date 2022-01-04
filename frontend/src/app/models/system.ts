@@ -21,7 +21,7 @@ export class System {
   }
 
   getStandardInformationSystem() : boolean{
-    return this.details.standard_information_system;
+    return this.details.standard_system;
   }
 
   getSecurityStandard() {
@@ -57,7 +57,7 @@ export class System {
   }
 
   setStandardInformationSystem(standard): void {
-    this.details.standard_information_system = standard;
+    this.details.standard_system = standard;
   }
 
   isUsed(): boolean{
@@ -152,10 +152,10 @@ export class System {
           timestamp: null
         }
       }
-      if (!this.details.standard_information_system){
-        this.details.standard_information_system = false;
-      } else if (this.details.standard_information_system == true && this.lastPositiveApprovalRequestType == classifiers.issue_type.AUTOMATICALLY_REGISTERED.code){
-        this.details.standard_information_system = false;
+      if (!this.details.standard_system){
+        this.details.standard_system = false;
+      } else if (this.details.standard_system == true && this.lastPositiveApprovalRequestType == classifiers.issue_type.AUTOMATICALLY_REGISTERED.code){
+        this.details.standard_system = false;
       }
     }
     else {
