@@ -127,7 +127,7 @@
           <input class="form-control" (keyup.enter)="search()" [(ngModel)]="filters.ownerCode" type="text" id="owner-code-input">
         </div>
         <div class="form-group">
-          <label for="standard_system">Infosüsteemi lahendus</label>
+          <label for="standard_system">Standardlahendus</label>
           <select id="standard_system" class="form-control"
                   [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
