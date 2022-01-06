@@ -1,6 +1,5 @@
 package ee.ria.riha.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Relation;
 import ee.ria.riha.domain.model.RelationResponse;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,7 +43,7 @@ public class RelationService {
                 .build();
     };
 
-    private static final Function<MainResourceRelation, RelationResponse> MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE = mainResourceRelation -> {
+    private static final BiFunction<MainResourceRelation, Boolean, RelationResponse> RELATION_RESPONSE = (mainResourceRelation, relationType) -> {
         if (mainResourceRelation == null) {
             return null;
         }
@@ -53,6 +53,7 @@ public class RelationService {
                 .infoSystemUuid(mainResourceRelation.getInfosystem_uuid())
                 .infoSystemName(mainResourceRelation.getInfosystem_name())
                 .infoSystemShortName(mainResourceRelation.getInfosystem_short_name())
+                .infoSystemStatus(relationType ? mainResourceRelation.getInfosystem_status() : mainResourceRelation.getRelated_infosystem_status())
                 .relatedInfoSystemUuid(mainResourceRelation.getRelated_infosystem_uuid())
                 .relatedInfoSystemName(mainResourceRelation.getRelated_infosystem_name())
                 .relatedInfoSystemShortName(mainResourceRelation.getRelated_infosystem_short_name())
@@ -83,6 +84,8 @@ public class RelationService {
 
         return mainResourceRelation;
     };
+    private static final Boolean REVERSE = true;
+    private static final Boolean DIRECT = false;
 
     private MainResourceRelationRepository mainResourceRelationRepository;
 
@@ -103,27 +106,15 @@ public class RelationService {
         List<MainResourceRelation> directRelations = getDirectRelations(infoSystem);
 
         List<RelationResponse> allRelations = directRelations.stream()
-                .map(MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE)
-                .peek(relation -> {
-                    InfoSystem infoSys = infoSystemService.get(relation.getRelatedInfoSystemUuid());
-                    JsonNode jsonContent = infoSys.getJsonContent();
-                    String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
-                    relation.setInfoSystemStatus(status);
-                })
+                .map(relation -> RELATION_RESPONSE.apply(relation, DIRECT))
                 .collect(Collectors.toList());
 
         List<MainResourceRelation> reverseRelations = getReverseRelations(infoSystem);
 
 
         allRelations.addAll(reverseRelations.stream()
-                .map(MAIN_RESOURCE_RELATION_TO_RELATION_RESPONSE)
+                .map(relation -> RELATION_RESPONSE.apply(relation, REVERSE))
                 .peek(relation -> relation.setReversed(true))
-                .peek(relation -> {
-                    InfoSystem infoSys = infoSystemService.get(relation.getInfoSystemUuid());
-                    JsonNode jsonContent = infoSys.getJsonContent();
-                    String status = jsonContent.path("meta").path("system_status").path("status").asText(null);
-                    relation.setInfoSystemStatus(status);
-                })
                 .collect(Collectors.toList())
         );
 
