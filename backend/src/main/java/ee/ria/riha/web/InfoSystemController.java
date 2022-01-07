@@ -184,7 +184,7 @@ public class InfoSystemController {
         }
 
         InfoSystem newlyCreatedInfoSystem = existingInfoSystem.copy();
-        newlyCreatedInfoSystem.setStandardInformationSystem(false);
+        newlyCreatedInfoSystem.setStandardInformationSystemUndefined();
         newlyCreatedInfoSystem.setShortName(standardRealisationCreationModel.getShortName());
         newlyCreatedInfoSystem.setDifferences(standardRealisationCreationModel.getDifferences());
         newlyCreatedInfoSystem.setFullName(standardRealisationCreationModel.getName());
@@ -194,7 +194,6 @@ public class InfoSystemController {
         newlyCreatedInfoSystem.clearSecuritySection();
 
         newlyCreatedInfoSystem.removeTopic("standardlahendus");
-
 
         newlyCreatedInfoSystem = infoSystemService.create(newlyCreatedInfoSystem);
 

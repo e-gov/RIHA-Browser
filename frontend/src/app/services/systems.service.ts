@@ -111,9 +111,6 @@ export class SystemsService {
       if (filters.shortName) {
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
-      if (filters.standardSystem) {
-        filtersArr.push(`standard_system,ilike,${ filters.standardSystem }`);
-      }
       if (filters.ownerCode) {
         filtersArr.push(`owner.code,jilike,%${ filters.ownerCode }%`);
       }
@@ -155,6 +152,13 @@ export class SystemsService {
           filtersArr.push('meta.x_road_status.status,isnull,null');
         } else {
           filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
+        }
+      }
+      if (filters.standardSystem) {
+        if (filters.standardSystem === 'false') {
+          filtersArr.push('standard_system,isnull,null');
+        } else {
+          filtersArr.push(`standard_system,ilike,${filters.standardSystem}`);
         }
       }
       if (filters.dateCreatedFrom) {
