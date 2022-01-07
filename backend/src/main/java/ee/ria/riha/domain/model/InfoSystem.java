@@ -253,8 +253,8 @@ public class InfoSystem {
         ((ObjectNode) jsonContent).put(SHORT_NAME_KEY, shortName);
     }
 
-    public void setStandardInformationSystem(boolean type) {
-        ((ObjectNode) jsonContent).put(STANDARD_SYSTEM, type);
+    public void setStandardInformationSystemUndefined() {
+        ((ObjectNode) jsonContent).remove(STANDARD_SYSTEM);
     }
 
     /**
