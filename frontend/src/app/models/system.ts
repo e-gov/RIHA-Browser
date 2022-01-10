@@ -8,6 +8,8 @@ export class System {
 
   details: any = {};
 
+  standardSystemBoolean: any = null;
+
   getOwnerCode(): any {
     if (this.details && this.details.owner){
       return this.details.owner.code;
@@ -21,7 +23,13 @@ export class System {
   }
 
   getStandardInformationSystem() : boolean{
-    return this.details.standard_system;
+
+    if (this.details.standard_system == undefined) {
+      this.standardSystemBoolean = false;
+    } else if (this.details.standard_system == true) {
+      this.standardSystemBoolean = true
+    }
+    return this.standardSystemBoolean;
   }
 
   getSecurityStandard() {
@@ -57,7 +65,11 @@ export class System {
   }
 
   setStandardInformationSystem(standard): void {
-    this.details.standard_system = standard;
+    if (standard == false){
+      this.details.standard_system = undefined;
+    } else if (standard == true){
+      this.details.standard_system = true;
+    }
   }
 
   isUsed(): boolean{
@@ -151,11 +163,6 @@ export class System {
           status: null,
           timestamp: null
         }
-      }
-      if (!this.details.standard_system){
-        this.details.standard_system = false;
-      } else if (this.details.standard_system == true && this.lastPositiveApprovalRequestType == classifiers.issue_type.AUTOMATICALLY_REGISTERED.code){
-        this.details.standard_system = false;
       }
     }
     else {
