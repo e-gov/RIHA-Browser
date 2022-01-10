@@ -16,14 +16,14 @@ export class SystemsService {
   private myOrganizationUrl =  environment.api.myOrganizationUrl;
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
-    if ((dateObj) && dateObj.year && dateObj.month && dateObj.day){
+    if ((dateObj) && dateObj.year && dateObj.month && dateObj.day) {
       const year = dateObj.year.toString();
       let month = dateObj.month.toString();
       let day = dateObj.day.toString();
 
-      if (month.length === 1) month = '0' + month;
-      if (day.length === 1) day = '0' + day;
-      if (simple === true){
+      if (month.length === 1) {month = '0' + month}
+      if (day.length === 1) {day = '0' + day}
+      if (simple === true) {
         return `${ year }-${ month }-${ day }`;
       } else {
         return `${ year }-${ month }-${ day }T00:00:00Z`;
@@ -34,7 +34,7 @@ export class SystemsService {
   }
 
   public timestampToDateObj(timestamp: string): any {
-    if (timestamp != null || timestamp != undefined && timestamp.substr && timestamp != ''){
+    if (timestamp != null || timestamp !== undefined && timestamp.substr && timestamp !== '') {
       const year = parseInt(timestamp.substr(0, 4), 10);
       const month = parseInt(timestamp.substr(5, 2), 10);
       const day = parseInt(timestamp.substr(8, 2), 10);
@@ -49,19 +49,19 @@ export class SystemsService {
   }
 
   public prepareSystemForDisplay(system: any): any {
-    if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp){
+    if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp) {
       system.details.meta.approval_status.timestamp = this.timestampToDateObj(system.details.meta.approval_status.timestamp);
     }
-    if (system.details.meta.x_road_status && system.details.meta.x_road_status.timestamp){
+    if (system.details.meta.x_road_status && system.details.meta.x_road_status.timestamp) {
       system.details.meta.x_road_status.timestamp = this.timestampToDateObj(system.details.meta.x_road_status.timestamp);
     }
-    if (system.details.meta.system_status && system.details.meta.system_status.timestamp){
+    if (system.details.meta.system_status && system.details.meta.system_status.timestamp) {
       system.details.meta.system_status.timestamp = this.timestampToDateObj(system.details.meta.system_status.timestamp);
     }
     return system;
   }
 
-  public prepareSystemForSending(system: any){
+  public prepareSystemForSending(system: any) {
     if (system.details.meta.approval_status && system.details.meta.approval_status.timestamp) {
       system.details.meta.approval_status.timestamp = this.dateObjToTimestamp(system.details.meta.approval_status.timestamp);
     }
@@ -74,10 +74,10 @@ export class SystemsService {
     return system;
   }
 
-  public getAlertText(errObj): string{
+  public getAlertText(errObj): string {
     let ret = null;
     const code = errObj.code || errObj.error.code;
-    if (code === 'validation.system.shortNameAlreadyTaken'){
+    if (code === 'validation.system.shortNameAlreadyTaken') {
       ret = 'Lühinimi on juba kasutusel';
     } else {
       ret = errObj.message;
@@ -85,11 +85,11 @@ export class SystemsService {
     return ret;
   }
 
-  public getOwnSystems(filters?, gridData?){
+  public getOwnSystems(filters?, gridData?) {
     filters = filters || {};
 
     const user = this.environmentService.getActiveUser();
-    if (user && user.getActiveOrganization()){
+    if (user && user.getActiveOrganization()) {
       filters.ownerCode = user.getActiveOrganization().code;
     }
 
@@ -101,82 +101,88 @@ export class SystemsService {
     const filtersArr: string[] = [];
     let params: HttpParams = new HttpParams();
 
-    if (filters !== null){
-      if (filters.searchText){
+    if (filters !== null) {
+      if (filters.searchText) {
         filtersArr.push(`search_content,ilike,%${ filters.searchText }%`);
       }
-      if (filters.name){
+      if (filters.name) {
         filtersArr.push(`name,ilike,%${ filters.name }%`);
       }
-      if (filters.shortName){
+      if (filters.shortName) {
         filtersArr.push(`short_name,ilike,%${ filters.shortName }%`);
       }
-      if (filters.ownerCode){
+      if (filters.ownerCode) {
         filtersArr.push(`owner.code,jilike,%${ filters.ownerCode }%`);
       }
-      if (filters.ownerName){
+      if (filters.ownerName) {
         filtersArr.push(`owner.name,jilike,%${ filters.ownerName }%`);
       }
-      if (filters.purpose){
+      if (filters.purpose) {
         filtersArr.push(`purpose,jilike,%${ filters.purpose }%`);
       }
-      if (filters.topic){
+      if (filters.topic) {
         filtersArr.push(`topics,jarr,%${ filters.topic }%`);
       }
-      if (filters.storedData){
+      if (filters.storedData) {
         filtersArr.push(`stored_data,jarr,%${ filters.storedData }%`);
       }
-      if (filters.systemStatus){
-        if (filters.systemStatus == 'null'){
+      if (filters.systemStatus) {
+        if (filters.systemStatus === 'null') {
           filtersArr.push('meta.system_status.status,isnull,null');
         } else {
           filtersArr.push(`meta.system_status.status,jilike,${ filters.systemStatus }`);
         }
       }
-      if (filters.developmentStatus){
-        if (filters.developmentStatus == 'null'){
+      if (filters.developmentStatus) {
+        if (filters.developmentStatus === 'null') {
           filtersArr.push('meta.development_status,isnull,null');
         } else {
           filtersArr.push(`meta.development_status,jilike,${ filters.developmentStatus }`);
         }
       }
-      if (filters.lastPositiveApprovalRequestType){
-        if (filters.lastPositiveApprovalRequestType == 'null'){
+      if (filters.lastPositiveApprovalRequestType) {
+        if (filters.lastPositiveApprovalRequestType === 'null') {
           filtersArr.push('last_positive_approval_request_type,isnull,null');
         } else {
           filtersArr.push(`last_positive_approval_request_type,ilike,${ filters.lastPositiveApprovalRequestType }`);
         }
       }
-      if (filters.xRoadStatus){
-        if (filters.xRoadStatus == 'null'){
+      if (filters.xRoadStatus) {
+        if (filters.xRoadStatus === 'null') {
           filtersArr.push('meta.x_road_status.status,isnull,null');
         } else {
           filtersArr.push(`meta.x_road_status.status,jilike,${ filters.xRoadStatus }`);
         }
       }
-      if (filters.dateCreatedFrom){
+      if (filters.standardSystem) {
+        if (filters.standardSystem === 'false') {
+          filtersArr.push('standard_system,isnull,null');
+        } else {
+          filtersArr.push(`standard_system,ilike,${filters.standardSystem}`);
+        }
+      }
+      if (filters.dateCreatedFrom) {
         filtersArr.push(`j_creation_timestamp,>,${ filters.dateCreatedFrom }`);
       }
-      if (filters.dateCreatedTo){
+      if (filters.dateCreatedTo) {
         filtersArr.push(`j_creation_timestamp,<,${ filters.dateCreatedTo }T23:59:59`);
       }
-      if (filters.dateUpdatedFrom){
+      if (filters.dateUpdatedFrom) {
         filtersArr.push(`j_update_timestamp,>,${ filters.dateUpdatedFrom }`);
       }
-      if (filters.dateUpdatedTo){
+      if (filters.dateUpdatedTo) {
         filtersArr.push(`j_update_timestamp,<,${ filters.dateUpdatedTo }T23:59:59`);
       }
-
-      if (filtersArr.length > 0){
+      if (filtersArr.length > 0) {
         params = params.set('filter', filtersArr.join());
       }
     }
 
-    if (gridData.page !== null){
+    if (gridData.page !== null) {
       params = params.set('page', gridData.page);
     }
 
-    if (gridData.sort !== null){
+    if (gridData.sort !== null) {
       params = params.set('sort', gridData.sort);
     }
 
@@ -205,11 +211,11 @@ export class SystemsService {
       params.append('filter', `data:Andmeobjekti nimi:%${ filters.searchText }%`);
     }
 
-    if (gridData.page !== null){
+    if (gridData.page !== null) {
       params = params.set('page', gridData.page);
     }
 
-    if (gridData.sort != null || gridData.sort != undefined){
+    if (gridData.sort != null || gridData.sort !== undefined) {
       params = params.set('sort', gridData.sort);
     }
 
@@ -221,7 +227,7 @@ export class SystemsService {
   public getSystemsDataObjects(filters?, gridData?): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (filters != null || filters != undefined) {
+    if (filters != null || filters !== undefined) {
 
       const possibleFilters = ['searchText', 'searchName', 'infosystem', 'dataObjectName', 'comment', 'parentObject', 'personalData'];
 
@@ -232,16 +238,16 @@ export class SystemsService {
         filterAtrributes.push(`${possibleFilter},ilike,%${ filters[possibleFilter]}%`);
       }});
 
-      if (filterAtrributes.length > 0){
+      if (filterAtrributes.length > 0) {
         params = params.set('filter', filterAtrributes.join());
       }
     }
 
-    if (gridData.page != null || gridData.page != undefined){
+    if (gridData.page != null || gridData.page !== undefined) {
       params = params.set('page', gridData.page);
     }
 
-    if (gridData.sort != null || gridData.sort != undefined){
+    if (gridData.sort != null || gridData.sort !== undefined) {
       params = params.set('sort', gridData.sort);
     }
 
@@ -300,9 +306,9 @@ export class SystemsService {
     params = params.append('sort', sort ? sort : '-last_comment_creation_date');
 
     let urlToUse = '/api/v1/dashboard/issues';
-    if (relation == 'person'){
+    if (relation === 'person') {
       urlToUse += '/my';
-    } else if (relation == 'organization'){
+    } else if (relation === 'organization') {
       urlToUse += '/org';
     }
 
@@ -311,11 +317,18 @@ export class SystemsService {
     });
   }
 
-  public getActiveIssuesForOrganization(organizationCode, sort?): Observable<any> {
+  public getActiveIssuesForOrganization(organizationCode, gridData?): Observable<any> {
     let params: HttpParams = new HttpParams();
-    params = params.append('size', '1000');
+
     params = params.append('filter', 'status:OPEN');
-    params = params.append('sort', sort ? sort : '-last_comment_creation_date');
+    if (gridData) {
+      if (gridData.sort) {
+        params = params.set('sort', gridData.sort);
+      } else {
+        params = params.set('sort', '-last_comment_creation_date');
+      }
+      params = params.set('page', gridData.page);
+    }
 
     return this.http.get(`/api/v1/organizations/${ organizationCode }/systems/issues`, {
       params: params
@@ -337,10 +350,10 @@ export class SystemsService {
   public getOrganizationUsers(gridData): Observable<any> {
     let params: HttpParams = new HttpParams();
 
-    if (gridData.page != null || gridData.page != undefined){
+    if (gridData.page != null || gridData.page !== undefined) {
       params = params.set('page', gridData.page);
     }
-    if (gridData.sort != null || gridData.sort != undefined){
+    if (gridData.sort != null || gridData.sort !== undefined) {
       params = params.set('sort', gridData.sort);
     }
 

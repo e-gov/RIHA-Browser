@@ -25,22 +25,22 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   gridData: GridData  = new GridData();
 
   userMatrix: UserMatrix;
-  loaded: boolean = false;
+  loaded: Boolean = false;
   differ: any;
 
   searchText: string;
-  extendedSearch: boolean = false;
+  extendedSearch: Boolean = false;
 
 
   @ViewChild(ProducerSearchFilterComponent, { static: false })
   filterPanel: ProducerSearchFilterComponent;
 
-  onPageChange(newPage): void{
+  onPageChange(newPage): void {
     this.gridData.page = newPage - 1;
     this.getOwnSystems(this.gridData.page);
   }
 
-  onSortChange(property): void{
+  onSortChange(property): void {
     this.gridData.changeSortOrder(property);
     this.getOwnSystems();
   }
@@ -51,7 +51,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       return;
     }
 
-    const params = filters? filters: [];
+    const params = filters ? filters : [];
     params.searchText = this.searchText;
     delete params.ownerName;
     delete params.ownerCode;
@@ -75,7 +75,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     if (sortOrder) {
       params.dir = sortOrder;
     }
-    if (page && page != 0) {
+    if (page && page !== 0) {
       params.page = page + 1;
     } else {
       this.gridData.page = 0;
@@ -112,25 +112,25 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     return false;
   }
 
-  toggleSearchPanel(){
+  toggleSearchPanel() {
     this.extendedSearch = !this.extendedSearch;
     return false;
   }
 
-  hasActiveFilters(): boolean{
+  hasActiveFilters(): boolean {
     return this.filterPanel && this.filterPanel.hasActiveFilters();
   }
 
-  clearFilters(){
+  clearFilters() {
     this.filterPanel.clearFilters();
   }
 
-  clearFiltersAndRefresh(){
+  clearFiltersAndRefresh() {
     this.clearFilters();
     this.getOwnSystems();
   }
 
-  searchSystemsByTopic(topic){
+  searchSystemsByTopic(topic) {
     this.clearFilters();
     this.filterPanel.setTopicFilter(topic);
 
@@ -176,7 +176,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngDoCheck() {
     const changes = this.differ.diff(this.environmentService.globalEnvironment);
-    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
+    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)) {
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getOwnSystems();
     }

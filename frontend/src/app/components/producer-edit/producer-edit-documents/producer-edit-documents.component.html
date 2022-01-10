@@ -7,27 +7,20 @@
     <app-tooltip [text]='"Laadi üles infosüsteemi dokumentatsioon: arhitektuuri dokument, eelanalüüs, liideste kirjeldus ja muud sarnast"'></app-tooltip>
     <form #addForm="ngForm">
       <div class="form-group">
-        <button class="btn btn-secondary ml-2"
-                [disabled]="uploading"
-                (click)="showAddFileFields = !showAddFileFields; showAddLinkFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Laadi fail</button>
-        <button class="btn btn-secondary ml-2"
+        <button type="button" class="btn btn-secondary ml-2"
                 [disabled]="uploading"
                 (click)="showAddLinkFields = !showAddLinkFields; showAddFileFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa veebiviide</button>
+        <button type="button" class="btn btn-secondary ml-2"
+                [disabled]="uploading"
+                (click)="showAddFileFields = !showAddFileFields; showAddLinkFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Laadi fail</button>
       </div>
+
       <div *ngIf="showAddFileFields">
-        <div class="form-group">
-          <label for="dataFile" class="text-muted separated-text">Fail:</label>
-          <div></div>
-          <label class="btn btn-secondary input-file-label mb-0 doc-style" for="dataFile">Vali fail</label>
-          <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event)">
-          <span *ngIf="docFile != null" claas="col-4">{{ docFile.name }}</span>
-          <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
-        </div>
         <div class="form-group">
           <label for="fileType" class="text-muted separated-text">Liik:</label>
           <select id="fileType"
                   [compareWith]="generalHelperService.compareClassifiers"
-                  [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched)}"
+                  [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched || uploadButtonClicked)}"
                   class="form-control col-12"
                   #fileType="ngModel"
                   [(ngModel)]="data.type"
@@ -35,6 +28,14 @@
             <option [ngValue]="''" disabled selected>Vali faili liik...</option>
             <option *ngFor="let type of generalHelperService.toArray(classifiers.document_types)" [ngValue]="type.code" selected>{{ type.value }}</option>
           </select>
+        </div>
+        <div class="form-group">
+          <label for="dataFile" class="text-muted separated-text">Fail:</label>
+          <div></div>
+          <label class="btn btn-secondary input-file-label mb-0 doc-style" for="dataFile">Vali fail</label>
+          <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event)">
+          <span *ngIf="docFile != null" claas="col-4">{{ docFile.name }}</span>
+          <i *ngIf="uploading" class="fa fa-spinner fa-spin fa-fw"></i>
         </div>
         <div class="form-group row">
           <div class="col-12">
@@ -46,9 +47,22 @@
       </div>
       <div *ngIf="showAddLinkFields">
         <div class="form-group">
+          <label for="linkType" class="text-muted separated-text">Liik:</label>
+          <select id="linkType"
+                  [compareWith]="generalHelperService.compareClassifiers"
+                  [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched || docsButtonClicked)}"
+                  class="form-control col-12"
+                  #linkType="ngModel"
+                  [(ngModel)]="data.type"
+                  name="linkType" required>
+            <option [ngValue]="''" disabled selected>Vali veebiviite liik...</option>
+            <option *ngFor="let type of generalHelperService.toArray(classifiers.document_types)" [ngValue]="type.code" selected>{{ type.value }}</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="url" class="text-muted separated-text">URL:</label>
           <input id="url"
-                 [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+                 [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || docsButtonClicked)}"
                  class="form-control col-12"
                  #url="ngModel"
                  [disabled]="uploading"
@@ -57,12 +71,11 @@
                  placeholder="http://www.example.com"
                  (keyup.enter)="addTechDoc(addForm)"
                  name="url" url required>
-
         </div>
         <div class="form-group">
           <label for="linkName" class="text-muted separated-text">Pealkiri:</label>
           <input id="linkName"
-                 [ngClass]="{'is-invalid': linkName.invalid && (linkName.dirty || linkName.touched)}"
+                 [ngClass]="{'is-invalid': linkName.invalid && (linkName.dirty || linkName.touched || docsButtonClicked)}"
                  class="form-control col-12"
                  #linkName="ngModel"
                  [disabled]="uploading"
@@ -70,20 +83,6 @@
                  placeholder="Lähtekood"
                  (keyup.enter)="addTechDoc(addForm)"
                  name="linkName" required>
-
-        </div>
-        <div class="form-group">
-          <label for="linkType" class="text-muted separated-text">Liik:</label>
-          <select id="linkType"
-                  [compareWith]="generalHelperService.compareClassifiers"
-                  [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched)}"
-                  class="form-control col-12"
-                  #linkType="ngModel"
-                  [(ngModel)]="data.type"
-                  name="linkType" required>
-            <option [ngValue]="''" disabled selected>Vali veebiviite liik...</option>
-            <option *ngFor="let type of generalHelperService.toArray(classifiers.document_types)" [ngValue]="type.code" selected>{{ type.value }}</option>
-          </select>
         </div>
         <div class="form-group row">
           <div class="col-12">

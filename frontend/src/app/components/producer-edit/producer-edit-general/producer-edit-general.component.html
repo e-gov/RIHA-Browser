@@ -17,8 +17,10 @@
                class="form-control h1"
                [(ngModel)]="system.details.name"
                name="system.details.name"
+               pattern="^[a-zA-ZõÕäÄöÖüÜ0-9][\S ]*[\S]$"
                (keydown.enter)="$event.preventDefault()"
-               type="text" id="name-input" required>
+               type="text"
+               id="name-input" required>
       </div>
       <div class="mb-4">
         <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
@@ -28,14 +30,29 @@
                [(ngModel)]="system.details.short_name"
                name="short_name"
                pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
-               type="text"
                (keydown.enter)="$event.preventDefault()"
+               type="text"
                id="short-name-input" required>
       </div>
 
       <hr>
 
       <div>
+        <div class="mb-3" *ngIf="!system.details.showDifferences">
+          <div class="my-2 mx-0 row switch-container">
+            <div class="mr-2"><i class="fa fa-align-justify general-style15" aria-hidden="true"></i> Ei ole standardlahendus</div>
+            <ui-switch size="small"
+                       color="#023cc1"
+                       defaultBgColor="#7a838a"
+                       [checked] = "system.getStandardInformationSystem()"
+                       (change) = "changeStandardType()"
+                       defaultBoColor="#023cc1"></ui-switch>
+            <div class="ml-2">On standardlahendus</div>
+          </div>
+          <div class="form-links col-sm-12">
+            <span>Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks</span>
+          </div>
+        </div>
         <div class="row ml-0 mb-3">
           <label for="active-since-date" class="col-form-label advanced-label">
             <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary general-style3">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
@@ -108,7 +125,9 @@
                    [modelAsStrings]="true"
                    [addOnBlur]="true"
                    [separatorKeys]="[',']"
-                   [secondaryPlaceholder]="'Sisesta märksõnad'"></tag-input>
+                   [secondaryPlaceholder]="'Sisesta märksõnad'"
+                   [addOnPaste]="true">
+        </tag-input>
       </div>
 
       <hr class="short" align="left">

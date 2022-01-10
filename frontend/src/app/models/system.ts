@@ -8,6 +8,8 @@ export class System {
 
   details: any = {};
 
+  standardSystemBoolean: any = null;
+
   getOwnerCode(): any {
     if (this.details && this.details.owner){
       return this.details.owner.code;
@@ -18,6 +20,16 @@ export class System {
 
   getStatus(){
     return this.details.meta.system_status.status;
+  }
+
+  getStandardInformationSystem() : boolean{
+
+    if (this.details.standard_system == undefined) {
+      this.standardSystemBoolean = false;
+    } else if (this.details.standard_system == true) {
+      this.standardSystemBoolean = true
+    }
+    return this.standardSystemBoolean;
   }
 
   getSecurityStandard() {
@@ -50,6 +62,14 @@ export class System {
 
   setStatus(status): void {
     this.details.meta.system_status.status = status;
+  }
+
+  setStandardInformationSystem(standard): void {
+    if (standard == false){
+      this.details.standard_system = undefined;
+    } else if (standard == true){
+      this.details.standard_system = true;
+    }
   }
 
   isUsed(): boolean{
@@ -112,13 +132,13 @@ export class System {
     return this.details.security.latest_audit_resolution != null;
   }
 
-  hasStandardRealisationTopic() : boolean {
-    if (!this.getTopics()) {
-      return false;
-    }
-
-    return this.getTopics().find(value => value == 'standardlahendus');
-  }
+  // hasStandardRealisationTopic() : boolean {
+  //   if (!this.getTopics()) {
+  //     return false;
+  //   }
+  //
+  //   return this.getTopics().find(value => value == 'standardlahendus');
+  // }
 
   constructor(system?){
     system = system || {};

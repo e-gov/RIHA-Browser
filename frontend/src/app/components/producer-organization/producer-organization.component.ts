@@ -20,16 +20,16 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
 
   gridData: GridData = new GridData();
   userMatrix: UserMatrix;
-  loaded: boolean = false;
+  loaded: Boolean = false;
   differ: any;
   users: Array<User>;
 
-  onPageChange(newPage): void{
+  onPageChange(newPage): void {
     this.gridData.page = newPage - 1;
     this.getUsers(this.gridData.page);
   }
 
-  onSortChange(property): void{
+  onSortChange(property): void {
     this.gridData.changeSortOrder(property);
     this.getUsers(this.gridData.page);
   }
@@ -45,7 +45,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
       if (sortOrder) {
         params.dir = sortOrder;
       }
-      if (page && page != 0) {
+      if (page && page !== 0) {
         params.page = page + 1;
       }
 
@@ -85,7 +85,8 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe( params => {
+      this.generalHelperService.setRihaPageTitle('Minu organisatsioon');
+      this.route.queryParams.subscribe( params => {
       this.gridData.changeSortOrder(params['sort'] || 'lastName');
       this.gridData.setPageFromUrl(params['page']);
     });
@@ -94,7 +95,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     const changes = this.differ.diff(this.environmentService.globalEnvironment);
-    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)){
+    if (changes && (this.loaded || !this.userMatrix.isOrganizationSelected)) {
       this.userMatrix = this.environmentService.getUserMatrix();
       this.getUsers();
     }

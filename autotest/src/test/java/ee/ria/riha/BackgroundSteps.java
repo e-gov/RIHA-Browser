@@ -30,6 +30,7 @@ public class BackgroundSteps {
     @Given("User is logged in to {string} as {string} using tel. number {string}")
     public void userIsLoggedInAsTestUser(String url, String personalCode, String phoneNumber) {
         homePage.goToPage(url);
+        wait.sleep(1000);
         homePage.goToLoginPage();
         loginPage.selectMobiilIdTab();
         loginPage.enterIsikukoodAndTelefoninumber(personalCode, phoneNumber);
