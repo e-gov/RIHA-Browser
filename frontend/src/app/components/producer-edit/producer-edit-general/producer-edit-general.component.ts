@@ -18,7 +18,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   classifiers = classifiers;
   timeoutId: any = null;
   isChanged: boolean = false;
-  standard: boolean = false;
+  standard: any = null;
 
   onSubmit(f) :void {
     this.alertConf = null;
