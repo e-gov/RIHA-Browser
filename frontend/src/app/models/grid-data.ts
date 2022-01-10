@@ -32,8 +32,8 @@ export class GridData {
   }
 
   updateData(data: any, contentTransformer?: any): void {
-    if (data.totalElements) {this.totalElements = data.totalElements}
-      else if (data.totalElements == 0) {this.totalElements = 0}
+    if (data.totalElements > 0) {this.totalElements = data.totalElements}
+      else {this.totalElements = 0}
 
     if (data.content) {
       if (contentTransformer) {
