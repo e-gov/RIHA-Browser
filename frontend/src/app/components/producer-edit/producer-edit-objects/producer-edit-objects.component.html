@@ -1,48 +1,60 @@
 <div class="fixed-header">
   Andmed
-  <button (click)="closeModal()" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal()" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove"
+                                                                                                aria-hidden="true"></i>
+  </button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
-    <div class="form-group">
-      <label for="object" class="separated-text">Infosüsteemi põhiandmed:
-        <app-tooltip [placement]="'bottom-right'" [text]="'Põhiandmed, mida mujal registrites ei koguta, kuni 10 kergesti hoomatava objektina, et tekitada parem arusaamine, milliseid andmeid infosüsteemis kogutakse. Näiteks rahvastikuregistri puhul ‘Eesti elanike elukohandmed’, ‘Eesti elanike sugulussuhted’ jne. Üks objekt võib koosneda mitmest sõnast, uus objekt lisatakse ‘lisa’ nupu vajutamisega või reavahetusega'"></app-tooltip>
-      </label>
-      <div class="row">
-        <input id="object" class="form-control col-10"
-               #object
-               placeholder="Eesti kodanike elukohaandmed"
-               (keyup.enter)="addStoredDataObject(object)"
-               name="object">
-        <div class="col-2">
-          <button class="btn btn-secondary" (click)="addStoredDataObject(object)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+    <form #objectForm="ngForm">
+      <div class="form-group">
+        <label for="object" class="separated-text">Infosüsteemi põhiandmed:
+          <app-tooltip [placement]="'bottom-right'"
+                       [text]="'Põhiandmed, mida mujal registrites ei koguta, kuni 10 kergesti hoomatava objektina, et tekitada parem arusaamine, milliseid andmeid infosüsteemis kogutakse. Näiteks rahvastikuregistri puhul ‘Eesti elanike elukohandmed’, ‘Eesti elanike sugulussuhted’ jne. Üks objekt võib koosneda mitmest sõnast, uus objekt lisatakse ‘lisa’ nupu vajutamisega või reavahetusega'"></app-tooltip>
+        </label>
+        <div class="row">
+          <input id="object" class="form-control col-10"
+                 [ngClass]="{'is-invalid': object.invalid && (object.dirty || object.touched || objButtonClicked)}"
+                 #object="ngModel"
+                 [(ngModel)]="obj"
+                 placeholder="Eesti kodanike elukohaandmed"
+                 name="object"
+                 required>
+          <div class="col-2">
+            <button class="btn btn-secondary" (click)="addStoredDataObject(objectForm)"><i class="fa fa-plus fa-fw"
+                                                                                 aria-hidden="true"></i>&nbsp;Lisa
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-group text-muted row" [ngClass]="{'text-danger': stored_data.length == 10}">
-      Sisestatud {{ stored_data.length }} / 10
-    </div>
-    <div class="dataTables_wrapper">
-      <table class="details-list-table">
-        <tr *ngFor="let object of stored_data; let i = index">
-          <td>
-            <i class="fa fa-circle text-primary"></i>
-          </td>
-          <td>
-            {{ object }}
-          </td>
-          <td>
-            <button (click)="deleteStoredDataObject(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-      </table>
-    </div>
+      <div class="form-group text-muted row" [ngClass]="{'text-danger': stored_data.length == 10}">
+        Sisestatud {{ stored_data.length }} / 10
+      </div>
+      <div class="dataTables_wrapper">
+        <table class="details-list-table">
+          <tr *ngFor="let object of stored_data; let i = index">
+            <td>
+              <i class="fa fa-circle text-primary"></i>
+            </td>
+            <td>
+              {{ object }}
+            </td>
+            <td>
+              <button (click)="deleteStoredDataObject(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
     <div class="form-group">
       Detailne andmekoosseis:
-      <app-tooltip [placement]="'bottom-right'" [text]="'Andmeobjektide detailne nimekiri, milles on esitatud isikuandmed, eriliiki isikuandmed ja põhiandmed: mallikohane csv-, xls- või xlsx-fail, mis kasutab koodisüsteemi Windows-1257'"></app-tooltip>
+      <app-tooltip [placement]="'bottom-right'"
+                   [text]="'Andmeobjektide detailne nimekiri, milles on esitatud isikuandmed, eriliiki isikuandmed ja põhiandmed: mallikohane csv-, xls- või xlsx-fail, mis kasutab koodisüsteemi Windows-1257'"></app-tooltip>
     </div>
     <div *ngIf="dataFile == null" class="form-group">
-      <label class="btn btn-secondary input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp; Laadi fail</label>
+      <label class="btn btn-secondary input-file-label mb-0" for="dataFile"><i class="fa fa-plus fa-fw"
+                                                                               aria-hidden="true"></i>&nbsp; Laadi fail</label>
       <input class="d-none" id="dataFile" name="dataFile" type="file" (change)="fileChange($event, dataFilesForm)">
     </div>
     <div *ngIf="dataFile != null" class="form-group">
@@ -56,7 +68,7 @@
       <div class="form-group">
         <label for="url" class="separated-text">URL:</label>
         <input id="url" class="form-control"
-               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched)}"
+               [ngClass]="{'is-invalid': url.invalid && (url.dirty || url.touched || buttonClicked)}"
                [disabled]="uploading"
                #url="ngModel"
                [(ngModel)]="data.url"
@@ -67,7 +79,7 @@
       <div class="form-group">
         <label for="name" class="separated-text">Dokumendi pealkiri:</label>
         <input id="name" class="form-control"
-               [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched)}"
+               [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched || buttonClicked)}"
                [disabled]="uploading"
                #name="ngModel"
                [(ngModel)]="data.name"
@@ -78,16 +90,18 @@
       <div class="form-group col-12">
         <button class="btn btn-secondary pull-right"
                 [disabled]="uploading"
-                (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+                (click)="addDataFile(dataFilesForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa
+        </button>
       </div>
       <div class="dataTables_wrapper">
         <table class="details-list-table">
           <tr *ngFor="let file of data_files; let i = index">
             <td>
-             <app-file-icon [file]="file"></app-file-icon>
+              <app-file-icon [file]="file"></app-file-icon>
             </td>
             <td>
-              <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}" target="_blank">{{ file.name }}</a>
+              <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}"
+                 target="_blank">{{ file.name }}</a>
             </td>
             <td>
               <button (click)="deleteDataFile(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>

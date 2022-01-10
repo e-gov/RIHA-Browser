@@ -2,6 +2,7 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Relation;
+import ee.ria.riha.domain.model.RelationResponse;
 import ee.ria.riha.domain.model.RelationType;
 import ee.ria.riha.storage.domain.MainResourceRelationRepository;
 import ee.ria.riha.storage.domain.model.MainResourceRelation;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,28 @@ public class RelationService {
                 .build();
     };
 
+    private static final BiFunction<MainResourceRelation, Boolean, RelationResponse> RELATION_RESPONSE = (mainResourceRelation, relationType) -> {
+        if (mainResourceRelation == null) {
+            return null;
+        }
+
+        return RelationResponse.builder()
+                .id(mainResourceRelation.getMain_resource_relation_id())
+                .infoSystemUuid(mainResourceRelation.getInfosystem_uuid())
+                .infoSystemName(mainResourceRelation.getInfosystem_name())
+                .infoSystemShortName(mainResourceRelation.getInfosystem_short_name())
+                .infoSystemStatus(relationType ? mainResourceRelation.getInfosystem_status() : mainResourceRelation.getRelated_infosystem_status())
+                .relatedInfoSystemUuid(mainResourceRelation.getRelated_infosystem_uuid())
+                .relatedInfoSystemName(mainResourceRelation.getRelated_infosystem_name())
+                .relatedInfoSystemShortName(mainResourceRelation.getRelated_infosystem_short_name())
+                .type(mainResourceRelation.getType() != null
+                        ? RelationType.valueOf(mainResourceRelation.getType())
+                        : null)
+                .creationDate(mainResourceRelation.getCreation_date())
+                .modifiedDate(mainResourceRelation.getModified_date())
+                .build();
+    };
+
     private static final Function<Relation, MainResourceRelation> RELATION_TO_MAIN_RESOURCE_RELATION = relation -> {
         if (relation == null) {
             return null;
@@ -60,6 +84,8 @@ public class RelationService {
 
         return mainResourceRelation;
     };
+    private static final Boolean REVERSE = true;
+    private static final Boolean DIRECT = false;
 
     private MainResourceRelationRepository mainResourceRelationRepository;
 
@@ -74,19 +100,20 @@ public class RelationService {
      * @param reference info system reference
      * @return list of relations (related info systems)
      */
-    public List<Relation> listRelations(String reference) {
+    public List<RelationResponse> listRelations(String reference) {
         InfoSystem infoSystem = infoSystemService.get(reference);
 
         List<MainResourceRelation> directRelations = getDirectRelations(infoSystem);
 
-        List<Relation> allRelations = directRelations.stream()
-                .map(MAIN_RESOURCE_RELATION_TO_RELATION)
+        List<RelationResponse> allRelations = directRelations.stream()
+                .map(relation -> RELATION_RESPONSE.apply(relation, DIRECT))
                 .collect(Collectors.toList());
 
         List<MainResourceRelation> reverseRelations = getReverseRelations(infoSystem);
 
+
         allRelations.addAll(reverseRelations.stream()
-                .map(MAIN_RESOURCE_RELATION_TO_RELATION)
+                .map(relation -> RELATION_RESPONSE.apply(relation, REVERSE))
                 .peek(relation -> relation.setReversed(true))
                 .collect(Collectors.toList())
         );

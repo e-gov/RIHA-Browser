@@ -22,8 +22,8 @@
                  [ngClass]="{'is-invalid': name.invalid  && (name.dirty || name.touched || addForm.submitted)}"
                  class="form-control"
                  name="name"
-                 ngModel
-                 type="text"
+                 pattern="^[a-zA-ZõÕäÄöÖüÜ0-9][\S ]*[\S]$"
+                 ngModel type="text"
                  id="name-input"
                  placeholder="nt. Andmeomanike ametlik register"
                  required>

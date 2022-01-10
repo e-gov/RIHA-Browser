@@ -200,14 +200,11 @@ public class InfosystemPageSteps {
 
     @Then("InfosystemPage: data object {string}, data file {string} and url {string} not present in 'data' block")
     public void dataObjectFileAndUrlNotPresentInDataBlock(String dataObject, String fileName, String urlName) {
-        assertFalse("Data block contains data object " + dataObject,
-                Stream.of(infosystemPage.getDataObjects().split(",")).anyMatch(obj -> obj.equalsIgnoreCase(dataObject)));
+        assertTrue("Data block contains data object " + dataObject, infosystemPage.getEmptyDataTable());
 
-        assertFalse("Data block contains file " + fileName,
-                Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(fileName)));
+        assertTrue("Data block contains file " + fileName, infosystemPage.getEmptyUrlTable());
 
-        assertFalse("Data block contains url " + urlName,
-                Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(urlName)));
+        assertTrue("Data block contains url " + urlName, infosystemPage.getEmptyUrlTable());
     }
 
     @Then("InfosytemPage: infosystem creation purpose is {string}")

@@ -65,6 +65,14 @@ export class ProducerDetailsRelationsComponent implements OnInit    {
     modalRef.componentInstance.system = this.system;
   }
 
+  getSystemStatusValue(relation){
+    if (relation){
+      return classifiers.system_status[relation].value;
+    } else {
+      return "määramata";
+    }
+  }
+
   constructor(private differs: KeyValueDiffers,
               private systemsService: SystemsService,
               private environmentService: EnvironmentService,
