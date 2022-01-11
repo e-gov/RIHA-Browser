@@ -26,7 +26,7 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
 
   hasSecurity: boolean = false;
   isAuditApplied: boolean = false;
-  isIske: boolean;
+  securityStandard: any;
   securityClass: {
     k: any,
     t: any,
@@ -43,8 +43,11 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
     }
   }
 
-  getSecurityClass(){
+  getIskeSecurityClass(){
       return `K${this.securityClass.k}T${this.securityClass.t}S${this.securityClass.s}`;
+  }
+  getEitsSecurityClass(){
+    return `C${this.securityClass.s}I${this.securityClass.t}A${this.securityClass.k}`;
   }
 
   saveSystem(f){
@@ -89,10 +92,10 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
       if (security.latest_audit_date){
         security.latest_audit_date = this.generalHelperService.dateObjToTimestamp(security.latest_audit_date);
       }
-      if (this.isIske){
+      if (this.securityStandard == 'ISKE'){
         security.standard = this.classifiers.security_standard.ISKE.code;
       }
-      if (this.isIske && this.securityClass.k != null && this.securityClass.s != null && this.securityClass.t != null){
+      if (this.securityStandard == 'ISKE' && this.securityClass.k != null && this.securityClass.s != null && this.securityClass.t != null){
         security.class = this.getSecurityClass();
         security.level = this.getSecurityLevel();
       } else {
@@ -105,6 +108,14 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
       }
     }
     return security;
+  }
+
+  getSecurityClass(){
+    if (this.securityStandard == 'ISKE'){
+      return this.getIskeSecurityClass();
+    } else if (this.securityStandard == 'EITS'){
+      return this.getEitsSecurityClass();
+    }
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -153,7 +164,13 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
     };
 
     this.hasSecurity = this.security.standard != null;
-    this.isIske = this.security.standard == 'ISKE';
+
+    if (this.security.standard != 'ISKE' && this.security.standard != 'EITS') {
+      this.securityStandard = 'MUU';
+    } else {
+      this.securityStandard = this.security.standard;
+    }
+
     this.isAuditApplied = this.security.latest_audit_date || this.security.latest_audit_resolution;
 
     if (this.security.class && this.security.class.length == 6){
