@@ -24,8 +24,6 @@ public class Setup {
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("start-maximized");
-                chromeOptions.addArguments("--disable-web-security");
-                chromeOptions.addArguments("--ignore-certificate-errors");
                 driver = new ChromeDriver(chromeOptions);
                 break;
             case "firefox":
