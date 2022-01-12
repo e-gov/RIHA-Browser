@@ -9,7 +9,7 @@
         Turvainfo puudub
       </p>
       <p *ngIf="system.getSecurityStandard()">
-        <strong>{{ system.getSecurityStandard() }}</strong>
+        <strong>{{ system.getSecurityStandardValue() }}</strong>
       </p>
   </div>
   <div *ngIf="system.getSecurityStandard() == classifiers.security_standard.ISKE.code" class="form-group">
