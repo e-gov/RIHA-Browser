@@ -19,6 +19,13 @@
       <strong>({{ system.getSecurityClass() }})</strong>
     </p>
   </div>
+  <div *ngIf="system.getSecurityStandard() == classifiers.security_standard.EITS.code" class="form-group">
+    <label class="text-muted separated-text">E-ITS turbetase:</label>
+    <p *ngIf="system.getSecurityLevel() && classifiers.security_level[system.getSecurityLevel()]">
+      <strong class="security-style">{{classifiers.security_level[system.getSecurityLevel()].value}}</strong>
+      <strong>({{ system.getSecurityClass() }})</strong>
+    </p>
+  </div>
   <div *ngIf="isAuditVisible() && system.hasAuditInfo()" class="form-group">
     <strong>Auditeeritud viimati {{ system.getLatestAuditDate() | date:'y-MM-dd'}}</strong>
     <strong>
