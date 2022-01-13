@@ -129,7 +129,7 @@ public class InfosystemPage extends BasePage {
     @FindBy(xpath = "//form/div[3]/div/button")
     private WebElement saveNewAssociation;
 
-    @FindBy(xpath = "//a[contains(@href, '/Infosüsteemid/Vaata/ummik.test')]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/app-producer-edit-relations/section/div/form/div[4]/table/tr[2]/td[2]/a")
     private WebElement newAssociatedInfosystemInModal;
 
     @FindBy(xpath = "//a[contains(text(),'riha-test (riha-test)')]")
@@ -302,6 +302,7 @@ public class InfosystemPage extends BasePage {
         modalContainer.findElement(By.name("commentText")).sendKeys(comment);
 
         modalContainer.findElement(By.name("decisionType")).click();
+        wait.sleep(2000);
         new Select(modalContainer.findElement(By.name("decisionType"))).selectByVisibleText(type);
 
         wait.sleep(2000);
