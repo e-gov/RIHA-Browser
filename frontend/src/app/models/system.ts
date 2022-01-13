@@ -42,7 +42,7 @@ export class System {
     } else if (this.getSecurityStandard() == classifiers.security_standard.EITS.code){
       return classifiers.security_standard.EITS.value;
     } else {
-      return null;
+      return this.details.security.standard;
     }
   }
 
