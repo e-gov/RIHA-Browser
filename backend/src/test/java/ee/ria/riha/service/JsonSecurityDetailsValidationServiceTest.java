@@ -29,10 +29,10 @@ public class JsonSecurityDetailsValidationServiceTest {
     //even though there may be more of them
     private static final int MAX_AMOUNT_OF_VALIDATION_ERRORS = 3;
 
-    private static final String SECURITY_CLASS_IS_NULL_KEY = "validation.system.json.securityClass.isNullWhenStandardIsISKE";
-    private static final String SECURITY_CLASS_IS_NOT_NULL_KEY = "validation.system.json.securityClass.isNotNullWhenStandardIsNotISKE";
-    private static final String SECURITY_LEVEL_IS_NULL_KEY = "validation.system.json.securityLevel.isNullWhenStandardIsISKE";
-    private static final String SECURITY_LEVEL_IS_NOT_NULL_KEY = "validation.system.json.securityLevel.isNotNullWhenStandardIsNotISKE";
+    private static final String SECURITY_CLASS_IS_NULL_KEY = "validation.system.json.securityClass.isNullWhenStandardIsISKEOrEITS";
+    private static final String SECURITY_CLASS_IS_NOT_NULL_KEY = "validation.system.json.securityClass.isNotNullWhenStandardIsNotISKEOrEITS";
+    private static final String SECURITY_LEVEL_IS_NULL_KEY = "validation.system.json.securityLevel.isNullWhenStandardIsISKEOrEITS";
+    private static final String SECURITY_LEVEL_IS_NOT_NULL_KEY = "validation.system.json.securityLevel.isNotNullWhenStandardIsNotISKEOrEITS";
     private static final String LEVEL_DOES_NOT_MATCH_CLASS_KEY = "validation.system.json.securityLevel.doesNotMatchSecurityClass";
     private static final String LATEST_AUDIT_RESOLUTION_IS_NULL_KEY = "validation.system.json.latestAuditResolution.isNullWhenLatestAuditDateIsNotNull";
     private static final String LATEST_AUDIT_RESOLUTION_IS_NOT_NULL_KEY = "validation.system.json.latestAuditResolution.isNotNullWhenLatestAuditDateIsNull";
@@ -84,7 +84,7 @@ public class JsonSecurityDetailsValidationServiceTest {
     }
 
     @Test
-    public void securityClassMustBeNullWhenStandardIsNotISKE() {
+    public void securityClassMustBeNullWhenStandardIsNotISKEOrEITS() {
         String json = "{\n" +
                 "  \"security\": " +
                 "  {\n" +
@@ -98,7 +98,7 @@ public class JsonSecurityDetailsValidationServiceTest {
     }
 
     @Test
-    public void securityClassMustNotBeNullWhenStandardIsISKE() {
+    public void securityClassMustNotBeNullWhenStandardIsISKEOrEits() {
         String json = "{\n" +
                 "  \"security\": " +
                 "  {\n" +
@@ -112,7 +112,7 @@ public class JsonSecurityDetailsValidationServiceTest {
     }
 
     @Test
-    public void securityLevelMustBeNullWhenStandardIsNotISKE() {
+    public void securityLevelMustBeNullWhenStandardIsNotISKEOrEits() {
         String json = "{\n" +
                 "  \"security\": " +
                 "  {\n" +
@@ -127,7 +127,7 @@ public class JsonSecurityDetailsValidationServiceTest {
     }
 
     @Test
-    public void securityLevelMustNotBeNullWhenStandardIsISKE() {
+    public void securityLevelMustNotBeNullWhenStandardIsISKEOrEITS() {
         String json = "{\n" +
                 "  \"security\": " +
                 "  {\n" +

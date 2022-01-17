@@ -22,11 +22,12 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
   @Input() system: System;
   security: any;
   classifiers = classifiers;
+
   buttonClicked: boolean = false;
 
   hasSecurity: boolean = false;
   isAuditApplied: boolean = false;
-  isIske: boolean;
+  securityStandard: any;
   securityClass: {
     k: any,
     t: any,
@@ -43,8 +44,11 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
     }
   }
 
-  getSecurityClass(){
+  getIskeSecurityClass(){
       return `K${this.securityClass.k}T${this.securityClass.t}S${this.securityClass.s}`;
+  }
+  getEitsSecurityClass(){
+    return `C${this.securityClass.s}I${this.securityClass.t}A${this.securityClass.k}`;
   }
 
   saveSystem(f){
@@ -89,10 +93,10 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
       if (security.latest_audit_date){
         security.latest_audit_date = this.generalHelperService.dateObjToTimestamp(security.latest_audit_date);
       }
-      if (this.isIske){
-        security.standard = this.classifiers.security_standard.ISKE.code;
+      if (this.securityStandard != this.classifiers.security_standard.MUU.code){
+        security.standard = this.securityStandard;
       }
-      if (this.isIske && this.securityClass.k != null && this.securityClass.s != null && this.securityClass.t != null){
+      if (this.securityStandard != this.classifiers.security_standard.MUU.code && this.securityClass.k != null && this.securityClass.s != null && this.securityClass.t != null){
         security.class = this.getSecurityClass();
         security.level = this.getSecurityLevel();
       } else {
@@ -105,6 +109,14 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
       }
     }
     return security;
+  }
+
+  getSecurityClass(){
+    if (this.securityStandard == this.classifiers.security_standard.ISKE.code){
+      return this.getIskeSecurityClass();
+    } else if (this.securityStandard == this.classifiers.security_standard.EITS.code){
+      return this.getEitsSecurityClass();
+    }
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -125,6 +137,7 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
     this.modalService.dismissActiveModal();
     return true;
   }
+
 
   /**
    * Getters
@@ -153,14 +166,20 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
     };
 
     this.hasSecurity = this.security.standard != null;
-    this.isIske = this.security.standard == 'ISKE';
+
+    if (this.security.standard != this.classifiers.security_standard.ISKE.code && this.security.standard != this.classifiers.security_standard.EITS.code) {
+      this.securityStandard = this.classifiers.security_standard.MUU.code;
+    } else {
+      this.securityStandard = this.security.standard;
+    }
+
     this.isAuditApplied = this.security.latest_audit_date || this.security.latest_audit_resolution;
 
     if (this.security.class && this.security.class.length == 6){
       this.securityClass = {
-        k: this.security.class.substr(1, 1),
+        k: this.security.standard == this.classifiers.security_standard.ISKE.code ? this.security.class.substr(1, 1) : this.security.class.substr(5, 1),
         t: this.security.class.substr(3, 1),
-        s: this.security.class.substr(5, 1)
+        s: this.security.standard == this.classifiers.security_standard.ISKE.code ? this.security.class.substr(5, 1) : this.security.class.substr(1, 1),
       }
     } else {
       this.securityClass = {
@@ -169,6 +188,7 @@ export class ProducerEditSecurityComponent implements OnInit, CanDeactivateModal
         s: null
       }
     }
+
 
     this.security.latest_audit_date = this.generalHelperService.timestampToDateObj(this.security.latest_audit_date);
   };

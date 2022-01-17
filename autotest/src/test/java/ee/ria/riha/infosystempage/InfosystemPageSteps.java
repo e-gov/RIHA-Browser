@@ -271,7 +271,8 @@ public class InfosystemPageSteps {
 
     @Then("InfosystemPage: a new associated infosystem {string} appears as a clickable link")
     public void verifyNewAssociatedInfosystem(String name) {
-        assertEquals("New associated infosystem is not " + name, this.infosystemPage.getNewAssociatedInfosystemInModal(), name);
+        String newAssociatedInfosystemInModal = this.infosystemPage.getNewAssociatedInfosystemInModal().split(" -")[0];
+        assertEquals("New associated infosystem is not " + name, newAssociatedInfosystemInModal, name);
     }
 
 
@@ -283,7 +284,8 @@ public class InfosystemPageSteps {
 
     @And("InfosystemPage: associated infosystem {string} will appear")
     public void verifySystemInDetailView(String name) {
-        assertEquals("New associated infosystem is not " + name, this.infosystemPage.getAssociatedInfosystemInDetail(), name );
+        String associatedInfosystemInDetail = this.infosystemPage.getAssociatedInfosystemInDetail().split(" -")[0];
+        assertEquals("New associated infosystem is not " + name, associatedInfosystemInDetail, name );
     }
 
 
