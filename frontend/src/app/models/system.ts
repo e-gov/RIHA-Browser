@@ -36,6 +36,17 @@ export class System {
     return this.details.security.standard ? this.details.security.standard : null;
   }
 
+  getSecurityStandardValue(){
+    if (this.getSecurityStandard() == classifiers.security_standard.ISKE.code){
+      return classifiers.security_standard.ISKE.value;
+    } else if (this.getSecurityStandard() == classifiers.security_standard.EITS.code){
+      return classifiers.security_standard.EITS.value;
+    } else {
+      return this.details.security.standard;
+    }
+  }
+
+
   getSecurityLevel() {
     return this.details.security.level ? this.details.security.level : null;
   }
