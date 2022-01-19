@@ -1,5 +1,6 @@
 package ee.ria.riha.web;
 
+import ee.ria.riha.conf.FeedbackServiceConnectionProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.RelationType;
 import ee.ria.riha.logging.auditlog.AuditEvent;
@@ -24,11 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
@@ -37,6 +41,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(API_V1_PREFIX + "/systems")
+
 @Api("Information systems")
 public class InfoSystemController {
 
@@ -57,6 +62,8 @@ public class InfoSystemController {
 
     @Autowired
     private FileService fileService;
+
+    private final FeedbackServiceConnectionProperties feedbackServiceConnectionProperties;
 
     private final AuditLogger auditLogger;
 
@@ -211,5 +218,44 @@ public class InfoSystemController {
 
         return ResponseEntity.ok(infoSystemModelMapper.map(newlyCreatedInfoSystem));
     }
+
+    @GetMapping("/mail-sender-test")
+    public ResponseEntity<String> mailSenderTest(){
+        Properties prop=new Properties();
+        prop.put("mail.smtp.host", "smtp.riaint.ee");
+        prop.put("mail.smtp.port", "25");
+        prop.put("mail.smtp.starttls.enable","true");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+
+        Session session = Session.getDefaultInstance(prop);
+
+        System.setProperty("javax.net.ssl.keyStore", "/etc/ssl/localcerts/riha-browser.pem");
+        System.setProperty("javax.net.ssl.keyStorePassword", Arrays.toString(feedbackServiceConnectionProperties.getKeyStoreKeyPassword()));
+
+        session.setDebug(true);
+
+        try {
+            String htmlBody = "<strong>This is an HTML Message</strong>";
+            String textBody = "This is a Text Message.";
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("riha-dev@riha.ee"));
+            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("makar.shokarev@wisercat.net"));
+            message.setSubject("Testing Subject");
+            message.setText(htmlBody);
+            message.setContent(textBody, "text/html");
+            Transport.send(message);
+
+            System.out.println("Done");
+
+            return ResponseEntity.ok("message send");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(e.toString());
+        }
+    }
+
 
 }
