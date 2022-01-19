@@ -229,12 +229,12 @@ public class InfoSystemController {
         prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
 
-        Session session = Session.getDefaultInstance(prop);
-
         System.setProperty("javax.net.ssl.keyStore", "/etc/ssl/localcerts/riha-browser.pem");
         System.setProperty("javax.net.ssl.keyStorePassword", Arrays.toString(feedbackServiceConnectionProperties.getKeyStoreKeyPassword()));
-        System.setProperty("javax.net.ssl.trustStore", "/etc/ssl/certs/java/cacerts");
-        System.setProperty("javax.net.ssl.trustStorePassword","changeit");
+
+
+        Session session = Session.getDefaultInstance(prop);
+
 
         session.setDebug(true);
 
