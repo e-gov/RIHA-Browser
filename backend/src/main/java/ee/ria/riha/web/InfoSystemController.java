@@ -253,7 +253,7 @@ public class InfoSystemController {
 
         } catch (MessagingException e) {
             e.printStackTrace();
-            return ResponseEntity.ok(session.getDebugOut().toString());
+            return ResponseEntity.ok(e.toString());
         }
     }
 
