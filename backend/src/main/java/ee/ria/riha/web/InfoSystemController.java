@@ -219,46 +219,4 @@ public class InfoSystemController {
         return ResponseEntity.ok(infoSystemModelMapper.map(newlyCreatedInfoSystem));
     }
 
-    @GetMapping("/mail-sender-test")
-    public ResponseEntity<String> mailSenderTest(){
-        Properties prop=new Properties();
-        prop.put("mail.smtp.host", "smtp.example.ee");
-        prop.put("mail.smtp.port", "25");
-        prop.put("mail.debug", "true");
-        prop.put("mail.smtp.ssl.enable","true");
-        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
-
-
-        System.setProperty("javax.net.ssl.keyStore", "/etc/ssl/localcerts/riha-browser.pem");
-        System.setProperty("javax.net.ssl.keyStorePassword", "rA/BXKmUBQxVwHCqnMcPYA==");
-
-
-        Session session = Session.getDefaultInstance(prop);
-
-
-        session.setDebug(true);
-
-        try {
-            String htmlBody = "<strong>This is an HTML Message</strong>";
-            String textBody = "This is a Text Message.";
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("riha-dev@riha.ee"));
-            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("makar.shokarev@wisercat.net"));
-            message.setSubject("Testing Subject");
-            message.setText(htmlBody);
-            message.setContent(textBody, "text/html");
-            Transport.send(message);
-
-            System.out.println("Done");
-
-            return ResponseEntity.ok("message send");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(e.toString());
-        }
-    }
-
-
 }
