@@ -224,9 +224,10 @@ public class InfoSystemController {
         Properties prop=new Properties();
         prop.put("mail.smtp.host", "smtp.riaint.ee");
         prop.put("mail.smtp.port", "25");
-        prop.put("mail.smtp.ssl.enable","true");
+        prop.put("mail.smtp.starttls.enable","true");
         prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        prop.put("mail.transport.protocol", "smtp");
 
         System.setProperty("javax.net.ssl.keyStore", "/etc/ssl/localcerts/riha-browser.pem");
         System.setProperty("javax.net.ssl.keyStorePassword", Arrays.toString(feedbackServiceConnectionProperties.getKeyStoreKeyPassword()));
