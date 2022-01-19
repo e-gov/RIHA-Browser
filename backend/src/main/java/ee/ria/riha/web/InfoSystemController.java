@@ -233,6 +233,8 @@ public class InfoSystemController {
 
         System.setProperty("javax.net.ssl.keyStore", "/etc/ssl/localcerts/riha-browser.pem");
         System.setProperty("javax.net.ssl.keyStorePassword", Arrays.toString(feedbackServiceConnectionProperties.getKeyStoreKeyPassword()));
+        System.setProperty("javax.net.ssl.trustStore", "/etc/ssl/certs/java/cacerts");
+        System.setProperty("javax.net.ssl.trustStorePassword","changeit");
 
         session.setDebug(true);
 
