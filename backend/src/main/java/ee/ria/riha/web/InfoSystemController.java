@@ -224,7 +224,7 @@ public class InfoSystemController {
         Properties prop=new Properties();
         prop.put("mail.smtp.host", "smtp.example.ee");
         prop.put("mail.smtp.port", "25");
-        prop.put("mail.smtp.starttls.enable","true");
+        prop.put("mail.smtp.ssl.enable","true");
         prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
