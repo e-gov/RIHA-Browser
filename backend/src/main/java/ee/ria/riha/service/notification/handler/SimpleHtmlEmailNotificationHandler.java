@@ -10,6 +10,8 @@ import ee.ria.riha.service.notification.model.SimpleHtmlEmailNotification;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
+
 @Slf4j
 public abstract class SimpleHtmlEmailNotificationHandler<T extends SimpleHtmlEmailNotification> implements EmailNotificationHandler<T> {
 
@@ -37,7 +39,7 @@ public abstract class SimpleHtmlEmailNotificationHandler<T extends SimpleHtmlEma
      * @throws NotificationHandlerException in case of exception while setting recipient addresses
      */
     protected void setTo(MimeMessageHelper helper, T model) {
-        Assert.notEmpty(model.getTo(), "List of recipients must not be empty");
+        Assert.notNull(model.getTo(), "List of recipients must not be empty");
 
         try {
             helper.setTo(model.getTo());
