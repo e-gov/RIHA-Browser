@@ -79,8 +79,7 @@ public class NotificationService {
                 .getName();
 
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(issueParticipantsEmails.toArray(new String[issueParticipantsEmails.size()]));
+        notificationModel.setTo(issueParticipantsEmails.toArray(new String[issueParticipantsEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
@@ -112,8 +111,7 @@ public class NotificationService {
 
         NewIssueToSystemContactsEmailNotification notificationModel = new NewIssueToSystemContactsEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(to.toArray(new String[to.size()]));
+        notificationModel.setTo(to.toArray(new String[to.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setInfoSystemUuid(infoSystem.getUuid());
@@ -133,8 +131,7 @@ public class NotificationService {
         InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
         Set<String> participantsEmails = new HashSet<>(infoSystem.getContactsEmails());
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(participantsEmails.toArray(new String[0]));
+        notificationModel.setTo(participantsEmails.toArray(new String[0]));
 
         notificationModel.setIssue(IssueDataModel.builder()
                 .id(issue.getId())
@@ -164,8 +161,7 @@ public class NotificationService {
 
         NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(approversEmails.toArray(new String[approversEmails.size()]));
+        notificationModel.setTo(approversEmails.toArray(new String[approversEmails.size()]));
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setInfoSystemUuid(infoSystem.getUuid());
