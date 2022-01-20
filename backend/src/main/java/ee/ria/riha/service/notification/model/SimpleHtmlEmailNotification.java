@@ -11,7 +11,7 @@ import lombok.Setter;
 public class SimpleHtmlEmailNotification implements EmailNotificationDataModel {
 
     private String from;
-    private String[] to;
+    private String to;
     private String[] cc;
     private String[] bcc;
 }
