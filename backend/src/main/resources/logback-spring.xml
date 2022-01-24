@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration>
 <configuration>
-    <property name="LOG_DIR" value="logs"/>
+    <property name="LOG_DIR" value="/var/log"/>
     <property name="appName" value="riha-browser"/>
     <appender name="FILEJSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/${appName}.json.log</file>
+        <file>${LOG_DIR}/${appName}/${appName}.json.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${appName}.%d{yyyy-MM-dd}.%i.json.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/${appName}/${appName}.%d{yyyy-MM-dd}.%i.json.log</fileNamePattern>
             <maxHistory>14</maxHistory>
             <maxFileSize>100MB</maxFileSize>
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
     <appender name="AUDIT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/${appName}-audit.json.log</file>
+        <file>${LOG_DIR}/${appName}/${appName}-audit.json.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${appName}-audit.%d{yyyy-MM-dd}.%i.json.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/${appName}/${appName}-audit.%d{yyyy-MM-dd}.%i.json.log</fileNamePattern>
             <maxHistory>14</maxHistory>
             <maxFileSize>100MB</maxFileSize>
         </rollingPolicy>

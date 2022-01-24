@@ -1,5 +1,6 @@
 package ee.ria.riha.web;
 
+import ee.ria.riha.conf.FeedbackServiceConnectionProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.RelationType;
 import ee.ria.riha.logging.auditlog.AuditEvent;
@@ -24,11 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
@@ -37,6 +41,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(API_V1_PREFIX + "/systems")
+
 @Api("Information systems")
 public class InfoSystemController {
 
@@ -57,6 +62,8 @@ public class InfoSystemController {
 
     @Autowired
     private FileService fileService;
+
+    private final FeedbackServiceConnectionProperties feedbackServiceConnectionProperties;
 
     private final AuditLogger auditLogger;
 
