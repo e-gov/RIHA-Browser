@@ -7,7 +7,7 @@ public interface EmailNotificationDataModel {
 
     String getFrom();
 
-    String[] getTo();
+    String getTo();
 
     String[] getCc();
 
