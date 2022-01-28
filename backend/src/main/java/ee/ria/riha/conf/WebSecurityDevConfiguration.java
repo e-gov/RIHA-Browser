@@ -53,6 +53,8 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 				.anyRequest()
 				.permitAll()
 			.and()
+				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
+				.and()
 			.addFilterBefore(createFromUrlSessionFilter(), ChannelProcessingFilter.class)
 			.logout()
 				.logoutUrl("/logout")
