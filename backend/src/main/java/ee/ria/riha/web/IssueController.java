@@ -132,7 +132,7 @@ public class IssueController {
             headers.setLocation(URI.create(API_V1_PREFIX + "/issues"));
             return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Teil puuduvad õigused näha seda lehekülge");
         }
     }
     /**
