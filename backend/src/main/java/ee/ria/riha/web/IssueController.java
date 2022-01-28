@@ -12,7 +12,6 @@ import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
