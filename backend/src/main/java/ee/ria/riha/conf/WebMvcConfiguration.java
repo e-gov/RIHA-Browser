@@ -1,8 +1,8 @@
 package ee.ria.riha.conf;
 
-import ee.ria.riha.storage.util.CompositeFilterArgumentResolver;
-import ee.ria.riha.storage.util.FilterableArgumentResolver;
-import ee.ria.riha.storage.util.PageableArgumentResolver;
+import ee.ria.riha.service.util.CompositeFilterArgumentResolver;
+import ee.ria.riha.service.util.FilterableArgumentResolver;
+import ee.ria.riha.service.util.PageableArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +11,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,15 +40,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         argumentResolvers.add(new CompositeFilterArgumentResolver());
     }
 
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.setUseSuffixPatternMatch(false);
-    }
-
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false);
-    }
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -70,7 +62,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         configureFontCacheControl(registry);
         registry.addResourceHandler("/infosystem_schema.json").addResourceLocations("classpath:/infosystem_schema.json");
     }
@@ -88,7 +80,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     static class UUIDConverter implements Converter<String, UUID> {
         @Override
-        public UUID convert(String source) {
+        public UUID convert(@NonNull String source) {
             return UUID.fromString(source);
         }
     }

@@ -12,7 +12,7 @@ import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.RelationService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.service.auth.PrincipalHasRoleProducer;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.InfoSystemDataObjectModel;
 import ee.ria.riha.web.model.InfoSystemModel;
 import ee.ria.riha.web.model.RelationModel;
@@ -25,12 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -111,9 +105,9 @@ public class InfoSystemController {
         return getResponseEntity(pageable, foundResults);
     }
 
-    private ResponseEntity getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
+    private ResponseEntity<PagedResponse<InfoSystemModel>> getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
         return ResponseEntity.ok(
-                new PagedResponse(
+                new PagedResponse<>(
                         pageable,
                         response.size(),
                         response.stream()
