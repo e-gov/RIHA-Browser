@@ -1,8 +1,8 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.storage.util.CompositeFilterRequest;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
+import ee.ria.riha.service.util.CompositeFilterRequest;
+import ee.ria.riha.service.util.Pageable;
+import ee.ria.riha.service.util.PagedResponse;
 import ee.ria.riha.web.model.DashboardIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

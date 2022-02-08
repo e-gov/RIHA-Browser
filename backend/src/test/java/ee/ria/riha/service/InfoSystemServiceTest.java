@@ -4,7 +4,7 @@ import ee.ria.riha.TestUtils;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
-import ee.ria.riha.storage.util.FilterRequest;
+import ee.ria.riha.service.util.FilterRequest;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,8 +40,8 @@ public class InfoSystemServiceTest {
     @InjectMocks
     private InfoSystemService infoSystemService;
 
-    private InfoSystem existingInfoSystem = new InfoSystem();
-    private List<InfoSystem> foundInfoSystems = Lists.newArrayList();
+    private final InfoSystem existingInfoSystem = new InfoSystem();
+    private final List<InfoSystem> foundInfoSystems = Lists.newArrayList();
 
     @Before
     public void setUp() {
