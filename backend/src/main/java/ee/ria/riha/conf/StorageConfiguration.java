@@ -1,13 +1,7 @@
 package ee.ria.riha.conf;
 
-import ee.ria.riha.domain.InfoSystemRepository;
-import ee.ria.riha.domain.RihaStorageInfoSystemRepository;
-import ee.ria.riha.domain.LdapRepository;
-import ee.ria.riha.storage.client.StorageClient;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.FileRepository;
-import ee.ria.riha.storage.domain.MainResourceRelationRepository;
-import ee.ria.riha.storage.domain.MainResourceRepository;
+import ee.ria.riha.client.StorageClient;
+import ee.ria.riha.domain.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.support.LdapContextSource;
