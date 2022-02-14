@@ -268,25 +268,17 @@
     "security": {
       "properties": {
         "standard": {
-          "description": "Infosüsteemi etalonturve. Näiteks \"ISKE\",\"E-ITS\" \"ISO 27001\", \"ISO 27002\" või muu.",
+          "description": "Infosüsteemi etalonturve. Näiteks \"ISKE\", \"ISO 27001\", \"ISO 27002\" või muu.",
           "type": ["string", "null"],
           "minLength": 1
         },
         "class": {
-          "description": "Infosüsteemi turvaklass. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\" või \"E-ITS\"",
-          "anyOf": [
-            {
-              "type": ["string", "null"],
-              "pattern": "^K[0-3]{1}T[0-3]{1}S[0-3]{1}$"
-            },
-            {
-              "type": ["string", "null"],
-              "pattern": "^C[0-3]{1}I[0-3]{1}A[0-3]{1}$"
-            }
-          ]
+          "description": "Infosüsteemi turvaklass. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\"",
+          "type": ["string", "null"],
+          "pattern": "^K[0-3]{1}T[0-3]{1}S[0-3]{1}$"
         },
         "level": {
-          "description": "Infosüsteemi turbeaste. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\" või \"E-ITS\"",
+          "description": "Infosüsteemi turbeaste. Määratakse ainult juhul kui infosüsteemi etalonturve on \"ISKE\"",
           "type": ["string", "null"],
           "pattern": "^[HML]{1}$"
         },
