@@ -1,9 +1,9 @@
 package ee.ria.riha.domain;
 
 import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.storage.util.Filterable;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
+import ee.ria.riha.service.util.Filterable;
+import ee.ria.riha.service.util.Pageable;
+import ee.ria.riha.service.util.PagedResponse;
 
 import java.util.List;
 
