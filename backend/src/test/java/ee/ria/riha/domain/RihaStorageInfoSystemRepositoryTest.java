@@ -1,10 +1,9 @@
 package ee.ria.riha.domain;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import ee.ria.riha.storage.domain.MainResourceRepository;
-import ee.ria.riha.storage.domain.model.MainResource;
-import ee.ria.riha.storage.util.FilterRequest;
-import ee.ria.riha.storage.util.Filterable;
+import ee.ria.riha.domain.model.MainResource;
+import ee.ria.riha.service.util.FilterRequest;
+import ee.ria.riha.service.util.Filterable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

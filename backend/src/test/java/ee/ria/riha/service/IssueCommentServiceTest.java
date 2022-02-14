@@ -1,9 +1,9 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.TestUtils;
+import ee.ria.riha.domain.CommentRepository;
+import ee.ria.riha.domain.model.Comment;
 import ee.ria.riha.rules.CleanAuthentication;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.web.model.IssueCommentModel;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,7 +38,7 @@ public class IssueCommentServiceTest {
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
-    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
+    private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
 
     @Mock
@@ -55,7 +56,7 @@ public class IssueCommentServiceTest {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         TestUtils.setActiveOrganisation(authenticationToken, JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
-        when(commentRepository.add(any(Comment.class))).thenReturn(Arrays.asList(CREATED_COMMENT_ENTITY_ID));
+        when(commentRepository.add(any(Comment.class))).thenReturn(Collections.singletonList(CREATED_COMMENT_ENTITY_ID));
     }
 
     @Test

@@ -5,7 +5,7 @@ import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.domain.model.RihaIssueSummary;
 import ee.ria.riha.service.IssueService;
 import ee.ria.riha.service.auth.*;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.DashboardIssue;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;

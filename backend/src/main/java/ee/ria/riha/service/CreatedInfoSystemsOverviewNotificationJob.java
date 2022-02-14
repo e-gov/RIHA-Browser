@@ -5,7 +5,7 @@ import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.notification.model.InfoSystemDataModel;
 import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
-import ee.ria.riha.storage.util.FilterRequest;
+import ee.ria.riha.service.util.FilterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
