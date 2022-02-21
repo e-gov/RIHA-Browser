@@ -1,6 +1,6 @@
 package ee.ria.riha.web;
 
-import ee.ria.riha.storage.util.CompositeFilterRequest;
+import ee.ria.riha.service.util.CompositeFilterRequest;
 import ee.ria.riha.web.model.UserDetailsModel;
 import org.junit.Test;
 
