@@ -2,14 +2,14 @@ package ee.ria.riha.domain;
 
 import java.util.List;
 
+import ee.ria.riha.client.StorageClient;
+import ee.ria.riha.service.util.Filterable;
+import ee.ria.riha.service.util.Pageable;
+import ee.ria.riha.service.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ee.ria.riha.domain.model.Classifier;
-import ee.ria.riha.storage.client.StorageClient;
-import ee.ria.riha.storage.util.Filterable;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
 
 @Service
 public class ClassifierRepository {

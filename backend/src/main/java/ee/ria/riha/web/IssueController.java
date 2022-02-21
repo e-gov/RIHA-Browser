@@ -1,12 +1,11 @@
 package ee.ria.riha.web;
 
+import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.model.Issue;
 import ee.ria.riha.domain.model.RihaIssueSummary;
 import ee.ria.riha.service.IssueService;
-import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
-import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
-import ee.ria.riha.service.auth.PrincipalHasRoleReviewer;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.auth.*;
+import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.DashboardIssue;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
@@ -14,8 +13,14 @@ import ee.ria.riha.web.model.IssueSummaryModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
@@ -32,6 +37,12 @@ public class IssueController {
 
     @Autowired
     private IssueSummaryModelMapper issueSummaryModelMapper;
+
+    @Autowired
+    private PrincipalRoleCheckerService principalRoleCheckerService;
+
+    @Autowired
+    private IssueAuthorizationService issueAuthorizationService;
 
     /**
      * Retrieve paginated and filtered list of issues for info system referenced by either UUID or short name.
@@ -111,12 +122,19 @@ public class IssueController {
      * @return issue or null
      */
     @GetMapping(API_V1_PREFIX + "/issues/{issueId}")
-    @PreAuthorizeIssueOwnerOrReviewer
     @ApiOperation("Get single information system issue")
-    public ResponseEntity<Issue> getInfoSystemIssue(@PathVariable("issueId") Long issueId) {
-        return ResponseEntity.ok(issueService.getIssueById(issueId));
+    public ResponseEntity getInfoSystemIssue(@PathVariable("issueId") Long issueId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (principalRoleCheckerService.hasRole("ROLE_HINDAJA") || principalRoleCheckerService.hasRole("ROLE_KIRJELDAJA") && issueAuthorizationService.isIssueOwner(issueId)) {
+            return ResponseEntity.ok(issueService.getIssueById(issueId));
+        } else if (!(authentication.getPrincipal() instanceof RihaUserDetails) || ((RihaUserDetails) authentication.getPrincipal()).getAuthorities() == null){
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(API_V1_PREFIX + "/issues"));
+            return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Teil puuduvad õigused näha seda lehekülge");
+        }
     }
-
     /**
      * Update issue.
      *

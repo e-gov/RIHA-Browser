@@ -2,11 +2,11 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
+import ee.ria.riha.domain.CommentRepository;
+import ee.ria.riha.domain.model.Comment;
 import ee.ria.riha.domain.model.IssueComment;
 import ee.ria.riha.domain.model.IssueEntityType;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.model.Comment;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.DashboardIssueComment;
 import ee.ria.riha.web.model.IssueCommentModel;
 import org.springframework.beans.factory.annotation.Autowired;

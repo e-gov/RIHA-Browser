@@ -3,14 +3,15 @@ package ee.ria.riha.web;
 import ee.ria.riha.domain.model.FileResource;
 import ee.ria.riha.service.FileService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwnerOrReviewer;
-import ee.ria.riha.storage.util.ApiPageableAndCompositeRequestParams;
-import ee.ria.riha.storage.util.CompositeFilterRequest;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
+import ee.ria.riha.service.util.ApiPageableAndCompositeRequestParams;
+import ee.ria.riha.service.util.CompositeFilterRequest;
+import ee.ria.riha.service.util.Pageable;
+import ee.ria.riha.service.util.PagedResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public class FileController {
     @PostMapping(value = API_V1_PREFIX + "/systems/{reference}/files", consumes = "multipart/form-data")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Upload file")
-    public ResponseEntity upload(@PathVariable("reference") String reference,
+    public ResponseEntity<String> upload(@PathVariable("reference") String reference,
                                  @RequestPart("file") MultipartFile file) throws IOException {
         log.info("Receiving info system '{}' file '{}' [{}] with size {}b",
                 reference, file.getOriginalFilename(), file.getContentType(), file.getSize());
@@ -44,8 +45,8 @@ public class FileController {
 
     @GetMapping(API_V1_PREFIX + "/systems/{reference}/files/{uuid}")
     @ApiOperation("Download file")
-    public ResponseEntity download(@PathVariable("reference") String reference,
-                                   @PathVariable("uuid") UUID fileUuid) throws IOException {
+    public ResponseEntity<InputStreamResource> download(@PathVariable("reference") String reference,
+                                                        @PathVariable("uuid") UUID fileUuid) throws IOException {
         log.info("Downloading info system '{}' file {}", reference, fileUuid);
         return fileService.download(reference, fileUuid);
     }

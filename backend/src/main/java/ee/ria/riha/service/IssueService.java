@@ -2,11 +2,9 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
+import ee.ria.riha.domain.CommentRepository;
 import ee.ria.riha.domain.model.*;
-import ee.ria.riha.service.util.DateUtils;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.model.Comment;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -282,7 +280,7 @@ public class IssueService {
         FilterRequest request = new FilterRequest();
         request.addFilter(getIssueTypeFilter());
         request.addFilter(getInfoSystemUuidEqFilter(infoSystemUuid));
-        request.addFilter(getIssueStatusFilter(IssueStatus.OPEN));
+        request.addFilter("status,=," + IssueStatus.OPEN.name());
         request.addFilter(getIssueSubTypeFilter(model.getType()));
 
         List<Comment> foundIssues = commentRepository.find(request);
@@ -328,10 +326,6 @@ public class IssueService {
 
     private boolean isFeedbackRequestIssue(Issue issue) {
         return FEEDBACK_REQUEST_ISSUE_TYPES.contains(issue.getType());
-    }
-
-    private String getIssueStatusFilter(IssueStatus issueStatus) {
-        return "status,=," + issueStatus.name();
     }
 
     private String getIssueSubTypeFilter(IssueType issueType) {

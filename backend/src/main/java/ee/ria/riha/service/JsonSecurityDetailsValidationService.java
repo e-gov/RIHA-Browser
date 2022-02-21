@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 public class JsonSecurityDetailsValidationService {
 
     private static final String ISKE_STANDARD = "ISKE";
-    private static final String EITS_STANDARD = "EITS";
     private static final String SECURITY_DETAILS_VALIDATION_ERROR = "securityDetailsValidationError";
 
     private static final String SECURITY_DETAILS_KEY = "security";
@@ -27,10 +26,10 @@ public class JsonSecurityDetailsValidationService {
     private static final String LATEST_AUDIT_DATE_KEY = "latest_audit_date";
     private static final String LATEST_AUDIT_RESOLUTION_KEY = "latest_audit_resolution";
 
-    private static final String SECURITY_CLASS_IS_NULL_KEY = "validation.system.json.securityClass.isNullWhenStandardIsISKEOrEITS";
-    private static final String SECURITY_CLASS_IS_NOT_NULL_KEY = "validation.system.json.securityClass.isNotNullWhenStandardIsNotISKEOrEITS";
-    private static final String SECURITY_LEVEL_IS_NULL_KEY = "validation.system.json.securityLevel.isNullWhenStandardIsISKEOrEITS";
-    private static final String SECURITY_LEVEL_IS_NOT_NULL_KEY = "validation.system.json.securityLevel.isNotNullWhenStandardIsNotISKEOrEITS";
+    private static final String SECURITY_CLASS_IS_NULL_KEY = "validation.system.json.securityClass.isNullWhenStandardIsISKE";
+    private static final String SECURITY_CLASS_IS_NOT_NULL_KEY = "validation.system.json.securityClass.isNotNullWhenStandardIsNotISKE";
+    private static final String SECURITY_LEVEL_IS_NULL_KEY = "validation.system.json.securityLevel.isNullWhenStandardIsISKE";
+    private static final String SECURITY_LEVEL_IS_NOT_NULL_KEY = "validation.system.json.securityLevel.isNotNullWhenStandardIsNotISKE";
     private static final String LEVEL_DOES_NOT_MATCH_CLASS_KEY = "validation.system.json.securityLevel.doesNotMatchSecurityClass";
     private static final String LATEST_AUDIT_RESOLUTION_IS_NULL_KEY = "validation.system.json.latestAuditResolution.isNullWhenLatestAuditDateIsNotNull";
     private static final String LATEST_AUDIT_RESOLUTION_IS_NOT_NULL_KEY = "validation.system.json.latestAuditResolution.isNotNullWhenLatestAuditDateIsNull";
@@ -66,9 +65,9 @@ public class JsonSecurityDetailsValidationService {
         String securityStandard = getSecurityDetail(jsonNode, SECURITY_STANDARD_KEY);
         String securityClass = getSecurityDetail(jsonNode, SECURITY_CLASS_KEY);
 
-        if ((ISKE_STANDARD.equals(securityStandard) || EITS_STANDARD.equals(securityStandard)) && securityClass == null) {
+        if (ISKE_STANDARD.equals(securityStandard) && securityClass == null) {
             validationResult = createProcessingMessage(SECURITY_CLASS_IS_NULL_KEY);
-        } else if (!ISKE_STANDARD.equals(securityStandard) && !EITS_STANDARD.equals(securityStandard) && securityClass != null) {
+        } else if (!ISKE_STANDARD.equals(securityStandard) && securityClass != null) {
             validationResult = createProcessingMessage(SECURITY_CLASS_IS_NOT_NULL_KEY);
         }
 
@@ -82,9 +81,9 @@ public class JsonSecurityDetailsValidationService {
         String securityLevel = getSecurityDetail(jsonNode, SECURITY_LEVEL_KEY);
         String securityClass = getSecurityDetail(jsonNode, SECURITY_CLASS_KEY);
 
-        if ((ISKE_STANDARD.equals(securityStandard) || EITS_STANDARD.equals(securityStandard)) && securityLevel == null) {
+        if (ISKE_STANDARD.equals(securityStandard) && securityLevel == null) {
             validationResult = createProcessingMessage(SECURITY_LEVEL_IS_NULL_KEY);
-        } else if (!ISKE_STANDARD.equals(securityStandard) && !EITS_STANDARD.equals(securityStandard) && securityLevel != null) {
+        } else if (!ISKE_STANDARD.equals(securityStandard) && securityLevel != null) {
             validationResult = createProcessingMessage(SECURITY_LEVEL_IS_NOT_NULL_KEY);
         } else if (!isSecurityLevelMatchingSecurityClass(securityLevel, securityClass)) {
             validationResult = createProcessingMessage(LEVEL_DOES_NOT_MATCH_CLASS_KEY);
