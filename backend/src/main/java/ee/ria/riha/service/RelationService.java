@@ -1,12 +1,8 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.domain.model.Relation;
-import ee.ria.riha.domain.model.RelationResponse;
-import ee.ria.riha.domain.model.RelationType;
-import ee.ria.riha.storage.domain.MainResourceRelationRepository;
-import ee.ria.riha.storage.domain.model.MainResourceRelation;
-import ee.ria.riha.storage.util.FilterRequest;
+import ee.ria.riha.domain.MainResourceRelationRepository;
+import ee.ria.riha.domain.model.*;
+import ee.ria.riha.service.util.FilterRequest;
 import ee.ria.riha.web.model.RelationModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

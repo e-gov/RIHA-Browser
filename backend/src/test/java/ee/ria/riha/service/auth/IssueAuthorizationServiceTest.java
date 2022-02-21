@@ -1,7 +1,6 @@
 package ee.ria.riha.service.auth;
 
-import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.domain.model.Issue;
+import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.IssueService;
 import org.junit.Before;

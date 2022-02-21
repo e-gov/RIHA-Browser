@@ -1,10 +1,9 @@
 package ee.ria.riha.service;
 
 import ee.ria.riha.TestUtils;
+import ee.ria.riha.domain.CommentRepository;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.model.Comment;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import org.junit.Before;
@@ -47,7 +46,7 @@ public class IssueServiceTest {
     @Rule
     public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
-    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
+    private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
     @Mock
     private InfoSystemService infoSystemService;
@@ -70,16 +69,16 @@ public class IssueServiceTest {
     @InjectMocks
     private IssueService issueService;
 
-    private InfoSystem existingInfoSystem = new InfoSystem();
+    private final InfoSystem existingInfoSystem = new InfoSystem();
 
-    private Issue existingIssue = Issue.builder()
+    private final Issue existingIssue = Issue.builder()
             .id(EXISTING_ISSUE_ID)
             .status(IssueStatus.OPEN)
             .build();
 
-    private Comment existingIssueEntity = IssueService.ISSUE_TO_COMMENT.apply(existingIssue);
+    private final Comment existingIssueEntity = IssueService.ISSUE_TO_COMMENT.apply(existingIssue);
 
-    private Map<Long, Comment> createdIssues = new HashMap<>();
+    private final Map<Long, Comment> createdIssues = new HashMap<>();
 
     @Before
     public void setUp() {
@@ -104,7 +103,7 @@ public class IssueServiceTest {
             Comment createdComment = invocation.getArgument(0);
             createdComment.setComment_id(42L);
             createdIssues.put(createdComment.getComment_id(), createdComment);
-            return Arrays.asList(createdComment.getComment_id());
+            return List.of(createdComment.getComment_id());
         });
 
         doNothing().when(notificationService).sendNewIssueToSystemContactsNotification(any(InfoSystem.class));
