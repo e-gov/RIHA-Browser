@@ -1,10 +1,10 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.domain.CommentRepository;
+import ee.ria.riha.domain.model.Comment;
 import ee.ria.riha.domain.model.IssueEntity;
 import ee.ria.riha.domain.model.IssueEntityType;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.model.Comment;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

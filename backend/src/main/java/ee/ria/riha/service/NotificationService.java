@@ -35,11 +35,17 @@ public class NotificationService {
             return;
         }
 
-        NewIssueCommentEmailNotification notificationModel = createIssueCommentNotification(
-                        new NewIssueCommentEmailNotification(),
-                        issueComment.getIssueId(),
-                        issueComment.getComment());
-        emailNotificationSenderService.sendNotification(notificationModel);
+        Set<String> issueParticipantEmail = getIssueParticipantEmail(issueComment.getIssueId());
+
+        issueParticipantEmail.forEach(mail ->{
+            NewIssueCommentEmailNotification notificationModel = createIssueCommentNotification(
+                    new NewIssueCommentEmailNotification(),
+                    issueComment.getIssueId(),
+                    issueComment.getComment(),
+                    mail);
+
+            emailNotificationSenderService.sendNotification(notificationModel);
+        });
     }
 
     public void sendNewIssueDecisionNotification(IssueEvent decisionEvent) {
@@ -48,28 +54,39 @@ public class NotificationService {
             return;
         }
 
-        NewIssueDecisionEmailNotification notificationModel = createIssueCommentNotification(
-                        new NewIssueDecisionEmailNotification(),
-                        decisionEvent.getIssueId(),
-                        decisionEvent.getComment());
-        if (notificationModel != null) {
-            notificationModel.setDecision(decisionEvent.getResolutionType());
-            emailNotificationSenderService.sendNotification(notificationModel);
-        }
+        Set<String> issueParticipantEmail = getIssueParticipantEmail(decisionEvent.getIssueId());
+
+        issueParticipantEmail.forEach(mail -> {
+            NewIssueDecisionEmailNotification notificationModel = createIssueCommentNotification(
+                    new NewIssueDecisionEmailNotification(),
+                    decisionEvent.getIssueId(),
+                    decisionEvent.getComment(),
+                    mail);
+            if (notificationModel != null) {
+                notificationModel.setDecision(decisionEvent.getResolutionType());
+                emailNotificationSenderService.sendNotification(notificationModel);
+            }
+        });
+    }
+
+    public Set<String> getIssueParticipantEmail(Long issueId){
+        Set<String> issueParticipantsEmails = getIssueParticipantsEmails(issueId);
+        Set<String> riaApproversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
+
+        issueParticipantsEmails.removeIf(email -> !riaApproversEmails.contains(email));
+        issueParticipantsEmails.addAll(infoSystemService.getByIssueId(issueId).getContactsEmails());
+
+        return issueParticipantsEmails;
     }
 
     private <T extends NewIssueCommentEmailNotification> T createIssueCommentNotification(T notificationModel,
                                                                                           Long issueId,
-                                                                                          String comment) {
+                                                                                          String comment,
+                                                                                          String mail) {
         InfoSystem infoSystem = infoSystemService.getByIssueId(issueId);
         Issue issue = issueService.getIssueById(issueId);
 
-        Set<String> issueParticipantsEmails = getIssueParticipantsEmails(issueId);
-        Set<String> riaApproversEmails = userService.getApproversEmailsByOrganization(SecurityContextUtil.RIA_ORGANIZATION_CODE);
-        issueParticipantsEmails.removeIf(email -> !riaApproversEmails.contains(email));
-
-        issueParticipantsEmails.addAll(infoSystem.getContactsEmails());
-        if (issueParticipantsEmails.isEmpty()) {
+        if (mail.isEmpty()) {
             log.info("New issue comment has been recently added for issue with id {}, "
                             + "but none of issue participants or info system contacts have emails.", issueId);
             return null;
@@ -79,8 +96,7 @@ public class NotificationService {
                 .getName();
 
         notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(issueParticipantsEmails.toArray(new String[issueParticipantsEmails.size()]));
+        notificationModel.setTo(mail);
         notificationModel.setInfoSystemFullName(infoSystem.getFullName());
         notificationModel.setInfoSystemShortName(infoSystem.getShortName());
         notificationModel.setBaseUrl(getBaseUrl());
@@ -103,23 +119,23 @@ public class NotificationService {
             return;
         }
 
-        List<String> to = infoSystem.getContactsEmails();
-        if (to.isEmpty()) {
+        List<String> sendTo = infoSystem.getContactsEmails();
+        if (sendTo.isEmpty()) {
             log.info("New issue has been recently added, but info system '{}' has no contacts.",
                     infoSystem.getFullName());
             return;
         }
 
-        NewIssueToSystemContactsEmailNotification notificationModel = new NewIssueToSystemContactsEmailNotification();
-        notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(to.toArray(new String[to.size()]));
-        notificationModel.setInfoSystemFullName(infoSystem.getFullName());
-        notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
-        notificationModel.setBaseUrl(getBaseUrl());
-
-        emailNotificationSenderService.sendNotification(notificationModel);
+        sendTo.forEach(mail -> {
+            NewIssueToSystemContactsEmailNotification notificationModel = new NewIssueToSystemContactsEmailNotification();
+            notificationModel.setFrom(getDefaultNotificationSender());
+            notificationModel.setInfoSystemFullName(infoSystem.getFullName());
+            notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+            notificationModel.setInfoSystemUuid(infoSystem.getUuid());
+            notificationModel.setBaseUrl(getBaseUrl());
+            notificationModel.setTo(mail);
+            emailNotificationSenderService.sendNotification(notificationModel);
+        });
     }
 
     public void sendIssueStatusUpdateNotification(Issue issue, boolean commented) {
@@ -128,30 +144,31 @@ public class NotificationService {
             return;
         }
 
-        IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
-
         InfoSystem infoSystem = infoSystemService.get(issue.getInfoSystemUuid());
         Set<String> participantsEmails = new HashSet<>(infoSystem.getContactsEmails());
-        notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(participantsEmails.toArray(new String[0]));
 
-        notificationModel.setIssue(IssueDataModel.builder()
-                .id(issue.getId())
-                .title(issue.getTitle())
-                .status(issue.getStatus().name())
-                .build());
+        participantsEmails.forEach(mail -> {
+            IssueStatusUpdateNotification notificationModel = new IssueStatusUpdateNotification();
+            notificationModel.setFrom(getDefaultNotificationSender());
+            notificationModel.setTo(mail);
 
-        notificationModel.setInfoSystem(InfoSystemDataModel.builder()
-                .fullName(infoSystem.getFullName())
-                .shortName(infoSystem.getShortName())                          
-                .uuid(infoSystem.getUuid())
-                .build());
+            notificationModel.setIssue(IssueDataModel.builder()
+                    .id(issue.getId())
+                    .title(issue.getTitle())
+                    .status(issue.getStatus().name())
+                    .build());
 
-        notificationModel.setCommented(commented);
-        notificationModel.setBaseUrl(getBaseUrl());
+            notificationModel.setInfoSystem(InfoSystemDataModel.builder()
+                    .fullName(infoSystem.getFullName())
+                    .shortName(infoSystem.getShortName())
+                    .uuid(infoSystem.getUuid())
+                    .build());
 
-        emailNotificationSenderService.sendNotification(notificationModel);
+            notificationModel.setCommented(commented);
+            notificationModel.setBaseUrl(getBaseUrl());
+
+            emailNotificationSenderService.sendNotification(notificationModel);
+        });
     }
 
     public void sendNewIssueToApproversNotification(Issue issue, InfoSystem infoSystem) {
@@ -162,23 +179,24 @@ public class NotificationService {
 
         Set<String> approversEmails = userService.getApproversEmailsByOrganization(null);
 
-        NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
-        notificationModel.setFrom(getDefaultNotificationSender());
-        notificationModel.setTo(getDefaultNotificationRecipient(infoSystem.getShortName()));
-        notificationModel.setBcc(approversEmails.toArray(new String[approversEmails.size()]));
-        notificationModel.setInfoSystemFullName(infoSystem.getFullName());
-        notificationModel.setInfoSystemShortName(infoSystem.getShortName());
-        notificationModel.setInfoSystemUuid(infoSystem.getUuid());
+        approversEmails.forEach(mail -> {
+            NewIssueToApproversEmailNotification notificationModel = new NewIssueToApproversEmailNotification();
+            notificationModel.setFrom(getDefaultNotificationSender());
+            notificationModel.setTo(mail);
+            notificationModel.setInfoSystemFullName(infoSystem.getFullName());
+            notificationModel.setInfoSystemShortName(infoSystem.getShortName());
+            notificationModel.setInfoSystemUuid(infoSystem.getUuid());
 
-        notificationModel.setIssue(IssueDataModel.builder()
-                .id(issue.getId())
-                .title(issue.getTitle())
-                .type(issue.getType() != null ? issue.getType().name() : null)
-                .build());
+            notificationModel.setIssue(IssueDataModel.builder()
+                    .id(issue.getId())
+                    .title(issue.getTitle())
+                    .type(issue.getType() != null ? issue.getType().name() : null)
+                    .build());
 
-        notificationModel.setBaseUrl(getBaseUrl());
+            notificationModel.setBaseUrl(getBaseUrl());
 
-        emailNotificationSenderService.sendNotification(notificationModel);
+            emailNotificationSenderService.sendNotification(notificationModel);
+        });
     }
 
     private String[] getDefaultNotificationRecipient(String infoSystemShortName) {

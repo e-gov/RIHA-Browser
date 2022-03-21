@@ -1,16 +1,14 @@
 package ee.ria.riha.service;
 
+import ee.ria.riha.domain.FileRepository;
 import ee.ria.riha.domain.InfoSystemRepository;
-import ee.ria.riha.domain.model.FileResource;
-import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
-import ee.ria.riha.domain.model.InfoSystemFileMetadata;
+import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
 import ee.ria.riha.service.auth.RoleType;
-import ee.ria.riha.storage.domain.FileRepository;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,7 +34,7 @@ public class FileService {
     private static final String INLINE_CONTENT_DISPOSITION_TYPE = "inline";
     private static final String ATTACHMENT_CONTENT_DISPOSITION_TYPE = "attachment";
     private static final String CONTENT_DISPOSITION_TOKEN_DELIMITER = ";";
-    private static final Function<ee.ria.riha.storage.domain.model.FileResource, FileResource> STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL =
+    private static final Function<FileResourceClient, FileResource> STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL =
             storageFileResource -> {
                 if (storageFileResource == null) {
                     return null;
@@ -91,7 +89,7 @@ public class FileService {
      * @return response entity with data stream
      * @throws IOException in case of file repository errors
      */
-    public ResponseEntity download(String infoSystemReference, UUID fileUuid) throws IOException {
+    public ResponseEntity<InputStreamResource> download(String infoSystemReference, UUID fileUuid) throws IOException {
         return download(infoSystemRepository.load(infoSystemReference), fileUuid);
     }
 
@@ -104,10 +102,10 @@ public class FileService {
      * @return response entity with data stream
      * @throws IOException in case of file repository errors
      */
-    public ResponseEntity download(InfoSystem infoSystem, UUID fileUuid) throws IOException {
+    public ResponseEntity<InputStreamResource> download(InfoSystem infoSystem, UUID fileUuid) throws IOException {
         checkFileAccess(infoSystem, fileUuid);
 
-        ResponseEntity fileResource = fileRepository.download(fileUuid, infoSystem.getUuid());
+        ResponseEntity<InputStreamResource> fileResource = fileRepository.download(fileUuid, infoSystem.getUuid());
 
         String attachmentContentDisposition = ATTACHMENT_CONTENT_DISPOSITION_TYPE
                 + CONTENT_DISPOSITION_TOKEN_DELIMITER
@@ -161,7 +159,7 @@ public class FileService {
             contentDispositionTokens.remove(0);
         }
 
-        return contentDispositionTokens.stream().collect(Collectors.joining(CONTENT_DISPOSITION_TOKEN_DELIMITER));
+        return String.join(CONTENT_DISPOSITION_TOKEN_DELIMITER, contentDispositionTokens);
     }
 
     private List<InfoSystemFileMetadata> getMatchingFileMetadata(InfoSystem infoSystem, UUID fileUuid) {
@@ -178,7 +176,7 @@ public class FileService {
     }
 
     public PagedResponse<FileResource> list(Pageable pageable, CompositeFilterRequest filterRequest) {
-        PagedGridResponse<ee.ria.riha.storage.domain.model.FileResource> fileResourcePagedResponse = fileRepository.list(
+        PagedGridResponse<FileResourceClient> fileResourcePagedResponse = fileRepository.list(
                 filterRequest, pageable);
 
         return new PagedResponse<>(

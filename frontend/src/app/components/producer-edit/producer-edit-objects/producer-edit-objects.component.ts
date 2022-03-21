@@ -16,13 +16,15 @@ import {CONSTANTS} from '../../../utils/constants';
 })
 export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal {
 
-  @ViewChild('dataFilesForm') formObject: NgForm;
-  @ViewChild('object') inputObject: ElementRef;
+  @ViewChild('dataFilesForm') dataFilesForm: NgForm;
+  @ViewChild('objectForm') objectForm: NgForm;
 
   @Input() system: System;
   stored_data: string[] =[];
   data_files: any[] = [];
   isChanged: boolean = false;
+  buttonClicked: boolean = false;
+  objButtonClicked: boolean = false;
 
   dataFile: any = null;
   uploading: boolean = false;
@@ -30,14 +32,33 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
     name: '',
     url: ''
   };
+  obj: string = '';
 
   // string data objects
 
-  addStoredDataObject(input): void {
-    if (input.value.length > 0 && this.stored_data.length < 10){
-      this.stored_data.push(input.value);
-      input.value = '';
+  addStoredDataObject(form): void {
+    if (form.valid || this.obj.length > 0 && this.stored_data.length < 10){
+      this.stored_data.push(this.obj);
+      form.reset;
       this.isChanged = true;
+      this.objButtonClicked = false;
+    } else {
+      this.objButtonClicked = true;
+    }
+  }
+
+
+  addDataFile(form): void{
+    if (form.valid){
+      this.data_files.push({
+        url: this.data.url,
+        name: this.data.name.trim()
+      });
+      form.reset();
+      this.isChanged = true;
+      this.buttonClicked = false;
+    }else {
+      this.buttonClicked = true;
     }
   }
 
@@ -64,17 +85,6 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
       this.uploading = false;
       this.dataFile = null;
     });
-  }
-
-  addDataFile(form): void{
-    if (form.valid){
-      this.data_files.push({
-        url: this.data.url,
-        name: this.data.name.trim()
-      });
-      form.reset();
-      this.isChanged = true;
-    }
   }
 
   deleteDataFile(i): void{
@@ -124,7 +134,7 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
    * Is form data changed ?
    */
   get isFormChanged(): boolean {
-    return this.isChanged || this.formObject.form.dirty || this.inputObject.nativeElement.value.length > 0
+    return this.isChanged || this.dataFilesForm.form.dirty || this.objectForm.form.dirty
   }
 
   constructor(private modalService: ModalHelperService,

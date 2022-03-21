@@ -23,6 +23,7 @@ export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateM
   legislations: any[] = [];
   isChanged: boolean = false;
   classifiers = classifiers;
+  buttonClicked: boolean = false;
 
   data: any = {url: '', name: '', type: ''};
 
@@ -34,6 +35,9 @@ export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateM
       this.data = {url: '', name: '', type: ''};
       addForm.reset();
       this.isChanged = true;
+      this.buttonClicked = false;
+    }else {
+      this.buttonClicked = true;
     }
   }
 

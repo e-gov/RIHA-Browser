@@ -1,11 +1,7 @@
 package ee.ria.riha.service;
 
-import ee.ria.riha.domain.model.IssueEntityType;
-import ee.ria.riha.domain.model.IssueEvent;
-import ee.ria.riha.domain.model.IssueEventType;
-import ee.ria.riha.domain.model.IssueResolutionType;
-import ee.ria.riha.storage.domain.CommentRepository;
-import ee.ria.riha.storage.domain.model.Comment;
+import ee.ria.riha.domain.CommentRepository;
+import ee.ria.riha.domain.model.*;
 import ee.ria.riha.web.model.IssueEventSummaryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +24,7 @@ public class IssueEventService {
 
         return IssueEvent.builder()
                 .id(comment.getComment_id())
-                .type(comment.getSub_type() != null ? IssueEventType.valueOf(comment.getSub_type()) : null)
+                .type(IssueEventType.valueOf(comment.getSub_type()))
                 .resolutionType(comment.getResolution_type() != null
                         ? IssueResolutionType.valueOf(comment.getResolution_type())
                         : null)
@@ -70,7 +66,7 @@ public class IssueEventService {
 
         return IssueEventSummaryModel.builder()
                 .id(comment.getComment_id())
-                .type(comment.getSub_type() != null ? IssueEventType.valueOf(comment.getSub_type()) : null)
+                .type(IssueEventType.valueOf(comment.getSub_type()))
                 .organizationName(comment.getOrganization_name())
                 .organizationCode(comment.getOrganization_code())
                 .resolutionType(comment.getResolution_type() != null ? IssueResolutionType.valueOf(comment.getResolution_type()) : null)
@@ -86,16 +82,13 @@ public class IssueEventService {
      *
      * @param issueId    an id of an issue
      * @param issueEvent a new issue event
-     * @return created issue event
      */
-    public IssueEvent createEvent(Long issueId, IssueEvent issueEvent) {
+    public void createEvent(Long issueId, IssueEvent issueEvent) {
         issueEvent.setIssueId(issueId);
         List<Long> createdIssueEventIds = commentRepository.add(ISSUE_EVENT_TO_COMMENT.apply(issueEvent));
         if (createdIssueEventIds.isEmpty()) {
             throw new IllegalBrowserStateException("Issue event was not created");
         }
-
-        return get(createdIssueEventIds.get(0));
     }
 
     /**

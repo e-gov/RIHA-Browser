@@ -1,34 +1,47 @@
 package ee.ria.riha.web;
 
+import ee.ria.riha.conf.FeedbackServiceConnectionProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.RelationType;
+import ee.ria.riha.logging.auditlog.AuditEvent;
+import ee.ria.riha.logging.auditlog.AuditLogger;
+import ee.ria.riha.logging.auditlog.AuditType;
 import ee.ria.riha.service.FileService;
 import ee.ria.riha.service.InfoSystemDataObjectService;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.RelationService;
 import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.service.auth.PrincipalHasRoleProducer;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
+import ee.ria.riha.web.model.InfoSystemDataObjectModel;
 import ee.ria.riha.web.model.InfoSystemModel;
 import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.StandardRealisationCreationModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 import static java.util.stream.Collectors.toList;
 
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(API_V1_PREFIX + "/systems")
+
 @Api("Information systems")
 public class InfoSystemController {
 
@@ -50,10 +63,14 @@ public class InfoSystemController {
     @Autowired
     private FileService fileService;
 
+    private final FeedbackServiceConnectionProperties feedbackServiceConnectionProperties;
+
+    private final AuditLogger auditLogger;
+
     @GetMapping
     @ApiOperation("List all existing information systems")
     @ApiPageableAndFilterableParams
-    public ResponseEntity list(Pageable pageable, Filterable filterable) {
+    public ResponseEntity<PagedResponse<InfoSystemModel>> list(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(
                 createPagedModel(
                         infoSystemService.list(pageable, filterable),
@@ -61,7 +78,7 @@ public class InfoSystemController {
     }
     @GetMapping("/autocomplete")
     @ApiOperation("List all existing information systems for autocomplete")
-    public ResponseEntity autocomplete(@RequestParam("searchTerm") String searchTerm) {
+    public ResponseEntity<PagedResponse<InfoSystemModel>> autocomplete(@RequestParam("searchTerm") String searchTerm) {
 
         String paramToRestEndpoint;
         if (StringUtils.isNumeric(searchTerm)) {
@@ -94,9 +111,9 @@ public class InfoSystemController {
         return getResponseEntity(pageable, foundResults);
     }
 
-    private ResponseEntity getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
+    private ResponseEntity<PagedResponse<InfoSystemModel>> getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
         return ResponseEntity.ok(
-                new PagedResponse(
+                new PagedResponse<>(
                         pageable,
                         response.size(),
                         response.stream()
@@ -121,7 +138,7 @@ public class InfoSystemController {
     @GetMapping(path = "/data-objects")
     @ApiOperation("List all existing information systems data objects")
     @ApiPageableAndFilterableParams
-    public ResponseEntity listDataObjects(Pageable pageable, Filterable filterable) {
+    public ResponseEntity<PagedResponse<InfoSystemDataObjectModel>> listDataObjects(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(
                 createPagedModel(
                         infoSystemDataObjectService.list(pageable, filterable),
@@ -139,8 +156,9 @@ public class InfoSystemController {
     @PostMapping
     @ApiOperation("Create new information system")
     @PrincipalHasRoleProducer
-    public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model) {
+    public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model, HttpServletRequest request) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
@@ -155,8 +173,9 @@ public class InfoSystemController {
     @PreAuthorizeInfoSystemOwner
     @ApiOperation("Update existing information system")
     public ResponseEntity<InfoSystemModel> update(@PathVariable("reference") String reference,
-                                                  @RequestBody InfoSystemModel model) {
+                                                  @RequestBody InfoSystemModel model, HttpServletRequest request) {
         InfoSystem infoSystem = infoSystemService.update(reference, new InfoSystem(model.getJson()));
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
     }
 
@@ -172,6 +191,7 @@ public class InfoSystemController {
         }
 
         InfoSystem newlyCreatedInfoSystem = existingInfoSystem.copy();
+        newlyCreatedInfoSystem.setStandardInformationSystemUndefined();
         newlyCreatedInfoSystem.setShortName(standardRealisationCreationModel.getShortName());
         newlyCreatedInfoSystem.setDifferences(standardRealisationCreationModel.getDifferences());
         newlyCreatedInfoSystem.setFullName(standardRealisationCreationModel.getName());
@@ -181,7 +201,6 @@ public class InfoSystemController {
         newlyCreatedInfoSystem.clearSecuritySection();
 
         newlyCreatedInfoSystem.removeTopic("standardlahendus");
-
 
         newlyCreatedInfoSystem = infoSystemService.create(newlyCreatedInfoSystem);
 

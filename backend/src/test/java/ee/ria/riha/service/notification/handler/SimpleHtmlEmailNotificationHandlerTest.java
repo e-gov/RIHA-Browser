@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -35,7 +35,7 @@ public class SimpleHtmlEmailNotificationHandlerTest {
     @Before
     public void setUp() {
         notification.setFrom("sender@example.com");
-        notification.setTo(new String[]{"recipient@example.com"});
+        notification.setTo("recipient@example.com");
         notification.setCc(new String[]{"cc@example.com"});
         notification.setBcc(new String[]{"bcc@example.com"});
     }
@@ -44,13 +44,12 @@ public class SimpleHtmlEmailNotificationHandlerTest {
     public void setsBasicMessageParameters() throws Exception {
         handler.createMessagePreparator(notification).prepare(mimeMessage);
 
-        verify(mimeMessage).setFrom(Matchers.eq(new InternetAddress("sender@example.com")));
-        verify(mimeMessage).setRecipients(Matchers.eq(Message.RecipientType.TO),
-                Matchers.eq(InternetAddress.parse("recipient@example.com")));
-        verify(mimeMessage).setRecipients(Matchers.eq(Message.RecipientType.CC),
-                Matchers.eq(InternetAddress.parse("cc@example.com")));
-        verify(mimeMessage).setRecipients(Matchers.eq(Message.RecipientType.BCC),
-                Matchers.eq(InternetAddress.parse("bcc@example.com")));
+        verify(mimeMessage).setFrom(new InternetAddress("sender@example.com"));
+        verify(mimeMessage).setRecipient(Message.RecipientType.TO,new InternetAddress("recipient@example.com"));
+        verify(mimeMessage).setRecipients(Message.RecipientType.CC,
+                InternetAddress.parse("cc@example.com"));
+        verify(mimeMessage).setRecipients(Message.RecipientType.BCC,
+                InternetAddress.parse("bcc@example.com"));
     }
 
     @Test
@@ -83,7 +82,7 @@ public class SimpleHtmlEmailNotificationHandlerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void throwsExceptionWhenToAddressIsEmpty() throws Exception {
-        notification.setTo(new String[0]);
+        notification.setTo(null);
 
         handler.createMessagePreparator(notification).prepare(mimeMessage);
     }

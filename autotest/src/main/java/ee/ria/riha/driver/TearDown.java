@@ -1,7 +1,7 @@
 package ee.ria.riha.driver;
 
-import io.cucumber.core.api.Scenario;
 import io.cucumber.java.After;
+import io.cucumber.java.Scenario;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -25,6 +25,6 @@ public class TearDown {
 
         final byte[] screenshot = ((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.BYTES);
-        scenario.embed(screenshot, "image/png");
+        scenario.attach(screenshot, "image/png", "result");
     }
 }
