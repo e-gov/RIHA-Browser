@@ -1,7 +1,6 @@
 package ee.ria.riha.service.auth;
 
-import ee.ria.riha.domain.model.InfoSystem;
-import ee.ria.riha.domain.model.Issue;
+import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.IssueService;
 import org.junit.Before;
@@ -9,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 

@@ -5,10 +5,10 @@ import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.Issue;
-import ee.ria.riha.storage.util.FilterRequest;
-import ee.ria.riha.storage.util.Filterable;
-import ee.ria.riha.storage.util.Pageable;
-import ee.ria.riha.storage.util.PagedResponse;
+import ee.ria.riha.service.util.FilterRequest;
+import ee.ria.riha.service.util.Filterable;
+import ee.ria.riha.service.util.Pageable;
+import ee.ria.riha.service.util.PagedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +30,14 @@ public class InfoSystemService {
 
     private static final String NOT_SET_VALUE = "[NOT SET]";
 
+
     @Autowired
     private InfoSystemRepository infoSystemRepository;
 
     @Autowired
     private JsonValidationService infoSystemValidationService;
     private IssueService issueService;
-
-    private DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    private final DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
         return infoSystemRepository.list(pageable, filterable);
@@ -128,7 +128,6 @@ public class InfoSystemService {
                 existingInfoSystem.getId(),
                 existingInfoSystem.getOwnerCode(),
                 existingInfoSystem.getShortName());
-
         if (!existingInfoSystem.getShortName().equals(model.getShortName())) {
             validateInfoSystemShortName(model.getShortName());
         }

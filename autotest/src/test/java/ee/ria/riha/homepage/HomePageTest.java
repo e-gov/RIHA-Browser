@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = {"src/test/resources/ee/ria/riha/HomePage.feature"},
-        strict = false, plugin = {"pretty",
+        plugin = {"pretty",
         "json:target/cucumber_json_reports/home-page.json",
         "html:target/home-page-html"},
         glue = {"ee.ria.riha"})

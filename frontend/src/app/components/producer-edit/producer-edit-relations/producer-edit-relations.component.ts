@@ -29,7 +29,12 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
     infoSystem: any,
     type: string
   };
+  buttonClicked: boolean = false;
 
+  getRelationTypesArray(){
+    const removeRelations = ["USED_SYSTEM", "USER_SYSTEM"];
+    return this.generalHelperService.toArray(classifiers.relation_type).filter(obj => !removeRelations.includes(obj.code));
+  }
 
   dropDownFormatter = (v)=> {
     return `${v.details.short_name} - ${this.generalHelperService.truncateString(v.details.name, 90)}`;
@@ -59,6 +64,9 @@ export class ProducerEditRelationsComponent implements OnInit, CanDeactivateModa
       }, err => {
         this.toastrService.error('Serveri viga');
       });
+      this.buttonClicked = false;
+    }else {
+      this.buttonClicked = true;
     }
   };
 

@@ -13,14 +13,14 @@
         <span *ngIf="!isAllowedToChangeOrganization()">
 
           <ng-container *ngIf="!isNoOrganizationPresent()">{{ getUserText() }}</ng-container>
-          <a *ngIf="isNoOrganizationPresent()" href="#" style="outline: none"
+          <a *ngIf="isNoOrganizationPresent()" href="#" class="navbar-style"
              (click)="openNoOrganizationWarningModal()">{{ getUserText() }}</a>
 
         </span>
         <span *ngIf="isAllowedToChangeOrganization()">
               <i *ngIf="noOrganizationSelected()" ngbTooltip="asutus ei ole valitud"
                  class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
-              <a href="#" style="outline: none" (click)="openOrganizationsModal()">{{ getUserText() }}</a>
+              <a href="#" class="navbar-style" (click)="openOrganizationsModal()">{{ getUserText() }}</a>
         </span>
         <span class="px-1">
           &nbsp;

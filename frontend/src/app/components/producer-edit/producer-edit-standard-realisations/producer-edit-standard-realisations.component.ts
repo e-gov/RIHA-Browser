@@ -22,7 +22,6 @@ export class ProducerEditStandardRealisationsComponent {
         this.system.details.short_name, addForm.value).subscribe(responseSystem => {
         this.closeModal();
         this.router.navigate(['/Infosüsteemid/Vaata', responseSystem.details.short_name]);
-
       }, err => {
 
         let errJson = null;

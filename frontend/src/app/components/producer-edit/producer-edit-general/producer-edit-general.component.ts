@@ -18,6 +18,7 @@ export class ProducerEditGeneralComponent implements OnInit {
   classifiers = classifiers;
   timeoutId: any = null;
   isChanged: boolean = false;
+  standard: any = null;
 
   onSubmit(f) :void {
     this.alertConf = null;
@@ -48,6 +49,14 @@ export class ProducerEditGeneralComponent implements OnInit {
     }
     this.isChanged = true;
     return false;
+  }
+
+  changeStandardType() {
+    if (this.system.getStandardInformationSystem() == false){
+      this.system.setStandardInformationSystem(true);
+    } else if (this.system.getStandardInformationSystem() == true){
+      this.system.setStandardInformationSystem(false);
+    }
   }
 
   changeXRoadStatus(xRoadStatus) {
@@ -103,5 +112,4 @@ export class ProducerEditGeneralComponent implements OnInit {
       this.reference = params['reference'];
     });
   }
-
 }

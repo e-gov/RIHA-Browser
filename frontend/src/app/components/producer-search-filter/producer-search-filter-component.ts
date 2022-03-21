@@ -27,6 +27,7 @@ export class ProducerSearchFilterComponent implements OnInit {
     dateUpdatedTo: string,
     ownerName: string,
     ownerCode: string
+    standardSystem: string
   };
 
   classifiers = classifiers;
@@ -98,6 +99,7 @@ export class ProducerSearchFilterComponent implements OnInit {
       dateUpdatedTo: '',
       ownerName: '',
       ownerCode: '',
+      standardSystem: ''
     };
   }
 
@@ -129,8 +131,8 @@ export class ProducerSearchFilterComponent implements OnInit {
         dateUpdatedFrom: this.systemsService.timestampToDateObj(params['dateUpdatedFrom']),
         dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo']),
         ownerName: params['ownerName'] || '',
-        ownerCode: params['ownerCode'] || ''
-
+        ownerCode: params['ownerCode'] || '',
+        standardSystem: params['standardSystem'] || ''
       };
     });
   }

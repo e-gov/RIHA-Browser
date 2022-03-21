@@ -2,10 +2,9 @@ package ee.ria.riha.domain;
 
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.IssueType;
+import ee.ria.riha.domain.model.MainResource;
 import ee.ria.riha.service.ObjectNotFoundException;
-import ee.ria.riha.storage.domain.MainResourceRepository;
-import ee.ria.riha.storage.domain.model.MainResource;
-import ee.ria.riha.storage.util.*;
+import ee.ria.riha.service.util.*;
 
 import java.util.List;
 import java.util.function.Function;

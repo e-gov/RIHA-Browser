@@ -30,6 +30,7 @@ public class Relation {
 
     private boolean reversed;
 
+
     public Relation reverse() {
         return Relation.builder()
                 .id(this.id)

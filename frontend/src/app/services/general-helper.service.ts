@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {classifiers} from "./environment.service";
-import {isNullOrUndefined} from 'util';
 import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
@@ -14,7 +13,7 @@ import * as $ from 'jquery';
 export class GeneralHelperService {
 
   public dateObjToTimestamp(dateObj: any, simple?: boolean): any {
-    if (!isNullOrUndefined(dateObj) && dateObj.year && dateObj.month && dateObj.day){
+    if ((dateObj !== null) && dateObj.year && dateObj.month && dateObj.day){
       const year = dateObj.year.toString();
       let month = dateObj.month.toString();
       let day = dateObj.day.toString();
@@ -32,7 +31,7 @@ export class GeneralHelperService {
   }
 
   public timestampToDateObj(timestamp: string): any {
-    if (!isNullOrUndefined(timestamp) && timestamp.substr && timestamp != ''){
+    if ((timestamp !== null) && timestamp.substr && timestamp != ''){
       const year = parseInt(timestamp.substr(0, 4), 10);
       const month = parseInt(timestamp.substr(5, 2), 10);
       const day = parseInt(timestamp.substr(8, 2), 10);

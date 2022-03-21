@@ -200,14 +200,11 @@ public class InfosystemPageSteps {
 
     @Then("InfosystemPage: data object {string}, data file {string} and url {string} not present in 'data' block")
     public void dataObjectFileAndUrlNotPresentInDataBlock(String dataObject, String fileName, String urlName) {
-        assertFalse("Data block contains data object " + dataObject,
-                Stream.of(infosystemPage.getDataObjects().split(",")).anyMatch(obj -> obj.equalsIgnoreCase(dataObject)));
+        assertTrue("Data block contains data object " + dataObject, infosystemPage.getEmptyDataTable());
 
-        assertFalse("Data block contains file " + fileName,
-                Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(fileName)));
+        assertTrue("Data block contains file " + fileName, infosystemPage.getEmptyUrlTable());
 
-        assertFalse("Data block contains url " + urlName,
-                Stream.of(infosystemPage.getDataUrls().split(",")).anyMatch(url -> url.equalsIgnoreCase(urlName)));
+        assertTrue("Data block contains url " + urlName, infosystemPage.getEmptyUrlTable());
     }
 
     @Then("InfosytemPage: infosystem creation purpose is {string}")
@@ -274,7 +271,8 @@ public class InfosystemPageSteps {
 
     @Then("InfosystemPage: a new associated infosystem {string} appears as a clickable link")
     public void verifyNewAssociatedInfosystem(String name) {
-        assertEquals("New associated infosystem is not " + name, this.infosystemPage.getNewAssociatedInfosystemInModal(), name);
+        String newAssociatedInfosystemInModal = this.infosystemPage.getNewAssociatedInfosystemInModal().split(" -")[0];
+        assertEquals("New associated infosystem is not " + name, newAssociatedInfosystemInModal, name);
     }
 
 
@@ -286,7 +284,8 @@ public class InfosystemPageSteps {
 
     @And("InfosystemPage: associated infosystem {string} will appear")
     public void verifySystemInDetailView(String name) {
-        assertEquals("New associated infosystem is not " + name, this.infosystemPage.getAssociatedInfosystemInDetail(), name );
+        String associatedInfosystemInDetail = this.infosystemPage.getAssociatedInfosystemInDetail().split(" -")[0];
+        assertEquals("New associated infosystem is not " + name, associatedInfosystemInDetail, name );
     }
 
 
