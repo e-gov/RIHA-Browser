@@ -29,7 +29,7 @@ export class ProducerDetailsIssuesComponent implements OnInit {
   closedIssues: any[] = [];
   newAdded: boolean = false;
   userMatrix: UserMatrix;
-  hasStandardRelations: boolean = false;
+  active = 1;
 
   constructor(private modalService: ModalHelperService,
               private systemsService: SystemsService,
@@ -107,11 +107,6 @@ export class ProducerDetailsIssuesComponent implements OnInit {
 
   ngOnInit() {
     this.refreshIssues();
-
-    this.systemsService.getSystemRelations(this.system.details.short_name).subscribe(systemRelations => {
-      this.hasStandardRelations = systemRelations != null
-        && typeof _.find(systemRelations, relation => relation != null && "USED_SYSTEM" === relation.type) !== 'undefined';
-    });
 
     if (this.issueId){
       if (!this.userMatrix.isLoggedIn){

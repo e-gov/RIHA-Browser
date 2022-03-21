@@ -2,13 +2,13 @@ package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import ee.ria.riha.client.StorageClientException;
+import ee.ria.riha.client.StorageError;
+import ee.ria.riha.client.StorageErrorCode;
 import ee.ria.riha.service.BrowserException;
 import ee.ria.riha.service.CodedBrowserException;
 import ee.ria.riha.service.JsonValidationException;
 import ee.ria.riha.service.ObjectNotFoundException;
-import ee.ria.riha.storage.client.StorageClientException;
-import ee.ria.riha.storage.client.StorageError;
-import ee.ria.riha.storage.client.StorageErrorCode;
 import ee.ria.riha.web.model.CodedBrowserExceptionModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         if (storageError == null) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(createBrowserExceptionModel(e, "error.storage.unknown"));
+                    .body(createBrowserExceptionModel(e, "error.storage.unknown", null));
         }
 
         if (storageError.getErrcode() == StorageErrorCode.INPUT_NO_OBJECT_FOUND_WITH_GIVEN_ID) {
@@ -74,9 +74,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                         new Object[]{storageError.getErrcode(), storageError.getErrmsg(), storageError.getErrtrace()}));
     }
 
-    private CodedBrowserExceptionModel createBrowserExceptionModel(Throwable exception, String code) {
-        return createBrowserExceptionModel(exception, code, null);
-    }
 
     private CodedBrowserExceptionModel createBrowserExceptionModel(Throwable exception, String code, Object[] args) {
         CodedBrowserExceptionModel model = new CodedBrowserExceptionModel();

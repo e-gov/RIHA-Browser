@@ -30,6 +30,8 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
     comment: null,
     type: null
   };
+  issueButtonClicked: boolean = false;
+  requestButtonClicked: boolean = false;
 
   switchView(){
     this.isApprovalRequest = !this.isApprovalRequest;
@@ -49,6 +51,9 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
         err => {
           this.toastrService.error('Serveri viga! Proovige uuesti!');
         })
+      this.issueButtonClicked = false;
+    } else {
+      this.issueButtonClicked = true;
     }
   }
 
@@ -61,6 +66,9 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
         err => {
           this.toastrService.error('Serveri viga! Proovige uuesti!');
         });
+      this.requestButtonClicked = false;
+    } else {
+      this.requestButtonClicked = true;
     }
   }
 

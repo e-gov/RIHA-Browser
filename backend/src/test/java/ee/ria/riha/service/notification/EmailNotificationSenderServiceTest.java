@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
@@ -51,7 +51,7 @@ public class EmailNotificationSenderServiceTest {
     @Test
     public void sendsNotificationMessage() {
         NewInfoSystemsEmailNotification notification = new NewInfoSystemsEmailNotification();
-        notification.setTo(new String[]{"recipient@example.com"});
+        notification.setTo("recipient@example.com");
         notification.setFrom("sender@example.com");
 
         emailNotificationSenderService.sendNotification(notification);
@@ -65,5 +65,4 @@ public class EmailNotificationSenderServiceTest {
 
         verify(javaMailSender, never()).send(Mockito.any(MimeMessagePreparator.class));
     }
-
 }

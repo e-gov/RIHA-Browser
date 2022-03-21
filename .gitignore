@@ -3,3 +3,5 @@
 *.ipr
 *.iml
 .project
+stores
+logs

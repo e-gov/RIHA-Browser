@@ -1,11 +1,11 @@
 package ee.ria.riha.conf;
 
-import lombok.*;
-import org.hibernate.validator.constraints.*;
-import org.springframework.boot.context.properties.*;
-import org.springframework.context.annotation.*;
-
-import java.util.*;
+import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Valentin Suhnjov

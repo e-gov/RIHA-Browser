@@ -28,7 +28,7 @@
       <table *ngIf="system.details.data_files && system.details.data_files.length > 0" class="details-list-table">
         <tr *ngFor="let file of system.details.data_files">
           <td>
-            <app-file-icon [file]="file" style="margin-right:3px;"></app-file-icon>
+            <app-file-icon [file]="file" class="producer-style"></app-file-icon>
           </td>
           <td>
             <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}" target="_blank">{{ file.name }}</a>

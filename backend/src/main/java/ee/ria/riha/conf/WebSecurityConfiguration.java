@@ -1,40 +1,60 @@
 package ee.ria.riha.conf;
 
-import ee.ria.riha.authentication.*;
-import ee.ria.riha.conf.ApplicationProperties.*;
-import lombok.extern.slf4j.*;
-import org.apache.commons.lang3.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.*;
-import org.springframework.http.*;
-import org.springframework.ldap.core.*;
-import org.springframework.ldap.core.support.*;
-import org.springframework.security.config.annotation.method.configuration.*;
-import org.springframework.security.config.annotation.web.builders.*;
-import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.security.core.authority.*;
-import org.springframework.security.core.userdetails.*;
-import org.springframework.security.ldap.userdetails.*;
-import org.springframework.security.oauth2.client.endpoint.*;
-import org.springframework.security.oauth2.client.oidc.authentication.*;
-import org.springframework.security.oauth2.client.registration.*;
-import org.springframework.security.oauth2.config.annotation.web.configuration.*;
-import org.springframework.security.oauth2.core.*;
-import org.springframework.security.oauth2.jwt.*;
-import org.springframework.security.web.access.channel.*;
-import org.springframework.security.web.authentication.*;
-import org.springframework.security.web.authentication.logout.*;
-import org.springframework.security.web.csrf.*;
-import org.springframework.web.util.*;
+import ee.ria.riha.authentication.RihaFilterBasedLdapUserSearch;
+import ee.ria.riha.authentication.RihaLdapUserDetailsContextMapper;
+import ee.ria.riha.authentication.RihaUserDetails;
+import ee.ria.riha.conf.ApplicationProperties.LdapAuthenticationProperties;
+import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
+import java.util.Map;
+import javax.servlet.Filter;
+import javax.servlet.http.HttpServletRequest;
 
-import java.lang.reflect.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import ee.ria.riha.logging.auditlog.AuditEvent;
+import ee.ria.riha.logging.auditlog.AuditLogger;
+import ee.ria.riha.logging.auditlog.AuditType;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.support.DefaultTlsDirContextAuthenticationStrategy;
+import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.web.util.UriUtils;
 
 /**
  * @author Valentin Suhnjov
  */
+@RequiredArgsConstructor
 @Configuration
 @Profile("!dev")
 @EnableWebSecurity
@@ -55,10 +75,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient;
 
     @Autowired
-    private JwtDecoder jwtDecoder;
-
-    @Autowired
     protected ApplicationProperties applicationProperties;
+
+    public final AuditLogger auditLogger;
 
     @Value("${csp.policyDirective}")
     private String policyDirective;
@@ -112,6 +131,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                 .and()
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
+                .and()
                 .addFilterBefore(createFromUrlSessionFilter(), ChannelProcessingFilter.class)
                 .oauth2Login()
                 .loginPage(applicationProperties.getBaseUrl())
@@ -146,9 +167,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 })
                 .and()
                 .tokenEndpoint()
-                .accessTokenResponseClient(accessTokenResponseClient)
-                .and()
-                .addObjectPostProcessor(new CustomPostProcessor());
+                .accessTokenResponseClient(accessTokenResponseClient);
     }
 
     private CsrfTokenRepository csrfTokenRepository() {
@@ -165,6 +184,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					((RihaUserDetails) authentication.getPrincipal()).getPersonalCode(),
 					((RihaUserDetails) authentication.getPrincipal()).getTaraAmr()
 			);
+
+            auditLogger.log(AuditEvent.AUTH, AuditType.AUTHENTICATION, request, ((RihaUserDetails) authentication.getPrincipal()).getDelegate().getAuthorities().toString());
 
 			String fromUrl = (String) request.getSession(false).getAttribute(REDIRECT_URL_PARAMETER_MARKER);
 
@@ -214,7 +235,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .clientName(taraConfig.getClientId())
                         .clientSecret(taraConfig.getClientSecret())
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                        .redirectUriTemplate(taraConfig.getRegisteredRedirectUri())
+                        .redirectUri(taraConfig.getRegisteredRedirectUri())
                         .tokenUri(taraConfig.getAccessTokenUri())
                         .jwkSetUri(taraConfig.getJwkKeySetUri())
                         .scope(taraConfig.getScope())
@@ -223,37 +244,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(ApplicationProperties applicationProperties) {
-        return new CustomisedNimbusJwtDecoderJwkSupport(applicationProperties.getTara().getJwkKeySetUri());
-    }
-
-    @Bean
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
         return new DefaultAuthorizationCodeTokenResponseClient();
     }
 
-    /**
-     * This is a workaround for TARA not fully complying with OAuth2 spec.
-     * It's needed to inject a custom jwtDecoder into the AuthorizationCodeAuthenticationProvider
-     * <p>
-     * It seems that there is no standard clean mechanism to inject a custom jwtDecoder using spring.
-     */
-    private class CustomPostProcessor implements org.springframework.security.config.annotation.ObjectPostProcessor<OidcAuthorizationCodeAuthenticationProvider> {
-
-        @Override
-        public OidcAuthorizationCodeAuthenticationProvider postProcess(OidcAuthorizationCodeAuthenticationProvider authenticationProvider) {
-
-            try {
-                Field jwtDecoders = authenticationProvider.getClass().getDeclaredField("jwtDecoders");
-                jwtDecoders.setAccessible(true);
-                ((Map<String, JwtDecoder>) jwtDecoders.get(authenticationProvider)).put(applicationProperties.getTara().getRegistrationId(), jwtDecoder);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            return authenticationProvider;
-        }
-
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(){
+        return new CustomAuthenticationEntryPoint();
     }
-
 }

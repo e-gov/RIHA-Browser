@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ee.ria.riha.TestUtils;
+import ee.ria.riha.domain.FileRepository;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
 import ee.ria.riha.domain.model.InfoSystemFileMetadata;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
-import ee.ria.riha.storage.domain.FileRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,16 +47,16 @@ public class FileServiceTest {
     @InjectMocks
     private FileService fileService;
 
-    private UUID infoSystemUuid = UUID.fromString("005b04a6-c144-44af-86ed-b526afed7b3e");
-    private InfoSystem infoSystem = new InfoSystem();
+    private final UUID infoSystemUuid = UUID.fromString("005b04a6-c144-44af-86ed-b526afed7b3e");
+    private final InfoSystem infoSystem = new InfoSystem();
 
-    private UUID documentUuid = UUID.fromString("d25b672a-0659-4970-9bb3-31743454528a");
+    private final UUID documentUuid = UUID.fromString("d25b672a-0659-4970-9bb3-31743454528a");
     private final InfoSystemDocumentMetadata documentMetadata = new InfoSystemDocumentMetadata();
 
-    private UUID dataFileUuid = UUID.fromString("e98bd769-681d-45cf-9fa7-a9fdaab7ca7a");
+    private final UUID dataFileUuid = UUID.fromString("e98bd769-681d-45cf-9fa7-a9fdaab7ca7a");
     private final InfoSystemFileMetadata dataFileMetadata = new InfoSystemFileMetadata();
 
-    private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
+    private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
     @Before
     public void setUp() throws IOException {
@@ -68,16 +68,16 @@ public class FileServiceTest {
         infoSystem.setOwnerCode(JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
 
         documentMetadata.setName("document");
-        documentMetadata.setUrl("file://" + documentUuid.toString());
+        documentMetadata.setUrl("file://" + documentUuid);
         documentMetadata.setAccessRestricted(false);
 
         dataFileMetadata.setName("dataFile");
-        dataFileMetadata.setUrl("file://" + dataFileUuid.toString());
+        dataFileMetadata.setUrl("file://" + dataFileUuid);
 
         setDocument(documentMetadata);
         setDataFile(dataFileMetadata);
 
-        when(infoSystemAuthorizationService.isOwner(Matchers.any(InfoSystem.class))).thenCallRealMethod();
+        when(infoSystemAuthorizationService.isOwner(any(InfoSystem.class))).thenCallRealMethod();
         when(fileRepository.download(any(), any())).thenReturn(ResponseEntity.ok().build());
     }
 

@@ -2,6 +2,15 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {},
   "id": "https://riha.ee/infosystem_schema.json",
+  "type": "object",
+  "description": "Süsteemi lühiandmestik. Andmed, mis on peamiselt olulised süsteemi elutsükli mõttes",
+  "required": [
+    "name",
+    "purpose",
+    "owner",
+    "short_name",
+    "uuid"
+  ],
   "properties": {
     "stored_data": {
       "items": {
@@ -65,13 +74,13 @@
               "DOC_TYPE_GDPR_IMPACT_ASSESSMENT",
               "DOC_TYPE_ISKE_ACT",
               "DOC_TYPE_ISKE_SUMMARY",
-              "DOC_TYPE_LEGAL",       
+              "DOC_TYPE_LEGAL",
               "DOC_TYPE_OPEN_DATA",
               "DOC_TYPE_OTHER",
-              "DOC_TYPE_SOURCE_CODE",       
+              "DOC_TYPE_SOURCE_CODE",
               "DOC_TYPE_USER_GUIDE",
               "DOC_TYPE_USER_VIEW",
-              "DOC_TYPE_XROAD"       
+              "DOC_TYPE_XROAD"
             ]
           },
           "creation_timestamp": {
@@ -293,15 +302,10 @@
       ],
       "type": "object",
       "description": "Infosüsteemi turvainfo"
+    },
+    "standard_system": {
+      "type": "boolean",
+      "description": "Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks"
     }
-  },
-  "required": [
-    "name",
-    "purpose",
-    "owner",
-    "short_name",
-    "uuid"
-  ],
-  "type": "object",
-  "description": "Süsteemi lühiandmestik. Andmed, mis on peamiselt olulised süsteemi elutsükli mõttes"
+  }
 }

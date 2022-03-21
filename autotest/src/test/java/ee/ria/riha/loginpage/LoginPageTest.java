@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = {"src/test/resources/ee/ria/riha/Login.feature"},
-        strict = false, plugin = {"pretty",
+        plugin = {"pretty",
         "json:target/cucumber_json_reports/login.json",
         "html:target/login-html"},
         glue = {"ee.ria.riha.driver",

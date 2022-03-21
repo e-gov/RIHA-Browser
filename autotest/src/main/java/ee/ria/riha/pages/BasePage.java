@@ -9,7 +9,7 @@ import java.net.*;
 
 public class BasePage {
     protected WebDriver driver;
-    protected Wait wait;
+    protected static Wait wait;
     protected ScenarioContext scenarioContext;
 
     public BasePage(ScenarioContext scenarioContext) {

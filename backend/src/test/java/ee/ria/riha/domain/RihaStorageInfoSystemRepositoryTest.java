@@ -1,23 +1,22 @@
 package ee.ria.riha.domain;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import ee.ria.riha.storage.domain.MainResourceRepository;
-import ee.ria.riha.storage.domain.model.MainResource;
-import ee.ria.riha.storage.util.FilterRequest;
-import ee.ria.riha.storage.util.Filterable;
+import ee.ria.riha.domain.model.MainResource;
+import ee.ria.riha.service.util.FilterRequest;
+import ee.ria.riha.service.util.Filterable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

@@ -5,7 +5,7 @@ import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.notification.model.InfoSystemDataModel;
 import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
-import ee.ria.riha.storage.util.FilterRequest;
+import ee.ria.riha.service.util.FilterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,6 +15,8 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -37,7 +39,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
     private final String baseUrl;
     private final String from;
-    private final String[] to;
+    private final String to;
     private final String[] cc;
     private final String[] bcc;
 
@@ -52,8 +54,8 @@ public class CreatedInfoSystemsOverviewNotificationJob {
         from = applicationProperties.getNotification().getFrom();
         Assert.hasText(from, "Notification email sender must be defined");
 
-        to = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getTo();
-        Assert.notEmpty(to, "At least one recipient must be defined in the list of recipients");
+        to = Arrays.toString(applicationProperties.getNotification().getCreatedInfoSystemsOverview().getTo());
+        Assert.notEmpty(Collections.singleton(to), "At least one recipient must be defined in the list of recipients");
 
         cc = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getCc();
         bcc = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getBcc();

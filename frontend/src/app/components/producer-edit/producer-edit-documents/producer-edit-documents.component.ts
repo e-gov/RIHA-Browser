@@ -31,6 +31,8 @@ export class ProducerEditDocumentsComponent implements OnInit, CanDeactivateModa
   showAddFileFields: boolean = false;
   data: any = {url: '', name: '', type:''};
   blocks = [];
+  docsButtonClicked: boolean = false;
+  uploadButtonClicked: boolean = false;
 
   addTechDoc(addForm): void {
     if (addForm.valid){
@@ -41,6 +43,9 @@ export class ProducerEditDocumentsComponent implements OnInit, CanDeactivateModa
       addForm.reset();
       this.isChanged = true;
       this.showAddLinkFields = false;
+      this.docsButtonClicked = false;
+    }else {
+      this.docsButtonClicked = true;
     }
   }
 
@@ -67,6 +72,9 @@ export class ProducerEditDocumentsComponent implements OnInit, CanDeactivateModa
         this.uploading = false;
         this.docFile = null;
       });
+      this.uploadButtonClicked = false;
+    }else {
+      this.uploadButtonClicked = true;
     }
   }
 
