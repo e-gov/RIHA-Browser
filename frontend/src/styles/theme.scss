@@ -413,6 +413,7 @@ $CONTENTS
     margin-bottom: 0px;
     &:before {
         content: "";
+        z-index: -1;
         position: absolute;
         top: 0px;
         left: -100px;
