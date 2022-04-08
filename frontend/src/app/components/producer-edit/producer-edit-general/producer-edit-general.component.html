@@ -7,14 +7,14 @@
   <div class="panel-action-heading">
     Infosüsteemi üldkirjeldus
   </div>
-  <div class="my-1 col-lg-10">
+  <div class="my-1 col-lg-10 px-3">
     <form class="col-12" #editForm="ngForm">
       <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
       <div>
         <label for="name-input" class="text-muted">Infosüsteemi nimi:</label>
         <input #name="ngModel"
                [ngClass]="{'is-invalid': name.invalid  && (name.dirty || name.touched || editForm.submitted)}"
-               class="form-control h1"
+               class="form-control h1 mt-2"
                [(ngModel)]="system.details.name"
                name="system.details.name"
                pattern="^[a-zA-ZõÕäÄöÖüÜ0-9][\S ]*[\S]$"
@@ -23,7 +23,7 @@
                id="name-input" required>
       </div>
       <div class="mb-4">
-        <label for="short-name-input" class="text-muted">Infosüsteemi lühinimi:</label>
+        <label for="short-name-input" class="text-muted mb-2">Infosüsteemi lühinimi:</label>
         <input #shortName="ngModel"
                [ngClass]="{'is-invalid': shortName.invalid  && (shortName.dirty || shortName.touched || editForm.submitted)}"
                class="form-control h2"
@@ -53,33 +53,37 @@
             <span>Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks</span>
           </div>
         </div>
-        <div class="row ml-0 mb-3">
-          <label for="active-since-date" class="col-form-label advanced-label">
-            <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary general-style3">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
-            <span *ngIf="system.getStatus() == classifiers.system_status.ESTABLISHING.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
-            <span *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
-            <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o general-style15" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
-          </label>
-          <div class="col-sm-4">
-            <div class="input-group datepicker" *ngIf="system.isUsed()">
-              <input id="active-since-date" class="form-control" placeholder="yyyy-mm-dd"
-                     name="active_since" [(ngModel)]="system.details.meta.system_status.timestamp" ngbDatepicker #activeSinceDate="ngbDatepicker">
-              <span class="input-group-btn">
-                <button (click)="activeSinceDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-            </span>
+        <div class="row ml-0">
+          <div class="col d-flex">
+            <label for="active-since-date" class="col-form-label advanced-label">
+              <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary general-style3">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
+              <span *ngIf="system.getStatus() == classifiers.system_status.ESTABLISHING.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">asutamisel</strong></span>
+              <span *ngIf="system.getStatus() == classifiers.system_status.FINISHED.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary">lõpetatud</strong></span>
+              <span *ngIf="!system.getStatus()"><i class="fa fa-question-circle-o general-style15" aria-hidden="true"></i> Süsteemi staatus on <strong>määramata</strong></span>
+            </label>
+            <div class="ms-2">
+              <div class="input-group datepicker" *ngIf="system.isUsed()">
+                <input id="active-since-date" class="form-control" placeholder="yyyy-mm-dd"
+                       name="active_since" [(ngModel)]="system.details.meta.system_status.timestamp" ngbDatepicker #activeSinceDate="ngbDatepicker">
+                <span class="input-group-btn ps-2">
+                  <button (click)="activeSinceDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+              </span>
+              </div>
             </div>
           </div>
-          <div class="col-sm-8 form-links">
-            <a href="#" (click)="changeSystemStatus(classifiers.system_status.ESTABLISHING.code)">{{classifiers.system_status.ESTABLISHING.value}}</a>
-            <a href="#" (click)="changeSystemStatus(classifiers.system_status.IN_USE.code)">{{classifiers.system_status.IN_USE.value}}</a>
-            <a href="#" (click)="changeSystemStatus(classifiers.system_status.FINISHED.code)">{{classifiers.system_status.FINISHED.value}}</a>
-          </div>
+        </div>
+          <div class="row ms-2 mb-3">
+            <div class="col-sm-8 form-links col">
+              <a href="#" (click)="changeSystemStatus(classifiers.system_status.ESTABLISHING.code)">{{classifiers.system_status.ESTABLISHING.value}}</a>
+              <a href="#" (click)="changeSystemStatus(classifiers.system_status.IN_USE.code)">{{classifiers.system_status.IN_USE.value}}</a>
+              <a href="#" (click)="changeSystemStatus(classifiers.system_status.FINISHED.code)">{{classifiers.system_status.FINISHED.value}}</a>
+            </div>
         </div>
         <div class="mb-4">
           <label *ngIf="system.getDevelopmentStatus() == classifiers.development_status.IN_DEVELOPMENT.code" class="col-form-label advanced-label"><i class="fa fa-line-chart" aria-hidden="true"></i> Infosüsteem on <strong class="text-primary">aktiivses arenduses</strong></label>
           <label *ngIf="system.getDevelopmentStatus() == classifiers.development_status.NOT_IN_DEVELOPMENT.code" class="col-form-label advanced-label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Infosüsteem <strong class="text-primary">ei ole arenduses</strong></label>
           <label *ngIf="!system.getDevelopmentStatus()" class="col-form-label advanced-label"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Infosüsteemi arenduse staatus on <strong>määramata</strong></label>
-          <div class="col-sm-4 form-links">
+          <div class="form-links ms-3">
             <span>Kas infosüsteemi arendatakse aktiivselt?</span>
             <a href="#" (click)="changeInDevelopmentStatus(true)">Jah</a>
             <a href="#" (click)="changeInDevelopmentStatus(false)">Ei</a>
@@ -90,7 +94,7 @@
       <hr class="short" align="left">
 
       <div class="mb-3">
-        <label for="purpose-textarea" class="text-muted">Infosüsteemi eesmärk:</label>
+        <label for="purpose-textarea" class="text-muted mb-2">Infosüsteemi eesmärk:</label>
 
         <textarea #purpose="ngModel"
                   [ngClass]="{'is-invalid': purpose.invalid  && (purpose.dirty || purpose.touched || editForm.submitted)}"
@@ -105,7 +109,7 @@
       </div>
 
       <div class="mb-3" *ngIf="system.details.showDifferences">
-        <label for="differences-textarea" class="text-muted">Infosüsteemi erisused:</label>
+        <label for="differences-textarea" class="text-muted mb-2">Infosüsteemi erisused:</label>
         <textarea #differences="ngModel"
                   [ngClass]="{'is-invalid': differences.invalid  && (differences.dirty || differences.touched || editForm.submitted)}"
                   [(ngModel)]="system.details.differences"
@@ -141,11 +145,11 @@
 
       <div>
         <div class="row ml-0 mb-3">
-          <label for="homepage" class="col-form-label advanced-label">
-            <i class="fa fa-external-link text-muted" aria-hidden="true"></i><strong>Avalik kasutajaliides</strong>
-          </label>
-          <div class="col">
-            <div class="input-group">
+          <div class="col d-flex mx-0">
+            <label for="homepage" class="col-form-label advanced-label flex-shrink-0">
+              <i class="fa fa-external-link text-muted" aria-hidden="true"></i><strong>Avalik kasutajaliides</strong>
+            </label>
+            <div class="input-group ms-2">
               <input id="homepage"
                      [ngClass]="{'is-invalid': homepage.invalid}"
                      class="form-control"
@@ -158,25 +162,27 @@
           </div>
         </div>
         <div class="row ml-0 mb-4">
-          <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" for="x_road_date" class="col-form-label advanced-label">
-            <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">on liidestatud</strong> X-teega
-          </label>
-          <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.NOT_JOINED.code" for="x_road_date" class="col-form-label advanced-label">
-            <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">ei ole liidestatud</strong> X-teega
-          </label>
-          <label *ngIf="!system.getXRoadStatus()" class="col-form-label advanced-label">
-            <i class="fa fa-question-circle-o" aria-hidden="true"></i>X-teega liidestamine staatus on <strong>määramata</strong>
-          </label>
-          <div class="col-sm-4">
-            <div *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" class="input-group datepicker">
-              <input id="x_road_date" class="form-control" placeholder="yyyy-mm-dd"
-                     name="x_road_date" [(ngModel)]="system.details.meta.x_road_status.timestamp" ngbDatepicker #xRoadDate="ngbDatepicker">
-              <span class="input-group-btn">
-                <button (click)="xRoadDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
-              </span>
+          <div>
+            <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" for="x_road_date" class="col-form-label advanced-label">
+              <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">on liidestatud</strong> X-teega
+            </label>
+            <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.NOT_JOINED.code" for="x_road_date" class="col-form-label advanced-label">
+              <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">ei ole liidestatud</strong> X-teega
+            </label>
+            <label *ngIf="!system.getXRoadStatus()" class="col-form-label advanced-label">
+              <i class="fa fa-question-circle-o" aria-hidden="true"></i>X-teega liidestamine staatus on <strong>määramata</strong>
+            </label>
+            <div>
+              <div *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" class="input-group datepicker">
+                <input id="x_road_date" class="form-control" placeholder="yyyy-mm-dd"
+                       name="x_road_date" [(ngModel)]="system.details.meta.x_road_status.timestamp" ngbDatepicker #xRoadDate="ngbDatepicker">
+                <span class="input-group-btn">
+                  <button (click)="xRoadDate.toggle()" class="btn btn-outline-primary btn-02 open-datepicker"><span class="fa fa-calendar"></span></button>
+                </span>
+              </div>
             </div>
           </div>
-          <div class="col-sm-8 form-links">
+          <div class="col-sm-8 form-links ms-3">
             <span>Kas infosüsteem on liidestatud või liidestatakse X-teega?</span>
             <a href="#" (click)="changeXRoadStatus(classifiers.x_road_status.JOINED.code)">Jah</a>
             <a href="#" (click)="changeXRoadStatus(classifiers.x_road_status.NOT_JOINED.code)">Ei</a>
