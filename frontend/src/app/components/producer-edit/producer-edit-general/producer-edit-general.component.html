@@ -39,17 +39,20 @@
 
       <div>
         <div class="mb-3" *ngIf="!system.details.showDifferences">
-          <div class="my-2 mx-0 row switch-container">
+          <div class="my-2 row switch-container">
+            <div class="col d-flex">
             <div class="mr-2"><i class="fa fa-align-justify general-style15" aria-hidden="true"></i> Ei ole standardlahendus</div>
-            <ui-switch size="small"
+            <ui-switch class="ms-2"
+                       size="small"
                        color="#023cc1"
                        defaultBgColor="#7a838a"
                        [checked] = "system.getStandardInformationSystem()"
                        (change) = "changeStandardType()"
                        defaultBoColor="#023cc1"></ui-switch>
-            <div class="ml-2">On standardlahendus</div>
+            <div class="ms-2">On standardlahendus</div>
+            </div>
           </div>
-          <div class="form-links col-sm-12">
+          <div class="form-links col-sm-12 ms-3">
             <span>Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks</span>
           </div>
         </div>
