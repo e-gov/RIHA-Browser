@@ -69,12 +69,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     static final String TARA_AUTH_ENDPOINT = "/oauth2/authorization/tara";
 
     @Autowired
-    private LdapUserDetailsService ldapUserDetailsService;
-
-    @Autowired
-    private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient;
-
-    @Autowired
     protected ApplicationProperties applicationProperties;
 
     public final AuditLogger auditLogger;
@@ -82,7 +76,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${csp.policyDirective}")
     private String policyDirective;
 
-    @Bean
     public LdapUserDetailsService ldapUserDetailsService(ApplicationProperties applicationProperties,
                                                          LdapContextSource contextSource) {
         LdapAuthenticationProperties ldapAuthenticationProperties = applicationProperties.getLdapAuthentication();
@@ -146,7 +139,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     RihaUserDetails rihaUserDetails;
                     String personalCode = userRequest.getIdToken().getSubject();
                     try {
-                        UserDetails userDetails = ldapUserDetailsService.loadUserByUsername(personalCode);
+                        UserDetails userDetails = ldapUserDetailsService(applicationProperties,
+                                contextSource(applicationProperties)).loadUserByUsername(personalCode);
                         rihaUserDetails = (RihaUserDetails) userDetails;
                     } catch (UsernameNotFoundException e) {
                         //this means that the LDAP does not contain record with such personal code
@@ -167,7 +161,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 })
                 .and()
                 .tokenEndpoint()
-                .accessTokenResponseClient(accessTokenResponseClient);
+                .accessTokenResponseClient(accessTokenResponseClient());
     }
 
     private CsrfTokenRepository csrfTokenRepository() {
@@ -243,12 +237,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         );
     }
 
-    @Bean
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
         return new DefaultAuthorizationCodeTokenResponseClient();
     }
 
-    @Bean
     public AuthenticationEntryPoint authenticationEntryPoint(){
         return new CustomAuthenticationEntryPoint();
     }
