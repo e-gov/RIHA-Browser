@@ -31,6 +31,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
@@ -39,7 +40,6 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCo
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
@@ -58,7 +58,6 @@ import org.springframework.web.util.UriUtils;
 @Configuration
 @Profile("!dev")
 @EnableWebSecurity
-@EnableOAuth2Client
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -134,7 +133,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .baseUri("/authenticate")
                 .and()
                 .userInfoEndpoint()
-                .customUserType(RihaUserDetails.class, applicationProperties.getTara().getRegistrationId())
                 .oidcUserService(userRequest -> {
                     RihaUserDetails rihaUserDetails;
                     String personalCode = userRequest.getIdToken().getSubject();
