@@ -57,7 +57,7 @@ import org.springframework.web.util.UriUtils;
 @RequiredArgsConstructor
 @Configuration
 @Profile("!dev")
-@EnableWebSecurity
+//@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -215,25 +215,25 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return rihaUserDetails;
     }
 
-    @Bean
-    @Profile("!dev")
-    ClientRegistrationRepository clientRegistrationRepository(ApplicationProperties applicationProperties) {
-        ApplicationProperties.TaraProperties taraConfig = applicationProperties.getTara();
-        return new InMemoryClientRegistrationRepository(
-                ClientRegistration
-                        .withRegistrationId(taraConfig.getRegistrationId())
-                        .authorizationUri(taraConfig.getUserAuthorizationUri())
-                        .clientId(taraConfig.getClientId())
-                        .clientName(taraConfig.getClientId())
-                        .clientSecret(taraConfig.getClientSecret())
-                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                        .redirectUri(taraConfig.getRegisteredRedirectUri())
-                        .tokenUri(taraConfig.getAccessTokenUri())
-                        .jwkSetUri(taraConfig.getJwkKeySetUri())
-                        .scope(taraConfig.getScope())
-                        .build()
-        );
-    }
+//    @Bean
+//    @Profile("!dev")
+//    ClientRegistrationRepository clientRegistrationRepository(ApplicationProperties applicationProperties) {
+//        ApplicationProperties.TaraProperties taraConfig = applicationProperties.getTara();
+//        return new InMemoryClientRegistrationRepository(
+//                ClientRegistration
+//                        .withRegistrationId(taraConfig.getRegistrationId())
+//                        .authorizationUri(taraConfig.getUserAuthorizationUri())
+//                        .clientId(taraConfig.getClientId())
+//                        .clientName(taraConfig.getClientId())
+//                        .clientSecret(taraConfig.getClientSecret())
+//                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                        .redirectUri(taraConfig.getRegisteredRedirectUri())
+//                        .tokenUri(taraConfig.getAccessTokenUri())
+//                        .jwkSetUri(taraConfig.getJwkKeySetUri())
+//                        .scope(taraConfig.getScope())
+//                        .build()
+//        );
+//    }
 
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
         return new DefaultAuthorizationCodeTokenResponseClient();
