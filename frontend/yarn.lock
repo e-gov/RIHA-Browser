@@ -7840,18 +7840,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-ui-switch@npm:^12.0.2":
-  version: 12.0.2
-  resolution: "ngx-ui-switch@npm:12.0.2"
+"ngx-ui-switch@npm:^13.0.2":
+  version: 13.0.2
+  resolution: "ngx-ui-switch@npm:13.0.2"
   dependencies:
     tslib: ^2.3.0
   peerDependencies:
-    "@angular/animations": ">=5.0.0 <13.0.0"
-    "@angular/common": ">=5.0.0 <13.0.0"
-    "@angular/core": ">=5.0.0 <13.0.0"
-    "@angular/forms": ">=5.0.0 <13.0.0"
-    "@angular/platform-browser": ">=5.0.0 <13.0.0"
-  checksum: cab6f892cac8ace8652c236db428eb7007e9924e07e2d25999291b69403edf24f7183dc61281b776d445ec520ac06dc55b9914207e2e4308523710394bd117b5
+    "@angular/animations": ">=5.0.0 <14.0.0"
+    "@angular/common": ">=5.0.0 <14.0.0"
+    "@angular/core": ">=5.0.0 <14.0.0"
+    "@angular/forms": ">=5.0.0 <14.0.0"
+    "@angular/platform-browser": ">=5.0.0 <14.0.0"
+  checksum: f6346d8090a97c1b681836353f478421594a8d4961d346f9ce9edac055f3392271a4a74b288532a56921ec51d60b1aad3a622762dcbe6437717ed522887c6573
   languageName: node
   linkType: hard
 
@@ -10142,7 +10142,7 @@ __metadata:
     ngx-chips: ^2.2.2
     ngx-custom-validators: ^8.0.0
     ngx-toastr: 11.3.3
-    ngx-ui-switch: ^12.0.2
+    ngx-ui-switch: ^13.0.2
     node-static: ^0.7.11
     phantomjs-prebuilt: ^2.1.16
     poor-mans-proxy: 1.0.0
