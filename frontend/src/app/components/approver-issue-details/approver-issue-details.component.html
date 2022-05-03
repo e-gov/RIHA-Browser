@@ -11,7 +11,7 @@
         [text]='"Arutelude kommentaarid ei ole avalikud, need on nähtavad infosüsteemi kirjeldusõigusega isikutele ning kõigile RIHA hindajatele. RIHA arutelusid võib sulgeda siis, kui hindaja poolt raporteeritud puudus on lahenduse leidnud."'>
       </app-tooltip>
     </div>
-    <div class="ml-4 my-1 card-text">
+    <div class="ms-4 my-1 card-text">
       <span *ngIf="feedback.status == 'OPEN'"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> Aktiivne</span>
       <span *ngIf="feedback.status == 'CLOSED'"><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Suletud</span><br>
       <span *ngIf="feedback.type !=null">
@@ -39,22 +39,22 @@
           <p class="user-multiline-text" [innerHTML]="reply.comment | linkify"></p>
         </div>
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && !reply.resolutionType" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && !reply.resolutionType" class="card-text ms-4">
         <i class="fa fa-check-circle text-success approver-style" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> märkis selle arutelu lahendatuks {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ms-4">
         <i class="fa fa-check-circle text-success approver-style" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-danger font-weight-bold">mittekooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'CLOSED' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ms-4">
         <i class="fa fa-check-circle text-success approver-style" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> andis kooskõlastamise koondotsuse <span class="text-success font-weight-bold">kooskõlastatud</span> ja sulges arutelu {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.POSITIVE.code" class="card-text ms-4">
         <i class="fa fa-check-circle text-success approver-style" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> kooskõlastas {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.NEGATIVE.code" class="card-text ms-4">
         <i class="fa fa-exclamation-circle text-danger approver-style" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> ei kooskõlastanud {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
-      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.DISMISSED.code" class="card-text ml-4">
+      <div *ngIf="reply.entityType == 'ISSUE_EVENT' && reply.type == 'DECISION' && reply.resolutionType == classifiers.issue_resolution_type.DISMISSED.code" class="card-text ms-4">
         <i class="fa fa-eye-slash text-muted approver-style" aria-hidden="true"></i> <strong>{{ getOrganizationWithUser(reply) }}</strong> jättis läbi vaatamata {{ reply.dateCreated | datem:'YYYY-MM-DD HH:mm:ss'}}
       </div>
     </div>
