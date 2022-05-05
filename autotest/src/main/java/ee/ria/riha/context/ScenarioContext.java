@@ -15,7 +15,7 @@ public class ScenarioContext {
     public static final String CREATED_SYSTEM_NAME = "CREATED_SYSTEM_NAME";
     public static final String CREATED_SYSTEM_SHORT_NAME = "CREATED_SYSTEM_SHORT_NAME";
 
-    public static final String DEFAULT_APP_URL = "https://riha-browser-ik.ci.kit";
+    public static final String DEFAULT_APP_URL = "https://riha-browser.dev.example.ee/Avaleht";
 
     private final Map<String, String> context = new HashMap<>();
 
