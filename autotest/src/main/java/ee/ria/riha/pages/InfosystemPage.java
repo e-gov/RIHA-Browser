@@ -237,7 +237,7 @@ public class InfosystemPage extends BasePage {
 
     public void userClicksOnUploadNewFileButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
-        modalContainer.findElement(By.cssSelector(".ml-2:nth-child(2)")).click();
+        modalContainer.findElement(By.cssSelector(".ms-2:nth-child(2)")).click();
     }
 
     public boolean isUploadedDateDisplayedOnTheLastUploadedDocument() {
@@ -480,7 +480,7 @@ public class InfosystemPage extends BasePage {
     }
 
     public boolean isUserCanEditLastUploadedDocument() {
-        modalContainer.findElement(By.cssSelector(".expandable-block:last-child .mr-1")).click();
+        modalContainer.findElement(By.cssSelector(".expandable-block:last-child .me-1")).click();
         wait.sleep(1000);
         boolean filenameInputVisible = modalContainer.findElement(By.cssSelector(".expandable-block:last-child .form-group:nth-child(1)")).isDisplayed();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();

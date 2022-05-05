@@ -56,7 +56,7 @@
             <span>Standardlahendus on tarkvaraline lahendus, mida on mitmel asutusel võimalik kasutada andmekogu pidamiseks</span>
           </div>
         </div>
-        <div class="row ml-0">
+        <div class="ms-0">
           <div class="col d-flex">
             <label for="active-since-date" class="col-form-label advanced-label">
               <span *ngIf="system.getStatus() == classifiers.system_status.IN_USE.code"><i class="fa fa-exchange" aria-hidden="true"></i> Süsteem on <strong class="text-primary general-style3">kasutusel</strong> <span *ngIf="system.isUsed()">alates </span></span>
@@ -147,7 +147,7 @@
       <hr class="short" align="left">
 
       <div>
-        <div class="row ml-0 mb-3">
+        <div class="ms-0 mb-3">
           <div class="col d-flex mx-0">
             <label for="homepage" class="col-form-label advanced-label flex-shrink-0">
               <i class="fa fa-external-link text-muted" aria-hidden="true"></i><strong>Avalik kasutajaliides</strong>
@@ -164,7 +164,7 @@
             </div>
           </div>
         </div>
-        <div class="row ml-0 mb-4">
+        <div class="ms-0 mb-4">
           <div>
             <label *ngIf="system.getXRoadStatus() == classifiers.x_road_status.JOINED.code" for="x_road_date" class="col-form-label advanced-label">
               <i class="fa fa-times" aria-hidden="true"></i>Infosüsteem <strong class="text-primary">on liidestatud</strong> X-teega
