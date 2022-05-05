@@ -61,8 +61,8 @@
 
     <div *ngIf="system.getTopics().length > 0" class="pb-2">
       <label class="text-muted">Infosüsteemi märksõnad:</label>
-      <div class="row">
-        <button *ngFor="let topic of system.getTopics()" (click)="listSystemsWithTopic(topic)" class="btn btn-primary btn-sm ml-1 mb-1">{{ topic }}</button>
+      <div class="word">
+        <button *ngFor="let topic of system.getTopics()" (click)="listSystemsWithTopic(topic)" class="btn btn-primary btn-sm ms-1 mb-1">{{ topic }}</button>
       </div>
     </div>
     <div *ngIf="system.getTopics().length == 0 && allowEdit" class="pb-2">

@@ -10,13 +10,13 @@
         </div>
         <div class="card-content p-2">
           <div *ngIf="canSwitchViews()" class="my-2 mx-0 row">
-            <div [ngClass]="{'text-muted': isApprovalRequest}" class="mr-2">Anna hinnang</div>
+            <div [ngClass]="{'text-muted': isApprovalRequest}" class="me-2">Anna hinnang</div>
             <ui-switch size="small"
                        color="#023cc1"
                        defaultBgColor="#023cc1"
                        defaultBoColor="#023cc1"
                        [(ngModel)]="isApprovalRequest"></ui-switch>
-            <div [ngClass]="{'text-muted': !isApprovalRequest}" class="ml-2">Küsi hinnangut</div>
+            <div [ngClass]="{'text-muted': !isApprovalRequest}" class="ms-2">Küsi hinnangut</div>
           </div>
           <form #newIssueForm="ngForm">
             <div *ngIf="!isApprovalRequest">
@@ -46,7 +46,7 @@
               <div class="form-group">
                 <label class="text-muted mb-0">Soovin saada tagasisidet: *</label>
                 <small class="label-small-text text-muted">vali, millist kooskõlastust on andmekogule vaja</small>
-                <div class="custom-controls-stacked ml-2">
+                <div class="custom-controls-stacked ms-2">
                   <div class="custom-control custom-radio">
                     <input id="issue_type_establishment_request"
                            ngModel
