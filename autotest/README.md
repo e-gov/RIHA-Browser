@@ -1,2 +1,2 @@
 `Run test` 
-mvn test -DskipTests=false -Dbrowser=chrome -Durl=https://riha-browser.dev.riaint.ee 
+mvn test -DskipTests=false -Dbrowser=chrome -Durl=https://www.riha.ee
