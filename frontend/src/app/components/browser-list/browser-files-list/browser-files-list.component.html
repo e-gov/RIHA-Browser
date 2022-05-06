@@ -52,7 +52,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
           <label for="personal-data-input">Isikuandmed</label>
-          <select id="personal-data-input" class="form-control"
+          <select id="personal-data-input" class="form-select"
                   [(ngModel)]="filters.personalData" (keyup.enter)="getDataObjectFiles()">
             <option [ngValue]="''" selected>kõik</option>
             <option [ngValue]="'eriliigiline'">jah, eriliigiline</option>
