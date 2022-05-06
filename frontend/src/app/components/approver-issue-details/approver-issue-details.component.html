@@ -72,7 +72,7 @@
             </div>
             <div class="row pull-right">
               <div *ngIf="canPostDecision()">
-                <select class="form-control"
+                <select class="form-select col"
                         [compareWith]="generalHelperService.compareClassifiers"
                         [(ngModel)]="decisionType"
                         name="decisionType">
@@ -80,7 +80,7 @@
                   <option *ngFor="let type of generalHelperService.toArray(classifiers.issue_resolution_type)" [ngValue]="type.code" selected>{{ type.value }}</option>
                 </select>
               </div>
-              <div class="mx-2" *ngIf="feedback.status == 'OPEN'" >
+              <div class="col" *ngIf="feedback.status == 'OPEN'" >
                 <button *ngIf="decisionType == 'null'" (click)="postComment(commentForm)" class="btn btn-primary pull-right">Lisa kommentaar</button>
                 <button *ngIf="decisionType != 'null'" (click)="postDecision(commentForm)" class="btn btn-primary pull-right">{{
                   textInput.value ? 'Lisa otsus ja kommentaar' : 'Lisa otsus' }}</button>

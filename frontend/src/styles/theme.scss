@@ -272,7 +272,7 @@ $HEADER
             flex: 0 1 240px;
             .form-control {
                 width: 100%;
-                background: $grey;
+                background: $white;
                 border: 2px solid $grey;
                 border-radius: 5px;
                 font-size: 14px;
@@ -1510,4 +1510,14 @@ ngb-typeahead-window {
 .active-inner-router-link {
   font-weight: bold;
   text-decoration: underline;
+}
+
+.form-check-input {
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  background-color: white;
+  margin-right: 10px;
+}
+
+.form-control[readonly] {
+  background-color: $white;
 }

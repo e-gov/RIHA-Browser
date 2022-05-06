@@ -21,7 +21,7 @@
           <select id="fileType"
                   [compareWith]="generalHelperService.compareClassifiers"
                   [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched || uploadButtonClicked)}"
-                  class="form-control col-12"
+                  class="form-select col-12"
                   #fileType="ngModel"
                   [(ngModel)]="data.type"
                   name="fileType" required>
@@ -51,7 +51,7 @@
           <select id="linkType"
                   [compareWith]="generalHelperService.compareClassifiers"
                   [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched || docsButtonClicked)}"
-                  class="form-control col-12"
+                  class="form-select col-12"
                   #linkType="ngModel"
                   [(ngModel)]="data.type"
                   name="linkType" required>
@@ -133,7 +133,7 @@
                 <select id="{{'linkType' + i}}"
                         [compareWith]="generalHelperService.compareClassifiers"
                         [ngClass]="{'is-invalid': linkTypeEdit.invalid}"
-                        class="form-control col-12"
+                        class="form-select col-12"
                         #linkTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'linkType' + i}}" required>
@@ -159,7 +159,7 @@
                 <select id="{{'fileType' + i}}"
                         [compareWith]="generalHelperService.compareClassifiers"
                         [ngClass]="{'is-invalid': fileTypeEdit.invalid}"
-                        class="form-control col-12"
+                        class="form-select col-12"
                         #fileTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'fileType' + i}}" required>
@@ -183,7 +183,7 @@
                   <select id="restrictionReason"
                           [compareWith]="generalHelperService.compareClassifiers"
                           [ngClass]="{'is-invalid': restrictionReason.invalid && (restrictionReason.dirty || restrictionReason.touched)}"
-                          class="form-control col-12"
+                          class="form-select col-12"
                           #restrictionReason="ngModel"
                           [(ngModel)]="documents[i].accessRestriction.reasonCode"
                           name="restrictionReason" required>
