@@ -8,7 +8,7 @@
         </div>
         <div class="form-group">
           <label for="x-road-status-input">X-teega liidestumine</label>
-          <select id="x-road-status-input" class="form-control"
+          <select id="x-road-status-input" class="form-select"
                   [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.xRoadStatus">
@@ -45,7 +45,7 @@
         </div>
         <div class="form-group">
           <label for="development-status-input">Arendamise staatus</label>
-          <select id="development-status-input" class="form-control"
+          <select id="development-status-input" class="form-select"
                   [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.developmentStatus">
@@ -90,7 +90,7 @@
         </div>
         <div class="form-group">
           <label for="approval-status">Kooskõlastamise staatus</label>
-          <select id="approval-status" class="form-control"
+          <select id="approval-status" class="form-select"
                   [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.lastPositiveApprovalRequestType">
@@ -109,7 +109,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
           <label for="system-status-input">Infosüsteemi staatus</label>
-          <select id="system-status-input" class="form-control"
+          <select id="system-status-input" class="form-select"
                   [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.systemStatus">
@@ -128,7 +128,7 @@
         </div>
         <div class="form-group">
           <label for="standard_system">Standardlahendus</label>
-          <select id="standard_system" class="form-control"
+          <select id="standard_system" class="form-select"
                   [compareWith]="generalHelperService.compareClassifiers"
                   (keyup.enter)="search()"
                   [(ngModel)]="filters.standardSystem">

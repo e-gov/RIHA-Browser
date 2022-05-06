@@ -48,6 +48,9 @@ textarea {
     font-size: 14px;
   background-color: white;
     height: unset;
+  &:focus {
+    background-color: $white;
+  }
     &:disabled,
     &[readonly] {
         border-width: 1px;
@@ -255,3 +258,22 @@ textarea {
 .form-group {
   margin-bottom: 1rem;
 }
+
+.form-select{
+  background-color: $white;
+  font-size: 14px;
+}
+
+.input-group .input-group-btn .btn {
+  margin-left: 10px;
+}
+
+.font-weight-bold {
+  font-weight: 700!important;
+}
+
+a {
+  text-decoration: none;
+}
+
+

@@ -1,3 +1,10 @@
 .inva {
   color: #dc3545;
 }
+
+.row>* {
+  flex-shrink: unset;
+  width: unset;
+  padding-right: unset;
+  padding-left: unset;
+}
