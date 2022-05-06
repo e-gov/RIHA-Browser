@@ -31,6 +31,9 @@ public class EvaluateSystemsPage extends BasePage{
     }
 
     public  boolean isPreviouslySavedSystemVisibleInTheFeedbackTable() {
+        wait.sleep(1000);
+        scrollToElement(lastInfosystem);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, lastInfosystem, "lastInfosystem");
         String savedShortName = scenarioContext.getFromContext(ScenarioContext.CREATED_SYSTEM_SHORT_NAME);
         return savedShortName.trim().equalsIgnoreCase(lastInfosystem.getText().trim());
