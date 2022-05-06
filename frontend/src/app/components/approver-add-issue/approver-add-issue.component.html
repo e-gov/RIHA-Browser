@@ -51,7 +51,7 @@
                     <input id="issue_type_establishment_request"
                            ngModel
                            #radio = "ngModel"
-                           class="custom-control-input"
+                           class="form-check-input"
                            type="radio"
                            [disabled]="openIssuesMatrix.establishment"
                            [(ngModel)]="approvalRequest.type"
@@ -68,7 +68,7 @@
                     <input id="issue_type_take_into_use_request"
                            ngModel
                            #radio = "ngModel"
-                           class="custom-control-input" type="radio"
+                           class="form-check-input" type="radio"
                            [(ngModel)]="approvalRequest.type"
                            [value]="classifiers.issue_type.TAKE_INTO_USE_REQUEST.code"
                            name="type_use"
@@ -83,7 +83,7 @@
                     <input id="issue_type_modification_request"
                            ngModel
                            #radio = "ngModel"
-                           class="custom-control-input" type="radio"
+                           class="form-check-input" type="radio"
                            [(ngModel)]="approvalRequest.type"
                            [value]="classifiers.issue_type.MODIFICATION_REQUEST.code"
                            name="type_mod"
@@ -95,7 +95,7 @@
                     </label>
                   </div>
                   <div class="custom-control custom-radio">
-                    <input id="issue_type_finalization_request" class="custom-control-input"
+                    <input id="issue_type_finalization_request" class="form-check-input"
                            ngModel
                            #radio = "ngModel"
                            type="radio"
