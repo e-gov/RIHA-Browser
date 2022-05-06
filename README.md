@@ -28,9 +28,9 @@ Additional parameters: <br>
 <i>currently supported:</i> 'chrome', 'firefox' <br>
 <i>default:</i> 'chrome' <br>
 <b>url</b> - defines RIHA application URL<br>
-<i>default:</i> 'https://riha-browser-ik.ci.kit' <br><br>
+<i>default:</i> 'https://www.riha.ee' <br><br>
 Running tests with additional parameters:<br>
-`mvn test -DskipTests=false -Dbrowser=chrome -Durl=https://riha-browser-ik.ci.kit`
+`mvn test -DskipTests=false -Dbrowser=chrome -Durl=https://www.riha.ee`
 
 
  
