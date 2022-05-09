@@ -164,7 +164,7 @@
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.code"
                        name="auditResolution">
-                <label for="audit_resolution_type_no_rem" class="custom-control-label ms-2"
+                <label for="audit_resolution_type_no_rem" class="custom-control-label"
                        [ngClass]="{'inva': buttonClicked && radio.invalid}">{{classifiers.audit_resolution_type.PASSED_WITHOUT_REMARKS.value}}</label>
               </div>
               <div class="custom-control custom-radio">
@@ -176,7 +176,7 @@
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.PASSED_WITH_REMARKS.code"
                        name="auditResolution">
-                <label for="audit_resolution_type_w_rem" class="custom-control-label ms-2"
+                <label for="audit_resolution_type_w_rem" class="custom-control-label"
                        [ngClass]="{'inva': buttonClicked && radio.invalid}">{{classifiers.audit_resolution_type.PASSED_WITH_REMARKS.value}}</label>
               </div>
               <div class="custom-control custom-radio">
@@ -189,7 +189,7 @@
                        [(ngModel)]="security.latest_audit_resolution"
                        [value]="classifiers.audit_resolution_type.DID_NOT_PASS.code"
                        name="auditResolution">
-                <label for="audit_resolution_type_no_pass" class="custom-control-label ms-2"
+                <label for="audit_resolution_type_no_pass" class="custom-control-label"
                        [ngClass]="{'inva': buttonClicked && radio.invalid}">{{classifiers.audit_resolution_type.DID_NOT_PASS.value}}</label>
               </div>
             </div>
