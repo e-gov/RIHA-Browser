@@ -30,7 +30,7 @@
                   [maxLength]="4000"
                   placeholder="Palun kommenteeri oma hinnangut. NB! Palume siia isikuandmeid mitte sisestada. Kui sul on küsimus, millele soovid vastust, kirjuta palun help@ria.ee"
                   rows="3" [(ngModel)]="systemFeedback.comment"></textarea>
-        <span class="text float-right "
+        <span class="text float-end "
               [ngClass]="{ 'feedback-form__characters-count' : systemFeedback.comment.length < 4000, 'feedback-form__characters-count-invalid': systemFeedback.comment.length >= 4000 }" >
           Sümboleid: {{systemFeedback.comment.length}} / 4000
         </span>
