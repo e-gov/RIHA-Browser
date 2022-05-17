@@ -10,7 +10,7 @@
       <h3 class="text text-center">Mõeldes viimase 3 kuu RIHA kasutamise peale, kuidas hindad oma
         kogemust?</h3>
     </div>
-    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center">
+    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center mb-1">
       <div class="d-inline-block" *ngFor="let grade of grades">
         <input class="feedback-form__grade-mark" id="grade-{{grade}}" [value]="grade" type="radio" name="feedback__grade"
                [(ngModel)]="systemFeedback.grade"/>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="col-12 my-3">
-      <div class="col-12 col-md-10 mx-auto">
+      <div class="col-12 col-md-10 mx-auto px-2">
         <textarea class="mx-auto my-2 form-control feedback-form__comment"
                   [maxLength]="4000"
                   placeholder="Palun kommenteeri oma hinnangut. NB! Palume siia isikuandmeid mitte sisestada. Kui sul on küsimus, millele soovid vastust, kirjuta palun help@ria.ee"
