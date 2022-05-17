@@ -109,7 +109,7 @@
           </div>
         </div>
         <div class="form-group">
-          <input class="form-control ms-1"
+          <input class="form-control"
                  [ngClass]="{'is-invalid': otherSecurityStandard.invalid  && (otherSecurityStandard.dirty || otherSecurityStandard.touched || buttonClicked)}" *ngIf="!isIske"
                  #otherSecurityStandard="ngModel"
                  [(ngModel)]="security.standard"
