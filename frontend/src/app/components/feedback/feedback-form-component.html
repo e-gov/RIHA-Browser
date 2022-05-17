@@ -10,7 +10,7 @@
       <h3 class="text text-center">Mõeldes viimase 3 kuu RIHA kasutamise peale, kuidas hindad oma
         kogemust?</h3>
     </div>
-    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center">
+    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center mb-1">
       <div class="d-inline-block" *ngFor="let grade of grades">
         <input class="feedback-form__grade-mark" id="grade-{{grade}}" [value]="grade" type="radio" name="feedback__grade"
                [(ngModel)]="systemFeedback.grade"/>
