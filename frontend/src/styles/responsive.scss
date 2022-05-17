@@ -41,7 +41,7 @@
   }
 }
 
-@include media-breakpoint-down(lg) {
+@include media-breakpoint-down(xl) {
     .menu-toggle {
         display: block;
         position: relative;
