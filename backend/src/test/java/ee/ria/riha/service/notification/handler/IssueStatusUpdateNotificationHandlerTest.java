@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
-import org.mockito.ArgumentMatchers;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
@@ -46,7 +46,7 @@ public class IssueStatusUpdateNotificationHandlerTest {
 
     @Before
     public void setUp() throws IOException {
-        when(messageSource.getMessage(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(Locale.class)))
+        when(messageSource.getMessage(Matchers.any(), Matchers.anyObject(), Matchers.any(Locale.class)))
                 .thenReturn("mock subject");
 
         when(freemarkerConfiguration.getTemplate("issue-status-update-notification-template.ftl"))
@@ -81,7 +81,7 @@ public class IssueStatusUpdateNotificationHandlerTest {
         notificationHandler.getText(model);
 
         ArgumentCaptor<Object> objectArgumentCaptor = ArgumentCaptor.forClass(Object.class);
-        verify(template).process(objectArgumentCaptor.capture(), ArgumentMatchers.any());
+        verify(template).process(objectArgumentCaptor.capture(), Matchers.anyObject());
 
         assertThat(objectArgumentCaptor.getValue(), is(instanceOf(Map.class)));
 

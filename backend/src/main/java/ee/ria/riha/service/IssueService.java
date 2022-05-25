@@ -168,6 +168,8 @@ public class IssueService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private RelationService relationService;
 
     /**
      * List concrete info system issues.

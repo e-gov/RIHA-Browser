@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.ArgumentMatchers;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -56,14 +56,14 @@ public class SimpleHtmlEmailNotificationHandlerTest {
     public void setsSubject() throws Exception {
         handler.createMessagePreparator(notification).prepare(mimeMessage);
 
-        verify(mimeMessage).setSubject(ArgumentMatchers.eq("testable subject"));
+        verify(mimeMessage).setSubject(Matchers.eq("testable subject"));
     }
 
     @Test
     public void setsText() throws Exception {
         handler.createMessagePreparator(notification).prepare(mimeMessage);
 
-        verify(mimeMessage).setContent(ArgumentMatchers.eq("testable text"), ArgumentMatchers.eq("text/html"));
+        verify(mimeMessage).setContent(Matchers.eq("testable text"), Matchers.eq("text/html"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -93,8 +93,8 @@ public class SimpleHtmlEmailNotificationHandlerTest {
 
         handler.createMessagePreparator(notification).prepare(mimeMessage);
 
-        verify(mimeMessage, never()).setRecipients(ArgumentMatchers.eq(Message.RecipientType.CC),
-                ArgumentMatchers.any(Address[].class));
+        verify(mimeMessage, never()).setRecipients(Matchers.eq(Message.RecipientType.CC),
+                Matchers.any(Address[].class));
     }
 
     @Test
@@ -103,8 +103,8 @@ public class SimpleHtmlEmailNotificationHandlerTest {
 
         handler.createMessagePreparator(notification).prepare(mimeMessage);
 
-        verify(mimeMessage, never()).setRecipients(ArgumentMatchers.eq(Message.RecipientType.BCC),
-                ArgumentMatchers.any(Address[].class));
+        verify(mimeMessage, never()).setRecipients(Matchers.eq(Message.RecipientType.BCC),
+                Matchers.any(Address[].class));
     }
 
     private static class TestableSimpleHtmlEmailNotificationHandler extends SimpleHtmlEmailNotificationHandler {
