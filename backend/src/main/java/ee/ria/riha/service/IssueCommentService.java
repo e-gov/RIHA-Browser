@@ -10,7 +10,6 @@ import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.DashboardIssueComment;
 import ee.ria.riha.web.model.IssueCommentModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -188,7 +187,7 @@ public class IssueCommentService {
     }
 
     @Autowired
-    public void setNotificationService(@Lazy NotificationService notificationService) {
+    public void setNotificationService(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
