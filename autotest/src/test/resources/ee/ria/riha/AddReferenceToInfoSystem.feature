@@ -4,7 +4,7 @@ Feature: Infosystems feedback requesting
     Given User is logged in to "/" as "60001019906" using tel. number "00000766"
     And HomePage: user opens 'my organization infosystems' page
 
-  Scenario: User can add relation to infosystem (RIHAKB-423)
+  Scenario: User can add contact to infosystem (RIHAKB-423)
     Given MyInfosystemsPage: user select "riha-test" infosystem
     When InfosytemPage: user clicks on 'Seosed süsteemidega' in the navigation bar
     Then InfosystemPage: url will contain '/Infosüsteemid/Vaata/riha-test#seosed'

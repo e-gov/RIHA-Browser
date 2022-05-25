@@ -7,7 +7,6 @@ import ee.ria.riha.service.notification.model.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.*;
 import org.springframework.util.*;
 
@@ -239,7 +238,7 @@ public class NotificationService {
     }
 
     @Autowired
-    public void setIssueService(@Lazy IssueService issueService) {
+    public void setIssueService(IssueService issueService) {
         this.issueService = issueService;
     }
 
@@ -249,7 +248,7 @@ public class NotificationService {
     }
 
     @Autowired
-    public void setInfoSystemService(@Lazy InfoSystemService infoSystemService) {
+    public void setInfoSystemService(InfoSystemService infoSystemService) {
         this.infoSystemService = infoSystemService;
     }
 
