@@ -5,7 +5,7 @@
   <h3 class="alert-heading">Lehekülje vaatamiseks ei ole õiguseid</h3>
   <p class="mb-0">See lehekülg on nähtav ainult RIHA hindaja õigusega kasutajatele.Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
 </div>
-<section id="page" class="row no-gutters" *ngIf="environmentService.getUserMatrix().isLoggedIn && environmentService.getUserMatrix().hasApproverRole">
+<section id="page" class="row g-0" *ngIf="environmentService.getUserMatrix().isLoggedIn && environmentService.getUserMatrix().hasApproverRole">
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">

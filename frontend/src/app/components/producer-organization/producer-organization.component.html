@@ -12,8 +12,8 @@
 <section *ngIf="userMatrix.isLoggedIn && userMatrix.isOrganizationSelected" class="col card p-3">
   <div class="form-group">
     <a [routerLink]="'/Kirjelda'" class="pull-left">Minu infosüsteemid</a>
-    <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ml-3">Minu arutelud</a>
-    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left active-inner-router-link ml-3">Minu organisatsioon</a>
+    <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ms-3">Minu arutelud</a>
+    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left active-inner-router-link ms-3">Minu organisatsioon</a>
   </div>
   <div *ngIf="loaded" class="my-1">
     <div *ngIf="gridData.content.length > 0">
