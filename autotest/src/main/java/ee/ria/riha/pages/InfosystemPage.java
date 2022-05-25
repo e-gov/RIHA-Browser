@@ -183,14 +183,21 @@ public class InfosystemPage extends BasePage {
     public void clickEditButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editButton, "editButton");
         editButton.click();
+        wait.sleep(2000);
     }
 
     public void clickEditLegalActsButton() {
+        wait.sleep(1000);
+        scrollToElement(editLegalActsButton);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editLegalActsButton, "editButton");
         editLegalActsButton.click();
     }
 
     public void clickEditContactsButton() {
+        wait.sleep(1000);
+        scrollToElement(editContactsButton);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editContactsButton, "editContactsButton");
         editContactsButton.click();
     }
@@ -207,6 +214,9 @@ public class InfosystemPage extends BasePage {
     }
 
     public void clickRequestFeedbackButton() {
+        wait.sleep(2000);
+        scrollToElement(feedbackRequestButton);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, feedbackRequestButton, "feedback request button");
         feedbackRequestButton.click();
         wait.sleep(2000);
@@ -237,7 +247,7 @@ public class InfosystemPage extends BasePage {
 
     public void userClicksOnUploadNewFileButton() {
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
-        modalContainer.findElement(By.cssSelector(".ml-2:nth-child(2)")).click();
+        modalContainer.findElement(By.cssSelector(".ms-2:nth-child(2)")).click();
     }
 
     public boolean isUploadedDateDisplayedOnTheLastUploadedDocument() {
@@ -302,7 +312,7 @@ public class InfosystemPage extends BasePage {
         modalContainer.findElement(By.name("commentText")).sendKeys(comment);
 
         modalContainer.findElement(By.name("decisionType")).click();
-        wait.sleep(2000);
+        wait.sleep(3000);
         new Select(modalContainer.findElement(By.name("decisionType"))).selectByVisibleText(type);
 
         wait.sleep(2000);
@@ -328,6 +338,8 @@ public class InfosystemPage extends BasePage {
     public boolean isIssueSaved() {
         String issueTitle = scenarioContext.getFromContext(ISSUE_TITLE);
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(issueTitle), "linkTitle");
+        scrollToElement(driver.findElement(By.linkText(issueTitle)));
+        wait.sleep(2000);
         driver.findElement(By.linkText(issueTitle)).click();
 
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, modalContainer, "modalContainer");
@@ -365,6 +377,8 @@ public class InfosystemPage extends BasePage {
     }
 
     public void clickSaveButton() {
+        scrollDown();
+        wait.sleep(2000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, saveButton, "saveButton");
         saveButton.click();
     }
@@ -423,6 +437,8 @@ public class InfosystemPage extends BasePage {
     }
 
     public void removeTopic(String topic) {
+        scrollDown();
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, topicTagsContainer, "topicTagsContainer");
         WebElement topicTag = topicTagsContainer.findElements(By.tagName("tag"))
                 .stream()
@@ -430,9 +446,13 @@ public class InfosystemPage extends BasePage {
                 .findFirst()
                 .get();
         topicTag.findElement(By.tagName("delete-icon")).click();
+        wait.sleep(1000);
     }
 
     public void clickEditDocumentationButton() {
+        wait.sleep(1000);
+        scrollToElement(editDocumentationButton);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editDocumentationButton, "editDocumentationButton");
         editDocumentationButton.click();
     }
@@ -444,6 +464,9 @@ public class InfosystemPage extends BasePage {
     }
 
     public void clickEditDataButton() {
+        wait.sleep(2000);
+        scrollToElement(editDataButton);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, editDataButton, "editDataButton");
         editDataButton.click();
     }
@@ -480,7 +503,7 @@ public class InfosystemPage extends BasePage {
     }
 
     public boolean isUserCanEditLastUploadedDocument() {
-        modalContainer.findElement(By.cssSelector(".expandable-block:last-child .mr-1")).click();
+        modalContainer.findElement(By.cssSelector(".expandable-block:last-child .me-1")).click();
         wait.sleep(1000);
         boolean filenameInputVisible = modalContainer.findElement(By.cssSelector(".expandable-block:last-child .form-group:nth-child(1)")).isDisplayed();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
@@ -497,6 +520,7 @@ public class InfosystemPage extends BasePage {
         modifiedSelectByValue(new Select(legalTypeSelect), "LEGAL_TYPE_STATUTE");
         modalContainer.findElement(By.cssSelector(".col-12 > .btn")).click();
         modalContainer.findElement(By.cssSelector(".btn-success")).click();
+        wait.sleep(1000);
     }
 
     public String getTechDocUrls() {
@@ -685,6 +709,9 @@ public class InfosystemPage extends BasePage {
     }
 
     public void clickFeedbackTopic(String topic) {
+        wait.sleep(1000);
+        scrollToElement(driver.findElement(By.linkText(topic)));
+        wait.sleep(2000);
         wait.forPresenceOfElements(DISPLAY_ELEMENT_TIMEOUT, By.linkText(topic), "feedbackTopic");
         driver.findElement(By.linkText(topic)).click();
     }

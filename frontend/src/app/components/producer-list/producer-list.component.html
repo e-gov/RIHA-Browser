@@ -13,19 +13,21 @@
   <div class="row">
     <div class="col-12">
       <div class="form-group row">
-        <input class="form-control col"
-               placeholder="Otsi kataloogist"
-               (keyup.enter)="getOwnSystems()"
-               [(ngModel)]="searchText"
-               type="text" id="search-text-input">
-        <button type="button" class="btn btn-primary ml-3" (click)="getOwnSystems()"><i class="fa fa-search" aria-hidden="true"></i> Otsi</button>
+        <div class="col d-flex g-0">
+          <input class="form-control col"
+                 placeholder="Otsi kataloogist"
+                 (keyup.enter)="getOwnSystems()"
+                 [(ngModel)]="searchText"
+                 type="text" id="search-text-input">
+          <button type="button" class="btn btn-primary ms-3" (click)="getOwnSystems()"><i class="fa fa-search" aria-hidden="true"></i> Otsi</button>
+        </div>
       </div>
     </div>
   </div>
   <div class="form-group">
     <a [routerLink]="'/Kirjelda'" class="pull-left active-inner-router-link">Minu infosüsteemid</a>
-    <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ml-3">Minu arutelud</a>
-    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left ml-3">Minu organisatsioon</a>
+    <a [routerLink]="'/MinuInfosüsteemid/Arutelud'" class="pull-left ms-3">Minu arutelud</a>
+    <a [routerLink]="'/Minu/Organisatsioon'" class="pull-left ms-3">Minu organisatsioon</a>
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
   </div>
   <app-producer-search-filter #filterPanel [extendedSearch]="extendedSearch" (performSearch)="searchSystems($event)"></app-producer-search-filter>
@@ -81,7 +83,7 @@
             <td class="name"><a [routerLink]="['/Infosüsteemid/Vaata', system.details.short_name]">{{system.details.name}}</a></td>
             <td class="status">{{ generalHelperService.getSystemStatusText(system) }}</td>
             <td class="approval-status">{{ generalHelperService.getApprovalStatusText(system) }}</td>
-            <td class="topics"><button *ngFor="let topic of system.details.topics" (click)="searchSystemsByTopic(topic)" class="btn btn-primary btn-sm ml-1 mb-1">{{ topic }}</button></td>
+            <td class="topics"><button *ngFor="let topic of system.details.topics" (click)="searchSystemsByTopic(topic)" class="btn btn-primary btn-sm ms-1 mb-1">{{ topic }}</button></td>
             <td class="last-modified text-nowrap">{{ system.details.meta.update_timestamp | datem:'YYYY-MM-DD HH:mm:ss'}}</td>
           </tr>
         </tbody>
