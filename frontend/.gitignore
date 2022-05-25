@@ -46,6 +46,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+.angular/*
 .pnp.*
 .yarn/*
 !.yarn/patches
