@@ -316,7 +316,7 @@ public class InfosystemPage extends BasePage {
         new Select(modalContainer.findElement(By.name("decisionType"))).selectByVisibleText(type);
 
         wait.sleep(2000);
-        modalContainer.findElement(By.cssSelector(".mx-2 > .btn")).click();
+        modalContainer.findElement(By.xpath("/html/body/ngb-modal-window/div/div/app-approver-feedback-details/section/div/form/div/div[2]/div[2]/div[2]/button")).click();
 
         wait.sleep(2000);
         modalContainer.findElement(By.cssSelector(".btn-secondary")).click();
