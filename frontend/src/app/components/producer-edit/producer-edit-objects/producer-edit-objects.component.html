@@ -101,7 +101,7 @@
             </td>
             <td>
               <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}"
-                 target="_blank">{{ file.name }}</a>
+                 target="_blank" rel="noopener">{{ file.name }}</a>
             </td>
             <td>
               <button (click)="deleteDataFile(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>

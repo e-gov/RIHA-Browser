@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ee.ria.riha.domain.model.Comment;
+import ee.ria.riha.service.ObjectNotFoundException;
 import ee.ria.riha.service.util.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -14,10 +15,12 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.webjars.NotFoundException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 
 import static ee.ria.riha.client.OperationType.*;
 import static ee.ria.riha.service.util.StorageRepositoryUriHelper.createRequestForPathAndOperation;
@@ -279,11 +282,14 @@ public class StorageClient {
      * @return number of updated records
      */
     public Long update(String path, Long id, Object entity) {
+
         JsonNode response = postRequest(path + "/" + id.toString(), entity, PUT,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.get("ok").asLong();
+        if (Objects.nonNull(response)){
+            return response.get("ok").asLong();
+        } else throw new ObjectNotFoundException("Response not found for "+ PUT +" request: " + path + "/" + id);
     }
 
     /**
@@ -298,7 +304,9 @@ public class StorageClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.get("ok").asLong();
+        if (Objects.nonNull(response)){
+            return response.get("ok").asLong();
+        } else throw new ObjectNotFoundException("Response not found for" + DELETE + "request: " + path + "/" + id);
     }
 
     public static class ParameterizedListTypeReference implements ParameterizedType {

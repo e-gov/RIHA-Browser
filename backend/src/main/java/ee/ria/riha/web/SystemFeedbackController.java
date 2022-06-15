@@ -55,16 +55,18 @@ public class SystemFeedbackController {
 
             RecaptchaVerificationResponse recaptchaVerificationResponse = responseEntity.getBody();
 
-            if (!recaptchaVerificationResponse.isSuccess()) {
-                log.error("There are problems with recaptcha integration. Verification endpoint responsed with: {}", recaptchaVerificationResponse);
-                return reportRecaptchaResultsToClient(applicationProperties.getFeedbackRecaptcha().isReportErrorsToClient());
-            }
+            if (Objects.nonNull(recaptchaVerificationResponse)){
+                if (!recaptchaVerificationResponse.isSuccess()) {
+                    log.error("There are problems with recaptcha integration. Verification endpoint responsed with: {}", recaptchaVerificationResponse);
+                    return reportRecaptchaResultsToClient(applicationProperties.getFeedbackRecaptcha().isReportErrorsToClient());
+                }
 
 
-            if (recaptchaVerificationResponse.getScore() < applicationProperties.getFeedbackRecaptcha().getPassingScore()) {
-                log.debug("recaptcha score did not pass for feedback: {}, recaptcha response: {}", systemFeedback, recaptchaVerificationResponse);
-                return reportRecaptchaResultsToClient(applicationProperties.getFeedbackRecaptcha().isReportErrorsToClient());
-            }
+                if (recaptchaVerificationResponse.getScore() < applicationProperties.getFeedbackRecaptcha().getPassingScore()) {
+                    log.debug("recaptcha score did not pass for feedback: {}, recaptcha response: {}", systemFeedback, recaptchaVerificationResponse);
+                    return reportRecaptchaResultsToClient(applicationProperties.getFeedbackRecaptcha().isReportErrorsToClient());
+                }
+            } else throw new ObjectNotFoundException("Recaptcha verification response not found for entity:" + responseEntity.getBody());
 
             log.debug("recaptcha response for feedback {} is {}", systemFeedback, recaptchaVerificationResponse);
         }
