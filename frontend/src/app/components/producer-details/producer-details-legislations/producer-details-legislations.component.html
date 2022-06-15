@@ -42,7 +42,7 @@
             <tr *ngFor="let legislation of gridData.content">
               <td class="name">
                 <i class="fa fa-external-link text-primary legislations-style"></i>
-                <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
+                <a href="{{ legislation.url }}" target="_blank" rel="noopener">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
               </td>
               <td class="type"><span *ngIf="legislation.type && classifiers.legislation_types[legislation.type]">{{classifiers.legislation_types[legislation.type].value}}</span></td>
               <td class="last-modified text-nowrap">

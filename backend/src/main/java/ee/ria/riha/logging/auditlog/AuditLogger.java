@@ -2,11 +2,14 @@ package ee.ria.riha.logging.auditlog;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.UserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Optional;
 
 import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
 
@@ -35,10 +38,13 @@ public class AuditLogger {
             userName = "ANON";
             organization = "ANON";
         } else {
-            if (userContext.getRihaUserFullName().isPresent()) {
-                userName = userContext.getRihaUserFullName().get();
-            } else if (getActiveOrganization().isPresent()){
-                organization = getActiveOrganization().get().toString();
+                Optional<String> optName = userContext.getRihaUserFullName();
+                Optional<RihaOrganization> optOrganisation = getActiveOrganization();
+
+                if (optName.isPresent()){
+                    userName = optName.get();
+                } else if (optOrganisation.isPresent()){
+                organization = optOrganisation.get().toString();
             }
         }
 
