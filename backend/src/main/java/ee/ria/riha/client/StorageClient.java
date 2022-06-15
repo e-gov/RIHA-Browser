@@ -15,7 +15,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.webjars.NotFoundException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
