@@ -52,7 +52,7 @@
               <i class="fa fa-external-link text-primary"></i>
             </td>
             <td>
-              <a href="{{ legislation.url }}" target="_blank">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
+              <a href="{{ legislation.url }}" target="_blank" rel="noopener">{{ (!legislation.name || legislation.name.trim()=='') ? legislation.url : legislation.name }}</a>
             </td>
             <td>
               <button (click)="deleteLegislation(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
