@@ -1,5 +1,8 @@
 package ee.ria.riha.client;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.riha.service.util.FilterRequest;
 import ee.ria.riha.service.util.PageRequest;
 import org.junit.Before;
@@ -52,8 +55,10 @@ public class StorageClientTest {
                              "  \"owner\": \"21304\"\n" +
                              "}");
 
+
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(),
             ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any())).thenReturn(ResponseEntity.ok(response));
+
     }
 
     @Test
@@ -83,5 +88,20 @@ public class StorageClientTest {
                 any(),
                 ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any());
     }
+
+    @Test
+    public void updateTestOk() throws JsonProcessingException {
+        Long update = storageClient.update("path", 1L, "asd");
+
+        String json = "{ \"ok\" : \"200\" } ";
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(json);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
+                ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
+
+        assertThat(update, is(equalTo(200L)));
+    }
+
 
 }
