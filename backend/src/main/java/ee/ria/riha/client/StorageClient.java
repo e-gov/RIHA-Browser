@@ -281,7 +281,6 @@ public class StorageClient {
      * @return number of updated records
      */
     public Long update(String path, Long id, Object entity) {
-
         JsonNode response = postRequest(path + "/" + id.toString(), entity, PUT,
                 new ParameterizedTypeReference<>() {
                 });
