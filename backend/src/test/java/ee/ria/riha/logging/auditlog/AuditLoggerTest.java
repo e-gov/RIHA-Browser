@@ -29,9 +29,20 @@ public class AuditLoggerTest {
     HttpServletRequest request;
 
     @Test
-    public void userIdTest(){
+    public void withUserId(){
         when(userContext.getRihaUserId()).thenReturn(Optional.of("1"));
         when(userContext.getRihaUserFullName()).thenReturn(Optional.of("test"));
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, new InfoSystem());
+    }
+
+    @Test
+    public void withoutUserId(){
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, new InfoSystem());
+    }
+
+    @Test
+    public void withoutOptName(){
+        when(userContext.getRihaUserId()).thenReturn(Optional.of("1"));
         auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, new InfoSystem());
     }
 
