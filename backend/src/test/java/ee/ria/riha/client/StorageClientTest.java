@@ -66,6 +66,9 @@ public class StorageClientTest {
 
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
                 ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.DELETE), any(),
+                ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
     }
 
     @Test
@@ -97,9 +100,16 @@ public class StorageClientTest {
     }
 
     @Test
-    public void updateTestOk(){
+    public void update(){
         Long update = storageClient.update("path", 1L, "asd");
 
         assertThat(update, is(equalTo(200L)));
+    }
+
+    @Test
+    public void remove(){
+        Long remove = storageClient.remove("path", 1L);
+
+        assertThat(remove, is(equalTo(200L)));
     }
 }
