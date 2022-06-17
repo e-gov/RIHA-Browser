@@ -42,7 +42,7 @@ public class StorageClientTest {
     private StorageClient storageClient = new StorageClient(URL);
 
     @Before
-    public void setUp() {
+    public void setUp() throws JsonProcessingException {
         List<String> response = new ArrayList<>();
         response.add("{\n" +
                              "  \"uri\": \"urn:fdc:riha.eesti.ee:2016:infosystem:350811-test\",\n" +
@@ -55,10 +55,17 @@ public class StorageClientTest {
                              "  \"owner\": \"21304\"\n" +
                              "}");
 
+        String json = "{ \"ok\" : \"200\" } ";
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonNode = objectMapper.readTree(json);
+
 
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(),
             ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any())).thenReturn(ResponseEntity.ok(response));
 
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
+                ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
     }
 
     @Test
@@ -90,18 +97,9 @@ public class StorageClientTest {
     }
 
     @Test
-    public void updateTestOk() throws JsonProcessingException {
+    public void updateTestOk(){
         Long update = storageClient.update("path", 1L, "asd");
-
-        String json = "{ \"ok\" : \"200\" } ";
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(json);
-
-        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
-                ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
 
         assertThat(update, is(equalTo(200L)));
     }
-
-
 }
