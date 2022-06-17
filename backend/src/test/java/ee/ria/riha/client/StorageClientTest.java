@@ -66,9 +66,6 @@ public class StorageClientTest {
 
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
                 ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
-
-        when(restTemplate.exchange(anyString(), eq(HttpMethod.DELETE), any(),
-                ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
     }
 
     @Test
