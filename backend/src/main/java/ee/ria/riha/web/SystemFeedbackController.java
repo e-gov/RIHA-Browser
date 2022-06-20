@@ -66,7 +66,7 @@ public class SystemFeedbackController {
                     log.debug("recaptcha score did not pass for feedback: {}, recaptcha response: {}", systemFeedback, recaptchaVerificationResponse);
                     return reportRecaptchaResultsToClient(applicationProperties.getFeedbackRecaptcha().isReportErrorsToClient());
                 }
-            } else throw new ObjectNotFoundException("Recaptcha verification response not found for entity:" + responseEntity.getBody());
+            }
 
             log.debug("recaptcha response for feedback {} is {}", systemFeedback, recaptchaVerificationResponse);
         }
