@@ -283,8 +283,6 @@ public class StorageClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        assert response != null;
-
         return response.get("ok").asLong();
     }
 
@@ -299,8 +297,6 @@ public class StorageClient {
         JsonNode response = postRequest(path + "/" + id.toString(), null, DELETE,
                 new ParameterizedTypeReference<>() {
                 });
-
-        assert response != null;
 
         return response.get("ok").asLong();
     }
