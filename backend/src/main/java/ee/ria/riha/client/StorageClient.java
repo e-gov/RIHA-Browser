@@ -285,9 +285,9 @@ public class StorageClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        if (Objects.nonNull(response)){
-            return response.get("ok").asLong();
-        } else throw new ObjectNotFoundException("Response not found for "+ PUT +" request: " + path + "/" + id);
+        assert response != null;
+
+        return response.get("ok").asLong();
     }
 
     /**
@@ -302,9 +302,9 @@ public class StorageClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        if (Objects.nonNull(response)){
-            return response.get("ok").asLong();
-        } else throw new ObjectNotFoundException("Response not found for" + DELETE + "request: " + path + "/" + id);
+        assert response != null;
+
+        return response.get("ok").asLong();
     }
 
     public static class ParameterizedListTypeReference implements ParameterizedType {
