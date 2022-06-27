@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ee.ria.riha.domain.model.Comment;
-import ee.ria.riha.service.ObjectNotFoundException;
 import ee.ria.riha.service.util.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -19,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Objects;
 
 import static ee.ria.riha.client.OperationType.*;
 import static ee.ria.riha.service.util.StorageRepositoryUriHelper.createRequestForPathAndOperation;
