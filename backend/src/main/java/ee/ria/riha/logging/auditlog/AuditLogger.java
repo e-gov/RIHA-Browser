@@ -38,10 +38,13 @@ public class AuditLogger {
             userName = "ANON";
             organization = "ANON";
         } else {
-            if (userContext.getRihaUserFullName().isPresent()) {
-                userName = userContext.getRihaUserFullName().get();
-            } else if (getActiveOrganization().isPresent()){
-                organization = getActiveOrganization().get().toString();
+                Optional<String> optName = userContext.getRihaUserFullName();
+                Optional<RihaOrganization> optOrganisation = getActiveOrganization();
+
+                if (optName.isPresent()){
+                    userName = optName.get();
+                } else if (optOrganisation.isPresent()){
+                organization = optOrganisation.get().toString();
             }
         }
 
@@ -57,9 +60,9 @@ public class AuditLogger {
 
     private static String getClientIpAddress(HttpServletRequest request) {
         String remoteAddress = "";
-        if (request != null){
+        if (request != null) {
             remoteAddress = request.getHeader("X-FORWARDED-FOR");
-            if (remoteAddress == null || remoteAddress.equals("")){
+            if (remoteAddress == null || remoteAddress.equals("")) {
                 remoteAddress = request.getRemoteAddr();
             }
         }
