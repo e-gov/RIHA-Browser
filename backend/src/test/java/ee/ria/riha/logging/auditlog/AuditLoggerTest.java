@@ -42,4 +42,9 @@ public class AuditLoggerTest {
         when(userContext.getRihaUserId()).thenReturn(Optional.of("1"));
         auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, new InfoSystem());
     }
+
+    @Test
+    public void withOrganization(){
+        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, new InfoSystem());
+    }
 }
