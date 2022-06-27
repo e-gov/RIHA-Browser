@@ -64,8 +64,6 @@ public class SystemFeedbackController {
 
             RecaptchaVerificationResponse recaptchaVerificationResponse = responseEntity.getBody();
 
-            assert recaptchaVerificationResponse != null;
-
             if (!recaptchaVerificationResponse.isSuccess()) {
                 log.error("There are problems with recaptcha integration. Verification endpoint responsed with: {}", recaptchaVerificationResponse);
                 return reportRecaptchaResultsToClient(applicationProperties.getFeedbackRecaptcha().isReportErrorsToClient());
