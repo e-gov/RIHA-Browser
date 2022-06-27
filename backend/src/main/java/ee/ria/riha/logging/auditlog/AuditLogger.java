@@ -38,13 +38,10 @@ public class AuditLogger {
             userName = "ANON";
             organization = "ANON";
         } else {
-                Optional<String> optName = userContext.getRihaUserFullName();
-                Optional<RihaOrganization> optOrganisation = getActiveOrganization();
-
-                if (optName.isPresent()){
-                    userName = optName.get();
-                } else if (optOrganisation.isPresent()){
-                organization = optOrganisation.get().toString();
+            if (userContext.getRihaUserFullName().isPresent()) {
+                userName = userContext.getRihaUserFullName().get();
+            } else if (getActiveOrganization().isPresent()){
+                organization = getActiveOrganization().get().toString();
             }
         }
 

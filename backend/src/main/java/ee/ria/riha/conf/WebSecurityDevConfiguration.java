@@ -47,7 +47,7 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 		}
 
 		http
-			.csrf().csrfTokenRepository(csrfTokenRepositoryDev()).and()
+			.csrf().csrfTokenRepository(csrfTokenRepository()).and()
 			.cors().disable()
 			.authorizeRequests()
 				.anyRequest()
@@ -66,7 +66,7 @@ public class WebSecurityDevConfiguration extends WebSecurityConfiguration {
 				.loginProcessingUrl("/oauth2/authorization/tara");
 	}
 
-	private CsrfTokenRepository csrfTokenRepositoryDev() {
+	private CsrfTokenRepository csrfTokenRepository() {
 		CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
 		cookieCsrfTokenRepository.setCookieHttpOnly(false);
 		cookieCsrfTokenRepository.setCookiePath("/");
