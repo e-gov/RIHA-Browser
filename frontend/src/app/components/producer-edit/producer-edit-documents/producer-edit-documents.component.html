@@ -98,7 +98,7 @@
         <div class="expandable-block" *ngFor="let doc of documents; let i = index">
           <div class="expandable-block-header" [ngClass]="{'highlighted': blocks[i]}">
             <app-file-icon [file]="doc" class="doc-style"></app-file-icon>
-            <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ doc.name }}</a>
+            <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank" rel="noopener">{{ doc.name }}</a>
             <app-file-hint [file]="doc"></app-file-hint>
             <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
             <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right me-1 btn-primary"><i class="fa fa-fw" [ngClass]="{'fa-pencil': !blocks[i], 'fa-chevron-up': blocks[i] }"></i></button>
