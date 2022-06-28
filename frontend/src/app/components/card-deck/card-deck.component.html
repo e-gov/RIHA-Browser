@@ -24,7 +24,7 @@
               <ng-container *ngIf="card.actions && card.actions.links">
                 <span *ngFor="let link of card.actions.links">
                   <a *ngIf="link.type !== 'external'" [routerLink]="link.hash">{{link.label}}</a>
-                  <a *ngIf="link.type === 'external'" target="_blank" href="{{link.hash}}">{{link.label}}</a>
+                  <a *ngIf="link.type === 'external'" target="_blank" rel="noopener" href="{{link.hash}} ">{{link.label}}</a>
                 </span>
               </ng-container>
             </div>
@@ -34,7 +34,7 @@
               <ng-container *ngIf="card.actions && card.actions.buttons">
                 <span *ngFor="let button of card.actions.buttons">
                   <a *ngIf="button.type !== 'external'" [routerLink]="[button.link]" class="btn btn-primary btn-lg btn-01" role="button">{{button.label}}</a>
-                  <a *ngIf="button.type === 'external'" target="_blank" href="{{button.link}}" class="btn btn-primary btn-lg btn-01" role="button">{{button.label}}</a>
+                  <a *ngIf="button.type === 'external'" target="_blank" rel="noopener" href="{{button.link}}" class="btn btn-primary btn-lg btn-01" role="button">{{button.label}}</a>
                 </span>
               </ng-container>
             </div>

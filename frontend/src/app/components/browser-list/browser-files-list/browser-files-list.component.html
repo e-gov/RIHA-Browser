@@ -140,7 +140,7 @@
           <td class="owner-centered"> {{r.infosystem}}</td>
           <td class="owner-centered"> {{r.comment}}</td>
           <td class="owner-centered"><a [routerLink]="['/Infosüsteemid/Vaata', r.shortName]">{{ r.shortName}}</a></td>
-          <td class="owner-centered"><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank"><i class="fa fa-download text-primary"></i></a></td>
+          <td class="owner-centered"><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank" rel="noopener"><i class="fa fa-download text-primary"></i></a></td>
         </tr>
         </tbody>
       </table>
