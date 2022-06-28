@@ -283,7 +283,9 @@ public class StorageClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.get("ok").asLong();
+        long responseOk = response.get("ok").asLong();
+
+        return responseOk;
     }
 
     /**
@@ -298,7 +300,9 @@ public class StorageClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.get("ok").asLong();
+        long responseOk = response.get("ok").asLong();
+
+        return responseOk;
     }
 
     public static class ParameterizedListTypeReference implements ParameterizedType {
