@@ -1,5 +1,8 @@
 package ee.ria.riha.client;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.riha.service.util.FilterRequest;
 import ee.ria.riha.service.util.PageRequest;
 import org.junit.Before;
@@ -39,7 +42,7 @@ public class StorageClientTest {
     private StorageClient storageClient = new StorageClient(URL);
 
     @Before
-    public void setUp() {
+    public void setUp() throws JsonProcessingException {
         List<String> response = new ArrayList<>();
         response.add("{\n" +
                              "  \"uri\": \"urn:fdc:riha.eesti.ee:2016:infosystem:350811-test\",\n" +
@@ -52,8 +55,17 @@ public class StorageClientTest {
                              "  \"owner\": \"21304\"\n" +
                              "}");
 
+        String json = "{ \"ok\" : \"200\" } ";
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonNode = objectMapper.readTree(json);
+
+
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(),
             ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any())).thenReturn(ResponseEntity.ok(response));
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
+                ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
     }
 
     @Test
@@ -84,4 +96,17 @@ public class StorageClientTest {
                 ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any());
     }
 
+    @Test
+    public void update(){
+        Long update = storageClient.update("path", 1L, "asd");
+
+        assertThat(update, is(equalTo(200L)));
+    }
+
+    @Test
+    public void remove(){
+        Long remove = storageClient.remove("path", 1L);
+
+        assertThat(remove, is(equalTo(200L)));
+    }
 }
