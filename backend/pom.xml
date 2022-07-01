@@ -108,6 +108,11 @@
             <artifactId>json</artifactId>
             <version>20180130</version>
         </dependency>
+        <dependency>
+            <groupId>xyz.capybara</groupId>
+            <artifactId>clamav-client</artifactId>
+            <version>2.1.2</version>
+        </dependency>
 
         <!-- Storage-client -->
 
@@ -141,7 +146,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.2</version>
+                <version>0.8.8</version>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
