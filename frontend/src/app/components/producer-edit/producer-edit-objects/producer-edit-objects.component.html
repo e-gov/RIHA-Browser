@@ -12,8 +12,8 @@
           <app-tooltip [placement]="'bottom-right'"
                        [text]="'Põhiandmed, mida mujal registrites ei koguta, kuni 10 kergesti hoomatava objektina, et tekitada parem arusaamine, milliseid andmeid infosüsteemis kogutakse. Näiteks rahvastikuregistri puhul ‘Eesti elanike elukohandmed’, ‘Eesti elanike sugulussuhted’ jne. Üks objekt võib koosneda mitmest sõnast, uus objekt lisatakse ‘lisa’ nupu vajutamisega või reavahetusega'"></app-tooltip>
         </label>
-        <div class="row">
-          <input id="object" class="form-control col-10"
+        <div class="row flex-nowrap">
+          <input id="object" class="form-control flex-shrink-1"
                  [ngClass]="{'is-invalid': object.invalid && (object.dirty || object.touched || objButtonClicked)}"
                  #object="ngModel"
                  [(ngModel)]="obj"
@@ -101,7 +101,7 @@
             </td>
             <td>
               <a href="{{ generalHelperService.getFileUrl(file.url, system.details.short_name) }}"
-                 target="_blank">{{ file.name }}</a>
+                 target="_blank" rel="noopener">{{ file.name }}</a>
             </td>
             <td>
               <button (click)="deleteDataFile(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
