@@ -10,7 +10,7 @@
         <select id="type"
                 [compareWith]="generalHelperService.compareClassifiers"
                 [ngClass]="{'is-invalid': type.invalid && (type.dirty || type.touched || buttonClicked)}"
-                class="form-control col-12"
+                class="form-select col-12"
                 #type="ngModel"
                 [(ngModel)]="relation.type"
                 name="type" required>

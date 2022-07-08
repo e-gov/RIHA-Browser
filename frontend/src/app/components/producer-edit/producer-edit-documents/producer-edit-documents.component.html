@@ -7,10 +7,10 @@
     <app-tooltip [text]='"Laadi üles infosüsteemi dokumentatsioon: arhitektuuri dokument, eelanalüüs, liideste kirjeldus ja muud sarnast"'></app-tooltip>
     <form #addForm="ngForm">
       <div class="form-group">
-        <button type="button" class="btn btn-secondary ml-2"
+        <button type="button" class="btn btn-secondary ms-2"
                 [disabled]="uploading"
                 (click)="showAddLinkFields = !showAddLinkFields; showAddFileFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa veebiviide</button>
-        <button type="button" class="btn btn-secondary ml-2"
+        <button type="button" class="btn btn-secondary ms-2"
                 [disabled]="uploading"
                 (click)="showAddFileFields = !showAddFileFields; showAddLinkFields = false"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Laadi fail</button>
       </div>
@@ -21,7 +21,7 @@
           <select id="fileType"
                   [compareWith]="generalHelperService.compareClassifiers"
                   [ngClass]="{'is-invalid': fileType.invalid && (fileType.dirty || fileType.touched || uploadButtonClicked)}"
-                  class="form-control col-12"
+                  class="form-select col-12"
                   #fileType="ngModel"
                   [(ngModel)]="data.type"
                   name="fileType" required>
@@ -51,7 +51,7 @@
           <select id="linkType"
                   [compareWith]="generalHelperService.compareClassifiers"
                   [ngClass]="{'is-invalid': linkType.invalid && (linkType.dirty || linkType.touched || docsButtonClicked)}"
-                  class="form-control col-12"
+                  class="form-select col-12"
                   #linkType="ngModel"
                   [(ngModel)]="data.type"
                   name="linkType" required>
@@ -98,10 +98,10 @@
         <div class="expandable-block" *ngFor="let doc of documents; let i = index">
           <div class="expandable-block-header" [ngClass]="{'highlighted': blocks[i]}">
             <app-file-icon [file]="doc" class="doc-style"></app-file-icon>
-            <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank">{{ doc.name }}</a>
+            <a href="{{ generalHelperService.getFileUrl(doc.url, system.details.short_name) }}" target="_blank" rel="noopener">{{ doc.name }}</a>
             <app-file-hint [file]="doc"></app-file-hint>
             <button (click)="deleteTechDoc(i)" class="btn btn-danger btn-sm pull-right"><i class="fa fa-fw fa-trash-o"></i></button>
-            <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right mr-1 btn-primary"><i class="fa fa-fw" [ngClass]="{'fa-pencil': !blocks[i], 'fa-chevron-up': blocks[i] }"></i></button>
+            <button (click)="blocks[i] = !blocks[i]" class="btn btn-sm pull-right me-1 btn-primary"><i class="fa fa-fw" [ngClass]="{'fa-pencil': !blocks[i], 'fa-chevron-up': blocks[i] }"></i></button>
           </div>
           <div *ngIf="blocks[i]" class="expandable-block-body">
             <div *ngIf="!isUploaded(doc)">
@@ -133,7 +133,7 @@
                 <select id="{{'linkType' + i}}"
                         [compareWith]="generalHelperService.compareClassifiers"
                         [ngClass]="{'is-invalid': linkTypeEdit.invalid}"
-                        class="form-control col-12"
+                        class="form-select col-12"
                         #linkTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'linkType' + i}}" required>
@@ -159,7 +159,7 @@
                 <select id="{{'fileType' + i}}"
                         [compareWith]="generalHelperService.compareClassifiers"
                         [ngClass]="{'is-invalid': fileTypeEdit.invalid}"
-                        class="form-control col-12"
+                        class="form-select col-12"
                         #fileTypeEdit="ngModel"
                         [(ngModel)]="documents[i].type"
                         name="{{'fileType' + i}}" required>
@@ -168,14 +168,14 @@
                 </select>
               </div>
               <div class="my-2 mx-0 row switch-container">
-                <div [ngClass]="{'text-muted': documents[i].accessRestriction}" class="mr-2">Juurdepääsupiiranguta</div>
+                <div [ngClass]="{'text-muted': documents[i].accessRestriction}" class="me-2">Juurdepääsupiiranguta</div>
                 <ui-switch size="small"
                            color="#023cc1"
                            (change)="clearAccessRestriction($event, i)"
                            defaultBgColor="#7a838a"
                            defaultBoColor="#023cc1"
                            [checked]="documents[i].accessRestriction != null"></ui-switch>
-                <div [ngClass]="{'text-muted': !documents[i].accessRestriction}" class="ml-2">Juurdepääsupiiranguga</div>
+                <div [ngClass]="{'text-muted': !documents[i].accessRestriction}" class="ms-2">Juurdepääsupiiranguga</div>
               </div>
               <div *ngIf="documents[i].accessRestriction">
                 <div class="form-group mt-2">
@@ -183,7 +183,7 @@
                   <select id="restrictionReason"
                           [compareWith]="generalHelperService.compareClassifiers"
                           [ngClass]="{'is-invalid': restrictionReason.invalid && (restrictionReason.dirty || restrictionReason.touched)}"
-                          class="form-control col-12"
+                          class="form-select col-12"
                           #restrictionReason="ngModel"
                           [(ngModel)]="documents[i].accessRestriction.reasonCode"
                           name="restrictionReason" required>

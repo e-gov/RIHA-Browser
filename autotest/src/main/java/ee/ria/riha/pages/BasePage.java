@@ -75,4 +75,14 @@ public class BasePage {
         scenarioContext.saveToContext(ScenarioContext.CREATED_SYSTEM_NAME, systemName);
         scenarioContext.saveToContext(ScenarioContext.CREATED_SYSTEM_SHORT_NAME, shortName);
     }
+
+    public void scrollDown(){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+    }
+
+    public void scrollToElement(WebElement element){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", element);
+    }
 }

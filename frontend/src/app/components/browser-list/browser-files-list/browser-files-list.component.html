@@ -2,15 +2,15 @@
 <section class="col card p-3">
   <div class="row">
     <div class="col-12">
-      <div class="form-group">
+      <div class="form-group row">
         <small class="label-small-text text-muted">Sisesta vähemalt 2 tähemärki</small>
-        <div class="row px-2">
+        <div class="col d-flex g-0">
           <input class="form-control col"
                  placeholder="Otsi andmeobjektidest"
                  (keyup.enter)="getDataObjectFiles()"
                  [(ngModel)]="filters.searchText"
                  type="text" id="search-text-input">
-          <button type="button" class="btn btn-primary ml-3" (click)="getDataObjectFiles()"><i class="fa fa-search" aria-hidden="true"></i> Otsi</button>
+          <button type="button" class="btn btn-primary ms-3" (click)="getDataObjectFiles()"><i class="fa fa-search" aria-hidden="true"></i> Otsi</button>
         </div>
       </div>
     </div>
@@ -18,7 +18,7 @@
   <div class="form-group">
     <a href="#" (click)="toggleSearchPanel()" class="pull-right font-weight-bold">Täpsusta otsingut</a>
     <a [routerLink]="'/Infosüsteemid'" class="pull-left">Otsi infosüsteemidest</a>
-    <a [routerLink]="'/Andmeobjektid'" class="pull-left active-inner-router-link ml-3">Otsi andmeobjektidest</a>
+    <a [routerLink]="'/Andmeobjektid'" class="pull-left active-inner-router-link ms-3">Otsi andmeobjektidest</a>
   </div>
 
   <div *ngIf="extendedSearch" id="extended-search-panel">
@@ -52,7 +52,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
         <div class="form-group">
           <label for="personal-data-input">Isikuandmed</label>
-          <select id="personal-data-input" class="form-control"
+          <select id="personal-data-input" class="form-select"
                   [(ngModel)]="filters.personalData" (keyup.enter)="getDataObjectFiles()">
             <option [ngValue]="''" selected>kõik</option>
             <option [ngValue]="'eriliigiline'">jah, eriliigiline</option>
@@ -140,7 +140,7 @@
           <td class="owner-centered"> {{r.infosystem}}</td>
           <td class="owner-centered"> {{r.comment}}</td>
           <td class="owner-centered"><a [routerLink]="['/Infosüsteemid/Vaata', r.shortName]">{{ r.shortName}}</a></td>
-          <td class="owner-centered"><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank"><i class="fa fa-download text-primary"></i></a></td>
+          <td class="owner-centered"><a href="{{ helper.getFileUrl('file://' + r.fileUuid, r.shortName) }}" target="_blank" rel="noopener"><i class="fa fa-download text-primary"></i></a></td>
         </tr>
         </tbody>
       </table>
@@ -157,4 +157,5 @@
     </div>
   </div>
 </section>
+
 

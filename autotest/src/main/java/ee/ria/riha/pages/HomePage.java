@@ -59,7 +59,7 @@ public class HomePage extends BasePage {
 
     public void selectSecondOrganization() {
         wait.forPresenceOfElements(25, By.xpath("/html/body/ngb-modal-window"), "modal");
-        modalContainer.findElement(By.cssSelector("tr:nth-child(2) > td")).click();
+        modalContainer.findElement(By.cssSelector("tr:nth-child(3) > td")).click();
         wait.sleep(3000);
     }
 
@@ -99,6 +99,9 @@ public class HomePage extends BasePage {
     }
 
     public void openSelectOrganizationDialog() {
+        wait.sleep(1000);
+        scrollToElement(selectOrganizationButton);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, selectOrganizationButton, "selectOrganizationButton");
         selectOrganizationButton.click();
     }
