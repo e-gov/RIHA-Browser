@@ -10,7 +10,7 @@
       <h3 class="text text-center">Mõeldes viimase 3 kuu RIHA kasutamise peale, kuidas hindad oma
         kogemust?</h3>
     </div>
-    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center">
+    <div class="col-12 mt-3 col-lg-8 col-xl-7 mx-auto text-center mb-1">
       <div class="d-inline-block" *ngFor="let grade of grades">
         <input class="feedback-form__grade-mark" id="grade-{{grade}}" [value]="grade" type="radio" name="feedback__grade"
                [(ngModel)]="systemFeedback.grade"/>
@@ -20,17 +20,17 @@
         </label>
       </div>
       <div class="d-xs-inline-block d-sm-inline">
-        <p class="d-inline-block float-left">Väga Halb</p>
-        <p class="d-inline-block float-right">Suurepärane</p>
+        <p class="d-inline-block float-start">Väga Halb</p>
+        <p class="d-inline-block float-end">Suurepärane</p>
       </div>
     </div>
     <div class="col-12 my-3">
-      <div class="col-12 col-md-10 mx-auto">
+      <div class="col-12 col-md-10 mx-auto px-2">
         <textarea class="mx-auto my-2 form-control feedback-form__comment"
                   [maxLength]="4000"
                   placeholder="Palun kommenteeri oma hinnangut. NB! Palume siia isikuandmeid mitte sisestada. Kui sul on küsimus, millele soovid vastust, kirjuta palun help@ria.ee"
                   rows="3" [(ngModel)]="systemFeedback.comment"></textarea>
-        <span class="text float-right "
+        <span class="text float-end "
               [ngClass]="{ 'feedback-form__characters-count' : systemFeedback.comment.length < 4000, 'feedback-form__characters-count-invalid': systemFeedback.comment.length >= 4000 }" >
           Sümboleid: {{systemFeedback.comment.length}} / 4000
         </span>

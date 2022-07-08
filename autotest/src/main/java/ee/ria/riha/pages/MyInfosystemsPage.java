@@ -80,6 +80,9 @@ public class MyInfosystemsPage extends BasePage {
     }
 
     public void goToCreateNewInfosystemPage() {
+        wait.sleep(1000);
+        scrollToElement(createNewLink);
+        wait.sleep(1000);
         wait.forElementToBeDisplayed(DISPLAY_ELEMENT_TIMEOUT, createNewLink, "createNewLink");
         createNewLink.click();
     }

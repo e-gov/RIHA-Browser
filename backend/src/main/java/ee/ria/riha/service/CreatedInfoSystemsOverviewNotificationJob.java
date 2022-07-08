@@ -8,6 +8,7 @@ import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.service.util.FilterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -115,7 +116,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     }
 
     @Autowired
-    public void setNotificationService(NotificationService notificationService) {
+    public void setNotificationService(@Lazy NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 }

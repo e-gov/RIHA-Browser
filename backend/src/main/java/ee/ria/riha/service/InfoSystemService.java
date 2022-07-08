@@ -11,6 +11,7 @@ import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -145,7 +146,7 @@ public class InfoSystemService {
     }
 
     @Autowired
-    public void setIssueService(IssueService issueService) {
+    public void setIssueService(@Lazy IssueService issueService) {
         this.issueService = issueService;
     }
 }
