@@ -39,7 +39,7 @@
     "linkify-string": "^3.0.4",
     "linkifyjs": "~3.0.5",
     "lodash": "^4.17.21",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "ng-recaptcha": "^9.0.0",
     "ngx-chips": "^2.2.2",
     "ngx-custom-validators": "^11.0.1",
