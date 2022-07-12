@@ -32,7 +32,7 @@ public class FileController {
     @PostMapping(value = API_V1_PREFIX + "/systems/{reference}/files", consumes = "multipart/form-data")
     @PreAuthorizeInfoSystemOwnerOrReviewer
     @ApiOperation("Upload file")
-    public ResponseEntity<String> upload(@PathVariable("reference") String reference,
+    public ResponseEntity<UUID> upload(@PathVariable("reference") String reference,
                                  @RequestPart("file") MultipartFile file) throws IOException {
         log.info("Receiving info system '{}' file '{}' [{}] with size {}b",
                 reference, file.getOriginalFilename(), file.getContentType(), file.getSize());
@@ -40,7 +40,7 @@ public class FileController {
         UUID fileUuid = fileService.upload(file.getInputStream(), reference, file.getOriginalFilename(),
                 file.getContentType());
 
-        return ResponseEntity.ok(fileUuid.toString());
+        return ResponseEntity.ok(fileUuid);
     }
 
     @GetMapping(API_V1_PREFIX + "/systems/{reference}/files/{uuid}")
