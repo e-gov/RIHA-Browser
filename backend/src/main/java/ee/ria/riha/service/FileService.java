@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xyz.capybara.clamav.ClamavClient;
+import xyz.capybara.clamav.commands.scan.result.ScanResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,7 @@ public class FileService {
     private static final String INLINE_CONTENT_DISPOSITION_TYPE = "inline";
     private static final String ATTACHMENT_CONTENT_DISPOSITION_TYPE = "attachment";
     private static final String CONTENT_DISPOSITION_TOKEN_DELIMITER = ";";
+    private static final ClamavClient clamavClient = new ClamavClient("");
     private static final Function<FileResourceClient, FileResource> STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL =
             storageFileResource -> {
                 if (storageFileResource == null) {
@@ -71,6 +74,13 @@ public class FileService {
      */
     public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) {
         log.info("Uploading file '{}' to storage", fileName);
+
+        boolean isVirusFound = scanFile(inputStream, fileName);
+        boolean isFileContentTypeHtml = fileContentType(contentType);
+
+        if (isVirusFound || isFileContentTypeHtml) {
+            throw new IllegalBrowserStateException("Faili ei saa üles laadida, kuna failitüüpi ei toetata.");
+        }
 
         InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
 
@@ -199,5 +209,29 @@ public class FileService {
                         infoSystem.replaceFileUrl(file.getUrl(), FILE_URL_PREFIX + newUuid);
                     }
                 });
+    }
+
+    public boolean scanFile(InputStream inputStream, String fileName) {
+        log.info("File received = {} . ClamAV start scanning for viruses", fileName);
+
+        boolean virusDetected = false;
+        ScanResult scanResult = clamavClient.scan(inputStream);
+
+        try {
+            if (scanResult instanceof ScanResult.OK) {
+                virusDetected = false;
+            } else if (scanResult instanceof ScanResult.VirusFound) {
+                virusDetected = true;
+            }
+            log.info("File Scanned = {} Clam AV Response = {}", fileName, scanResult);
+        } catch (Exception e) {
+            log.error("Exception occurred while scanning using clam av = {} ", e.getMessage());
+        }
+
+        return virusDetected;
+    }
+
+    public boolean fileContentType(String contentType) {
+        return contentType.equals("text/html");
     }
 }
