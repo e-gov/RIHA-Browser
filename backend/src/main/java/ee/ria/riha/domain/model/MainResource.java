@@ -3,6 +3,7 @@ package ee.ria.riha.domain.model;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,9 @@ import java.util.Date;
  *
  * @author Valentin Suhnjov
  */
-public class MainResource {
+public class MainResource implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long main_resource_id;
 

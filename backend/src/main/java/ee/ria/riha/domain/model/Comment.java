@@ -1,5 +1,6 @@
 package ee.ria.riha.domain.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +10,10 @@ import java.util.UUID;
  *
  * @author Valentin Suhnjov
  */
-public class Comment {
+public class Comment implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long comment_id;
     private Long comment_parent_id;
     private UUID infosystem_uuid;
