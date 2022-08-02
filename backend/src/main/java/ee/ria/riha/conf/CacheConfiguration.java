@@ -1,10 +1,9 @@
 package ee.ria.riha.conf;
 
 import com.hazelcast.config.*;
-import io.github.jhipster.config.JHipsterProperties;
-
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
