@@ -29,7 +29,8 @@ public class UserService {
      * @param organizationCode - organization code (registry number)
      */
     public void changeActiveOrganization(String organizationCode) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
         Assert.notNull(authentication, "authentication not found in security context");
 
         if (!(authentication.getPrincipal() instanceof RihaUserDetails)) {
@@ -40,6 +41,9 @@ public class UserService {
 
         if (rihaUserDetails.getOrganizationsByCode() != null) {
             rihaUserDetails.setActiveOrganization(rihaUserDetails.getOrganizationsByCode().get(organizationCode));
+            SecurityContext newContext = SecurityContextHolder.createEmptyContext();
+            newContext.setAuthentication(authentication);
+            SecurityContextHolder.setContext(newContext);
         }
     }
 

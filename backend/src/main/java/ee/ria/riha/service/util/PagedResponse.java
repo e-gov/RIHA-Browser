@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,9 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class PagedResponse<T> {
+public class PagedResponse<T> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Getter(value = AccessLevel.PRIVATE)
     @Setter(value = AccessLevel.PRIVATE)
     private Pageable pageable;

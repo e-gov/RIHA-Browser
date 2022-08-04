@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @author Valentin Suhnjov
  */
@@ -12,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FilterRequest implements Filterable {
+public class FilterRequest implements Filterable, Serializable {
 
     private String filter;
     private String sort;
