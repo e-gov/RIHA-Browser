@@ -5,6 +5,8 @@ import ee.ria.riha.domain.model.MainResource;
 import ee.ria.riha.service.util.Filterable;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -27,31 +29,37 @@ public class MainResourceRepository implements StorageRepository<Long, MainResou
     }
 
     @Override
+    @Cacheable("listMainResource")
     public PagedResponse<MainResource> list(Pageable pageable, Filterable filterable) {
         return storageClient.list(MAIN_RESOURCE_VIEW_PATH, pageable, filterable, MainResource.class);
     }
 
     @Override
+    @Cacheable("getMainResource")
     public MainResource get(Long id) {
         return storageClient.get(MAIN_RESOURCE_PATH, id, MainResource.class);
     }
 
     @Override
+    @Cacheable("findMainResource")
     public List<MainResource> find(Filterable filterable) {
         return storageClient.find(MAIN_RESOURCE_VIEW_PATH, filterable, MainResource.class);
     }
 
     @Override
+    @CacheEvict(value = {"listMainResource", "getMainResource", "findMainResource"}, allEntries = true)
     public List<Long> add(MainResource mainResource) {
         return storageClient.create(MAIN_RESOURCE_PATH, mainResource);
     }
 
     @Override
+    @CacheEvict(value = {"listMainResource", "getMainResource", "findMainResource"}, allEntries = true)
     public void update(Long id, MainResource mainResource) {
         throw new UnsupportedOperationException("Entity can not be updated");
     }
 
     @Override
+    @CacheEvict(value = {"listMainResource", "getMainResource", "findMainResource"}, allEntries = true)
     public void remove(Long id) {
         throw new UnsupportedOperationException("Entity can not be deleted");
     }

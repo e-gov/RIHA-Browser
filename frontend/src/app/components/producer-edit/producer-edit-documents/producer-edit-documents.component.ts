@@ -71,6 +71,7 @@ export class ProducerEditDocumentsComponent implements OnInit, CanDeactivateModa
       }, err => {
         this.uploading = false;
         this.docFile = null;
+        this.generalHelperService.showError(err.error.message);
       });
       this.uploadButtonClicked = false;
     }else {

@@ -2,11 +2,14 @@ package ee.ria.riha.service.util;
 
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @ToString
-public class CompositeFilterRequest {
+public class CompositeFilterRequest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final List<String> filterParameters = new ArrayList<>();
     private final List<String> sortParameters = new ArrayList<>();

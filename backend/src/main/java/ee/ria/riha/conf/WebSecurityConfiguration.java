@@ -6,6 +6,7 @@ import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.conf.ApplicationProperties.LdapAuthenticationProperties;
 import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
 import java.util.Map;
+import java.util.Objects;
 import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
 
@@ -179,7 +180,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             auditLogger.log(AuditEvent.AUTH, AuditType.AUTHENTICATION, request, ((RihaUserDetails) authentication.getPrincipal()).getDelegate().getAuthorities().toString());
 
-			String fromUrl = (String) request.getSession(false).getAttribute(REDIRECT_URL_PARAMETER_MARKER);
+            String fromUrl = null;
+
+            if (Objects.nonNull(request.getSession(false))){
+                fromUrl = (String) request.getSession(false).getAttribute(REDIRECT_URL_PARAMETER_MARKER);
+            }
 
 			if (fromUrl != null) {
 				// fromUrl param has the following format:

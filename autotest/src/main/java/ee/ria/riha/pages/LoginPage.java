@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage extends BasePage {
-    @FindBy(css = ".c-tab-login__nav-label > .icon-mobile-id")
+    @FindBy(xpath = "//span[contains(.,'Mobiil-ID')]")
     private WebElement mobiilIdTab;
 
     @FindBy(xpath = "//*[@id=\"mid-personal-code\"]")
