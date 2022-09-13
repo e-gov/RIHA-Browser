@@ -2,7 +2,7 @@
 
 # RIHA-Browser
 
-Software application that allows a human user to browse descriptions and approval decisions. Project is divided into frontend and backend modules. Frontend is an Angular 4 module which interacts with the bakcend java application's API.
+Software application that allows a human user to browse descriptions and approval decisions. Project is divided into frontend and backend modules. Frontend is an Angular 13 module which interacts with the bakcend java application's API.
 
 
 ## Installation
