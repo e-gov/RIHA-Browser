@@ -12,10 +12,13 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import xyz.capybara.clamav.ClamavClient;
 import xyz.capybara.clamav.commands.scan.result.ScanResult;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -72,19 +75,24 @@ public class FileService {
      * @param contentType         MIME type of the file
      * @return UUID of created file resource
      */
-    public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) {
+    public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) throws IOException {
         log.info("Uploading file '{}' to storage", fileName);
 
-        boolean isVirusFound = scanFile(inputStream, fileName);
-        boolean isFileContentTypeHtml = fileContentType(contentType);
+        UUID fileUuid = null;
+        List<InputStream> inputStreams = getCopiesOfInputStream(inputStream);
 
-        if (isVirusFound || isFileContentTypeHtml) {
-            throw new IllegalBrowserStateException("Faili ei saa üles laadida, kuna failitüüpi ei toetata.");
+        if (!CollectionUtils.isEmpty(inputStreams) && inputStreams.size() == 2) {
+            boolean isVirusFound = scanFile(inputStreams.get(0), fileName);
+            boolean isFileContentTypeHtml = fileContentType(contentType);
+
+            if (isVirusFound || isFileContentTypeHtml) {
+                throw new IllegalBrowserStateException("Faili ei saa üles laadida, kuna failitüüpi ei toetata.");
+            }
+
+            InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
+
+            fileUuid = fileRepository.upload(inputStreams.get(1), infoSystem.getUuid(), fileName, contentType);
         }
-
-        InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
-
-        UUID fileUuid = fileRepository.upload(inputStream, infoSystem.getUuid(), fileName, contentType);
         log.info("File uploaded with uuid: {}", fileUuid);
 
         return fileUuid;
@@ -233,5 +241,14 @@ public class FileService {
 
     public boolean fileContentType(String contentType) {
         return contentType.equals("text/html");
+    }
+
+    private List<InputStream> getCopiesOfInputStream(InputStream inputStream) throws IOException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            inputStream.transferTo(baos);
+            InputStream tempInputStreamToScan = new ByteArrayInputStream(baos.toByteArray());
+            InputStream tempInputStreamToUplod = new ByteArrayInputStream(baos.toByteArray());
+            return List.of(tempInputStreamToScan, tempInputStreamToUplod);
+        }
     }
 }
