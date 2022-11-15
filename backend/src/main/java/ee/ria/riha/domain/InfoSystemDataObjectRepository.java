@@ -6,7 +6,6 @@ import ee.ria.riha.service.util.Filterable;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -18,7 +17,6 @@ public class InfoSystemDataObjectRepository {
     @Autowired
     private StorageClient storageClient;
 
-    @Cacheable("listInfosystemDataObject")
     public PagedResponse<InfoSystemDataObject> list(Pageable pageable, Filterable filterable) {
         return storageClient.list(DATA_OBJECT_PATH, pageable, filterable, InfoSystemDataObject.class);
     }
