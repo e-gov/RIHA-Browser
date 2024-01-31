@@ -404,6 +404,12 @@ $CONTENTS
         }
     }
 }
+
+.pagehead-wrapper {
+    display: inline;
+    background-color: $primary;
+}
+
 .pagehead {
     border-radius: 0px;
     color: $white;
