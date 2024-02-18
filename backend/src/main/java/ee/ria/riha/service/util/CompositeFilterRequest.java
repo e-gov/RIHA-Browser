@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ToString
-public class CompositeFilterRequest implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class CompositeFilterRequest {
 
     private final List<String> filterParameters = new ArrayList<>();
     private final List<String> sortParameters = new ArrayList<>();
