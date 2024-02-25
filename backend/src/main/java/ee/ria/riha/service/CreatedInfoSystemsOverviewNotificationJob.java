@@ -41,6 +41,8 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     };
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    private static final String LOCK_NAME = "notificationJobLock";
+
     private final String baseUrl;
     private final String from;
     private final String to;
@@ -72,13 +74,13 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
     @Scheduled(cron = "${browser.notification.createdInfoSystemsOverview.cron}")
     public void startSendCreatedInfoSystemsOverviewNotification() {
-        FencedLock lock = hazelcastInstance.getCPSubsystem().getLock("notificationJobLock");
+        FencedLock lock = hazelcastInstance.getCPSubsystem().getLock(LOCK_NAME);
         if (lock.tryLock()) {
-            log.debug("Created notificationJobLock");
+            log.debug("Created " + LOCK_NAME);
             try {
                 sendCreatedInfoSystemsOverviewNotification();
             } finally {
-                log.debug("Unlocking notificationJobLock");
+                log.debug("Unlocking " + LOCK_NAME);
                 lock.unlock();
             }
         } else {
