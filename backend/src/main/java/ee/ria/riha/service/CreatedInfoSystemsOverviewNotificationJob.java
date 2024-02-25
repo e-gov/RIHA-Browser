@@ -1,5 +1,7 @@
 package ee.ria.riha.service;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.cp.lock.FencedLock;
 import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.InfoSystemRepository;
 import ee.ria.riha.domain.model.InfoSystem;
@@ -8,6 +10,7 @@ import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.service.util.FilterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -47,8 +50,11 @@ public class CreatedInfoSystemsOverviewNotificationJob {
     private InfoSystemRepository infoSystemRepository;
     private NotificationService notificationService;
 
+    private final HazelcastInstance hazelcastInstance;
+
     @Autowired
-    public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties) {
+    public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties,
+                                                     @Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance) {
         baseUrl = applicationProperties.getBaseUrl();
         Assert.hasText(baseUrl, "Base URL must be defined");
 
@@ -60,9 +66,26 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
         cc = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getCc();
         bcc = applicationProperties.getNotification().getCreatedInfoSystemsOverview().getBcc();
+
+        this.hazelcastInstance = hazelcastInstance;
     }
 
     @Scheduled(cron = "${browser.notification.createdInfoSystemsOverview.cron}")
+    public void startSendCreatedInfoSystemsOverviewNotification() {
+        FencedLock lock = hazelcastInstance.getCPSubsystem().getLock("notificationJobLock");
+        if (lock.tryLock()) {
+            log.debug("Created notificationJobLock");
+            try {
+                sendCreatedInfoSystemsOverviewNotification();
+            } finally {
+                log.debug("Unlocking notificationJobLock");
+                lock.unlock();
+            }
+        } else {
+            log.info("Another node is already processing the task");
+        }
+    }
+
     public void sendCreatedInfoSystemsOverviewNotification() {
         try {
             List<InfoSystem> infoSystems = getListOfCreatedInfoSystems();
