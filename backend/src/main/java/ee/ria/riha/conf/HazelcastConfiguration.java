@@ -18,7 +18,7 @@ import java.util.Properties;
 @Configuration
 @Slf4j
 public class HazelcastConfiguration {
-    @Value("${clustering.hazelcast.members}")
+    @Value("${clustering.hazelcast.members:127.0.0.1}")
     private List<String> members;
 
     @Bean
