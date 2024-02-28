@@ -22,11 +22,6 @@ public class HazelcastConfiguration {
     private List<String> members;
 
     @Bean
-    public Config config() {
-        return new Config();
-    }
-
-    @Bean
     public WebFilter webFilter(@Qualifier("riha") HazelcastInstance hazelcastInstance) {
 
         Properties properties = new Properties();
