@@ -56,7 +56,7 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
     @Autowired
     public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties,
-                                                     @Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance) {
+                                                     @Qualifier("riha") HazelcastInstance hazelcastInstance) {
         baseUrl = applicationProperties.getBaseUrl();
         Assert.hasText(baseUrl, "Base URL must be defined");
 
