@@ -1,14 +1,11 @@
 package ee.ria.riha.domain.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
 
 @Data
-public class Classifier implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Classifier {
 
 	private int id;
 	private String type;

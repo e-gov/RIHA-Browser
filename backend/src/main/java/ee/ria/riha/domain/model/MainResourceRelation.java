@@ -1,7 +1,5 @@
 package ee.ria.riha.domain.model;
 
-
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,10 +8,7 @@ import java.util.UUID;
  *
  * @author Valentin Suhnjov
  */
-public class MainResourceRelation implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class MainResourceRelation {
 
     private Long main_resource_relation_id;
     private Date creation_date;
