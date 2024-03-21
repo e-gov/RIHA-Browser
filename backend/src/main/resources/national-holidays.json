@@ -1,1017 +1,1220 @@
 [
-  {
-	"date": "2019-01-01",
-	"title": "Uusaasta",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-01-06",
-	"title": "kolmekuningap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-02-02",
-	"title": "Tartu rahulepingu aastap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-02-23",
-	"title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2019-02-24",
-	"title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Rahvusp\u00fcha",
-	"kind_id": "2"
-  },
-  {
-	"date": "2019-03-14",
-	"title": "emakeelep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-04-19",
-	"title": "Suur reede",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-04-21",
-	"title": "\u00dclest\u00f5usmisp\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-05-01",
-	"title": "Kevadp\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-05-12",
-	"title": "emadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-06-04",
-	"title": "Eesti lipu p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-06-09",
-	"title": "Nelip\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-06-14",
-	"title": "leinap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-06-22",
-	"title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2019-06-23",
-	"title": "V\u00f5idup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-06-24",
-	"title": "Jaanip\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-08-20",
-	"title": "Taasiseseisvumisp\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-08-23",
-	"title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-09-08",
-	"title": "vanavanemate p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-09-22",
-	"title": "vastupanuv\u00f5itluse p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-10-19",
-	"title": "h\u00f5imup\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-11-02",
-	"title": "hingedep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-11-10",
-	"title": "isadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-11-16",
-	"title": "taass\u00fcnni p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2019-12-23",
-	"title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2019-12-24",
-	"title": "J\u00f5ululaup\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-12-25",
-	"title": "Esimene j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-12-26",
-	"title": "Teine j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2019-12-31",
-	"title": "uuele aastale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2020-01-01",
-	"title": "Uusaasta",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-01-06",
-	"title": "kolmekuningap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-02-02",
-	"title": "Tartu rahulepingu aastap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-02-23",
-	"title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2020-02-24",
-	"title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Rahvusp\u00fcha",
-	"kind_id": "2"
-  },
-  {
-	"date": "2020-03-14",
-	"title": "emakeelep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-04-10",
-	"title": "Suur reede",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-04-12",
-	"title": "\u00dclest\u00f5usmisp\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-05-01",
-	"title": "Kevadp\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-05-10",
-	"title": "emadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-05-31",
-	"title": "Nelip\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-06-04",
-	"title": "Eesti lipu p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-06-14",
-	"title": "leinap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-06-22",
-	"title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2020-06-23",
-	"title": "V\u00f5idup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-06-24",
-	"title": "Jaanip\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-08-20",
-	"title": "Taasiseseisvumisp\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-08-23",
-	"title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-09-13",
-	"title": "vanavanemate p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-09-22",
-	"title": "vastupanuv\u00f5itluse p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-10-17",
-	"title": "h\u00f5imup\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-11-02",
-	"title": "hingedep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-11-08",
-	"title": "isadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-11-16",
-	"title": "taass\u00fcnni p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2020-12-23",
-	"title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2020-12-24",
-	"title": "J\u00f5ululaup\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-12-25",
-	"title": "Esimene j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-12-26",
-	"title": "Teine j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2020-12-31",
-	"title": "uuele aastale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2021-01-01",
-	"title": "Uusaasta",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-01-06",
-	"title": "kolmekuningap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-02-02",
-	"title": "Tartu rahulepingu aastap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-02-23",
-	"title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2021-02-24",
-	"title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Rahvusp\u00fcha",
-	"kind_id": "2"
-  },
-  {
-	"date": "2021-03-14",
-	"title": "emakeelep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-04-02",
-	"title": "Suur reede",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-04-04",
-	"title": "\u00dclest\u00f5usmisp\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-05-01",
-	"title": "Kevadp\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-05-09",
-	"title": "emadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-05-23",
-	"title": "Nelip\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-06-04",
-	"title": "Eesti lipu p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-06-14",
-	"title": "leinap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-06-22",
-	"title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2021-06-23",
-	"title": "V\u00f5idup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-06-24",
-	"title": "Jaanip\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-08-20",
-	"title": "Taasiseseisvumisp\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-08-23",
-	"title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-09-12",
-	"title": "vanavanemate p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-09-22",
-	"title": "vastupanuv\u00f5itluse p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-10-16",
-	"title": "h\u00f5imup\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-11-02",
-	"title": "hingedep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-11-14",
-	"title": "isadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-11-16",
-	"title": "taass\u00fcnni p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2021-12-23",
-	"title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2021-12-24",
-	"title": "J\u00f5ululaup\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-12-25",
-	"title": "Esimene j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-12-26",
-	"title": "Teine j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2021-12-31",
-	"title": "uuele aastale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2022-01-01",
-	"title": "Uusaasta",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-01-06",
-	"title": "kolmekuningap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-02-02",
-	"title": "Tartu rahulepingu aastap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-02-23",
-	"title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2022-02-24",
-	"title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Rahvusp\u00fcha",
-	"kind_id": "2"
-  },
-  {
-	"date": "2022-03-14",
-	"title": "emakeelep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-04-15",
-	"title": "Suur reede",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-04-17",
-	"title": "\u00dclest\u00f5usmisp\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-05-01",
-	"title": "Kevadp\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-05-08",
-	"title": "emadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-06-04",
-	"title": "Eesti lipu p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-06-05",
-	"title": "Nelip\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-06-14",
-	"title": "leinap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-06-22",
-	"title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2022-06-23",
-	"title": "V\u00f5idup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-06-24",
-	"title": "Jaanip\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-08-20",
-	"title": "Taasiseseisvumisp\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-08-23",
-	"title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-09-11",
-	"title": "vanavanemate p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-09-22",
-	"title": "vastupanuv\u00f5itluse p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-10-15",
-	"title": "h\u00f5imup\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-11-02",
-	"title": "hingedep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-11-13",
-	"title": "isadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-11-16",
-	"title": "taass\u00fcnni p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2022-12-23",
-	"title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2022-12-24",
-	"title": "J\u00f5ululaup\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-12-25",
-	"title": "Esimene j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-12-26",
-	"title": "Teine j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2022-12-31",
-	"title": "uuele aastale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2023-01-01",
-	"title": "Uusaasta",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-01-06",
-	"title": "kolmekuningap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-02-02",
-	"title": "Tartu rahulepingu aastap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-02-23",
-	"title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2023-02-24",
-	"title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Rahvusp\u00fcha",
-	"kind_id": "2"
-  },
-  {
-	"date": "2023-03-14",
-	"title": "emakeelep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-04-07",
-	"title": "Suur reede",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-04-09",
-	"title": "\u00dclest\u00f5usmisp\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-05-01",
-	"title": "Kevadp\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-05-14",
-	"title": "emadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-05-28",
-	"title": "Nelip\u00fchade 1. p\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-06-04",
-	"title": "Eesti lipu p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-06-14",
-	"title": "leinap\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-06-22",
-	"title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2023-06-23",
-	"title": "V\u00f5idup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-06-24",
-	"title": "Jaanip\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-08-20",
-	"title": "Taasiseseisvumisp\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-08-23",
-	"title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-09-10",
-	"title": "vanavanemate p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-09-22",
-	"title": "vastupanuv\u00f5itluse p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-10-21",
-	"title": "h\u00f5imup\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-11-02",
-	"title": "hingedep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-11-12",
-	"title": "isadep\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-11-16",
-	"title": "taass\u00fcnni p\u00e4ev",
-	"notes": null,
-	"kind": "Riiklik t\u00e4htp\u00e4ev",
-	"kind_id": "3"
-  },
-  {
-	"date": "2023-12-23",
-	"title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  },
-  {
-	"date": "2023-12-24",
-	"title": "J\u00f5ululaup\u00e4ev",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-12-25",
-	"title": "Esimene j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-12-26",
-	"title": "Teine j\u00f5ulup\u00fcha",
-	"notes": "puhkep\u00e4ev",
-	"kind": "Riigip\u00fcha",
-	"kind_id": "1"
-  },
-  {
-	"date": "2023-12-31",
-	"title": "uuele aastale eelnev p\u00e4ev",
-	"notes": null,
-	"kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
-	"kind_id": "4"
-  }
-]
+    {
+    "date": "2023-01-01",
+    "title": "Uusaasta",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-01-06",
+    "title": "Riiklik t\u00e4htp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-02-02",
+    "title": "Tartu rahulepingu aastap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-02-23",
+    "title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2023-02-24",
+    "title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Rahvusp\u00fcha",
+    "kind_id": "2"
+    },
+    {
+    "date": "2023-03-14",
+    "title": "emakeelep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-04-07",
+    "title": "Suur reede",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-04-09",
+    "title": "Ülest\u00f5usmisp\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-05-01",
+    "title": "Kevadp\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-05-14",
+    "title": "emadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-05-28",
+    "title": "Nelip\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-06-04",
+    "title": "Eesti lipu p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-06-14",
+    "title": "leinap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-06-22",
+    "title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2023-06-23",
+    "title": "V\u00f5idup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-06-24",
+    "title": "Jaanip\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-08-20",
+    "title": "Taasiseseisvumisp\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-08-23",
+    "title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-09-10",
+    "title": "vanavanemate p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-09-22",
+    "title": "vastupanuv\u00f5itluse p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-10-21",
+    "title": "h\u00f5imup\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-11-02",
+    "title": "hingedep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-11-12",
+    "title": "isadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-11-16",
+    "title": "taass\u00fcnni p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2023-12-23",
+    "title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2023-12-24",
+    "title": "J\u00f5ululaup\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-12-25",
+    "title": "Esimene j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-12-26",
+    "title": "Teine j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2023-12-31",
+    "title": "uuele aastale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2024-01-01",
+    "title": "Uusaasta",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-01-06",
+    "title": "Riiklik t\u00e4htp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-02-02",
+    "title": "Tartu rahulepingu aastap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-02-23",
+    "title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2024-02-24",
+    "title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Rahvusp\u00fcha",
+    "kind_id": "2"
+    },
+    {
+    "date": "2024-03-14",
+    "title": "emakeelep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-03-29",
+    "title": "Suur reede",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-03-31",
+    "title": "Ülest\u00f5usmisp\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-05-01",
+    "title": "Kevadp\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-05-12",
+    "title": "emadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-05-19",
+    "title": "Nelip\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-06-04",
+    "title": "Eesti lipu p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-06-14",
+    "title": "leinap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-06-22",
+    "title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2024-06-23",
+    "title": "V\u00f5idup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-06-24",
+    "title": "Jaanip\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-08-20",
+    "title": "Taasiseseisvumisp\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-08-23",
+    "title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-09-08",
+    "title": "vanavanemate p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-09-22",
+    "title": "vastupanuv\u00f5itluse p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-10-19",
+    "title": "h\u00f5imup\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-11-02",
+    "title": "hingedep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-11-10",
+    "title": "isadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-11-16",
+    "title": "taass\u00fcnni p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2024-12-23",
+    "title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2024-12-24",
+    "title": "J\u00f5ululaup\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-12-25",
+    "title": "Esimene j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-12-26",
+    "title": "Teine j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2024-12-31",
+    "title": "uuele aastale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2025-01-01",
+    "title": "Uusaasta",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-01-06",
+    "title": "Riiklik t\u00e4htp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-02-02",
+    "title": "Tartu rahulepingu aastap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-02-23",
+    "title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2025-02-24",
+    "title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Rahvusp\u00fcha",
+    "kind_id": "2"
+    },
+    {
+    "date": "2025-03-14",
+    "title": "emakeelep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-04-18",
+    "title": "Suur reede",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-04-20",
+    "title": "Ülest\u00f5usmisp\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-05-01",
+    "title": "Kevadp\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-05-11",
+    "title": "emadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-06-04",
+    "title": "Eesti lipu p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-06-08",
+    "title": "Nelip\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-06-14",
+    "title": "leinap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-06-22",
+    "title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2025-06-23",
+    "title": "V\u00f5idup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-06-24",
+    "title": "Jaanip\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-08-20",
+    "title": "Taasiseseisvumisp\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-08-23",
+    "title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-09-14",
+    "title": "vanavanemate p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-09-22",
+    "title": "vastupanuv\u00f5itluse p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-10-18",
+    "title": "h\u00f5imup\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-11-02",
+    "title": "hingedep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-11-09",
+    "title": "isadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-11-16",
+    "title": "taass\u00fcnni p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2025-12-23",
+    "title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2025-12-24",
+    "title": "J\u00f5ululaup\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-12-25",
+    "title": "Esimene j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-12-26",
+    "title": "Teine j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2025-12-31",
+    "title": "uuele aastale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2026-01-01",
+    "title": "Uusaasta",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-01-06",
+    "title": "Riiklik t\u00e4htp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-02-02",
+    "title": "Tartu rahulepingu aastap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-02-23",
+    "title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2026-02-24",
+    "title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Rahvusp\u00fcha",
+    "kind_id": "2"
+    },
+    {
+    "date": "2026-03-14",
+    "title": "emakeelep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-04-03",
+    "title": "Suur reede",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-04-05",
+    "title": "Ülest\u00f5usmisp\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-05-01",
+    "title": "Kevadp\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-05-10",
+    "title": "emadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-05-24",
+    "title": "Nelip\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-06-04",
+    "title": "Eesti lipu p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-06-14",
+    "title": "leinap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-06-22",
+    "title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2026-06-23",
+    "title": "V\u00f5idup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-06-24",
+    "title": "Jaanip\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-08-20",
+    "title": "Taasiseseisvumisp\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-08-23",
+    "title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-09-13",
+    "title": "vanavanemate p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-09-22",
+    "title": "vastupanuv\u00f5itluse p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-10-17",
+    "title": "h\u00f5imup\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-11-02",
+    "title": "hingedep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-11-08",
+    "title": "isadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-11-16",
+    "title": "taass\u00fcnni p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2026-12-23",
+    "title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2026-12-24",
+    "title": "J\u00f5ululaup\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-12-25",
+    "title": "Esimene j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-12-26",
+    "title": "Teine j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2026-12-31",
+    "title": "uuele aastale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2027-01-01",
+    "title": "Uusaasta",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-01-06",
+    "title": "Riiklik t\u00e4htp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-02-02",
+    "title": "Tartu rahulepingu aastap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-02-23",
+    "title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2027-02-24",
+    "title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Rahvusp\u00fcha",
+    "kind_id": "2"
+    },
+    {
+    "date": "2027-03-14",
+    "title": "emakeelep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-03-26",
+    "title": "Suur reede",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-03-28",
+    "title": "Ülest\u00f5usmisp\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-05-01",
+    "title": "Kevadp\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-05-09",
+    "title": "emadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-05-16",
+    "title": "Nelip\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-06-04",
+    "title": "Eesti lipu p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-06-14",
+    "title": "leinap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-06-22",
+    "title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2027-06-23",
+    "title": "V\u00f5idup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-06-24",
+    "title": "Jaanip\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-08-20",
+    "title": "Taasiseseisvumisp\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-08-23",
+    "title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-09-12",
+    "title": "vanavanemate p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-09-22",
+    "title": "vastupanuv\u00f5itluse p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-10-16",
+    "title": "h\u00f5imup\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-11-02",
+    "title": "hingedep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-11-14",
+    "title": "isadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-11-16",
+    "title": "taass\u00fcnni p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2027-12-23",
+    "title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2027-12-24",
+    "title": "J\u00f5ululaup\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-12-25",
+    "title": "Esimene j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-12-26",
+    "title": "Teine j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2027-12-31",
+    "title": "uuele aastale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2028-01-01",
+    "title": "Uusaasta",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-01-06",
+    "title": "Riiklik t\u00e4htp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-02-02",
+    "title": "Tartu rahulepingu aastap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-02-23",
+    "title": "Eesti Vabariigi aastap\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2028-02-24",
+    "title": "Iseseisvusp\u00e4ev, Eesti Vabariigi aastap\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Rahvusp\u00fcha",
+    "kind_id": "2"
+    },
+    {
+    "date": "2028-03-14",
+    "title": "emakeelep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-04-14",
+    "title": "Suur reede",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-04-16",
+    "title": "Ülest\u00f5usmisp\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-05-01",
+    "title": "Kevadp\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-05-14",
+    "title": "emadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-06-04",
+    "title": "Nelip\u00fchade 1. p\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-06-04",
+    "title": "Eesti lipu p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-06-14",
+    "title": "leinap\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-06-22",
+    "title": "v\u00f5idup\u00fchale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2028-06-23",
+    "title": "V\u00f5idup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-06-24",
+    "title": "Jaanip\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-08-20",
+    "title": "Taasiseseisvumisp\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-08-23",
+    "title": "kommunismi ja natsismi ohvrite m\u00e4lestusp\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-09-10",
+    "title": "vanavanemate p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-09-22",
+    "title": "vastupanuv\u00f5itluse p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-10-21",
+    "title": "h\u00f5imup\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-11-02",
+    "title": "hingedep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-11-12",
+    "title": "isadep\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-11-16",
+    "title": "taass\u00fcnni p\u00e4ev",
+    "notes": null,
+    "kind": "Riiklik t\u00e4htp\u00e4ev",
+    "kind_id": "3"
+    },
+    {
+    "date": "2028-12-23",
+    "title": "j\u00f5ululaup\u00e4evale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    },
+    {
+    "date": "2028-12-24",
+    "title": "J\u00f5ululaup\u00e4ev",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-12-25",
+    "title": "Esimene j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-12-26",
+    "title": "Teine j\u00f5ulup\u00fcha",
+    "notes": "puhkep\u00e4ev",
+    "kind": "Riigip\u00fcha",
+    "kind_id": "1"
+    },
+    {
+    "date": "2028-12-31",
+    "title": "uuele aastale eelnev p\u00e4ev",
+    "notes": null,
+    "kind": "L\u00fchendatud t\u00f6\u00f6p\u00e4ev",
+    "kind_id": "4"
+    }
+    ]
