@@ -137,7 +137,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         }
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(new SizeLimitExceptionModel("Faili ei saa üles laadida, kuna fail on liiga suur. Faili suurus võib olla kuni 10 MB."));
     }
 }
