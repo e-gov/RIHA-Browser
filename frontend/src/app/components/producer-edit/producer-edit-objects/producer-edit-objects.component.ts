@@ -82,8 +82,6 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
       this.dataFile = null;
       this.isChanged = true;
     }, err =>{
-      console.log('error:');
-      console.log(err);
       this.uploading = false;
       this.dataFile = null;
       if (err.status === 0) {
