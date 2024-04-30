@@ -85,7 +85,7 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
       this.uploading = false;
       this.dataFile = null;
       if (err.status === 0) {
-        err.error.message = 'Serveri viga. Põhjuseks võib olla liiga suur fail (lubatud on kuni 10 MB).'
+        err.error.message = CONSTANTS.SERVER_ERROR_CHECK_FILE_SIZE;
       }
       this.generalHelperService.showError(err.error.message);
     });
