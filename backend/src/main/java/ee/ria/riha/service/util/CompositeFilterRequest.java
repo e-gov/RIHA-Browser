@@ -2,6 +2,7 @@ package ee.ria.riha.service.util;
 
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

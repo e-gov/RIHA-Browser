@@ -5,12 +5,11 @@ import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import ee.ria.riha.client.StorageClientException;
 import ee.ria.riha.client.StorageError;
 import ee.ria.riha.client.StorageErrorCode;
-import ee.ria.riha.service.BrowserException;
-import ee.ria.riha.service.CodedBrowserException;
-import ee.ria.riha.service.JsonValidationException;
-import ee.ria.riha.service.ObjectNotFoundException;
+import ee.ria.riha.service.*;
 import ee.ria.riha.web.model.CodedBrowserExceptionModel;
+import ee.ria.riha.web.model.SizeLimitExceptionModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -131,4 +130,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 .body(createBrowserExceptionModel(e));
     }
 
+    @ExceptionHandler(SizeLimitExceededException.class)
+    public ResponseEntity<SizeLimitExceptionModel> handleSizeLimit(SizeLimitExceededException e) {
+        if (log.isTraceEnabled()) {
+            log.trace("Handling size limit exception", e);
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(new SizeLimitExceptionModel("Faili ei saa üles laadida, kuna fail on liiga suur. Faili suurus võib olla kuni 10 MB."));
+    }
 }

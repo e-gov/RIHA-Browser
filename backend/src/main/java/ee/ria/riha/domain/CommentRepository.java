@@ -3,6 +3,8 @@ package ee.ria.riha.domain;
 import ee.ria.riha.client.StorageClient;
 import ee.ria.riha.domain.model.Comment;
 import ee.ria.riha.service.util.*;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
 
 import java.util.List;

@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
+
 /**
  * @author Valentin Suhnjov
  */
 @Getter
 @ToString
-public class PageRequest implements Pageable {
+public class PageRequest implements Pageable , Serializable {
 
     private final int pageNumber;
     private final int pageSize;

@@ -1,6 +1,5 @@
 package ee.ria.riha.domain.model;
 
-
 import java.util.Date;
 import java.util.UUID;
 

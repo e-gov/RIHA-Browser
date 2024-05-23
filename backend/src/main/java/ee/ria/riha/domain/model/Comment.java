@@ -10,6 +10,7 @@ import java.util.UUID;
  * @author Valentin Suhnjov
  */
 public class Comment {
+
     private Long comment_id;
     private Long comment_parent_id;
     private UUID infosystem_uuid;

@@ -12,8 +12,13 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import xyz.capybara.clamav.ClamavClient;
+import xyz.capybara.clamav.commands.scan.result.ScanResult;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -34,6 +39,7 @@ public class FileService {
     private static final String INLINE_CONTENT_DISPOSITION_TYPE = "inline";
     private static final String ATTACHMENT_CONTENT_DISPOSITION_TYPE = "attachment";
     private static final String CONTENT_DISPOSITION_TOKEN_DELIMITER = ";";
+    private static final ClamavClient clamavClient = new ClamavClient("");
     private static final Function<FileResourceClient, FileResource> STORAGE_FILE_RESOURCE_TO_FILE_RESOURCE_MODEL =
             storageFileResource -> {
                 if (storageFileResource == null) {
@@ -69,12 +75,24 @@ public class FileService {
      * @param contentType         MIME type of the file
      * @return UUID of created file resource
      */
-    public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) {
+    public UUID upload(InputStream inputStream, String infoSystemReference, String fileName, String contentType) throws IOException {
         log.info("Uploading file '{}' to storage", fileName);
 
-        InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
+        UUID fileUuid = null;
+        List<InputStream> inputStreams = getCopiesOfInputStream(inputStream);
 
-        UUID fileUuid = fileRepository.upload(inputStream, infoSystem.getUuid(), fileName, contentType);
+        if (!CollectionUtils.isEmpty(inputStreams) && inputStreams.size() == 2) {
+            boolean isVirusFound = scanFile(inputStreams.get(0), fileName);
+            boolean isFileContentTypeHtml = fileContentType(contentType);
+
+            if (isVirusFound || isFileContentTypeHtml) {
+                throw new IllegalBrowserStateException("Faili ei saa üles laadida, kuna failitüüpi ei toetata.");
+            }
+
+            InfoSystem infoSystem = infoSystemRepository.load(infoSystemReference);
+
+            fileUuid = fileRepository.upload(inputStreams.get(1), infoSystem.getUuid(), fileName, contentType);
+        }
         log.info("File uploaded with uuid: {}", fileUuid);
 
         return fileUuid;
@@ -199,5 +217,38 @@ public class FileService {
                         infoSystem.replaceFileUrl(file.getUrl(), FILE_URL_PREFIX + newUuid);
                     }
                 });
+    }
+
+    public boolean scanFile(InputStream inputStream, String fileName) {
+        log.info("File received = {} . ClamAV start scanning for viruses", fileName);
+
+        boolean virusDetected = false;
+        ScanResult scanResult = clamavClient.scan(inputStream);
+
+        try {
+            if (scanResult instanceof ScanResult.OK) {
+                virusDetected = false;
+            } else if (scanResult instanceof ScanResult.VirusFound) {
+                virusDetected = true;
+            }
+            log.info("File Scanned = {} Clam AV Response = {}", fileName, scanResult);
+        } catch (Exception e) {
+            log.error("Exception occurred while scanning using clam av = {} ", e.getMessage());
+        }
+
+        return virusDetected;
+    }
+
+    public boolean fileContentType(String contentType) {
+        return contentType.equals("text/html");
+    }
+
+    private List<InputStream> getCopiesOfInputStream(InputStream inputStream) throws IOException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            inputStream.transferTo(baos);
+            InputStream tempInputStreamToScan = new ByteArrayInputStream(baos.toByteArray());
+            InputStream tempInputStreamToUplod = new ByteArrayInputStream(baos.toByteArray());
+            return List.of(tempInputStreamToScan, tempInputStreamToUplod);
+        }
     }
 }

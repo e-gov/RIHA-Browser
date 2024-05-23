@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static org.springframework.util.StringUtils.hasText;
@@ -22,7 +23,7 @@ import static org.springframework.util.StringUtils.hasText;
  */
 @Slf4j
 @Getter
-public class RihaUserDetails implements UserDetails, OidcUser {
+public class RihaUserDetails implements UserDetails, OidcUser, Serializable {
 
     private UserDetails delegate;
 

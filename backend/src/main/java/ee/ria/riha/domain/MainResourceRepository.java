@@ -5,6 +5,8 @@ import ee.ria.riha.domain.model.MainResource;
 import ee.ria.riha.service.util.Filterable;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
 
 import java.util.List;
