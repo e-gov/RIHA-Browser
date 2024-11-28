@@ -4,7 +4,7 @@ import ee.ria.riha.conf.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.notification.*;
 import ee.ria.riha.service.notification.model.*;
-import lombok.*;
+import lombok.Getter;
 import lombok.extern.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Lazy;
@@ -202,7 +202,7 @@ public class NotificationService {
 
     private String[] getDefaultNotificationRecipient(String infoSystemShortName) {
         String defaultNotificationRecipientPattern = applicationProperties.getNotification().getRecipientPattern();
-        return new String[]{String.format(defaultNotificationRecipientPattern, infoSystemShortName)};
+        return new String[]{defaultNotificationRecipientPattern.formatted(infoSystemShortName)};
     }
 
     private String getDefaultNotificationSender() {

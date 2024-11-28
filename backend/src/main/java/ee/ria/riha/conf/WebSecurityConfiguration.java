@@ -201,10 +201,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     protected Filter createFromUrlSessionFilter() {
         return (request, response, chain) -> {
-            if (request instanceof HttpServletRequest && ((HttpServletRequest) request).getRequestURI().contains(TARA_AUTH_ENDPOINT)) {
+            if (request instanceof HttpServletRequest servletRequest && servletRequest.getRequestURI().contains(TARA_AUTH_ENDPOINT)) {
                 String fromUrlParameter = request.getParameter(REDIRECT_URL_PARAMETER_MARKER);
                 log.info("authenticate request detected, fromUrl param ({}) is saved to session ", fromUrlParameter);
-                ((HttpServletRequest) request).getSession().setAttribute("fromUrl", fromUrlParameter);
+                servletRequest.getSession().setAttribute("fromUrl", fromUrlParameter);
             }
             chain.doFilter(request, response);
         };

@@ -41,10 +41,12 @@ public class JsonValidationServiceTest {
     @Test
     public void successfullyValidatesCorrectJson() {
         //language=JSON
-        String json = "{\n" +
-                "  \"name\": \"test\",\n" +
-                "  \"uuid\": \"00000000-0000-0000-0000-000000000000\"\n" +
-                "}";
+        String json = """
+                {
+                  "name": "test",
+                  "uuid": "00000000-0000-0000-0000-000000000000"
+                }\
+                """;
 
         ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
@@ -62,23 +64,27 @@ public class JsonValidationServiceTest {
     @Test
     public void catchesMissingValues() throws JSONException {
         //language=JSON
-        String json = "{\n" +
-                "  \"name\": \"some name\"\n" +
-                "}";
+        String json = """
+                {
+                  "name": "some name"
+                }\
+                """;
         ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(false));
         for (ProcessingMessage message : report) {
-            JSONAssert.assertEquals("{\n" +
-                            "  \"keyword\": \"required\",\n" +
-                            "  \"required\": [\n" +
-                            "    \"name\",\n" +
-                            "    \"uuid\"\n" +
-                            "  ],\n" +
-                            "  \"missing\": [\n" +
-                            "    \"uuid\"\n" +
-                            "  ]\n" +
-                            "}",
+            JSONAssert.assertEquals("""
+                            {
+                              "keyword": "required",
+                              "required": [
+                                "name",
+                                "uuid"
+                              ],
+                              "missing": [
+                                "uuid"
+                              ]
+                            }\
+                            """,
                     message.asJson().toString(),
                     false);
         }
@@ -87,21 +93,25 @@ public class JsonValidationServiceTest {
     @Test
     public void catchesWronglyFormatValues() throws JSONException {
         //language=JSON
-        String json = "{\n" +
-                "  \"name\": \"asd\",\n" +
-                "  \"uuid\": \"00000000-0000-0000-0000-000000000000\",\n" +
-                "  \"sub-item\": {\n" +
-                "    \"timestamp\": \"not-a-timestamp\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "name": "asd",
+                  "uuid": "00000000-0000-0000-0000-000000000000",
+                  "sub-item": {
+                    "timestamp": "not-a-timestamp"
+                  }
+                }\
+                """;
         ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(false));
         for (ProcessingMessage message : report) {
-            JSONAssert.assertEquals("{\n" +
-                            "  \"keyword\": \"format\",\n" +
-                            "  \"value\": \"not-a-timestamp\"\n" +
-                            "}",
+            JSONAssert.assertEquals("""
+                            {
+                              "keyword": "format",
+                              "value": "not-a-timestamp"
+                            }\
+                            """,
                     message.asJson().toString(),
                     false);
         }
@@ -110,31 +120,37 @@ public class JsonValidationServiceTest {
     @Test
     public void catchesErrorsInRegexPatternValidatedFields() throws JSONException {
         //language=JSON
-        String json = "{\n" +
-                "  \"name\": \"regex validation test\",\n" +
-                "  \"uuid\": \"00000000-0000-0000-0000-000000000000\",\n" +
-                "  \"short_name\": \"underscores_are_not_valid\"\n" +
-                "}";
+        String json = """
+                {
+                  "name": "regex validation test",
+                  "uuid": "00000000-0000-0000-0000-000000000000",
+                  "short_name": "underscores_are_not_valid"
+                }\
+                """;
 
         ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 
         assertThat(report.isSuccess(), equalTo(false));
         for (ProcessingMessage message : report) {
-            JSONAssert.assertEquals("{\n" +
-                    "  \"keyword\": \"pattern\",\n" +
-                    "  \"string\": \"underscores_are_not_valid\"\n" +
-                    "}", message.asJson().toString(), false);
+            JSONAssert.assertEquals("""
+                    {
+                      "keyword": "pattern",
+                      "string": "underscores_are_not_valid"
+                    }\
+                    """, message.asJson().toString(), false);
         }
     }
 
     @Test
     public void successfullyValidatesRegexPatternValidatedFields() {
         //language=JSON
-        String json = "{\n" +
-                "  \"name\": \"regex validation test\",\n" +
-                "  \"uuid\": \"00000000-0000-0000-0000-000000000000\",\n" +
-                "  \"short_name\": \"all-these.VALUES-allowed-õÕäÄöÖüÜ-0123456789\"\n" +
-                "}";
+        String json = """
+                {
+                  "name": "regex validation test",
+                  "uuid": "00000000-0000-0000-0000-000000000000",
+                  "short_name": "all-these.VALUES-allowed-õÕäÄöÖüÜ-0123456789"
+                }\
+                """;
 
         ProcessingReport report = infoSystemValidationService.validate(fromString(json), false);
 

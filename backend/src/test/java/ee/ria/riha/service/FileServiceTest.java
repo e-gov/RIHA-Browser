@@ -129,8 +129,8 @@ public class FileServiceTest {
                 .put("name", fileMetadata.getName())
                 .put("url", fileMetadata.getUrl());
 
-        if (fileMetadata instanceof InfoSystemDocumentMetadata) {
-            if (((InfoSystemDocumentMetadata) fileMetadata).isAccessRestricted()) {
+        if (fileMetadata instanceof InfoSystemDocumentMetadata metadata) {
+            if (metadata.isAccessRestricted()) {
                 documentNode.putObject("accessRestriction").put("reasonCode", 38);
             }
         }

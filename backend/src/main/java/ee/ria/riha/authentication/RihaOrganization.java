@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.util.Assert;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @Getter
 @ToString
 public class RihaOrganization implements Serializable {
+    @Serial
     private static final long serialVersionUID = 0;
 
     private String code;
