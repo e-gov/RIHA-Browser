@@ -45,16 +45,18 @@ public class InfoSystemModelMapperTest {
     private static final String LATEST_AUDIT_RESOLUTION_KEY = "latest_audit_resolution";
     private static final String ACME_ORG_OWNER_CODE = "555010203";
 
-    private static final String SECURITY_DETAILS_JSON = "{\n" +
-            "  \"security\": " +
-            "  {\n" +
-            "    \"standard\": \"ISKE\",\n" +
-            "    \"class\": \"K1T2S1\",\n" +
-            "    \"level\": \"M\",\n" +
-            "    \"latest_audit_date\": \"2017-11-13T17:15:55.002+02:00\",\n" +
-            "    \"latest_audit_resolution\": \"Auditeeritud märkuste või soovitustega\"\n" +
-            "  }\n" +
-            "}";
+    private static final String SECURITY_DETAILS_JSON = """
+            {
+              "security": \
+              {
+                "standard": "ISKE",
+                "class": "K1T2S1",
+                "level": "M",
+                "latest_audit_date": "2017-11-13T17:15:55.002+02:00",
+                "latest_audit_resolution": "Auditeeritud märkuste või soovitustega"
+              }
+            }\
+            """;
 
     private InfoSystem mappedInfoSystem;
 

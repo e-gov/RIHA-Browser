@@ -48,8 +48,8 @@ public class AuditLogger {
             }
         }
 
-        sb.append(String.format(" %s:%s:%s; ", getClientIpAddress(request), auditEvent, auditType));
-        sb.append(String.format(" %s:%s:%s; ", userId, userName, organization));
+        sb.append(" %s:%s:%s; ".formatted(getClientIpAddress(request), auditEvent, auditType));
+        sb.append(" %s:%s:%s; ".formatted(userId, userName, organization));
         try {
             sb.append(mapper.writeValueAsString(data));
         } catch (JsonProcessingException e) {

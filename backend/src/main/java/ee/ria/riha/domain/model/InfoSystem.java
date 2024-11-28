@@ -519,10 +519,10 @@ public class InfoSystem {
             docNode.put(META_UPDATE_TIMESTAMP_KEY, currentFileMetadata.getUpdateTimestamp());
         }
 
-        if (currentFileMetadata instanceof InfoSystemDocumentMetadata &&
-                ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson() != null) {
+        if (currentFileMetadata instanceof InfoSystemDocumentMetadata metadata &&
+                metadata.getAccessRestrictionJson() != null) {
             docNode.set(FILE_METADATA_ACCESS_RESTRICTION_KEY,
-                    ((InfoSystemDocumentMetadata) currentFileMetadata).getAccessRestrictionJson());
+                    metadata.getAccessRestrictionJson());
         }
     }
 
