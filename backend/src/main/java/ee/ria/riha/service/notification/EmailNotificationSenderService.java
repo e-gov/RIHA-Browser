@@ -88,7 +88,7 @@ public class EmailNotificationSenderService {
 
     private String messageToString(Message message) {
         try {
-            return String.format("[from: '%s', to: '%s', subject: '%s']",
+            return "[from: '%s', to: '%s', subject: '%s']".formatted(
                     Arrays.toString(message.getFrom()),
                     Arrays.toString(message.getAllRecipients()),
                     message.getSubject());
