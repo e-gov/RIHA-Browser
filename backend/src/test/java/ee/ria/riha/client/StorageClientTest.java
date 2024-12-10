@@ -44,16 +44,20 @@ public class StorageClientTest {
     @Before
     public void setUp() throws JsonProcessingException {
         List<String> response = new ArrayList<>();
-        response.add("{\n" +
-                             "  \"uri\": \"urn:fdc:riha.eesti.ee:2016:infosystem:350811-test\",\n" +
-                             "  \"name\": \"LOADTEST\",\n" +
-                             "  \"owner\": \"70001484\"\n" +
-                             "}");
-        response.add("{\n" +
-                             "  \"uri\": \"urn:fdc:riha.eesti.ee:2016:classifier:436900\",\n" +
-                             "  \"name\": \"Testklassifikaator\",\n" +
-                             "  \"owner\": \"21304\"\n" +
-                             "}");
+        response.add("""
+                             {
+                               "uri": "urn:fdc:riha.eesti.ee:2016:infosystem:350811-test",
+                               "name": "LOADTEST",
+                               "owner": "70001484"
+                             }\
+                             """);
+        response.add("""
+                             {
+                               "uri": "urn:fdc:riha.eesti.ee:2016:classifier:436900",
+                               "name": "Testklassifikaator",
+                               "owner": "21304"
+                             }\
+                             """);
 
         String json = "{ \"ok\" : \"200\" } ";
         ObjectMapper objectMapper = new ObjectMapper();

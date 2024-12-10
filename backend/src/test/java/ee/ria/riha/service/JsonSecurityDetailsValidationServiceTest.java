@@ -50,32 +50,36 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void successfullyValidatesCorrectJson() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"ISKE\",\n" +
-                "    \"class\": \"K1T2S1\",\n" +
-                "    \"level\": \"M\",\n" +
-                "    \"latest_audit_date\": \"2017-11-13T17:15:55.002+02:00\",\n" +
-                "    \"latest_audit_resolution\": \"PASSED_WITH_REMARKS\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "ISKE",
+                    "class": "K1T2S1",
+                    "level": "M",
+                    "latest_audit_date": "2017-11-13T17:15:55.002+02:00",
+                    "latest_audit_resolution": "PASSED_WITH_REMARKS"
+                  }
+                }\
+                """;
         List<ProcessingMessage> validationErrorMessages = jsonSecurityDetailsValidationService.validate(fromString(json));
         assertThat(validationErrorMessages, is(emptyCollectionOf(ProcessingMessage.class)));
     }
 
     @Test
     public void catchesMaxAmountOfValidationErrorMessages() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"ISKE\",\n" +
-                "    \"class\": null,\n" +
-                "    \"level\": null,\n" +
-                "    \"latest_audit_date\": null,\n" +
-                "    \"latest_audit_resolution\": \"PASSED_WITH_REMARKS\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "ISKE",
+                    "class": null,
+                    "level": null,
+                    "latest_audit_date": null,
+                    "latest_audit_resolution": "PASSED_WITH_REMARKS"
+                  }
+                }\
+                """;
         List<ProcessingMessage> validationErrorMessages = jsonSecurityDetailsValidationService.validate(fromString(json));
         assertThat(validationErrorMessages.size(), is(equalTo(MAX_AMOUNT_OF_VALIDATION_ERRORS)));
         verify(messageSource).getMessage(SECURITY_CLASS_IS_NULL_KEY, null, Locale.getDefault());
@@ -85,13 +89,15 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void securityClassMustBeNullWhenStandardIsNotISKE() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"This is not ISKE\",\n" +
-                "    \"class\": \"K1T2S1\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "This is not ISKE",
+                    "class": "K1T2S1"
+                  }
+                }\
+                """;
         ProcessingMessage securityClassValidationErrorMessage = jsonSecurityDetailsValidationService.validateSecurityClass(fromString(json));
         assertThat(securityClassValidationErrorMessage, is(notNullValue()));
         verify(messageSource).getMessage(SECURITY_CLASS_IS_NOT_NULL_KEY, null, Locale.getDefault());
@@ -99,13 +105,15 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void securityClassMustNotBeNullWhenStandardIsISKE() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"ISKE\",\n" +
-                "    \"class\": null\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "ISKE",
+                    "class": null
+                  }
+                }\
+                """;
         ProcessingMessage securityClassValidationErrorMessage = jsonSecurityDetailsValidationService.validateSecurityClass(fromString(json));
         assertThat(securityClassValidationErrorMessage, is(notNullValue()));
         verify(messageSource).getMessage(SECURITY_CLASS_IS_NULL_KEY, null, Locale.getDefault());
@@ -113,14 +121,16 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void securityLevelMustBeNullWhenStandardIsNotISKE() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"This is not ISKE\",\n" +
-                "    \"class\": \"K1T2S1\",\n" +
-                "    \"level\": \"M\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "This is not ISKE",
+                    "class": "K1T2S1",
+                    "level": "M"
+                  }
+                }\
+                """;
         ProcessingMessage securityLevelValidationErrorMessage = jsonSecurityDetailsValidationService.validateSecurityLevel(fromString(json));
         assertThat(securityLevelValidationErrorMessage, is(notNullValue()));
         verify(messageSource).getMessage(SECURITY_LEVEL_IS_NOT_NULL_KEY, null, Locale.getDefault());
@@ -128,14 +138,16 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void securityLevelMustNotBeNullWhenStandardIsISKE() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"ISKE\",\n" +
-                "    \"class\": \"K1T2S1\",\n" +
-                "    \"level\": null\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "ISKE",
+                    "class": "K1T2S1",
+                    "level": null
+                  }
+                }\
+                """;
         ProcessingMessage securityLevelValidationErrorMessage = jsonSecurityDetailsValidationService.validateSecurityLevel(fromString(json));
         assertThat(securityLevelValidationErrorMessage, is(notNullValue()));
         verify(messageSource).getMessage(SECURITY_LEVEL_IS_NULL_KEY, null, Locale.getDefault());
@@ -143,14 +155,16 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void securityLevelMustMatchSecurityClass() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"standard\": \"ISKE\",\n" +
-                "    \"class\": \"K1T2S1\",\n" +
-                "    \"level\": \"H\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "standard": "ISKE",
+                    "class": "K1T2S1",
+                    "level": "H"
+                  }
+                }\
+                """;
         ProcessingMessage securityLevelValidationErrorMessage = jsonSecurityDetailsValidationService.validateSecurityLevel(fromString(json));
         assertThat(securityLevelValidationErrorMessage, is(notNullValue()));
         verify(messageSource).getMessage(LEVEL_DOES_NOT_MATCH_CLASS_KEY, null, Locale.getDefault());
@@ -158,13 +172,15 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void latestAuditResolutionMustBeNullWhenLatestAuditDateIsNull() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"latest_audit_date\": null,\n" +
-                "    \"latest_audit_resolution\": \"PASSED_WITH_REMARKS\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "latest_audit_date": null,
+                    "latest_audit_resolution": "PASSED_WITH_REMARKS"
+                  }
+                }\
+                """;
         ProcessingMessage latestAuditResolutionValidationErrorMessage =
                 jsonSecurityDetailsValidationService.validateLatestAuditResolution(fromString(json));
         assertThat(latestAuditResolutionValidationErrorMessage, is(notNullValue()));
@@ -173,13 +189,15 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void latestAuditResolutionMustNotBeNullWhenLatestAuditDateIsNotNull() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"latest_audit_date\": \"2017-11-13T17:15:55.002+02:00\",\n" +
-                "    \"latest_audit_resolution\": null\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "latest_audit_date": "2017-11-13T17:15:55.002+02:00",
+                    "latest_audit_resolution": null
+                  }
+                }\
+                """;
         ProcessingMessage latestAuditResolutionValidationErrorMessage =
                 jsonSecurityDetailsValidationService.validateLatestAuditResolution(fromString(json));
         assertThat(latestAuditResolutionValidationErrorMessage, is(notNullValue()));
@@ -188,13 +206,15 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     @Test
     public void latestAuditResolutionValueIsNotAllowed() {
-        String json = "{\n" +
-                "  \"security\": " +
-                "  {\n" +
-                "    \"latest_audit_date\": \"2017-11-13T17:15:55.002+02:00\",\n" +
-                "    \"latest_audit_resolution\": \"This is not allowed\"\n" +
-                "  }\n" +
-                "}";
+        String json = """
+                {
+                  "security": \
+                  {
+                    "latest_audit_date": "2017-11-13T17:15:55.002+02:00",
+                    "latest_audit_resolution": "This is not allowed"
+                  }
+                }\
+                """;
         ProcessingMessage latestAuditResolutionValidationErrorMessage =
                 jsonSecurityDetailsValidationService.validateLatestAuditResolution(fromString(json));
         assertThat(latestAuditResolutionValidationErrorMessage, is(notNullValue()));

@@ -1,6 +1,7 @@
 package ee.ria.riha.conf;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.*;
 
 import java.io.*;

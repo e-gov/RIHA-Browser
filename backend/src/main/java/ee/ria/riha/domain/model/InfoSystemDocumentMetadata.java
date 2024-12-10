@@ -15,10 +15,10 @@ public class InfoSystemDocumentMetadata extends InfoSystemFileMetadata {
 
     @Override
     public boolean wasChanged(InfoSystemFileMetadata prevVersion) {
-        if (prevVersion instanceof InfoSystemDocumentMetadata) {
+        if (prevVersion instanceof InfoSystemDocumentMetadata metadata) {
             return super.wasChanged(prevVersion)
                     || accessRestrictionWasChanged(
-                    ((InfoSystemDocumentMetadata) prevVersion).getAccessRestrictionJson(),
+                    metadata.getAccessRestrictionJson(),
                     this.getAccessRestrictionJson());
         } else {
             return super.wasChanged(prevVersion);

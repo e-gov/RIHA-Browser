@@ -160,8 +160,8 @@ public class InfoSystemTest {
                 .put("creation_timestamp", fileMetadata.getCreationTimestamp())
                 .put("update_timestamp", fileMetadata.getUpdateTimestamp());
 
-        if (fileMetadata instanceof InfoSystemDocumentMetadata) {
-            if (((InfoSystemDocumentMetadata) fileMetadata).isAccessRestricted()) {
+        if (fileMetadata instanceof InfoSystemDocumentMetadata metadata) {
+            if (metadata.isAccessRestricted()) {
                 documentNode.putObject("accessRestriction").put("reasonCode", 38);
             }
         }

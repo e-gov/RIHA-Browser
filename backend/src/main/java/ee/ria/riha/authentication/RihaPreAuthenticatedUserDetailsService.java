@@ -33,8 +33,8 @@ public class RihaPreAuthenticatedUserDetailsService extends UserDetailsByNameSer
                     authentication.getName());
         }
 
-        if (userDetails instanceof RihaUserDetails) {
-            populateRihaUserDetails(((RihaUserDetails) userDetails), authentication);
+        if (userDetails instanceof RihaUserDetails details) {
+            populateRihaUserDetails(details, authentication);
         }
 
         return userDetails;
