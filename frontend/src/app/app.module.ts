@@ -101,7 +101,6 @@ export function loadClassifiers(environmentService: EnvironmentService) {
 
 export function initCsrfToken(csrfTokenService: CsrfTokenService) {
   return () => csrfTokenService.getCsrfToken().toPromise().catch(err => {
-    console.warn('Failed to load CSRF token on startup:', err);
     return null;
   });
 }

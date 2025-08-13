@@ -32,19 +32,19 @@
     </appender>
     
     <!-- Spring Security logging (additivity=false to prevent duplication) -->
-    <logger name="org.springframework.security" level="TRACE" additivity="false">
+    <logger name="org.springframework.security" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILEJSON"/>
     </logger>
     
     <!-- Our application logging (additivity=false to prevent duplication) -->
-    <logger name="ee.ria.riha" level="TRACE" additivity="false">
+    <logger name="ee.ria.riha" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILEJSON"/>
     </logger>
     
     <!-- Audit logging (separate from main logs) -->
-    <logger name="ee.ria.riha.logging.auditlog" level="TRACE" additivity="false">
+    <logger name="ee.ria.riha.logging.auditlog" level="INFO" additivity="false">
         <appender-ref ref="AUDIT_LOG"/>
     </logger>
     

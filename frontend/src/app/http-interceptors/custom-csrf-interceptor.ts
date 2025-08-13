@@ -39,9 +39,7 @@ export class CustomCsrfInterceptor implements HttpInterceptor {
         return next.handle(csrfReq);
       }),
       catchError((error) => {
-        console.error('Failed to fetch CSRF token:', error);
-        // Continue without CSRF token if fetch fails
-        return next.handle(req);
+        throw error;
       })
     );
   }
