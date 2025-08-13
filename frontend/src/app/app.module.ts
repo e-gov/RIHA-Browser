@@ -85,6 +85,7 @@ import {httpInterceptorProviders} from "./http-interceptors";
 import {CanDeactivateModalGuard} from './guards/can-deactivate-modal.guard';
 import {RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module} from 'ng-recaptcha';
 import { TopicsButtonComponent } from './components/grid-view/topics-button/topics-button.component';
+import { CsrfTokenService } from './services/csrf-token.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -96,6 +97,13 @@ export function onApplicationStart(environmentService: EnvironmentService) {
 
 export function loadClassifiers(environmentService: EnvironmentService) {
   return () => environmentService.loadClassifiers();
+}
+
+export function initCsrfToken(csrfTokenService: CsrfTokenService) {
+  return () => csrfTokenService.getCsrfToken().toPromise().catch(err => {
+    console.warn('Failed to load CSRF token on startup:', err);
+    return null;
+  });
 }
 
 export function loadRecaptchaSiteKey(environmentService: EnvironmentService) {
