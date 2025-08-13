@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -62,6 +63,7 @@ public class EnvironmentController {
     @SuppressWarnings("rawtypes")
     @Deprecated
     @PutMapping("/organization")
+    @PreAuthorize("hasRole('ROLE_RIHA_USER')")
     @Operation(summary = "Change active organization of the current user")
     public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode, HttpSession session) {
         environmentService.changeActiveOrganization(organizationCode);
