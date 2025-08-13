@@ -1,7 +1,7 @@
 package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
 import ee.ria.riha.client.StorageClientException;
 import ee.ria.riha.client.StorageError;
 import ee.ria.riha.client.StorageErrorCode;

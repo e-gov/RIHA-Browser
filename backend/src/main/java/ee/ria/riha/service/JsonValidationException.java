@@ -1,7 +1,7 @@
 package ee.ria.riha.service;
 
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
+import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
+import ee.ria.riha.service.JsonValidationService.ProcessingReport;
 
 import java.util.ArrayList;
 import java.util.List;

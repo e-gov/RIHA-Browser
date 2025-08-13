@@ -1,14 +1,17 @@
 package ee.ria.riha.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jsonschema.core.exceptions.ProcessingException;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
-import com.github.fge.jsonschema.main.JsonSchema;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Service for JSON validity check against JSON schema.
@@ -22,8 +25,9 @@ public class JsonValidationService {
 
     public JsonValidationService(JsonNode schema) {
         try {
-            this.schema = JsonSchemaFactory.byDefault().getJsonSchema(schema);
-        } catch (ProcessingException e) {
+            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
+            this.schema = factory.getSchema(schema);
+        } catch (Exception e) {
             throw new IllegalBrowserStateException("Error initializing validating schema", e);
         }
     }
@@ -48,7 +52,9 @@ public class JsonValidationService {
      */
     public ProcessingReport validate(JsonNode jsonNode, boolean exceptionMustBeThrown) {
         try {
-            ProcessingReport report = schema.validate(jsonNode, true);
+            // Use networknt validation
+            Set<ValidationMessage> errors = schema.validate(jsonNode);
+            ProcessingReport report = new ProcessingReport(errors);
 
             if (report.isSuccess() && jsonSecurityDetailsValidationService.isNecessaryToValidateSecurityDetails(jsonNode)) {
                 List<ProcessingMessage> securityDetailsValidationErrorMessages = jsonSecurityDetailsValidationService.validate(jsonNode);
@@ -64,7 +70,7 @@ public class JsonValidationService {
             }
 
             return report;
-        } catch (ProcessingException e) {
+        } catch (Exception e) {
             throw new IllegalBrowserStateException("Could not validate json", e);
         }
     }
@@ -72,5 +78,98 @@ public class JsonValidationService {
     @Autowired
     public void setJsonSecurityDetailsValidationService(JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService) {
         this.jsonSecurityDetailsValidationService = jsonSecurityDetailsValidationService;
+    }
+
+    /**
+     * Wrapper class to maintain API compatibility with old com.github.fge.jsonschema.core.report.ProcessingReport
+     */
+    public static class ProcessingReport implements Iterable<ProcessingMessage> {
+        private final List<ProcessingMessage> messages;
+        private boolean success;
+
+        public ProcessingReport(Set<ValidationMessage> networkntMessages) {
+            this.messages = new ArrayList<>();
+            this.success = networkntMessages.isEmpty();
+            
+            for (ValidationMessage msg : networkntMessages) {
+                this.messages.add(new ProcessingMessage(msg));
+            }
+        }
+
+        public ProcessingReport() {
+            this.messages = new ArrayList<>();
+            this.success = true;
+        }
+
+        public boolean isSuccess() {
+            return success && messages.stream().allMatch(ProcessingMessage::isSuccess);
+        }
+
+        public void error(ProcessingMessage message) {
+            this.messages.add(message);
+            this.success = false;
+        }
+
+        @Override
+        public Iterator<ProcessingMessage> iterator() {
+            return messages.iterator();
+        }
+    }
+
+    /**
+     * Wrapper class to maintain API compatibility with old com.github.fge.jsonschema.core.report.ProcessingMessage
+     */
+    public static class ProcessingMessage {
+        private JsonNode jsonNode;
+        private final boolean success;
+
+        public ProcessingMessage(ValidationMessage networkntMessage) {
+            ObjectMapper mapper = new ObjectMapper();
+            this.success = false;
+            try {
+                // Convert networknt ValidationMessage to JsonNode format similar to old library
+                String messageJson = String.format("""
+                    {
+                        "keyword": "%s",
+                        "message": "%s"
+                    }
+                    """, 
+                    networkntMessage.getType(), 
+                    networkntMessage.getMessage().replace("\"", "\\\""));
+                this.jsonNode = mapper.readTree(messageJson);
+            } catch (Exception e) {
+                // Fallback to simple message
+                try {
+                    String fallbackJson = String.format("""
+                        {
+                            "message": "%s"
+                        }
+                        """, networkntMessage.getMessage().replace("\"", "\\\""));
+                    this.jsonNode = mapper.readTree(fallbackJson);
+                } catch (Exception ex) {
+                    this.jsonNode = mapper.createObjectNode();
+                }
+            }
+        }
+
+        public ProcessingMessage() {
+            this.success = true;
+            this.jsonNode = new ObjectMapper().createObjectNode();
+        }
+
+        public JsonNode asJson() {
+            return jsonNode;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public ProcessingMessage put(String key, String value) {
+            if (jsonNode instanceof com.fasterxml.jackson.databind.node.ObjectNode) {
+                ((com.fasterxml.jackson.databind.node.ObjectNode) jsonNode).put(key, value);
+            }
+            return this;
+        }
     }
 }

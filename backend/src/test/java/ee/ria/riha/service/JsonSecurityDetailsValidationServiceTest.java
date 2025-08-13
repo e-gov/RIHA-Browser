@@ -1,8 +1,8 @@
 package ee.ria.riha.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jackson.JsonLoader;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +45,7 @@ public class JsonSecurityDetailsValidationServiceTest {
     private MessageSource messageSource;
     @InjectMocks
     private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() {
@@ -226,7 +227,7 @@ public class JsonSecurityDetailsValidationServiceTest {
 
     private JsonNode fromString(String json) {
         try {
-            return JsonLoader.fromString(json);
+            return objectMapper.readTree(json);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

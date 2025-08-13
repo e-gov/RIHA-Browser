@@ -2,7 +2,7 @@ package ee.ria.riha.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;

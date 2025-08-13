@@ -1,9 +1,9 @@
 package ee.ria.riha.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jackson.JsonLoader;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
+import ee.ria.riha.service.JsonValidationService.ProcessingReport;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import org.mockito.quality.Strictness;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,14 +32,24 @@ public class JsonValidationServiceTest {
     @Mock
     private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService = new JsonSecurityDetailsValidationService();
     private JsonValidationService infoSystemValidationService;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() throws IOException {
-        this.infoSystemValidationService = new JsonValidationService(
-                JsonLoader.fromResource("/test_infosystem_schema.json"));
+        JsonNode schemaNode = loadFromResource("/test_infosystem_schema.json");
+        this.infoSystemValidationService = new JsonValidationService(schemaNode);
         infoSystemValidationService.setJsonSecurityDetailsValidationService(jsonSecurityDetailsValidationService);
 
         when(jsonSecurityDetailsValidationService.isNecessaryToValidateSecurityDetails(any())).thenReturn(false);
+    }
+
+    private JsonNode loadFromResource(String resourcePath) throws IOException {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new IOException("Resource not found: " + resourcePath);
+            }
+            return objectMapper.readTree(is);
+        }
     }
 
     @Test
@@ -58,7 +69,7 @@ public class JsonValidationServiceTest {
 
     private JsonNode fromString(String json) {
         try {
-            return JsonLoader.fromString(json);
+            return objectMapper.readTree(json);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
