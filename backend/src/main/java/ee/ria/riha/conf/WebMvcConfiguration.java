@@ -58,6 +58,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // Handle Angular routes by mapping all non-API, non-static resource paths to index.html
+        // Cover both single and multi-segment paths
+        registry.addViewController("/{path:^(?!api|actuator).*}").setViewName("index.html");
+        registry.addViewController("/{path:^(?!api|actuator).*}/**").setViewName("index.html");
+    }
+
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigins)
