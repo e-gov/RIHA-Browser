@@ -209,7 +209,7 @@ const routes: Routes = [
     TagInputModule,
     BrowserAnimationsModule,
     CustomFormsModule,
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot(routes, {}),
     UiSwitchModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
