@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -58,14 +61,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        // Handle Angular routes by mapping all non-API, non-static resource paths to index.html
-        // Cover both single and multi-segment paths
-        registry.addViewController("/{path:^(?!api|actuator).*}").setViewName("index.html");
-        registry.addViewController("/{path:^(?!api|actuator).*}/**").setViewName("index.html");
-    }
-
-    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigins)
@@ -77,6 +72,23 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         configureFontCacheControl(registry);
         registry.addResourceHandler("/infosystem_schema.json").addResourceLocations("classpath:/infosystem_schema.json");
+        
+        // Serve Angular static resources with proper fallback
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+                        // If the resource exists, serve it
+                        if (requestedResource.exists() && requestedResource.isReadable()) {
+                            return requestedResource;
+                        }
+                        // Otherwise, serve index.html for Angular routing
+                        return location.createRelative("index.html");
+                    }
+                });
     }
 
     /**
