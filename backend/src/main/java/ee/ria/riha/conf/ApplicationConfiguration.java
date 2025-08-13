@@ -9,6 +9,8 @@ import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.*;
 import lombok.extern.slf4j.*;
 import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.io.*;
+import org.apache.hc.client5.http.ssl.*;
 import org.apache.hc.core5.ssl.*;
 import org.springframework.boot.context.properties.*;
 import org.springframework.boot.task.*;
@@ -62,7 +64,15 @@ public class ApplicationConfiguration {
             throw new IllegalStateException(fatal);
         }
 
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().setSSLContext(context).build());
+        PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setTlsSocketStrategy(new DefaultClientTlsStrategy(context))
+                .build();
+        
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(
+                HttpClientBuilder.create()
+                        .setConnectionManager(connectionManager)
+                        .build()
+        );
 
         return restTemplateBuilder.requestFactory(() -> factory::createRequest).build();
     }

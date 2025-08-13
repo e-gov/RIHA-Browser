@@ -2,7 +2,6 @@ package ee.ria.riha.web;
 
 import ee.ria.riha.conf.*;
 import ee.ria.riha.service.*;
-import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.*;
@@ -31,6 +30,7 @@ public class EnvironmentController {
     @Autowired
     private ApplicationProperties applicationProperties;
 
+    @SuppressWarnings("rawtypes")
     @GetMapping
     @Operation(summary = "Retrieve environment")
     public ResponseEntity environment(HttpSession session) {
@@ -49,6 +49,7 @@ public class EnvironmentController {
         return ResponseEntity.ok(environment);
     }
 
+    @SuppressWarnings("rawtypes")
     @GetMapping("/classifiers")
     @Operation(summary = "Load classifiers")
     public ResponseEntity classifiers() {
@@ -58,6 +59,7 @@ public class EnvironmentController {
     /**
      * @deprecated use user controller
      */
+    @SuppressWarnings("rawtypes")
     @Deprecated
     @PutMapping("/organization")
     @Operation(summary = "Change active organization of the current user")
