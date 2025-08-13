@@ -20,7 +20,6 @@
 *.launch
 .settings/
 *.sublime-workspace
-.moderne/
 
 # IDE - VSCode
 .vscode/*
@@ -50,9 +49,11 @@ Thumbs.db
 .angular/*
 .pnp.*
 .yarn/*
+.yarnrc.yml
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
 
