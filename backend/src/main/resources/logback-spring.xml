@@ -20,6 +20,7 @@
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+    
     <appender name="AUDIT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${appName}/${appName}-audit.json.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -30,56 +31,34 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
     
-    <!-- Spring Security logging -->
-    <logger name="org.springframework.security" level="DEBUG">
+    <!-- Spring Security logging (additivity=false to prevent duplication) -->
+    <logger name="org.springframework.security" level="TRACE" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILEJSON"/>
     </logger>
     
-    <!-- Our application logging -->
-    <logger name="ee.ria.riha" level="DEBUG">
+    <!-- Our application logging (additivity=false to prevent duplication) -->
+    <logger name="ee.ria.riha" level="TRACE" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILEJSON"/>
     </logger>
     
-    <!-- CSRF token logging -->
-    <logger name="org.springframework.security.web.csrf" level="DEBUG">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    
-    <!-- Method Security logging -->
-    <logger name="org.springframework.security.access" level="DEBUG">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="com" level="WARN">
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="io" level="WARN">
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="org" level="WARN">
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="javax" level="WARN">
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="springfox" level="WARN">
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="springfox.documentation.swagger.readers.operation.OperationImplicitParameterReader" level="ERROR">
-        <appender-ref ref="FILEJSON"/>
-    </logger>
-    <logger name="ee.ria.riha.logging.auditlog" level="INFO" additivity="false">
+    <!-- Audit logging (separate from main logs) -->
+    <logger name="ee.ria.riha.logging.auditlog" level="TRACE" additivity="false">
         <appender-ref ref="AUDIT_LOG"/>
     </logger>
-    <logger name="Validator" level="INFO">
+    
+    <!-- Validator logging -->
+    <logger name="Validator" level="INFO" additivity="false">
         <appender-ref ref="FILEJSON"/>
     </logger>
-    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO">
+    
+    <!-- Handler mapping logging -->
+    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO" additivity="false">
         <appender-ref ref="FILEJSON"/>
     </logger>
+    
+    <!-- Root logger for everything else -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILEJSON"/>
