@@ -5,14 +5,15 @@ import ee.ria.riha.domain.CommentRepository;
 import ee.ria.riha.domain.model.Comment;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueCommentModel;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -22,6 +23,7 @@ import java.util.Collections;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,17 +31,14 @@ import static org.mockito.Mockito.when;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class IssueCommentServiceTest {
 
     private static final long EXISTING_ISSUE_ID = 15503L;
     private static final Long CREATED_COMMENT_ENTITY_ID = 42L;
 
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
-
     private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
-
 
     @Mock
     private CommentRepository commentRepository;
@@ -50,7 +49,7 @@ public class IssueCommentServiceTest {
     @InjectMocks
     private IssueCommentService issueCommentService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Reset authentication
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -75,13 +74,15 @@ public class IssueCommentServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringCommentCreation() {
-        TestUtils.setActiveOrganisation(authenticationToken, null);
+        assertThrows(IllegalBrowserStateException.class, () -> {
+            TestUtils.setActiveOrganisation(authenticationToken, null);
 
-        issueCommentService.createIssueComment(EXISTING_ISSUE_ID, IssueCommentModel.builder()
-                .comment("comment")
-                .build());
+            issueCommentService.createIssueComment(EXISTING_ISSUE_ID, IssueCommentModel.builder()
+                    .comment("comment")
+                    .build());
+        });
     }
 
 }

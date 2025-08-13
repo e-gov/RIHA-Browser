@@ -20,6 +20,7 @@
 *.launch
 .settings/
 *.sublime-workspace
+.moderne/
 
 # IDE - VSCode
 .vscode/*

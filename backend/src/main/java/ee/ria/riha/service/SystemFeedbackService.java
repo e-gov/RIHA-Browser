@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import ee.ria.riha.conf.*;
 import ee.ria.riha.domain.model.*;
 import lombok.extern.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.util.*;
@@ -22,7 +22,6 @@ public class SystemFeedbackService {
 
     private final RestTemplate restTemplate;
 
-    @Autowired
     public SystemFeedbackService(FeedbackServiceConnectionProperties feedbackServiceConnectionProperties,
                                  ObjectMapper objectMapper,
                                  @Qualifier(FEEDBACK_SERVICE) RestTemplate restTemplate) {

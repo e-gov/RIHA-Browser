@@ -2,14 +2,15 @@ package ee.ria.riha.conf;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.*;
-import com.github.fge.jackson.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.*;
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.*;
 import lombok.extern.slf4j.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.ssl.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.io.*;
+import org.apache.hc.client5.http.ssl.*;
+import org.apache.hc.core5.ssl.*;
 import org.springframework.boot.context.properties.*;
 import org.springframework.boot.task.*;
 import org.springframework.boot.web.client.*;
@@ -62,20 +63,33 @@ public class ApplicationConfiguration {
             throw new IllegalStateException(fatal);
         }
 
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().setSSLContext(context).build());
+        PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setTlsSocketStrategy(new DefaultClientTlsStrategy(context))
+                .build();
+        
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(
+                HttpClientBuilder.create()
+                        .setConnectionManager(connectionManager)
+                        .build()
+        );
 
         return restTemplateBuilder.requestFactory(() -> factory::createRequest).build();
     }
 
     @Bean
-    public TaskExecutor taskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
+    public TaskExecutor taskExecutor(ThreadPoolTaskExecutorBuilder taskExecutorBuilder) {
         return taskExecutorBuilder.build();
     }
 
     @Bean
     public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties) throws IOException {
-        return new JsonValidationService(
-                JsonLoader.fromResource(applicationProperties.getValidation().getJsonSchemaUrl()));
+        ObjectMapper mapper = new ObjectMapper();
+        try (var inputStream = getClass().getResourceAsStream(applicationProperties.getValidation().getJsonSchemaUrl())) {
+            if (inputStream == null) {
+                throw new IOException("Schema resource not found: " + applicationProperties.getValidation().getJsonSchemaUrl());
+            }
+            return new JsonValidationService(mapper.readTree(inputStream));
+        }
     }
 
     @Bean

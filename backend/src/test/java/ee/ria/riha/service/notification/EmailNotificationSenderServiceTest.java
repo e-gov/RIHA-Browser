@@ -3,24 +3,27 @@ package ee.ria.riha.service.notification;
 import ee.ria.riha.service.notification.handler.NewInfoSystemsNotificationHandler;
 import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.service.notification.model.SimpleHtmlEmailNotification;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMessage;
 
 import static org.mockito.Mockito.*;
 
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class EmailNotificationSenderServiceTest {
 
     @Mock
@@ -38,7 +41,7 @@ public class EmailNotificationSenderServiceTest {
     @Mock
     private MimeMessagePreparator messagePreparator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         emailNotificationSenderService.getHandlers().add(handler);
 

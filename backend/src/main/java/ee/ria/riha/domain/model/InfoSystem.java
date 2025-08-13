@@ -490,11 +490,11 @@ public class InfoSystem {
 
             if (foundPrevFileMetadata.isPresent()) {
                 //found prev version of same doc
-                currentFileMetadata.setCreationTimestamp(foundPrevFileMetadata.get().getCreationTimestamp());
+                currentFileMetadata.setCreationTimestamp(normalizeTimestamp(foundPrevFileMetadata.get().getCreationTimestamp()));
                 if (currentFileMetadata.wasChanged(foundPrevFileMetadata.get())) {
                     currentFileMetadata.setUpdateTimestamp(this.getUpdateTimestamp());
                 } else {
-                    currentFileMetadata.setUpdateTimestamp(foundPrevFileMetadata.get().getUpdateTimestamp());
+                    currentFileMetadata.setUpdateTimestamp(normalizeTimestamp(foundPrevFileMetadata.get().getUpdateTimestamp()));
                 }
             } else {
                 //new doc
@@ -549,6 +549,30 @@ public class InfoSystem {
                 }
             }
         }
+    }
+
+    /**
+     * Normalizes timestamp to RFC 3339 format by converting timezone offset from +0300 to +03:00 format
+     *
+     * @param timestamp the timestamp to normalize
+     * @return normalized timestamp in RFC 3339 format
+     */
+    private String normalizeTimestamp(String timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        
+        // Check if timestamp has old format timezone without colon (+0300, -0300, +0200, -0200, etc)
+        // This regex specifically matches 4 digits at the end, excluding already correct formats like +03:00
+        if (timestamp.matches(".*[+-]\\d{4}$") && !timestamp.matches(".*[+-]\\d{2}:\\d{2}$")) {
+            // Convert +0300 to +03:00 format for RFC 3339 compliance
+            String timezonePart = timestamp.substring(timestamp.length() - 5);
+            String timestampWithoutTz = timestamp.substring(0, timestamp.length() - 5);
+            String normalizedTz = timezonePart.substring(0, 3) + ":" + timezonePart.substring(3);
+            return timestampWithoutTz + normalizedTz;
+        }
+        
+        return timestamp;
     }
 
     @Override

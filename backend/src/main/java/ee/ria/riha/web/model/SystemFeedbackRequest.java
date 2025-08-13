@@ -3,7 +3,7 @@ package ee.ria.riha.web.model;
 import lombok.*;
 
 import java.sql.*;
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 @Getter
 @Setter

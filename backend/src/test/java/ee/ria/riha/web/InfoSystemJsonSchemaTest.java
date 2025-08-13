@@ -1,39 +1,45 @@
 package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.github.fge.jackson.JsonLoader;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.JsonSecurityDetailsValidationService;
 import ee.ria.riha.service.JsonValidationException;
 import ee.ria.riha.service.JsonValidationService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class InfoSystemJsonSchemaTest {
 
     private UUID uuid = UUID.fromString("5d68f510-86f0-4e05-9502-c761bbebe6be");
     private JsonValidationService jsonValidationService;
     private InfoSystem infoSystem = new InfoSystem();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService = new JsonSecurityDetailsValidationService();
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
-        this.jsonValidationService = new JsonValidationService(
-                JsonLoader.fromResource("/infosystem_schema.json"));
+        JsonNode schemaNode = loadFromResource("/infosystem_schema.json");
+        this.jsonValidationService = new JsonValidationService(schemaNode);
         jsonValidationService.setJsonSecurityDetailsValidationService(jsonSecurityDetailsValidationService);
 
         infoSystem.setUuid(uuid);
@@ -46,21 +52,34 @@ public class InfoSystemJsonSchemaTest {
         when(jsonSecurityDetailsValidationService.isNecessaryToValidateSecurityDetails(any())).thenReturn(false);
     }
 
+    private JsonNode loadFromResource(String resourcePath) throws IOException {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new IOException("Resource not found: " + resourcePath);
+            }
+            return objectMapper.readTree(is);
+        }
+    }
+
     @Test
     public void infoSystemSuccessfullyValidates() {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void shortNameMustContainAtLeastOneCharacter() {
-        infoSystem.setShortName("");
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            infoSystem.setShortName("");
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void shortNameValidationFailsWhenItIsValidUuid() {
-        infoSystem.setShortName(uuid.toString());
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            infoSystem.setShortName(uuid.toString());
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
     @Test
@@ -106,17 +125,21 @@ public class InfoSystemJsonSchemaTest {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void shortNameValidationFailsWhenItContainsIllegalCharacter() {
-        infoSystem.setShortName("in>alid");
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            infoSystem.setShortName("in>alid");
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void failsWhenDocumentTypeIsNull() {
-        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
-                .add(createDocument("document", "document_url", null));
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                    .add(createDocument("document", "document_url", null));
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
     @Test
@@ -134,18 +157,22 @@ public class InfoSystemJsonSchemaTest {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void failsWhenDocumentTypeValueIsNotNullAndDoesNotBelongToEnumValues() {
-        ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
-                .add(createDocument("document", "document_url", "INVALID_TYPE"));
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            ((ArrayNode) infoSystem.getJsonContent().withArray("documents"))
+                    .add(createDocument("document", "document_url", "INVALID_TYPE"));
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void failsWhenLegislationTypeIsNull() {
-        ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
-                .add(createDocument("legislation", "legislation_url", null));
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
+                    .add(createDocument("legislation", "legislation_url", null));
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
     @Test
@@ -163,11 +190,13 @@ public class InfoSystemJsonSchemaTest {
         jsonValidationService.validate(infoSystem.getJsonContent());
     }
 
-    @Test(expected = JsonValidationException.class)
+    @Test
     public void failsWhenLegislationTypeValueIsNotNullAndDoesNotBelongToEnumValues() {
-        ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
-                .add(createDocument("legislation", "legislation_url", "INVALID_TYPE"));
-        jsonValidationService.validate(infoSystem.getJsonContent());
+        assertThrows(JsonValidationException.class, () -> {
+            ((ArrayNode) infoSystem.getJsonContent().withArray("legislations"))
+                    .add(createDocument("legislation", "legislation_url", "INVALID_TYPE"));
+            jsonValidationService.validate(infoSystem.getJsonContent());
+        });
     }
 
     private JsonNode createDocument(String name, String url) {

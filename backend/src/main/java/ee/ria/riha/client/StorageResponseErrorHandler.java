@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
@@ -20,9 +21,9 @@ public class StorageResponseErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
-        HttpStatus statusCode = response.getStatusCode();
+        HttpStatusCode statusCode = response.getStatusCode();
 
-        if (statusCode.series() == HttpStatus.Series.CLIENT_ERROR) {
+        if (statusCode instanceof HttpStatus httpStatus && httpStatus.series() == HttpStatus.Series.CLIENT_ERROR) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 StorageError error = objectMapper.readValue(response.getBody(), StorageError.class);

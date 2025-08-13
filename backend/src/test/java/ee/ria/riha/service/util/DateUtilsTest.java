@@ -1,7 +1,7 @@
 package ee.ria.riha.service.util;
 
 import ee.ria.riha.service.IssueService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DateUtilsTest {
 

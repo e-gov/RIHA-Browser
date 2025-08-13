@@ -6,11 +6,12 @@ import ee.ria.riha.service.SecurityContextUtil;
 import ee.ria.riha.service.UserService;
 import ee.ria.riha.web.model.OrganizationModel;
 import ee.ria.riha.web.model.UserDetailsModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
  */
 @RestController
 @RequestMapping(API_V1_PREFIX + "/user")
-@Api("Users")
+@Tag(name = "Users")
 @Slf4j
 public class UserController {
 
@@ -33,14 +34,23 @@ public class UserController {
     private UserService userService;
 
     @PutMapping("/organization")
-    @ApiOperation("Change active organization of the current user")
-    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+    @PreAuthorize("hasRole('ROLE_RIHA_USER')")
+    @Operation(summary = "Change active organization of the current user")
+    public ResponseEntity<UserDetailsModel> changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+        log.info("changeActiveOrganization called with organizationCode: {}", organizationCode);
+        log.info("Current authentication: {}", SecurityContextHolder.getContext().getAuthentication());
+        log.info("Current principal: {}", SecurityContextHolder.getContext().getAuthentication() != null ? 
+            SecurityContextHolder.getContext().getAuthentication().getPrincipal() : "null");
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            log.info("Current authorities: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        }
+        
         userService.changeActiveOrganization(organizationCode);
         return getUserDetails();
     }
 
     @GetMapping
-    @ApiOperation("Retrieves user details")
+    @Operation(summary = "Retrieves user details")
     public ResponseEntity<UserDetailsModel> getUserDetails() {
         return ResponseEntity.ok(createUserDetailsModel().orElse(null));
     }

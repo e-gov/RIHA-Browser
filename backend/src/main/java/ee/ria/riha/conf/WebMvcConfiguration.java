@@ -3,20 +3,18 @@ package ee.ria.riha.conf;
 import ee.ria.riha.service.util.CompositeFilterArgumentResolver;
 import ee.ria.riha.service.util.FilterableArgumentResolver;
 import ee.ria.riha.service.util.PageableArgumentResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
 import org.springframework.boot.actuate.endpoint.ExposableEndpoint;
 import org.springframework.boot.actuate.endpoint.web.*;
-import org.springframework.boot.actuate.endpoint.web.annotation.ControllerEndpointsSupplier;
-import org.springframework.boot.actuate.endpoint.web.annotation.ServletEndpointsSupplier;
 import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +35,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private final String[] allowedOrigins;
 
-    @Autowired
     public WebMvcConfiguration(ApplicationProperties applicationProperties) {
         allowedOrigins = applicationProperties.getCors().getAllowedOrigins();
         Assert.notEmpty(allowedOrigins, "Allowed origins must be defined.");
@@ -73,6 +72,23 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         configureFontCacheControl(registry);
         registry.addResourceHandler("/infosystem_schema.json").addResourceLocations("classpath:/infosystem_schema.json");
+        
+        // Serve Angular static resources with proper fallback
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+                        // If the resource exists, serve it
+                        if (requestedResource.exists() && requestedResource.isReadable()) {
+                            return requestedResource;
+                        }
+                        // Otherwise, serve index.html for Angular routing
+                        return location.createRelative("index.html");
+                    }
+                });
     }
 
     /**
@@ -94,16 +110,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(WebEndpointsSupplier webEndpointsSupplier, ServletEndpointsSupplier servletEndpointsSupplier, ControllerEndpointsSupplier controllerEndpointsSupplier, EndpointMediaTypes endpointMediaTypes, CorsEndpointProperties corsProperties, WebEndpointProperties webEndpointProperties, Environment environment) {
-        List<ExposableEndpoint<?>> allEndpoints = new ArrayList();
+    public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(WebEndpointsSupplier webEndpointsSupplier, EndpointMediaTypes endpointMediaTypes, CorsEndpointProperties corsProperties, WebEndpointProperties webEndpointProperties, Environment environment) {
+        List<ExposableEndpoint<?>> allEndpoints = new ArrayList<>();
         Collection<ExposableWebEndpoint> webEndpoints = webEndpointsSupplier.getEndpoints();
         allEndpoints.addAll(webEndpoints);
-        allEndpoints.addAll(servletEndpointsSupplier.getEndpoints());
-        allEndpoints.addAll(controllerEndpointsSupplier.getEndpoints());
         String basePath = webEndpointProperties.getBasePath();
         EndpointMapping endpointMapping = new EndpointMapping(basePath);
         boolean shouldRegisterLinksMapping = this.shouldRegisterLinksMapping(webEndpointProperties, environment, basePath);
-        return new WebMvcEndpointHandlerMapping(endpointMapping, webEndpoints, endpointMediaTypes, corsProperties.toCorsConfiguration(), new EndpointLinksResolver(allEndpoints, basePath), shouldRegisterLinksMapping, null);
+        return new WebMvcEndpointHandlerMapping(endpointMapping, webEndpoints, endpointMediaTypes, corsProperties.toCorsConfiguration(), new EndpointLinksResolver(allEndpoints, basePath), shouldRegisterLinksMapping);
     }
 
 

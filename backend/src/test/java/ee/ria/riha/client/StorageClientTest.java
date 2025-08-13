@@ -5,13 +5,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.riha.service.util.FilterRequest;
 import ee.ria.riha.service.util.PageRequest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +25,15 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class StorageClientTest {
 
     private static final String URL = "http://storage/api";
@@ -41,7 +44,7 @@ public class StorageClientTest {
     @InjectMocks
     private StorageClient storageClient = new StorageClient(URL);
 
-    @Before
+    @BeforeEach
     public void setUp() throws JsonProcessingException {
         List<String> response = new ArrayList<>();
         response.add("""
@@ -66,7 +69,7 @@ public class StorageClientTest {
 
 
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(),
-            ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any())).thenReturn(ResponseEntity.ok(response));
+                ArgumentMatchers.<ParameterizedTypeReference<List<String>>>any())).thenReturn(ResponseEntity.ok(response));
 
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(),
                 ArgumentMatchers.<ParameterizedTypeReference<JsonNode>>any())).thenReturn(ResponseEntity.ok(jsonNode));
@@ -84,8 +87,8 @@ public class StorageClientTest {
     @Test
     public void includesPagingAndFilteringParametersDuringSearch() {
         storageClient.find("path", new PageRequest(5, 3),
-                           new FilterRequest("name,ilike,TestSystem", "-modification_date", "owner,name"),
-                           String.class);
+                new FilterRequest("name,ilike,TestSystem", "-modification_date", "owner,name"),
+                String.class);
 
         verify(restTemplate).exchange(
                 argThat(allOf(
@@ -101,14 +104,14 @@ public class StorageClientTest {
     }
 
     @Test
-    public void update(){
+    public void update() {
         Long update = storageClient.update("path", 1L, "asd");
 
         assertThat(update, is(equalTo(200L)));
     }
 
     @Test
-    public void remove(){
+    public void remove() {
         Long remove = storageClient.remove("path", 1L);
 
         assertThat(remove, is(equalTo(200L)));

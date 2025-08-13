@@ -38,7 +38,7 @@ public class InfoSystemService {
     @Autowired
     private JsonValidationService infoSystemValidationService;
     private IssueService issueService;
-    private final DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private final DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
         return infoSystemRepository.list(pageable, filterable);

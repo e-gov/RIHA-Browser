@@ -4,13 +4,15 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import ee.ria.riha.domain.model.MainResource;
 import ee.ria.riha.service.util.FilterRequest;
 import ee.ria.riha.service.util.Filterable;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Collections;
 
@@ -23,7 +25,8 @@ import static org.mockito.Mockito.when;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class RihaStorageInfoSystemRepositoryTest {
 
     @Mock
@@ -32,7 +35,7 @@ public class RihaStorageInfoSystemRepositoryTest {
     @InjectMocks
     private RihaStorageInfoSystemRepository rihaStorageInfoSystemRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MainResource mainResource = new MainResource();
         mainResource.setJson_content(JsonNodeFactory.instance.objectNode());

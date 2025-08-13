@@ -3,12 +3,14 @@ package ee.ria.riha.service.auth;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.InfoSystemService;
 import ee.ria.riha.service.IssueService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.UUID;
 
@@ -18,7 +20,8 @@ import static org.mockito.Mockito.when;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class IssueAuthorizationServiceTest {
 
     private static final Long ISSUE_ID = 123L;
@@ -40,7 +43,7 @@ public class IssueAuthorizationServiceTest {
 
     private InfoSystem infoSystem = new InfoSystem();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         infoSystem.setUuid(INFO_SYSTEM_UUID);
 

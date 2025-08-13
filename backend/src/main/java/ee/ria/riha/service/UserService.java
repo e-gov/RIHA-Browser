@@ -4,20 +4,26 @@ import ee.ria.riha.authentication.*;
 import ee.ria.riha.domain.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.web.model.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
 import org.springframework.stereotype.*;
 import org.springframework.util.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 import java.util.stream.*;
-import javax.mail.internet.*;
+import jakarta.mail.internet.*;
 import javax.naming.ldap.*;
 
 /**
  * @author Valentin Suhnjov
  */
+@Slf4j
 @Service
 public class UserService {
 
@@ -29,21 +35,38 @@ public class UserService {
      * @param organizationCode - organization code (registry number)
      */
     public void changeActiveOrganization(String organizationCode) {
+        log.info("UserService.changeActiveOrganization called with organizationCode: {}", organizationCode);
+        
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
+        log.info("Authentication in UserService: {}", authentication);
+        
         Assert.notNull(authentication, "authentication not found in security context");
 
         if (!(authentication.getPrincipal() instanceof RihaUserDetails)) {
+            log.error("Principal is not RihaUserDetails, but: {}", authentication.getPrincipal().getClass());
             throw new IllegalStateException("Organization change is not supported by current authentication");
         }
 
         RihaUserDetails rihaUserDetails = (RihaUserDetails) authentication.getPrincipal();
+        log.info("RihaUserDetails found, organizations available: {}", 
+            rihaUserDetails.getOrganizationsByCode() != null ? rihaUserDetails.getOrganizationsByCode().keySet() : "null");
 
         if (rihaUserDetails.getOrganizationsByCode() != null) {
             rihaUserDetails.setActiveOrganization(rihaUserDetails.getOrganizationsByCode().get(organizationCode));
+            log.info("Set active organization to: {}", rihaUserDetails.getActiveOrganization());
+            
+            // In Spring Security 6.x, we need to explicitly save the context to the session
             SecurityContext newContext = SecurityContextHolder.createEmptyContext();
             newContext.setAuthentication(authentication);
             SecurityContextHolder.setContext(newContext);
+            
+            // Force save the security context to the session
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+            HttpSession session = request.getSession();
+            session.setAttribute("SPRING_SECURITY_CONTEXT", newContext);
+        } else {
+            log.warn("No organizations available for user");
         }
     }
 

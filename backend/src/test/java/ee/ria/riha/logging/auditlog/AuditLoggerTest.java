@@ -2,18 +2,21 @@ package ee.ria.riha.logging.auditlog;
 
 import ee.ria.riha.authentication.UserContext;
 import ee.ria.riha.domain.model.InfoSystem;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class AuditLoggerTest {
 
     @Mock
@@ -44,7 +47,7 @@ public class AuditLoggerTest {
     }
 
     @Test
-    public void withOrganization(){
+    public void withOrganization() {
         auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, new InfoSystem());
     }
 }

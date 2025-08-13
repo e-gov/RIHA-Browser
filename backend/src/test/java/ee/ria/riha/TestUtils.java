@@ -115,7 +115,7 @@ public class TestUtils {
                 ClientRegistration.withRegistrationId("tara")
                         .clientId("tara")
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                        .redirectUriTemplate("redirectUriTemplate")
+                        .redirectUri("redirectUriTemplate")
                         .authorizationUri("authorizationUri")
                         .tokenUri("tokenUri")
 

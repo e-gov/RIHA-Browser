@@ -11,13 +11,14 @@ import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
 import ee.ria.riha.domain.model.InfoSystemFileMetadata;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.io.IOException;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,11 +34,10 @@ import static org.mockito.Mockito.when;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class FileServiceTest {
 
-    @Rule
-    public CleanAuthentication cleanAuthentication;
     @Mock
     private InfoSystemRepository infoSystemRepository;
     @Mock
@@ -57,7 +58,7 @@ public class FileServiceTest {
 
     private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         TestUtils.setActiveOrganisation(authenticationToken, JaneAuthenticationTokenBuilder.ORGANIZATION_CODE);
@@ -99,19 +100,22 @@ public class FileServiceTest {
         verify(fileRepository).download(dataFileUuid, infoSystemUuid);
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void doesNotDownloadFilesNotInTheInfoSystemDescription() throws IOException {
-        fileService.download(infoSystem, UUID.fromString("8fa1fa68-266c-4cf3-8c51-446a3feb5b56"));
+        assertThrows(IllegalBrowserStateException.class, () ->
+                fileService.download(infoSystem, UUID.fromString("8fa1fa68-266c-4cf3-8c51-446a3feb5b56")));
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void doesNotAllowUnauthorizedUsersToDownloadRestrictedFiles() throws IOException {
-        SecurityContextHolder.clearContext();
+        assertThrows(IllegalBrowserStateException.class, () -> {
+            SecurityContextHolder.clearContext();
 
-        documentMetadata.setAccessRestricted(true);
-        setDocument(documentMetadata);
+            documentMetadata.setAccessRestricted(true);
+            setDocument(documentMetadata);
 
-        fileService.download(infoSystem, documentUuid);
+            fileService.download(infoSystem, documentUuid);
+        });
     }
 
     private void setDocument(InfoSystemFileMetadata document) {
@@ -138,24 +142,28 @@ public class FileServiceTest {
         return documentNode;
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void doesNotAllowSimpleAuthorizedUsersToDownloadRestrictedFiles() throws IOException {
-        TestUtils.setActiveOrganisation(authenticationToken, null);
+        assertThrows(IllegalBrowserStateException.class, () -> {
+            TestUtils.setActiveOrganisation(authenticationToken, null);
 
-        documentMetadata.setAccessRestricted(true);
-        setDocument(documentMetadata);
+            documentMetadata.setAccessRestricted(true);
+            setDocument(documentMetadata);
 
-        fileService.download(infoSystem, documentUuid);
+            fileService.download(infoSystem, documentUuid);
+        });
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void doesNotAllowNonOwnersToDownloadRestrictedFiles() throws IOException {
-        infoSystem.setOwnerCode("some-other-organization-code");
+        assertThrows(IllegalBrowserStateException.class, () -> {
+            infoSystem.setOwnerCode("some-other-organization-code");
 
-        documentMetadata.setAccessRestricted(true);
-        setDocument(documentMetadata);
+            documentMetadata.setAccessRestricted(true);
+            setDocument(documentMetadata);
 
-        fileService.download(infoSystem, documentUuid);
+            fileService.download(infoSystem, documentUuid);
+        });
     }
 
 }

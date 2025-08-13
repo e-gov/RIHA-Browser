@@ -2,7 +2,7 @@ package ee.ria.riha.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -138,13 +138,13 @@ public class JsonSecurityDetailsValidationService {
                 .max(Integer::compare)
                 .orElse(Integer.MIN_VALUE);
 
-        switch(securityLevel) {
-            case HIGH_SECURITY_LEVEL: return highestSecurityLevel == HIGH_SECURITY_LEVEL_CLASS_VALUE;
-            case MEDIUM_SECURITY_LEVEL: return highestSecurityLevel == MEDIUM_SECURITY_LEVEL_CLASS_VALUE;
-            case LOW_SECURITY_LEVEL: return highestSecurityLevel == LOW_SECURITY_LEVEL_CLASS_VALUE
+        return switch(securityLevel) {
+            case HIGH_SECURITY_LEVEL -> highestSecurityLevel == HIGH_SECURITY_LEVEL_CLASS_VALUE;
+            case MEDIUM_SECURITY_LEVEL -> highestSecurityLevel == MEDIUM_SECURITY_LEVEL_CLASS_VALUE;
+            case LOW_SECURITY_LEVEL -> highestSecurityLevel == LOW_SECURITY_LEVEL_CLASS_VALUE
                     || highestSecurityLevel == ALTERNATIVE_LOW_SECURITY_LEVEL_CLASS_VALUE;
-            default: return false;
-        }
+            default -> false;
+        };
     }
 
     private boolean isValidLatestAuditResolutionStatus(String latestAuditResolution) {

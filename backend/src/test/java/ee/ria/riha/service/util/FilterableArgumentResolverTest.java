@@ -1,7 +1,7 @@
 package ee.ria.riha.service.util;
 
 import com.sun.jdi.Method;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.ServletWebRequest;
