@@ -60,6 +60,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // Serve index.html for root and any unmatched paths (Angular routing fallback)
+        registry.addViewController("/").setViewName("forward:/index.html");
+        // Pattern excludes API paths (/api/v1/*) and files with extensions
+        registry.addViewController("/{path:(?!api).*}").setViewName("forward:/index.html");
+    }
+
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigins)
@@ -71,6 +79,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         configureFontCacheControl(registry);
         registry.addResourceHandler("/infosystem_schema.json").addResourceLocations("classpath:/infosystem_schema.json");
+        
+        // Serve Angular app static files
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/public/")
+                .setCachePeriod(0);
     }
 
     /**
