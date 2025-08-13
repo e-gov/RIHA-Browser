@@ -120,7 +120,7 @@ public class WebSecurityConfiguration {
                         .loginPage(applicationProperties.getBaseUrl())
                         .successHandler(successHandler())
                         .redirectionEndpoint(endpoint -> endpoint
-                                .baseUri(applicationProperties.getBaseUrl() + TARA_AUTH_ENDPOINT))
+                                .baseUri("/authenticate"))
                         .userInfoEndpoint(endpoint -> endpoint
                                 .oidcUserService(userRequest -> {
                                     RihaUserDetails rihaUserDetails;
