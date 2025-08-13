@@ -48,7 +48,7 @@
     <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO">
         <appender-ref ref="FILEJSON"/>
     </logger>
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="FILEJSON"/>
     </root>
 </configuration>

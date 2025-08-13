@@ -4,6 +4,7 @@ import ee.ria.riha.authentication.*;
 import ee.ria.riha.domain.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.web.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
@@ -18,6 +19,7 @@ import javax.naming.ldap.*;
 /**
  * @author Valentin Suhnjov
  */
+@Slf4j
 @Service
 public class UserService {
 
@@ -29,21 +31,31 @@ public class UserService {
      * @param organizationCode - organization code (registry number)
      */
     public void changeActiveOrganization(String organizationCode) {
+        log.info("UserService.changeActiveOrganization called with organizationCode: {}", organizationCode);
+        
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
+        log.info("Authentication in UserService: {}", authentication);
+        
         Assert.notNull(authentication, "authentication not found in security context");
 
         if (!(authentication.getPrincipal() instanceof RihaUserDetails)) {
+            log.error("Principal is not RihaUserDetails, but: {}", authentication.getPrincipal().getClass());
             throw new IllegalStateException("Organization change is not supported by current authentication");
         }
 
         RihaUserDetails rihaUserDetails = (RihaUserDetails) authentication.getPrincipal();
+        log.info("RihaUserDetails found, organizations available: {}", 
+            rihaUserDetails.getOrganizationsByCode() != null ? rihaUserDetails.getOrganizationsByCode().keySet() : "null");
 
         if (rihaUserDetails.getOrganizationsByCode() != null) {
             rihaUserDetails.setActiveOrganization(rihaUserDetails.getOrganizationsByCode().get(organizationCode));
+            log.info("Set active organization to: {}", rihaUserDetails.getActiveOrganization());
             SecurityContext newContext = SecurityContextHolder.createEmptyContext();
             newContext.setAuthentication(authentication);
             SecurityContextHolder.setContext(newContext);
+        } else {
+            log.warn("No organizations available for user");
         }
     }
 

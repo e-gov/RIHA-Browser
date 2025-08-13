@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,17 @@ public class UserController {
     private UserService userService;
 
     @PutMapping("/organization")
+    @PreAuthorize("hasRole('ROLE_RIHA_USER')")
     @Operation(summary = "Change active organization of the current user")
-    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+    public ResponseEntity<UserDetailsModel> changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
+        log.info("changeActiveOrganization called with organizationCode: {}", organizationCode);
+        log.info("Current authentication: {}", SecurityContextHolder.getContext().getAuthentication());
+        log.info("Current principal: {}", SecurityContextHolder.getContext().getAuthentication() != null ? 
+            SecurityContextHolder.getContext().getAuthentication().getPrincipal() : "null");
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            log.info("Current authorities: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        }
+        
         userService.changeActiveOrganization(organizationCode);
         return getUserDetails();
     }
