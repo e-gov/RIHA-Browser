@@ -6,7 +6,6 @@ import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.InfoSystemService;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,13 +27,10 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
  * @author Valentin Suhnjov
  */
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class InfoSystemAuthorizationServiceTest {
 
     private static final String ACME_ORG_CODE = "777";
-
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     private Authentication authenticationToken;
 

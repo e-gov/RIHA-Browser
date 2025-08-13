@@ -6,7 +6,6 @@ import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,16 +30,13 @@ import static org.mockito.Mockito.*;
  * @author Valentin Suhnjov
  */
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class IssueServiceApprovalDecisionTest {
 
     private static final Long EXISTING_ISSUE_ID = 15503L;
 
     private static final String ACME_REG_CODE = "555010203";
     private static final String EVS_REG_CODE = "70001234";
-
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     @Mock
     private IssueEventService issueEventService;

@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.TestUtils;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.rules.CleanAuthentication;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Valentin Suhnjov
  */
+@ExtendWith(CleanAuthentication.class)
 public class SecurityContextUtilTest {
 
     private static final String ACME_REG_CODE = "555010203";
     private static final String RIA_REG_CODE = "70006317";
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
+    
     ImmutableMultimap<RihaOrganization, GrantedAuthority> organizations = ImmutableMultimap.of(
                             new RihaOrganization(ACME_REG_CODE, "Acme org"),
                             new SimpleGrantedAuthority(PRODUCER.getRole()),

@@ -10,7 +10,6 @@ import ee.ria.riha.domain.model.IssueType;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
 import ee.ria.riha.web.model.InfoSystemModel;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.when;
  * @author Valentin Suhnjov
  */
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class InfoSystemModelMapperTest {
 
     private static final String CONTACTS_KEY = "contacts";
@@ -62,9 +61,6 @@ public class InfoSystemModelMapperTest {
             """;
 
     private InfoSystem mappedInfoSystem;
-
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     @Mock
     private InfoSystemAuthorizationService infoSystemAuthorizationService;

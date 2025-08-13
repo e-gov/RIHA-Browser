@@ -6,7 +6,6 @@ import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.util.FilterRequest;
 import org.assertj.core.util.Lists;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +26,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class InfoSystemServiceTest {
 
     private static final String EXISTING_INFO_SYSTEM_SHORT_NAME = "sys1";
-
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     @Mock
     private InfoSystemRepository infoSystemRepository;

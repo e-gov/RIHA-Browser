@@ -6,7 +6,6 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +35,7 @@ import static org.mockito.Mockito.*;
  * @author Valentin Suhnjov
  */
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class IssueServiceTest {
 
     private static final String EXISTING_INFO_SYSTEM_SHORT_NAME = "is1";
@@ -46,9 +45,6 @@ public class IssueServiceTest {
     private static final String EVS_REG_CODE = "70001234";
     private static final String RIA_REG_CODE = "70006317";
     private static final UUID EXISTING_INFO_SYSTEM_UUID = UUID.fromString("01234567-0123-0123-0123-0123456789ab");
-
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
 
     private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 

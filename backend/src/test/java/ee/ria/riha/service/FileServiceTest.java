@@ -11,7 +11,6 @@ import ee.ria.riha.domain.model.InfoSystemDocumentMetadata;
 import ee.ria.riha.domain.model.InfoSystemFileMetadata;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,11 +35,9 @@ import static org.mockito.Mockito.when;
  * @author Valentin Suhnjov
  */
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class FileServiceTest {
 
-    @Rule
-    public CleanAuthentication cleanAuthentication;
     @Mock
     private InfoSystemRepository infoSystemRepository;
     @Mock

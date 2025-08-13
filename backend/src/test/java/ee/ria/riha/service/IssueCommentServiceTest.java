@@ -5,7 +5,6 @@ import ee.ria.riha.domain.CommentRepository;
 import ee.ria.riha.domain.model.Comment;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueCommentModel;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,17 +32,13 @@ import static org.mockito.Mockito.when;
  * @author Valentin Suhnjov
  */
 @MockitoSettings(strictness = Strictness.WARN)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class IssueCommentServiceTest {
 
     private static final long EXISTING_ISSUE_ID = 15503L;
     private static final Long CREATED_COMMENT_ENTITY_ID = 42L;
 
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
-
     private final Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
-
 
     @Mock
     private CommentRepository commentRepository;
