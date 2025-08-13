@@ -2,7 +2,6 @@ package ee.ria.riha.conf;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.*;
-import com.github.fge.jackson.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.*;
 import io.swagger.v3.oas.models.*;
@@ -84,8 +83,13 @@ public class ApplicationConfiguration {
 
     @Bean
     public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties) throws IOException {
-        return new JsonValidationService(
-                JsonLoader.fromResource(applicationProperties.getValidation().getJsonSchemaUrl()));
+        ObjectMapper mapper = new ObjectMapper();
+        try (var inputStream = getClass().getResourceAsStream(applicationProperties.getValidation().getJsonSchemaUrl())) {
+            if (inputStream == null) {
+                throw new IOException("Schema resource not found: " + applicationProperties.getValidation().getJsonSchemaUrl());
+            }
+            return new JsonValidationService(mapper.readTree(inputStream));
+        }
     }
 
     @Bean
