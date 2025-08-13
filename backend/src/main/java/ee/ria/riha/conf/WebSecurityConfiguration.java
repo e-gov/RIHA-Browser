@@ -55,7 +55,7 @@ import org.springframework.web.util.UriUtils;
 @Configuration
 @Profile("!dev")
 //@EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurityConfiguration {
 
