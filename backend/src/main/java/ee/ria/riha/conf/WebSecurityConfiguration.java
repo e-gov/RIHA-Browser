@@ -39,6 +39,8 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCo
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -107,8 +109,11 @@ public class WebSecurityConfiguration {
         }
 
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository()))
                 .cors(cors -> cors.disable())
+                .sessionManagement(session -> session
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false))
                 .authorizeHttpRequests(requests -> requests
                         .anyRequest().permitAll())
                 .logout(logout -> logout
@@ -149,6 +154,14 @@ public class WebSecurityConfiguration {
                         .tokenEndpoint(endpoint -> endpoint
                                 .accessTokenResponseClient(accessTokenResponseClient())));
         return http.build();
+    }
+
+    private CsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
+        cookieCsrfTokenRepository.setCookieCustomizer(cookie -> cookie
+                .httpOnly(false)
+                .path("/"));
+        return cookieCsrfTokenRepository;
     }
 
 	protected AuthenticationSuccessHandler successHandler() {
