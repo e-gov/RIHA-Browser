@@ -9,7 +9,7 @@ import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {UiSwitchModule} from 'ngx-ui-switch';
-import {CustomFormsModule} from 'ngx-custom-validators';
+import {NarikCustomValidatorsModule} from '@narik/custom-validators';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import missingTranslationHandler from './app.missingTranslation';
@@ -208,7 +208,7 @@ const routes: Routes = [
     HttpClientModule,
     TagInputModule,
     BrowserAnimationsModule,
-    CustomFormsModule,
+    NarikCustomValidatorsModule,
     RouterModule.forRoot(routes, {}),
     UiSwitchModule,
     ToastrModule.forRoot(),

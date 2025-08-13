@@ -164,7 +164,6 @@
       }
     }
   },
-  "defaultProject": "riha",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
