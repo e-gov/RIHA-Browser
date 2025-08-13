@@ -1,25 +1,19 @@
 package ee.ria.riha.authentication;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.runners.Parameterized.Parameter;
-import org.mockito.internal.matchers.Or;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-@RunWith(Parameterized.class)
 public class OrganizationRoleMappingExtractorTest {
 
-    @Parameters(name = "{index}: extract({0}), expectedOrganizationRoleMapping = {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {"12345-hindaja", createExpectedOrganizationRoleMapping("12345", "ROLE_HINDAJA")},
@@ -37,10 +31,7 @@ public class OrganizationRoleMappingExtractorTest {
 
     private static final String DISPLAY_NAME = "Display name is unnecessary in testing purposes";
     private OrganizationRoleMappingExtractor organizationRoleMappingExtractor = new OrganizationRoleMappingExtractor();
-
-    @Parameter
     public String commonNameInput;
-    @Parameter(1)
     public OrganizationRoleMapping expectedOrganizationRoleMapping;
 
     private static OrganizationRoleMapping createExpectedOrganizationRoleMapping(String expectedCode, String expectedRole) {
@@ -53,9 +44,16 @@ public class OrganizationRoleMappingExtractorTest {
         return expectedOrganizationRoleMapping;
     }
 
-    @Test
-    public void test() {
+    @MethodSource("data")
+    @ParameterizedTest(name = "{index}: extract({0}), expectedOrganizationRoleMapping = {1}")
+    public void test(String commonNameInput, OrganizationRoleMapping expectedOrganizationRoleMapping) {
+        initOrganizationRoleMappingExtractorTest(commonNameInput, expectedOrganizationRoleMapping);
         OrganizationRoleMapping organizationRoleMapping = organizationRoleMappingExtractor.extract(commonNameInput, DISPLAY_NAME);
         assertThat(organizationRoleMapping, equalTo(expectedOrganizationRoleMapping));
+    }
+
+    public void initOrganizationRoleMappingExtractorTest(String commonNameInput, OrganizationRoleMapping expectedOrganizationRoleMapping) {
+        this.commonNameInput = commonNameInput;
+        this.expectedOrganizationRoleMapping = expectedOrganizationRoleMapping;
     }
 }

@@ -8,8 +8,8 @@ import ee.ria.riha.service.util.Filterable;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
 import ee.ria.riha.web.model.IssueCommentModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +25,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 @RestController
 @RequestMapping(API_V1_PREFIX + "/issues")
 @PreAuthorize("hasRole('ROLE_RIHA_USER')")
-@Api("Issue events")
+@Tag(name = "Issue events")
 public class IssueCommentController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class IssueCommentController {
      */
     @GetMapping("/{issueId}/comments")
     @PreAuthorizeIssueOwnerOrReviewer
-    @ApiOperation("List all issue comments")
+    @Operation(summary = "List all issue comments")
     @ApiPageableAndFilterableParams
     public ResponseEntity<PagedResponse<IssueComment>> listIssueComments(@PathVariable("issueId") Long issueId,
                                                                          Pageable pageable, Filterable filterable) {
@@ -57,7 +57,7 @@ public class IssueCommentController {
      */
     @GetMapping("/{issueId}/comments/{commentId}")
     @PreAuthorizeIssueOwnerOrReviewer
-    @ApiOperation("Get single issue comment")
+    @Operation(summary = "Get single issue comment")
     public ResponseEntity<IssueComment> getIssueComment(@PathVariable("issueId") Long issueId,
                                                         @PathVariable("commentId") Long commentId) {
         return ResponseEntity.ok(issueEventService.getIssueCommentById(commentId));
@@ -72,7 +72,7 @@ public class IssueCommentController {
      */
     @PostMapping("/{issueId}/comments")
     @PreAuthorizeIssueOwnerOrReviewer
-    @ApiOperation("Create new issue comment")
+    @Operation(summary = "Create new issue comment")
     public ResponseEntity<IssueComment> createIssueComment(@PathVariable("issueId") Long issueId,
                                                            @RequestBody IssueCommentModel model) {
         return ResponseEntity.ok(issueEventService.createIssueComment(issueId, model));

@@ -5,8 +5,8 @@ import ee.ria.riha.conf.ApplicationProperties;
 import ee.ria.riha.domain.model.SystemFeedbackModel;
 import ee.ria.riha.service.SystemFeedbackService;
 import ee.ria.riha.web.model.SystemFeedbackRequest;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 
 @RestController
 @RequestMapping(API_V1_PREFIX + "/system-feedback")
-@Api("Feedback")
+@Tag(name = "Feedback")
 @RequiredArgsConstructor
 @Slf4j
 public class SystemFeedbackController {
@@ -41,7 +41,7 @@ public class SystemFeedbackController {
     private final RestTemplate restTemplate;
 
     @PostMapping
-    @ApiOperation("Save user feedback")
+    @Operation(summary = "Save user feedback")
     public ResponseEntity<Void> leaveFeedback(@RequestBody @Valid SystemFeedbackRequest systemFeedback, HttpServletRequest request) {
 
         if (applicationProperties.getFeedbackRecaptcha().isEnabled()) {

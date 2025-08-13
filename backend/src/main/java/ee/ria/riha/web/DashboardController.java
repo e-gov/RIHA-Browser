@@ -6,7 +6,7 @@ import ee.ria.riha.service.util.CompositeFilterRequest;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
 import ee.ria.riha.web.model.DashboardIssue;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +24,7 @@ public class DashboardController {
 
     @GetMapping("/issues/my")
     @PreAuthorize("hasRole('ROLE_RIHA_USER')")
-    @ApiOperation("List issues related to current user")
+    @Operation(summary = "List issues related to current user")
     @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<DashboardIssue>> listUserRelatedIssues(Pageable pageable,
                                                                                CompositeFilterRequest filterRequest) {
@@ -33,7 +33,7 @@ public class DashboardController {
 
     @GetMapping("/issues/org")
     @PreAuthorize("hasRole('ROLE_RIHA_USER')")
-    @ApiOperation("List issues related to current user organization")
+    @Operation(summary = "List issues related to current user organization")
     @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<DashboardIssue>> listUserActiveOrganizationRelatedIssues(Pageable pageable,
                                                                                                  CompositeFilterRequest filterRequest) {

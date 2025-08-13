@@ -4,8 +4,8 @@ import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.service.UserService;
 import ee.ria.riha.service.util.*;
 import ee.ria.riha.web.model.UserDetailsModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 
 @RestController
 @RequestMapping(API_V1_PREFIX + "/my/organization")
-@Api("Organization")
+@Tag(name = "Organization")
 @Slf4j
 public class OrganizationController {
 
@@ -48,7 +48,7 @@ public class OrganizationController {
 
 	@GetMapping("/users")
 	@PreAuthorize("hasRole('ROLE_RIHA_USER')")
-	@ApiOperation("List users of given organization")
+	@Operation(summary = "List users of given organization")
 	@ApiPageableAndCompositeRequestParams
 	public ResponseEntity<PagedResponse<UserDetailsModel>> listOrganizationUsers(HttpServletRequest request, Pageable pageable, CompositeFilterRequest filterRequest) {
 		if (!(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof RihaUserDetails)) {

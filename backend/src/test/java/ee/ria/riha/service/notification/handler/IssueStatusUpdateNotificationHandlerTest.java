@@ -6,14 +6,16 @@ import ee.ria.riha.service.notification.model.IssueStatusUpdateNotification;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.context.MessageSource;
 
 import java.io.IOException;
@@ -22,14 +24,14 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class IssueStatusUpdateNotificationHandlerTest {
 
     @Mock
@@ -44,7 +46,7 @@ public class IssueStatusUpdateNotificationHandlerTest {
     @InjectMocks
     private IssueStatusUpdateNotificationHandler notificationHandler;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         when(messageSource.getMessage(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(Locale.class)))
                 .thenReturn("mock subject");

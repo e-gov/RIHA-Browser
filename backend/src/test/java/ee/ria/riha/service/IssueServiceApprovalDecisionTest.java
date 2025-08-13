@@ -6,20 +6,23 @@ import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueCommentModel;
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -27,7 +30,8 @@ import static org.mockito.Mockito.*;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class IssueServiceApprovalDecisionTest {
 
     private static final Long EXISTING_ISSUE_ID = 15503L;
@@ -58,7 +62,7 @@ public class IssueServiceApprovalDecisionTest {
 
     private Authentication authenticationToken = TestUtils.getOAuth2LoginToken(null, null);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Reset authorization
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -98,26 +102,30 @@ public class IssueServiceApprovalDecisionTest {
         TestUtils.setActiveOrganisation(authenticationToken, EVS_REG_CODE);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void throwsExceptionWhenProducerTriesToMakeDecision() {
-        setProducerRole();
+        assertThrows(ValidationException.class, () -> {
+            setProducerRole();
 
-        issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
-                .decisionType(IssueResolutionType.DISMISSED)
-                .build());
+            issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
+                    .decisionType(IssueResolutionType.DISMISSED)
+                    .build());
+        });
     }
 
     private void setProducerRole() {
         TestUtils.setActiveOrganisation(authenticationToken, ACME_REG_CODE);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void throwsExceptionWhenUserWithoutRightsTriesToMakeDecision() {
-        setAuthenticatedUserRole();
+        assertThrows(ValidationException.class, () -> {
+            setAuthenticatedUserRole();
 
-        issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
-                .decisionType(IssueResolutionType.DISMISSED)
-                .build());
+            issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
+                    .decisionType(IssueResolutionType.DISMISSED)
+                    .build());
+        });
     }
 
     private void setAuthenticatedUserRole() {
@@ -139,25 +147,29 @@ public class IssueServiceApprovalDecisionTest {
                 any(IssueCommentModel.class));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void throwsExceptionForNonFeedbackRequestIssue() {
-        setApproverRole();
+        assertThrows(ValidationException.class, () -> {
+            setApproverRole();
 
-        existingIssue.setType(null);
+            existingIssue.setType(null);
 
-        issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
-                .comment("should not happen")
-                .decisionType(IssueResolutionType.POSITIVE)
-                .build());
+            issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
+                    .comment("should not happen")
+                    .decisionType(IssueResolutionType.POSITIVE)
+                    .build());
+        });
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void throwsExceptionWhenDecisionWasNotProvided() {
-        setApproverRole();
+        assertThrows(ValidationException.class, () -> {
+            setApproverRole();
 
-        issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
-                .comment("decision must be provided")
-                .build());
+            issueService.makeApprovalDecision(existingIssue, IssueApprovalDecisionModel.builder()
+                    .comment("decision must be provided")
+                    .build());
+        });
     }
 
 }

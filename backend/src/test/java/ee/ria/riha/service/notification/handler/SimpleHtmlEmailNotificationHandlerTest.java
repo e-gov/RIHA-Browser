@@ -2,26 +2,30 @@ package ee.ria.riha.service.notification.handler;
 
 import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
 import ee.ria.riha.service.notification.model.SimpleHtmlEmailNotification;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class SimpleHtmlEmailNotificationHandlerTest {
 
     @Mock
@@ -32,7 +36,7 @@ public class SimpleHtmlEmailNotificationHandlerTest {
 
     private SimpleHtmlEmailNotification notification = new SimpleHtmlEmailNotification();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         notification.setFrom("sender@example.com");
         notification.setTo("recipient@example.com");
@@ -45,7 +49,7 @@ public class SimpleHtmlEmailNotificationHandlerTest {
         handler.createMessagePreparator(notification).prepare(mimeMessage);
 
         verify(mimeMessage).setFrom(new InternetAddress("sender@example.com"));
-        verify(mimeMessage).setRecipient(Message.RecipientType.TO,new InternetAddress("recipient@example.com"));
+        verify(mimeMessage).setRecipient(Message.RecipientType.TO, new InternetAddress("recipient@example.com"));
         verify(mimeMessage).setRecipients(Message.RecipientType.CC,
                 InternetAddress.parse("cc@example.com"));
         verify(mimeMessage).setRecipients(Message.RecipientType.BCC,
@@ -66,25 +70,31 @@ public class SimpleHtmlEmailNotificationHandlerTest {
         verify(mimeMessage).setContent(ArgumentMatchers.eq("testable text"), ArgumentMatchers.eq("text/html"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void throwsExceptionWhenFromAddressIsNull() throws Exception {
-        notification.setFrom(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            notification.setFrom(null);
 
-        handler.createMessagePreparator(notification).prepare(mimeMessage);
+            handler.createMessagePreparator(notification).prepare(mimeMessage);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void throwsExceptionWhenToAddressIsNull() throws Exception {
-        notification.setTo(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            notification.setTo(null);
 
-        handler.createMessagePreparator(notification).prepare(mimeMessage);
+            handler.createMessagePreparator(notification).prepare(mimeMessage);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void throwsExceptionWhenToAddressIsEmpty() throws Exception {
-        notification.setTo(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            notification.setTo(null);
 
-        handler.createMessagePreparator(notification).prepare(mimeMessage);
+            handler.createMessagePreparator(notification).prepare(mimeMessage);
+        });
     }
 
     @Test

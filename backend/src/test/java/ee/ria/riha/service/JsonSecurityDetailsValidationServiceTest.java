@@ -3,25 +3,28 @@ package ee.ria.riha.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.context.MessageSource;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
-import static org.junit.Assert.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class JsonSecurityDetailsValidationServiceTest {
 
     private static final String DEFAULT_VALIDATION_ERROR_MESSAGE = "securityDetailsValidationError";
@@ -43,7 +46,7 @@ public class JsonSecurityDetailsValidationServiceTest {
     @InjectMocks
     private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(messageSource.getMessage(any(String.class), any(), any(Locale.class))).thenReturn(DEFAULT_VALIDATION_ERROR_MESSAGE);
     }

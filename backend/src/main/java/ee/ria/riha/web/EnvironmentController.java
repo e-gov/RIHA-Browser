@@ -3,12 +3,14 @@ package ee.ria.riha.web;
 import ee.ria.riha.conf.*;
 import ee.ria.riha.service.*;
 import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.*;
 
@@ -17,7 +19,7 @@ import static ee.ria.riha.conf.ApplicationProperties.*;
  */
 @RestController
 @RequestMapping(API_V1_PREFIX + "/environment")
-@Api("Environment configuration")
+@Tag(name = "Environment configuration")
 public class EnvironmentController {
 
     @Autowired
@@ -30,7 +32,7 @@ public class EnvironmentController {
     private ApplicationProperties applicationProperties;
 
     @GetMapping
-    @ApiOperation("Retrieve environment")
+    @Operation(summary = "Retrieve environment")
     public ResponseEntity environment(HttpSession session) {
         Map<String, Object> environment = new HashMap<>();
         environment.put("userDetails", userController.createUserDetailsModel().orElse(null));
@@ -48,7 +50,7 @@ public class EnvironmentController {
     }
 
     @GetMapping("/classifiers")
-    @ApiOperation("Load classifiers")
+    @Operation(summary = "Load classifiers")
     public ResponseEntity classifiers() {
         return ResponseEntity.ok(environmentService.getClassifiers());
     }
@@ -58,7 +60,7 @@ public class EnvironmentController {
      */
     @Deprecated
     @PutMapping("/organization")
-    @ApiOperation("Change active organization of the current user")
+    @Operation(summary = "Change active organization of the current user")
     public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode, HttpSession session) {
         environmentService.changeActiveOrganization(organizationCode);
         return environment(session);

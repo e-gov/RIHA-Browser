@@ -1,6 +1,6 @@
 package ee.ria.riha.authentication;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -11,6 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Valentin Suhnjov
@@ -27,19 +28,25 @@ public class RihaUserDetailsTest {
 
     private final User WRAPPED_USER_DETAILS = new User(USERNAME, PASSWORD, WRAPPED_ROLES);
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void failsWhenDelegateIsNull() {
-        new RihaUserDetails(null, "123");
+        assertThrows(IllegalArgumentException.class, () -> {
+            new RihaUserDetails(null, "123");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void failsWhenPersonalCodeIsNull() {
-        new RihaUserDetails(WRAPPED_USER_DETAILS, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            new RihaUserDetails(WRAPPED_USER_DETAILS, null);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void failsWhenPersonalCodeIsEmpty() {
-        new RihaUserDetails(WRAPPED_USER_DETAILS, "");
+        assertThrows(IllegalArgumentException.class, () -> {
+            new RihaUserDetails(WRAPPED_USER_DETAILS, "");
+        });
     }
 
     @Test

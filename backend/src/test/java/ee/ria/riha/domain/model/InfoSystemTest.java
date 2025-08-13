@@ -4,21 +4,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 public class InfoSystemTest {
 
     private InfoSystem validInfoSystem = new InfoSystem();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validInfoSystem.setId(123L);
         validInfoSystem.setUuid(UUID.fromString("53524f32-b732-4ce6-99a8-448d931d870d"));

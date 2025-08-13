@@ -17,21 +17,21 @@ import ee.ria.riha.web.model.InfoSystemDataObjectModel;
 import ee.ria.riha.web.model.InfoSystemModel;
 import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.StandardRealisationCreationModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
@@ -42,7 +42,7 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping(API_V1_PREFIX + "/systems")
 
-@Api("Information systems")
+@Tag(name = "Information systems")
 public class InfoSystemController {
 
     @Autowired
@@ -68,7 +68,7 @@ public class InfoSystemController {
     private final AuditLogger auditLogger;
 
     @GetMapping
-    @ApiOperation("List all existing information systems")
+    @Operation(summary = "List all existing information systems")
     @ApiPageableAndFilterableParams
     public ResponseEntity<PagedResponse<InfoSystemModel>> list(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(
@@ -77,7 +77,7 @@ public class InfoSystemController {
                         infoSystemModelMapper));
     }
     @GetMapping("/autocomplete")
-    @ApiOperation("List all existing information systems for autocomplete")
+    @Operation(summary = "List all existing information systems for autocomplete")
     public ResponseEntity<PagedResponse<InfoSystemModel>> autocomplete(@RequestParam("searchTerm") String searchTerm) {
 
         String paramToRestEndpoint;
@@ -136,7 +136,7 @@ public class InfoSystemController {
     }
 
     @GetMapping(path = "/data-objects")
-    @ApiOperation("List all existing information systems data objects")
+    @Operation(summary = "List all existing information systems data objects")
     @ApiPageableAndFilterableParams
     public ResponseEntity<PagedResponse<InfoSystemDataObjectModel>> listDataObjects(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(
@@ -154,7 +154,7 @@ public class InfoSystemController {
     }
 
     @PostMapping
-    @ApiOperation("Create new information system")
+    @Operation(summary = "Create new information system")
     @PrincipalHasRoleProducer
     public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model, HttpServletRequest request) {
         InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
@@ -163,7 +163,7 @@ public class InfoSystemController {
     }
 
     @GetMapping("/{reference}")
-    @ApiOperation("Get existing information system")
+    @Operation(summary = "Get existing information system")
     public ResponseEntity<InfoSystemModel> get(@PathVariable("reference") String reference) {
         InfoSystem infoSystem = infoSystemService.get(reference);
         return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
@@ -171,7 +171,7 @@ public class InfoSystemController {
 
     @PutMapping("/{reference}")
     @PreAuthorizeInfoSystemOwner
-    @ApiOperation("Update existing information system")
+    @Operation(summary = "Update existing information system")
     public ResponseEntity<InfoSystemModel> update(@PathVariable("reference") String reference,
                                                   @RequestBody InfoSystemModel model, HttpServletRequest request) {
         InfoSystem infoSystem = infoSystemService.update(reference, new InfoSystem(model.getJson()));
@@ -180,7 +180,7 @@ public class InfoSystemController {
     }
 
     @PostMapping("/{reference}/create-standard-realisation-system")
-    @ApiOperation("Create new realisation for standard information system")
+    @Operation(summary = "Create new realisation for standard information system")
     @PrincipalHasRoleProducer
     public ResponseEntity<InfoSystemModel> createStandardInformationSystem(@PathVariable("reference") String reference,
                                                                            @RequestBody StandardRealisationCreationModel standardRealisationCreationModel) {

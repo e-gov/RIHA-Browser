@@ -54,7 +54,6 @@ public class CreatedInfoSystemsOverviewNotificationJob {
 
     private final HazelcastInstance hazelcastInstance;
 
-    @Autowired
     public CreatedInfoSystemsOverviewNotificationJob(ApplicationProperties applicationProperties,
                                                      @Qualifier("riha") HazelcastInstance hazelcastInstance) {
         baseUrl = applicationProperties.getBaseUrl();

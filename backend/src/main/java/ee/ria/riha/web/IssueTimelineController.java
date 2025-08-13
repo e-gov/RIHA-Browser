@@ -6,8 +6,8 @@ import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
 import ee.ria.riha.service.util.ApiPageableParams;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +26,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 @Controller
 @RequestMapping(API_V1_PREFIX + "/issues")
 @PreAuthorize("hasRole('ROLE_RIHA_USER')")
-@Api("Issue timeline")
+@Tag(name = "Issue timeline")
 public class IssueTimelineController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class IssueTimelineController {
      */
     @GetMapping("/{issueId}/timeline")
     @PreAuthorizeIssueOwnerOrReviewer
-    @ApiOperation("Get issue timeline")
+    @Operation(summary = "Get issue timeline")
     @ApiPageableParams
     public ResponseEntity<PagedResponse<IssueEntity>> getTimeline(@PathVariable("issueId") Long issueId,
                                                                   Pageable pageable) {

@@ -10,8 +10,8 @@ import ee.ria.riha.web.model.DashboardIssue;
 import ee.ria.riha.web.model.IssueApprovalDecisionModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
 import ee.ria.riha.web.model.IssueSummaryModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toList;
  * Info system issues
  */
 @RestController
-@Api("Issues")
+@Tag(name = "Issues")
 public class IssueController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class IssueController {
      * @return paginated list of info system issues
      */
     @GetMapping(API_V1_PREFIX + "/systems/{reference}/issues")
-    @ApiOperation("List all issues of information system")
+    @Operation(summary = "List all issues of information system")
     @ApiPageableAndFilterableParams
     public ResponseEntity<PagedResponse<IssueSummaryModel>> listInfoSystemIssues(
             @PathVariable("reference") String reference,
@@ -76,7 +76,7 @@ public class IssueController {
      * @return paginated and filtered list of all RIHA issues
      */
     @GetMapping(API_V1_PREFIX + "/issues")
-    @ApiOperation("List all RIHA issues")
+    @Operation(summary = "List all RIHA issues")
     @ApiPageableAndFilterableParams
     public ResponseEntity<PagedResponse<RihaIssueSummary>> listIssues(Pageable pageable, Filterable filterable) {
         return ResponseEntity.ok(issueService.listIssues(pageable, filterable));
@@ -91,7 +91,7 @@ public class IssueController {
      * @return paginated and filtered list of all RIHA issues
      */
     @GetMapping(API_V1_PREFIX + "/organizations/{organizationCode}/systems/issues")
-    @ApiOperation("List issues that belong to specific organization")
+    @Operation(summary = "List issues that belong to specific organization")
     @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<DashboardIssue>> listOrganizationSystemsIssues(
             @PathVariable("organizationCode") String organizationCode, Pageable pageable,
@@ -109,7 +109,7 @@ public class IssueController {
      */
     @PostMapping(API_V1_PREFIX + "/systems/{reference}/issues")
     @PreAuthorizeInfoSystemOwnerOrReviewer
-    @ApiOperation("Create new issue for information system")
+    @Operation(summary = "Create new issue for information system")
     public ResponseEntity<Issue> createInfoSystemIssue(@PathVariable("reference") String reference,
                                                        @RequestBody Issue model) {
         return ResponseEntity.ok(issueService.createInfoSystemIssue(reference, model));
@@ -122,7 +122,7 @@ public class IssueController {
      * @return issue or null
      */
     @GetMapping(API_V1_PREFIX + "/issues/{issueId}")
-    @ApiOperation("Get single information system issue")
+    @Operation(summary = "Get single information system issue")
     public ResponseEntity getInfoSystemIssue(@PathVariable("issueId") Long issueId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (principalRoleCheckerService.hasRole("ROLE_HINDAJA") || principalRoleCheckerService.hasRole("ROLE_KIRJELDAJA") && issueAuthorizationService.isIssueOwner(issueId)) {
@@ -144,7 +144,7 @@ public class IssueController {
      */
     @PutMapping(API_V1_PREFIX + "/issues/{issueId}")
     @PreAuthorizeIssueOwnerOrReviewer
-    @ApiOperation("Update issue")
+    @Operation(summary = "Update issue")
     public ResponseEntity<Issue> updateStatus(@PathVariable("issueId") Long issueId,
                                               @RequestBody IssueStatusUpdateModel model) {
         return ResponseEntity.ok(issueService.updateIssueStatus(issueId, model));
@@ -158,7 +158,7 @@ public class IssueController {
      */
     @PostMapping(API_V1_PREFIX + "/issues/{issueId}/decisions")
     @PrincipalHasRoleReviewer
-    @ApiOperation("Leave decision")
+    @Operation(summary = "Leave decision")
     public void makeApprovalDecision(@PathVariable("issueId") Long issueId,
                                      @RequestBody IssueApprovalDecisionModel model) {
         issueService.makeApprovalDecision(issueId, model);

@@ -6,13 +6,15 @@ import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.util.FilterRequest;
 import org.assertj.core.util.Lists;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -20,10 +22,12 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class InfoSystemServiceTest {
 
     private static final String EXISTING_INFO_SYSTEM_SHORT_NAME = "sys1";
@@ -43,7 +47,7 @@ public class InfoSystemServiceTest {
     private final InfoSystem existingInfoSystem = new InfoSystem();
     private final List<InfoSystem> foundInfoSystems = Lists.newArrayList();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         SecurityContextHolder.getContext().setAuthentication(TestUtils.getOAuth2LoginToken(null, JaneAuthenticationTokenBuilder.ORGANIZATION_CODE));
 
@@ -59,14 +63,16 @@ public class InfoSystemServiceTest {
                 .thenAnswer((Answer<InfoSystem>) invocation -> invocation.getArgument(0));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void creatingInfoSystemMustFailIfSuggestedShortNameIsAlreadyInUse() {
-        InfoSystem createdInfoSystem = existingInfoSystem.copy();
+        assertThrows(ValidationException.class, () -> {
+            InfoSystem createdInfoSystem = existingInfoSystem.copy();
 
-        // When at least one info system with updated short name is found, test should fail
-        foundInfoSystems.add(createdInfoSystem);
+            // When at least one info system with updated short name is found, test should fail
+            foundInfoSystems.add(createdInfoSystem);
 
-        infoSystemService.create(createdInfoSystem);
+            infoSystemService.create(createdInfoSystem);
+        });
     }
 
     @Test
@@ -99,15 +105,17 @@ public class InfoSystemServiceTest {
         verify(infoSystemRepository).add(any(InfoSystem.class));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void updatingInfoSystemMustFailIfUpdatedShortNameIsAlreadyInUse() {
-        InfoSystem updatedInfoSystem = existingInfoSystem.copy();
-        updatedInfoSystem.setShortName("new-short-name");
+        assertThrows(ValidationException.class, () -> {
+            InfoSystem updatedInfoSystem = existingInfoSystem.copy();
+            updatedInfoSystem.setShortName("new-short-name");
 
-        // When at least one info system with updated short name is found, test should fail
-        foundInfoSystems.add(updatedInfoSystem);
+            // When at least one info system with updated short name is found, test should fail
+            foundInfoSystems.add(updatedInfoSystem);
 
-        infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
+            infoSystemService.update(EXISTING_INFO_SYSTEM_SHORT_NAME, updatedInfoSystem);
+        });
     }
 
     @Test

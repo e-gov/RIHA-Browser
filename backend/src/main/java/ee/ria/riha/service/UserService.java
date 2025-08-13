@@ -12,7 +12,7 @@ import org.springframework.util.*;
 
 import java.util.*;
 import java.util.stream.*;
-import javax.mail.internet.*;
+import jakarta.mail.internet.*;
 import javax.naming.ldap.*;
 
 /**

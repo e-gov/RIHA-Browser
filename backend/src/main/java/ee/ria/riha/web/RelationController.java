@@ -7,8 +7,8 @@ import ee.ria.riha.service.auth.PreAuthorizeInfoSystemOwner;
 import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.RelationResponseSummaryModel;
 import ee.ria.riha.web.model.RelationSummaryModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
  */
 @RestController
 @RequestMapping(API_V1_PREFIX + "/systems")
-@Api("Information system relations")
+@Tag(name = "Information system relations")
 public class RelationController {
 
     private static final Function<Relation, RelationSummaryModel> RELATION_TO_RELATION_SUMMARY_MODEL = relation -> {
@@ -69,7 +69,7 @@ public class RelationController {
     }
 
     @GetMapping("/{reference}/relations")
-    @ApiOperation("List all info system relations")
+    @Operation(summary = "List all info system relations")
     public ResponseEntity<List<RelationResponseSummaryModel>> list(@PathVariable("reference") String reference) {
         List<RelationResponse> relations = relationService.listRelations(reference);
         return ResponseEntity.ok(createModel(relations));
@@ -83,7 +83,7 @@ public class RelationController {
 
     @PostMapping("/{reference}/relations")
     @PreAuthorizeInfoSystemOwner
-    @ApiOperation("Create new relation for information system")
+    @Operation(summary = "Create new relation for information system")
     public ResponseEntity<RelationSummaryModel> add(@PathVariable("reference") String reference,
                                                     @RequestBody RelationModel relationModel) {
         Relation createdRelation = relationService.createRelation(reference, relationModel);
@@ -92,7 +92,7 @@ public class RelationController {
 
     @DeleteMapping("/{reference}/relations/{relationId}")
     @PreAuthorizeInfoSystemOwner
-    @ApiOperation("Deletes single relation of information system")
+    @Operation(summary = "Deletes single relation of information system")
     public void delete(@PathVariable("reference") String reference, @PathVariable("relationId") Long relationId) {
         relationService.delete(reference, relationId);
     }

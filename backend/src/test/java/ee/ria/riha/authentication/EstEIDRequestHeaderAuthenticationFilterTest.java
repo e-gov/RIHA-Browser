@@ -1,10 +1,12 @@
 package ee.ria.riha.authentication;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
@@ -13,7 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 
@@ -21,12 +23,14 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.util.StringUtils.hasText;
 
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class EstEIDRequestHeaderAuthenticationFilterTest {
 
     private static final String MARY_ANN_SERIAL_NUMBER = "11412090004";
@@ -83,14 +87,16 @@ public class EstEIDRequestHeaderAuthenticationFilterTest {
         return request.buildRequest(new MockServletContext());
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void failsWhenNoPrincipalInHeaders() throws IOException, ServletException {
-        filter.getPreAuthenticatedPrincipal(createRequest(null, MARY_ANN_CERT));
+        assertThrows(BadCredentialsException.class, () ->
+                filter.getPreAuthenticatedPrincipal(createRequest(null, MARY_ANN_CERT)));
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void failsWhenNoCredentialsInHeaders() throws IOException, ServletException {
-        filter.getPreAuthenticatedCredentials(createRequest(MARY_ANN_SUBJECT_DN, null));
+        assertThrows(BadCredentialsException.class, () ->
+                filter.getPreAuthenticatedCredentials(createRequest(MARY_ANN_SUBJECT_DN, null)));
     }
 
     @Test
@@ -111,9 +117,10 @@ public class EstEIDRequestHeaderAuthenticationFilterTest {
         assertThat(principal.getSurname(), is(equalTo(MARY_ANN_SURNAME)));
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void failsWhenNoSerialNumberInSubjectDn() {
-        filter.getPreAuthenticatedPrincipal(createRequest("sn=Doe,dn=Joe", MARY_ANN_CERT));
+        assertThrows(BadCredentialsException.class, () ->
+                filter.getPreAuthenticatedPrincipal(createRequest("sn=Doe,dn=Joe", MARY_ANN_CERT)));
     }
 
     @Test

@@ -7,8 +7,8 @@ import ee.ria.riha.service.util.ApiPageableAndCompositeRequestParams;
 import ee.ria.riha.service.util.CompositeFilterRequest;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -23,7 +23,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 
 @RestController
 @Slf4j
-@Api("File resources")
+@Tag(name = "File resources")
 public class FileController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class FileController {
 
     @PostMapping(value = API_V1_PREFIX + "/systems/{reference}/files", consumes = "multipart/form-data")
     @PreAuthorizeInfoSystemOwnerOrReviewer
-    @ApiOperation("Upload file")
+    @Operation(summary = "Upload file")
     public ResponseEntity<UUID> upload(@PathVariable("reference") String reference,
                                  @RequestPart("file") MultipartFile file) throws IOException {
         log.info("Receiving info system '{}' file '{}' [{}] with size {}b",
@@ -44,7 +44,7 @@ public class FileController {
     }
 
     @GetMapping(API_V1_PREFIX + "/systems/{reference}/files/{uuid}")
-    @ApiOperation("Download file")
+    @Operation(summary = "Download file")
     public ResponseEntity<InputStreamResource> download(@PathVariable("reference") String reference,
                                                         @PathVariable("uuid") UUID fileUuid) throws IOException {
         log.info("Downloading info system '{}' file {}", reference, fileUuid);
@@ -52,7 +52,7 @@ public class FileController {
     }
 
     @GetMapping(API_V1_PREFIX + "/systems/files")
-    @ApiOperation("List file resources")
+    @Operation(summary = "List file resources")
     @ApiPageableAndCompositeRequestParams
     public ResponseEntity<PagedResponse<FileResource>> list(CompositeFilterRequest filter, Pageable pageable) {
         return ResponseEntity.ok(fileService.list(pageable, filter));

@@ -8,8 +8,8 @@ import ee.ria.riha.service.*;
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.*;
 import lombok.extern.slf4j.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.ssl.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.core5.ssl.*;
 import org.springframework.boot.context.properties.*;
 import org.springframework.boot.task.*;
 import org.springframework.boot.web.client.*;
@@ -68,7 +68,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public TaskExecutor taskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
+    public TaskExecutor taskExecutor(ThreadPoolTaskExecutorBuilder taskExecutorBuilder) {
         return taskExecutorBuilder.build();
     }
 

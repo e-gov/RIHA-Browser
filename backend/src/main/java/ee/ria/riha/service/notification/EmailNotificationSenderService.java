@@ -13,9 +13,9 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,6 @@ public class EmailNotificationSenderService {
 
     private List<EmailNotificationHandler> handlers = new ArrayList<>();
 
-    @Autowired
     public EmailNotificationSenderService(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
     }

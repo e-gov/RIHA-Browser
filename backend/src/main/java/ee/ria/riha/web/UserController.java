@@ -6,8 +6,8 @@ import ee.ria.riha.service.SecurityContextUtil;
 import ee.ria.riha.service.UserService;
 import ee.ria.riha.web.model.OrganizationModel;
 import ee.ria.riha.web.model.UserDetailsModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
  */
 @RestController
 @RequestMapping(API_V1_PREFIX + "/user")
-@Api("Users")
+@Tag(name = "Users")
 @Slf4j
 public class UserController {
 
@@ -33,14 +33,14 @@ public class UserController {
     private UserService userService;
 
     @PutMapping("/organization")
-    @ApiOperation("Change active organization of the current user")
+    @Operation(summary = "Change active organization of the current user")
     public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode) {
         userService.changeActiveOrganization(organizationCode);
         return getUserDetails();
     }
 
     @GetMapping
-    @ApiOperation("Retrieves user details")
+    @Operation(summary = "Retrieves user details")
     public ResponseEntity<UserDetailsModel> getUserDetails() {
         return ResponseEntity.ok(createUserDetailsModel().orElse(null));
     }

@@ -6,14 +6,16 @@ import ee.ria.riha.domain.model.*;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.web.model.IssueCommentModel;
 import ee.ria.riha.web.model.IssueStatusUpdateModel;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -32,7 +35,8 @@ import static org.mockito.Mockito.*;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class IssueServiceTest {
 
     private static final String EXISTING_INFO_SYSTEM_SHORT_NAME = "is1";
@@ -80,7 +84,7 @@ public class IssueServiceTest {
 
     private final Map<Long, Comment> createdIssues = new HashMap<>();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Reset authorization
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -94,9 +98,9 @@ public class IssueServiceTest {
         createdIssues.put(EXISTING_ISSUE_ID, existingIssueEntity);
 
         when(commentRepository.get(any(Long.class))).thenAnswer((Answer<Comment>) invocation -> {
-                    Long commentId = invocation.getArgument(0);
-                    return createdIssues.get(commentId);
-                }
+            Long commentId = invocation.getArgument(0);
+            return createdIssues.get(commentId);
+        }
 
         );
         when(commentRepository.add(any(Comment.class))).thenAnswer((Answer<List<Long>>) invocation -> {
@@ -148,25 +152,29 @@ public class IssueServiceTest {
         assertThat(comment.getOrganization_code(), is(equalTo("555010203")));
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueCreation() {
-        TestUtils.setActiveOrganisation(authenticationToken, null);
+        assertThrows(IllegalBrowserStateException.class, () -> {
+            TestUtils.setActiveOrganisation(authenticationToken, null);
 
-        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
-                .title("title")
-                .comment("comment")
-                .build());
+            issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                    .title("title")
+                    .comment("comment")
+                    .build());
+        });
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void throwsExceptionWhenApproverTriesToCreateRequestIssue() {
-        setNonRiaApproverRole();
+        assertThrows(ValidationException.class, () -> {
+            setNonRiaApproverRole();
 
-        issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
-                .title("title")
-                .comment("comment")
-                .type(ESTABLISHMENT_REQUEST)
-                .build());
+            issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                    .title("title")
+                    .comment("comment")
+                    .type(ESTABLISHMENT_REQUEST)
+                    .build());
+        });
     }
 
     private void setNonRiaApproverRole() {
@@ -232,22 +240,26 @@ public class IssueServiceTest {
         assertThat(issueCommentArgumentCaptor.getValue().getComment(), is(equalTo("closing comment")));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void throwsExceptionWhenUpdatingClosedIssue() {
-        existingIssueEntity.setStatus(IssueStatus.CLOSED.name());
+        assertThrows(ValidationException.class, () -> {
+            existingIssueEntity.setStatus(IssueStatus.CLOSED.name());
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
-                .status(IssueStatus.CLOSED)
-                .build());
+            issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
+                    .status(IssueStatus.CLOSED)
+                    .build());
+        });
     }
 
-    @Test(expected = IllegalBrowserStateException.class)
+    @Test
     public void throwsExceptionWhenActiveOrganizationIsNotSetDuringIssueUpdate() {
-        TestUtils.setActiveOrganisation(authenticationToken, null);
+        assertThrows(IllegalBrowserStateException.class, () -> {
+            TestUtils.setActiveOrganisation(authenticationToken, null);
 
-        issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
-                .status(IssueStatus.CLOSED)
-                .build());
+            issueService.updateIssueStatus(EXISTING_ISSUE_ID, IssueStatusUpdateModel.builder()
+                    .status(IssueStatus.CLOSED)
+                    .build());
+        });
     }
 
     @Test
@@ -292,61 +304,71 @@ public class IssueServiceTest {
         TestUtils.setActiveOrganisation(authenticationToken, RIA_REG_CODE);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void doesNotAllowNonRiaUsersToCloseFeedbackIssues() {
-        setNonRiaApproverRole();
+        assertThrows(ValidationException.class, () -> {
+            setNonRiaApproverRole();
 
-        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+            existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
-                .status(IssueStatus.CLOSED)
-                .resolutionType(IssueResolutionType.POSITIVE)
-                .build());
+            issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
+                    .status(IssueStatus.CLOSED)
+                    .resolutionType(IssueResolutionType.POSITIVE)
+                    .build());
+        });
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void doesNotAllowFeedbackIssueResolutionWithoutApproverRole() {
-        setProducerRole();
+        assertThrows(ValidationException.class, () -> {
+            setProducerRole();
 
-        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+            existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
-                .status(IssueStatus.CLOSED)
-                .resolutionType(IssueResolutionType.POSITIVE)
-                .build());
+            issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
+                    .status(IssueStatus.CLOSED)
+                    .resolutionType(IssueResolutionType.POSITIVE)
+                    .build());
+        });
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void doesNotAllowToCloseFeedbackIssueWithoutResolution() {
-        setNonRiaApproverRole();
+        assertThrows(ValidationException.class, () -> {
+            setNonRiaApproverRole();
 
-        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+            existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
-                .status(IssueStatus.CLOSED)
-                .build());
+            issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
+                    .status(IssueStatus.CLOSED)
+                    .build());
+        });
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void doesNotAllowToResolveIssueWithDismissedResolutionType() {
-        setRiaApproverRole();
+        assertThrows(ValidationException.class, () -> {
+            setRiaApproverRole();
 
-        existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
+            existingIssue.setType(IssueType.ESTABLISHMENT_REQUEST);
 
-        issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
-                .status(IssueStatus.CLOSED)
-                .resolutionType(IssueResolutionType.DISMISSED)
-                .build());
+            issueService.updateIssueStatus(existingIssue, IssueStatusUpdateModel.builder()
+                    .status(IssueStatus.CLOSED)
+                    .resolutionType(IssueResolutionType.DISMISSED)
+                    .build());
+        });
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void doesNotAllowToCreateFeedbackIssueWhenThereIsOpenIssueOfTheSameType() {
-        when(commentRepository.find(any())).thenReturn(Collections.singletonList(existingIssueEntity));
+        assertThrows(ValidationException.class, () -> {
+            when(commentRepository.find(any())).thenReturn(Collections.singletonList(existingIssueEntity));
 
-        Issue issue = issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
-                .title("title")
-                .comment("comment")
-                .type(ESTABLISHMENT_REQUEST)
-                .build());
+            Issue issue = issueService.createInfoSystemIssue(EXISTING_INFO_SYSTEM_SHORT_NAME, Issue.builder()
+                    .title("title")
+                    .comment("comment")
+                    .type(ESTABLISHMENT_REQUEST)
+                    .build());
+        });
     }
 }

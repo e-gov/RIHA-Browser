@@ -10,13 +10,15 @@ import ee.ria.riha.domain.model.IssueType;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.auth.InfoSystemAuthorizationService;
 import ee.ria.riha.web.model.InfoSystemModel;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +38,8 @@ import static org.mockito.Mockito.when;
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class InfoSystemModelMapperTest {
 
     private static final String CONTACTS_KEY = "contacts";
@@ -68,7 +71,7 @@ public class InfoSystemModelMapperTest {
     @InjectMocks
     private InfoSystemModelMapper infoSystemModelMapper = new InfoSystemModelMapper();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mappedInfoSystem = new InfoSystem(fromString(SECURITY_DETAILS_JSON));
         mappedInfoSystem.setId(123L);

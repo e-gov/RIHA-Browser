@@ -28,18 +28,13 @@ public class NewIssueToApproversNotificationHandler extends IssueNotificationHan
             return STANDARD_SUBJECT_KEY;
         }
 
-        switch (notification.getIssue().getType()) {
-        case "ESTABLISHMENT_REQUEST":
-            return ESTABLISHMENT_REQUEST_SUBJECT_KEY;
-        case "TAKE_INTO_USE_REQUEST":
-            return TAKE_INTO_USE_REQUEST_SUBJECT_KEY;
-        case "MODIFICATION_REQUEST":
-            return MODIFICATION_REQUEST_SUBJECT_KEY;
-        case "FINALIZATION_REQUEST":
-            return FINALIZATION_REQUEST_SUBJECT_KEY;
-        default:
-            return STANDARD_SUBJECT_KEY;
-        }
+        return switch (notification.getIssue().getType()) {
+        case "ESTABLISHMENT_REQUEST" -> ESTABLISHMENT_REQUEST_SUBJECT_KEY;
+        case "TAKE_INTO_USE_REQUEST" -> TAKE_INTO_USE_REQUEST_SUBJECT_KEY;
+        case "MODIFICATION_REQUEST" -> MODIFICATION_REQUEST_SUBJECT_KEY;
+        case "FINALIZATION_REQUEST" -> FINALIZATION_REQUEST_SUBJECT_KEY;
+        default -> STANDARD_SUBJECT_KEY;
+        };
     }
 
     @Override

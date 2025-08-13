@@ -5,7 +5,7 @@ import ee.ria.riha.TestUtils;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.rules.CleanAuthentication;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,8 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import static ee.ria.riha.service.auth.RoleType.APPROVER;
 import static ee.ria.riha.service.auth.RoleType.PRODUCER;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Valentin Suhnjov

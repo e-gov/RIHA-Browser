@@ -1,8 +1,8 @@
 package ee.ria.riha.service.util;
 
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,11 +15,11 @@ import java.lang.annotation.Target;
  * @author Valentin Suhnjov
  * @see ApiPageableParams
  */
-@ApiImplicitParams(value = {
-        @ApiImplicitParam(name = "page", value = "page number", dataType = "integer", paramType = "query"),
-        @ApiImplicitParam(name = "size", value = "page size", dataType = "integer", paramType = "query"),
-        @ApiImplicitParam(name = "filter", value = "filter options", dataType = "string", paramType = "query"),
-        @ApiImplicitParam(name = "sort", value = "sorting options", dataType = "string", paramType = "query")
+@Parameters(value = {
+        @Parameter(name = "page", description = "page number"),
+        @Parameter(name = "size", description = "page size"),
+        @Parameter(name = "filter", description = "filter options"),
+        @Parameter(name = "sort", description = "sorting options")
 })
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
