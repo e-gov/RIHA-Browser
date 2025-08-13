@@ -27,7 +27,6 @@ import org.springframework.ldap.core.support.DefaultTlsDirContextAuthenticationS
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,19 +36,13 @@ import org.springframework.security.ldap.userdetails.LdapUserDetailsService;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.util.UriUtils;
 
 /**
@@ -114,57 +107,51 @@ public class WebSecurityConfiguration {
         }
 
         http
-                .csrf(csrf -> csrf
-                        .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
+                .authorizeHttpRequests(requests -> requests
+                        .anyRequest().permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))))
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(authenticationEntryPoint()))
+                .addFilterBefore(createFromUrlSessionFilter(), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(login -> login
+                        .loginPage(applicationProperties.getBaseUrl())
+                        .successHandler(successHandler())
+                        .redirectionEndpoint(endpoint -> endpoint
+                                .baseUri(applicationProperties.getBaseUrl() + TARA_AUTH_ENDPOINT))
+                        .userInfoEndpoint(endpoint -> endpoint
+                                .oidcUserService(userRequest -> {
+                                    RihaUserDetails rihaUserDetails;
+                                    String personalCode = userRequest.getIdToken().getSubject();
+                                    try {
+                                        UserDetails userDetails = ldapUserDetailsService(applicationProperties,
+                                                contextSource(applicationProperties)).loadUserByUsername(personalCode);
+                                        rihaUserDetails = (RihaUserDetails) userDetails;
+                                    } catch (UsernameNotFoundException e) {
+                                        //this means that the LDAP does not contain record with such personal code
+                                        rihaUserDetails = getDefaultRihaUserWithDefaultRole(personalCode);
+                                    } catch (Exception e) {
+                                        log.error("auth error", e);
+                                        throw new OAuth2AuthenticationException(new OAuth2Error("401"), e);
+                                    }
+                                    rihaUserDetails.setUserRequest(userRequest);
+                                    if (userRequest.getIdToken().getClaims().get("profile_attributes") instanceof Map) {
+                                        Map<String, String> profileAttributes = (Map<String, String>) userRequest.getIdToken().getClaims().get("profile_attributes");
+                                        rihaUserDetails.setFirstName(profileAttributes.get("given_name"));
+                                        rihaUserDetails.setLastName(profileAttributes.get("family_name"));
+                                    }
 
-                        .authorizeHttpRequests(requests -> requests
-                                .logout(logout -> logout
-                                        .logoutUrl("/logout")
-                                        .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))))
-                                .exceptionHandling(handling -> handling.authenticationEntryPoint(authenticationEntryPoint()))
-                                .addFilterBefore(createFromUrlSessionFilter(), ChannelProcessingFilter.class)
-                                .oauth2Login(login -> login
-                                        .loginPage(applicationProperties.getBaseUrl())
-                                        .successHandler(successHandler())
-                                        .redirectionEndpoint(endpoint -> endpoint
-                                                .userInfoEndpoint(endpoint -> endpoint
-                                                        .oidcUserService(userRequest -> {
-                                                            RihaUserDetails rihaUserDetails;
-                                                            String personalCode = userRequest.getIdToken().getSubject();
-                                                            try {
-                                                                UserDetails userDetails = ldapUserDetailsService(applicationProperties,
-                                                                        contextSource(applicationProperties)).loadUserByUsername(personalCode);
-                                                                rihaUserDetails = (RihaUserDetails) userDetails;
-                                                            } catch (UsernameNotFoundException e) {
-                                                                //this means that the LDAP does not contain record with such personal code
-                                                                rihaUserDetails = getDefaultRihaUserWithDefaultRole(personalCode);
-                                                            } catch (Exception e) {
-                                                                log.error("auth error", e);
-                                                                throw new OAuth2AuthenticationException(new OAuth2Error("401"), e);
-                                                            }
-                                                            rihaUserDetails.setUserRequest(userRequest);
-                                                            if (userRequest.getIdToken().getClaims().get("profile_attributes") instanceof Map) {
-                                                                Map<String, String> profileAttributes = (Map<String, String>) userRequest.getIdToken().getClaims().get("profile_attributes");
-                                                                rihaUserDetails.setFirstName(profileAttributes.get("given_name"));
-                                                                rihaUserDetails.setLastName(profileAttributes.get("family_name"));
-                                                            }
-
-                                                            rihaUserDetails.setUserRequest(userRequest);
-                                                            return rihaUserDetails;
-                                                        }))
-                                                .tokenEndpoint(endpoint -> endpoint
-                                                        .accessTokenResponseClient(accessTokenResponseClient()))))));
+                                    rihaUserDetails.setUserRequest(userRequest);
+                                    return rihaUserDetails;
+                                }))
+                        .tokenEndpoint(endpoint -> endpoint
+                                .accessTokenResponseClient(accessTokenResponseClient())));
         return http.build();
     }
 
-    private CsrfTokenRepository csrfTokenRepository() {
-        CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
-        cookieCsrfTokenRepository.setCookieHttpOnly(false);
-        cookieCsrfTokenRepository.setCookiePath("/");
-        return cookieCsrfTokenRepository;
-    }
-
-    protected AuthenticationSuccessHandler successHandler() {
+	protected AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
 			log.info("Kasutaja {} ID koodiga {} logis sisse kasutades amr: {} ",
 					((RihaUserDetails) authentication.getPrincipal()).getFullName(),
