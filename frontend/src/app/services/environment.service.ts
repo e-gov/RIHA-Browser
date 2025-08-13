@@ -167,7 +167,7 @@ export class EnvironmentService {
   }
 
   public setActiveOrganization(organizationCode): Observable<Environment> {
-    return this.http.put<Environment>(this.environmentUrl + '/organization', organizationCode);
+    return this.http.put<Environment>(this.userInfoUrl + '/organization', organizationCode);
   }
 
   constructor(private http: HttpClient) {
