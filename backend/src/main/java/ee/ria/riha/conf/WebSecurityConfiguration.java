@@ -38,6 +38,7 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResp
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -111,15 +112,12 @@ public class WebSecurityConfiguration {
         http
                 .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository()))
                 .cors(cors -> cors.disable())
-                .sessionManagement(session -> session
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false))
                 .authorizeHttpRequests(requests -> requests
                         .anyRequest().permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))))
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(authenticationEntryPoint()))
+                                .exceptionHandling(handling -> handling.authenticationEntryPoint(authenticationEntryPoint()))
                 .addFilterBefore(createFromUrlSessionFilter(), ChannelProcessingFilter.class)
                 .oauth2Login(login -> login
                         .loginPage(applicationProperties.getBaseUrl())
