@@ -5,15 +5,13 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {RouterModule, Routes} from '@angular/router';
-import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {UiSwitchModule} from 'ngx-ui-switch';
 import {NarikCustomValidatorsModule} from '@narik/custom-validators';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-
+import {MatChipsModule} from '@angular/material/chips';
 import missingTranslationHandler from './app.missingTranslation';
-
 import {AppComponent} from './app.component';
 import {RihaNavbarComponent} from './components/riha-navbar/riha-navbar.component';
 //services
@@ -206,7 +204,7 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    TagInputModule,
+    MatChipsModule,
     BrowserAnimationsModule,
     NarikCustomValidatorsModule,
     RouterModule.forRoot(routes, {}),
@@ -223,7 +221,6 @@ const routes: Routes = [
     NgbModule,
     RecaptchaV3Module
   ],
-  entryComponents: [ ],
   bootstrap: [AppComponent],
   providers: [
     SystemsService,
