@@ -2,6 +2,7 @@ package ee.ria.riha.conf;
 
 import ee.ria.riha.authentication.RihaFilterBasedLdapUserSearch;
 import ee.ria.riha.authentication.RihaLdapUserDetailsContextMapper;
+import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.conf.ApplicationProperties.LdapAuthenticationProperties;
 import ee.ria.riha.conf.ApplicationProperties.LdapProperties;
@@ -143,6 +144,15 @@ public class WebSecurityConfiguration {
                                         Map<String, String> profileAttributes = (Map<String, String>) userRequest.getIdToken().getClaims().get("profile_attributes");
                                         rihaUserDetails.setFirstName(profileAttributes.get("given_name"));
                                         rihaUserDetails.setLastName(profileAttributes.get("family_name"));
+                                    }
+
+                                    // Auto-select active organization if user has only one organization
+                                    if (rihaUserDetails.getOrganizationsByCode() != null && 
+                                        rihaUserDetails.getOrganizationsByCode().size() == 1) {
+                                        RihaOrganization singleOrganization = rihaUserDetails.getOrganizationsByCode().values().iterator().next();
+                                        rihaUserDetails.setActiveOrganization(singleOrganization);
+                                        log.info("Auto-selected organization {} for user {}", 
+                                                singleOrganization.getCode(), rihaUserDetails.getPersonalCode());
                                     }
 
                                     rihaUserDetails.setUserRequest(userRequest);

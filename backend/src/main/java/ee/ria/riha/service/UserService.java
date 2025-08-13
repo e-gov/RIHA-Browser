@@ -4,12 +4,16 @@ import ee.ria.riha.authentication.*;
 import ee.ria.riha.domain.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.web.model.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
 import org.springframework.stereotype.*;
 import org.springframework.util.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 import java.util.stream.*;
@@ -51,9 +55,16 @@ public class UserService {
         if (rihaUserDetails.getOrganizationsByCode() != null) {
             rihaUserDetails.setActiveOrganization(rihaUserDetails.getOrganizationsByCode().get(organizationCode));
             log.info("Set active organization to: {}", rihaUserDetails.getActiveOrganization());
+            
+            // In Spring Security 6.x, we need to explicitly save the context to the session
             SecurityContext newContext = SecurityContextHolder.createEmptyContext();
             newContext.setAuthentication(authentication);
             SecurityContextHolder.setContext(newContext);
+            
+            // Force save the security context to the session
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+            HttpSession session = request.getSession();
+            session.setAttribute("SPRING_SECURITY_CONTEXT", newContext);
         } else {
             log.warn("No organizations available for user");
         }
