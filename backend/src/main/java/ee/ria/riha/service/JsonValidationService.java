@@ -127,9 +127,19 @@ public class JsonValidationService {
             ObjectMapper mapper = new ObjectMapper();
             this.success = false;
             try {
-                // Create a simple JSON structure for the validation message
+                // Create a JSON structure similar to the old library format
                 com.fasterxml.jackson.databind.node.ObjectNode messageNode = mapper.createObjectNode();
                 messageNode.put("message", networkntMessage.getMessage());
+                messageNode.put("keyword", networkntMessage.getType());
+                
+                // Add path information if available
+                if (networkntMessage.getInstanceLocation() != null) {
+                    messageNode.put("instance", networkntMessage.getInstanceLocation().toString());
+                }
+                if (networkntMessage.getSchemaLocation() != null) {
+                    messageNode.put("schema", networkntMessage.getSchemaLocation().toString());
+                }
+                
                 this.jsonNode = messageNode;
             } catch (Exception e) {
                 // Ultimate fallback
