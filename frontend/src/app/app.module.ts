@@ -10,7 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {UiSwitchModule} from 'ngx-ui-switch';
 import {CustomFormsModule} from 'ngx-custom-validators';
-import {HttpClient, HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import missingTranslationHandler from './app.missingTranslation';
 
@@ -221,7 +221,6 @@ const routes: Routes = [
         deps: [HttpClient]
       }
     }),
-    HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN'}),
     NgbModule,
     RecaptchaV3Module
   ],
@@ -235,8 +234,10 @@ const routes: Routes = [
     SessionHelperService,
     ModalHelperService,
     SystemFeedbackService,
+    CsrfTokenService,
     {provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true},
+    {provide: APP_INITIALIZER, useFactory: initCsrfToken, deps: [CsrfTokenService], multi: true},
     // { provide: RECAPTCHA_V3_SITE_KEY, useValue: '6Lfm39QZAAAAAGefZSqsv3poar50pSIpdGs4qVb6'},
     { provide: RECAPTCHA_V3_SITE_KEY, useFactory: loadRecaptchaSiteKey, deps: [EnvironmentService], multi: false},
 
