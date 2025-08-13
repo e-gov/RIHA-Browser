@@ -127,28 +127,14 @@ public class JsonValidationService {
             ObjectMapper mapper = new ObjectMapper();
             this.success = false;
             try {
-                // Convert networknt ValidationMessage to JsonNode format similar to old library
-                String messageJson = String.format("""
-                    {
-                        "keyword": "%s",
-                        "message": "%s"
-                    }
-                    """, 
-                    networkntMessage.getType(), 
-                    networkntMessage.getMessage().replace("\"", "\\\""));
-                this.jsonNode = mapper.readTree(messageJson);
+                // Create a simple JSON structure for the validation message
+                com.fasterxml.jackson.databind.node.ObjectNode messageNode = mapper.createObjectNode();
+                messageNode.put("message", networkntMessage.getMessage());
+                this.jsonNode = messageNode;
             } catch (Exception e) {
-                // Fallback to simple message
-                try {
-                    String fallbackJson = String.format("""
-                        {
-                            "message": "%s"
-                        }
-                        """, networkntMessage.getMessage().replace("\"", "\\\""));
-                    this.jsonNode = mapper.readTree(fallbackJson);
-                } catch (Exception ex) {
-                    this.jsonNode = mapper.createObjectNode();
-                }
+                // Ultimate fallback
+                this.jsonNode = mapper.createObjectNode();
+                ((com.fasterxml.jackson.databind.node.ObjectNode) this.jsonNode).put("message", "Validation error");
             }
         }
 
