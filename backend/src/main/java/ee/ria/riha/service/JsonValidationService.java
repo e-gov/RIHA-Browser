@@ -70,7 +70,13 @@ public class JsonValidationService {
             }
 
             return report;
+        } catch (JsonValidationException jve) {
+            // Re-throw JsonValidationException without wrapping
+            throw jve;
         } catch (Exception e) {
+            // Log the actual exception for debugging
+            System.err.println("JSON Validation error: " + e.getMessage());
+            e.printStackTrace();
             throw new IllegalBrowserStateException("Could not validate json", e);
         }
     }
@@ -129,19 +135,52 @@ public class JsonValidationService {
             try {
                 // Create a JSON structure similar to the old library format
                 com.fasterxml.jackson.databind.node.ObjectNode messageNode = mapper.createObjectNode();
-                messageNode.put("message", networkntMessage.getMessage());
-                messageNode.put("keyword", networkntMessage.getType());
                 
-                // Add path information if available
-                if (networkntMessage.getInstanceLocation() != null) {
-                    messageNode.put("instance", networkntMessage.getInstanceLocation().toString());
+                // Safely get message
+                try {
+                    String message = networkntMessage.getMessage();
+                    if (message != null) {
+                        messageNode.put("message", message);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error getting message: " + e.getMessage());
+                    messageNode.put("message", "Validation error");
                 }
-                if (networkntMessage.getSchemaLocation() != null) {
-                    messageNode.put("schema", networkntMessage.getSchemaLocation().toString());
+                
+                // Safely get type/keyword
+                try {
+                    String type = networkntMessage.getType();
+                    if (type != null) {
+                        messageNode.put("keyword", type);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error getting type: " + e.getMessage());
+                }
+                
+                // Safely get instance location
+                try {
+                    Object instanceLocation = networkntMessage.getInstanceLocation();
+                    if (instanceLocation != null) {
+                        messageNode.put("instance", instanceLocation.toString());
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error getting instance location: " + e.getMessage());
+                }
+                
+                // Safely get schema location
+                try {
+                    Object schemaLocation = networkntMessage.getSchemaLocation();
+                    if (schemaLocation != null) {
+                        messageNode.put("schema", schemaLocation.toString());
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error getting schema location: " + e.getMessage());
                 }
                 
                 this.jsonNode = messageNode;
             } catch (Exception e) {
+                System.err.println("Error in ProcessingMessage constructor: " + e.getMessage());
+                e.printStackTrace();
                 // Ultimate fallback
                 this.jsonNode = mapper.createObjectNode();
                 ((com.fasterxml.jackson.databind.node.ObjectNode) this.jsonNode).put("message", "Validation error");
