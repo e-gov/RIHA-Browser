@@ -42,8 +42,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.util.UriUtils;
 
@@ -120,7 +120,7 @@ public class WebSecurityConfiguration {
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))))
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(authenticationEntryPoint()))
-                .addFilterBefore(createFromUrlSessionFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(createFromUrlSessionFilter(), ChannelProcessingFilter.class)
                 .oauth2Login(login -> login
                         .loginPage(applicationProperties.getBaseUrl())
                         .successHandler(successHandler())
