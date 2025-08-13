@@ -3,6 +3,14 @@
 <configuration>
     <property name="LOG_DIR" value="/var/log"/>
     <property name="appName" value="riha-browser"/>
+    
+    <!-- Console appender for development -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
     <appender name="FILEJSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${appName}/${appName}.json.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -21,6 +29,30 @@
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+    
+    <!-- Spring Security logging -->
+    <logger name="org.springframework.security" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    
+    <!-- Our application logging -->
+    <logger name="ee.ria.riha" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    
+    <!-- CSRF token logging -->
+    <logger name="org.springframework.security.web.csrf" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILEJSON"/>
+    </logger>
+    
+    <!-- Method Security logging -->
+    <logger name="org.springframework.security.access" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILEJSON"/>
+    </logger>
     <logger name="com" level="WARN">
         <appender-ref ref="FILEJSON"/>
     </logger>
@@ -48,7 +80,8 @@
     <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO">
         <appender-ref ref="FILEJSON"/>
     </logger>
-    <root level="debug">
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILEJSON"/>
     </root>
 </configuration>
