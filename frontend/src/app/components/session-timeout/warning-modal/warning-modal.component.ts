@@ -6,9 +6,10 @@ import { ModalHelperService } from '../../../services/modal-helper.service';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
 
 @Component({
-  selector: 'app-warning-modal',
-  templateUrl: './warning-modal.component.html',
-  styleUrls: ['./warning-modal.component.scss']
+    selector: 'app-warning-modal',
+    templateUrl: './warning-modal.component.html',
+    styleUrls: ['./warning-modal.component.scss'],
+    standalone: false
 })
 export class WarningModalComponent implements OnInit, OnDestroy {
   private static readonly ERROR_MESSAGE = 'Serveri viga.';

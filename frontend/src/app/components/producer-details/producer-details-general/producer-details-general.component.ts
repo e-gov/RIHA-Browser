@@ -10,9 +10,10 @@ import {ModalHelperService} from "../../../services/modal-helper.service";
 import {UserMatrix} from "../../../models/user-matrix";
 
 @Component({
-  selector: 'app-producer-details-general',
-  templateUrl: './producer-details-general.component.html',
-  styleUrls: ['./producer-details-general.component.scss']
+    selector: 'app-producer-details-general',
+    templateUrl: './producer-details-general.component.html',
+    styleUrls: ['./producer-details-general.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsGeneralComponent implements OnInit {
 

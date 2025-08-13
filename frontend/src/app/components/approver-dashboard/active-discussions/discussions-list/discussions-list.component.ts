@@ -7,9 +7,10 @@ import {GeneralHelperService} from '../../../../services/general-helper.service'
 import {UserMatrix} from '../../../../models/user-matrix';
 
 @Component({
-  selector: 'app-discussions-list',
-  templateUrl: './discussions-list.component.html',
-  styleUrls: ['./discussions-list.component.scss']
+    selector: 'app-discussions-list',
+    templateUrl: './discussions-list.component.html',
+    styleUrls: ['./discussions-list.component.scss'],
+    standalone: false
 })
 export class DiscussionsListComponent implements OnInit, DoCheck {
 

@@ -11,9 +11,10 @@ import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
 import {CONSTANTS} from '../../../utils/constants';
 
 @Component({
-  selector: 'app-producer-edit-legislations',
-  templateUrl: './producer-edit-legislations.component.html',
-  styleUrls: ['./producer-edit-legislations.component.scss']
+    selector: 'app-producer-edit-legislations',
+    templateUrl: './producer-edit-legislations.component.html',
+    styleUrls: ['./producer-edit-legislations.component.scss'],
+    standalone: false
 })
 export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateModal {
 

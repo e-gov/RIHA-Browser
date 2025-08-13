@@ -6,9 +6,10 @@ import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
-  selector: 'app-producer-search-filter',
-  templateUrl: './producer-search-filter-component.html',
-  styleUrls: ['./producer-search-filter-component.scss']
+    selector: 'app-producer-search-filter',
+    templateUrl: './producer-search-filter-component.html',
+    styleUrls: ['./producer-search-filter-component.scss'],
+    standalone: false
 })
 export class ProducerSearchFilterComponent implements OnInit {
 

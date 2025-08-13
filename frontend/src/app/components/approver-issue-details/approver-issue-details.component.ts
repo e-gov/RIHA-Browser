@@ -12,9 +12,10 @@ import {Observable} from "rxjs";
 import {CONSTANTS} from '../../utils/constants';
 
 @Component({
-  selector: 'app-approver-feedback-details',
-  templateUrl: './approver-issue-details.component.html',
-  styleUrls: ['./approver-issue-details.component.scss']
+    selector: 'app-approver-feedback-details',
+    templateUrl: './approver-issue-details.component.html',
+    styleUrls: ['./approver-issue-details.component.scss'],
+    standalone: false
 })
 export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal {
 

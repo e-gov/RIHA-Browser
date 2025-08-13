@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
 @Pipe({
-  name: 'datem'
+    name: 'datem',
+    standalone: false
 })
 export class DatemPipe implements PipeTransform {
   transform(value: any, format: string = ""): string {

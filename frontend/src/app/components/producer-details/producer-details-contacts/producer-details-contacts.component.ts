@@ -6,9 +6,10 @@ import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-producer-details-contacts',
-  templateUrl: './producer-details-contacts.component.html',
-  styleUrls: ['./producer-details-contacts.component.scss']
+    selector: 'app-producer-details-contacts',
+    templateUrl: './producer-details-contacts.component.html',
+    styleUrls: ['./producer-details-contacts.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsContactsComponent implements OnInit {
 

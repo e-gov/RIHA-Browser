@@ -11,9 +11,10 @@ import {GeneralHelperService} from '../../../services/general-helper.service';
 import _ from 'lodash';
 
 @Component({
-  selector: 'app-producer-details-issues',
-  templateUrl: './producer-details-issues.component.html',
-  styleUrls: ['./producer-details-issues.component.scss']
+    selector: 'app-producer-details-issues',
+    templateUrl: './producer-details-issues.component.html',
+    styleUrls: ['./producer-details-issues.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsIssuesComponent implements OnInit {
 

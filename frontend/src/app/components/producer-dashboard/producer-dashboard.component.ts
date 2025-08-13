@@ -12,9 +12,10 @@ import {ModalHelperService} from "../../services/modal-helper.service";
 import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
-  selector: 'app-producer-dashboard',
-  templateUrl: './producer-dashboard.component.html',
-  styleUrls: ['./producer-dashboard.component.scss']
+    selector: 'app-producer-dashboard',
+    templateUrl: './producer-dashboard.component.html',
+    styleUrls: ['./producer-dashboard.component.scss'],
+    standalone: false
 })
 export class ProducerDashboardComponent implements OnInit, DoCheck {
 

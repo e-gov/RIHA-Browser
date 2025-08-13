@@ -10,9 +10,10 @@ import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
 import {CONSTANTS} from '../../../utils/constants';
 
 @Component({
-  selector: 'app-producer-edit-contacts',
-  templateUrl: './producer-edit-contacts.component.html',
-  styleUrls: ['./producer-edit-contacts.component.scss']
+    selector: 'app-producer-edit-contacts',
+    templateUrl: './producer-edit-contacts.component.html',
+    styleUrls: ['./producer-edit-contacts.component.scss'],
+    standalone: false
 })
 export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal {
 

@@ -47,10 +47,10 @@ describe('When initializing AppComponent', function () {
       fixture = TestBed.createComponent(AppComponent);
     })
     .then(() => new Promise((resolve) => {
-      const translate: TranslateService = TestBed.get(TranslateService);
+      const translate: TranslateService = TestBed.inject(TranslateService);
       langChangeSubscription = translate.onLangChange.subscribe((event: LangChangeEvent) => {
         defaultLang = event.lang;
-        resolve();
+        resolve(void 0);
       });
     }))
     .then(() => {

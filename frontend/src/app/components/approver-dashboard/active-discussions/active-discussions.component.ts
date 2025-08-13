@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-active-discussions',
-  templateUrl: './active-discussions.component.html',
-  styleUrls: ['./active-discussions.component.scss']
+    selector: 'app-active-discussions',
+    templateUrl: './active-discussions.component.html',
+    styleUrls: ['./active-discussions.component.scss'],
+    standalone: false
 })
 export class ActiveDiscussionsComponent implements OnInit {
 

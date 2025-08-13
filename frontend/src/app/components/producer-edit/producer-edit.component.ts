@@ -7,9 +7,10 @@ import { ToastrService } from 'ngx-toastr';
 import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
-  selector: 'app-producer-edit',
-  templateUrl: './producer-edit.component.html',
-  styleUrls: ['./producer-edit.component.scss']
+    selector: 'app-producer-edit',
+    templateUrl: './producer-edit.component.html',
+    styleUrls: ['./producer-edit.component.scss'],
+    standalone: false
 })
 export class ProducerEditComponent implements OnInit {
   private system: System;

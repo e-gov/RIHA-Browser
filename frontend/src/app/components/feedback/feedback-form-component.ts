@@ -11,9 +11,10 @@ import {makeRecaptchaBadgeInvisible, makeRecaptchaBadgeVisible} from '../../util
 
 
 @Component({
-  selector: 'feedback-form',
-  templateUrl: './feedback-form-component.html',
-  styleUrls: ['./feedback-form-component.scss']
+    selector: 'feedback-form',
+    templateUrl: './feedback-form-component.html',
+    styleUrls: ['./feedback-form-component.scss'],
+    standalone: false
 })
 export class FeedbackFormComponent implements OnInit, OnDestroy {
 

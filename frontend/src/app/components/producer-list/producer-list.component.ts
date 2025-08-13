@@ -16,9 +16,10 @@ import {of} from "rxjs";
 import {delay, tap} from "rxjs/operators";
 
 @Component({
-  selector: 'app-producer-list',
-  templateUrl: './producer-list.component.html',
-  styleUrls: ['./producer-list.component.scss']
+    selector: 'app-producer-list',
+    templateUrl: './producer-list.component.html',
+    styleUrls: ['./producer-list.component.scss'],
+    standalone: false
 })
 export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 

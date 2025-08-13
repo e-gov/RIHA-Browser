@@ -11,9 +11,10 @@ import {CanDeactivateModal} from "../../guards/can-deactivate-modal.guard";
 import {ModalHelperService} from "../../services/modal-helper.service";
 
 @Component({
-  selector: 'app-producer-details',
-  templateUrl: './producer-details.component.html',
-  styleUrls: ['./producer-details.component.scss']
+    selector: 'app-producer-details',
+    templateUrl: './producer-details.component.html',
+    styleUrls: ['./producer-details.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsComponent implements OnInit, DoCheck, CanDeactivateModal {
   private system: System = new System();

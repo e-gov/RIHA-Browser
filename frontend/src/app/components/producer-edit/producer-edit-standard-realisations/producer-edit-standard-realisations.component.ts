@@ -5,9 +5,10 @@ import {ModalHelperService} from '../../../services/modal-helper.service';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-producer-edit-standard-realisations',
-  templateUrl: './producer-edit-standard-realisations.component.html',
-  styleUrls: ['./producer-edit-standard-realisations.component.scss']
+    selector: 'app-producer-edit-standard-realisations',
+    templateUrl: './producer-edit-standard-realisations.component.html',
+    styleUrls: ['./producer-edit-standard-realisations.component.scss'],
+    standalone: false
 })
 export class ProducerEditStandardRealisationsComponent {
 
