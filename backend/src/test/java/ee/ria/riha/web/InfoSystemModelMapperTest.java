@@ -1,7 +1,7 @@
 package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jackson.JsonLoader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.TestUtils;
 import ee.ria.riha.authentication.RihaOrganization;
@@ -66,6 +66,7 @@ public class InfoSystemModelMapperTest {
     private InfoSystemAuthorizationService infoSystemAuthorizationService;
     @InjectMocks
     private InfoSystemModelMapper infoSystemModelMapper = new InfoSystemModelMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() {
@@ -160,7 +161,7 @@ public class InfoSystemModelMapperTest {
 
     private JsonNode fromString(String json) {
         try {
-            return JsonLoader.fromString(json);
+            return objectMapper.readTree(json);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

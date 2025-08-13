@@ -1,9 +1,9 @@
 package ee.ria.riha.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.github.fge.jackson.JsonLoader;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.service.JsonSecurityDetailsValidationService;
 import ee.ria.riha.service.JsonValidationException;
@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,14 +31,15 @@ public class InfoSystemJsonSchemaTest {
     private UUID uuid = UUID.fromString("5d68f510-86f0-4e05-9502-c761bbebe6be");
     private JsonValidationService jsonValidationService;
     private InfoSystem infoSystem = new InfoSystem();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private JsonSecurityDetailsValidationService jsonSecurityDetailsValidationService = new JsonSecurityDetailsValidationService();
 
     @BeforeEach
     public void setUp() throws IOException {
-        this.jsonValidationService = new JsonValidationService(
-                JsonLoader.fromResource("/infosystem_schema.json"));
+        JsonNode schemaNode = loadFromResource("/infosystem_schema.json");
+        this.jsonValidationService = new JsonValidationService(schemaNode);
         jsonValidationService.setJsonSecurityDetailsValidationService(jsonSecurityDetailsValidationService);
 
         infoSystem.setUuid(uuid);
@@ -48,6 +50,15 @@ public class InfoSystemJsonSchemaTest {
         infoSystem.setPurpose("testing");
 
         when(jsonSecurityDetailsValidationService.isNecessaryToValidateSecurityDetails(any())).thenReturn(false);
+    }
+
+    private JsonNode loadFromResource(String resourcePath) throws IOException {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new IOException("Resource not found: " + resourcePath);
+            }
+            return objectMapper.readTree(is);
+        }
     }
 
     @Test
