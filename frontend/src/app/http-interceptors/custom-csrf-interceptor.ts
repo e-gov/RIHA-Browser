@@ -18,7 +18,7 @@ export class CustomCsrfInterceptor implements HttpInterceptor {
     }
 
     // Skip CSRF for the CSRF token endpoint itself
-    if (req.url.includes('/api/v1/csrf-token')) {
+    if (req.url.includes('/api/v1/csrf/token')) {
       return next.handle(req);
     }
 
@@ -47,7 +47,7 @@ export class CustomCsrfInterceptor implements HttpInterceptor {
   }
 
   private fetchCsrfToken(): Observable<any> {
-    return this.http.get<any>('/api/v1/csrf-token').pipe(
+    return this.http.get<any>('/api/v1/csrf/token').pipe(
       switchMap((response) => {
         this.csrfToken = response.token;
         this.csrfHeaderName = response.headerName || 'X-CSRF-TOKEN';
