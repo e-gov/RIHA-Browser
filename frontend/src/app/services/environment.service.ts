@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Environment} from '../models/environment';
 import {User} from '../models/user';
 import {UserMatrix} from '../models/user-matrix';

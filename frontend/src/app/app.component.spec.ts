@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {LangChangeEvent, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {DebugElement} from '@angular/core';
 
@@ -24,18 +24,19 @@ describe('When initializing AppComponent', function () {
   let langChangeSubscription;
 
   beforeAll((done) => TestBed.configureTestingModule({
-      imports: [HttpClientModule, TranslateModule.forRoot({
-        missingTranslationHandler,
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-        }
-      })],
-      declarations: [
+    declarations: [
         AppComponent
-      ]
-    })
+    ],
+    imports: [TranslateModule.forRoot({
+            missingTranslationHandler,
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })],
+    providers: [provideHttpClient(withInterceptorsFromDi())]
+})
     .overrideComponent(AppComponent, {
       set: {
         template: '<h1>{{ title | translate }}</h1>'

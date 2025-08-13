@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {EnvironmentService} from './environment.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {System} from "../models/system";
 import {SystemIssue} from "../models/system-issue";
 import {SystemRelation} from "../models/system-relation";
