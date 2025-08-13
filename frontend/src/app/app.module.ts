@@ -86,7 +86,7 @@ import { TopicsButtonComponent } from './components/grid-view/topics-button/topi
 import { CsrfTokenService } from './services/csrf-token.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader();
 }
 
 export function onApplicationStart(environmentService: EnvironmentService) {

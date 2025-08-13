@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as linkify from 'linkify-string/index';
+import linkifyStr from 'linkify-string';
 
 @Pipe({
     name: 'linkify',
@@ -7,7 +7,7 @@ import * as linkify from 'linkify-string/index';
 })
 export class LinkifyPipe implements PipeTransform {
   transform(str: string): string {
-    return str ? linkify(str, {
+    return str ? linkifyStr(str, {
       className: 'user-link',
     }) : str;
   }
