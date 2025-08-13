@@ -109,7 +109,7 @@ public class WebSecurityConfiguration {
         }
 
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository()))
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(requests -> requests
                         .anyRequest().permitAll())
