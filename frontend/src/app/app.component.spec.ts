@@ -7,8 +7,11 @@ import {DebugElement} from '@angular/core';
 import {AppComponent} from './app.component';
 import missingTranslationHandler from './app.missingTranslation';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/base/src/assets/i18n/', '.json');
+// Use TranslateHttpLoader directly, no factory needed with modern Angular
+// The loader will be configured through the provider system
+// This function is kept for backwards compatibility with tests
+export function HttpLoaderFactory() {
+  return new TranslateHttpLoader();
 }
 
 /* ATTENTION Angular 2 zone.js reset created component after each it section */
@@ -31,8 +34,7 @@ describe('When initializing AppComponent', function () {
             missingTranslationHandler,
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                useClass: TranslateHttpLoader
             }
         })],
     providers: [provideHttpClient(withInterceptorsFromDi())]
