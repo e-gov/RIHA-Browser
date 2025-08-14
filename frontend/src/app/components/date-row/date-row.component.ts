@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-date-row',
-  templateUrl: './date-row.component.html',
-  styleUrls: ['./date-row.component.scss']
+    selector: 'app-date-row',
+    templateUrl: './date-row.component.html',
+    styleUrls: ['./date-row.component.scss'],
+    standalone: false
 })
 export class DateRowComponent implements OnInit {
 

@@ -19,7 +19,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "assets": [
               "src/assets",
               "src/favicon.ico"
@@ -75,22 +75,22 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "riha:build",
-            "proxyConfig": "src/proxy.conf.json"
+            "proxyConfig": "src/proxy.conf.json",
+            "buildTarget": "riha:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "riha:build:production"
+              "buildTarget": "riha:build:production"
             },
             "local": {
-              "browserTarget": "riha:build:local"
+              "buildTarget": "riha:build:local"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "riha:build"
+            "buildTarget": "riha:build"
           }
         },
         "test": {
@@ -98,7 +98,7 @@
           "options": {
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": "zone.js",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
               "bower_components/jquery/dist/jquery.js",
@@ -164,7 +164,6 @@
       }
     }
   },
-  "defaultProject": "riha",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

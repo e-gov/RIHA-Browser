@@ -2,8 +2,9 @@ import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-login-link',
-  templateUrl: './login-link-component.html'
+    selector: 'app-login-link',
+    templateUrl: './login-link-component.html',
+    standalone: false
 })
 export class LoginLinkComponent  {
 

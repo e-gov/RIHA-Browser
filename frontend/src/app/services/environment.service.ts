@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Environment} from '../models/environment';
 import {User} from '../models/user';
 import {UserMatrix} from '../models/user-matrix';
 import {environment} from '../../environments/environment';
-import {Observable} from "rxjs";
+import {Observable, firstValueFrom} from "rxjs";
 
 declare const ga: Function;
 export let classifiers: any;
@@ -139,7 +139,7 @@ export class EnvironmentService {
   }
 
   public loadClassifiers(): Promise<any> {
-    return this.http.get(this.classifiersUrl).toPromise().then(response => {
+    return firstValueFrom(this.http.get(this.classifiersUrl)).then(response => {
       classifiers = Object.freeze(response);
     });
   }
@@ -154,7 +154,7 @@ export class EnvironmentService {
   }
 
   public async loadEnvironmentDataProperly(): Promise<Environment> {
-    this.globalEnvironment = new Environment(await this.http.get<Environment>(this.environmentUrl).toPromise());
+    this.globalEnvironment = new Environment(await firstValueFrom(this.http.get<Environment>(this.environmentUrl)));
     return this.globalEnvironment;
   }
 

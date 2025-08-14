@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-card-deck',
-  templateUrl: './card-deck.component.html',
-  styleUrls: ['./card-deck.component.scss']
+    selector: 'app-card-deck',
+    templateUrl: './card-deck.component.html',
+    styleUrls: ['./card-deck.component.scss'],
+    standalone: false
 })
 export class CardDeckComponent implements OnInit {
   public cards = [];

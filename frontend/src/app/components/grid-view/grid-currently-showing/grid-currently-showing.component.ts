@@ -3,9 +3,10 @@ import { GridData } from '../../../models/grid-data';
 
 
 @Component({
-  selector: 'app-grid-currently-showing',
-  templateUrl: './grid-currently-showing.component.html',
-  styleUrls: ['./grid-currently-showing.component.scss']
+    selector: 'app-grid-currently-showing',
+    templateUrl: './grid-currently-showing.component.html',
+    styleUrls: ['./grid-currently-showing.component.scss'],
+    standalone: false
 })
 export class GridCurrentlyShowingComponent implements OnInit {
 

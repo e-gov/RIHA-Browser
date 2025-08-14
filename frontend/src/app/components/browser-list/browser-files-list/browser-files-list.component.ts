@@ -6,9 +6,10 @@ import {ActivatedRoute} from '@angular/router';
 import {SystemsService} from '../../../services/systems.service';
 
 @Component({
-  selector: 'app-browser-files-list',
-  templateUrl: './browser-files-list.component.html',
-  styleUrls: ['./browser-files-list.component.scss']
+    selector: 'app-browser-files-list',
+    templateUrl: './browser-files-list.component.html',
+    styleUrls: ['./browser-files-list.component.scss'],
+    standalone: false
 })
 export class BrowserFilesListComponent implements OnInit {
 

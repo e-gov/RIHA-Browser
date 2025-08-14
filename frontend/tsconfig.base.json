@@ -10,14 +10,16 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2022",
+    "useDefineForClassFields": false,
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2016",
+      "ES2022",
       "dom"
     ],
-    "module": "es2020"
+    "module": "ES2022"
   }
 }

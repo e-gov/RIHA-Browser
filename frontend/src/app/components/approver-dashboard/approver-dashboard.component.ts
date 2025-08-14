@@ -3,9 +3,10 @@ import { GeneralHelperService } from '../../services/general-helper.service';
 import { EnvironmentService } from '../../services/environment.service';
 
 @Component({
-  selector: 'app-approver-dashboard',
-  templateUrl: './approver-dashboard.component.html',
-  styleUrls: ['./approver-dashboard.component.scss']
+    selector: 'app-approver-dashboard',
+    templateUrl: './approver-dashboard.component.html',
+    styleUrls: ['./approver-dashboard.component.scss'],
+    standalone: false
 })
 export class ApproverDashboardComponent implements OnInit {
 

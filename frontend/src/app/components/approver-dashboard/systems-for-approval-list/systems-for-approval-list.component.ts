@@ -8,9 +8,10 @@ import * as moment from 'moment';
 import {UserMatrix} from '../../../models/user-matrix';
 
 @Component({
-  selector: 'app-systems-for-approval-list',
-  templateUrl: './systems-for-approval-list.component.html',
-  styleUrls: ['./systems-for-approval-list.component.scss']
+    selector: 'app-systems-for-approval-list',
+    templateUrl: './systems-for-approval-list.component.html',
+    styleUrls: ['./systems-for-approval-list.component.scss'],
+    standalone: false
 })
 export class SystemsForApprovalListComponent implements OnInit {
   classifiers = classifiers;

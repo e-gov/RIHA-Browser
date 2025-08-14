@@ -9,9 +9,10 @@ import {ProducerEditStandardRealisationsComponent} from '../../producer-edit/pro
 import {UserMatrix} from '../../../models/user-matrix';
 
 @Component({
-  selector: 'app-producer-details-relations',
-  templateUrl: './producer-details-relations.component.html',
-  styleUrls: ['./producer-details-relations.component.scss']
+    selector: 'app-producer-details-relations',
+    templateUrl: './producer-details-relations.component.html',
+    styleUrls: ['./producer-details-relations.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsRelationsComponent implements OnInit    {
 

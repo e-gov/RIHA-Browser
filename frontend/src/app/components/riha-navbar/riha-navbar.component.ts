@@ -9,9 +9,10 @@ import {NoOrganizationModalComponent} from '../no-organization-modal/no-organiza
 import * as $ from 'jquery';
 
 @Component({
-  selector: 'app-riha-navbar',
-  templateUrl: './riha-navbar.component.html',
-  styleUrls: ['./riha-navbar.component.scss']
+    selector: 'app-riha-navbar',
+    templateUrl: './riha-navbar.component.html',
+    styleUrls: ['./riha-navbar.component.scss'],
+    standalone: false
 })
 export class RihaNavbarComponent implements OnInit, AfterContentChecked {
   public activeUser: User = null;

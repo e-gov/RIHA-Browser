@@ -2,9 +2,10 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GridData} from '../../../models/grid-data';
 
 @Component({
-  selector: 'app-sort-button',
-  templateUrl: './sort-button.component.html',
-  styleUrls: ['./sort-button.component.scss']
+    selector: 'app-sort-button',
+    templateUrl: './sort-button.component.html',
+    styleUrls: ['./sort-button.component.scss'],
+    standalone: false
 })
 export class SortButtonComponent implements OnInit {
 

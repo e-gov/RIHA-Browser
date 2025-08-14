@@ -15,9 +15,10 @@ import {delay, tap} from "rxjs/operators";
 
 
 @Component({
-  selector: 'app-browser-list',
-  templateUrl: './browser-list.component.html',
-  styleUrls: ['./browser-list.component.scss']
+    selector: 'app-browser-list',
+    templateUrl: './browser-list.component.html',
+    styleUrls: ['./browser-list.component.scss'],
+    standalone: false
 })
 export class BrowserListComponent implements OnInit, AfterViewInit {
 

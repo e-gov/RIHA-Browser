@@ -7,9 +7,10 @@ import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-producer-details-objects',
-  templateUrl: './producer-details-objects.component.html',
-  styleUrls: ['./producer-details-objects.component.scss']
+    selector: 'app-producer-details-objects',
+    templateUrl: './producer-details-objects.component.html',
+    styleUrls: ['./producer-details-objects.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsObjectsComponent implements OnInit {
 

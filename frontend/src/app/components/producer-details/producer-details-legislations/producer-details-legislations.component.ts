@@ -9,9 +9,10 @@ import { classifiers } from "../../../services/environment.service";
 import _ from 'lodash';
 
 @Component({
-  selector: 'app-producer-details-legislations',
-  templateUrl: './producer-details-legislations.component.html',
-  styleUrls: ['./producer-details-legislations.component.scss']
+    selector: 'app-producer-details-legislations',
+    templateUrl: './producer-details-legislations.component.html',
+    styleUrls: ['./producer-details-legislations.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsLegislationsComponent implements OnInit {
 

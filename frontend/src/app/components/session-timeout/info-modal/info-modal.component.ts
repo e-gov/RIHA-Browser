@@ -3,9 +3,10 @@ import {Router} from '@angular/router';
 import {ModalHelperService} from '../../../services/modal-helper.service';
 
 @Component({
-  selector: 'app-info-modal',
-  templateUrl: './info-modal.component.html',
-  styleUrls: ['./info-modal.component.scss']
+    selector: 'app-info-modal',
+    templateUrl: './info-modal.component.html',
+    styleUrls: ['./info-modal.component.scss'],
+    standalone: false
 })
 export class InfoModalComponent implements OnInit {
 

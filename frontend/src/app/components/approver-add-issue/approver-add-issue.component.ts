@@ -11,9 +11,10 @@ import {NgForm} from "@angular/forms";
 import {CONSTANTS} from '../../utils/constants';
 
 @Component({
-  selector: 'app-approver-add-comment',
-  templateUrl: './approver-add-issue.component.html',
-  styleUrls: ['./approver-add-issue.component.scss']
+    selector: 'app-approver-add-comment',
+    templateUrl: './approver-add-issue.component.html',
+    styleUrls: ['./approver-add-issue.component.scss'],
+    standalone: false
 })
 export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
 

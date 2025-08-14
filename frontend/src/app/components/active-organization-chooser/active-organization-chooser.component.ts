@@ -6,9 +6,10 @@ import { Environment } from '../../models/environment';
 import { ModalHelperService } from '../../services/modal-helper.service';
 
 @Component({
-  selector: 'app-active-organization-chooser',
-  templateUrl: './active-organization-chooser.component.html',
-  styleUrls: ['./active-organization-chooser.component.scss']
+    selector: 'app-active-organization-chooser',
+    templateUrl: './active-organization-chooser.component.html',
+    styleUrls: ['./active-organization-chooser.component.scss'],
+    standalone: false
 })
 export class ActiveOrganizationChooserComponent implements OnInit {
   user: User;

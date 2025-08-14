@@ -1,4 +1,4 @@
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import {SessionInterceptor} from './session-interceptor';
 import {CustomCsrfInterceptor} from './custom-csrf-interceptor';

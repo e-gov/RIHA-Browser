@@ -6,9 +6,10 @@ import {WindowRefService} from '../../../services/window-ref.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  selector: 'app-producer-edit-general',
-  templateUrl: './producer-edit-general.component.html',
-  styleUrls: ['./producer-edit-general.component.scss']
+    selector: 'app-producer-edit-general',
+    templateUrl: './producer-edit-general.component.html',
+    styleUrls: ['./producer-edit-general.component.scss'],
+    standalone: false
 })
 export class ProducerEditGeneralComponent implements OnInit {
 

@@ -8,9 +8,10 @@ import {ProducerEditSecurityComponent} from '../../producer-edit/producer-edit-s
 import {classifiers, EnvironmentService} from '../../../services/environment.service';
 
 @Component({
-  selector: 'app-producer-details-security',
-  templateUrl: './producer-details-security.component.html',
-  styleUrls: ['./producer-details-security.component.scss']
+    selector: 'app-producer-details-security',
+    templateUrl: './producer-details-security.component.html',
+    styleUrls: ['./producer-details-security.component.scss'],
+    standalone: false
 })
 export class ProducerDetailsSecurityComponent implements OnInit {
 

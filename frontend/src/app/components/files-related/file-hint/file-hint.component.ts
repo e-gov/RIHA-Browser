@@ -3,9 +3,10 @@ import {classifiers} from "../../../services/environment.service";
 import {GeneralHelperService} from "../../../services/general-helper.service";
 
 @Component({
-  selector: 'app-file-hint',
-  templateUrl: './file-hint.component.html',
-  styleUrls: ['./file-hint.component.scss']
+    selector: 'app-file-hint',
+    templateUrl: './file-hint.component.html',
+    styleUrls: ['./file-hint.component.scss'],
+    standalone: false
 })
 export class FileHintComponent implements OnInit {
 

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import {Location} from '@angular/common';
 import {Observable} from 'rxjs';
 
@@ -11,7 +11,7 @@ export interface CanDeactivateModal {
   providedIn: 'root'
 })
 
-export class CanDeactivateModalGuard implements CanDeactivate<CanDeactivateModal> {
+export class CanDeactivateModalGuard  {
 
   constructor(
     private location: Location,

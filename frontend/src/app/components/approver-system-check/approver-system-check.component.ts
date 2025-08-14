@@ -5,9 +5,10 @@ import { classifiers } from "../../services/environment.service";
 import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
-  selector: 'app-approver-system-check',
-  templateUrl: './approver-system-check.component.html',
-  styleUrls: ['./approver-system-check.component.scss']
+    selector: 'app-approver-system-check',
+    templateUrl: './approver-system-check.component.html',
+    styleUrls: ['./approver-system-check.component.scss'],
+    standalone: false
 })
 export class ApproverSystemCheckComponent implements OnInit {
 

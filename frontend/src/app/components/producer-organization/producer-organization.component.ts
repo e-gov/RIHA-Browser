@@ -12,9 +12,10 @@ import {ModalHelperService} from "../../services/modal-helper.service";
 import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
-  selector: 'app-producer-organization',
-  templateUrl: './producer-organization.component.html',
-  styleUrls: ['./producer-organization.component.scss']
+    selector: 'app-producer-organization',
+    templateUrl: './producer-organization.component.html',
+    styleUrls: ['./producer-organization.component.scss'],
+    standalone: false
 })
 export class ProducerOrganizationComponent implements OnInit, DoCheck {
 

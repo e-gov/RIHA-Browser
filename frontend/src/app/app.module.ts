@@ -1,19 +1,18 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule, importProvidersFrom} from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG} from '@ngx-translate/http-loader';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {RouterModule, Routes} from '@angular/router';
-import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {UiSwitchModule} from 'ngx-ui-switch';
-import {CustomFormsModule} from 'ngx-custom-validators';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-
+import {NarikCustomValidatorsModule} from '@narik/custom-validators';
+import { HttpClient, provideHttpClient, HttpClientModule, withInterceptorsFromDi, withJsonpSupport } from '@angular/common/http';
+import {MatChipsModule} from '@angular/material/chips';
 import missingTranslationHandler from './app.missingTranslation';
-
 import {AppComponent} from './app.component';
 import {RihaNavbarComponent} from './components/riha-navbar/riha-navbar.component';
 //services
@@ -87,10 +86,6 @@ import {RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module} from 'ng-recaptcha';
 import { TopicsButtonComponent } from './components/grid-view/topics-button/topics-button.component';
 import { CsrfTokenService } from './services/csrf-token.service';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
-
 export function onApplicationStart(environmentService: EnvironmentService) {
   return () => environmentService.onAppStart();
 }
@@ -100,7 +95,8 @@ export function loadClassifiers(environmentService: EnvironmentService) {
 }
 
 export function initCsrfToken(csrfTokenService: CsrfTokenService) {
-  return () => csrfTokenService.getCsrfToken().toPromise().catch(err => {
+  return () => firstValueFrom(csrfTokenService.getCsrfToken()).catch(err => {
+    console.error('Failed to initialize CSRF token:', err);
     return null;
   });
 }
@@ -141,109 +137,109 @@ const routes: Routes = [
   {path: '**', component: PageNotFoundComponent}
 ];
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    RihaNavbarComponent,
-    CardDeckComponent,
-    ProducerListComponent,
-    ProducerDetailsComponent,
-    BrowserListComponent,
-    FrontPageComponent,
-    PageHeaderComponent,
-    PageNotFoundComponent,
-    LoginFormComponent,
-    ProducerAddComponent,
-    ProducerEditComponent,
-    DateRowComponent,
-    ProducerDetailsObjectsComponent,
-    ProducerEditObjectsComponent,
-    ProducerDetailsGeneralComponent,
-    ProducerEditGeneralComponent,
-    ProducerDetailsDocumentsComponent,
-    ProducerEditDocumentsComponent,
-    ProducerEditLegislationsComponent,
-    ProducerDetailsLegislationsComponent,
-    AlertComponent,
-    ProducerDetailsIssuesComponent,
-    ApproverAddIssueComponent,
-    ApproverIssueDetailsComponent,
-    NoOrganizationModalComponent,
-    ActiveOrganizationChooserComponent,
-    TooltipComponent,
-    ProducerDetailsContactsComponent,
-    ProducerEditContactsComponent,
-    WarningModalComponent,
-    InfoModalComponent,
-    ProducerDetailsRelationsComponent,
-    ProducerEditRelationsComponent,
-    GridTotalFoundComponent,
-    GridCurrentlyShowingComponent,
-    SortButtonComponent,
-    ProducerDetailsSecurityComponent,
-    ProducerEditSecurityComponent,
-    DatemPipe,
-    FileIconComponent,
-    FileHintComponent,
-    FileCreateUpdateDateComponent,
-    ApproverDashboardComponent,
-    SystemsForApprovalListComponent,
-    ActiveDiscussionsComponent,
-    DiscussionsListComponent,
-    LinkifyPipe,
-    ApproverSystemCheckComponent,
-    CheckResultRowComponent,
-    ProducerDashboardComponent,
-    BrowserFilesListComponent,
-    ProducerEditStandardRealisationsComponent,
-    LoginLinkComponent,
-    ProducerSearchFilterComponent,
-    ProducerOrganizationComponent,
-    FeedbackFormComponent,
-    TopicsButtonComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    TagInputModule,
-    BrowserAnimationsModule,
-    CustomFormsModule,
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
-    UiSwitchModule,
-    ToastrModule.forRoot(),
-    TranslateModule.forRoot({
-      missingTranslationHandler,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
-        deps: [HttpClient]
-      }
-    }),
-    NgbModule,
-    RecaptchaV3Module
-  ],
-  entryComponents: [ ],
-  bootstrap: [AppComponent],
-  providers: [
-    SystemsService,
-    WindowRefService,
-    EnvironmentService,
-    GeneralHelperService,
-    SessionHelperService,
-    ModalHelperService,
-    SystemFeedbackService,
-    CsrfTokenService,
-    {provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true},
-    {provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true},
-    {provide: APP_INITIALIZER, useFactory: initCsrfToken, deps: [CsrfTokenService], multi: true},
-    // { provide: RECAPTCHA_V3_SITE_KEY, useValue: '6Lfm39QZAAAAAGefZSqsv3poar50pSIpdGs4qVb6'},
-    { provide: RECAPTCHA_V3_SITE_KEY, useFactory: loadRecaptchaSiteKey, deps: [EnvironmentService], multi: false},
-
-    httpInterceptorProviders,
-    CanDeactivateModalGuard,
-  ]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        RihaNavbarComponent,
+        CardDeckComponent,
+        ProducerListComponent,
+        ProducerDetailsComponent,
+        BrowserListComponent,
+        FrontPageComponent,
+        PageHeaderComponent,
+        PageNotFoundComponent,
+        LoginFormComponent,
+        ProducerAddComponent,
+        ProducerEditComponent,
+        DateRowComponent,
+        ProducerDetailsObjectsComponent,
+        ProducerEditObjectsComponent,
+        ProducerDetailsGeneralComponent,
+        ProducerEditGeneralComponent,
+        ProducerDetailsDocumentsComponent,
+        ProducerEditDocumentsComponent,
+        ProducerEditLegislationsComponent,
+        ProducerDetailsLegislationsComponent,
+        AlertComponent,
+        ProducerDetailsIssuesComponent,
+        ApproverAddIssueComponent,
+        ApproverIssueDetailsComponent,
+        NoOrganizationModalComponent,
+        ActiveOrganizationChooserComponent,
+        TooltipComponent,
+        ProducerDetailsContactsComponent,
+        ProducerEditContactsComponent,
+        WarningModalComponent,
+        InfoModalComponent,
+        ProducerDetailsRelationsComponent,
+        ProducerEditRelationsComponent,
+        GridTotalFoundComponent,
+        GridCurrentlyShowingComponent,
+        SortButtonComponent,
+        ProducerDetailsSecurityComponent,
+        ProducerEditSecurityComponent,
+        DatemPipe,
+        FileIconComponent,
+        FileHintComponent,
+        FileCreateUpdateDateComponent,
+        ApproverDashboardComponent,
+        SystemsForApprovalListComponent,
+        ActiveDiscussionsComponent,
+        DiscussionsListComponent,
+        LinkifyPipe,
+        ApproverSystemCheckComponent,
+        CheckResultRowComponent,
+        ProducerDashboardComponent,
+        BrowserFilesListComponent,
+        ProducerEditStandardRealisationsComponent,
+        LoginLinkComponent,
+        ProducerSearchFilterComponent,
+        ProducerOrganizationComponent,
+        FeedbackFormComponent,
+        TopicsButtonComponent
+    ],
+    bootstrap: [AppComponent], 
+    imports: [BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        MatChipsModule,
+        BrowserAnimationsModule,
+        NarikCustomValidatorsModule,
+        RouterModule.forRoot(routes, {}),
+        UiSwitchModule,
+        ToastrModule.forRoot(),
+        TranslateModule.forRoot({
+            missingTranslationHandler,
+            loader: {
+                provide: TranslateLoader,
+                useClass: TranslateHttpLoader
+            }
+        }),
+        NgbModule,
+        RecaptchaV3Module], providers: [
+        SystemsService,
+        WindowRefService,
+        EnvironmentService,
+        GeneralHelperService,
+        SessionHelperService,
+        ModalHelperService,
+        SystemFeedbackService,
+        CsrfTokenService,
+        { provide: APP_INITIALIZER, useFactory: onApplicationStart, deps: [EnvironmentService], multi: true },
+        { provide: APP_INITIALIZER, useFactory: loadClassifiers, deps: [EnvironmentService], multi: true },
+        { provide: APP_INITIALIZER, useFactory: initCsrfToken, deps: [CsrfTokenService], multi: true },
+        { provide: RECAPTCHA_V3_SITE_KEY, useFactory: loadRecaptchaSiteKey, deps: [EnvironmentService], multi: false },
+        httpInterceptorProviders,
+        CanDeactivateModalGuard,
+        { 
+          provide: TRANSLATE_HTTP_LOADER_CONFIG, 
+          useValue: { 
+            prefix: './assets/i18n/', 
+            suffix: '.json' 
+          } 
+        },
+    ] })
 
 export class AppModule {
+  // Angular 20 requires a constructor for proper DI resolution
+  constructor() {}
 }

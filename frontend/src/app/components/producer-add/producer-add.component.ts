@@ -8,9 +8,10 @@ import { UserMatrix } from '../../models/user-matrix';
 import { GeneralHelperService } from '../../services/general-helper.service';
 
 @Component({
-  selector: 'app-producer-add',
-  templateUrl: './producer-add.component.html',
-  styleUrls: ['./producer-add.component.scss']
+    selector: 'app-producer-add',
+    templateUrl: './producer-add.component.html',
+    styleUrls: ['./producer-add.component.scss'],
+    standalone: false
 })
 export class ProducerAddComponent implements OnInit, DoCheck {
 
