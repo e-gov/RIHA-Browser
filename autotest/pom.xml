@@ -17,7 +17,7 @@
 
     <properties>
         <skipTests>false</skipTests>
-        <cucumber.version>6.8.0</cucumber.version>
+        <cucumber.version>7.27.0</cucumber.version>
     </properties>
 
     <build>
@@ -40,12 +40,12 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>3.141.59</version>
+            <version>4.35.0</version>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>3.7.1</version>
+            <version>6.2.0</version>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
