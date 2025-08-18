@@ -4,6 +4,8 @@ import {SystemsService} from '../../../services/systems.service';
 import {classifiers, EnvironmentService} from "../../../services/environment.service";
 import {WindowRefService} from '../../../services/window-ref.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipEditedEvent, MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
     selector: 'app-producer-edit-general',
@@ -20,6 +22,9 @@ export class ProducerEditGeneralComponent implements OnInit {
   timeoutId: any = null;
   isChanged: boolean = false;
   standard: any = null;
+  
+  // Chip input configuration
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   onSubmit(f) :void {
     this.alertConf = null;
@@ -101,6 +106,41 @@ export class ProducerEditGeneralComponent implements OnInit {
     }
   }
 
+  // Chip management methods
+  addTopic(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    
+    // Add topic
+    if (value && this.system.details.topics.indexOf(value) === -1) {
+      this.system.details.topics.push(value);
+      this.isChanged = true;
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+  }
+
+  removeTopic(index: number): void {
+    if (index >= 0) {
+      this.system.details.topics.splice(index, 1);
+      this.isChanged = true;
+    }
+  }
+
+  editTopic(index: number, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+
+    // Remove topic if it no longer has a name
+    if (!value) {
+      this.removeTopic(index);
+      return;
+    }
+
+    // Edit existing topic
+    this.system.details.topics[index] = value;
+    this.isChanged = true;
+  }
+
   constructor(private systemsService: SystemsService,
               private router: Router,
               private route: ActivatedRoute,
@@ -112,5 +152,10 @@ export class ProducerEditGeneralComponent implements OnInit {
     this.route.params.subscribe( params => {
       this.reference = params['reference'];
     });
+    
+    // Ensure topics is initialized as an array
+    if (!this.system.details.topics) {
+      this.system.details.topics = [];
+    }
   }
 }

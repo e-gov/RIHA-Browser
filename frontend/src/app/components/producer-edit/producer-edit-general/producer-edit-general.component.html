@@ -126,15 +126,22 @@
         <label class="text-muted">Infosüsteemi märksõnad:
           <app-tooltip [text]='"Valdkonnad ja märksõnad, mis infosüsteemi iseloomustavad. Näiteks \"majandus\" jne. Uue märksõna lisamiseks kasuta reavahetust"'></app-tooltip>
         </label>
-        <mat-chip-input [(ngModel)]="system.details.topics" name="topics"
-                   [theme]="'bootstrap'"
-                   [placeholder]="'lisa uus'"
-                   [modelAsStrings]="true"
-                   [addOnBlur]="true"
-                   [separatorKeys]="[',']"
-                   [secondaryPlaceholder]="'Sisesta märksõnad'"
-                   [addOnPaste]="true">
-        </mat-chip-input>
+        <mat-chip-grid #chipGrid aria-label="Infosüsteemi märksõnad">
+          <mat-chip-row *ngFor="let topic of system.details.topics; let i = index" 
+                        (removed)="removeTopic(i)" 
+                        [editable]="true"
+                        (edited)="editTopic(i, $event)">
+            {{topic}}
+            <button matChipRemove [attr.aria-label]="'remove ' + topic">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Sisesta märksõnad"
+                 [matChipInputFor]="chipGrid"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="true"
+                 (matChipInputTokenEnd)="addTopic($event)" />
+        </mat-chip-grid>
       </div>
 
       <hr class="short" align="left">
