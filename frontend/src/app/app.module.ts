@@ -12,6 +12,7 @@ import {UiSwitchModule} from 'ngx-ui-switch';
 import {NarikCustomValidatorsModule} from '@narik/custom-validators';
 import { HttpClient, provideHttpClient, HttpClientModule, withInterceptorsFromDi, withJsonpSupport } from '@angular/common/http';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatIconModule} from '@angular/material/icon';
 import missingTranslationHandler from './app.missingTranslation';
 import {AppComponent} from './app.component';
 import {RihaNavbarComponent} from './components/riha-navbar/riha-navbar.component';
@@ -202,6 +203,7 @@ const routes: Routes = [
         HttpClientModule,
         FormsModule,
         MatChipsModule,
+        MatIconModule,
         BrowserAnimationsModule,
         NarikCustomValidatorsModule,
         RouterModule.forRoot(routes, {}),

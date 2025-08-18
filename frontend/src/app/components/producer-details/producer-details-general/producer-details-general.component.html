@@ -59,13 +59,13 @@
       <p class="user-multiline-text" [innerHTML]="system.details.differences | linkify"></p>
     </div>
 
-    <div *ngIf="system.getTopics().length > 0" class="pb-2">
+    <div *ngIf="system.getTopics().length > 0" class="mb-3">
       <label class="text-muted">Infosüsteemi märksõnad:</label>
       <div class="word">
         <button *ngFor="let topic of system.getTopics()" (click)="listSystemsWithTopic(topic)" class="btn btn-primary btn-sm ms-1 mb-1">{{ topic }}</button>
       </div>
     </div>
-    <div *ngIf="system.getTopics().length == 0 && allowEdit" class="pb-2">
+    <div *ngIf="system.getTopics().length == 0 && allowEdit" class="mb-3">
       <label>Infosüsteemi märksõnad on <strong>määramata</strong></label>
     </div>
 

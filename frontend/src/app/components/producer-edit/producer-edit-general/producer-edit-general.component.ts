@@ -101,6 +101,27 @@ export class ProducerEditGeneralComponent implements OnInit {
     }
   }
 
+  // Chip management methods
+  addTopicFromInput(input: HTMLInputElement): void {
+    const value = (input.value || '').trim();
+    
+    // Add topic if it's not empty and not already in the list
+    if (value && this.system.details.topics.indexOf(value) === -1) {
+      this.system.details.topics.push(value);
+      this.isChanged = true;
+    }
+
+    // Clear the input value
+    input.value = '';
+  }
+
+  removeTopic(index: number): void {
+    if (index >= 0) {
+      this.system.details.topics.splice(index, 1);
+      this.isChanged = true;
+    }
+  }
+
   constructor(private systemsService: SystemsService,
               private router: Router,
               private route: ActivatedRoute,
@@ -112,5 +133,10 @@ export class ProducerEditGeneralComponent implements OnInit {
     this.route.params.subscribe( params => {
       this.reference = params['reference'];
     });
+    
+    // Ensure topics is initialized as an array
+    if (!this.system.details.topics) {
+      this.system.details.topics = [];
+    }
   }
 }
