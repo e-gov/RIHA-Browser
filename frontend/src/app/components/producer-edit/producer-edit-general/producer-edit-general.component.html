@@ -122,26 +122,23 @@
                   rows="5"
                   placeholder="Standardlahenduse kasutajaks registreerimiseks kirjeldage omapoolsed võimalikud erisused infosüsteemi kasutamisel: kasutusel moodulid, rakenduse versioon jmt."></textarea>
       </div>
-      <div>
+      <div class="pb-2">
         <label class="text-muted">Infosüsteemi märksõnad:
           <app-tooltip [text]='"Valdkonnad ja märksõnad, mis infosüsteemi iseloomustavad. Näiteks \"majandus\" jne. Uue märksõna lisamiseks kasuta reavahetust"'></app-tooltip>
         </label>
-        <mat-chip-grid #chipGrid aria-label="Infosüsteemi märksõnad">
-          <mat-chip-row *ngFor="let topic of system.details.topics; let i = index" 
-                        (removed)="removeTopic(i)" 
-                        [editable]="true"
-                        (edited)="editTopic(i, $event)">
-            {{topic}}
-            <button matChipRemove [attr.aria-label]="'remove ' + topic">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
-          <input placeholder="Sisesta märksõnad"
-                 [matChipInputFor]="chipGrid"
-                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                 [matChipInputAddOnBlur]="true"
-                 (matChipInputTokenEnd)="addTopic($event)" />
-        </mat-chip-grid>
+        <div class="word">
+          <button *ngFor="let topic of system.details.topics; let i = index" 
+                  class="btn btn-primary btn-sm ms-1 mb-1 chip-button">
+            {{ topic }}
+            <i class="fa fa-times ms-1" (click)="removeTopic(i)" aria-label="remove"></i>
+          </button>
+          <input #chipInput 
+                 class="chip-input"
+                 placeholder="Sisesta märksõnad"
+                 (keydown.enter)="addTopicFromInput(chipInput)"
+                 (keydown.comma)="addTopicFromInput(chipInput)"
+                 (blur)="addTopicFromInput(chipInput)" />
+        </div>
       </div>
 
       <hr class="short" align="left">
