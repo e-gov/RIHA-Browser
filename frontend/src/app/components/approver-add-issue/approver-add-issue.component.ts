@@ -33,6 +33,10 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
   };
   issueButtonClicked: boolean = false;
   requestButtonClicked: boolean = false;
+  
+  // Loading states
+  isIssueSubmitting: boolean = false;
+  isApprovalRequestSubmitting: boolean = false;
 
   switchView(){
     this.isApprovalRequest = !this.isApprovalRequest;
@@ -45,13 +49,16 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
 
   onSubmitNewIssue(f) :void {
     if (f.valid){
+      this.isIssueSubmitting = true;
       this.systemsService.addSystemIssue(this.system.details.short_name, f.value).subscribe(
         issue => {
+          this.isIssueSubmitting = false;
           this.modalService.closeActiveModal();
         },
         err => {
+          this.isIssueSubmitting = false;
           this.toastrService.error('Serveri viga! Proovige uuesti!');
-        })
+        });
       this.issueButtonClicked = false;
     } else {
       this.issueButtonClicked = true;
@@ -60,11 +67,14 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
 
   onSubmitApprovalRequest(f) :void {
     if (f.valid) {
+      this.isApprovalRequestSubmitting = true;
       this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).subscribe(
         issue => {
+          this.isApprovalRequestSubmitting = false;
           this.modalService.closeActiveModal();
         },
         err => {
+          this.isApprovalRequestSubmitting = false;
           this.toastrService.error('Serveri viga! Proovige uuesti!');
         });
       this.requestButtonClicked = false;

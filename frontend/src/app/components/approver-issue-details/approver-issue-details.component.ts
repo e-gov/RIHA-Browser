@@ -30,6 +30,11 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
   decisionType: string = 'null';
   commentText: string = '';
   deadlinePassed: boolean;
+  
+  // Loading states
+  isCommentSubmitting: boolean = false;
+  isDecisionSubmitting: boolean = false;
+  isResolvingIssue: boolean = false;
 
   refreshReplies(){
     this.systemService.getSystemIssueTimeline(this.feedback.id).subscribe(
@@ -45,14 +50,17 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
   }
 
   markResolved(resolutionType?){
+    this.isResolvingIssue = true;
     this.systemService.closeSystemIssue(this.feedback.id, resolutionType).subscribe(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
         this.modalService.closeActiveModal({issueType: resolutionType});
+        this.isResolvingIssue = false;
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
+        this.isResolvingIssue = false;
       }
     )
   }
@@ -63,6 +71,7 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
 
   postComment(f){
     if (f.valid && this.commentText){
+      this.isCommentSubmitting = true;
       this.systemService.postSystemIssueComment(this.feedback.id, {
         comment: this.commentText
       }).subscribe(
@@ -70,10 +79,12 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
           this.resetValues(f);
           this.refreshReplies();
           this.toastrService.success('Kommentaar edukalt lisatud.');
+          this.isCommentSubmitting = false;
         },
         err => {
           this.resetValues(f);
           this.toastrService.error('Kommentaari lisamine ebaõnnestus. Palun proovi uuesti.');
+          this.isCommentSubmitting = false;
         }
       )
     }
@@ -81,6 +92,7 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
 
   postDecision(f){
     if (f.valid){
+      this.isDecisionSubmitting = true;
       this.systemService.postSystemIssueDecision(this.feedback.id, {
         comment: this.commentText,
         decisionType: this.decisionType
@@ -89,10 +101,12 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
           this.resetValues(f);
           this.refreshReplies();
           this.toastrService.success('Otsus edukalt lisatud.');
+          this.isDecisionSubmitting = false;
         },
         err => {
           this.resetValues(f);
           this.toastrService.error('Otsuse lisamine ebaõnnestus. Palun proovi uuesti.');
+          this.isDecisionSubmitting = false;
         }
       )
     }
