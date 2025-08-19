@@ -1,6 +1,6 @@
 {
   "name": "riha",
-  "version": "7.10.2",
+  "version": "8.0.0",
   "license": "MIT",
   "scripts": {
     "static": "static ../main/resources --port 8085",
