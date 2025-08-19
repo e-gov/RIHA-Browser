@@ -142,12 +142,22 @@
     </div>
     <div class="actions-bar">
       <div *ngIf="isApprovalRequest && openIssuesMatrix" class="buttons pull-right">
-        <button  (click)="closeModal()" class="btn btn-secondary pull-right">Katkesta</button>
-        <button (click)="onSubmitApprovalRequest(approvalRequestForm)" class="btn btn-success pull-right">Salvesta</button>
+        <button (click)="closeModal()" class="btn btn-secondary pull-right" [disabled]="isApprovalRequestSubmitting">Katkesta</button>
+        <button (click)="onSubmitApprovalRequest(approvalRequestForm)" 
+                class="btn btn-success pull-right"
+                [disabled]="isApprovalRequestSubmitting">
+          <span *ngIf="isApprovalRequestSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Salvesta
+        </button>
       </div>
       <div *ngIf="!isApprovalRequest" class="buttons pull-right">
-        <button (click)="closeModal()" class="btn btn-secondary pull-right">Katkesta</button>
-        <button (click)="onSubmitNewIssue(newIssueForm)" class="btn btn-success pull-right">Salvesta</button>
+        <button (click)="closeModal()" class="btn btn-secondary pull-right" [disabled]="isIssueSubmitting">Katkesta</button>
+        <button (click)="onSubmitNewIssue(newIssueForm)" 
+                class="btn btn-success pull-right"
+                [disabled]="isIssueSubmitting">
+          <span *ngIf="isIssueSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Salvesta
+        </button>
       </div>
     </div>
   </div>

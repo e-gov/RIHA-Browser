@@ -81,9 +81,18 @@
                 </select>
               </div>
               <div class="col" *ngIf="feedback.status == 'OPEN'" >
-                <button *ngIf="decisionType == 'null'" (click)="postComment(commentForm)" class="btn btn-primary pull-right">Lisa kommentaar</button>
-                <button *ngIf="decisionType != 'null'" (click)="postDecision(commentForm)" class="btn btn-primary pull-right">{{
-                  textInput.value ? 'Lisa otsus ja kommentaar' : 'Lisa otsus' }}</button>
+                <button *ngIf="decisionType == 'null'" (click)="postComment(commentForm)" 
+                        class="btn btn-primary pull-right" 
+                        [disabled]="isCommentSubmitting">
+                  <span *ngIf="isCommentSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                  Lisa kommentaar
+                </button>
+                <button *ngIf="decisionType != 'null'" (click)="postDecision(commentForm)" 
+                        class="btn btn-primary pull-right"
+                        [disabled]="isDecisionSubmitting">
+                  <span *ngIf="isDecisionSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                  {{ textInput.value ? 'Lisa otsus ja kommentaar' : 'Lisa otsus' }}
+                </button>
               </div>
             </div>
         </div>
@@ -91,9 +100,27 @@
     </form>
     <div *ngIf="canResolveGeneral() || canResolveWithVerdict()" class="actions-bar">
       <div class="buttons pull-right">
-        <button (click)="markResolved()" *ngIf="canResolveGeneral()" class="btn btn-outline-primary pull-right">Märgi lahendatuks</button>
-        <button (click)="markResolvedWithVerdict(classifiers.issue_resolution_type.NEGATIVE.code)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-danger pull-right">Lükka tagasi ja sulge</button>
-        <button (click)="markResolvedWithVerdict(classifiers.issue_resolution_type.POSITIVE.code)" *ngIf="canResolveWithVerdict()" class="btn btn-outline-success pull-right">Kooskõlasta ja sulge</button>
+        <button (click)="markResolved()" 
+                *ngIf="canResolveGeneral()" 
+                class="btn btn-outline-primary pull-right"
+                [disabled]="isResolvingIssue">
+          <span *ngIf="isResolvingIssue" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Märgi lahendatuks
+        </button>
+        <button (click)="markResolvedWithVerdict(classifiers.issue_resolution_type.NEGATIVE.code)" 
+                *ngIf="canResolveWithVerdict()" 
+                class="btn btn-outline-danger pull-right"
+                [disabled]="isResolvingIssue">
+          <span *ngIf="isResolvingIssue" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Lükka tagasi ja sulge
+        </button>
+        <button (click)="markResolvedWithVerdict(classifiers.issue_resolution_type.POSITIVE.code)" 
+                *ngIf="canResolveWithVerdict()" 
+                class="btn btn-outline-success pull-right"
+                [disabled]="isResolvingIssue">
+          <span *ngIf="isResolvingIssue" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Kooskõlasta ja sulge
+        </button>
       </div>
     </div>
   </div>
