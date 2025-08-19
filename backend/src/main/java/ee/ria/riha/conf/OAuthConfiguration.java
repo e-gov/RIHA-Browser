@@ -11,24 +11,22 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 @Configuration
 public class OAuthConfiguration {
 
-    @Bean
-    @Profile("!dev")
-    public ClientRegistrationRepository clientRegistrationRepository(ApplicationProperties applicationProperties) {
-        ApplicationProperties.TaraProperties taraConfig = applicationProperties.getTara();
-        return new InMemoryClientRegistrationRepository(
-                ClientRegistration
-                        .withRegistrationId(taraConfig.getRegistrationId())
-                        .authorizationUri(taraConfig.getUserAuthorizationUri())
-                        .clientId(taraConfig.getClientId())
-                        .clientName(taraConfig.getClientId())
-                        .clientSecret(taraConfig.getClientSecret())
-                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                        .redirectUri(taraConfig.getRegisteredRedirectUri())
-                        .tokenUri(taraConfig.getAccessTokenUri())
-                        .jwkSetUri(taraConfig.getJwkKeySetUri())
-                        .scope(taraConfig.getScope())
-                        .build()
-        );
-    }
-
+  @Bean
+  @Profile("!dev")
+  public ClientRegistrationRepository clientRegistrationRepository(
+      ApplicationProperties applicationProperties) {
+    ApplicationProperties.TaraProperties taraConfig = applicationProperties.getTara();
+    return new InMemoryClientRegistrationRepository(
+        ClientRegistration.withRegistrationId(taraConfig.getRegistrationId())
+            .authorizationUri(taraConfig.getUserAuthorizationUri())
+            .clientId(taraConfig.getClientId())
+            .clientName(taraConfig.getClientId())
+            .clientSecret(taraConfig.getClientSecret())
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .redirectUri(taraConfig.getRegisteredRedirectUri())
+            .tokenUri(taraConfig.getAccessTokenUri())
+            .jwkSetUri(taraConfig.getJwkKeySetUri())
+            .scope(taraConfig.getScope())
+            .build());
+  }
 }

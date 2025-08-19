@@ -27,13 +27,13 @@ $line-height-lg: 1.1111111111111112;
 $line-height-sm: 1.6666666666666667;
 $btn-secondary-color: $brand-dark !default;
 $btn-secondary-border: $body-bg !default;
-$btn-success-color: $brand-dark!default;
+$btn-success-color: $brand-dark !default;
 $btn-padding-x-sm: 15px !default;
 $btn-padding-y-sm: 3px !default;
-$btn-border-radius-sm: 15px!default;
+$btn-border-radius-sm: 15px !default;
 $btn-padding-x-lg: 28px !default;
 $btn-padding-y-lg: 13px !default;
-$btn-border-radius-lg: 25px!default;
+$btn-border-radius-lg: 25px !default;
 /* Cards */
 $card-border-width: 0px !default;
 $card-border-radius: 0px !default;
@@ -80,7 +80,7 @@ $custom-control-checked-indicator-box-shadow: none !default;
 $custom-checkbox-radius: 3px !default;
 /* Tables */
 $table-cell-padding: 15px 6px !default;
-$table-bg: transparent !default;  /* Add explicit table background */
+$table-bg: transparent !default; /* Add explicit table background */
 $table-bg-accent: $grey4 !default;
 $table-bg-hover: $body-bg !default;
 $table-bg-active: $table-bg-accent !default;
@@ -93,18 +93,17 @@ $modal-title-line-height: 20px !default;
 $modal-content-border-width: 0px !default;
 $modal-content-xs-box-shadow: 0px 3px 10px 0px rgba($black, 0.2) !default;
 $modal-content-sm-up-box-shadow: 0px 3px 10px 0px rgba($black, 0.2) !default;
-$modal-backdrop-opacity: .3 !default;
+$modal-backdrop-opacity: 0.3 !default;
 $modal-footer-border-color: $body-bg !default;
 $modal-header-padding: 25px 20px !default;
 $modal-md: 600px !default;
 /* Progressbar */
 $progress-bg: $body-bg !default;
 $text-muted: $frm-placeholder !default;
-$font-family-sans-serif: "Roboto",
-sans-serif;
+$font-family-sans-serif: 'Roboto', sans-serif;
 
 /* Tooltip customization */
-$tooltip-opacity: 1.0;
+$tooltip-opacity: 1;
 $tooltip-bg: $grey2;
 $tooltip-color: $grey3;
 
@@ -115,7 +114,7 @@ $grid-breakpoints: (
   lg: 992px,
   xl: 1200px,
   xxl: 1400px,
-  xxxl: 1600px
+  xxxl: 1600px,
 ) !default;
 
 $container-max-widths: (
@@ -124,10 +123,10 @@ $container-max-widths: (
   lg: 960px,
   xl: 1140px,
   xxl: 1200px,
-  xxxl: 1400px
+  xxxl: 1400px,
 ) !default;
 
 /* Validation */
 $enable-validation-icons: false;
 
-@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';

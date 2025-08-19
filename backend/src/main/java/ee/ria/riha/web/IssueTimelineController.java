@@ -1,5 +1,7 @@
 package ee.ria.riha.web;
 
+import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
+
 import ee.ria.riha.domain.model.IssueEntity;
 import ee.ria.riha.service.IssueTimelineService;
 import ee.ria.riha.service.auth.PreAuthorizeIssueOwnerOrReviewer;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
-
 /**
  * Issue timeline
  *
@@ -29,23 +29,21 @@ import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
 @Tag(name = "Issue timeline")
 public class IssueTimelineController {
 
-    @Autowired
-    private IssueTimelineService issueTimelineService;
+  @Autowired private IssueTimelineService issueTimelineService;
 
-    /**
-     * List various issue events. Does not include issue itself.
-     *
-     * @param issueId  an id of an issue
-     * @param pageable paging definition
-     * @return paged list of issue events
-     */
-    @GetMapping("/{issueId}/timeline")
-    @PreAuthorizeIssueOwnerOrReviewer
-    @Operation(summary = "Get issue timeline")
-    @ApiPageableParams
-    public ResponseEntity<PagedResponse<IssueEntity>> getTimeline(@PathVariable("issueId") Long issueId,
-                                                                  Pageable pageable) {
-        return ResponseEntity.ok(issueTimelineService.listTimeline(issueId, pageable));
-    }
-
+  /**
+   * List various issue events. Does not include issue itself.
+   *
+   * @param issueId an id of an issue
+   * @param pageable paging definition
+   * @return paged list of issue events
+   */
+  @GetMapping("/{issueId}/timeline")
+  @PreAuthorizeIssueOwnerOrReviewer
+  @Operation(summary = "Get issue timeline")
+  @ApiPageableParams
+  public ResponseEntity<PagedResponse<IssueEntity>> getTimeline(
+      @PathVariable("issueId") Long issueId, Pageable pageable) {
+    return ResponseEntity.ok(issueTimelineService.listTimeline(issueId, pageable));
+  }
 }

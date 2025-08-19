@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Data
 public class OrganizationRoleMapping {
 
-    private String name;
-    private String code;
-    private GrantedAuthority authority;
+  private String name;
+  private String code;
+  private GrantedAuthority authority;
 }

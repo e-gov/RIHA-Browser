@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ApproverAddIssueComponent} from './approver-add-issue.component';
+import { ApproverAddIssueComponent } from './approver-add-issue.component';
 
 describe('ApproverAddIssueComponent', () => {
   let component: ApproverAddIssueComponent;
@@ -8,9 +8,8 @@ describe('ApproverAddIssueComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApproverAddIssueComponent ]
-    })
-    .compileComponents();
+      declarations: [ApproverAddIssueComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

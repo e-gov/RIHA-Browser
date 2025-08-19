@@ -1,10 +1,10 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {LangChangeEvent, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {DebugElement} from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { LangChangeEvent, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DebugElement } from '@angular/core';
 
-import {AppComponent} from './app.component';
+import { AppComponent } from './app.component';
 import missingTranslationHandler from './app.missingTranslation';
 
 // Use TranslateHttpLoader directly, no factory needed with modern Angular
@@ -26,40 +26,45 @@ describe('When initializing AppComponent', function () {
   let defaultLang;
   let langChangeSubscription;
 
-  beforeAll((done) => TestBed.configureTestingModule({
-    declarations: [
-        AppComponent
-    ],
-    imports: [TranslateModule.forRoot({
-            missingTranslationHandler,
-            loader: {
-                provide: TranslateLoader,
-                useClass: TranslateHttpLoader
-            }
-        })],
-    providers: [provideHttpClient(withInterceptorsFromDi())]
-})
-    .overrideComponent(AppComponent, {
-      set: {
-        template: '<h1>{{ title | translate }}</h1>'
-      }
+  beforeAll(done =>
+    TestBed.configureTestingModule({
+      declarations: [AppComponent],
+      imports: [
+        TranslateModule.forRoot({
+          missingTranslationHandler,
+          loader: {
+            provide: TranslateLoader,
+            useClass: TranslateHttpLoader,
+          },
+        }),
+      ],
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(AppComponent);
-    })
-    .then(() => new Promise((resolve) => {
-      const translate: TranslateService = TestBed.inject(TranslateService);
-      langChangeSubscription = translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        defaultLang = event.lang;
-        resolve(void 0);
-      });
-    }))
-    .then(() => {
-      fixture.autoDetectChanges(true);
-      app = fixture.debugElement;
-    })
-    .then(done));
+      .overrideComponent(AppComponent, {
+        set: {
+          template: '<h1>{{ title | translate }}</h1>',
+        },
+      })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(AppComponent);
+      })
+      .then(
+        () =>
+          new Promise(resolve => {
+            const translate: TranslateService = TestBed.inject(TranslateService);
+            langChangeSubscription = translate.onLangChange.subscribe((event: LangChangeEvent) => {
+              defaultLang = event.lang;
+              resolve(void 0);
+            });
+          }),
+      )
+      .then(() => {
+        fixture.autoDetectChanges(true);
+        app = fixture.debugElement;
+      })
+      .then(done),
+  );
 
   afterAll(() => {
     langChangeSubscription.unsubscribe();

@@ -1,8 +1,6 @@
 <app-page-header *ngIf="!notFound"></app-page-header>
 
-<app-login-link
-  *ngIf="isLoginErrorVisible()"
-  loginBoxText="Arutelude nägemiseks on vaja RIHAsse sisse logida."></app-login-link>
+<app-login-link *ngIf="isLoginErrorVisible()" loginBoxText="Arutelude nägemiseks on vaja RIHAsse sisse logida."></app-login-link>
 
 <div *ngIf="isCannotViewCommentsErrorVisible()" class="alert alert-info" role="alert">
   <h3 class="alert-heading">Hindamine ei ole lubatud</h3>
@@ -12,49 +10,65 @@
   <aside class="col sidebar">
     <nav id="sidemenu" class="sidenav">
       <div class="list-group">
-        <a [ngClass]="{'active': generalHelperService.isMenuActive('uldkirjeldus', true)}"
-           (click)="generalHelperService.scrollTo('#uldkirjeldus')"
-           class="list-group-item justify-content-between">
+        <a
+          [ngClass]="{ active: generalHelperService.isMenuActive('uldkirjeldus', true) }"
+          (click)="generalHelperService.scrollTo('#uldkirjeldus')"
+          class="list-group-item justify-content-between"
+        >
           Infosüsteemi üldkirjeldus
         </a>
-        <a [ngClass]="{'active': generalHelperService.isMenuActive('tagasiside')}"
-           (click)="generalHelperService.scrollTo('#tagasiside')"
-           class="list-group-item justify-content-between">
+        <a
+          [ngClass]="{ active: generalHelperService.isMenuActive('tagasiside') }"
+          (click)="generalHelperService.scrollTo('#tagasiside')"
+          class="list-group-item justify-content-between"
+        >
           Hindajate tagasiside
         </a>
-        <a *ngIf="isBlockVisible('dataObjects')"
-           [ngClass]="{'active': generalHelperService.isMenuActive('andmed')}"
-           (click)="generalHelperService.scrollTo('#andmed')"
-           class="list-group-item justify-content-between">
+        <a
+          *ngIf="isBlockVisible('dataObjects')"
+          [ngClass]="{ active: generalHelperService.isMenuActive('andmed') }"
+          (click)="generalHelperService.scrollTo('#andmed')"
+          class="list-group-item justify-content-between"
+        >
           Andmed
         </a>
-        <a *ngIf="isBlockVisible('documents')"
-           [ngClass]="{'active': generalHelperService.isMenuActive('dokumentatsioon')}"
-           (click)="generalHelperService.scrollTo('#dokumentatsioon')"
-           class="list-group-item justify-content-between">
+        <a
+          *ngIf="isBlockVisible('documents')"
+          [ngClass]="{ active: generalHelperService.isMenuActive('dokumentatsioon') }"
+          (click)="generalHelperService.scrollTo('#dokumentatsioon')"
+          class="list-group-item justify-content-between"
+        >
           Dokumentatsioon
         </a>
-        <a *ngIf="isBlockVisible('legislations')"
-           [ngClass]="{'active': generalHelperService.isMenuActive('oigusaktid')}"
-           (click)="generalHelperService.scrollTo('#oigusaktid')"
-           class="list-group-item justify-content-between">
+        <a
+          *ngIf="isBlockVisible('legislations')"
+          [ngClass]="{ active: generalHelperService.isMenuActive('oigusaktid') }"
+          (click)="generalHelperService.scrollTo('#oigusaktid')"
+          class="list-group-item justify-content-between"
+        >
           Õigusaktid
         </a>
-        <a *ngIf="isBlockVisible('security')"
-           [ngClass]="{'active': generalHelperService.isMenuActive('turvalisus')}"
-           (click)="generalHelperService.scrollTo('#turvalisus')"
-           class="list-group-item justify-content-between">
+        <a
+          *ngIf="isBlockVisible('security')"
+          [ngClass]="{ active: generalHelperService.isMenuActive('turvalisus') }"
+          (click)="generalHelperService.scrollTo('#turvalisus')"
+          class="list-group-item justify-content-between"
+        >
           Turvalisus
         </a>
-        <a *ngIf="isBlockVisible('contacts')"
-           [ngClass]="{'active': generalHelperService.isMenuActive('kontaktid')}"
-           (click)="generalHelperService.scrollTo('#kontaktid')"
-           class="list-group-item justify-content-between">
+        <a
+          *ngIf="isBlockVisible('contacts')"
+          [ngClass]="{ active: generalHelperService.isMenuActive('kontaktid') }"
+          (click)="generalHelperService.scrollTo('#kontaktid')"
+          class="list-group-item justify-content-between"
+        >
           Kontaktid
         </a>
-        <a [ngClass]="{'active': generalHelperService.isMenuActive('seosed')}"
-           (click)="generalHelperService.scrollTo('#seosed')"
-           class="list-group-item justify-content-between">
+        <a
+          [ngClass]="{ active: generalHelperService.isMenuActive('seosed') }"
+          (click)="generalHelperService.scrollTo('#seosed')"
+          class="list-group-item justify-content-between"
+        >
           Seosed süsteemidega
         </a>
       </div>
@@ -62,7 +76,11 @@
   </aside>
   <article class="col separate-blocks">
     <div id="uldkirjeldus" class="separate-block">
-      <app-producer-details-general [system]="system" [userMatrix]="userMatrix" [allowEdit]="isEditingAllowed()"></app-producer-details-general>
+      <app-producer-details-general
+        [system]="system"
+        [userMatrix]="userMatrix"
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-general>
     </div>
     <div id="tagasiside" class="separate-block">
       <app-producer-details-issues
@@ -70,36 +88,51 @@
         (onIssueError)="onIssueError($event)"
         [system]="system"
         [issueId]="issueId"
-        [allowEdit]="isEditingAllowed()"></app-producer-details-issues>
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-issues>
     </div>
-    <div id="andmed"
-         *ngIf="isBlockVisible('dataObjects')"
-         class="separate-block">
-      <app-producer-details-objects (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-objects>
+    <div id="andmed" *ngIf="isBlockVisible('dataObjects')" class="separate-block">
+      <app-producer-details-objects
+        (onSystemChanged)="system = $event"
+        [system]="system"
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-objects>
     </div>
-    <div id="dokumentatsioon"
-         *ngIf="isBlockVisible('documents')"
-         class="separate-block">
-      <app-producer-details-tech-docs (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-tech-docs>
+    <div id="dokumentatsioon" *ngIf="isBlockVisible('documents')" class="separate-block">
+      <app-producer-details-tech-docs
+        (onSystemChanged)="system = $event"
+        [system]="system"
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-tech-docs>
     </div>
-    <div id="oigusaktid"
-         *ngIf="isBlockVisible('legislations')"
-         class="separate-block">
-      <app-producer-details-legislations (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-legislations>
+    <div id="oigusaktid" *ngIf="isBlockVisible('legislations')" class="separate-block">
+      <app-producer-details-legislations
+        (onSystemChanged)="system = $event"
+        [system]="system"
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-legislations>
     </div>
-    <div id="turvalisus"
-         *ngIf="isBlockVisible('security')"
-         class="separate-block">
-      <app-producer-details-security (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-security>
+    <div id="turvalisus" *ngIf="isBlockVisible('security')" class="separate-block">
+      <app-producer-details-security
+        (onSystemChanged)="system = $event"
+        [system]="system"
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-security>
     </div>
-    <div id="kontaktid"
-         *ngIf="isBlockVisible('contacts')"
-         class="separate-block">
-      <app-producer-details-contacts (onSystemChanged)="system = $event" [system]="system" [allowEdit]="isEditingAllowed()"></app-producer-details-contacts>
+    <div id="kontaktid" *ngIf="isBlockVisible('contacts')" class="separate-block">
+      <app-producer-details-contacts
+        (onSystemChanged)="system = $event"
+        [system]="system"
+        [allowEdit]="isEditingAllowed()"
+      ></app-producer-details-contacts>
     </div>
-    <div id="seosed"
-         class="separate-block">
-      <app-producer-details-relations [system]="system" [allowEdit]="isEditingAllowed()" [userMatrix]="userMatrix" (relationsRefreshEvent)="onRelationsRefresh($event)" ></app-producer-details-relations>
+    <div id="seosed" class="separate-block">
+      <app-producer-details-relations
+        [system]="system"
+        [allowEdit]="isEditingAllowed()"
+        [userMatrix]="userMatrix"
+        (relationsRefreshEvent)="onRelationsRefresh($event)"
+      ></app-producer-details-relations>
     </div>
   </article>
 </section>

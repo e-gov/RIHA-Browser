@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: true,
+  production: false,
   api: {
     environmentUrl: '/api/v1/environment',
     userInfoUrl: '/api/v1/user',
@@ -12,6 +12,6 @@ export const environment = {
     systemsUrl: '/api/v1/systems',
     issuesUrl: '/api/v1/issues',
     myOrganizationUrl: '/api/v1/my/organization/users',
-    systemFeedbackUrl: '/api/v1/system-feedback'
-  }
+    systemFeedbackUrl: '/api/v1/system-feedback',
+  },
 };

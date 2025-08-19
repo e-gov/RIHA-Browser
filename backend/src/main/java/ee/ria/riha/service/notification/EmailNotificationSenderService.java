@@ -2,6 +2,14 @@ package ee.ria.riha.service.notification;
 
 import ee.ria.riha.service.notification.handler.EmailNotificationHandler;
 import ee.ria.riha.service.notification.model.EmailNotificationDataModel;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -13,100 +21,105 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.Future;
-
 @Service
 @Slf4j
 public class EmailNotificationSenderService {
 
-    private JavaMailSenderImpl mailSender;
+  private JavaMailSenderImpl mailSender;
 
-    private List<EmailNotificationHandler> handlers = new ArrayList<>();
+  private List<EmailNotificationHandler> handlers = new ArrayList<>();
 
-    public EmailNotificationSenderService(JavaMailSenderImpl mailSender) {
-        this.mailSender = mailSender;
+  public EmailNotificationSenderService(JavaMailSenderImpl mailSender) {
+    this.mailSender = mailSender;
+  }
+
+  @Async
+  public Future<Void> sendNotification(EmailNotificationDataModel model) {
+    Assert.notNull(model, "Email notification data model must be provided");
+
+    try {
+      EmailNotificationHandler handler =
+          findMessageHandler(model)
+              .orElseThrow(
+                  () ->
+                      new MailPreparationException(
+                          "Notification handler for model of type "
+                              + model.getClass().getName()
+                              + " was not found"));
+
+      MimeMessage message = prepareMessage(handler, model);
+      sendMessage(message);
+    } catch (MailException e) {
+      log.warn("Error sending notification message", e);
     }
 
-    @Async
-    public Future<Void> sendNotification(EmailNotificationDataModel model) {
-        Assert.notNull(model, "Email notification data model must be provided");
+    return AsyncResult.forValue(null);
+  }
 
-        try {
-            EmailNotificationHandler handler = findMessageHandler(model)
-                    .orElseThrow(() -> new MailPreparationException(
-                            "Notification handler for model of type " + model.getClass().getName() + " was not found"));
-
-            MimeMessage message = prepareMessage(handler, model);
-            sendMessage(message);
-        } catch (MailException e) {
-            log.warn("Error sending notification message", e);
-        }
-
-        return AsyncResult.forValue(null);
+  private Optional<EmailNotificationHandler> findMessageHandler(EmailNotificationDataModel model) {
+    for (EmailNotificationHandler handler : handlers) {
+      if (handler.supports(model)) {
+        return Optional.of(handler);
+      }
     }
+    return Optional.empty();
+  }
 
-    private Optional<EmailNotificationHandler> findMessageHandler(EmailNotificationDataModel model) {
-        for (EmailNotificationHandler handler : handlers) {
-            if (handler.supports(model)) {
-                return Optional.of(handler);
-            }
-        }
-        return Optional.empty();
+  private MimeMessage prepareMessage(
+      EmailNotificationHandler handler, EmailNotificationDataModel model) {
+    try {
+      log.debug(
+          "Using handler {} to create preparator for model {}",
+          handler,
+          model.getClass().getName());
+      MimeMessagePreparator preparator = handler.createMessagePreparator(model);
+
+      if (preparator == null) {
+        throw new MailPreparationException(
+            "Handler "
+                + handler
+                + " did not produce preparator for model "
+                + model.getClass().getName());
+      }
+
+      MimeMessage message = mailSender.createMimeMessage();
+      preparator.prepare(message);
+      return message;
+    } catch (Exception e) {
+      throw new MailPreparationException("Could not prepare message", e);
     }
+  }
 
-    private MimeMessage prepareMessage(EmailNotificationHandler handler, EmailNotificationDataModel model) {
-        try {
-            log.debug("Using handler {} to create preparator for model {}", handler, model.getClass().getName());
-            MimeMessagePreparator preparator = handler.createMessagePreparator(model);
+  private void sendMessage(MimeMessage message) {
+    log.info("Sending notification message {}", messageToString(message));
+    mailSender.send(message);
+    log.info("Notification message {} was successfully sent", messageToString(message));
+  }
 
-            if (preparator == null) {
-                throw new MailPreparationException(
-                        "Handler " + handler + " did not produce preparator for model " + model.getClass().getName());
-            }
-
-            MimeMessage message = mailSender.createMimeMessage();
-            preparator.prepare(message);
-            return message;
-        } catch (Exception e) {
-            throw new MailPreparationException("Could not prepare message", e);
-        }
+  private String messageToString(Message message) {
+    try {
+      return "[from: '%s', to: '%s', subject: '%s']"
+          .formatted(
+              Arrays.toString(message.getFrom()),
+              Arrays.toString(message.getAllRecipients()),
+              message.getSubject());
+    } catch (MessagingException e) {
+      log.info(
+          "Unable to produce string representation of message {} due to {}", message, e.toString());
+      return message.toString();
     }
+  }
 
-    private void sendMessage(MimeMessage message) {
-        log.info("Sending notification message {}", messageToString(message));
-        mailSender.send(message);
-        log.info("Notification message {} was successfully sent", messageToString(message));
-    }
+  public JavaMailSenderImpl getMailSender() {
+    return mailSender;
+  }
 
-    private String messageToString(Message message) {
-        try {
-            return "[from: '%s', to: '%s', subject: '%s']".formatted(
-                    Arrays.toString(message.getFrom()),
-                    Arrays.toString(message.getAllRecipients()),
-                    message.getSubject());
-        } catch (MessagingException e) {
-            log.info("Unable to produce string representation of message {} due to {}", message, e.toString());
-            return message.toString();
-        }
-    }
+  public List<EmailNotificationHandler> getHandlers() {
+    return handlers;
+  }
 
-    public JavaMailSenderImpl getMailSender() {
-        return mailSender;
-    }
-
-    public List<EmailNotificationHandler> getHandlers() {
-        return handlers;
-    }
-
-    @Autowired
-    public void setHandlers(List<EmailNotificationHandler> handlers) {
-        this.handlers = handlers;
-    }
+  @Autowired
+  public void setHandlers(List<EmailNotificationHandler> handlers) {
+    this.handlers = handlers;
+  }
 }

@@ -1,9 +1,8 @@
 package ee.ria.riha.web.model;
 
-import lombok.*;
-
-import java.sql.*;
 import jakarta.validation.constraints.*;
+import java.sql.*;
+import lombok.*;
 
 @Getter
 @Setter
@@ -11,28 +10,27 @@ import jakarta.validation.constraints.*;
 @ToString
 public class SystemFeedbackRequest {
 
-    @NotNull(message = "validation.feedback.invalidInput")
-    private Integer grade;
+  @NotNull(message = "validation.feedback.invalidInput")
+  private Integer grade;
 
-    @Size(max = 4000, message = "validation.feedback.invalidInput")
-    private String comment;
+  @Size(max = 4000, message = "validation.feedback.invalidInput")
+  private String comment;
 
-    @Setter(AccessLevel.NONE)
-    private Integer NPS;
+  @Setter(AccessLevel.NONE)
+  private Integer NPS;
 
-    private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+  private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-    private String recaptchaToken;
+  private String recaptchaToken;
 
-    public void setGrade(Integer grade) {
-        this.grade = grade;
-        if (this.grade >= 9) {
-            NPS = 100;
-        } else if (this.grade <= 6) {
-            NPS = -100;
-        } else {
-            NPS = 0;
-        }
+  public void setGrade(Integer grade) {
+    this.grade = grade;
+    if (this.grade >= 9) {
+      NPS = 100;
+    } else if (this.grade <= 6) {
+      NPS = -100;
+    } else {
+      NPS = 0;
     }
-
+  }
 }

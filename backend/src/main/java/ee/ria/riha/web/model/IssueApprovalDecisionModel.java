@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IssueApprovalDecisionModel {
-    private String comment;
-    private IssueResolutionType decisionType;
+  private String comment;
+  private IssueResolutionType decisionType;
 }

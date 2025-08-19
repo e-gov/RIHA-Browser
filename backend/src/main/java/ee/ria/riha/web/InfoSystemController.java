@@ -1,5 +1,8 @@
 package ee.ria.riha.web;
 
+import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
+import static java.util.stream.Collectors.toList;
+
 import ee.ria.riha.conf.FeedbackServiceConnectionProperties;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.domain.model.RelationType;
@@ -19,204 +22,193 @@ import ee.ria.riha.web.model.RelationModel;
 import ee.ria.riha.web.model.StandardRealisationCreationModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.*;
-
-import static ee.ria.riha.conf.ApplicationProperties.API_V1_PREFIX;
-import static java.util.stream.Collectors.toList;
-
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(API_V1_PREFIX + "/systems")
-
 @Tag(name = "Information systems")
 public class InfoSystemController {
 
-    @Autowired
-    private InfoSystemService infoSystemService;
+  @Autowired private InfoSystemService infoSystemService;
 
-    @Autowired
-    private InfoSystemDataObjectService infoSystemDataObjectService;
+  @Autowired private InfoSystemDataObjectService infoSystemDataObjectService;
 
-    @Autowired
-    private InfoSystemModelMapper infoSystemModelMapper;
+  @Autowired private InfoSystemModelMapper infoSystemModelMapper;
 
-    @Autowired
-    private InfoSystemDataObjectMapper infoSystemDataObjectMapper;
+  @Autowired private InfoSystemDataObjectMapper infoSystemDataObjectMapper;
 
-    @Autowired
-    private RelationService relationService;
+  @Autowired private RelationService relationService;
 
-    @Autowired
-    private FileService fileService;
+  @Autowired private FileService fileService;
 
-    private final FeedbackServiceConnectionProperties feedbackServiceConnectionProperties;
+  private final FeedbackServiceConnectionProperties feedbackServiceConnectionProperties;
 
-    private final AuditLogger auditLogger;
+  private final AuditLogger auditLogger;
 
-    @GetMapping
-    @Operation(summary = "List all existing information systems")
-    @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<InfoSystemModel>> list(Pageable pageable, Filterable filterable) {
-        return ResponseEntity.ok(
-                createPagedModel(
-                        infoSystemService.list(pageable, filterable),
-                        infoSystemModelMapper));
-    }
-    @GetMapping("/autocomplete")
-    @Operation(summary = "List all existing information systems for autocomplete")
-    public ResponseEntity<PagedResponse<InfoSystemModel>> autocomplete(@RequestParam("searchTerm") String searchTerm) {
+  @GetMapping
+  @Operation(summary = "List all existing information systems")
+  @ApiPageableAndFilterableParams
+  public ResponseEntity<PagedResponse<InfoSystemModel>> list(
+      Pageable pageable, Filterable filterable) {
+    return ResponseEntity.ok(
+        createPagedModel(infoSystemService.list(pageable, filterable), infoSystemModelMapper));
+  }
 
-        String paramToRestEndpoint;
-        if (StringUtils.isNumeric(searchTerm)) {
-            paramToRestEndpoint = "'" + searchTerm + "'";
-        } else {
-            paramToRestEndpoint = searchTerm;
-        }
+  @GetMapping("/autocomplete")
+  @Operation(summary = "List all existing information systems for autocomplete")
+  public ResponseEntity<PagedResponse<InfoSystemModel>> autocomplete(
+      @RequestParam("searchTerm") String searchTerm) {
 
-        PageRequest pageable = new PageRequest(0, 10);
-        FilterRequest shortNameExact = new FilterRequest("short_name,ilike," + paramToRestEndpoint, "desc", "id");
-        FilterRequest fuzzyNameExact = new FilterRequest("short_name,ilike,%" + searchTerm + "%", "desc", "id");
-        FilterRequest nameExact = new FilterRequest("name,ilike," + paramToRestEndpoint, "desc", "id");
-        FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
-
-        List<InfoSystem> foundResults = new ArrayList<>();
-        for (FilterRequest filterRequest : Arrays.asList(shortNameExact, fuzzyNameExact, nameExact, nameFuzzy)) {
-
-            searchInfoSystemsByFilter(pageable, filterRequest)
-                    .forEach(infoSystem ->  {
-                            if (!foundResults.contains(infoSystem)) {
-                                foundResults.add(infoSystem);
-                            }
-            });
-
-            if (foundResults.size() >= pageable.getPageSize()) {
-                return getResponseEntity(pageable, foundResults.subList(0, pageable.getPageSize()));
-            }
-        }
-
-        return getResponseEntity(pageable, foundResults);
+    String paramToRestEndpoint;
+    if (StringUtils.isNumeric(searchTerm)) {
+      paramToRestEndpoint = "'" + searchTerm + "'";
+    } else {
+      paramToRestEndpoint = searchTerm;
     }
 
-    private ResponseEntity<PagedResponse<InfoSystemModel>> getResponseEntity(PageRequest pageable, List<InfoSystem> response) {
-        return ResponseEntity.ok(
-                new PagedResponse<>(
-                        pageable,
-                        response.size(),
-                        response.stream()
-                                .map(infoSystemModelMapper::map)
-                                .collect(toList())));
+    PageRequest pageable = new PageRequest(0, 10);
+    FilterRequest shortNameExact =
+        new FilterRequest("short_name,ilike," + paramToRestEndpoint, "desc", "id");
+    FilterRequest fuzzyNameExact =
+        new FilterRequest("short_name,ilike,%" + searchTerm + "%", "desc", "id");
+    FilterRequest nameExact = new FilterRequest("name,ilike," + paramToRestEndpoint, "desc", "id");
+    FilterRequest nameFuzzy = new FilterRequest("name,ilike,%" + searchTerm + "%", "desc", "id");
+
+    List<InfoSystem> foundResults = new ArrayList<>();
+    for (FilterRequest filterRequest :
+        Arrays.asList(shortNameExact, fuzzyNameExact, nameExact, nameFuzzy)) {
+
+      searchInfoSystemsByFilter(pageable, filterRequest)
+          .forEach(
+              infoSystem -> {
+                if (!foundResults.contains(infoSystem)) {
+                  foundResults.add(infoSystem);
+                }
+              });
+
+      if (foundResults.size() >= pageable.getPageSize()) {
+        return getResponseEntity(pageable, foundResults.subList(0, pageable.getPageSize()));
+      }
     }
 
-    private List<InfoSystem> searchInfoSystemsByFilter(PageRequest pageable, FilterRequest filterRequest) {
-        PagedResponse<InfoSystem> exactMatchesShortNames = infoSystemService.list(pageable, filterRequest);
-        return exactMatchesShortNames.getContent() == null
-                ? Collections.emptyList()
-                : exactMatchesShortNames.getContent();
+    return getResponseEntity(pageable, foundResults);
+  }
+
+  private ResponseEntity<PagedResponse<InfoSystemModel>> getResponseEntity(
+      PageRequest pageable, List<InfoSystem> response) {
+    return ResponseEntity.ok(
+        new PagedResponse<>(
+            pageable,
+            response.size(),
+            response.stream().map(infoSystemModelMapper::map).collect(toList())));
+  }
+
+  private List<InfoSystem> searchInfoSystemsByFilter(
+      PageRequest pageable, FilterRequest filterRequest) {
+    PagedResponse<InfoSystem> exactMatchesShortNames =
+        infoSystemService.list(pageable, filterRequest);
+    return exactMatchesShortNames.getContent() == null
+        ? Collections.emptyList()
+        : exactMatchesShortNames.getContent();
+  }
+
+  private Filterable createExactMatchFilterFromILikeFilter(Filterable filterable) {
+    return new FilterRequest(
+        filterable.getFilter().replaceAll("%", ""), filterable.getSort(), filterable.getFields());
+  }
+
+  @GetMapping(path = "/data-objects")
+  @Operation(summary = "List all existing information systems data objects")
+  @ApiPageableAndFilterableParams
+  public ResponseEntity<PagedResponse<InfoSystemDataObjectModel>> listDataObjects(
+      Pageable pageable, Filterable filterable) {
+    return ResponseEntity.ok(
+        createPagedModel(
+            infoSystemDataObjectService.list(pageable, filterable), infoSystemDataObjectMapper));
+  }
+
+  private <E, R> PagedResponse<R> createPagedModel(
+      PagedResponse<E> list, ModelMapper<E, R> mapper) {
+    return new PagedResponse<>(
+        new PageRequest(list.getPage(), list.getSize()),
+        list.getTotalElements(),
+        list.getContent().stream().map(mapper::map).collect(toList()));
+  }
+
+  @PostMapping
+  @Operation(summary = "Create new information system")
+  @PrincipalHasRoleProducer
+  public ResponseEntity<InfoSystemModel> create(
+      @RequestBody InfoSystemModel model, HttpServletRequest request) {
+    InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
+    auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
+    return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
+  }
+
+  @GetMapping("/{reference}")
+  @Operation(summary = "Get existing information system")
+  public ResponseEntity<InfoSystemModel> get(@PathVariable("reference") String reference) {
+    InfoSystem infoSystem = infoSystemService.get(reference);
+    return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
+  }
+
+  @PutMapping("/{reference}")
+  @PreAuthorizeInfoSystemOwner
+  @Operation(summary = "Update existing information system")
+  public ResponseEntity<InfoSystemModel> update(
+      @PathVariable("reference") String reference,
+      @RequestBody InfoSystemModel model,
+      HttpServletRequest request) {
+    InfoSystem infoSystem = infoSystemService.update(reference, new InfoSystem(model.getJson()));
+    auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
+    return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
+  }
+
+  @PostMapping("/{reference}/create-standard-realisation-system")
+  @Operation(summary = "Create new realisation for standard information system")
+  @PrincipalHasRoleProducer
+  public ResponseEntity<InfoSystemModel> createStandardInformationSystem(
+      @PathVariable("reference") String reference,
+      @RequestBody StandardRealisationCreationModel standardRealisationCreationModel) {
+    InfoSystem existingInfoSystem = infoSystemService.get(reference);
+
+    if (existingInfoSystem == null) {
+      return ResponseEntity.badRequest().build();
     }
 
-    private Filterable createExactMatchFilterFromILikeFilter(Filterable filterable) {
-        return new FilterRequest(
-                filterable.getFilter().replaceAll("%", ""),
-                filterable.getSort(),
-                filterable.getFields());
-    }
+    InfoSystem newlyCreatedInfoSystem = existingInfoSystem.copy();
+    newlyCreatedInfoSystem.setStandardInformationSystemUndefined();
+    newlyCreatedInfoSystem.setShortName(standardRealisationCreationModel.getShortName());
+    newlyCreatedInfoSystem.setDifferences(standardRealisationCreationModel.getDifferences());
+    newlyCreatedInfoSystem.setFullName(standardRealisationCreationModel.getName());
+    newlyCreatedInfoSystem.setPurpose(standardRealisationCreationModel.getPurpose());
 
-    @GetMapping(path = "/data-objects")
-    @Operation(summary = "List all existing information systems data objects")
-    @ApiPageableAndFilterableParams
-    public ResponseEntity<PagedResponse<InfoSystemDataObjectModel>> listDataObjects(Pageable pageable, Filterable filterable) {
-        return ResponseEntity.ok(
-                createPagedModel(
-                        infoSystemDataObjectService.list(pageable, filterable),
-                        infoSystemDataObjectMapper));
-    }
+    newlyCreatedInfoSystem.clearContacts();
+    newlyCreatedInfoSystem.clearSecuritySection();
 
-    private  <E,R> PagedResponse<R> createPagedModel(PagedResponse<E> list, ModelMapper<E,R> mapper) {
-        return new PagedResponse<>(new PageRequest(list.getPage(), list.getSize()),
-                                   list.getTotalElements(),
-                                   list.getContent().stream()
-                                           .map(mapper::map)
-                                           .collect(toList()));
-    }
+    newlyCreatedInfoSystem.removeTopic("standardlahendus");
 
-    @PostMapping
-    @Operation(summary = "Create new information system")
-    @PrincipalHasRoleProducer
-    public ResponseEntity<InfoSystemModel> create(@RequestBody InfoSystemModel model, HttpServletRequest request) {
-        InfoSystem infoSystem = infoSystemService.create(new InfoSystem(model.getJson()));
-        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
-        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
-    }
+    newlyCreatedInfoSystem = infoSystemService.create(newlyCreatedInfoSystem);
 
-    @GetMapping("/{reference}")
-    @Operation(summary = "Get existing information system")
-    public ResponseEntity<InfoSystemModel> get(@PathVariable("reference") String reference) {
-        InfoSystem infoSystem = infoSystemService.get(reference);
-        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
-    }
+    relationService.createRelation(
+        standardRealisationCreationModel.getShortName(),
+        RelationModel.builder()
+            .infoSystemShortName(reference)
+            .type(RelationType.USED_SYSTEM)
+            .build());
 
-    @PutMapping("/{reference}")
-    @PreAuthorizeInfoSystemOwner
-    @Operation(summary = "Update existing information system")
-    public ResponseEntity<InfoSystemModel> update(@PathVariable("reference") String reference,
-                                                  @RequestBody InfoSystemModel model, HttpServletRequest request) {
-        InfoSystem infoSystem = infoSystemService.update(reference, new InfoSystem(model.getJson()));
-        auditLogger.log(AuditEvent.CREATE, AuditType.INFOSYSTEM, request, model);
-        return ResponseEntity.ok(infoSystemModelMapper.map(infoSystem));
-    }
+    // for all existing files, should create new entry into file_resource table with new info system
+    // UUID
+    fileService.updateFilesUuid(newlyCreatedInfoSystem, existingInfoSystem.getUuid());
+    infoSystemService.update(newlyCreatedInfoSystem.getUuid().toString(), newlyCreatedInfoSystem);
 
-    @PostMapping("/{reference}/create-standard-realisation-system")
-    @Operation(summary = "Create new realisation for standard information system")
-    @PrincipalHasRoleProducer
-    public ResponseEntity<InfoSystemModel> createStandardInformationSystem(@PathVariable("reference") String reference,
-                                                                           @RequestBody StandardRealisationCreationModel standardRealisationCreationModel) {
-        InfoSystem existingInfoSystem = infoSystemService.get(reference);
-
-        if (existingInfoSystem == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        InfoSystem newlyCreatedInfoSystem = existingInfoSystem.copy();
-        newlyCreatedInfoSystem.setStandardInformationSystemUndefined();
-        newlyCreatedInfoSystem.setShortName(standardRealisationCreationModel.getShortName());
-        newlyCreatedInfoSystem.setDifferences(standardRealisationCreationModel.getDifferences());
-        newlyCreatedInfoSystem.setFullName(standardRealisationCreationModel.getName());
-        newlyCreatedInfoSystem.setPurpose(standardRealisationCreationModel.getPurpose());
-
-        newlyCreatedInfoSystem.clearContacts();
-        newlyCreatedInfoSystem.clearSecuritySection();
-
-        newlyCreatedInfoSystem.removeTopic("standardlahendus");
-
-        newlyCreatedInfoSystem = infoSystemService.create(newlyCreatedInfoSystem);
-
-        relationService.createRelation(
-                standardRealisationCreationModel.getShortName(),
-                RelationModel.builder()
-                        .infoSystemShortName(reference)
-                        .type(RelationType.USED_SYSTEM)
-                        .build()
-        );
-
-        //for all existing files, should create new entry into file_resource table with new info system UUID
-        fileService.updateFilesUuid(newlyCreatedInfoSystem, existingInfoSystem.getUuid());
-        infoSystemService.update(newlyCreatedInfoSystem.getUuid().toString(), newlyCreatedInfoSystem);
-
-        return ResponseEntity.ok(infoSystemModelMapper.map(newlyCreatedInfoSystem));
-    }
-
+    return ResponseEntity.ok(infoSystemModelMapper.map(newlyCreatedInfoSystem));
+  }
 }

@@ -1,18 +1,17 @@
 package ee.ria.riha.web;
 
+import static ee.ria.riha.conf.ApplicationProperties.*;
+
 import ee.ria.riha.conf.*;
 import ee.ria.riha.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.*;
+import java.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
-import jakarta.servlet.http.*;
-
-import static ee.ria.riha.conf.ApplicationProperties.*;
 
 /**
  * @author Valentin Suhnjov
@@ -22,51 +21,50 @@ import static ee.ria.riha.conf.ApplicationProperties.*;
 @Tag(name = "Environment configuration")
 public class EnvironmentController {
 
-    @Autowired
-    private EnvironmentService environmentService;
+  @Autowired private EnvironmentService environmentService;
 
-    @Autowired
-    private UserController userController;
+  @Autowired private UserController userController;
 
-    @Autowired
-    private ApplicationProperties applicationProperties;
+  @Autowired private ApplicationProperties applicationProperties;
 
-    @SuppressWarnings("rawtypes")
-    @GetMapping
-    @Operation(summary = "Retrieve environment")
-    public ResponseEntity environment(HttpSession session) {
-        Map<String, Object> environment = new HashMap<>();
-        environment.put("userDetails", userController.createUserDetailsModel().orElse(null));
-        environment.put("tracking", applicationProperties.getTracking());
-        ApplicationProperties.FeedbackRecaptcha feedbackRecaptcha = applicationProperties.getFeedbackRecaptcha();
+  @SuppressWarnings("rawtypes")
+  @GetMapping
+  @Operation(summary = "Retrieve environment")
+  public ResponseEntity environment(HttpSession session) {
+    Map<String, Object> environment = new HashMap<>();
+    environment.put("userDetails", userController.createUserDetailsModel().orElse(null));
+    environment.put("tracking", applicationProperties.getTracking());
+    ApplicationProperties.FeedbackRecaptcha feedbackRecaptcha =
+        applicationProperties.getFeedbackRecaptcha();
 
-        Map<String, String> recaptchaProperties = new HashMap<>();
-        recaptchaProperties.put("siteKey", feedbackRecaptcha.getSiteKey());
-        recaptchaProperties.put("enabled", feedbackRecaptcha.isEnabled() + "");
+    Map<String, String> recaptchaProperties = new HashMap<>();
+    recaptchaProperties.put("siteKey", feedbackRecaptcha.getSiteKey());
+    recaptchaProperties.put("enabled", feedbackRecaptcha.isEnabled() + "");
 
-        environment.put("feedbackRecaptcha", recaptchaProperties);
-        environment.put("sessionMaxInactiveInterval", session.getMaxInactiveInterval() * 1000);
+    environment.put("feedbackRecaptcha", recaptchaProperties);
+    environment.put("sessionMaxInactiveInterval", session.getMaxInactiveInterval() * 1000);
 
-        return ResponseEntity.ok(environment);
-    }
+    return ResponseEntity.ok(environment);
+  }
 
-    @SuppressWarnings("rawtypes")
-    @GetMapping("/classifiers")
-    @Operation(summary = "Load classifiers")
-    public ResponseEntity classifiers() {
-        return ResponseEntity.ok(environmentService.getClassifiers());
-    }
+  @SuppressWarnings("rawtypes")
+  @GetMapping("/classifiers")
+  @Operation(summary = "Load classifiers")
+  public ResponseEntity classifiers() {
+    return ResponseEntity.ok(environmentService.getClassifiers());
+  }
 
-    /**
-     * @deprecated use user controller
-     */
-    @SuppressWarnings("rawtypes")
-    @Deprecated
-    @PutMapping("/organization")
-    @PreAuthorize("hasRole('ROLE_RIHA_USER')")
-    @Operation(summary = "Change active organization of the current user")
-    public ResponseEntity changeActiveOrganization(@RequestBody(required = false) String organizationCode, HttpSession session) {
-        environmentService.changeActiveOrganization(organizationCode);
-        return environment(session);
-    }
+  /**
+   * @deprecated use user controller
+   */
+  @SuppressWarnings("rawtypes")
+  @Deprecated
+  @PutMapping("/organization")
+  @PreAuthorize("hasRole('ROLE_RIHA_USER')")
+  @Operation(summary = "Change active organization of the current user")
+  public ResponseEntity changeActiveOrganization(
+      @RequestBody(required = false) String organizationCode, HttpSession session) {
+    environmentService.changeActiveOrganization(organizationCode);
+    return environment(session);
+  }
 }

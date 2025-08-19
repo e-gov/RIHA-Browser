@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {InfoModalComponent} from './info-modal.component';
+import { InfoModalComponent } from './info-modal.component';
 
 describe('InfoModalComponent', () => {
   let component: InfoModalComponent;
@@ -8,9 +8,8 @@ describe('InfoModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoModalComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoModalComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

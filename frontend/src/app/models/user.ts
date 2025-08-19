@@ -6,11 +6,11 @@ export class User {
   organizations: any[];
   roles: string[];
 
-  public getOrganizations(): any[]{
+  public getOrganizations(): any[] {
     return this.organizations;
   }
 
-  public getActiveOrganization(): any{
+  public getActiveOrganization(): any {
     return this.activeOrganization;
   }
 
@@ -22,13 +22,13 @@ export class User {
     return this.roles;
   }
 
-  public hasApproverRole(): boolean{
+  public hasApproverRole(): boolean {
     return -1 != this.getRoles().indexOf('ROLE_HINDAJA');
   }
 
   public canEdit(organizationCode): boolean {
     const ao = this.getActiveOrganization();
-    if (ao != null && ao.code == organizationCode){
+    if (ao != null && ao.code == organizationCode) {
       return this.roles.indexOf('ROLE_KIRJELDAJA') != -1;
     } else {
       return false;
@@ -38,13 +38,13 @@ export class User {
   public getFullNameWithActiveOrganization(): string {
     let ret = `${this.firstName} ${this.lastName}`;
 
-    if (this.activeOrganization){
-        ret += ` (${ this.activeOrganization.name })`
+    if (this.activeOrganization) {
+      ret += ` (${this.activeOrganization.name})`;
     }
     return ret;
   }
 
-  constructor(options?){
+  constructor(options?) {
     this.personalCode = options.personalCode || null;
     this.firstName = options.firstName || null;
     this.lastName = options.lastName || null;

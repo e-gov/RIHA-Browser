@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ProducerDetailsSecurityComponent} from './producer-details-security.component';
+import { ProducerDetailsSecurityComponent } from './producer-details-security.component';
 
 describe('ProducerDetailsSecurityComponent', () => {
   let component: ProducerDetailsSecurityComponent;
@@ -8,9 +8,8 @@ describe('ProducerDetailsSecurityComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProducerDetailsSecurityComponent ]
-    })
-    .compileComponents();
+      declarations: [ProducerDetailsSecurityComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

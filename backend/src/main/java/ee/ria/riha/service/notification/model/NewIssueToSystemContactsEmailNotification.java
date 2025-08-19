@@ -1,18 +1,16 @@
 package ee.ria.riha.service.notification.model;
 
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.UUID;
 
-/**
- * Holds data for new issue email notification messages to info system contacts.
- */
+/** Holds data for new issue email notification messages to info system contacts. */
 @Getter
 @Setter
 public class NewIssueToSystemContactsEmailNotification extends SimpleHtmlEmailNotification {
 
-    private String infoSystemFullName;
-    private String infoSystemShortName;
-    private String baseUrl;
-    private UUID infoSystemUuid;
+  private String infoSystemFullName;
+  private String infoSystemShortName;
+  private String baseUrl;
+  private UUID infoSystemUuid;
 }

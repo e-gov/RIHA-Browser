@@ -8,12 +8,11 @@ package ee.ria.riha.web;
  */
 public interface ModelMapper<E, R> {
 
-    /**
-     * Maps entity to model.
-     *
-     * @param value entity
-     * @return mapped model
-     */
-    R map(E value);
-
+  /**
+   * Maps entity to model.
+   *
+   * @param value entity
+   * @return mapped model
+   */
+  R map(E value);
 }

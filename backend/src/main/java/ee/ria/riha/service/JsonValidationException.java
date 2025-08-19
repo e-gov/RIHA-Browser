@@ -2,7 +2,6 @@ package ee.ria.riha.service;
 
 import ee.ria.riha.service.JsonValidationService.ProcessingMessage;
 import ee.ria.riha.service.JsonValidationService.ProcessingReport;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +12,18 @@ import java.util.List;
  */
 public class JsonValidationException extends BrowserException {
 
-    private final transient ProcessingReport processingReport;
+  private final transient ProcessingReport processingReport;
 
-    JsonValidationException(ProcessingReport processingReport) {
-        this.processingReport = processingReport;
+  JsonValidationException(ProcessingReport processingReport) {
+    this.processingReport = processingReport;
+  }
+
+  public List<ProcessingMessage> getMessages() {
+    ArrayList<ProcessingMessage> messages = new ArrayList<>();
+    if (processingReport != null) {
+      processingReport.forEach(messages::add);
     }
 
-    public List<ProcessingMessage> getMessages() {
-        ArrayList<ProcessingMessage> messages = new ArrayList<>();
-        if (processingReport != null) {
-            processingReport.forEach(messages::add);
-        }
-
-        return messages;
-    }
-
+    return messages;
+  }
 }

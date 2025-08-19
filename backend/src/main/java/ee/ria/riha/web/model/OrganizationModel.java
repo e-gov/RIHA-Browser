@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class OrganizationModel {
 
-    private String code;
-    private String name;
-
+  private String code;
+  private String name;
 }

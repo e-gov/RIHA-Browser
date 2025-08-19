@@ -1,8 +1,11 @@
 package ee.ria.riha.service.notification;
 
+import static org.mockito.Mockito.*;
+
 import ee.ria.riha.service.notification.handler.NewInfoSystemsNotificationHandler;
 import ee.ria.riha.service.notification.model.NewInfoSystemsEmailNotification;
 import ee.ria.riha.service.notification.model.SimpleHtmlEmailNotification;
+import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +18,6 @@ import org.mockito.quality.Strictness;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
-import jakarta.mail.internet.MimeMessage;
-
-import static org.mockito.Mockito.*;
-
 /**
  * @author Valentin Suhnjov
  */
@@ -26,46 +25,42 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class EmailNotificationSenderServiceTest {
 
-    @Mock
-    private JavaMailSenderImpl javaMailSender;
+  @Mock private JavaMailSenderImpl javaMailSender;
 
-    @InjectMocks
-    private EmailNotificationSenderService emailNotificationSenderService;
+  @InjectMocks private EmailNotificationSenderService emailNotificationSenderService;
 
-    @Mock
-    private NewInfoSystemsNotificationHandler handler;
+  @Mock private NewInfoSystemsNotificationHandler handler;
 
-    @Mock
-    private MimeMessage mimeMessage;
+  @Mock private MimeMessage mimeMessage;
 
-    @Mock
-    private MimeMessagePreparator messagePreparator;
+  @Mock private MimeMessagePreparator messagePreparator;
 
-    @BeforeEach
-    public void setUp() {
-        emailNotificationSenderService.getHandlers().add(handler);
+  @BeforeEach
+  public void setUp() {
+    emailNotificationSenderService.getHandlers().add(handler);
 
-        when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
+    when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        when(handler.supports(Mockito.any(NewInfoSystemsEmailNotification.class))).thenCallRealMethod();
-        when(handler.createMessagePreparator(Mockito.any(NewInfoSystemsEmailNotification.class))).thenReturn(messagePreparator);
-    }
+    when(handler.supports(Mockito.any(NewInfoSystemsEmailNotification.class))).thenCallRealMethod();
+    when(handler.createMessagePreparator(Mockito.any(NewInfoSystemsEmailNotification.class)))
+        .thenReturn(messagePreparator);
+  }
 
-    @Test
-    public void sendsNotificationMessage() {
-        NewInfoSystemsEmailNotification notification = new NewInfoSystemsEmailNotification();
-        notification.setTo("recipient@example.com");
-        notification.setFrom("sender@example.com");
+  @Test
+  public void sendsNotificationMessage() {
+    NewInfoSystemsEmailNotification notification = new NewInfoSystemsEmailNotification();
+    notification.setTo("recipient@example.com");
+    notification.setFrom("sender@example.com");
 
-        emailNotificationSenderService.sendNotification(notification);
+    emailNotificationSenderService.sendNotification(notification);
 
-        verify(javaMailSender).send(Mockito.any(MimeMessage.class));
-    }
+    verify(javaMailSender).send(Mockito.any(MimeMessage.class));
+  }
 
-    @Test
-    public void doesNotSendNotificationIfHandlerNotFound() {
-        emailNotificationSenderService.sendNotification(new SimpleHtmlEmailNotification());
+  @Test
+  public void doesNotSendNotificationIfHandlerNotFound() {
+    emailNotificationSenderService.sendNotification(new SimpleHtmlEmailNotification());
 
-        verify(javaMailSender, never()).send(Mockito.any(MimeMessagePreparator.class));
-    }
+    verify(javaMailSender, never()).send(Mockito.any(MimeMessagePreparator.class));
+  }
 }

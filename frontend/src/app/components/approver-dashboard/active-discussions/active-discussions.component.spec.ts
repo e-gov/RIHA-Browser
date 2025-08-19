@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ActiveDiscussionsComponent} from './active-discussions.component';
+import { ActiveDiscussionsComponent } from './active-discussions.component';
 
 describe('ActiveDiscussionsComponent', () => {
   let component: ActiveDiscussionsComponent;
@@ -8,9 +8,8 @@ describe('ActiveDiscussionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActiveDiscussionsComponent ]
-    })
-    .compileComponents();
+      declarations: [ActiveDiscussionsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

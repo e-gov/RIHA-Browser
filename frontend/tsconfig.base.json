@@ -4,7 +4,7 @@
     "downlevelIteration": true,
     "importHelpers": true,
     "outDir": "./dist/out-tsc",
-    "baseUrl": "../",
+    "baseUrl": "./",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -13,13 +13,16 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2022",
     "useDefineForClassFields": false,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
-    "module": "ES2022"
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["ES2022", "dom"],
+    "module": "ES2022",
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   }
 }

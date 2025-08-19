@@ -1,8 +1,8 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {catchError, switchMap} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class CustomCsrfInterceptor implements HttpInterceptor {
@@ -13,7 +13,7 @@ export class CustomCsrfInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Skip CSRF for GET, HEAD, OPTIONS, TRACE requests
-    if (req.method === 'GET' || req.method === 'HEAD' || req.method === 'OPTIONS' || req.method === 'TRACE') {
+    if (req.method == 'GET' || req.method == 'HEAD' || req.method == 'OPTIONS' || req.method == 'TRACE') {
       return next.handle(req);
     }
 
@@ -25,7 +25,7 @@ export class CustomCsrfInterceptor implements HttpInterceptor {
     // If we already have a token, use it
     if (this.csrfToken) {
       const csrfReq = req.clone({
-        headers: req.headers.set(this.csrfHeaderName, this.csrfToken)
+        headers: req.headers.set(this.csrfHeaderName, this.csrfToken),
       });
       return next.handle(csrfReq);
     }
@@ -34,23 +34,23 @@ export class CustomCsrfInterceptor implements HttpInterceptor {
     return this.fetchCsrfToken().pipe(
       switchMap(() => {
         const csrfReq = req.clone({
-          headers: req.headers.set(this.csrfHeaderName, this.csrfToken!)
+          headers: req.headers.set(this.csrfHeaderName, this.csrfToken!),
         });
         return next.handle(csrfReq);
       }),
-      catchError((error) => {
+      catchError(error => {
         throw error;
-      })
+      }),
     );
   }
 
   private fetchCsrfToken(): Observable<any> {
     return this.http.get<any>('/api/v1/csrf/token').pipe(
-      switchMap((response) => {
+      switchMap(response => {
         this.csrfToken = response.token;
         this.csrfHeaderName = response.headerName || 'X-CSRF-TOKEN';
         return of(response);
-      })
+      }),
     );
   }
 }

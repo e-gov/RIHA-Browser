@@ -1,22 +1,16 @@
-import {Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { GridData } from '../../../models/grid-data';
 
-
 @Component({
-    selector: 'app-grid-currently-showing',
-    templateUrl: './grid-currently-showing.component.html',
-    styleUrls: ['./grid-currently-showing.component.scss'],
-    standalone: false
+  selector: 'app-grid-currently-showing',
+  templateUrl: './grid-currently-showing.component.html',
+  styleUrls: ['./grid-currently-showing.component.scss'],
+  standalone: false,
 })
 export class GridCurrentlyShowingComponent implements OnInit {
-
   @Input() gridData: GridData;
 
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-
-  }
-
+  ngOnInit() {}
 }

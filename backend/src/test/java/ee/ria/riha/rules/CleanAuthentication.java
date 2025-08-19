@@ -11,18 +11,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @author Valentin Suhnjov
  */
 public class CleanAuthentication implements BeforeEachCallback, AfterEachCallback {
-    
-    @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
-        clearAuthentication();
-    }
-    
-    @Override
-    public void afterEach(ExtensionContext context) throws Exception {
-        clearAuthentication();
-    }
 
-    private void clearAuthentication() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-    }
+  @Override
+  public void beforeEach(ExtensionContext context) throws Exception {
+    clearAuthentication();
+  }
+
+  @Override
+  public void afterEach(ExtensionContext context) throws Exception {
+    clearAuthentication();
+  }
+
+  private void clearAuthentication() {
+    SecurityContextHolder.getContext().setAuthentication(null);
+  }
 }

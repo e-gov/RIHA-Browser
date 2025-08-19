@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ProducerEditGeneralComponent} from './producer-edit-general.component';
+import { ProducerEditGeneralComponent } from './producer-edit-general.component';
 
 describe('ProducerEditGeneralComponent', () => {
   let component: ProducerEditGeneralComponent;
@@ -8,9 +8,8 @@ describe('ProducerEditGeneralComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProducerEditGeneralComponent ]
-    })
-    .compileComponents();
+      declarations: [ProducerEditGeneralComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

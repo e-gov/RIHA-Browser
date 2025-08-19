@@ -10,7 +10,7 @@ export interface CsrfTokenResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CsrfTokenService {
   private tokenSubject = new BehaviorSubject<string | null>(null);
@@ -23,7 +23,7 @@ export class CsrfTokenService {
       tap(response => {
         this.tokenSubject.next(response.token);
         this.headerNameSubject.next(response.headerName);
-      })
+      }),
     );
   }
 

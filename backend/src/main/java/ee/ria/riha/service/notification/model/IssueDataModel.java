@@ -14,9 +14,8 @@ import lombok.*;
 @NoArgsConstructor
 public class IssueDataModel {
 
-    private Long id;
-    private String title;
-    private String status;
-    private String type;
-
+  private Long id;
+  private String title;
+  private String status;
+  private String type;
 }

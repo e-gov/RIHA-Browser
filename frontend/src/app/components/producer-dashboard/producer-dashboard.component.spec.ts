@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ProducerDashboardComponent} from './producer-dashboard.component';
+import { ProducerDashboardComponent } from './producer-dashboard.component';
 
 describe('ProducerDashboardComponent', () => {
   let component: ProducerDashboardComponent;
@@ -8,9 +8,8 @@ describe('ProducerDashboardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProducerDashboardComponent ]
-    })
-    .compileComponents();
+      declarations: [ProducerDashboardComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

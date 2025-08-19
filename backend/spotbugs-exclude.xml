@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter xmlns="https://github.com/spotbugs/filter/3.0.0"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
+
+    <!-- Exclude auto-generated classes -->
+    <Match>
+        <Package name="~.*\.generated\..*"/>
+    </Match>
+
+    <!-- Exclude test classes from certain checks -->
+    <Match>
+        <Class name="~.*Test"/>
+        <Bug pattern="DM_EXIT"/>
+    </Match>
+
+    <!-- Exclude Spring Boot configuration classes from certain checks -->
+    <Match>
+        <Class name="~.*Configuration"/>
+        <Bug pattern="URF_UNREAD_FIELD"/>
+    </Match>
+
+    <!-- Exclude DTOs/Models from serialization warnings -->
+    <Match>
+        <Package name="~.*\.model\..*"/>
+        <Bug pattern="SE_NO_SERIALVERSIONID"/>
+    </Match>
+    
+    <Match>
+        <Package name="~.*\.dto\..*"/>
+        <Bug pattern="SE_NO_SERIALVERSIONID"/>
+    </Match>
+
+    <!-- Exclude controllers from certain security checks -->
+    <Match>
+        <Class name="~.*Controller"/>
+        <Bug pattern="XSS_REQUEST_PARAMETER_TO_SEND_ERROR"/>
+    </Match>
+
+</FindBugsFilter>

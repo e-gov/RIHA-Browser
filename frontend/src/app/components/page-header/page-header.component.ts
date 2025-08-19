@@ -1,20 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-page-header',
-    templateUrl: './page-header.component.html',
-    standalone: false
+  selector: 'app-page-header',
+  templateUrl: './page-header.component.html',
+  standalone: false,
 })
 export class PageHeaderComponent implements OnInit {
-
   @Input() text: string;
 
   @Input() subHeader: string;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

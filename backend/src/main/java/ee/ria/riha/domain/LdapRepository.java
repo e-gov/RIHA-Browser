@@ -3,6 +3,10 @@ package ee.ria.riha.domain;
 import ee.ria.riha.conf.ApplicationProperties.LdapRepositoryProperties;
 import ee.ria.riha.domain.model.LdapGroup;
 import ee.ria.riha.domain.model.LdapUser;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import javax.naming.Name;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -16,106 +20,100 @@ import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.ldap.support.LdapUtils;
 import org.springframework.util.Assert;
 
-import javax.naming.Name;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 @Slf4j
 public class LdapRepository {
 
-    private static final String USER_ID_ATTRIBUTE = "uid";
-    private static final String COMMON_NAME_ATTRIBUTE = "cn";
-    private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
-    private static final String APPROVER_GROUP_COMMON_NAME_PATTERN = "*-hindaja";
-    private static final String ALL_NON_OPERATIONAL_ATTRIBUTES = "*";
+  private static final String USER_ID_ATTRIBUTE = "uid";
+  private static final String COMMON_NAME_ATTRIBUTE = "cn";
+  private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
+  private static final String APPROVER_GROUP_COMMON_NAME_PATTERN = "*-hindaja";
+  private static final String ALL_NON_OPERATIONAL_ATTRIBUTES = "*";
 
-    private Name baseDn;
-    private Name userSearchBase;
-    private Name groupSearchBase;
-    private LdapTemplate ldapTemplate;
+  private Name baseDn;
+  private Name userSearchBase;
+  private Name groupSearchBase;
+  private LdapTemplate ldapTemplate;
 
-    public LdapRepository(LdapContextSource ldapContextSource, LdapRepositoryProperties ldapRepositoryProperties) {
-        Assert.notNull(ldapContextSource, "LDAP context source must not be null");
-        this.ldapTemplate = new LdapTemplate(ldapContextSource);
+  public LdapRepository(
+      LdapContextSource ldapContextSource, LdapRepositoryProperties ldapRepositoryProperties) {
+    Assert.notNull(ldapContextSource, "LDAP context source must not be null");
+    this.ldapTemplate = new LdapTemplate(ldapContextSource);
 
-        this.baseDn = ldapContextSource.getBaseLdapName();
+    this.baseDn = ldapContextSource.getBaseLdapName();
 
-        Assert.hasText(ldapRepositoryProperties.getUserSearchBase(), "userSearchBase must be provided");
-        this.userSearchBase = LdapUtils.newLdapName(ldapRepositoryProperties.getUserSearchBase());
+    Assert.hasText(ldapRepositoryProperties.getUserSearchBase(), "userSearchBase must be provided");
+    this.userSearchBase = LdapUtils.newLdapName(ldapRepositoryProperties.getUserSearchBase());
 
-        Assert.hasText(ldapRepositoryProperties.getGroupSearchBase(), "groupSearchBase must be provided");
-        this.groupSearchBase = LdapUtils.newLdapName(ldapRepositoryProperties.getGroupSearchBase());
+    Assert.hasText(
+        ldapRepositoryProperties.getGroupSearchBase(), "groupSearchBase must be provided");
+    this.groupSearchBase = LdapUtils.newLdapName(ldapRepositoryProperties.getGroupSearchBase());
+  }
+
+  public List<LdapUser> findLdapUsersByPersonalCodes(Set<String> personalCodes) {
+    if (personalCodes.isEmpty()) {
+      log.debug("Will not search for users since list of personal codes is empty");
+      return new ArrayList<>();
     }
 
-    public List<LdapUser> findLdapUsersByPersonalCodes(Set<String> personalCodes) {
-        if (personalCodes.isEmpty()) {
-            log.debug("Will not search for users since list of personal codes is empty");
-            return new ArrayList<>();
-        }
+    OrFilter filter = new OrFilter();
+    personalCodes.stream()
+        .map(personalCode -> new EqualsFilter(USER_ID_ATTRIBUTE, personalCode))
+        .forEach(filter::or);
 
-        OrFilter filter = new OrFilter();
-        personalCodes.stream()
-                .map(personalCode -> new EqualsFilter(USER_ID_ATTRIBUTE, personalCode))
-                .forEach(filter::or);
+    return findLdapUsers(filter);
+  }
 
-        return findLdapUsers(filter);
+  private List<LdapUser> findLdapUsers(AbstractFilter filter) {
+    LdapQuery query =
+        LdapQueryBuilder.query()
+            .base(userSearchBase)
+            .attributes(ALL_NON_OPERATIONAL_ATTRIBUTES, MEMBER_OF_ATTRIBUTE)
+            .filter(filter);
+
+    return ldapTemplate.find(query, LdapUser.class);
+  }
+
+  public List<LdapUser> getApproversByOrganization(String organizationCode) {
+    String approverGroupName = APPROVER_GROUP_COMMON_NAME_PATTERN.replace("*", organizationCode);
+    LdapGroup group = findLdapGroup(new EqualsFilter(COMMON_NAME_ATTRIBUTE, approverGroupName));
+    String groupDn = LdapNameBuilder.newInstance(baseDn).add(group.getDn()).build().toString();
+    return findLdapUsers(new EqualsFilter(MEMBER_OF_ATTRIBUTE, groupDn));
+  }
+
+  public List<LdapUser> getUsersByOrganization(String organizationCode) {
+    return getLdapUsersByGroups(organizationCode + ALL_NON_OPERATIONAL_ATTRIBUTES);
+  }
+
+  public List<LdapUser> getAllApprovers() {
+    return getLdapUsersByGroups(APPROVER_GROUP_COMMON_NAME_PATTERN);
+  }
+
+  private List<LdapUser> getLdapUsersByGroups(String groupNamePattern) {
+    List<LdapGroup> groups =
+        findLdapGroups(new LikeFilter(COMMON_NAME_ATTRIBUTE, groupNamePattern));
+    if (groups.isEmpty()) {
+      log.debug("Would not search for approvers since no approver groups found");
+      return new ArrayList<>();
     }
 
-    private List<LdapUser> findLdapUsers(AbstractFilter filter) {
-        LdapQuery query = LdapQueryBuilder.query()
-                .base(userSearchBase)
-                .attributes(ALL_NON_OPERATIONAL_ATTRIBUTES, MEMBER_OF_ATTRIBUTE)
-                .filter(filter);
+    OrFilter filter = new OrFilter();
+    groups.stream()
+        .map(group -> LdapNameBuilder.newInstance(baseDn).add(group.getDn()).build().toString())
+        .map(groupDn -> new EqualsFilter(MEMBER_OF_ATTRIBUTE, groupDn))
+        .forEach(filter::or);
 
-        return ldapTemplate.find(query, LdapUser.class);
-    }
+    return findLdapUsers(filter);
+  }
 
-    public List<LdapUser> getApproversByOrganization(String organizationCode) {
-        String approverGroupName = APPROVER_GROUP_COMMON_NAME_PATTERN.replace("*", organizationCode);
-        LdapGroup group = findLdapGroup(new EqualsFilter(COMMON_NAME_ATTRIBUTE, approverGroupName));
-        String groupDn = LdapNameBuilder.newInstance(baseDn).add(group.getDn()).build().toString();
-        return findLdapUsers(new EqualsFilter(MEMBER_OF_ATTRIBUTE, groupDn));
-    }
+  private LdapGroup findLdapGroup(AbstractFilter filter) {
+    return ldapTemplate.findOne(getGroupQuery(filter), LdapGroup.class);
+  }
 
-    public List<LdapUser> getUsersByOrganization(String organizationCode) {
-        return getLdapUsersByGroups(organizationCode + ALL_NON_OPERATIONAL_ATTRIBUTES);
-    }
+  private List<LdapGroup> findLdapGroups(AbstractFilter filter) {
+    return ldapTemplate.find(getGroupQuery(filter), LdapGroup.class);
+  }
 
-    public List<LdapUser> getAllApprovers() {
-        return getLdapUsersByGroups(APPROVER_GROUP_COMMON_NAME_PATTERN);
-    }
-
-    private List<LdapUser> getLdapUsersByGroups(String groupNamePattern) {
-        List<LdapGroup> groups = findLdapGroups(new LikeFilter(COMMON_NAME_ATTRIBUTE, groupNamePattern));
-        if (groups.isEmpty()) {
-            log.debug("Would not search for approvers since no approver groups found");
-            return new ArrayList<>();
-        }
-
-        OrFilter filter = new OrFilter();
-        groups.stream()
-                .map(group -> LdapNameBuilder.newInstance(baseDn)
-                        .add(group.getDn())
-                        .build()
-                        .toString())
-                .map(groupDn -> new EqualsFilter(MEMBER_OF_ATTRIBUTE, groupDn))
-                .forEach(filter::or);
-
-        return findLdapUsers(filter);
-    }
-
-    private LdapGroup findLdapGroup(AbstractFilter filter) {
-        return ldapTemplate.findOne(getGroupQuery(filter), LdapGroup.class);
-    }
-
-    private List<LdapGroup> findLdapGroups(AbstractFilter filter) {
-        return ldapTemplate.find(getGroupQuery(filter), LdapGroup.class);
-    }
-
-    private LdapQuery getGroupQuery(AbstractFilter filter) {
-        return LdapQueryBuilder.query()
-                .base(groupSearchBase)
-                .filter(filter);
-    }
+  private LdapQuery getGroupQuery(AbstractFilter filter) {
+    return LdapQueryBuilder.query().base(groupSearchBase).filter(filter);
+  }
 }

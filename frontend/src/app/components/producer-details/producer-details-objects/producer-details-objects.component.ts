@@ -7,47 +7,48 @@ import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-    selector: 'app-producer-details-objects',
-    templateUrl: './producer-details-objects.component.html',
-    styleUrls: ['./producer-details-objects.component.scss'],
-    standalone: false
+  selector: 'app-producer-details-objects',
+  templateUrl: './producer-details-objects.component.html',
+  styleUrls: ['./producer-details-objects.component.scss'],
+  standalone: false,
 })
 export class ProducerDetailsObjectsComponent implements OnInit {
-
   @Input() system: System;
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
 
   openObjectsEdit(content) {
-    this.systemsService.getSystem(this.system.details.short_name).subscribe( responseSystem => {
-      const system = new System(responseSystem);
-      this.onSystemChanged.emit(system);
-      const modalRef = this.modalService.open(ProducerEditObjectsComponent,{
-        backdrop: 'static',
-        windowClass: 'fixed-header-modal',
-        keyboard: false
-      });
-      modalRef.componentInstance.system = this.system;
-      modalRef.result.then( result => {
-        if (result.system) {
-          this.onSystemChanged.emit(result.system);
-        }
-      }, reason => {
-
-      });
-    }, err => {
-      this.toastrService.error('Serveri viga.');
-    });
+    this.systemsService.getSystem(this.system.details.short_name).subscribe(
+      responseSystem => {
+        const system = new System(responseSystem);
+        this.onSystemChanged.emit(system);
+        const modalRef = this.modalService.open(ProducerEditObjectsComponent, {
+          backdrop: 'static',
+          windowClass: 'fixed-header-modal',
+          keyboard: false,
+        });
+        modalRef.componentInstance.system = this.system;
+        modalRef.result.then(
+          result => {
+            if (result.system) {
+              this.onSystemChanged.emit(result.system);
+            }
+          },
+          reason => {},
+        );
+      },
+      err => {
+        this.toastrService.error('Serveri viga.');
+      },
+    );
   }
 
-  constructor(private modalService: ModalHelperService,
-              public generalHelperService: GeneralHelperService,
-              private systemsService: SystemsService,
-              private toastrService: ToastrService) {
+  constructor(
+    private modalService: ModalHelperService,
+    public generalHelperService: GeneralHelperService,
+    private systemsService: SystemsService,
+    private toastrService: ToastrService,
+  ) {}
 
-  }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

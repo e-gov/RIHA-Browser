@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {SortButtonComponent} from './sort-button.component';
+import { SortButtonComponent } from './sort-button.component';
 
 describe('SortButtonComponent', () => {
   let component: SortButtonComponent;
@@ -8,9 +8,8 @@ describe('SortButtonComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SortButtonComponent ]
-    })
-    .compileComponents();
+      declarations: [SortButtonComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

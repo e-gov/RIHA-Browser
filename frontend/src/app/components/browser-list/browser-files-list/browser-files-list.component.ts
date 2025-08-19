@@ -1,89 +1,92 @@
-import {Component, OnInit} from '@angular/core';
-import {GeneralHelperService} from '../../../services/general-helper.service';
-import {Location} from '@angular/common';
-import {GridData} from '../../../models/grid-data';
-import {ActivatedRoute} from '@angular/router';
-import {SystemsService} from '../../../services/systems.service';
+import { Component, OnInit } from '@angular/core';
+import { GeneralHelperService } from '../../../services/general-helper.service';
+import { Location } from '@angular/common';
+import { GridData } from '../../../models/grid-data';
+import { ActivatedRoute } from '@angular/router';
+import { SystemsService } from '../../../services/systems.service';
 
 @Component({
-    selector: 'app-browser-files-list',
-    templateUrl: './browser-files-list.component.html',
-    styleUrls: ['./browser-files-list.component.scss'],
-    standalone: false
+  selector: 'app-browser-files-list',
+  templateUrl: './browser-files-list.component.html',
+  styleUrls: ['./browser-files-list.component.scss'],
+  standalone: false,
 })
 export class BrowserFilesListComponent implements OnInit {
-
   public gridData: GridData = new GridData();
   public loaded: boolean = false;
   filters: {
-    searchText: string,
-    searchName: string,
-    infosystem: string,
-    dataObjectName: string,
-    comment: string,
-    parentObject: string,
-    personalData: string
+    searchText: string;
+    searchName: string;
+    infosystem: string;
+    dataObjectName: string;
+    comment: string;
+    parentObject: string;
+    personalData: string;
   };
-
 
   extendedSearch: boolean = false;
 
-  toggleSearchPanel(){
+  toggleSearchPanel() {
     this.extendedSearch = !this.extendedSearch;
     return false;
   }
 
-  public onPageChange(newPage){
+  public onPageChange(newPage) {
     this.gridData.page = newPage - 1;
     this.getDataObjectFiles(this.gridData.page);
   }
 
-  public onSortChange(property): void{
+  public onSortChange(property): void {
     this.gridData.changeSortOrder(property);
     this.getDataObjectFiles();
   }
 
-  public getDataObjectFiles(page?){
+  public getDataObjectFiles(page?) {
     // if (this.filters.searchText && this.filters.searchText.length > 1){
-      const params = this.helper.cloneObject(this.filters);
+    const params = this.helper.cloneObject(this.filters);
 
-      const sortProperty = this.gridData.getSortProperty();
-      if (sortProperty) {
-        params.sort = sortProperty;
-      }
+    const sortProperty = this.gridData.getSortProperty();
+    if (sortProperty) {
+      params.sort = sortProperty;
+    }
     const sortOrder = this.gridData.getSortOrder();
-      if (sortOrder) {
-        params.dir = sortOrder;
-      }
-      if (page && page != 0) {
-        params.page = page + 1;
-      }
+    if (sortOrder) {
+      params.dir = sortOrder;
+    }
+    if (page && page != 0) {
+      params.page = page + 1;
+    }
 
-      this.gridData.page = page || 0;
+    this.gridData.page = page || 0;
 
-      const q = this.helper.generateQueryString(params);
-      this.location.replaceState('/Andmeobjektid', q);
+    const q = this.helper.generateQueryString(params);
+    this.location.replaceState('/Andmeobjektid', q);
 
-      this.systemsService.getSystemsDataObjects(this.filters, this.gridData).subscribe(res =>{
+    this.systemsService.getSystemsDataObjects(this.filters, this.gridData).subscribe(
+      res => {
         this.gridData.updateData(res);
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getDataObjectFiles();
         }
         this.loaded = true;
-      }, err => {
+      },
+      err => {
         this.loaded = true;
         this.helper.showError();
-      })
+      },
+    );
     // }
   }
 
-  constructor(public helper: GeneralHelperService,
-              private route: ActivatedRoute,
-              private systemsService: SystemsService,
-              private location: Location) { }
+  constructor(
+    public helper: GeneralHelperService,
+    private route: ActivatedRoute,
+    private systemsService: SystemsService,
+    private location: Location,
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe( params => {
+    this.route.queryParams.subscribe(params => {
       this.filters = {
         searchText: params['searchText'],
         searchName: params['searchName'],
@@ -91,7 +94,7 @@ export class BrowserFilesListComponent implements OnInit {
         dataObjectName: params['dataObjectName'],
         comment: params['comment'],
         parentObject: params['parentObject'],
-        personalData: params['personalData'] || ''
+        personalData: params['personalData'] || '',
       };
 
       this.gridData.changeSortOrder(params['sort'] || 'file_resource_name', params['dir'] || 'ASC');
@@ -100,20 +103,18 @@ export class BrowserFilesListComponent implements OnInit {
     if (this.route.queryParams['page']) {
       this.gridData.setPageFromUrl(this.route.queryParams['page']);
     }
-    if (this.filtersNotEmpty()){
+    if (this.filtersNotEmpty()) {
       this.getDataObjectFiles(this.gridData.page);
     }
     this.helper.setRihaPageTitle('Andmeobjektid');
   }
 
-  private filtersNotEmpty() : boolean {
-
+  private filtersNotEmpty(): boolean {
     for (const key in this.filters) {
-      if (this.filters[key]){
+      if (this.filters[key]) {
         return true;
       }
     }
     return false;
   }
-
 }

@@ -5,10 +5,9 @@ package ee.ria.riha.service.util;
  */
 public interface Filterable {
 
-    String getFilter();
+  String getFilter();
 
-    String getSort();
+  String getSort();
 
-    String getFields();
-
+  String getFields();
 }

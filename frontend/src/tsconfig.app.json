@@ -2,17 +2,20 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "baseUrl": "",
+    "baseUrl": "./",
     "types": []
   },
-  "files": [
-    "main.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts"
-  ],
+  "files": ["main.ts"],
+  "include": ["app/**/*.ts", "environments/environment.ts", "**/*.d.ts"],
   "exclude": [
     "test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "e2e/**/*",
+    "environments/environment.local.ts",
+    "environments/environment.prod.ts",
+    "node_modules/**/*",
+    "../node_modules/**/*",
+    "../dist/**/*",
+    "../target/**/*"
   ]
 }

@@ -6,6 +6,6 @@ package ee.ria.riha.domain.model;
  * @author Valentin Suhnjov
  */
 public enum IssueStatus {
-    OPEN,
-    CLOSED;
+  OPEN,
+  CLOSED;
 }
