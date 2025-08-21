@@ -6,17 +6,17 @@ import { GeneralHelperService } from '../../../services/general-helper.service';
 import { SystemsService } from '../../../services/systems.service';
 import { ToastrService } from 'ngx-toastr';
 import { EnvironmentService } from '../../../services/environment.service';
-import { GridData } from "../../../models/grid-data";
+import { GridData } from '../../../models/grid-data';
 import { classifiers } from '../../../services/environment.service';
 import _ from 'lodash';
 
 @Component({
   selector: 'app-producer-details-tech-docs',
   templateUrl: './producer-details-documents.component.html',
-  styleUrls: ['./producer-details-documents.component.scss']
+  styleUrls: ['./producer-details-documents.component.scss'],
+  standalone: false,
 })
 export class ProducerDetailsDocumentsComponent implements OnInit {
-
   @Input() system: System;
   @Input() allowEdit: boolean;
   @Output() onSystemChanged = new EventEmitter<System>();
@@ -24,13 +24,13 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
   gridData: GridData = new GridData();
   classifiers = classifiers;
 
-  onSortChange(property): void{
+  onSortChange(property): void {
     this.gridData.changeSortOrder(property);
     this.getDocuments();
   }
 
-  canDownload(doc){
-    if (!doc.accessRestriction){
+  canDownload(doc) {
+    if (!doc.accessRestriction) {
       return true;
     } else {
       return this.allowEdit || this.environmentService.getUserMatrix().hasApproverRole;
@@ -38,35 +38,41 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
   }
 
   openTechDocsEdit(content) {
-    this.systemsService.getSystem(this.system.details.short_name).subscribe( responseSystem => {
-      const system = new System(responseSystem);
-      this.onSystemChanged.emit(system);
-      const modalRef = this.modalService.open(ProducerEditDocumentsComponent,{
-        backdrop: 'static',
-        size: 'lg',
-        windowClass: 'fixed-header-modal',
-        keyboard: false
-      });
-      modalRef.componentInstance.system = system;
-      modalRef.result.then( result => {
-        if (result.system) {
-          this.onSystemChanged.emit(result.system);
-          this.system = result.system;
-          this.getDocuments();
-        }
-      }, reason => {
-
-      });
-    }, err => {
-      this.toastrService.error('Serveri viga.');
-    });
+    this.systemsService.getSystem(this.system.details.short_name).subscribe(
+      responseSystem => {
+        const system = new System(responseSystem);
+        this.onSystemChanged.emit(system);
+        const modalRef = this.modalService.open(ProducerEditDocumentsComponent, {
+          backdrop: 'static',
+          size: 'lg',
+          windowClass: 'fixed-header-modal',
+          keyboard: false,
+        });
+        modalRef.componentInstance.system = system;
+        modalRef.result.then(
+          result => {
+            if (result.system) {
+              this.onSystemChanged.emit(result.system);
+              this.system = result.system;
+              this.getDocuments();
+            }
+          },
+          reason => {},
+        );
+      },
+      err => {
+        this.toastrService.error('Serveri viga.');
+      },
+    );
   }
 
-  constructor(private modalService: ModalHelperService,
-              public generalHelperService: GeneralHelperService,
-              private environmentService: EnvironmentService,
-              private systemsService: SystemsService,
-              private toastrService: ToastrService) { }
+  constructor(
+    private modalService: ModalHelperService,
+    public generalHelperService: GeneralHelperService,
+    private environmentService: EnvironmentService,
+    private systemsService: SystemsService,
+    private toastrService: ToastrService,
+  ) {}
 
   ngOnInit() {
     this.gridData.changeSortOrder('name');
@@ -75,10 +81,10 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
 
   getDocuments() {
     let documents = this.system.details.documents;
-    if (documents && documents.constructor === Array && documents.length > 0) {
+    if (documents && documents.constructor == Array && documents.length > 0) {
       let sort = this.gridData.sort;
       let sortOrder = 'asc';
-      if(sort[0] === "-") {
+      if (sort[0] == '-') {
         sortOrder = 'desc';
         sort = sort.substr(1);
       }
@@ -97,6 +103,6 @@ export class ProducerDetailsDocumentsComponent implements OnInit {
       documents = _.orderBy(documents, [sort, 'name'], [sortOrder, 'asc']);
     }
 
-    this.gridData.updateData({content: documents});
+    this.gridData.updateData({ content: documents });
   }
 }

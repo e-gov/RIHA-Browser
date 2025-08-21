@@ -8,16 +8,14 @@ import ee.ria.riha.service.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class InfoSystemDataObjectRepository {
 
-    private static final String DATA_OBJECT_PATH = "db/data_object_search_view";
+  private static final String DATA_OBJECT_PATH = "db/data_object_search_view";
 
-    @Autowired
-    private StorageClient storageClient;
+  @Autowired private StorageClient storageClient;
 
-    public PagedResponse<InfoSystemDataObject> list(Pageable pageable, Filterable filterable) {
-        return storageClient.list(DATA_OBJECT_PATH, pageable, filterable, InfoSystemDataObject.class);
-    }
+  public PagedResponse<InfoSystemDataObject> list(Pageable pageable, Filterable filterable) {
+    return storageClient.list(DATA_OBJECT_PATH, pageable, filterable, InfoSystemDataObject.class);
+  }
 }

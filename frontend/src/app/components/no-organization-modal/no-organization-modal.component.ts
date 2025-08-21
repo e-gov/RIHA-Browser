@@ -1,10 +1,9 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-no-organization-modal',
   templateUrl: './no-organization-modal.component.html',
-  styleUrls: ['./no-organization-modal.component.scss']
+  styleUrls: ['./no-organization-modal.component.scss'],
+  standalone: false,
 })
-export class NoOrganizationModalComponent {
-
-}
+export class NoOrganizationModalComponent {}

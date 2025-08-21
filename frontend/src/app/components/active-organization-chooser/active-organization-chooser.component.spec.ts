@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ActiveOrganizationChooserComponent} from './active-organization-chooser.component';
+import { ActiveOrganizationChooserComponent } from './active-organization-chooser.component';
 
 describe('ActiveOrganizationChooserComponent', () => {
   let component: ActiveOrganizationChooserComponent;
@@ -8,9 +8,8 @@ describe('ActiveOrganizationChooserComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActiveOrganizationChooserComponent ]
-    })
-    .compileComponents();
+      declarations: [ActiveOrganizationChooserComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

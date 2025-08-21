@@ -5,28 +5,22 @@ package ee.ria.riha.service.auth;
  */
 public enum RoleType {
 
-    /**
-     * Any logged in user (not anonymous)
-     */
-    AUTHENTICATED_USER("ROLE_RIHA_USER"),
+  /** Any logged in user (not anonymous) */
+  AUTHENTICATED_USER("ROLE_RIHA_USER"),
 
-    /**
-     * Hindaja user
-     */
-    APPROVER("ROLE_HINDAJA"),
+  /** Hindaja user */
+  APPROVER("ROLE_HINDAJA"),
 
-    /**
-     * Kirjeldaja user
-     */
-    PRODUCER("ROLE_KIRJELDAJA");
+  /** Kirjeldaja user */
+  PRODUCER("ROLE_KIRJELDAJA");
 
-    private String role;
+  private String role;
 
-    RoleType(String role) {
-        this.role = role;
-    }
+  RoleType(String role) {
+    this.role = role;
+  }
 
-    public String getRole() {
-        return role;
-    }
+  public String getRole() {
+    return role;
+  }
 }

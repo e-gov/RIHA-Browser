@@ -1,23 +1,23 @@
-import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
-import {GridData} from "../../models/grid-data";
-import {UserMatrix} from "../../models/user-matrix";
-import {EnvironmentService} from "../../services/environment.service";
-import {ActivatedRoute} from "@angular/router";
-import {GeneralHelperService} from "../../services/general-helper.service";
-import {Location} from "@angular/common";
-import {SystemsService} from "../../services/systems.service";
-import {ToastrService} from "ngx-toastr";
-import {User} from "../../models/user";
-import {ModalHelperService} from "../../services/modal-helper.service";
-import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
+import { Component, DoCheck, KeyValueDiffers, OnInit } from '@angular/core';
+import { GridData } from '../../models/grid-data';
+import { UserMatrix } from '../../models/user-matrix';
+import { EnvironmentService } from '../../services/environment.service';
+import { ActivatedRoute } from '@angular/router';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { Location } from '@angular/common';
+import { SystemsService } from '../../services/systems.service';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '../../models/user';
+import { ModalHelperService } from '../../services/modal-helper.service';
+import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-producer-dashboard',
   templateUrl: './producer-dashboard.component.html',
-  styleUrls: ['./producer-dashboard.component.scss']
+  styleUrls: ['./producer-dashboard.component.scss'],
+  standalone: false,
 })
 export class ProducerDashboardComponent implements OnInit, DoCheck {
-
   public userMatrix: UserMatrix;
   public loaded: Boolean = false;
   private differ: any;
@@ -35,18 +35,23 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
 
   private getOwnOpenIssues() {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected && this.environmentService.getActiveUser()) {
-      this.systemsService.getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData).subscribe(res => {
-        this.gridData.updateData(res);
-        if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
-          this.gridData.page = 0;
-          this.getOwnOpenIssues();
-        } else {
-          this.loaded = true;
-        }
-      }, err => {
-        this.helper.showError();
-        this.loaded = true;
-      });
+      this.systemsService
+        .getActiveIssuesForOrganization(this.environmentService.getActiveUser().activeOrganization.code, this.gridData)
+        .subscribe(
+          res => {
+            this.gridData.updateData(res);
+            if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
+              this.gridData.page = 0;
+              this.getOwnOpenIssues();
+            } else {
+              this.loaded = true;
+            }
+          },
+          err => {
+            this.helper.showError();
+            this.loaded = true;
+          },
+        );
     }
   }
 
@@ -55,14 +60,16 @@ export class ProducerDashboardComponent implements OnInit, DoCheck {
     return false;
   }
 
-  constructor(private environmentService: EnvironmentService,
-              private helper: GeneralHelperService,
-              private systemsService: SystemsService,
-              private toastrService: ToastrService,
-              private modalService: ModalHelperService,
-              private route: ActivatedRoute,
-              private location: Location,
-              private differs: KeyValueDiffers) {
+  constructor(
+    private environmentService: EnvironmentService,
+    private helper: GeneralHelperService,
+    private systemsService: SystemsService,
+    private toastrService: ToastrService,
+    private modalService: ModalHelperService,
+    private route: ActivatedRoute,
+    private location: Location,
+    private differs: KeyValueDiffers,
+  ) {
     this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }

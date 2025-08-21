@@ -1,4 +1,4 @@
-import {User} from './user';
+import { User } from './user';
 
 export class Environment {
   private userDetails: User;
@@ -6,29 +6,29 @@ export class Environment {
   private sessionMaxInactiveInterval: number;
   private feedbackRecaptcha: any;
 
-  public getSessionMaxInactiveInterval(){
+  public getSessionMaxInactiveInterval() {
     return this.sessionMaxInactiveInterval;
   }
 
-  public getGoogleAnalyticsId(){
+  public getGoogleAnalyticsId() {
     let ret = null;
-    if (this.tracking && this.tracking.googleAnalytics && this.tracking.googleAnalytics.id){
+    if (this.tracking && this.tracking.googleAnalytics && this.tracking.googleAnalytics.id) {
       ret = this.tracking.googleAnalytics.id;
     }
     return ret;
   }
 
-  public getHotjarHjid(){
+  public getHotjarHjid() {
     let ret = null;
-    if (this.tracking && this.tracking.hotjar && this.tracking.hotjar.hjid){
+    if (this.tracking && this.tracking.hotjar && this.tracking.hotjar.hjid) {
       ret = this.tracking.hotjar.hjid;
     }
     return ret;
   }
 
-  public getHotjarHjsv(){
+  public getHotjarHjsv() {
     let ret = null;
-    if (this.tracking && this.tracking.hotjar && this.tracking.hotjar.hjsv){
+    if (this.tracking && this.tracking.hotjar && this.tracking.hotjar.hjsv) {
       ret = this.tracking.hotjar.hjsv;
     }
     return ret;
@@ -47,30 +47,31 @@ export class Environment {
   }
 
   public setActiveUser(details?): void {
-    if (details){
+    if (details) {
       this.userDetails = new User(details);
     } else {
       this.userDetails = null;
     }
   }
 
-  constructor(options){
+  constructor(options) {
     this.sessionMaxInactiveInterval = options.sessionMaxInactiveInterval ? options.sessionMaxInactiveInterval : 1800000;
     this.userDetails = options.userDetails ? new User(options.userDetails) : null;
-    this.tracking = options.tracking ? options.tracking : {
-      googleAnalytics: {
-        id: null
-      },
-      hotjar: {
-        hjid: null,
-        hjsv: null
-      },
-      matomo: {
-        url: null,
-        properties: null,
-      }
-    }
+    this.tracking = options.tracking
+      ? options.tracking
+      : {
+          googleAnalytics: {
+            id: null,
+          },
+          hotjar: {
+            hjid: null,
+            hjsv: null,
+          },
+          matomo: {
+            url: null,
+            properties: null,
+          },
+        };
     this.feedbackRecaptcha = options.feedbackRecaptcha;
   }
-
 }

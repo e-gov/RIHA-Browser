@@ -1,28 +1,28 @@
-import {AfterViewInit, Component, DoCheck, KeyValueDiffers, OnInit, ViewChild} from '@angular/core';
-import {SystemsService} from '../../services/systems.service';
-import {EnvironmentService} from '../../services/environment.service';
-import {GridData} from '../../models/grid-data';
-import {UserMatrix} from '../../models/user-matrix';
-import {ToastrService} from 'ngx-toastr';
-import {ModalHelperService} from '../../services/modal-helper.service';
-import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
-import {GeneralHelperService} from '../../services/general-helper.service';
-import {ActivatedRoute} from '@angular/router';
-import {Location} from '@angular/common';
-import {System} from '../../models/system';
+import { AfterViewInit, Component, DoCheck, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
+import { SystemsService } from '../../services/systems.service';
+import { EnvironmentService } from '../../services/environment.service';
+import { GridData } from '../../models/grid-data';
+import { UserMatrix } from '../../models/user-matrix';
+import { ToastrService } from 'ngx-toastr';
+import { ModalHelperService } from '../../services/modal-helper.service';
+import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { System } from '../../models/system';
 import _ from 'lodash';
-import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
-import {of} from "rxjs";
-import {delay, tap} from "rxjs/operators";
+import { ProducerSearchFilterComponent } from '../producer-search-filter/producer-search-filter-component';
+import { of } from 'rxjs';
+import { delay, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-producer-list',
   templateUrl: './producer-list.component.html',
-  styleUrls: ['./producer-list.component.scss']
+  styleUrls: ['./producer-list.component.scss'],
+  standalone: false,
 })
 export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
-
-  gridData: GridData  = new GridData();
+  gridData: GridData = new GridData();
 
   userMatrix: UserMatrix;
   loaded: Boolean = false;
@@ -30,7 +30,6 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
   searchText: string;
   extendedSearch: Boolean = false;
-
 
   @ViewChild(ProducerSearchFilterComponent, { static: false })
   filterPanel: ProducerSearchFilterComponent;
@@ -46,7 +45,6 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   _loadSystems(filters, page?): void {
-
     if (!(this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected)) {
       return;
     }
@@ -75,7 +73,7 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     if (sortOrder) {
       params.dir = sortOrder;
     }
-    if (page && page !== 0) {
+    if (page && page != 0) {
       params.page = page + 1;
     } else {
       this.gridData.page = 0;
@@ -86,22 +84,23 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
 
     this.systemsService.getOwnSystems(params, this.gridData).subscribe(
       items => {
-        this.gridData.updateData(items, (content) => _.map(content, (contentElement) => new System(contentElement)));
+        this.gridData.updateData(items, content => _.map(content, contentElement => new System(contentElement)));
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getOwnSystems();
         } else {
           this.loaded = true;
         }
-      }, err => {
+      },
+      err => {
         this.loaded = true;
         this.toastrService.error('Serveri viga!');
-      });
+      },
+    );
   }
 
   searchSystems(filters): void {
     this._loadSystems(filters);
   }
-
 
   getOwnSystems(page?): void {
     this._loadSystems(this.filterPanel ? this.filterPanel.getFilters() : null, page);
@@ -138,21 +137,22 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
     this.getOwnSystems();
   }
 
-  constructor(private systemsService: SystemsService,
-              private environmentService: EnvironmentService,
-              private route: ActivatedRoute,
-              private location: Location,
-              private toastrService: ToastrService,
-              private differs: KeyValueDiffers,
-              public  generalHelperService: GeneralHelperService,
-              private modalService: ModalHelperService) {
+  constructor(
+    private systemsService: SystemsService,
+    private environmentService: EnvironmentService,
+    private route: ActivatedRoute,
+    private location: Location,
+    private toastrService: ToastrService,
+    private differs: KeyValueDiffers,
+    public generalHelperService: GeneralHelperService,
+    private modalService: ModalHelperService,
+  ) {
     this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe( params => {
-
+    this.route.queryParams.subscribe(params => {
       this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
       this.gridData.setPageFromUrl(params['page']);
     });
@@ -161,14 +161,15 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngAfterViewInit() {
-
     if (this.hasActiveFilters()) {
-      of(null).pipe(
-        delay(0),
-        tap(() => {
-          this.extendedSearch = true;
-        })
-      ).subscribe();
+      of(null)
+        .pipe(
+          delay(0),
+          tap(() => {
+            this.extendedSearch = true;
+          }),
+        )
+        .subscribe();
     }
 
     this.getOwnSystems(this.gridData.page);
@@ -181,5 +182,4 @@ export class ProducerListComponent implements OnInit, AfterViewInit, DoCheck {
       this.getOwnSystems();
     }
   }
-
 }

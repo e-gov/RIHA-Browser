@@ -8,7 +8,8 @@ import { ModalHelperService } from '../../services/modal-helper.service';
 @Component({
   selector: 'app-active-organization-chooser',
   templateUrl: './active-organization-chooser.component.html',
-  styleUrls: ['./active-organization-chooser.component.scss']
+  styleUrls: ['./active-organization-chooser.component.scss'],
+  standalone: false,
 })
 export class ActiveOrganizationChooserComponent implements OnInit {
   user: User;
@@ -20,13 +21,13 @@ export class ActiveOrganizationChooserComponent implements OnInit {
     });
   }
 
-  constructor(private environmentService: EnvironmentService,
-              private modalService: ModalHelperService,
-              private router: Router) {
+  constructor(
+    private environmentService: EnvironmentService,
+    private modalService: ModalHelperService,
+    private router: Router,
+  ) {
     this.user = environmentService.getActiveUser();
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

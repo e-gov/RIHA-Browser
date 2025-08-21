@@ -1,22 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserMatrix} from "../../models/user-matrix";
-import {EnvironmentService} from "../../services/environment.service";
-import {GeneralHelperService} from '../../services/general-helper.service';
-import {SystemFeedback} from "../../models/system-feedback";
-import {SystemFeedbackService} from "../../services/system-feedback.service";
-import {ActivatedRoute} from '@angular/router';
-import {ToastrService} from "ngx-toastr";
-import {ReCaptchaV3Service} from 'ng-recaptcha';
-import {makeRecaptchaBadgeInvisible, makeRecaptchaBadgeVisible} from '../../utils/commonUtils';
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UserMatrix } from '../../models/user-matrix';
+import { EnvironmentService } from '../../services/environment.service';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { SystemFeedback } from '../../models/system-feedback';
+import { SystemFeedbackService } from '../../services/system-feedback.service';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ReCaptchaV3Service } from 'ng-recaptcha-2';
+import { makeRecaptchaBadgeInvisible, makeRecaptchaBadgeVisible } from '../../utils/commonUtils';
 
 @Component({
   selector: 'feedback-form',
   templateUrl: './feedback-form-component.html',
-  styleUrls: ['./feedback-form-component.scss']
+  styleUrls: ['./feedback-form-component.scss'],
+  standalone: false,
 })
 export class FeedbackFormComponent implements OnInit, OnDestroy {
-
   systemFeedback: SystemFeedback;
   isRedirectedLogout: boolean;
   grades;
@@ -27,15 +26,19 @@ export class FeedbackFormComponent implements OnInit, OnDestroy {
   recaptchaProperties: any;
   recaptchaBadgeStyle: HTMLStyleElement;
 
-  constructor(private environmentService: EnvironmentService,
-              private generalHelperService: GeneralHelperService,
-              private systemFeedbackService: SystemFeedbackService,
-              private route: ActivatedRoute,
-              private recaptchaV3Service: ReCaptchaV3Service,
-              private toastrService: ToastrService) {
-    this.systemFeedback = new SystemFeedback()
-    this.grades = Array(11).fill(0).map((x, i) => i);
-    this.userMatrix = this.environmentService.getUserMatrix()
+  constructor(
+    private environmentService: EnvironmentService,
+    private generalHelperService: GeneralHelperService,
+    private systemFeedbackService: SystemFeedbackService,
+    private route: ActivatedRoute,
+    private recaptchaV3Service: ReCaptchaV3Service,
+    private toastrService: ToastrService,
+  ) {
+    this.systemFeedback = new SystemFeedback();
+    this.grades = Array(11)
+      .fill(0)
+      .map((x, i) => i);
+    this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnDestroy(): void {
@@ -58,13 +61,15 @@ export class FeedbackFormComponent implements OnInit, OnDestroy {
 
     try {
       if (this.recaptchaProperties.enabled) {
-        this.recaptchaV3Service.execute('feedbackAction')
-          .subscribe((token) => {
+        this.recaptchaV3Service.execute('feedbackAction').subscribe(
+          token => {
             this.sendFeedbackToServer(token);
-          }, error => {
+          },
+          error => {
             this.isSubmitted = true;
             this.isError = true;
-          });
+          },
+        );
       } else {
         this.sendFeedbackToServer();
       }
@@ -75,30 +80,28 @@ export class FeedbackFormComponent implements OnInit, OnDestroy {
     }
   }
 
-
   private sendFeedbackToServer(token?: string) {
     this.systemFeedback.recaptchaToken = token;
-    this.systemFeedbackService.leaveFeedback(this.systemFeedback).subscribe((res => {
+    this.systemFeedbackService.leaveFeedback(this.systemFeedback).subscribe(
+      res => {
         this.isSubmitted = true;
-      }),
+      },
       error => {
         this.isSubmitted = true;
         this.isError = true;
-      });
+      },
+    );
   }
 
   validateInput() {
-    return this.systemFeedback.grade === '';
+    return this.systemFeedback.grade == '';
   }
 
   getNotificationHeader() {
-    return this.isError
-      ? 'Serveri viga! Proovige uuesti!'
-      : 'Täname tagasiside eest!';
+    return this.isError ? 'Serveri viga! Proovige uuesti!' : 'Täname tagasiside eest!';
   }
 
   getNotificationClass() {
     return this.isError ? 'danger' : 'success';
   }
-
 }

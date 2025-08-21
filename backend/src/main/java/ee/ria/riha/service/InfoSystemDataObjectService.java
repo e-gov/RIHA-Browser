@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class InfoSystemDataObjectService {
 
-    @Autowired
-    private InfoSystemDataObjectRepository infoSystemDataObjectRepository;
+  @Autowired private InfoSystemDataObjectRepository infoSystemDataObjectRepository;
 
-
-    public PagedResponse<InfoSystemDataObject> list(Pageable pageable, Filterable filterable) {
-        return infoSystemDataObjectRepository.list(pageable, filterable);
-    }
+  public PagedResponse<InfoSystemDataObject> list(Pageable pageable, Filterable filterable) {
+    return infoSystemDataObjectRepository.list(pageable, filterable);
+  }
 }

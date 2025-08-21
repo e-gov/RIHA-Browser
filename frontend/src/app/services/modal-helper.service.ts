@@ -1,36 +1,35 @@
-import {Injectable} from '@angular/core';
-import {NgbModal, NgbModalOptions, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class ModalHelperService {
-
   private lastModalRef: NgbModalRef = null;
 
   private modalRefs: NgbModalRef[] = [];
 
-  public dismissActiveModal(reason?): void{
-    if (this.modalRefs.length > 0){
+  public dismissActiveModal(reason?): void {
+    if (this.modalRefs.length > 0) {
       const modalRef = this.modalRefs.pop();
       modalRef.dismiss(reason);
     }
   }
 
-  public closeActiveModal(result?): void{
-    if (this.modalRefs.length > 0){
+  public closeActiveModal(result?): void {
+    if (this.modalRefs.length > 0) {
       const modalRef = this.modalRefs.pop();
       modalRef.close(result);
     }
   }
 
-  public dismissAllModals(){
-    while (this.modalRefs.length > 0){
+  public dismissAllModals() {
+    while (this.modalRefs.length > 0) {
       this.dismissActiveModal();
     }
   }
 
   public open(content: any, options?: NgbModalOptions, keepStacked?: boolean): NgbModalRef {
-    if (keepStacked !== true){
+    if (keepStacked != true) {
       this.dismissAllModals();
     }
     const modalRef = this.modalService.open(content, options);
@@ -45,11 +44,13 @@ export class ModalHelperService {
     const confirmation = window.confirm(message || 'Is it OK?');
 
     return of(confirmation);
-  };
+  }
 
-  get hasActiveModal() { return this.modalRefs.length > 0; }
+  get hasActiveModal() {
+    return this.modalRefs.length > 0;
+  }
 
-  get lastModal(): NgbModalRef  {
+  get lastModal(): NgbModalRef {
     if (this.hasActiveModal) {
       return this.modalRefs[this.modalRefs.length - 1];
     } else {
@@ -57,6 +58,5 @@ export class ModalHelperService {
     }
   }
 
-  constructor(private modalService: NgbModal) { }
-
+  constructor(private modalService: NgbModal) {}
 }

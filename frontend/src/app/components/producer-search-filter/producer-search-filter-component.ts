@@ -1,33 +1,32 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {SystemsService} from '../../services/systems.service';
-import {classifiers, EnvironmentService} from '../../services/environment.service';
-import {GeneralHelperService} from '../../services/general-helper.service';
-import {ActivatedRoute} from '@angular/router';
-
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SystemsService } from '../../services/systems.service';
+import { classifiers, EnvironmentService } from '../../services/environment.service';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-producer-search-filter',
   templateUrl: './producer-search-filter-component.html',
-  styleUrls: ['./producer-search-filter-component.scss']
+  styleUrls: ['./producer-search-filter-component.scss'],
+  standalone: false,
 })
 export class ProducerSearchFilterComponent implements OnInit {
-
   filters: {
-    purpose: string,
-    name: string,
-    shortName: string,
-    topic: string,
-    systemStatus: string,
-    xRoadStatus: string,
-    developmentStatus: string,
-    lastPositiveApprovalRequestType: string,
-    dateCreatedFrom: string,
-    dateCreatedTo: string,
-    dateUpdatedFrom: string,
-    dateUpdatedTo: string,
-    ownerName: string,
-    ownerCode: string
-    standardSystem: string
+    purpose: string;
+    name: string;
+    shortName: string;
+    topic: string;
+    systemStatus: string;
+    xRoadStatus: string;
+    developmentStatus: string;
+    lastPositiveApprovalRequestType: string;
+    dateCreatedFrom: string;
+    dateCreatedTo: string;
+    dateUpdatedFrom: string;
+    dateUpdatedTo: string;
+    ownerName: string;
+    ownerCode: string;
+    standardSystem: string;
   };
 
   classifiers = classifiers;
@@ -44,7 +43,6 @@ export class ProducerSearchFilterComponent implements OnInit {
   @Output()
   performSearch = new EventEmitter();
 
-
   search() {
     this.performSearch.next(this.filters);
   }
@@ -52,7 +50,6 @@ export class ProducerSearchFilterComponent implements OnInit {
   setTopicFilter(topic: string): void {
     this.filters.topic = topic;
   }
-
 
   getFilters(): any {
     const params = this.generalHelperService.cloneObject(this.filters);
@@ -72,7 +69,6 @@ export class ProducerSearchFilterComponent implements OnInit {
 
     return params;
   }
-
 
   hasActiveFilters(): boolean {
     for (const key in this.filters) {
@@ -99,7 +95,7 @@ export class ProducerSearchFilterComponent implements OnInit {
       dateUpdatedTo: '',
       ownerName: '',
       ownerCode: '',
-      standardSystem: ''
+      standardSystem: '',
     };
   }
 
@@ -107,13 +103,12 @@ export class ProducerSearchFilterComponent implements OnInit {
     this.clearFilters();
   }
 
-
-  constructor(private systemsService: SystemsService,
-              private environmentService: EnvironmentService,
-              private route: ActivatedRoute,
-              public  generalHelperService: GeneralHelperService) {
-
-  }
+  constructor(
+    private systemsService: SystemsService,
+    private environmentService: EnvironmentService,
+    private route: ActivatedRoute,
+    public generalHelperService: GeneralHelperService,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -132,9 +127,8 @@ export class ProducerSearchFilterComponent implements OnInit {
         dateUpdatedTo: this.systemsService.timestampToDateObj(params['dateUpdatedTo']),
         ownerName: params['ownerName'] || '',
         ownerCode: params['ownerCode'] || '',
-        standardSystem: params['standardSystem'] || ''
+        standardSystem: params['standardSystem'] || '',
       };
     });
   }
-
 }

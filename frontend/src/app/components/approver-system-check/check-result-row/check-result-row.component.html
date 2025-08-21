@@ -4,8 +4,14 @@
   <i *ngIf="systemCheckStatus == classifiers.system_check_status.PENDING.code" class="fa fa-fw fa-pause-circle text-muted"></i>
   <i *ngIf="systemCheckStatus == classifiers.system_check_status.IN_PROGRESS.code" class="fa fa-fw fa-spinner fa-spin"></i>
   <i *ngIf="systemCheckStatus == classifiers.system_check_status.CANCELLED.code" class="fa fa-fw fa-times"></i>
-  <span *ngIf="systemCheckStatus == classifiers.system_check_status.PENDING.code || systemCheckStatus == classifiers.system_check_status.IN_PROGRESS.code || systemCheckStatus == classifiers.system_check_status.CANCELLED.code"
-        [ngClass]="{'text-muted': systemCheckStatus == classifiers.system_check_status.PENDING.code}">
+  <span
+    *ngIf="
+      systemCheckStatus == classifiers.system_check_status.PENDING.code ||
+      systemCheckStatus == classifiers.system_check_status.IN_PROGRESS.code ||
+      systemCheckStatus == classifiers.system_check_status.CANCELLED.code
+    "
+    [ngClass]="{ 'text-muted': systemCheckStatus == classifiers.system_check_status.PENDING.code }"
+  >
     {{ text }}
   </span>
   <span *ngIf="systemCheckStatus == classifiers.system_check_status.FAILED.code">

@@ -5,7 +5,7 @@ import { EnvironmentService } from './environment.service';
 describe('EnvironmentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [EnvironmentService]
+      providers: [EnvironmentService],
     });
   });
 

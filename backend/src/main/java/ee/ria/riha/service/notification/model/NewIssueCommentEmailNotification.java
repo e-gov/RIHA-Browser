@@ -1,22 +1,20 @@
 package ee.ria.riha.service.notification.model;
 
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.UUID;
 
-/**
- * Holds data for new issue comment email notification messages.
- */
+/** Holds data for new issue comment email notification messages. */
 @Getter
 @Setter
 public class NewIssueCommentEmailNotification extends SimpleHtmlEmailNotification {
 
-    private String infoSystemFullName;
-    private String infoSystemShortName;
-    private String baseUrl;
-    private Long issueId;
-    private String issueTitle;
-    private String authorName;
-    private String comment;
-    private UUID infoSystemUuid;
+  private String infoSystemFullName;
+  private String infoSystemShortName;
+  private String baseUrl;
+  private Long issueId;
+  private String issueTitle;
+  private String authorName;
+  private String comment;
+  private UUID infoSystemUuid;
 }

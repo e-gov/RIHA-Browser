@@ -1,26 +1,24 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {SystemsService} from '../../services/systems.service';
-import {GridData} from '../../models/grid-data';
-import {GeneralHelperService} from '../../services/general-helper.service';
-import {ActivatedRoute} from '@angular/router';
-import {Location} from '@angular/common';
-import {ToastrService} from 'ngx-toastr';
-import {classifiers} from "../../services/environment.service";
-import {System} from '../../models/system';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { SystemsService } from '../../services/systems.service';
+import { GridData } from '../../models/grid-data';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+import { classifiers } from '../../services/environment.service';
+import { System } from '../../models/system';
 import _ from 'lodash';
-import {ProducerSearchFilterComponent} from '../producer-search-filter/producer-search-filter-component';
-import {of} from "rxjs";
-import {delay, tap} from "rxjs/operators";
-
-
+import { ProducerSearchFilterComponent } from '../producer-search-filter/producer-search-filter-component';
+import { of } from 'rxjs';
+import { delay, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-browser-list',
   templateUrl: './browser-list.component.html',
-  styleUrls: ['./browser-list.component.scss']
+  styleUrls: ['./browser-list.component.scss'],
+  standalone: false,
 })
 export class BrowserListComponent implements OnInit, AfterViewInit {
-
   gridData: GridData = new GridData();
 
   @ViewChild(ProducerSearchFilterComponent, { static: false })
@@ -33,12 +31,12 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
 
   classifiers = classifiers;
 
-  onPageChange(newPage){
+  onPageChange(newPage) {
     this.gridData.page = newPage - 1;
     this.getSystems(this.gridData.page);
   }
 
-  onSortChange(property): void{
+  onSortChange(property): void {
     this.gridData.changeSortOrder(property);
     this.getSystems();
   }
@@ -77,8 +75,7 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
     this.gridData.page = page || 0;
     this.systemsService.getSystems(params, this.gridData).subscribe(
       items => {
-
-        this.gridData.updateData(items, (content) => content.map((contentElement) => new System(contentElement)));
+        this.gridData.updateData(items, content => content.map(contentElement => new System(contentElement)));
 
         if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
           this.getSystems();
@@ -86,10 +83,12 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
           this.loaded = true;
         }
         this.loaded = true;
-      }, err => {
+      },
+      err => {
         this.loaded = true;
         this.toastrService.error('Serveri viga!');
-      });
+      },
+    );
   }
 
   searchSystems(filters): void {
@@ -100,41 +99,41 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
     this._loadSystems(this.filterPanel.getFilters(), page);
   }
 
-  toggleSearchPanel(){
+  toggleSearchPanel() {
     this.extendedSearch = !this.extendedSearch;
     return false;
   }
 
-  hasActiveFilters(): boolean{
+  hasActiveFilters(): boolean {
     return this.filterPanel.hasActiveFilters();
   }
 
-  clearFilters(){
+  clearFilters() {
     this.filterPanel.clearFilters();
-
   }
 
-  clearFiltersAndRefresh(){
+  clearFiltersAndRefresh() {
     this.clearFilters();
     this.getSystems();
   }
 
-  searchSystemsByTopic(topic){
+  searchSystemsByTopic(topic) {
     this.clearFilters();
     this.filterPanel.setTopicFilter(topic);
     this.extendedSearch = true;
     this.getSystems();
   }
 
-  constructor(private systemsService: SystemsService,
-              private route: ActivatedRoute,
-              private location: Location,
-              private toastrService: ToastrService,
-              public generalHelperService: GeneralHelperService) {
-  }
+  constructor(
+    private systemsService: SystemsService,
+    private route: ActivatedRoute,
+    private location: Location,
+    private toastrService: ToastrService,
+    public generalHelperService: GeneralHelperService,
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe( params => {
+    this.route.queryParams.subscribe(params => {
       this.searchText = params['searchText'];
       this.gridData.changeSortOrder(params['sort'] || 'meta.update_timestamp', params['dir'] || 'DESC');
       this.gridData.setPageFromUrl(params['page']);
@@ -143,19 +142,18 @@ export class BrowserListComponent implements OnInit, AfterViewInit {
     this.generalHelperService.setRihaPageTitle('Infosüsteemid');
   }
 
-
   ngAfterViewInit() {
-
     if (this.hasActiveFilters()) {
-      of(null).pipe(
-        delay(0),
-        tap(() => {
-          this.extendedSearch = true;
-        })
-      ).subscribe();
+      of(null)
+        .pipe(
+          delay(0),
+          tap(() => {
+            this.extendedSearch = true;
+          }),
+        )
+        .subscribe();
     }
 
     this.getSystems(this.gridData.page);
   }
-
 }

@@ -5,7 +5,7 @@ import { ModalHelperService } from './modal-helper.service';
 describe('ModalHelperService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ModalHelperService]
+      providers: [ModalHelperService],
     });
   });
 

@@ -1,58 +1,84 @@
 <app-page-header [text]="'Sisesta infosüsteemi andmed'"></app-page-header>
-<app-login-link *ngIf="!userMatrix.isLoggedIn" loginBoxText="Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. " ></app-login-link>
-<div *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations" class="alert alert-info" role="alert">
+<app-login-link *ngIf="!userMatrix.isLoggedIn" loginBoxText="Kirjeldamise alustamiseks on vaja RIHAsse sisse logida. "></app-login-link>
+<div
+  *ngIf="userMatrix.isLoggedIn && !userMatrix.isOrganizationSelected && userMatrix.hasOrganizations"
+  class="alert alert-info"
+  role="alert"
+>
   <h3 class="alert-heading">Palun vali asutus</h3>
-  <p class="mb-0">Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste saamiseks pöördu <a href="mailto:help@ria.ee">help@ria.ee</a>.</p>
+  <p class="mb-0">
+    Sul ei ole ühegi asutuse kirjeldaja roll aktiivne. Asutust vaheta <a (click)="openOrganizationsModal()" href="#">siit</a>. Uute õiguste
+    saamiseks pöördu <a href="mailto:help@ria.ee">help&#64;ria.ee</a>.
+  </p>
 </div>
-<div *ngIf="userMatrix.isLoggedIn && (userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole || !userMatrix.hasOrganizations)" class="alert alert-info" role="alert">
+<div
+  *ngIf="userMatrix.isLoggedIn && ((userMatrix.isOrganizationSelected && !userMatrix.hasDescriberRole) || !userMatrix.hasOrganizations)"
+  class="alert alert-info"
+  role="alert"
+>
   <h3 class="alert-heading">Kirjeldamine ei ole lubatud</h3>
-  <p class="mb-0">Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega <a href="mailto:help@ria.ee">help@ria.ee</a></p>
+  <p class="mb-0">
+    Sul ei ole infosüsteemi kirjeldamise õigust. Õiguse saamiseks võta ühendust RIHA kasutajatoega
+    <a href="mailto:help@ria.ee">help&#64;ria.ee</a>
+  </p>
 </div>
 <section *ngIf="userMatrix.isLoggedIn && userMatrix.hasDescriberRole" class="col card p-3">
   <div class="my-1">
-    <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)" >
+    <form class="col-12" #addForm="ngForm" (ngSubmit)="onSubmit(addForm)">
       <app-alert *ngIf="alertConf" [conf]="alertConf"></app-alert>
       <p>
-        RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva eraõigusliku isiku infosüsteemid, mis asutatakse ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises lepingus sätestatud ülesannete täitmiseks.
+        RIHAsse pannakse kirja riigi, kohaliku omavalitsuse või muu avalik-õigusliku juriidilise isiku või avalikke ülesandeid täitva
+        eraõigusliku isiku infosüsteemid, mis asutatakse ja mida kasutatakse seaduses, selle alusel antud õigusaktis või rahvusvahelises
+        lepingus sätestatud ülesannete täitmiseks.
       </p>
       <div class="form-group row">
         <label for="name-input" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Nimi:</label>
         <div class="col-sm-10">
-          <input #name="ngModel"
-                 [ngClass]="{'is-invalid': name.invalid  && (name.dirty || name.touched || addForm.submitted)}"
-                 class="form-control"
-                 name="name"
-                 pattern="^[a-zA-ZõÕäÄöÖüÜ0-9][\S ]*[\S]$"
-                 ngModel type="text"
-                 id="name-input"
-                 placeholder="nt. Andmeomanike ametlik register"
-                 required>
+          <input
+            #name="ngModel"
+            [ngClass]="{ 'is-invalid': name.invalid && (name.dirty || name.touched || addForm.submitted) }"
+            class="form-control"
+            name="name"
+            pattern="^[a-zA-ZõÕäÄöÖüÜ0-9][\S ]*[\S]$"
+            ngModel
+            type="text"
+            id="name-input"
+            placeholder="nt. Andmeomanike ametlik register"
+            required
+          />
         </div>
       </div>
       <div class="form-group row">
         <label for="short-name-input" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Lühinimi:</label>
         <div class="col-sm-10">
-          <input #shortName="ngModel"
-                 [ngClass]="{'is-invalid': shortName.invalid  && (shortName.dirty || shortName.touched || addForm.submitted)}"
-                 class="form-control"
-                 name="short_name"
-                 pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
-                 ngModel type="text"
-                 id="short-name-input"
-                 placeholder="nt. AARE" required>
+          <input
+            #shortName="ngModel"
+            [ngClass]="{ 'is-invalid': shortName.invalid && (shortName.dirty || shortName.touched || addForm.submitted) }"
+            class="form-control"
+            name="short_name"
+            pattern="^(?!^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)([a-zA-ZõÕäÄöÖüÜ0-9.-]*)$"
+            ngModel
+            type="text"
+            id="short-name-input"
+            placeholder="nt. AARE"
+            required
+          />
         </div>
       </div>
       <div class="form-group row">
         <label for="purpose-textarea" class="col-sm-2 col-form-label pr-sm-0 text-sm-right required">Infosüsteemi eesmärk:</label>
         <div class="col-sm-10">
-          <textarea #purpose="ngModel"
-                    [ngClass]="{'is-invalid': purpose.invalid  && (purpose.dirty || purpose.touched || addForm.submitted)}"
-                    ngModel name="purpose"
-                    class="form-control counter-element"
-                    id="purpose-textarea"
-                    rows="10"
-                    placeholder="kellele ja miks infosüsteem luuakse"
-                    required>
+          <textarea
+            #purpose="ngModel"
+            [ngClass]="{ 'is-invalid': purpose.invalid && (purpose.dirty || purpose.touched || addForm.submitted) }"
+            ngModel
+            name="purpose"
+            class="form-control counter-element"
+            id="purpose-textarea"
+            rows="10"
+            placeholder="kellele ja miks infosüsteem luuakse"
+            required
+          >
           </textarea>
         </div>
       </div>

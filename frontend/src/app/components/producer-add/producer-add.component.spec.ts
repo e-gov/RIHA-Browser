@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ProducerAddComponent} from './producer-add.component';
+import { ProducerAddComponent } from './producer-add.component';
 
 describe('ProducerAddComponent', () => {
   let component: ProducerAddComponent;
@@ -8,9 +8,8 @@ describe('ProducerAddComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProducerAddComponent ]
-    })
-    .compileComponents();
+      declarations: [ProducerAddComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

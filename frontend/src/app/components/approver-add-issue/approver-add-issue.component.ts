@@ -1,22 +1,22 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {SystemsService} from '../../services/systems.service';
-import {classifiers, EnvironmentService} from '../../services/environment.service';
-import {System} from '../../models/system';
-import {ToastrService} from 'ngx-toastr';
-import {User} from '../../models/user';
-import {ModalHelperService} from '../../services/modal-helper.service';
-import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
-import {Observable} from "rxjs";
-import {NgForm} from "@angular/forms";
-import {CONSTANTS} from '../../utils/constants';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { SystemsService } from '../../services/systems.service';
+import { classifiers, EnvironmentService } from '../../services/environment.service';
+import { System } from '../../models/system';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '../../models/user';
+import { ModalHelperService } from '../../services/modal-helper.service';
+import { CanDeactivateModal } from '../../guards/can-deactivate-modal.guard';
+import { Observable } from 'rxjs';
+import { NgForm } from '@angular/forms';
+import { CONSTANTS } from '../../utils/constants';
 
 @Component({
   selector: 'app-approver-add-comment',
   templateUrl: './approver-add-issue.component.html',
-  styleUrls: ['./approver-add-issue.component.scss']
+  styleUrls: ['./approver-add-issue.component.scss'],
+  standalone: false,
 })
 export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
-
   @ViewChild('approvalRequestForm') formObjectApprovalRequest: NgForm;
   @ViewChild('newIssueForm') formObjectNewIssue: NgForm;
 
@@ -28,52 +28,64 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
   approvalRequest: any = {
     title: null,
     comment: null,
-    type: null
+    type: null,
   };
   issueButtonClicked: boolean = false;
   requestButtonClicked: boolean = false;
 
-  switchView(){
+  // Loading states
+  isIssueSubmitting: boolean = false;
+  isApprovalRequestSubmitting: boolean = false;
+
+  switchView() {
     this.isApprovalRequest = !this.isApprovalRequest;
     this.approvalRequest = {
       title: null,
       comment: null,
-      type: null
+      type: null,
     };
   }
 
-  onSubmitNewIssue(f) :void {
-    if (f.valid){
+  onSubmitNewIssue(f): void {
+    if (f.valid) {
+      this.isIssueSubmitting = true;
       this.systemsService.addSystemIssue(this.system.details.short_name, f.value).subscribe(
         issue => {
+          this.isIssueSubmitting = false;
           this.modalService.closeActiveModal();
         },
         err => {
+          this.isIssueSubmitting = false;
           this.toastrService.error('Serveri viga! Proovige uuesti!');
-        })
+        },
+      );
       this.issueButtonClicked = false;
     } else {
       this.issueButtonClicked = true;
     }
   }
 
-  onSubmitApprovalRequest(f) :void {
+  onSubmitApprovalRequest(f): void {
     if (f.valid) {
+      this.isApprovalRequestSubmitting = true;
       this.systemsService.addSystemIssue(this.system.details.short_name, this.approvalRequest).subscribe(
         issue => {
+          this.isApprovalRequestSubmitting = false;
           this.modalService.closeActiveModal();
         },
         err => {
+          this.isApprovalRequestSubmitting = false;
           this.toastrService.error('Serveri viga! Proovige uuesti!');
-        });
+        },
+      );
       this.requestButtonClicked = false;
     } else {
       this.requestButtonClicked = true;
     }
   }
 
-  onIssueTypeChange(issueType){
-    switch (issueType){
+  onIssueTypeChange(issueType) {
+    switch (issueType) {
       case classifiers.issue_type.ESTABLISHMENT_REQUEST.code: {
         this.approvalRequest.title = 'Infosüsteemil puudub asutamise kooskõlastus';
         break;
@@ -93,7 +105,7 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
     }
   }
 
-  canSwitchViews(){
+  canSwitchViews() {
     return this.environmentService.getUserMatrix().hasApproverRole && this.activeUser.canEdit(this.system.getOwnerCode());
   }
 
@@ -131,28 +143,28 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
     }
   }
 
-  constructor(private modalService: ModalHelperService,
-              private systemsService: SystemsService,
-              private toastrService: ToastrService,
-              private environmentService: EnvironmentService) {
-  }
+  constructor(
+    private modalService: ModalHelperService,
+    private systemsService: SystemsService,
+    private toastrService: ToastrService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit() {
     this.activeUser = this.environmentService.getActiveUser();
     this.isApprovalRequest = !this.activeUser.hasApproverRole();
-    if (this.activeUser.canEdit(this.system.getOwnerCode())){
-
-      this.systemsService.getSystemIssues(this.system.details.short_name).subscribe(res =>{
+    if (this.activeUser.canEdit(this.system.getOwnerCode())) {
+      this.systemsService.getSystemIssues(this.system.details.short_name).subscribe(res => {
         this.openIssuesMatrix = {
           establishment: false,
           takingIntoUse: false,
           modification: false,
-          finalization: false
+          finalization: false,
         };
 
         res.content.forEach(issue => {
-          if (issue.status == 'OPEN' && issue.type != null){
-            switch (issue.type){
+          if (issue.status == 'OPEN' && issue.type != null) {
+            switch (issue.type) {
               case classifiers.issue_type.FINALIZATION_REQUEST.code: {
                 this.openIssuesMatrix.finalization = true;
                 break;
@@ -175,5 +187,4 @@ export class ApproverAddIssueComponent implements OnInit, CanDeactivateModal {
       });
     }
   }
-
 }

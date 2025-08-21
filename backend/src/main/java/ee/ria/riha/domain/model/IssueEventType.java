@@ -5,14 +5,9 @@ package ee.ria.riha.domain.model;
  */
 public enum IssueEventType {
 
-    /**
-     * Type of event that occurs when issue is closed
-     */
-    CLOSED,
+  /** Type of event that occurs when issue is closed */
+  CLOSED,
 
-    /**
-     * Type of event that occurs when resolution decision is made
-     */
-    DECISION
-
+  /** Type of event that occurs when resolution decision is made */
+  DECISION
 }

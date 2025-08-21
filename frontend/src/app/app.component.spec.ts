@@ -1,14 +1,17 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {LangChangeEvent, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {DebugElement} from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { LangChangeEvent, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DebugElement } from '@angular/core';
 
-import {AppComponent} from './app.component';
+import { AppComponent } from './app.component';
 import missingTranslationHandler from './app.missingTranslation';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/base/src/assets/i18n/', '.json');
+// Use TranslateHttpLoader directly, no factory needed with modern Angular
+// The loader will be configured through the provider system
+// This function is kept for backwards compatibility with tests
+export function HttpLoaderFactory() {
+  return new TranslateHttpLoader();
 }
 
 /* ATTENTION Angular 2 zone.js reset created component after each it section */
@@ -23,40 +26,45 @@ describe('When initializing AppComponent', function () {
   let defaultLang;
   let langChangeSubscription;
 
-  beforeAll((done) => TestBed.configureTestingModule({
-      imports: [HttpClientModule, TranslateModule.forRoot({
-        missingTranslationHandler,
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-        }
-      })],
-      declarations: [
-        AppComponent
-      ]
+  beforeAll(done =>
+    TestBed.configureTestingModule({
+      declarations: [AppComponent],
+      imports: [
+        TranslateModule.forRoot({
+          missingTranslationHandler,
+          loader: {
+            provide: TranslateLoader,
+            useClass: TranslateHttpLoader,
+          },
+        }),
+      ],
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     })
-    .overrideComponent(AppComponent, {
-      set: {
-        template: '<h1>{{ title | translate }}</h1>'
-      }
-    })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(AppComponent);
-    })
-    .then(() => new Promise((resolve) => {
-      const translate: TranslateService = TestBed.get(TranslateService);
-      langChangeSubscription = translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        defaultLang = event.lang;
-        resolve();
-      });
-    }))
-    .then(() => {
-      fixture.autoDetectChanges(true);
-      app = fixture.debugElement;
-    })
-    .then(done));
+      .overrideComponent(AppComponent, {
+        set: {
+          template: '<h1>{{ title | translate }}</h1>',
+        },
+      })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(AppComponent);
+      })
+      .then(
+        () =>
+          new Promise(resolve => {
+            const translate: TranslateService = TestBed.inject(TranslateService);
+            langChangeSubscription = translate.onLangChange.subscribe((event: LangChangeEvent) => {
+              defaultLang = event.lang;
+              resolve(void 0);
+            });
+          }),
+      )
+      .then(() => {
+        fixture.autoDetectChanges(true);
+        app = fixture.debugElement;
+      })
+      .then(done),
+  );
 
   afterAll(() => {
     langChangeSubscription.unsubscribe();

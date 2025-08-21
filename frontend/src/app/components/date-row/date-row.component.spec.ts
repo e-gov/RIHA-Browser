@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {DateRowComponent} from './date-row.component';
+import { DateRowComponent } from './date-row.component';
 
 describe('DateRowComponent', () => {
   let component: DateRowComponent;
@@ -8,9 +8,8 @@ describe('DateRowComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DateRowComponent ]
-    })
-    .compileComponents();
+      declarations: [DateRowComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

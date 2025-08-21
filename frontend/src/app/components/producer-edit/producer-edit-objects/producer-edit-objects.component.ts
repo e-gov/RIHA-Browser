@@ -1,26 +1,26 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {SystemsService} from '../../../services/systems.service';
-import {GeneralHelperService} from '../../../services/general-helper.service';
-import {System} from '../../../models/system';
-import {ToastrService} from 'ngx-toastr';
-import {ModalHelperService} from '../../../services/modal-helper.service';
-import {NgForm} from "@angular/forms";
-import {Observable} from "rxjs";
-import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
-import {CONSTANTS} from '../../../utils/constants';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { SystemsService } from '../../../services/systems.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
+import { System } from '../../../models/system';
+import { ToastrService } from 'ngx-toastr';
+import { ModalHelperService } from '../../../services/modal-helper.service';
+import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { CanDeactivateModal } from '../../../guards/can-deactivate-modal.guard';
+import { CONSTANTS } from '../../../utils/constants';
 
 @Component({
   selector: 'app-producer-edit-objects',
   templateUrl: './producer-edit-objects.component.html',
-  styleUrls: ['./producer-edit-objects.component.scss']
+  styleUrls: ['./producer-edit-objects.component.scss'],
+  standalone: false,
 })
 export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal {
-
   @ViewChild('dataFilesForm') dataFilesForm: NgForm;
   @ViewChild('objectForm') objectForm: NgForm;
 
   @Input() system: System;
-  stored_data: string[] =[];
+  stored_data: string[] = [];
   data_files: any[] = [];
   isChanged: boolean = false;
   buttonClicked: boolean = false;
@@ -30,14 +30,14 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
   uploading: boolean = false;
   data: any = {
     name: '',
-    url: ''
+    url: '',
   };
   obj: string = '';
 
   // string data objects
 
   addStoredDataObject(form): void {
-    if (form.valid || this.obj.length > 0 && this.stored_data.length < 10){
+    if (form.valid || (this.obj.length > 0 && this.stored_data.length < 10)) {
       this.stored_data.push(this.obj);
       form.reset;
       this.isChanged = true;
@@ -47,17 +47,16 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
     }
   }
 
-
-  addDataFile(form): void{
-    if (form.valid){
+  addDataFile(form): void {
+    if (form.valid) {
       this.data_files.push({
         url: this.data.url,
-        name: this.data.name.trim()
+        name: this.data.name.trim(),
       });
       form.reset();
       this.isChanged = true;
       this.buttonClicked = false;
-    }else {
+    } else {
       this.buttonClicked = true;
     }
   }
@@ -69,46 +68,55 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
 
   // data files
 
-  fileChange(event, form){
+  fileChange(event, form) {
     this.dataFile = event.target.files[0];
     this.uploading = true;
 
-    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).subscribe(fileUrl => {
-      this.uploading = false;
-      this.data_files.push({
-        url: 'file://' + fileUrl,
-        name: this.dataFile.name
-      });
-      this.dataFile = null;
-      this.isChanged = true;
-    }, err =>{
-      this.uploading = false;
-      this.dataFile = null;
-      if (err.status === 0) {
-        err.error.message = CONSTANTS.SERVER_ERROR_CHECK_FILE_SIZE;
-      }
-      this.generalHelperService.showError(err.error.message);
-    });
+    this.systemsService.postDataFile(this.dataFile, this.system.details.short_name).subscribe(
+      fileUrl => {
+        this.uploading = false;
+        this.data_files.push({
+          url: 'file://' + fileUrl,
+          name: this.dataFile.name,
+        });
+        this.dataFile = null;
+        this.isChanged = true;
+      },
+      err => {
+        this.uploading = false;
+        this.dataFile = null;
+        if (err.status == 0) {
+          err.error.message = CONSTANTS.SERVER_ERROR_CHECK_FILE_SIZE;
+        }
+        this.generalHelperService.showError(err.error.message);
+      },
+    );
   }
 
-  deleteDataFile(i): void{
+  deleteDataFile(i): void {
     this.data_files.splice(i, 1);
     this.isChanged = true;
   }
 
   saveSystem() {
-    this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
-      const system = new System(responseSystem);
-      system.details.stored_data = this.stored_data;
-      system.details.data_files = this.data_files;
-      this.systemsService.updateSystem(system).subscribe(updatedSystem => {
-        this.modalService.closeActiveModal({system: new System(updatedSystem)});
-      }, err => {
+    this.systemsService.getSystem(this.system.details.short_name).subscribe(
+      responseSystem => {
+        const system = new System(responseSystem);
+        system.details.stored_data = this.stored_data;
+        system.details.data_files = this.data_files;
+        this.systemsService.updateSystem(system).subscribe(
+          updatedSystem => {
+            this.modalService.closeActiveModal({ system: new System(updatedSystem) });
+          },
+          err => {
+            this.toastrService.error('Serveri viga.');
+          },
+        );
+      },
+      err => {
         this.toastrService.error('Serveri viga.');
-      });
-    }, err => {
-      this.toastrService.error('Serveri viga.');
-    });
+      },
+    );
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -138,14 +146,15 @@ export class ProducerEditObjectsComponent implements OnInit, CanDeactivateModal 
    * Is form data changed ?
    */
   get isFormChanged(): boolean {
-    return this.isChanged || this.dataFilesForm.form.dirty || this.objectForm.form.dirty
+    return this.isChanged || this.dataFilesForm.form.dirty || this.objectForm.form.dirty;
   }
 
-  constructor(private modalService: ModalHelperService,
-              private systemsService: SystemsService,
-              public generalHelperService: GeneralHelperService,
-              private toastrService: ToastrService) {
-  }
+  constructor(
+    private modalService: ModalHelperService,
+    private systemsService: SystemsService,
+    public generalHelperService: GeneralHelperService,
+    private toastrService: ToastrService,
+  ) {}
 
   ngOnInit() {
     const system = this.generalHelperService.cloneObject(this.system);

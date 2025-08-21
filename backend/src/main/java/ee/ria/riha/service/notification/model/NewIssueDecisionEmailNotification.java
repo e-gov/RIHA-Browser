@@ -1,19 +1,15 @@
 package ee.ria.riha.service.notification.model;
 
 import ee.ria.riha.domain.model.IssueResolutionType;
-
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.UUID;
 
-
-/**
- * Holds data for new issue decision email notification messages.
- */
+/** Holds data for new issue decision email notification messages. */
 @Getter
 @Setter
 public class NewIssueDecisionEmailNotification extends NewIssueCommentEmailNotification {
 
-	private IssueResolutionType decision;
-    private UUID infoSystemUuid;
+  private IssueResolutionType decision;
+  private UUID infoSystemUuid;
 }

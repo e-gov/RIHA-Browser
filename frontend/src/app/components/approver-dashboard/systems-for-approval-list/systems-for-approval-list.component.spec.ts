@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {SystemsForApprovalListComponent} from './systems-for-approval-list.component';
+import { SystemsForApprovalListComponent } from './systems-for-approval-list.component';
 
 describe('SystemsForApprovalListComponent', () => {
   let component: SystemsForApprovalListComponent;
@@ -8,9 +8,8 @@ describe('SystemsForApprovalListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SystemsForApprovalListComponent ]
-    })
-    .compileComponents();
+      declarations: [SystemsForApprovalListComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

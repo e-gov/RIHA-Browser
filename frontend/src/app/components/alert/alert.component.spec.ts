@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {AlertComponent} from './alert.component';
+import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
   let component: AlertComponent;
@@ -8,9 +8,8 @@ describe('AlertComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AlertComponent ]
-    })
-    .compileComponents();
+      declarations: [AlertComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

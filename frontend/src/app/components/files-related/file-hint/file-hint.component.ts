@@ -1,27 +1,27 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {classifiers} from "../../../services/environment.service";
-import {GeneralHelperService} from "../../../services/general-helper.service";
+import { classifiers } from '../../../services/environment.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
 
 @Component({
   selector: 'app-file-hint',
   templateUrl: './file-hint.component.html',
-  styleUrls: ['./file-hint.component.scss']
+  styleUrls: ['./file-hint.component.scss'],
+  standalone: false,
 })
 export class FileHintComponent implements OnInit {
-
   @Input() file: any;
   classifiers = classifiers;
 
-  getOrganizationName(){
-    if (this.file.accessRestriction && this.file.accessRestriction.organization){
+  getOrganizationName() {
+    if (this.file.accessRestriction && this.file.accessRestriction.organization) {
       return this.file.accessRestriction.organization.name;
     } else {
       return '-';
     }
   }
 
-  getRestrictionEndDate(){
-    if (this.file.accessRestriction && this.file.accessRestriction.endDate){
+  getRestrictionEndDate() {
+    if (this.file.accessRestriction && this.file.accessRestriction.endDate) {
       if (this.isDateObject(this.file.accessRestriction.endDate)) {
         return this.generalHelperService.dateObjToTimestamp(this.file.accessRestriction.endDate, true);
       } else {
@@ -32,8 +32,8 @@ export class FileHintComponent implements OnInit {
     }
   }
 
-  getRestrictionStartDate(){
-    if (this.file.accessRestriction && this.file.accessRestriction.startDate){
+  getRestrictionStartDate() {
+    if (this.file.accessRestriction && this.file.accessRestriction.startDate) {
       if (this.isDateObject(this.file.accessRestriction.startDate)) {
         return this.generalHelperService.dateObjToTimestamp(this.file.accessRestriction.startDate, true);
       } else {
@@ -44,20 +44,22 @@ export class FileHintComponent implements OnInit {
     }
   }
 
-  private getRestrictionReason(){
-    if (this.file.accessRestriction && this.file.accessRestriction.reasonCode){
-      const reason = this.generalHelperService.toArray(this.classifiers.access_restriction_reasons).filter( r => r.code == this.file.accessRestriction.reasonCode)[0].value;
+  private getRestrictionReason() {
+    if (this.file.accessRestriction && this.file.accessRestriction.reasonCode) {
+      const reason = this.generalHelperService
+        .toArray(this.classifiers.access_restriction_reasons)
+        .filter(r => r.code == this.file.accessRestriction.reasonCode)[0].value;
       return JSON.parse(reason);
     } else {
       return null;
     }
   }
 
-  getReasonLegislation(){
+  getReasonLegislation() {
     return this.getRestrictionReason().legislation;
   }
 
-  getReasonDescription(){
+  getReasonDescription() {
     return this.getRestrictionReason().description;
   }
 
@@ -65,10 +67,7 @@ export class FileHintComponent implements OnInit {
     return date.day || date.month || date.year;
   }
 
-  constructor(private generalHelperService: GeneralHelperService) {
-  }
+  constructor(private generalHelperService: GeneralHelperService) {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

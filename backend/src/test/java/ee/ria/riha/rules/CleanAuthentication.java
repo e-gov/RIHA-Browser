@@ -1,36 +1,28 @@
 package ee.ria.riha.rules;
 
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * Clears {@link SecurityContextHolder} authentication before and after base statement evaluation.
+ * Clears {@link SecurityContextHolder} authentication before and after test execution.
  *
  * @author Valentin Suhnjov
  */
-public class CleanAuthentication implements TestRule {
-    @Override
-    public Statement apply(Statement base, Description description) {
-        return statement(base);
-    }
+public class CleanAuthentication implements BeforeEachCallback, AfterEachCallback {
 
-    private Statement statement(final Statement base) {
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                clearAuthentication();
-                try {
-                    base.evaluate();
-                } finally {
-                    clearAuthentication();
-                }
-            }
-        };
-    }
+  @Override
+  public void beforeEach(ExtensionContext context) throws Exception {
+    clearAuthentication();
+  }
 
-    private void clearAuthentication() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-    }
+  @Override
+  public void afterEach(ExtensionContext context) throws Exception {
+    clearAuthentication();
+  }
+
+  private void clearAuthentication() {
+    SecurityContextHolder.getContext().setAuthentication(null);
+  }
 }

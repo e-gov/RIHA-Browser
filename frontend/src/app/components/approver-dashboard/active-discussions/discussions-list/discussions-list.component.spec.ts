@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {DiscussionsListComponent} from './discussions-list.component';
+import { DiscussionsListComponent } from './discussions-list.component';
 
 describe('DiscussionsListComponent', () => {
   let component: DiscussionsListComponent;
@@ -8,9 +8,8 @@ describe('DiscussionsListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiscussionsListComponent ]
-    })
-    .compileComponents();
+      declarations: [DiscussionsListComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

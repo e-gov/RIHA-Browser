@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {GridCurrentlyShowingComponent} from './grid-currently-showing.component';
+import { GridCurrentlyShowingComponent } from './grid-currently-showing.component';
 
 describe('GridCurrentlyShowingComponent', () => {
   let component: GridCurrentlyShowingComponent;
@@ -8,9 +8,8 @@ describe('GridCurrentlyShowingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GridCurrentlyShowingComponent ]
-    })
-    .compileComponents();
+      declarations: [GridCurrentlyShowingComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

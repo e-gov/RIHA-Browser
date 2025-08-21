@@ -1,5 +1,8 @@
 package ee.ria.riha.service;
 
+import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
+import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
+
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.authentication.RihaUserDetails;
 import ee.ria.riha.domain.InfoSystemRepository;
@@ -9,18 +12,14 @@ import ee.ria.riha.service.util.FilterRequest;
 import ee.ria.riha.service.util.Filterable;
 import ee.ria.riha.service.util.Pageable;
 import ee.ria.riha.service.util.PagedResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-
-import static ee.ria.riha.service.SecurityContextUtil.getActiveOrganization;
-import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Valentin Suhnjov
@@ -29,124 +28,128 @@ import static ee.ria.riha.service.SecurityContextUtil.getRihaUserDetails;
 @Slf4j
 public class InfoSystemService {
 
-    private static final String NOT_SET_VALUE = "[NOT SET]";
+  private static final String NOT_SET_VALUE = "[NOT SET]";
 
+  @Autowired private InfoSystemRepository infoSystemRepository;
 
-    @Autowired
-    private InfoSystemRepository infoSystemRepository;
+  @Autowired private JsonValidationService infoSystemValidationService;
+  private IssueService issueService;
+  private final DateTimeFormatter isoDateTimeFormatter =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
-    @Autowired
-    private JsonValidationService infoSystemValidationService;
-    private IssueService issueService;
-    private final DateTimeFormatter isoDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+  public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
+    return infoSystemRepository.list(pageable, filterable);
+  }
 
-    public PagedResponse<InfoSystem> list(Pageable pageable, Filterable filterable) {
-        return infoSystemRepository.list(pageable, filterable);
+  /**
+   * Creates new {@link InfoSystem}. Newly created {@link InfoSystem} will be filled with owner
+   * information and generated UUID.
+   *
+   * @param model new {@link InfoSystem} model
+   * @return created {@link InfoSystem}
+   */
+  public InfoSystem create(InfoSystem model) {
+    RihaOrganization organization =
+        getActiveOrganization()
+            .orElseThrow(
+                () -> new IllegalBrowserStateException("Unable to retrieve active organization"));
+    validateInfoSystemShortName(model.getShortName());
+
+    log.info(
+        "User '{}' with active organization '{}' is creating new info system with short name '{}'",
+        getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
+        organization,
+        model.getShortName());
+
+    model.setUuid(UUID.randomUUID());
+    model.setOwnerCode(organization.getCode());
+    model.setOwnerName(organization.getName());
+    String creationTimestamp = isoDateTimeFormatter.format(ZonedDateTime.now());
+    model.setCreationTimestamp(creationTimestamp);
+    model.setUpdateTimestamp(creationTimestamp);
+
+    infoSystemValidationService.validate(model.getJsonContent());
+
+    return infoSystemRepository.add(model);
+  }
+
+  private void validateInfoSystemShortName(String shortName) {
+    log.debug("Checking info system '{}' existence", shortName);
+    FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
+    List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
+    if (!infoSystems.isEmpty()) {
+      throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
     }
+  }
 
-    /**
-     * Creates new {@link InfoSystem}. Newly created {@link InfoSystem} will be filled with owner information and
-     * generated UUID.
-     *
-     * @param model new {@link InfoSystem} model
-     * @return created {@link InfoSystem}
-     */
-    public InfoSystem create(InfoSystem model) {
-        RihaOrganization organization = getActiveOrganization()
-                .orElseThrow(() -> new IllegalBrowserStateException("Unable to retrieve active organization"));
-        validateInfoSystemShortName(model.getShortName());
+  /**
+   * Retrieves {@link InfoSystem} by issue id
+   *
+   * @param issueId - issue id
+   * @return retrieved {@link InfoSystem}
+   */
+  public InfoSystem getByIssueId(Long issueId) {
+    Issue issue = issueService.getIssueById(issueId);
+    return get(issue.getInfoSystemUuid());
+  }
 
-        log.info("User '{}' with active organization '{}' is creating new info system with short name '{}'",
-                getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
-                organization,
-                model.getShortName());
+  /**
+   * Retrieves {@link InfoSystem} by its reference. Reference may be either info system UUID or
+   * short name.
+   *
+   * @param reference info system reference
+   * @return retrieved {@link InfoSystem}
+   */
+  public InfoSystem get(String reference) {
+    return infoSystemRepository.load(reference);
+  }
 
-        model.setUuid(UUID.randomUUID());
-        model.setOwnerCode(organization.getCode());
-        model.setOwnerName(organization.getName());
-        String creationTimestamp = isoDateTimeFormatter.format(ZonedDateTime.now());
-        model.setCreationTimestamp(creationTimestamp);
-        model.setUpdateTimestamp(creationTimestamp);
+  /**
+   * Convenience method for retrieving {@link InfoSystem} by its UUID
+   *
+   * @param uuid info system uuid
+   * @return retrieved {@link InfoSystem}
+   */
+  public InfoSystem get(UUID uuid) {
+    return get(uuid.toString());
+  }
 
-        infoSystemValidationService.validate(model.getJsonContent());
-
-        return infoSystemRepository.add(model);
+  /**
+   * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated
+   * from model.
+   *
+   * @param reference info system reference
+   * @param model updated {@link InfoSystem} model
+   * @return new {@link InfoSystem}
+   */
+  public InfoSystem update(String reference, InfoSystem model) {
+    InfoSystem existingInfoSystem = get(reference);
+    log.info(
+        "User '{}' with active organization '{}'"
+            + " is updating info system with id {}, owner code '{}' and short name '{}'",
+        getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
+        getActiveOrganization().orElse(new RihaOrganization(NOT_SET_VALUE, NOT_SET_VALUE)),
+        existingInfoSystem.getId(),
+        existingInfoSystem.getOwnerCode(),
+        existingInfoSystem.getShortName());
+    if (!existingInfoSystem.getShortName().equals(model.getShortName())) {
+      validateInfoSystemShortName(model.getShortName());
     }
+    model.setUuid(existingInfoSystem.getUuid());
+    model.setOwnerCode(existingInfoSystem.getOwnerCode());
+    model.setOwnerName(existingInfoSystem.getOwnerName());
+    model.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
+    model.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
 
-    private void validateInfoSystemShortName(String shortName) {
-        log.debug("Checking info system '{}' existence", shortName);
-        FilterRequest filter = new FilterRequest("short_name,=," + shortName, null, null);
-        List<InfoSystem> infoSystems = infoSystemRepository.find(filter);
-        if (!infoSystems.isEmpty()) {
-            throw new ValidationException("validation.system.shortNameAlreadyTaken", shortName);
-        }
-    }
+    model.setCreationAndUpdateTimestampToFilesMetadata(existingInfoSystem);
 
-    /**
-     * Retrieves {@link InfoSystem} by issue id
-     *
-     * @param issueId - issue id
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem getByIssueId(Long issueId) {
-        Issue issue = issueService.getIssueById(issueId);
-        return get(issue.getInfoSystemUuid());
-    }
+    infoSystemValidationService.validate(model.getJsonContent());
 
-    /**
-     * Retrieves {@link InfoSystem} by its reference. Reference may be either info system UUID or short name.
-     *
-     * @param reference info system reference
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(String reference) {
-        return infoSystemRepository.load(reference);
-    }
+    return infoSystemRepository.add(model);
+  }
 
-    /**
-     * Convenience method for retrieving {@link InfoSystem} by its UUID
-     *
-     * @param uuid info system uuid
-     * @return retrieved {@link InfoSystem}
-     */
-    public InfoSystem get(UUID uuid) {
-        return get(uuid.toString());
-    }
-
-    /**
-     * Creates new record with the same UUID and owner. Other parts of {@link InfoSystem} are updated from model.
-     *
-     * @param reference info system reference
-     * @param model     updated {@link InfoSystem} model
-     * @return new {@link InfoSystem}
-     */
-    public InfoSystem update(String reference, InfoSystem model) {
-        InfoSystem existingInfoSystem = get(reference);
-        log.info("User '{}' with active organization '{}'" +
-                        " is updating info system with id {}, owner code '{}' and short name '{}'",
-                getRihaUserDetails().map(RihaUserDetails::getPersonalCode).orElse(NOT_SET_VALUE),
-                getActiveOrganization().orElse(new RihaOrganization(NOT_SET_VALUE, NOT_SET_VALUE)),
-                existingInfoSystem.getId(),
-                existingInfoSystem.getOwnerCode(),
-                existingInfoSystem.getShortName());
-        if (!existingInfoSystem.getShortName().equals(model.getShortName())) {
-            validateInfoSystemShortName(model.getShortName());
-        }
-        model.setUuid(existingInfoSystem.getUuid());
-        model.setOwnerCode(existingInfoSystem.getOwnerCode());
-        model.setOwnerName(existingInfoSystem.getOwnerName());
-        model.setCreationTimestamp(existingInfoSystem.getCreationTimestamp());
-        model.setUpdateTimestamp(isoDateTimeFormatter.format(ZonedDateTime.now()));
-
-        model.setCreationAndUpdateTimestampToFilesMetadata(existingInfoSystem);
-
-        infoSystemValidationService.validate(model.getJsonContent());
-
-        return infoSystemRepository.add(model);
-    }
-
-    @Autowired
-    public void setIssueService(@Lazy IssueService issueService) {
-        this.issueService = issueService;
-    }
+  @Autowired
+  public void setIssueService(@Lazy IssueService issueService) {
+    this.issueService = issueService;
+  }
 }

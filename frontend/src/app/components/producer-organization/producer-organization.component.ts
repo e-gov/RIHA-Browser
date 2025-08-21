@@ -1,23 +1,23 @@
-import {Component, DoCheck, KeyValueDiffers, OnInit} from '@angular/core';
-import {GridData} from "../../models/grid-data";
-import {UserMatrix} from "../../models/user-matrix";
-import {EnvironmentService} from "../../services/environment.service";
-import {ActivatedRoute} from "@angular/router";
-import {GeneralHelperService} from "../../services/general-helper.service";
-import {Location} from "@angular/common";
-import {SystemsService} from "../../services/systems.service";
-import {ToastrService} from "ngx-toastr";
-import {User} from "../../models/user";
-import {ModalHelperService} from "../../services/modal-helper.service";
-import {ActiveOrganizationChooserComponent} from '../active-organization-chooser/active-organization-chooser.component';
+import { Component, DoCheck, KeyValueDiffers, OnInit } from '@angular/core';
+import { GridData } from '../../models/grid-data';
+import { UserMatrix } from '../../models/user-matrix';
+import { EnvironmentService } from '../../services/environment.service';
+import { ActivatedRoute } from '@angular/router';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { Location } from '@angular/common';
+import { SystemsService } from '../../services/systems.service';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '../../models/user';
+import { ModalHelperService } from '../../services/modal-helper.service';
+import { ActiveOrganizationChooserComponent } from '../active-organization-chooser/active-organization-chooser.component';
 
 @Component({
   selector: 'app-producer-organization',
   templateUrl: './producer-organization.component.html',
-  styleUrls: ['./producer-organization.component.scss']
+  styleUrls: ['./producer-organization.component.scss'],
+  standalone: false,
 })
 export class ProducerOrganizationComponent implements OnInit, DoCheck {
-
   gridData: GridData = new GridData();
   userMatrix: UserMatrix;
   loaded: Boolean = false;
@@ -36,7 +36,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
 
   getUsers(page?): void {
     if (this.userMatrix.isLoggedIn && this.userMatrix.isOrganizationSelected) {
-      const params = {'sort': null, 'dir': null, 'page': null};
+      const params = { sort: null, dir: null, page: null };
       const sortProperty = this.gridData.getSortProperty();
       if (sortProperty) {
         params.sort = sortProperty;
@@ -45,7 +45,7 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
       if (sortOrder) {
         params.dir = sortOrder;
       }
-      if (page && page !== 0) {
+      if (page && page != 0) {
         params.page = page + 1;
       }
 
@@ -53,17 +53,20 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
       this.location.replaceState('/Minu/Organisatsioon', q);
       this.gridData.page = page || 0;
 
-      this.systemsService.getOrganizationUsers(this.gridData).subscribe(res => {
+      this.systemsService.getOrganizationUsers(this.gridData).subscribe(
+        res => {
           this.gridData.updateData(res);
           if (this.gridData.getPageNumber() > 1 && this.gridData.getPageNumber() > this.gridData.totalPages) {
             this.getUsers();
           } else {
             this.loaded = true;
           }
-        }, err => {
+        },
+        err => {
           this.loaded = true;
           this.toastrService.error('Serveri viga!');
-        });
+        },
+      );
     }
   }
 
@@ -72,21 +75,23 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
     return false;
   }
 
-  constructor(private environmentService: EnvironmentService,
-              private generalHelperService: GeneralHelperService,
-              private systemsService: SystemsService,
-              private toastrService: ToastrService,
-              private modalService: ModalHelperService,
-              private route: ActivatedRoute,
-              private location: Location,
-              private differs: KeyValueDiffers) {
+  constructor(
+    private environmentService: EnvironmentService,
+    private generalHelperService: GeneralHelperService,
+    private systemsService: SystemsService,
+    private toastrService: ToastrService,
+    private modalService: ModalHelperService,
+    private route: ActivatedRoute,
+    private location: Location,
+    private differs: KeyValueDiffers,
+  ) {
     this.differ = differs.find({}).create();
     this.userMatrix = this.environmentService.getUserMatrix();
   }
 
   ngOnInit() {
-      this.generalHelperService.setRihaPageTitle('Minu organisatsioon');
-      this.route.queryParams.subscribe( params => {
+    this.generalHelperService.setRihaPageTitle('Minu organisatsioon');
+    this.route.queryParams.subscribe(params => {
       this.gridData.changeSortOrder(params['sort'] || 'lastName');
       this.gridData.setPageFromUrl(params['page']);
     });
@@ -100,5 +105,4 @@ export class ProducerOrganizationComponent implements OnInit, DoCheck {
       this.getUsers();
     }
   }
-
 }

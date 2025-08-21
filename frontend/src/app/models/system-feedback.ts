@@ -4,6 +4,5 @@ export class SystemFeedback {
   public comment: string = '';
   public recaptchaToken: string = '';
 
-  constructor() {
-  }
+  constructor() {}
 }

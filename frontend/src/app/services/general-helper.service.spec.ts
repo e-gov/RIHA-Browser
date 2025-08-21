@@ -5,7 +5,7 @@ import { GeneralHelperService } from './general-helper.service';
 describe('GeneralHelperService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GeneralHelperService]
+      providers: [GeneralHelperService],
     });
   });
 
