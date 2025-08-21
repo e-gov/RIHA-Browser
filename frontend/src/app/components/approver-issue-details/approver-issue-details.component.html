@@ -132,7 +132,7 @@
                 [(ngModel)]="decisionType"
                 name="decisionType"
               >
-                <option [ngValue]="'null'" selected>Vali otsus...</option>
+                <option [ngValue]="null" selected>Vali otsus...</option>
                 <option *ngFor="let type of generalHelperService.toArray(classifiers.issue_resolution_type)" [ngValue]="type.code" selected>
                   {{ type.value }}
                 </option>
@@ -140,7 +140,7 @@
             </div>
             <div class="col" *ngIf="feedback.status == 'OPEN'">
               <button
-                *ngIf="decisionType == 'null'"
+                *ngIf="decisionType == null"
                 (click)="postComment(commentForm)"
                 class="btn btn-primary pull-right"
                 [disabled]="isCommentSubmitting"
@@ -149,7 +149,7 @@
                 Lisa kommentaar
               </button>
               <button
-                *ngIf="decisionType != 'null'"
+                *ngIf="decisionType != null"
                 (click)="postDecision(commentForm)"
                 class="btn btn-primary pull-right"
                 [disabled]="isDecisionSubmitting"

@@ -26,7 +26,7 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
   replies: any[] = [];
   activeUser: User;
   classifiers = classifiers;
-  decisionType: string = 'null';
+  decisionType: string = null;
   commentText: string = '';
   deadlinePassed: boolean;
 
@@ -43,7 +43,7 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
 
   resetValues(f) {
     f.resetForm();
-    this.decisionType = 'null';
+    this.decisionType = null;
     this.commentText = '';
   }
 
