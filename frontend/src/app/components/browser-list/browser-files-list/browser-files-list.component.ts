@@ -89,7 +89,7 @@ export class BrowserFilesListComponent implements OnInit {
       this.filters.infosystem,
       this.filters.dataObjectName,
       this.filters.comment,
-      this.filters.parentObject
+      this.filters.parentObject,
     ];
 
     // Check if at least one field has 2 or more characters
