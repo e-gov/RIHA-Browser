@@ -52,7 +52,7 @@ export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal
             this.modalService.closeActiveModal({ system: new System(updatedSystem) });
           },
           err => {
-            this.toastrService.error('Serveri viga.');
+            this.handleValidationError(err);
           },
         );
       },
@@ -60,6 +60,32 @@ export class ProducerEditContactsComponent implements OnInit, CanDeactivateModal
         this.toastrService.error('Serveri viga.');
       },
     );
+  }
+
+  private handleValidationError(err: any): void {
+    // Check if this is a JSON validation error with email format issue
+    if (err.error && Array.isArray(err.error)) {
+      for (const validationError of err.error) {
+        // Check for the specific error pattern: format validation with "not-a-timestamp" value
+        // This indicates an email validation error despite the misleading error message
+        if (validationError.keyword === 'format' && 
+            validationError.value === 'not-a-timestamp') {
+          this.toastrService.error('Viga e-posti aadressi valideerimisel');
+          return;
+        }
+        // Also check for other email-related format errors
+        if (validationError.keyword === 'format' && 
+            (validationError.schemaPath?.includes('email') || 
+             validationError.instancePath?.includes('email') ||
+             validationError.instancePath?.includes('contacts'))) {
+          this.toastrService.error('Viga e-posti aadressi valideerimisel');
+          return;
+        }
+      }
+    }
+    
+    // Default error message for other types of errors
+    this.toastrService.error('Serveri viga.');
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
