@@ -42,7 +42,12 @@ export class BrowserFilesListComponent implements OnInit {
   }
 
   public getDataObjectFiles(page?) {
-    // if (this.filters.searchText && this.filters.searchText.length > 1){
+    // Validate that at least one search field has at least 2 characters
+    if (!this.hasValidSearchInput()) {
+      this.helper.showError('Palun sisesta vähemalt ühte otsingukriteeriumisse vähemalt 2 tähemärki');
+      return;
+    }
+
     const params = this.helper.cloneObject(this.filters);
 
     const sortProperty = this.gridData.getSortProperty();
@@ -75,7 +80,21 @@ export class BrowserFilesListComponent implements OnInit {
         this.helper.showError();
       },
     );
-    // }
+  }
+
+  private hasValidSearchInput(): boolean {
+    const searchFields = [
+      this.filters.searchText,
+      this.filters.searchName,
+      this.filters.infosystem,
+      this.filters.dataObjectName,
+      this.filters.comment,
+      this.filters.parentObject,
+    ];
+
+    // Check if at least one field has 2 or more characters
+    // personalData is excluded as it's a dropdown selection
+    return searchFields.some(field => field && field.trim().length >= 2);
   }
 
   constructor(
@@ -110,11 +129,6 @@ export class BrowserFilesListComponent implements OnInit {
   }
 
   private filtersNotEmpty(): boolean {
-    for (const key in this.filters) {
-      if (this.filters[key]) {
-        return true;
-      }
-    }
-    return false;
+    return this.hasValidSearchInput() || (this.filters.personalData && this.filters.personalData !== '');
   }
 }
