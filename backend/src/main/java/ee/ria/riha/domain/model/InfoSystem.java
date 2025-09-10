@@ -57,22 +57,13 @@ public class InfoSystem {
         String creationTimestamp = jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null);
         String updateTimestamp = jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null);
         
+        // Apply timestamp normalization
         if (creationTimestamp != null) {
-          try {
-            creationTimestamp = new InfoSystem().normalizeTimestamp(creationTimestamp);
-          } catch (Exception e) {
-            // If normalization fails, log and use the original value
-            System.out.println("Failed to normalize creation timestamp: " + e.getMessage());
-          }
+          creationTimestamp = new InfoSystem().normalizeTimestamp(creationTimestamp);
         }
         
         if (updateTimestamp != null) {
-          try {
-            updateTimestamp = new InfoSystem().normalizeTimestamp(updateTimestamp);
-          } catch (Exception e) {
-            // If normalization fails, log and use the original value
-            System.out.println("Failed to normalize update timestamp: " + e.getMessage());
-          }
+          updateTimestamp = new InfoSystem().normalizeTimestamp(updateTimestamp);
         }
         
         metadata.setCreationTimestamp(creationTimestamp);
@@ -92,22 +83,13 @@ public class InfoSystem {
         String creationTimestamp = jsonNode.path(META_CREATION_TIMESTAMP_KEY).asText(null);
         String updateTimestamp = jsonNode.path(META_UPDATE_TIMESTAMP_KEY).asText(null);
         
+        // Apply timestamp normalization
         if (creationTimestamp != null) {
-          try {
-            creationTimestamp = new InfoSystem().normalizeTimestamp(creationTimestamp);
-          } catch (Exception e) {
-            // If normalization fails, log and use the original value
-            System.out.println("Failed to normalize document creation timestamp: " + e.getMessage());
-          }
+          creationTimestamp = new InfoSystem().normalizeTimestamp(creationTimestamp);
         }
         
         if (updateTimestamp != null) {
-          try {
-            updateTimestamp = new InfoSystem().normalizeTimestamp(updateTimestamp);
-          } catch (Exception e) {
-            // If normalization fails, log and use the original value
-            System.out.println("Failed to normalize document update timestamp: " + e.getMessage());
-          }
+          updateTimestamp = new InfoSystem().normalizeTimestamp(updateTimestamp);
         }
         
         metadata.setCreationTimestamp(creationTimestamp);
@@ -651,56 +633,18 @@ public class InfoSystem {
     if (timestamp == null) {
       return null;
     }
-
-    // Get detailed context for better debugging
-    StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-    String callingMethod = stackTrace.length > 2 ? stackTrace[2].getMethodName() : "unknown";
-    String callingClass = stackTrace.length > 2 ? stackTrace[2].getClassName() : "unknown";
-    String fieldContext = "unknown"; // Will try to determine this
-    
-    // Try to identify the field context from the stack
-    for (int i = 2; i < Math.min(stackTrace.length, 5); i++) {
-      String methodName = stackTrace[i].getMethodName();
-      if (methodName.contains("set") && methodName.contains("Timestamp")) {
-        fieldContext = methodName;
-        break;
-      } else if (methodName.equals("setCreationAndUpdateTimestampToFilesMetadata")) {
-        fieldContext = "file_metadata_timestamp";
-        break;
-      }
-    }
     
     try {
-      // Log the timestamp with full context for debugging
-      System.out.println("INFO: Normalizing timestamp [" + timestamp + "] from method [" + callingMethod + 
-                         "] in class [" + callingClass + "] for field [" + fieldContext + "]");
-      
       // Check for null-like values
-      if (timestamp == null || "not-a-timestamp".equals(timestamp) || timestamp.trim().isEmpty() ||
+      if ("not-a-timestamp".equals(timestamp) || timestamp.trim().isEmpty() ||
           "null".equals(timestamp) || "undefined".equals(timestamp)) {
-        System.out.println("ERROR: Found invalid timestamp value [" + timestamp + "] in method [" + 
-                          callingMethod + "] for field [" + fieldContext + "]");
         return null; // Return null instead of an invalid timestamp
       }
       
       // Handle timestamp that may have non-standard whitespace or surrounding characters
       String trimmedTimestamp = timestamp.trim();
-      
-      // Try to extract a valid ISO-8601 timestamp using a regex if the string contains extra characters
       if (!trimmedTimestamp.equals(timestamp)) {
-        System.out.println("INFO: Timestamp had whitespace - trimmed from [" + timestamp + "] to [" + trimmedTimestamp + "]");
         timestamp = trimmedTimestamp;
-      }
-      
-      // Check for common date formats that are not ISO (like dd/MM/yyyy) and convert them
-      if (timestamp.matches("\\d{1,2}[/.-]\\d{1,2}[/.-]\\d{4}.*")) {
-        System.out.println("WARNING: Found non-ISO date format [" + timestamp + "], attempting conversion");
-        try {
-          // This is a complex case that would require special date format parsing
-          // For now we'll just log it and continue with other checks
-        } catch (Exception e) {
-          System.out.println("ERROR: Failed to parse non-ISO date format [" + timestamp + "]: " + e.getMessage());
-        }
       }
       
       // Check if timestamp has old format timezone without colon (+0300, -0300, +0200, -0200, etc)
@@ -709,106 +653,136 @@ public class InfoSystem {
         String timezonePart = timestamp.substring(timestamp.length() - 5);
         String timestampWithoutTz = timestamp.substring(0, timestamp.length() - 5);
         String normalizedTz = timezonePart.substring(0, 3) + ":" + timezonePart.substring(3);
-        String result = timestampWithoutTz + normalizedTz;
-        System.out.println("INFO: Converted timestamp from [" + timestamp + "] to [" + result + "]");
-        return result;
+        return timestampWithoutTz + normalizedTz;
       }
       
       // Handle timestamps with Z timezone designator
       if (timestamp.endsWith("Z")) {
-        try {
-          java.time.Instant instant = java.time.Instant.parse(timestamp);
-          java.time.OffsetDateTime odt = instant.atOffset(java.time.ZoneOffset.UTC);
-          String result = odt.toString();
-          System.out.println("INFO: Converted Z-format timestamp [" + timestamp + "] to [" + result + "]");
+        String result = handleZTimezone(timestamp);
+        if (result != null) {
           return result;
-        } catch (Exception e) {
-          System.out.println("ERROR: Failed to parse Z-format timestamp [" + timestamp + "]: " + e.getMessage());
-          // Fall through to next handling attempt
         }
+        // If handling failed, fall through to next approach
       }
 
       // Handle case where timestamp has +02:00 format (already correct but may need validation)
       if (timestamp.matches(".*[+-]\\d{2}:\\d{2}$")) {
-        try {
-          // The format is already correct, but let's ensure it's valid by parsing and reformatting
-          java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(timestamp);
-          String result = odt.toString();
-          System.out.println("INFO: Validated timestamp [" + timestamp + "] as [" + result + "]");
-          return result; // This will ensure the format is valid
-        } catch (Exception e) {
-          System.out.println("ERROR: Failed to parse timestamp [" + timestamp + "]: " + e.getMessage());
-          // Fall through to next handling attempt
+        String result = handleOffsetFormat(timestamp);
+        if (result != null) {
+          return result;
         }
+        // If handling failed, fall through to next approach
       }
       
       // Try more lenient parsing with multiple patterns
-      String[] patterns = {
-          "yyyy-MM-dd'T'HH:mm:ss",
-          "yyyy-MM-dd HH:mm:ss",
-          "yyyy-MM-dd'T'HH:mm",
-          "yyyy-MM-dd'T'HH:mm:ss.SSS",
-          "yyyy-MM-dd"
-      };
-      
-      for (String pattern : patterns) {
-        try {
-          java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern(pattern);
-          if (pattern.endsWith("yyyy-MM-dd")) {
-            // Parse as LocalDate
-            java.time.LocalDate date = java.time.LocalDate.parse(timestamp, formatter);
-            String result = date.atStartOfDay().atOffset(java.time.ZoneOffset.UTC).toString();
-            System.out.println("INFO: Parsed with pattern [" + pattern + "] as LocalDate: [" + result + "]");
-            return result;
-          } else {
-            // Parse as LocalDateTime
-            java.time.LocalDateTime dateTime = java.time.LocalDateTime.parse(timestamp, formatter);
-            String result = dateTime.atOffset(java.time.ZoneOffset.UTC).toString();
-            System.out.println("INFO: Parsed with pattern [" + pattern + "] as LocalDateTime: [" + result + "]");
-            return result;
-          }
-        } catch (Exception e) {
-          // Just try the next pattern
-        }
+      String result = parseWithPatterns(timestamp);
+      if (result != null) {
+        return result;
       }
       
       // As a last resort, try general ISO pattern parsing
-      try {
-        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-        java.time.temporal.TemporalAccessor temporal = formatter.parseBest(
-            timestamp, 
-            java.time.OffsetDateTime::from, 
-            java.time.LocalDateTime::from,
-            java.time.LocalDate::from);
-            
-        if (temporal instanceof java.time.OffsetDateTime) {
-          String result = ((java.time.OffsetDateTime) temporal).toString();
-          System.out.println("INFO: Parsed as OffsetDateTime: [" + result + "]");
-          return result;
-        } else if (temporal instanceof java.time.LocalDateTime) {
-          // Assume UTC if no zone provided
-          String result = ((java.time.LocalDateTime) temporal).atOffset(java.time.ZoneOffset.UTC).toString();
-          System.out.println("INFO: Parsed as LocalDateTime (assuming UTC): [" + result + "]");
-          return result;
-        } else if (temporal instanceof java.time.LocalDate) {
-          // Assume midnight UTC if no time provided
-          String result = ((java.time.LocalDate) temporal).atStartOfDay().atOffset(java.time.ZoneOffset.UTC).toString();
-          System.out.println("INFO: Parsed as LocalDate (assuming midnight UTC): [" + result + "]");
-          return result;
-        }
-      } catch (Exception e) {
-        System.out.println("ERROR: Failed to parse timestamp [" + timestamp + "] with lenient parsing: " + e.getMessage());
+      String isoResult = parseWithIsoPattern(timestamp);
+      if (isoResult != null) {
+        return isoResult;
       }
       
       // If we reached here and the timestamp doesn't match any pattern,
-      // log a warning and return null (instead of returning invalid timestamp)
-      System.out.println("WARNING: Unable to normalize timestamp [" + timestamp + "] in field [" + fieldContext + 
-                         "], converting to null to avoid validation failures");
+      // return null (instead of returning invalid timestamp)
       return null;
     } catch (Exception e) {
-      // If any exception occurs during parsing, log it and return null to avoid validation failures
-      System.out.println("ERROR: Exception while processing timestamp [" + timestamp + "]: " + e.getMessage());
-      e.printStackTrace();
+      // If any exception occurs during parsing, return null to avoid validation failures
+      return null;
+    }
+  }
+  
+  /**
+   * Handles timestamps with Z timezone designator
+   * @param timestamp the timestamp ending with Z
+   * @return normalized timestamp in RFC 3339 format or null if parsing fails
+   */
+  private String handleZTimezone(String timestamp) {
+    try {
+      java.time.Instant instant = java.time.Instant.parse(timestamp);
+      java.time.OffsetDateTime odt = instant.atOffset(java.time.ZoneOffset.UTC);
+      return odt.toString();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
+  /**
+   * Handles timestamps with standard offset format like +02:00
+   * @param timestamp the timestamp with offset in +HH:MM format
+   * @return normalized timestamp in RFC 3339 format or null if parsing fails
+   */
+  private String handleOffsetFormat(String timestamp) {
+    try {
+      // The format is already correct, but let's ensure it's valid by parsing and reformatting
+      java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(timestamp);
+      return odt.toString(); // This will ensure the format is valid
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
+  /**
+   * Attempts to parse timestamp using various predefined patterns
+   * @param timestamp the timestamp to parse
+   * @return normalized timestamp in RFC 3339 format or null if parsing fails with all patterns
+   */
+  private String parseWithPatterns(String timestamp) {
+    String[] patterns = {
+        "yyyy-MM-dd'T'HH:mm:ss",
+        "yyyy-MM-dd HH:mm:ss",
+        "yyyy-MM-dd'T'HH:mm",
+        "yyyy-MM-dd'T'HH:mm:ss.SSS",
+        "yyyy-MM-dd"
+    };
+    
+    for (String pattern : patterns) {
+      try {
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern(pattern);
+        if (pattern.endsWith("yyyy-MM-dd")) {
+          // Parse as LocalDate
+          java.time.LocalDate date = java.time.LocalDate.parse(timestamp, formatter);
+          return date.atStartOfDay().atOffset(java.time.ZoneOffset.UTC).toString();
+        } else {
+          // Parse as LocalDateTime
+          java.time.LocalDateTime dateTime = java.time.LocalDateTime.parse(timestamp, formatter);
+          return dateTime.atOffset(java.time.ZoneOffset.UTC).toString();
+        }
+      } catch (Exception e) {
+        // Just try the next pattern
+      }
+    }
+    return null;
+  }
+  
+  /**
+   * Attempts to parse timestamp using ISO date-time patterns
+   * @param timestamp the timestamp to parse
+   * @return normalized timestamp in RFC 3339 format or null if parsing fails
+   */
+  private String parseWithIsoPattern(String timestamp) {
+    try {
+      java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+      java.time.temporal.TemporalAccessor temporal = formatter.parseBest(
+          timestamp, 
+          java.time.OffsetDateTime::from, 
+          java.time.LocalDateTime::from,
+          java.time.LocalDate::from);
+          
+      if (temporal instanceof java.time.OffsetDateTime offsetDateTime) {
+        return offsetDateTime.toString();
+      } else if (temporal instanceof java.time.LocalDateTime localDateTime) {
+        // Assume UTC if no zone provided
+        return localDateTime.atOffset(java.time.ZoneOffset.UTC).toString();
+      } else if (temporal instanceof java.time.LocalDate localDate) {
+        // Assume midnight UTC if no time provided
+        return localDate.atStartOfDay().atOffset(java.time.ZoneOffset.UTC).toString();
+      }
+      return null;
+    } catch (Exception e) {
       return null;
     }
   }
