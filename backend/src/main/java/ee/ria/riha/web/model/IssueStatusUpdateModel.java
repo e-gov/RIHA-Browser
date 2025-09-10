@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IssueStatusUpdateModel {
-    private String comment;
-    private IssueStatus status;
-    private IssueResolutionType resolutionType;
+  private String comment;
+  private IssueStatus status;
+  private IssueResolutionType resolutionType;
 }

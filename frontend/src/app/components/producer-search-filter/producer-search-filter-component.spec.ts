@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ProducerSearchFilterComponent} from './producer-search-filter-component';
+import { ProducerSearchFilterComponent } from './producer-search-filter-component';
 
 describe('ProducerListComponent', () => {
   let component: ProducerSearchFilterComponent;
@@ -8,9 +8,8 @@ describe('ProducerListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProducerSearchFilterComponent ]
-    })
-      .compileComponents();
+      declarations: [ProducerSearchFilterComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

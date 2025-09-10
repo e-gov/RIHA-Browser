@@ -1,15 +1,13 @@
 package ee.ria.riha.service.notification.model;
 
-/**
- * Interface for classes that hold email notification messages data.
- */
+/** Interface for classes that hold email notification messages data. */
 public interface EmailNotificationDataModel {
 
-    String getFrom();
+  String getFrom();
 
-    String getTo();
+  String getTo();
 
-    String[] getCc();
+  String[] getCc();
 
-    String[] getBcc();
+  String[] getBcc();
 }

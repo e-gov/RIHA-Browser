@@ -2,14 +2,18 @@ package ee.ria.riha.conf;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.*;
-import com.github.fge.jackson.*;
 import ee.ria.riha.domain.model.*;
 import ee.ria.riha.service.*;
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.*;
+import java.io.*;
+import java.net.*;
+import javax.net.ssl.*;
 import lombok.extern.slf4j.*;
-import org.apache.http.impl.client.*;
-import org.apache.http.ssl.*;
+import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.io.*;
+import org.apache.hc.client5.http.ssl.*;
+import org.apache.hc.core5.ssl.*;
 import org.springframework.boot.context.properties.*;
 import org.springframework.boot.task.*;
 import org.springframework.boot.web.client.*;
@@ -19,77 +23,103 @@ import org.springframework.http.client.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.web.client.*;
 
-import java.io.*;
-import java.net.*;
-import javax.net.ssl.*;
-
 /**
  * @author Valentin Suhnjov
  */
 @Configuration
-@EnableConfigurationProperties({ApplicationProperties.class, FeedbackServiceConnectionProperties.class})
+@EnableConfigurationProperties({
+  ApplicationProperties.class,
+  FeedbackServiceConnectionProperties.class
+})
 @EnableScheduling
 @EnableAsync
 @Slf4j
 public class ApplicationConfiguration {
 
-    public static final String FEEDBACK_SERVICE = "feedbackService";
+  public static final String FEEDBACK_SERVICE = "feedbackService";
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.build();
+  @Bean
+  public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+    return restTemplateBuilder.build();
+  }
+
+  @Bean(FEEDBACK_SERVICE)
+  public RestTemplate feedbackRestTemplate(
+      RestTemplateBuilder restTemplateBuilder,
+      FeedbackServiceConnectionProperties feedbackServiceConnectionProperties) {
+
+    SSLContext context;
+    try {
+      context =
+          SSLContextBuilder.create()
+              .loadTrustMaterial(
+                  feedbackServiceConnectionProperties.getTrustStore(),
+                  feedbackServiceConnectionProperties.getTrustStorePassword())
+              .loadKeyMaterial(
+                  feedbackServiceConnectionProperties.getKeyStore(),
+                  feedbackServiceConnectionProperties.getKeyStorePassword(),
+                  feedbackServiceConnectionProperties.getKeyStoreKeyPassword(),
+                  (map, socket) -> feedbackServiceConnectionProperties.getKeyStoreAlias())
+              .setProtocol(feedbackServiceConnectionProperties.getProtocol())
+              .build();
+    } catch (Exception fatal) {
+      log.error("unable to create feedback service connection factory", fatal);
+      throw new IllegalStateException(fatal);
     }
 
-    @Bean(FEEDBACK_SERVICE)
-    public RestTemplate feedbackRestTemplate(RestTemplateBuilder restTemplateBuilder, FeedbackServiceConnectionProperties feedbackServiceConnectionProperties) {
+    PoolingHttpClientConnectionManager connectionManager =
+        PoolingHttpClientConnectionManagerBuilder.create()
+            .setTlsSocketStrategy(new DefaultClientTlsStrategy(context))
+            .build();
 
-        SSLContext context;
-        try {
-            context = SSLContextBuilder.create()
-                    .loadTrustMaterial(
-                            feedbackServiceConnectionProperties.getTrustStore(),
-                            feedbackServiceConnectionProperties.getTrustStorePassword())
-                    .loadKeyMaterial(
-                            feedbackServiceConnectionProperties.getKeyStore(),
-                            feedbackServiceConnectionProperties.getKeyStorePassword(),
-                            feedbackServiceConnectionProperties.getKeyStoreKeyPassword(),
-                            (map, socket) -> feedbackServiceConnectionProperties.getKeyStoreAlias()
-                    )
-                    .setProtocol(feedbackServiceConnectionProperties.getProtocol())
-                    .build();
-        } catch (Exception fatal) {
-            log.error("unable to create feedback service connection factory", fatal);
-            throw new IllegalStateException(fatal);
-        }
+    HttpComponentsClientHttpRequestFactory factory =
+        new HttpComponentsClientHttpRequestFactory(
+            HttpClientBuilder.create().setConnectionManager(connectionManager).build());
 
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().setSSLContext(context).build());
+    return restTemplateBuilder.requestFactory(() -> factory::createRequest).build();
+  }
 
-        return restTemplateBuilder.requestFactory(() -> factory::createRequest).build();
+  @Bean
+  public TaskExecutor taskExecutor(ThreadPoolTaskExecutorBuilder taskExecutorBuilder) {
+    return taskExecutorBuilder.build();
+  }
+
+  @Bean
+  public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties)
+      throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    try (var inputStream =
+        getClass().getResourceAsStream(applicationProperties.getValidation().getJsonSchemaUrl())) {
+      if (inputStream == null) {
+        throw new IOException(
+            "Schema resource not found: "
+                + applicationProperties.getValidation().getJsonSchemaUrl());
+      }
+      return new JsonValidationService(mapper.readTree(inputStream));
     }
+  }
 
-    @Bean
-    public TaskExecutor taskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
-        return taskExecutorBuilder.build();
-    }
+  @Bean
+  public NationalHolidays nationalHolidays(ApplicationProperties applicationProperties)
+      throws IOException, URISyntaxException {
+    ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    File holidaysFile =
+        new File(
+            getClass()
+                .getClassLoader()
+                .getResource(applicationProperties.getNationalHolidaysFile())
+                .toURI());
+    return mapper.readValue(holidaysFile, NationalHolidays.class);
+  }
 
-    @Bean
-    public JsonValidationService jsonValidationService(ApplicationProperties applicationProperties) throws IOException {
-        return new JsonValidationService(
-                JsonLoader.fromResource(applicationProperties.getValidation().getJsonSchemaUrl()));
-    }
-
-    @Bean
-    public NationalHolidays nationalHolidays(ApplicationProperties applicationProperties) throws IOException, URISyntaxException {
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        File holidaysFile = new File(getClass().getClassLoader().getResource(applicationProperties.getNationalHolidaysFile()).toURI());
-        return mapper.readValue(holidaysFile, NationalHolidays.class);
-    }
-
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .components(new Components())
-                .info(new Info().title("RIHA API").description("API description generated by springdoc-openapi plugin").version("1.0"));
-    }
-
+  @Bean
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+        .components(new Components())
+        .info(
+            new Info()
+                .title("RIHA API")
+                .description("API description generated by springdoc-openapi plugin")
+                .version("1.0"));
+  }
 }

@@ -1,11 +1,11 @@
-import {inject, TestBed} from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 
-import {CanDeactivateModalGuard} from './can-deactivate-modal.guard';
+import { CanDeactivateModalGuard } from './can-deactivate-modal.guard';
 
 describe('CanDeactivateModalGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CanDeactivateModalGuard]
+      providers: [CanDeactivateModalGuard],
     });
   });
 

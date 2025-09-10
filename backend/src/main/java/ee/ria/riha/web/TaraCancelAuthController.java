@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 public class TaraCancelAuthController {
 
-    @GetMapping("/cancel-auth")
-    public String cancelTaraAuth() {
-        log.debug("somebody has just canceled an auth request");
+  @GetMapping("/cancel-auth")
+  public String cancelTaraAuth() {
+    log.debug("somebody has just canceled an auth request");
 
-        return "redirect:/";
-    }
+    return "redirect:/";
+  }
 }

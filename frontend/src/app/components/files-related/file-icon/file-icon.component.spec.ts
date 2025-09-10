@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {FileIconComponent} from './file-icon.component';
+import { FileIconComponent } from './file-icon.component';
 
 describe('FileIconComponent', () => {
   let component: FileIconComponent;
@@ -8,9 +8,8 @@ describe('FileIconComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FileIconComponent ]
-    })
-    .compileComponents();
+      declarations: [FileIconComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

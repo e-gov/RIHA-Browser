@@ -1,23 +1,23 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {SystemsService} from '../../services/systems.service';
-import {classifiers, EnvironmentService} from '../../services/environment.service';
-import {ToastrService} from 'ngx-toastr';
-import {User} from '../../models/user';
-import {ModalHelperService} from "../../services/modal-helper.service";
-import {System} from '../../models/system';
-import {GeneralHelperService} from '../../services/general-helper.service';
-import {CanDeactivateModal} from '../../guards/can-deactivate-modal.guard';
-import {NgForm} from "@angular/forms";
-import {Observable} from "rxjs";
-import {CONSTANTS} from '../../utils/constants';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { SystemsService } from '../../services/systems.service';
+import { classifiers, EnvironmentService } from '../../services/environment.service';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '../../models/user';
+import { ModalHelperService } from '../../services/modal-helper.service';
+import { System } from '../../models/system';
+import { GeneralHelperService } from '../../services/general-helper.service';
+import { CanDeactivateModal } from '../../guards/can-deactivate-modal.guard';
+import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { CONSTANTS } from '../../utils/constants';
 
 @Component({
   selector: 'app-approver-feedback-details',
   templateUrl: './approver-issue-details.component.html',
-  styleUrls: ['./approver-issue-details.component.scss']
+  styleUrls: ['./approver-issue-details.component.scss'],
+  standalone: false,
 })
 export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal {
-
   @ViewChild('commentForm') formObject: NgForm;
 
   @Input() feedback: any;
@@ -26,107 +26,128 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
   replies: any[] = [];
   activeUser: User;
   classifiers = classifiers;
-  decisionType: string = 'null';
+  decisionType: string = null;
   commentText: string = '';
   deadlinePassed: boolean;
 
-  refreshReplies(){
-    this.systemService.getSystemIssueTimeline(this.feedback.id).subscribe(
-      replies => {
-        this.replies = replies.content;
-      });
+  // Loading states
+  isCommentSubmitting: boolean = false;
+  isDecisionSubmitting: boolean = false;
+  isResolvingIssue: boolean = false;
+
+  refreshReplies() {
+    this.systemService.getSystemIssueTimeline(this.feedback.id).subscribe(replies => {
+      this.replies = replies.content;
+    });
   }
 
-  resetValues(f){
+  resetValues(f) {
     f.resetForm();
-    this.decisionType = 'null';
+    this.decisionType = null;
     this.commentText = '';
   }
 
-  markResolved(resolutionType?){
+  markResolved(resolutionType?) {
+    this.isResolvingIssue = true;
     this.systemService.closeSystemIssue(this.feedback.id, resolutionType).subscribe(
       res => {
         this.refreshReplies();
         this.toastrService.success('Lahendatud');
-        this.modalService.closeActiveModal({issueType: resolutionType});
+        this.modalService.closeActiveModal({ issueType: resolutionType });
+        this.isResolvingIssue = false;
       },
       err => {
         this.toastrService.error('Lahendatuks märkimine ebaõnnestus. Palun proovi uuesti.');
-      }
-    )
+        this.isResolvingIssue = false;
+      },
+    );
   }
 
-  markResolvedWithVerdict(resolutionType){
+  markResolvedWithVerdict(resolutionType) {
     this.markResolved(resolutionType);
   }
 
-  postComment(f){
-    if (f.valid && this.commentText){
-      this.systemService.postSystemIssueComment(this.feedback.id, {
-        comment: this.commentText
-      }).subscribe(
-        res => {
-          this.resetValues(f);
-          this.refreshReplies();
-          this.toastrService.success('Kommentaar edukalt lisatud.');
-        },
-        err => {
-          this.resetValues(f);
-          this.toastrService.error('Kommentaari lisamine ebaõnnestus. Palun proovi uuesti.');
-        }
-      )
+  postComment(f) {
+    if (f.valid && this.commentText) {
+      this.isCommentSubmitting = true;
+      this.systemService
+        .postSystemIssueComment(this.feedback.id, {
+          comment: this.commentText,
+        })
+        .subscribe(
+          res => {
+            this.resetValues(f);
+            this.refreshReplies();
+            this.toastrService.success('Kommentaar edukalt lisatud.');
+            this.isCommentSubmitting = false;
+          },
+          err => {
+            this.resetValues(f);
+            this.toastrService.error('Kommentaari lisamine ebaõnnestus. Palun proovi uuesti.');
+            this.isCommentSubmitting = false;
+          },
+        );
     }
   }
 
-  postDecision(f){
-    if (f.valid){
-      this.systemService.postSystemIssueDecision(this.feedback.id, {
-        comment: this.commentText,
-        decisionType: this.decisionType
-      }).subscribe(
-        res => {
-          this.resetValues(f);
-          this.refreshReplies();
-          this.toastrService.success('Otsus edukalt lisatud.');
-        },
-        err => {
-          this.resetValues(f);
-          this.toastrService.error('Otsuse lisamine ebaõnnestus. Palun proovi uuesti.');
-        }
-      )
+  postDecision(f) {
+    if (f.valid) {
+      this.isDecisionSubmitting = true;
+      this.systemService
+        .postSystemIssueDecision(this.feedback.id, {
+          comment: this.commentText,
+          decisionType: this.decisionType,
+        })
+        .subscribe(
+          res => {
+            this.resetValues(f);
+            this.refreshReplies();
+            this.toastrService.success('Otsus edukalt lisatud.');
+            this.isDecisionSubmitting = false;
+          },
+          err => {
+            this.resetValues(f);
+            this.toastrService.error('Otsuse lisamine ebaõnnestus. Palun proovi uuesti.');
+            this.isDecisionSubmitting = false;
+          },
+        );
     }
   }
 
-  getOrganizationWithUser(o){
+  getOrganizationWithUser(o) {
     return `${o.organizationName} (${o.authorName})`;
   }
 
-  canPostDecision(){
+  canPostDecision() {
     return this.feedback.type && this.environmentService.getUserMatrix().hasApproverRole;
   }
 
-  canResolveGeneral(){
+  canResolveGeneral() {
     let ret = false;
-    if (this.feedback.status == 'OPEN'){
+    if (this.feedback.status == 'OPEN') {
       const bHasApproverRole = this.environmentService.getUserMatrix().hasApproverRole;
-      if (this.feedback.type != classifiers.issue_type.TAKE_INTO_USE_REQUEST.code
-        && this.feedback.type != classifiers.issue_type.MODIFICATION_REQUEST.code
-        && this.feedback.type != classifiers.issue_type.FINALIZATION_REQUEST.code
-        && this.feedback.type != classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
+      if (
+        this.feedback.type != classifiers.issue_type.TAKE_INTO_USE_REQUEST.code &&
+        this.feedback.type != classifiers.issue_type.MODIFICATION_REQUEST.code &&
+        this.feedback.type != classifiers.issue_type.FINALIZATION_REQUEST.code &&
+        this.feedback.type != classifiers.issue_type.ESTABLISHMENT_REQUEST.code
+      ) {
         ret = bHasApproverRole || (this.activeUser && this.activeUser.canEdit(this.system.getOwnerCode()));
       }
     }
     return ret;
   }
-  canResolveWithVerdict(){
+  canResolveWithVerdict() {
     let ret = false;
-    if (this.feedback.status == 'OPEN'){
-      if (this.feedback.type == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code
-        || this.feedback.type == classifiers.issue_type.MODIFICATION_REQUEST.code
-        || this.feedback.type == classifiers.issue_type.FINALIZATION_REQUEST.code
-        || this.feedback.type == classifiers.issue_type.ESTABLISHMENT_REQUEST.code){
-          const userMatrix = this.environmentService.getUserMatrix();
-          ret = userMatrix.hasApproverRole && userMatrix.isRiaMember;
+    if (this.feedback.status == 'OPEN') {
+      if (
+        this.feedback.type == classifiers.issue_type.TAKE_INTO_USE_REQUEST.code ||
+        this.feedback.type == classifiers.issue_type.MODIFICATION_REQUEST.code ||
+        this.feedback.type == classifiers.issue_type.FINALIZATION_REQUEST.code ||
+        this.feedback.type == classifiers.issue_type.ESTABLISHMENT_REQUEST.code
+      ) {
+        const userMatrix = this.environmentService.getUserMatrix();
+        ret = userMatrix.hasApproverRole && userMatrix.isRiaMember;
       }
     }
     return ret;
@@ -159,22 +180,21 @@ export class ApproverIssueDetailsComponent implements OnInit, CanDeactivateModal
    * Is form data changed ?
    */
   get isFormChanged(): boolean {
-    return this.formObject.form.dirty
+    return this.formObject.form.dirty;
   }
 
-
-  constructor(private systemService: SystemsService,
-              private toastrService: ToastrService,
-              private modalService: ModalHelperService,
-              private generalHelperService: GeneralHelperService,
-              private environmentService: EnvironmentService) {
+  constructor(
+    private systemService: SystemsService,
+    private toastrService: ToastrService,
+    private modalService: ModalHelperService,
+    private generalHelperService: GeneralHelperService,
+    private environmentService: EnvironmentService,
+  ) {
     this.activeUser = this.environmentService.getActiveUser();
-
   }
 
   ngOnInit() {
     this.deadlinePassed = Date.now() > Date.parse(this.feedback.decisionDeadline);
     this.refreshReplies();
   }
-
 }

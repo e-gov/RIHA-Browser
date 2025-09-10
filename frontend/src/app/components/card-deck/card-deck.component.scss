@@ -5,10 +5,10 @@
   margin-left: -10px;
 }
 
-@media (max-width: 1199.98px){
-.card-deck {
-  flex-direction: column;
-}
+@media (max-width: 1199.98px) {
+  .card-deck {
+    flex-direction: column;
+  }
 }
 
 @media (min-width: 1199.98px) {
@@ -21,7 +21,7 @@
 }
 
 @media (max-width: 1199.98px) {
-  .card:not(:first-child){
+  .card:not(:first-child) {
     margin-top: 10px;
     margin-left: 0;
   }
@@ -33,4 +33,3 @@
     margin-right: 0;
   }
 }
-

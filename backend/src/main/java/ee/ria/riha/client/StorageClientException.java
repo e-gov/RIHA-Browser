@@ -7,14 +7,14 @@ package ee.ria.riha.client;
  */
 public class StorageClientException extends RuntimeException {
 
-    private final StorageError storageError;
+  private final StorageError storageError;
 
-    public StorageClientException(StorageError rihaRestError) {
-        super();
-        this.storageError = rihaRestError;
-    }
+  public StorageClientException(StorageError rihaRestError) {
+    super();
+    this.storageError = rihaRestError;
+  }
 
-    public StorageError getStorageError() {
-        return storageError;
-    }
+  public StorageError getStorageError() {
+    return storageError;
+  }
 }

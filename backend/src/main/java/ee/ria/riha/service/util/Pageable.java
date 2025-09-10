@@ -5,10 +5,9 @@ package ee.ria.riha.service.util;
  */
 public interface Pageable {
 
-    int getPageNumber();
+  int getPageNumber();
 
-    int getPageSize();
+  int getPageSize();
 
-    int getOffset();
-
+  int getOffset();
 }

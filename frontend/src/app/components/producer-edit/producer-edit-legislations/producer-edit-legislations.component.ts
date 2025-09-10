@@ -1,22 +1,22 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {SystemsService} from '../../../services/systems.service';
-import {System} from '../../../models/system';
-import {ToastrService} from 'ngx-toastr';
-import {ModalHelperService} from '../../../services/modal-helper.service';
-import {GeneralHelperService} from '../../../services/general-helper.service';
-import {classifiers} from "../../../services/environment.service";
-import {Observable} from "rxjs";
-import {NgForm} from "@angular/forms";
-import {CanDeactivateModal} from '../../../guards/can-deactivate-modal.guard';
-import {CONSTANTS} from '../../../utils/constants';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { SystemsService } from '../../../services/systems.service';
+import { System } from '../../../models/system';
+import { ToastrService } from 'ngx-toastr';
+import { ModalHelperService } from '../../../services/modal-helper.service';
+import { GeneralHelperService } from '../../../services/general-helper.service';
+import { classifiers } from '../../../services/environment.service';
+import { Observable } from 'rxjs';
+import { NgForm } from '@angular/forms';
+import { CanDeactivateModal } from '../../../guards/can-deactivate-modal.guard';
+import { CONSTANTS } from '../../../utils/constants';
 
 @Component({
   selector: 'app-producer-edit-legislations',
   templateUrl: './producer-edit-legislations.component.html',
-  styleUrls: ['./producer-edit-legislations.component.scss']
+  styleUrls: ['./producer-edit-legislations.component.scss'],
+  standalone: false,
 })
 export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateModal {
-
   @ViewChild('addForm') formObjectAdd: NgForm;
 
   @Input() system: System;
@@ -25,18 +25,16 @@ export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateM
   classifiers = classifiers;
   buttonClicked: boolean = false;
 
-  data: any = {url: '', name: '', type: ''};
+  data: any = { url: '', name: '', type: '' };
 
   addLegislation(addForm): void {
-    if (addForm.valid){
-      this.legislations.push({url: this.data.url,
-                              name: this.data.name ? this.data.name.trim() : '',
-                              type: this.data.type});
-      this.data = {url: '', name: '', type: ''};
+    if (addForm.valid) {
+      this.legislations.push({ url: this.data.url, name: this.data.name ? this.data.name.trim() : '', type: this.data.type });
+      this.data = { url: '', name: '', type: '' };
       addForm.reset();
       this.isChanged = true;
       this.buttonClicked = false;
-    }else {
+    } else {
       this.buttonClicked = true;
     }
   }
@@ -46,18 +44,24 @@ export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateM
     this.isChanged = true;
   }
 
-  saveSystem(){
-    this.systemsService.getSystem(this.system.details.short_name).subscribe(responseSystem => {
-      const system = new System(responseSystem);
-      system.details.legislations = this.legislations;
-      this.systemsService.updateSystem(system).subscribe(updatedSystem => {
-        this.modalService.closeActiveModal({system: new System(updatedSystem)});
-      }, err => {
+  saveSystem() {
+    this.systemsService.getSystem(this.system.details.short_name).subscribe(
+      responseSystem => {
+        const system = new System(responseSystem);
+        system.details.legislations = this.legislations;
+        this.systemsService.updateSystem(system).subscribe(
+          updatedSystem => {
+            this.modalService.closeActiveModal({ system: new System(updatedSystem) });
+          },
+          err => {
+            this.toastrService.error('Serveri viga.');
+          },
+        );
+      },
+      err => {
         this.toastrService.error('Serveri viga.');
-      });
-    }, err => {
-      this.toastrService.error('Serveri viga.');
-    });
+      },
+    );
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -87,17 +91,18 @@ export class ProducerEditLegislationsComponent implements OnInit, CanDeactivateM
    * Is form data changed ?
    */
   get isFormChanged(): boolean {
-    return this.isChanged || this.formObjectAdd.form.dirty
+    return this.isChanged || this.formObjectAdd.form.dirty;
   }
 
-  constructor(private modalService: ModalHelperService,
-              private systemsService: SystemsService,
-              private toastrService: ToastrService,
-              public generalHelperService: GeneralHelperService) { }
+  constructor(
+    private modalService: ModalHelperService,
+    private systemsService: SystemsService,
+    private toastrService: ToastrService,
+    public generalHelperService: GeneralHelperService,
+  ) {}
 
   ngOnInit() {
     const system = this.generalHelperService.cloneObject(this.system);
     this.legislations = system.details.legislations || [];
   }
-
 }

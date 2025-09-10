@@ -1,4 +1,4 @@
-import {classifiers} from "../services/environment.service";
+import { classifiers } from '../services/environment.service';
 
 export class System {
   id: number = null;
@@ -11,23 +11,22 @@ export class System {
   standardSystemBoolean: any = null;
 
   getOwnerCode(): any {
-    if (this.details && this.details.owner){
+    if (this.details && this.details.owner) {
       return this.details.owner.code;
     } else {
       return null;
     }
   }
 
-  getStatus(){
+  getStatus() {
     return this.details.meta.system_status.status;
   }
 
-  getStandardInformationSystem() : boolean{
-
+  getStandardInformationSystem(): boolean {
     if (this.details.standard_system == undefined) {
       this.standardSystemBoolean = false;
     } else if (this.details.standard_system == true) {
-      this.standardSystemBoolean = true
+      this.standardSystemBoolean = true;
     }
     return this.standardSystemBoolean;
   }
@@ -44,20 +43,20 @@ export class System {
     return this.details.security.class ? this.details.security.class : null;
   }
 
-  getLatestAuditDate(){
+  getLatestAuditDate() {
     return this.details.security.latest_audit_date ? this.details.security.latest_audit_date : null;
   }
 
-  getLatestAuditResolution(){
+  getLatestAuditResolution() {
     return this.details.security.latest_audit_resolution ? this.details.security.latest_audit_resolution : null;
   }
 
-  getLastPositiveApprovalRequestType(){
-      return this.lastPositiveApprovalRequestType;
+  getLastPositiveApprovalRequestType() {
+    return this.lastPositiveApprovalRequestType;
   }
 
-  getLastPositiveApprovalRequestDate(){
-      return this.lastPositiveApprovalRequestDate;
+  getLastPositiveApprovalRequestDate() {
+    return this.lastPositiveApprovalRequestDate;
   }
 
   setStatus(status): void {
@@ -65,31 +64,31 @@ export class System {
   }
 
   setStandardInformationSystem(standard): void {
-    if (standard == false){
+    if (standard == false) {
       this.details.standard_system = undefined;
-    } else if (standard == true){
+    } else if (standard == true) {
       this.details.standard_system = true;
     }
   }
 
-  isUsed(): boolean{
-    return this.details.meta.system_status.status === classifiers.system_status.IN_USE.code;
+  isUsed(): boolean {
+    return this.details.meta.system_status.status == classifiers.system_status.IN_USE.code;
   }
 
   setInDevelopment(inDevelopment): void {
-    if (inDevelopment === true){
+    if (inDevelopment == true) {
       this.details.meta.development_status = classifiers.development_status.IN_DEVELOPMENT.code;
-    } else if (inDevelopment === false){
+    } else if (inDevelopment == false) {
       this.details.meta.development_status = classifiers.development_status.NOT_IN_DEVELOPMENT.code;
     }
   }
 
-  getDevelopmentStatus(){
+  getDevelopmentStatus() {
     return this.details.meta.development_status;
   }
 
-  isInDevelopment(): boolean{
-    return this.details.meta.development_status === classifiers.development_status.IN_DEVELOPMENT.code;
+  isInDevelopment(): boolean {
+    return this.details.meta.development_status == classifiers.development_status.IN_DEVELOPMENT.code;
   }
 
   getXRoadStatus() {
@@ -104,31 +103,31 @@ export class System {
     return this.details.topics;
   }
 
-  hasDocuments(): boolean{
+  hasDocuments(): boolean {
     return this.details.documents && this.details.documents.length > 0;
   }
 
-  hasLegislations(): boolean{
+  hasLegislations(): boolean {
     return this.details.legislations && this.details.legislations.length > 0;
   }
 
-  hasDataObjects(): boolean{
+  hasDataObjects(): boolean {
     return this.details.stored_data && this.details.stored_data.length > 0;
   }
 
-  hasDataFiles(): boolean{
+  hasDataFiles(): boolean {
     return this.details.data_files && this.details.data_files.length > 0;
   }
 
-  hasContacts(): boolean{
+  hasContacts(): boolean {
     return this.details.contacts && this.details.contacts.length > 0;
   }
 
-  hasSecurityInfo(): boolean{
+  hasSecurityInfo(): boolean {
     return this.details.security.standard != null;
   }
 
-  hasAuditInfo(): boolean{
+  hasAuditInfo(): boolean {
     return this.details.security.latest_audit_resolution != null;
   }
 
@@ -137,10 +136,10 @@ export class System {
   //     return false;
   //   }
   //
-  //   return this.getTopics().find(value => value == 'standardlahendus');
+  //   return this.getTopics().find(value => value=='standardlahendus');
   // }
 
-  constructor(system?){
+  constructor(system?) {
     system = system || {};
     this.id = system.id || null;
     this.lastPositiveApprovalRequestType = system.lastPositiveApprovalRequestType || null;
@@ -148,35 +147,34 @@ export class System {
     this.hasUsedSystemTypeRelations = system.hasUsedSystemTypeRelations;
 
     this.details = system.details || {};
-    if (this.details.meta != null){
-      if (!this.details.meta.development_status){
+    if (this.details.meta != null) {
+      if (!this.details.meta.development_status) {
         this.details.meta.development_status = null;
       }
-      if (!this.details.meta.system_status){
+      if (!this.details.meta.system_status) {
         this.details.meta.system_status = {
           status: null,
-          timestamp: null
-        }
+          timestamp: null,
+        };
       }
-      if (!this.details.meta.x_road_status){
+      if (!this.details.meta.x_road_status) {
         this.details.meta.x_road_status = {
           status: null,
-          timestamp: null
-        }
+          timestamp: null,
+        };
       }
-    }
-    else {
+    } else {
       this.details.meta = {
         development_status: null,
         system_status: {
           status: null,
-          timestamp: null
+          timestamp: null,
         },
         x_road_status: {
           status: null,
-          timestamp: null
-        }
-      }
+          timestamp: null,
+        },
+      };
     }
     this.details.topics = this.details.topics || [];
     this.details.stored_data = this.details.stored_data || [];
@@ -194,7 +192,7 @@ export class System {
       level: null,
       standard: null,
       latest_audit_date: null,
-      latest_audit_resolution: null
+      latest_audit_resolution: null,
     };
   }
 }

@@ -1,18 +1,18 @@
-import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core';
-import {SystemsService} from '../../../../services/systems.service';
-import {ToastrService} from 'ngx-toastr';
-import {GridData} from '../../../../models/grid-data';
-import {classifiers, EnvironmentService} from '../../../../services/environment.service';
-import {GeneralHelperService} from '../../../../services/general-helper.service';
-import {UserMatrix} from '../../../../models/user-matrix';
+import { Component, DoCheck, Input, KeyValueDiffers, OnInit } from '@angular/core';
+import { SystemsService } from '../../../../services/systems.service';
+import { ToastrService } from 'ngx-toastr';
+import { GridData } from '../../../../models/grid-data';
+import { classifiers, EnvironmentService } from '../../../../services/environment.service';
+import { GeneralHelperService } from '../../../../services/general-helper.service';
+import { UserMatrix } from '../../../../models/user-matrix';
 
 @Component({
   selector: 'app-discussions-list',
   templateUrl: './discussions-list.component.html',
-  styleUrls: ['./discussions-list.component.scss']
+  styleUrls: ['./discussions-list.component.scss'],
+  standalone: false,
 })
 export class DiscussionsListComponent implements OnInit, DoCheck {
-
   @Input() relation: string;
   classifiers = classifiers;
   public loaded: boolean = false;
@@ -20,29 +20,37 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
   private differ: any;
   private userMatrix: UserMatrix;
 
-  public isNewDiscussion(ad){
-    if (ad.lastComment){
-      return this.environmentService.getActiveUser() != null && ad.lastComment.organizationCode != this.environmentService.getActiveUser().activeOrganization.code;
+  public isNewDiscussion(ad) {
+    if (ad.lastComment) {
+      return (
+        this.environmentService.getActiveUser() != null &&
+        ad.lastComment.organizationCode != this.environmentService.getActiveUser().activeOrganization.code
+      );
     } else {
       return true;
     }
   }
 
-  private getActiveDiscussions(){
-    this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).subscribe( res => {
-      this.gridData.updateData(res);
-      this.loaded = true;
-    }, err => {
-      this.loaded = true;
-      this.toastrService.error('Serveri viga!');
-    });
+  private getActiveDiscussions() {
+    this.systemsService.getActiveDiscussions(this.gridData.sort, this.relation).subscribe(
+      res => {
+        this.gridData.updateData(res);
+        this.loaded = true;
+      },
+      err => {
+        this.loaded = true;
+        this.toastrService.error('Serveri viga!');
+      },
+    );
   }
 
-  constructor(private systemsService: SystemsService,
-              private helper: GeneralHelperService,
-              private differs: KeyValueDiffers,
-              private environmentService: EnvironmentService,
-              private toastrService: ToastrService) {
+  constructor(
+    private systemsService: SystemsService,
+    private helper: GeneralHelperService,
+    private differs: KeyValueDiffers,
+    private environmentService: EnvironmentService,
+    private toastrService: ToastrService,
+  ) {
     this.differ = differs.find({}).create();
   }
 
@@ -53,7 +61,7 @@ export class DiscussionsListComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     const changes = this.differ.diff(this.environmentService.globalEnvironment);
-    if (changes && (this.loaded || !this.environmentService.getUserMatrix().isOrganizationSelected)){
+    if (changes && (this.loaded || !this.environmentService.getUserMatrix().isOrganizationSelected)) {
       this.loaded = false;
       this.getActiveDiscussions();
     }

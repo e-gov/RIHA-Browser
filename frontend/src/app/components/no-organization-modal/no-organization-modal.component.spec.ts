@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {NoOrganizationModalComponent} from './no-organization-modal.component';
+import { NoOrganizationModalComponent } from './no-organization-modal.component';
 
 describe('NoOrganizationModalComponent', () => {
   let component: NoOrganizationModalComponent;
@@ -8,9 +8,8 @@ describe('NoOrganizationModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NoOrganizationModalComponent ]
-    })
-    .compileComponents();
+      declarations: [NoOrganizationModalComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

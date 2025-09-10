@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {BrowserFilesListComponent} from './browser-files-list.component';
+import { BrowserFilesListComponent } from './browser-files-list.component';
 
 describe('BrowserFilesListComponent', () => {
   let component: BrowserFilesListComponent;
@@ -8,9 +8,8 @@ describe('BrowserFilesListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BrowserFilesListComponent ]
-    })
-    .compileComponents();
+      declarations: [BrowserFilesListComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

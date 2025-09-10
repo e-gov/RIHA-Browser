@@ -1,0 +1,12 @@
+node_modules
+yarn.lock
+.git
+build/
+
+build/resources/main/static/
+
+build
+
+# Yarn directory and releases
+.yarn/
+.yarnrc.yml

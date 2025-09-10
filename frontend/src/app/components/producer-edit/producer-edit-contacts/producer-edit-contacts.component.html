@@ -1,35 +1,46 @@
 <div class="fixed-header">
   Kontaktid
-  <button (click)="closeModal()" class="btn btn-sm btn-secondary close-modal-btn pull-right"><i class="fa fa-remove" aria-hidden="true"></i></button>
+  <button (click)="closeModal()" class="btn btn-sm btn-secondary close-modal-btn pull-right">
+    <i class="fa fa-remove" aria-hidden="true"></i>
+  </button>
 </div>
 <section class="col card p-3 main-content scrollable-modal-content">
   <div class="my-1">
     <form #addForm="ngForm">
       <div class="form-group">
         <label for="name" class="text-muted separated-text">Nimi:</label>
-        <input id="name"
-               [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched || buttonClicked)}"
-               class="form-control col-12"
-               #name="ngModel"
-               [(ngModel)]="data.name"
-               placeholder="kontakti nimi või kontakti tüüp (kasutajatugi)"
-               (keyup.enter)="addContact(addForm)"
-               name="name" required>
+        <input
+          id="name"
+          [ngClass]="{ 'is-invalid': name.invalid && (name.dirty || name.touched || buttonClicked) }"
+          class="form-control col-12"
+          #name="ngModel"
+          [(ngModel)]="data.name"
+          placeholder="kontakti nimi või kontakti tüüp (kasutajatugi)"
+          (keyup.enter)="addContact(addForm)"
+          name="name"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="email" class="text-muted separated-text">E-mail:</label>
-        <input id="email"
-               [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched || buttonClicked) }"
-               class="form-control col-12"
-               #email="ngModel"
-               [(ngModel)]="data.email"
-               type="email"
-               (keyup.enter)="addContact(addForm)"
-               name="email" email required>
+        <input
+          id="email"
+          [ngClass]="{ 'is-invalid': email.invalid && (email.dirty || email.touched || buttonClicked) }"
+          class="form-control col-12"
+          #email="ngModel"
+          [(ngModel)]="data.email"
+          type="email"
+          (keyup.enter)="addContact(addForm)"
+          name="email"
+          email
+          required
+        />
       </div>
       <div class="form-group row">
         <div class="col-12">
-          <button class="btn btn-secondary pull-right" (click)="addContact(addForm)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa</button>
+          <button class="btn btn-secondary pull-right" (click)="addContact(addForm)">
+            <i class="fa fa-plus fa-fw" aria-hidden="true"></i>&nbsp;Lisa
+          </button>
         </div>
       </div>
       <div class="dataTables_wrapper">
@@ -39,7 +50,8 @@
               <i class="fa fa-circle text-primary"></i>
             </td>
             <td>
-              <span class="font-weight-bold">{{ contact.name }}</span><br />
+              <span class="font-weight-bold">{{ contact.name }}</span
+              ><br />
               <a class="text-gray-dark small" href="mailto:{{ contact.email }}">{{ contact.email }}</a>
             </td>
             <td>

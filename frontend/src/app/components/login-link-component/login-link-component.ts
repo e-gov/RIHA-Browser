@@ -1,26 +1,21 @@
-import {Component, Input} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-link',
-  templateUrl: './login-link-component.html'
+  templateUrl: './login-link-component.html',
+  standalone: false,
 })
-export class LoginLinkComponent  {
-
+export class LoginLinkComponent {
   @Input()
   loginBoxText: string;
 
   @Input()
   loginLinkText: string = 'Logi sisse';
 
-  constructor(
-    private router: Router) {
-
-  }
+  constructor(private router: Router) {}
 
   getCurrentUrl() {
     return this.router.url;
   }
-
-
 }

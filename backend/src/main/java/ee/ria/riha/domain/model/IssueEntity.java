@@ -5,6 +5,5 @@ package ee.ria.riha.domain.model;
  */
 public interface IssueEntity {
 
-    IssueEntityType getEntityType();
-
+  IssueEntityType getEntityType();
 }

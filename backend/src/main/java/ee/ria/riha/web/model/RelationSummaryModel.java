@@ -1,9 +1,8 @@
 package ee.ria.riha.web.model;
 
 import ee.ria.riha.domain.model.RelationType;
-import lombok.*;
-
 import java.util.UUID;
+import lombok.*;
 
 /**
  * Model of info system relationship response.
@@ -16,9 +15,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RelationSummaryModel {
-    private Long id;
-    private UUID infoSystemUuid;
-    private String infoSystemName;
-    private String infoSystemShortName;
-    private RelationType type;
+  private Long id;
+  private UUID infoSystemUuid;
+  private String infoSystemName;
+  private String infoSystemShortName;
+  private RelationType type;
 }

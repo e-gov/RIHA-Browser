@@ -7,18 +7,16 @@ import org.springframework.boot.autoconfigure.ldap.LdapAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@SpringBootApplication(exclude = {
-        LdapAutoConfiguration.class,
-    MailHealthContributorAutoConfiguration.class
-})
+@SpringBootApplication(
+    exclude = {LdapAutoConfiguration.class, MailHealthContributorAutoConfiguration.class})
 public class BrowserApplication extends SpringBootServletInitializer {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BrowserApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(BrowserApplication.class, args);
+  }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(BrowserApplication.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+    return builder.sources(BrowserApplication.class);
+  }
 }

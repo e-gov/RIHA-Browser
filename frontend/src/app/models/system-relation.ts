@@ -1,5 +1,4 @@
 export class SystemRelation {
-
   public id: number;
   public infoSystemUuid: string;
   public infoSystemName: string;

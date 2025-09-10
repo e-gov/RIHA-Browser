@@ -1,4 +1,4 @@
-import {MissingTranslationHandler, MissingTranslationHandlerParams} from '@ngx-translate/core';
+import { MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
 
 class RihaMissingTranslationHandler implements MissingTranslationHandler {
   handle(params: MissingTranslationHandlerParams) {
@@ -8,7 +8,7 @@ class RihaMissingTranslationHandler implements MissingTranslationHandler {
 
 const missingTranslationHandler = {
   provide: MissingTranslationHandler,
-  useClass: RihaMissingTranslationHandler
+  useClass: RihaMissingTranslationHandler,
 };
 
 export default missingTranslationHandler;

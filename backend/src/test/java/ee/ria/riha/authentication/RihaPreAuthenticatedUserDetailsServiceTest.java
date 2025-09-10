@@ -7,12 +7,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,51 +25,54 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith(MockitoExtension.class)
 public class RihaPreAuthenticatedUserDetailsServiceTest {
 
-    private final String SERIAL_NUMBER = "12345678901";
-    private final String PRINCIPAL_SN = "DOE";
-    private final String PRINCIPAL_GN = "JOHN";
+  private final String SERIAL_NUMBER = "12345678901";
+  private final String PRINCIPAL_SN = "DOE";
+  private final String PRINCIPAL_GN = "JOHN";
 
-    private final RihaUserDetails EXISTING_USER = new RihaUserDetails(
-            new User(SERIAL_NUMBER, "", AuthorityUtils.NO_AUTHORITIES), SERIAL_NUMBER);
+  private final RihaUserDetails EXISTING_USER =
+      new RihaUserDetails(
+          new User(SERIAL_NUMBER, "", AuthorityUtils.NO_AUTHORITIES), SERIAL_NUMBER);
 
-    @Mock
-    private UserDetailsService userDetailsService;
+  @Mock private UserDetailsService userDetailsService;
 
-    @InjectMocks
-    private RihaPreAuthenticatedUserDetailsService rihaPreAuthenticatedUserDetailsService;
+  @InjectMocks
+  private RihaPreAuthenticatedUserDetailsService rihaPreAuthenticatedUserDetailsService;
 
-    private PreAuthenticatedAuthenticationToken estEidAuthenticationToken;
+  private PreAuthenticatedAuthenticationToken estEidAuthenticationToken;
 
-    @Before
-    public void setUp() {
-        EstEIDPrincipal principal = new EstEIDPrincipal(SERIAL_NUMBER);
-        principal.setSurname(PRINCIPAL_SN);
-        principal.setGivenName(PRINCIPAL_GN);
+  @BeforeEach
+  public void setUp() {
+    EstEIDPrincipal principal = new EstEIDPrincipal(SERIAL_NUMBER);
+    principal.setSurname(PRINCIPAL_SN);
+    principal.setGivenName(PRINCIPAL_GN);
 
-        estEidAuthenticationToken = new PreAuthenticatedAuthenticationToken(principal, null);
+    estEidAuthenticationToken = new PreAuthenticatedAuthenticationToken(principal, null);
 
-        when(userDetailsService.loadUserByUsername(principal.getName())).thenReturn(EXISTING_USER);
-    }
+    when(userDetailsService.loadUserByUsername(principal.getName())).thenReturn(EXISTING_USER);
+  }
 
-    @Test
-    public void fillsUserNameDetailsWhenPrincipalIsEstEIDPrincipal() {
-        RihaUserDetails rihaUserDetails = (RihaUserDetails) rihaPreAuthenticatedUserDetailsService.loadUserDetails(
-                estEidAuthenticationToken);
+  @Test
+  public void fillsUserNameDetailsWhenPrincipalIsEstEIDPrincipal() {
+    RihaUserDetails rihaUserDetails =
+        (RihaUserDetails)
+            rihaPreAuthenticatedUserDetailsService.loadUserDetails(estEidAuthenticationToken);
 
-        assertThat(rihaUserDetails.getFirstName(), is(equalTo(PRINCIPAL_GN)));
-        assertThat(rihaUserDetails.getLastName(), is(equalTo(PRINCIPAL_SN)));
-    }
+    assertThat(rihaUserDetails.getFirstName(), is(equalTo(PRINCIPAL_GN)));
+    assertThat(rihaUserDetails.getLastName(), is(equalTo(PRINCIPAL_SN)));
+  }
 
-    @Test
-    public void createsUserDetailsEvenIfUserNotFound() {
-        when(userDetailsService.loadUserByUsername(any())).thenThrow(new UsernameNotFoundException("mock"));
+  @Test
+  public void createsUserDetailsEvenIfUserNotFound() {
+    when(userDetailsService.loadUserByUsername(any()))
+        .thenThrow(new UsernameNotFoundException("mock"));
 
-        UserDetails userDetails = rihaPreAuthenticatedUserDetailsService.loadUserDetails(estEidAuthenticationToken);
+    UserDetails userDetails =
+        rihaPreAuthenticatedUserDetailsService.loadUserDetails(estEidAuthenticationToken);
 
-        assertThat(userDetails, is(notNullValue()));
-    }
-
+    assertThat(userDetails, is(notNullValue()));
+  }
 }

@@ -10,14 +10,14 @@ import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
  */
 public class RihaFilterBasedLdapUserSearch extends FilterBasedLdapUserSearch {
 
-    private static final String ALL_NON_OPERATIONAL_ATTRIBUTES = "*";
-    private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
+  private static final String ALL_NON_OPERATIONAL_ATTRIBUTES = "*";
+  private static final String MEMBER_OF_ATTRIBUTE = "memberOf";
 
-    public RihaFilterBasedLdapUserSearch(String searchBase, String searchFilter,
-                                         BaseLdapPathContextSource contextSource) {
-        super(searchBase, searchFilter, contextSource);
+  public RihaFilterBasedLdapUserSearch(
+      String searchBase, String searchFilter, BaseLdapPathContextSource contextSource) {
+    super(searchBase, searchFilter, contextSource);
 
-        setReturningAttributes(new String[]{ALL_NON_OPERATIONAL_ATTRIBUTES, MEMBER_OF_ATTRIBUTE});
-        setSearchSubtree(true);
-    }
+    setReturningAttributes(new String[] {ALL_NON_OPERATIONAL_ATTRIBUTES, MEMBER_OF_ATTRIBUTE});
+    setSearchSubtree(true);
+  }
 }

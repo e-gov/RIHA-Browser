@@ -5,21 +5,20 @@ import { EnvironmentService } from '../../services/environment.service';
 @Component({
   selector: 'app-approver-dashboard',
   templateUrl: './approver-dashboard.component.html',
-  styleUrls: ['./approver-dashboard.component.scss']
+  styleUrls: ['./approver-dashboard.component.scss'],
+  standalone: false,
 })
 export class ApproverDashboardComponent implements OnInit {
-
-  constructor(public helper: GeneralHelperService,
-              public generalHelperService: GeneralHelperService,
-              public environmentService: EnvironmentService) { }
+  constructor(
+    public helper: GeneralHelperService,
+    public generalHelperService: GeneralHelperService,
+    public environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit() {
     this.generalHelperService.setRihaPageTitle('Hinda');
   }
 
-  @HostListener("window:scroll", [])
-  onWindowScroll() {
-
-  }
-
+  @HostListener('window:scroll', [])
+  onWindowScroll() {}
 }

@@ -6,8 +6,8 @@ export const makeRecaptchaBadgeVisible = (): HTMLStyleElement => {
   style.appendChild(document.createTextNode(css));
   head.appendChild(style);
   return style;
-}
+};
 
 export const makeRecaptchaBadgeInvisible = (recaptchaBadgeStyle: HTMLStyleElement): void => {
   document.getElementsByTagName('head')[0].removeChild(recaptchaBadgeStyle);
-}
+};

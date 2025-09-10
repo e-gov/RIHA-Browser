@@ -1,98 +1,95 @@
 package ee.ria.riha.service.auth;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
+
 import com.google.common.collect.ImmutableMultimap;
 import ee.ria.riha.TestUtils;
 import ee.ria.riha.authentication.RihaOrganization;
 import ee.ria.riha.domain.model.InfoSystem;
 import ee.ria.riha.rules.CleanAuthentication;
 import ee.ria.riha.service.InfoSystemService;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
-
 /**
  * @author Valentin Suhnjov
  */
-@RunWith(MockitoJUnitRunner.class)
+@MockitoSettings(strictness = Strictness.WARN)
+@ExtendWith({MockitoExtension.class, CleanAuthentication.class})
 public class InfoSystemAuthorizationServiceTest {
 
-    private static final String ACME_ORG_CODE = "777";
+  private static final String ACME_ORG_CODE = "777";
 
-    @Rule
-    public CleanAuthentication cleanAuthentication = new CleanAuthentication();
+  private Authentication authenticationToken;
 
-    private Authentication authenticationToken;
+  @Mock private InfoSystemService infoSystemService;
 
-    @Mock
-    private InfoSystemService infoSystemService;
+  @InjectMocks private InfoSystemAuthorizationService infoSystemAuthorization;
 
-    @InjectMocks
-    private InfoSystemAuthorizationService infoSystemAuthorization;
+  private InfoSystem infoSystem = new InfoSystem();
 
-    private InfoSystem infoSystem = new InfoSystem();
+  @BeforeEach
+  public void setUp() {
 
-    @Before
-    public void setUp() {
+    infoSystem.setOwnerCode("777");
 
-        infoSystem.setOwnerCode("777");
+    authenticationToken =
+        TestUtils.getOAuth2LoginToken(
+            ImmutableMultimap.of(
+                new RihaOrganization(ACME_ORG_CODE, "Acme org"),
+                new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")),
+            ACME_ORG_CODE);
 
-        authenticationToken = TestUtils.getOAuth2LoginToken(
-                ImmutableMultimap.of(
-                        new RihaOrganization(ACME_ORG_CODE, "Acme org"),
-                        new SimpleGrantedAuthority("ROLE_NOT_IMPORTANT")),
-                ACME_ORG_CODE);
+    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+  }
 
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    }
+  @Test
+  public void isOwnerReturnsFalseWhenInfoSystemIsNull() {
+    assertThat(infoSystemAuthorization.isOwner((InfoSystem) null), is(false));
+  }
 
-    @Test
-    public void isOwnerReturnsFalseWhenInfoSystemIsNull() {
-        assertThat(infoSystemAuthorization.isOwner((InfoSystem) null), is(false));
-    }
+  @Test
+  public void isOwnerReturnsFalseWhenUserHasNoActiveOrganizationSet() {
 
-    @Test
-    public void isOwnerReturnsFalseWhenUserHasNoActiveOrganizationSet() {
+    TestUtils.setActiveOrganisation(authenticationToken, null);
+    infoSystemAuthorization.isOwner(infoSystem);
+  }
 
-        TestUtils.setActiveOrganisation(authenticationToken, null);
-        infoSystemAuthorization.isOwner(infoSystem);
-    }
+  @Test
+  public void isOwnerReturnsTrueWhenActiveOrganizationAndInfoSystemOwnerCodeAreEqual() {
+    assertThat(infoSystemAuthorization.isOwner(infoSystem), is(true));
+  }
 
-    @Test
-    public void isOwnerReturnsTrueWhenActiveOrganizationAndInfoSystemOwnerCodeAreEqual() {
-        assertThat(infoSystemAuthorization.isOwner(infoSystem), is(true));
-    }
+  @Test
+  public void isOwnerReturnsFalseWhenInfoSystemOwnerCodeIsNotSet() {
+    infoSystem = new InfoSystem();
+    assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
+  }
 
-    @Test
-    public void isOwnerReturnsFalseWhenInfoSystemOwnerCodeIsNotSet() {
-        infoSystem = new InfoSystem();
-        assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
-    }
+  @Test
+  public void isOwnerReturnsFalseWhenActiveOrganizationAndInfoSystemOwnerCodeAreNotEqual() {
+    infoSystem = new InfoSystem();
+    infoSystem.setOwnerCode("000");
 
-    @Test
-    public void isOwnerReturnsFalseWhenActiveOrganizationAndInfoSystemOwnerCodeAreNotEqual() {
-        infoSystem = new InfoSystem();
-        infoSystem.setOwnerCode("000");
+    assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
+  }
 
-        assertThat(infoSystemAuthorization.isOwner(infoSystem), is(false));
-    }
+  @Test
+  public void isOwnerResolvesInfoSystemByShortName() {
+    infoSystemAuthorization.isOwner("not-too-short-name");
 
-    @Test
-    public void isOwnerResolvesInfoSystemByShortName() {
-        infoSystemAuthorization.isOwner("not-too-short-name");
-
-        verify(infoSystemService, times(1)).get("not-too-short-name");
-    }
-
+    verify(infoSystemService, times(1)).get("not-too-short-name");
+  }
 }

@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RelationModel {
-    private Long id;
-    private String infoSystemShortName;
-    private RelationType type;
+  private Long id;
+  private String infoSystemShortName;
+  private RelationType type;
 }

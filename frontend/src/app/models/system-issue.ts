@@ -1,5 +1,4 @@
 export class SystemIssue {
-
   public id: number;
   public infoSystemUuid: string;
   public dateCreated: string;

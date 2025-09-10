@@ -9,50 +9,49 @@ import java.util.Date;
  */
 public class CodedBrowserExceptionModel {
 
-    private Date timestamp = new Date();
-    private Class exception;
-    private String code;
-    private String message;
-    private Object[] args;
+  private Date timestamp = new Date();
+  private Class exception;
+  private String code;
+  private String message;
+  private Object[] args;
 
-    public Date getTimestamp() {
-        return timestamp;
-    }
+  public Date getTimestamp() {
+    return timestamp;
+  }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
+  public void setTimestamp(Date timestamp) {
+    this.timestamp = timestamp;
+  }
 
-    public Class getException() {
-        return exception;
-    }
+  public Class getException() {
+    return exception;
+  }
 
-    public void setException(Class exception) {
-        this.exception = exception;
-    }
+  public void setException(Class exception) {
+    this.exception = exception;
+  }
 
-    public String getCode() {
-        return code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public Object[] getArgs() {
-        return args;
-    }
+  public Object[] getArgs() {
+    return args;
+  }
 
-    public void setArgs(Object[] args) {
-        this.args = args;
-    }
-
+  public void setArgs(Object[] args) {
+    this.args = args;
+  }
 }

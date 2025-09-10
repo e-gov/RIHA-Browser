@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {ApproverSystemCheckComponent} from './approver-system-check.component';
+import { ApproverSystemCheckComponent } from './approver-system-check.component';
 
 describe('ApproverSystemCheckComponent', () => {
   let component: ApproverSystemCheckComponent;
@@ -8,9 +8,8 @@ describe('ApproverSystemCheckComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApproverSystemCheckComponent ]
-    })
-    .compileComponents();
+      declarations: [ApproverSystemCheckComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

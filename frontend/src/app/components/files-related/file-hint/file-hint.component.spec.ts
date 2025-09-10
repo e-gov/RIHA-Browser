@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {FileHintComponent} from './file-hint.component';
+import { FileHintComponent } from './file-hint.component';
 
 describe('FileHintComponent', () => {
   let component: FileHintComponent;
@@ -8,9 +8,8 @@ describe('FileHintComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FileHintComponent ]
-    })
-    .compileComponents();
+      declarations: [FileHintComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

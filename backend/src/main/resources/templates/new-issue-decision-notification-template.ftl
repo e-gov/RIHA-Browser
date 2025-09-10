@@ -4,7 +4,7 @@
 </head>
 <body>
     <p>Infosüsteemi <a href="${baseUrl}/Infosüsteemid/Vaata/${uuid}">${name}</a> arutelusse "<a href="${baseUrl}/Infosüsteemid/Vaata/${uuid}/Arutelu/${issueId?c}">${issueTitle}</a>" on lisatud uus otsus:</p>
-    <p>${decision}<#if comment != ""> (<i>"${comment}"</i>)</#if> - ${author}</p>
+    <p>${decision}<#if comment!=""> (<i>"${comment}"</i>)</#if> - ${author}</p>
     <p>Sisene RIHAsse, et arutelu lähemalt vaadata.</p>
     <p>----</p>
     <p>See on automaatne kiri RIHA rakendusest. Palun ära vasta sellele. Küsimuste korral tutvu <a href="https://abi.ria.ee/riha">RIHA abikeskusega</a> või saada kiri <a href="mailto:help@ria.ee">kasutajatoele</a></p>
