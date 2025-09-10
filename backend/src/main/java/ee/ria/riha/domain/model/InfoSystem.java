@@ -574,7 +574,7 @@ public class InfoSystem {
 
   /**
    * Normalizes timestamp to RFC 3339 format by converting timezone offset from +0300 to +03:00
-   * format
+   * format and handling other potential timestamp format issues
    *
    * @param timestamp the timestamp to normalize
    * @return normalized timestamp in RFC 3339 format
@@ -584,18 +584,33 @@ public class InfoSystem {
       return null;
     }
 
-    // Check if timestamp has old format timezone without colon (+0300, -0300, +0200, -0200, etc)
-    // This regex specifically matches 4 digits at the end, excluding already correct formats like
-    // +03:00
-    if (timestamp.matches(".*[+-]\\d{4}$") && !timestamp.matches(".*[+-]\\d{2}:\\d{2}$")) {
-      // Convert +0300 to +03:00 format for RFC 3339 compliance
-      String timezonePart = timestamp.substring(timestamp.length() - 5);
-      String timestampWithoutTz = timestamp.substring(0, timestamp.length() - 5);
-      String normalizedTz = timezonePart.substring(0, 3) + ":" + timezonePart.substring(3);
-      return timestampWithoutTz + normalizedTz;
-    }
+    try {
+      // Check if timestamp has old format timezone without colon (+0300, -0300, +0200, -0200, etc)
+      // This regex specifically matches 4 digits at the end, excluding already correct formats like
+      // +03:00
+      if (timestamp.matches(".*[+-]\\d{4}$") && !timestamp.matches(".*[+-]\\d{2}:\\d{2}$")) {
+        // Convert +0300 to +03:00 format for RFC 3339 compliance
+        String timezonePart = timestamp.substring(timestamp.length() - 5);
+        String timestampWithoutTz = timestamp.substring(0, timestamp.length() - 5);
+        String normalizedTz = timezonePart.substring(0, 3) + ":" + timezonePart.substring(3);
+        return timestampWithoutTz + normalizedTz;
+      }
 
-    return timestamp;
+      // Handle case where timestamp has +02:00 format (already correct but may need validation)
+      if (timestamp.matches(".*[+-]\\d{2}:\\d{2}$")) {
+        // The format is already correct, but let's ensure it's valid by parsing and reformatting
+        java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(timestamp);
+        return odt.toString(); // This will ensure the format is valid
+      }
+      
+      // If we reached here and the timestamp doesn't match either pattern,
+      // it might be in a different format or invalid
+      return timestamp;
+    } catch (Exception e) {
+      // If any exception occurs during parsing, return the original timestamp
+      // rather than causing the whole save operation to fail
+      return timestamp;
+    }
   }
 
   @Override
