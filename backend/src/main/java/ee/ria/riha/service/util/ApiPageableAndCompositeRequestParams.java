@@ -21,13 +21,13 @@ import java.lang.annotation.Target;
       name = "page",
       description = "page number",
       in = ParameterIn.QUERY,
-      schema = @Schema(type = "integer", format = "int32", defaultValue = "0")
+      schema = @Schema(type = "integer")
     ),
     @Parameter(
       name = "size",
       description = "page size",
       in = ParameterIn.QUERY,
-      schema = @Schema(type = "integer", format = "int32", defaultValue = "20")
+      schema = @Schema(type = "integer")
     ),
     @Parameter(
       name = "filter",
