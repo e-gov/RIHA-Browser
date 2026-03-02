@@ -83,7 +83,7 @@ export class CardDeckComponent implements OnInit {
           links: [
             {
               label: 'Loe lähemalt',
-              hash: 'https://abi.ria.ee/xtee/et/x-tee-juhend/x-teega-liitumine',
+              hash: 'https://abi.ria.ee/xtee/x-teega-liitumine-ja-parimad-praktikad',
               type: 'external',
             },
           ],
