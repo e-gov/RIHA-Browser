@@ -85,7 +85,7 @@
                 style="padding:30px;font-family:Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:normal;font-size:12px;line-height:16px;color:#9fb1c1">
                 <p>See sõnum on saadetud sulle RIHA tiimi poolt. Kui sa ei soovi enam
                   uudiskirju saada, anna sellest teada <a
-                  href="mailto:help@ria.ee?subject=Loobun RIHA uudiskirjast"
+                  href="mailto:klient@ria.ee?subject=Loobun RIHA uudiskirjast"
                   style="font-family:Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:normal;font-size:12px;line-height:16px;color:#9fb1c1">
                   RIA kasutajatoele</a>.</p>
                 </td>
