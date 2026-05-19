@@ -724,19 +724,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/platform-server@npm:^20.1.7":
-  version: 20.1.7
-  resolution: "@angular/platform-server@npm:20.1.7"
+"@angular/platform-server@npm:^20.3.19":
+  version: 20.3.21
+  resolution: "@angular/platform-server@npm:20.3.21"
   dependencies:
     tslib: "npm:^2.3.0"
     xhr2: "npm:^0.2.0"
   peerDependencies:
-    "@angular/common": 20.1.7
-    "@angular/compiler": 20.1.7
-    "@angular/core": 20.1.7
-    "@angular/platform-browser": 20.1.7
+    "@angular/common": 20.3.21
+    "@angular/compiler": 20.3.21
+    "@angular/core": 20.3.21
+    "@angular/platform-browser": 20.3.21
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10/6bf5183f4a0114d7e672b2f95fdbf3f63f2c6569e5fd89f7e4f288ffe7723d33a3e1d9e8659d0a2851f13b2bdaf0a072b3daa7591827249ce77ce46e036faba0
+  checksum: 10/0ef40e15c0556fd4705ab18b1c71ce517c2d57f248dc6f85f4715b3d34df98d5e66454ffcf5c0e424cee829e3fdeeee42c3541552d2d295c3903a3a74e7969c6
   languageName: node
   linkType: hard
 
@@ -10443,7 +10443,7 @@ __metadata:
     "@angular/material": "npm:^20.1.5"
     "@angular/platform-browser": "npm:^20.1.7"
     "@angular/platform-browser-dynamic": "npm:^20.1.7"
-    "@angular/platform-server": "npm:^20.1.7"
+    "@angular/platform-server": "npm:^20.3.19"
     "@angular/router": "npm:^20.1.7"
     "@narik/custom-validators": "npm:14.0.0"
     "@ng-bootstrap/ng-bootstrap": "npm:^19.0.1"
